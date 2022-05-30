@@ -13,8 +13,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
+  // ----------------------------------------------
+  // Code maintained and written by Lucas Bubner
+  // Murray Bridge Bunyips - 15215
+  // ----------------------------------------------
+
 @Autonomous(name = "LB_AutoAdvancedPrecisionDrive_JRC (Blocks to Java)")
 public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
+
+  // Declare all variables
 
   private BNO055IMU imu;
   private DcMotor LeftMotor;
@@ -27,9 +34,7 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
   int rightPower;
   ElapsedTime elapsedTime;
 
-  /**
-   * IMU Calibration Check
-   */
+  // IMU calibration check function
   private boolean IMU_Calibrated() {
     telemetry.addData("IMU calibration status", imu.getCalibrationStatus());
     telemetry.addData("Gyro calibration", imu.isGyroCalibrated() ? "True" : "False");
@@ -42,14 +47,11 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
    * over 10 degrees pitch, which would indicate that the
    * motors have driven into something and are overexerting.
    */
-
   private boolean areMotorsOverexerting() {
     return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle > 10 ? true : false;
   }
 
-  /**
-   * This function is executed when this Op Mode is selected from the Driver Station.
-   */
+  // Primary thread that is ran from the Driver Station.
   @Override
   public void runOpMode() {
     BNO055IMU.Parameters imuParameters;
@@ -59,11 +61,8 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
     RightMotor = hardwareMap.get(DcMotor.class, "Right Motor");
     ForwardVisionSystem_DistanceSensor = hardwareMap.get(DistanceSensor.class, "Forward Vision System");
 
-    // ----------------------------------------------
-    // Code maintained and written by Lucas Bubner
-    // Murray Bridge Bunyips - 15215
-    // ----------------------------------------------
-    // Set braking mode
+
+    // Set braking mode for both motors
     LeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     RightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     // Neutralise the FWS stop system
@@ -294,7 +293,6 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
     rightPower = 0;
     LeftMotor.setPower(leftPower);
     RightMotor.setPower(rightPower);
-    // Allow robot to remove momentum
     sleep(200);
   }
 }
