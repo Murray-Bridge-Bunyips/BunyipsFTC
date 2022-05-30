@@ -22,12 +22,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Autonomous(name = "LB_AutoAdvancedPrecisionDrive")
 public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
 
-  // Declare all variables
+  // Declare hardware
   private BNO055IMU imu;
   private DcMotor LeftMotor;
   private DcMotor RightMotor;
   private DistanceSensor ForwardVisionSystem_DistanceSensor;
 
+  // Declare variables
   boolean fwsAlert;
   float yawAngle;
   double leftPower;
@@ -36,7 +37,7 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
   double rightMotorCurrentPosition;
   ElapsedTime elapsedTime;
 
-  // IMU calibration check function
+  // IMU calibration check method
   private boolean IMU_Calibrated() {
     telemetry.addData("IMU calibration status", imu.getCalibrationStatus());
     telemetry.addData("Gyro calibration", imu.isGyroCalibrated() ? "True" : "False");
