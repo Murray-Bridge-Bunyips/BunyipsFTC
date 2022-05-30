@@ -42,8 +42,8 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
    * over 10 degrees pitch, which would indicate that the
    * motors have driven into something and are overexerting.
    */
-  // TODO: Enter the correct return type for function named areMotorsOverexerting
-  private UNKNOWN_TYPE areMotorsOverexerting() {
+
+  private boolean areMotorsOverexerting() {
     return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle > 10 ? true : false;
   }
 
@@ -102,14 +102,14 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
       elapsedTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
       // Call to main variable functions
       Turn_drg_using_Tri_stop_Algorithm(60, 3);
-      Move_desiredDistance_with_PrecisionDrive_Algorithm(243, null, 1, 0.9);
+      Move_desiredDistance_with_PrecisionDrive_Algorithm(243, 0, 1, 0.9);
       Turn_drg_using_Tri_stop_Algorithm(-1, 5);
       for (int count = 0; count < 2; count++) {
-        Move_desiredDistance_with_PrecisionDrive_Algorithm(75, null, 0.75, 0.8);
-        Move_desiredDistance_with_PrecisionDrive_Algorithm(-75, null, 0.75, 0.8);
+        Move_desiredDistance_with_PrecisionDrive_Algorithm(75, 0, 0.75, 0.8);
+        Move_desiredDistance_with_PrecisionDrive_Algorithm(-75, 0, 0.75, 0.8);
       }
       Turn_drg_using_Tri_stop_Algorithm(-75, 2);
-      Move_desiredDistance_with_PrecisionDrive_Algorithm(175, null, 1, 0.9);
+      Move_desiredDistance_with_PrecisionDrive_Algorithm(175, 0, 1, 0.9);
       // Execution complete.
       leftPower = 0;
       rightPower = 0;
@@ -191,8 +191,6 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
     RightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     LeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     RightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    turnSwitch = null;
-    i = null;
     // Check direction of turn and latch codes
     if (desiredAngle >= 0) {
       turnSwitch = true;
@@ -204,7 +202,7 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
     // Repeat code four times to ensure accuracy
     // Unless IMU reports within <t> degrees of accuracy
     for (i = 1; i <= 3; i++) {
-      if (turnSwitch == true) {
+      if (turnSwitch) {
         // Turn left
         LeftMotor.setPower(i >= 3 ? -0.25 : -1.5 + i / 2);
         RightMotor.setPower(i >= 3 ? 0.25 : 1.5 - i / 2);
@@ -287,7 +285,7 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
       // Loop correction algorithm and check FWS
       if (desiredDistance_cm > 0) {
         FWS_Collision_Avoidance_Check(50);
-      } else if (areMotorsOverexerting() == true) {
+      } else if (areMotorsOverexerting()) {
         break;
       }
       sleep(200);
