@@ -1,0 +1,302 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
+@Autonomous(name = "LB_AutoAdvancedPrecisionDrive_JRC (Blocks to Java)")
+public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
+
+  private BNO055IMU imu;
+  private DcMotor LeftMotor;
+  private DcMotor RightMotor;
+  private DistanceSensor ForwardVisionSystem_DistanceSensor;
+
+  boolean fwsAlert;
+  int leftPower;
+  float yawAngle;
+  int rightPower;
+  ElapsedTime elapsedTime;
+
+  /**
+   * IMU Calibration Check
+   */
+  private boolean IMU_Calibrated() {
+    telemetry.addData("IMU calibration status", imu.getCalibrationStatus());
+    telemetry.addData("Gyro calibration", imu.isGyroCalibrated() ? "True" : "False");
+    telemetry.addData("System status", imu.getSystemStatus().toString());
+    return imu.isGyroCalibrated();
+  }
+
+  /**
+   * Simple detection algorithm to detect if the robot is
+   * over 10 degrees pitch, which would indicate that the
+   * motors have driven into something and are overexerting.
+   */
+  // TODO: Enter the correct return type for function named areMotorsOverexerting
+  private UNKNOWN_TYPE areMotorsOverexerting() {
+    return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle > 10 ? true : false;
+  }
+
+  /**
+   * This function is executed when this Op Mode is selected from the Driver Station.
+   */
+  @Override
+  public void runOpMode() {
+    BNO055IMU.Parameters imuParameters;
+
+    imu = hardwareMap.get(BNO055IMU.class, "imu");
+    LeftMotor = hardwareMap.get(DcMotor.class, "Left Motor");
+    RightMotor = hardwareMap.get(DcMotor.class, "Right Motor");
+    ForwardVisionSystem_DistanceSensor = hardwareMap.get(DistanceSensor.class, "Forward Vision System");
+
+    // ----------------------------------------------
+    // Code maintained and written by Lucas Bubner
+    // Murray Bridge Bunyips - 15215
+    // ----------------------------------------------
+    // Set braking mode
+    LeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    RightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    // Neutralise the FWS stop system
+    fwsAlert = false;
+    // Reverse direction of motor for one-direction trvl
+    LeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+    // Reset encoders for distance calc
+    LeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    RightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    // IMU configuration
+    imuParameters = new BNO055IMU.Parameters();
+    imuParameters.mode = BNO055IMU.SensorMode.IMU;
+    imuParameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+    imuParameters.loggingEnabled = true;
+    imuParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+    // Init IMU sequence
+    imu.initialize(imuParameters);
+    telemetry.addData("Status", "IMU successfully initalised");
+    telemetry.update();
+    // IMU calibration check
+    sleep(1000);
+    while (!IMU_Calibrated()) {
+      telemetry.addData("If calibration ", "doesn't complete after 3 seconds, move through 90 degree pitch, roll and yaw motions until calibration is complete.");
+      telemetry.update();
+      // Loop until IMU is calibrated
+      sleep(1000);
+    }
+    // Calibration complete - await for Driver
+    telemetry.addData("IMU", "Ready.");
+    telemetry.addData(">", "Ready to initalise code.");
+    telemetry.update();
+    waitForStart();
+    // Ready to start, run blocks below
+    if (opModeIsActive()) {
+      // Create new timer for various operations
+      elapsedTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
+      // Call to main variable functions
+      Turn_drg_using_Tri_stop_Algorithm(60, 3);
+      Move_desiredDistance_with_PrecisionDrive_Algorithm(243, null, 1, 0.9);
+      Turn_drg_using_Tri_stop_Algorithm(-1, 5);
+      for (int count = 0; count < 2; count++) {
+        Move_desiredDistance_with_PrecisionDrive_Algorithm(75, null, 0.75, 0.8);
+        Move_desiredDistance_with_PrecisionDrive_Algorithm(-75, null, 0.75, 0.8);
+      }
+      Turn_drg_using_Tri_stop_Algorithm(-75, 2);
+      Move_desiredDistance_with_PrecisionDrive_Algorithm(175, null, 1, 0.9);
+      // Execution complete.
+      leftPower = 0;
+      rightPower = 0;
+      LeftMotor.setPower(0);
+      RightMotor.setPower(0);
+      telemetry.addData("Code execution:", "All actions completed.");
+      telemetry.update();
+      sleep(3000);
+    }
+  }
+
+  /**
+   * Math function to calculate the distance travelled by the wheels.
+   *
+   * avg of motor position divided by pulses per revolution =
+   * roughly how many revolutions have been done by the robot,
+   * where plugging in the wheel circumference and using the formula
+   *
+   * diameter of wheel in inches * pi = circumference
+   * circumference * revolutions = inches travelled
+   *
+   * inches * 2.54 = cm
+   *
+   * We get the translated distance travelled by the encoders in centimetres.
+   */
+  private double getTranslatedDistance() {
+    return 3.34646 * Math.PI * (((LeftMotor.getCurrentPosition() + RightMotor.getCurrentPosition()) / 2) / 288) * 2.54;
+  }
+
+  /**
+   * Initialises the Forward Vision System Collision Avoidance System.
+   * Collision avoidance is only active during a forward drive.
+   * The avoidance system will activate once below the alert_threshold,
+   * begin backwards thrust to a clearance of [x]cm, and return
+   * the motor control to the following function in runOpMode.
+   * Code written by Lucas Bubner.
+   */
+  private void FWS_Collision_Avoidance_Check(int reverseDist_cm) {
+    double fwsDist;
+    double captureCurrentDistance;
+
+    fwsDist = ForwardVisionSystem_DistanceSensor.getDistance(DistanceUnit.CM);
+    if (fwsDist < 7 || areMotorsOverexerting() == true) {
+      // Activating FWS procedure
+      // Broadcast to code to stop operations
+      fwsAlert = true;
+      // Take over motor control to reverse x distance
+      LeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+      RightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+      LeftMotor.setPower(0);
+      RightMotor.setPower(0);
+      sleep(200);
+      captureCurrentDistance = getTranslatedDistance();
+      LeftMotor.setPower(-1);
+      RightMotor.setPower(-1);
+      while (!(getTranslatedDistance() <= captureCurrentDistance - reverseDist_cm)) {
+        // Allow robot to move backwards until reverse_dist
+        telemetry.addData("Debug", "fws_alert currently active");
+        telemetry.update();
+      }
+      LeftMotor.setPower(0);
+      RightMotor.setPower(0);
+      sleep(200);
+      // Reset FWS and allow code to continue
+      fwsAlert = false;
+    }
+  }
+
+  /**
+   * Utilise the Angle Adjustment Algorithm in order to turn the
+   * robot to within accuracies, with three-stop correction.
+   */
+  private void Turn_drg_using_Tri_stop_Algorithm(int desiredAngle, int tolerance) {
+    boolean turnSwitch;
+    double i;
+    int desiredAngleCompensated;
+
+    LeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    RightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    LeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    RightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    turnSwitch = null;
+    i = null;
+    // Check direction of turn and latch codes
+    if (desiredAngle >= 0) {
+      turnSwitch = true;
+      desiredAngleCompensated = desiredAngle - 15;
+    } else {
+      turnSwitch = false;
+      desiredAngleCompensated = desiredAngle + 15;
+    }
+    // Repeat code four times to ensure accuracy
+    // Unless IMU reports within <t> degrees of accuracy
+    for (i = 1; i <= 3; i++) {
+      if (turnSwitch == true) {
+        // Turn left
+        LeftMotor.setPower(i >= 3 ? -0.25 : -1.5 + i / 2);
+        RightMotor.setPower(i >= 3 ? 0.25 : 1.5 - i / 2);
+        while (!(yawAngle >= (i >= 2 ? desiredAngle : desiredAngleCompensated))) {
+          yawAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+          // Update yaw while robot turns
+          telemetry.addData("Debug Yaw angle:", yawAngle);
+          telemetry.update();
+        }
+      } else {
+        // Turn right
+        LeftMotor.setPower(i >= 3 ? 0.25 : 1.5 - i / 2);
+        RightMotor.setPower(i >= 3 ? -0.25 : -1.5 + i / 2);
+        while (!(yawAngle <= (i >= 2 ? desiredAngle : desiredAngleCompensated))) {
+          // Update Yaw-Angle variable with current yaw.
+          yawAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+          // Report yaw orientation to Driver Station.
+          telemetry.addData("Debug Yaw angle:", yawAngle);
+          telemetry.update();
+        }
+      }
+      LeftMotor.setPower(0);
+      RightMotor.setPower(0);
+      // Allow robot to remove momentum
+      sleep(150);
+      // Check if within tolerance
+      yawAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+      if (yawAngle < desiredAngle + tolerance || yawAngle > desiredAngle - tolerance) {
+        // Restart from i loop with lower amplitude
+      } else {
+        // End function.
+        break;
+      }
+    }
+  }
+
+  /**
+   * Corrects yaw within +-1 degrees of accuracy over x distance.
+   * Uses time limit backup - if set to null, the code will ignore.
+   * Utilises the self-designed PrecisionDrive algorithm.
+   */
+  private void Move_desiredDistance_with_PrecisionDrive_Algorithm(int desiredDistance_cm, double timeLimit, double precisionAngle_drg, double correctionAmplitude) {
+    float originalDesiredAngle;
+
+    // Reset encoders and run
+    LeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    RightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    LeftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    RightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+    originalDesiredAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+    // Utilises auto-latching for forward or backward cmd
+    while (!((desiredDistance_cm > 0 ? getTranslatedDistance() : -getTranslatedDistance()) >= (desiredDistance_cm > 0 ? desiredDistance_cm : -desiredDistance_cm) || (timeLimit != null || timeLimit == 0 ? elapsedTime.milliseconds() >= timeLimit * Math.pow(10, 3) || isStopRequested() : isStopRequested()) || (desiredDistance_cm > 0 ? fwsAlert == true : null))) {
+      if (fwsAlert == true) {
+        break;
+      }
+      yawAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
+      // Z coord orientation angle
+      telemetry.addData("Debug Yaw angle:", yawAngle);
+      // If outside x degree(s) of desired yaw then correct
+      if (yawAngle < originalDesiredAngle + -precisionAngle_drg) {
+        // Left correction if positive, vice versa
+        leftPower = desiredDistance_cm > 0 ? correctionAmplitude : -1;
+        rightPower = desiredDistance_cm > 0 ? 1 : -correctionAmplitude;
+      } else if (yawAngle > originalDesiredAngle + precisionAngle_drg) {
+        // Right correction if positive, vice versa
+        leftPower = desiredDistance_cm > 0 ? 1 : -correctionAmplitude;
+        rightPower = desiredDistance_cm > 0 ? correctionAmplitude : -1;
+      } else {
+        // No correction
+        leftPower = desiredDistance_cm > 0 ? 1 : -1;
+        rightPower = desiredDistance_cm > 0 ? 1 : -1;
+      }
+      // Report debug information
+      telemetry.addData("Debug Left Power:", leftPower);
+      telemetry.addData("Debug Right Power:", rightPower);
+      telemetry.addData("Debug translatedDistance:", desiredDistance_cm > 0 ? getTranslatedDistance() : -getTranslatedDistance());
+      LeftMotor.setPower(leftPower);
+      RightMotor.setPower(rightPower);
+      telemetry.update();
+      // Loop correction algorithm and check FWS
+      if (desiredDistance_cm > 0) {
+        FWS_Collision_Avoidance_Check(50);
+      } else if (areMotorsOverexerting() == true) {
+        break;
+      }
+      sleep(200);
+    }
+    leftPower = 0;
+    rightPower = 0;
+    LeftMotor.setPower(leftPower);
+    RightMotor.setPower(rightPower);
+    // Allow robot to remove momentum
+    sleep(200);
+  }
+}
