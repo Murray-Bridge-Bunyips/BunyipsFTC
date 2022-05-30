@@ -6,68 +6,59 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+@SuppressWarnings("unused")
 @TeleOp(name = "LUCASBUBNERFreightFrenzyDriveTrain (Blocks to Java)")
 public class LUCASBUBNERFreightFrenzyDriveTrain extends LinearOpMode {
 
-  private DcMotor ArmMotor;
-  private DcMotor FrontRight;
-  private DcMotor BackRight;
-  private CRServo SpinIntake;
-  private DcMotor FrontLeft;
-  private DcMotor BackLeft;
-  private CRServo CarouselRight;
-  private CRServo CarouselLeft;
-
-  /**
-   * This function is executed when this Op Mode is selected from the Driver Station.
-   */
+    // Primary thread that is ran from the Driver Station.
   @Override
   public void runOpMode() {
-    int armPosition;
+    double armPosition;
 
-    ArmMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
-    FrontRight = hardwareMap.get(DcMotor.class, "Front Right");
-    BackRight = hardwareMap.get(DcMotor.class, "Back Right");
-    SpinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
-    FrontLeft = hardwareMap.get(DcMotor.class, "Front Left");
-    BackLeft = hardwareMap.get(DcMotor.class, "Back Left");
-    CarouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
-    CarouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
+    // Map hardware
+      DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
+      DcMotor frontRight = hardwareMap.get(DcMotor.class, "Front Right");
+      DcMotor backRight = hardwareMap.get(DcMotor.class, "Back Right");
+      CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
+      DcMotor frontLeft = hardwareMap.get(DcMotor.class, "Front Left");
+      DcMotor backLeft = hardwareMap.get(DcMotor.class, "Back Left");
+      CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
+      CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
 
     // Coded by Lucas Bubner
-    armPosition = ArmMotor.getCurrentPosition();
-    FrontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-    BackRight.setDirection(DcMotorSimple.Direction.REVERSE);
-    SpinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
-    ArmMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    armPosition = armMotor.getCurrentPosition();
+    frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+    backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+    spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
+    armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     waitForStart();
     while (opModeIsActive()) {
       // Standardised movements
-      SpinIntake.setPower(gamepad2.left_stick_y);
-      FrontLeft.setPower((gamepad1.left_stick_y - gamepad1.right_stick_x / 2) - gamepad1.left_stick_x / 2);
-      BackLeft.setPower((gamepad1.left_stick_y + gamepad1.right_stick_x / 2) - gamepad1.left_stick_x / 2);
-      FrontRight.setPower(gamepad1.left_stick_y + gamepad1.right_stick_x / 2 + gamepad1.left_stick_x / 2);
-      BackRight.setPower((gamepad1.left_stick_y - gamepad1.right_stick_x / 2) + gamepad1.left_stick_x / 2);
+      spinIntake.setPower(gamepad2.left_stick_y);
+      frontLeft.setPower((gamepad1.left_stick_y - gamepad1.right_stick_x / 2) - gamepad1.left_stick_x / 2);
+      backLeft.setPower((gamepad1.left_stick_y + gamepad1.right_stick_x / 2) - gamepad1.left_stick_x / 2);
+      frontRight.setPower(gamepad1.left_stick_y + gamepad1.right_stick_x / 2 + gamepad1.left_stick_x / 2);
+      backRight.setPower((gamepad1.left_stick_y - gamepad1.right_stick_x / 2) + gamepad1.left_stick_x / 2);
       // Carousel movements
       if (gamepad2.a || gamepad2.b) {
-        CarouselRight.setPower(gamepad2.a ? 1 : -1);
-        CarouselLeft.setPower(gamepad2.a ? -1 : 1);
+        carouselRight.setPower(gamepad2.a ? 1 : -1);
+        carouselLeft.setPower(gamepad2.a ? -1 : 1);
       } else {
-        CarouselRight.setPower(0);
-        CarouselLeft.setPower(0);
+        carouselRight.setPower(0);
+        carouselLeft.setPower(0);
       }
       // Arm movements
       armPosition = (int) (armPosition + -gamepad2.right_stick_y * 14);
-      ArmMotor.setTargetPosition(armPosition < 1850 ? armPosition : ArmMotor.getTargetPosition());
+      armMotor.setTargetPosition((int) armPosition < 1850 ? (int) armPosition : armMotor.getTargetPosition());
       telemetry.addData("ArmPosition", armPosition);
-      telemetry.addData("TargetPosition", ArmMotor.getTargetPosition());
-      telemetry.addData("CurrentPosition", ArmMotor.getCurrentPosition());
+      telemetry.addData("TargetPosition", armMotor.getTargetPosition());
+      telemetry.addData("CurrentPosition", armMotor.getCurrentPosition());
       telemetry.update();
-      ArmMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-      if (ArmMotor.getTargetPosition() > ArmMotor.getCurrentPosition() + 5 || ArmMotor.getTargetPosition() < ArmMotor.getCurrentPosition() - 5) {
-        ArmMotor.setPower(ArmMotor.getTargetPosition() > ArmMotor.getCurrentPosition() ? 0.25 : -0.25);
+      armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      if (armMotor.getTargetPosition() > armMotor.getCurrentPosition() + 5 || armMotor.getTargetPosition() < armMotor.getCurrentPosition() - 5) {
+        armMotor.setPower(armMotor.getTargetPosition() > armMotor.getCurrentPosition() ? 0.25 : -0.25);
       } else {
-        ArmMotor.setPower(0);
+        armMotor.setPower(0);
       }
     }
   }

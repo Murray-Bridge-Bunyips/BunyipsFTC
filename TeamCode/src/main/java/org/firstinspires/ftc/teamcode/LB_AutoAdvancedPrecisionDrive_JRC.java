@@ -18,20 +18,22 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
   // Murray Bridge Bunyips - 15215
   // ----------------------------------------------
 
-@Autonomous(name = "LB_AutoAdvancedPrecisionDrive_JRC (Blocks to Java)")
+@SuppressWarnings({"unused", "SameParameterValue"})
+@Autonomous(name = "LB_AutoAdvancedPrecisionDrive")
 public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
 
   // Declare all variables
-
   private BNO055IMU imu;
   private DcMotor LeftMotor;
   private DcMotor RightMotor;
   private DistanceSensor ForwardVisionSystem_DistanceSensor;
 
   boolean fwsAlert;
-  int leftPower;
   float yawAngle;
-  int rightPower;
+  double leftPower;
+  double rightPower;
+  double leftMotorCurrentPosition;
+  double rightMotorCurrentPosition;
   ElapsedTime elapsedTime;
 
   // IMU calibration check function
@@ -48,10 +50,10 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
    * motors have driven into something and are overexerting.
    */
   private boolean areMotorsOverexerting() {
-    return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle > 10 ? true : false;
+    return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle > 10;
   }
 
-  // Primary thread that is ran from the Driver Station.
+    // Primary thread that is ran from the Driver Station.
   @Override
   public void runOpMode() {
     BNO055IMU.Parameters imuParameters;
@@ -61,13 +63,12 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
     RightMotor = hardwareMap.get(DcMotor.class, "Right Motor");
     ForwardVisionSystem_DistanceSensor = hardwareMap.get(DistanceSensor.class, "Forward Vision System");
 
-
     // Set braking mode for both motors
     LeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     RightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     // Neutralise the FWS stop system
     fwsAlert = false;
-    // Reverse direction of motor for one-direction trvl
+    // Reverse direction of motor for one-direction travel
     LeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
     // Reset encoders for distance calc
     LeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -80,7 +81,7 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
     imuParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
     // Init IMU sequence
     imu.initialize(imuParameters);
-    telemetry.addData("Status", "IMU successfully initalised");
+    telemetry.addData("Status", "IMU successfully initialised");
     telemetry.update();
     // IMU calibration check
     sleep(1000);
@@ -92,7 +93,7 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
     }
     // Calibration complete - await for Driver
     telemetry.addData("IMU", "Ready.");
-    telemetry.addData(">", "Ready to initalise code.");
+    telemetry.addData(">", "Ready to initialise code.");
     telemetry.update();
     waitForStart();
     // Ready to start, run blocks below
@@ -135,7 +136,9 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
    * We get the translated distance travelled by the encoders in centimetres.
    */
   private double getTranslatedDistance() {
-    return 3.34646 * Math.PI * (((LeftMotor.getCurrentPosition() + RightMotor.getCurrentPosition()) / 2) / 288) * 2.54;
+    leftMotorCurrentPosition = LeftMotor.getCurrentPosition();
+    rightMotorCurrentPosition = RightMotor.getCurrentPosition();
+    return 3.34646 * Math.PI * ((leftMotorCurrentPosition + rightMotorCurrentPosition) / 2) / 288 * 2.54;
   }
 
   /**
@@ -146,12 +149,12 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
    * the motor control to the following function in runOpMode.
    * Code written by Lucas Bubner.
    */
-  private void FWS_Collision_Avoidance_Check(int reverseDist_cm) {
+  private void FWS_Collision_Avoidance_Check() {
     double fwsDist;
     double captureCurrentDistance;
 
     fwsDist = ForwardVisionSystem_DistanceSensor.getDistance(DistanceUnit.CM);
-    if (fwsDist < 7 || areMotorsOverexerting() == true) {
+    if (fwsDist < 7 || areMotorsOverexerting()) {
       // Activating FWS procedure
       // Broadcast to code to stop operations
       fwsAlert = true;
@@ -164,7 +167,8 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
       captureCurrentDistance = getTranslatedDistance();
       LeftMotor.setPower(-1);
       RightMotor.setPower(-1);
-      while (!(getTranslatedDistance() <= captureCurrentDistance - reverseDist_cm)) {
+      // Reverse distance is 7cm
+      while (!(getTranslatedDistance() <= captureCurrentDistance - 7)) {
         // Allow robot to move backwards until reverse_dist
         telemetry.addData("Debug", "fws_alert currently active");
         telemetry.update();
@@ -229,11 +233,9 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
       sleep(150);
       // Check if within tolerance
       yawAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
-      if (yawAngle < desiredAngle + tolerance || yawAngle > desiredAngle - tolerance) {
-        // Restart from i loop with lower amplitude
-      } else {
-        // End function.
-        break;
+      if (!(yawAngle < desiredAngle + tolerance || yawAngle > desiredAngle - tolerance)) {
+          // Restart from i loop with lower amplitude until aligned
+          break;
       }
     }
   }
@@ -245,7 +247,6 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
    */
   private void Move_desiredDistance_with_PrecisionDrive_Algorithm(int desiredDistance_cm, double timeLimit, double precisionAngle_drg, double correctionAmplitude) {
     float originalDesiredAngle;
-
     // Reset encoders and run
     LeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     RightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -253,15 +254,15 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
     RightMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     originalDesiredAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
     // Utilises auto-latching for forward or backward cmd
-    while (!((desiredDistance_cm > 0 ? getTranslatedDistance() : -getTranslatedDistance()) >= (desiredDistance_cm > 0 ? desiredDistance_cm : -desiredDistance_cm) || (timeLimit != null || timeLimit == 0 ? elapsedTime.milliseconds() >= timeLimit * Math.pow(10, 3) || isStopRequested() : isStopRequested()) || (desiredDistance_cm > 0 ? fwsAlert == true : null))) {
-      if (fwsAlert == true) {
+    while (!((desiredDistance_cm > 0 ? getTranslatedDistance() : -getTranslatedDistance()) >= (desiredDistance_cm > 0 ? desiredDistance_cm : -desiredDistance_cm) || (timeLimit != 0) ? elapsedTime.milliseconds() >= timeLimit * Math.pow(10, 3) || isStopRequested() : isStopRequested()) || (desiredDistance_cm > 0 ? fwsAlert : isStopRequested())) {
+      if (fwsAlert) {
         break;
       }
       yawAngle = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).thirdAngle;
-      // Z coord orientation angle
+      // Z coordination orientation angle
       telemetry.addData("Debug Yaw angle:", yawAngle);
       // If outside x degree(s) of desired yaw then correct
-      if (yawAngle < originalDesiredAngle + -precisionAngle_drg) {
+      if (yawAngle < originalDesiredAngle - precisionAngle_drg) {
         // Left correction if positive, vice versa
         leftPower = desiredDistance_cm > 0 ? correctionAmplitude : -1;
         rightPower = desiredDistance_cm > 0 ? 1 : -correctionAmplitude;
@@ -283,7 +284,7 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
       telemetry.update();
       // Loop correction algorithm and check FWS
       if (desiredDistance_cm > 0) {
-        FWS_Collision_Avoidance_Check(50);
+        FWS_Collision_Avoidance_Check();
       } else if (areMotorsOverexerting()) {
         break;
       }
