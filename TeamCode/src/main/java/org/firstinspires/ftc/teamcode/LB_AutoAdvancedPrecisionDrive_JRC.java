@@ -63,8 +63,6 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
     LeftMotor = hardwareMap.get(DcMotor.class, "Left Motor");
     RightMotor = hardwareMap.get(DcMotor.class, "Right Motor");
     ForwardVisionSystem_DistanceSensor = hardwareMap.get(DistanceSensor.class, "Forward Vision System");
-
-    // Set braking mode for both motors
     LeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     RightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     // Neutralise the FWS stop system
