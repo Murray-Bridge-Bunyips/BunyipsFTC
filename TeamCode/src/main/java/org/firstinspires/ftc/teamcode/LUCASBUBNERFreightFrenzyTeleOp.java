@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @SuppressWarnings("unused")
-@TeleOp(name = "LUCASBUBNERFreightFrenzyDriveTrain")
-public class LUCASBUBNERFreightFrenzyDriveTrain extends LinearOpMode {
+@TeleOp(name = "LUCASBUBNERFreightFrenzyTeleOp")
+public class LUCASBUBNERFreightFrenzyTeleOp extends LinearOpMode {
 
     // Primary thread that is ran from the Driver Station.
   @Override
