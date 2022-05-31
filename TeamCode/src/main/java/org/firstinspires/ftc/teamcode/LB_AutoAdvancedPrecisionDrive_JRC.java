@@ -100,15 +100,15 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
       // Create new timer for various operations
       elapsedTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
       // Call to main variable functions
-      Turn_drg_using_Tri_stop_Algorithm(60, 3);
-      Move_desiredDistance_with_PrecisionDrive_Algorithm(243, 0, 1, 0.9);
-      Turn_drg_using_Tri_stop_Algorithm(-1, 5);
+      TurnUsingAngleAdjustmentAlgorithm(60, 3);
+      MoveDesiredDistanceWithPrecisionDriveAlgorithm(243, 0, 1, 0.9);
+      TurnUsingAngleAdjustmentAlgorithm(-1, 5);
       for (int count = 0; count < 2; count++) {
-        Move_desiredDistance_with_PrecisionDrive_Algorithm(75, 0, 0.75, 0.8);
-        Move_desiredDistance_with_PrecisionDrive_Algorithm(-75, 0, 0.75, 0.8);
+        MoveDesiredDistanceWithPrecisionDriveAlgorithm(75, 0, 0.75, 0.8);
+        MoveDesiredDistanceWithPrecisionDriveAlgorithm(-75, 0, 0.75, 0.8);
       }
-      Turn_drg_using_Tri_stop_Algorithm(-75, 2);
-      Move_desiredDistance_with_PrecisionDrive_Algorithm(175, 0, 1, 0.9);
+      TurnUsingAngleAdjustmentAlgorithm(-75, 2);
+      MoveDesiredDistanceWithPrecisionDriveAlgorithm(175, 0, 1, 0.9);
       // Execution complete.
       leftPower = 0;
       rightPower = 0;
@@ -184,7 +184,7 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
    * Utilise the Angle Adjustment Algorithm in order to turn the
    * robot to within accuracies, with three-stop correction.
    */
-  private void Turn_drg_using_Tri_stop_Algorithm(int desiredAngle, int tolerance) {
+  private void TurnUsingAngleAdjustmentAlgorithm(int desiredAngle, int tolerance) {
     boolean turnSwitch;
     double i;
     int desiredAngleCompensated;
@@ -244,7 +244,7 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
    * Uses time limit backup - if set to null, the code will ignore.
    * Utilises the self-designed PrecisionDrive algorithm.
    */
-  private void Move_desiredDistance_with_PrecisionDrive_Algorithm(int desiredDistance_cm, double timeLimit, double precisionAngle_drg, double correctionAmplitude) {
+  private void MoveDesiredDistanceWithPrecisionDriveAlgorithm(int desiredDistance_cm, double timeLimit, double precisionAngle_drg, double correctionAmplitude) {
     float originalDesiredAngle;
     // Reset encoders and run
     LeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
