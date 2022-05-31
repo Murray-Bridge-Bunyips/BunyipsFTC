@@ -104,8 +104,8 @@ public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
       MoveDesiredDistanceWithPrecisionDriveAlgorithm(243, 0, 1, 0.9);
       TurnUsingAngleAdjustmentAlgorithm(-1, 5);
       for (int count = 0; count < 2; count++) {
-        MoveDesiredDistanceWithPrecisionDriveAlgorithm(75, 0, 0.75, 0.8);
-        MoveDesiredDistanceWithPrecisionDriveAlgorithm(-75, 0, 0.75, 0.8);
+        MoveDesiredDistanceWithPrecisionDriveAlgorithm(100, 0, 0.75, 0.8);
+        MoveDesiredDistanceWithPrecisionDriveAlgorithm(-100, 0, 0.75, 0.8);
       }
       TurnUsingAngleAdjustmentAlgorithm(-75, 2);
       MoveDesiredDistanceWithPrecisionDriveAlgorithm(175, 0, 1, 0.9);
