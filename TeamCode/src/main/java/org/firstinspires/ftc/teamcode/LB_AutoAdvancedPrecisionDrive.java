@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -18,9 +19,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
   // Murray Bridge Bunyips - 15215
   // ----------------------------------------------
 
+// THIS CODE WAS INTENDED FOR USE WITH MINI BOT LISA, THIS WAS MERELY IMPORTED FOR CODE USAGE
+
 @SuppressWarnings({"unused", "SameParameterValue"})
+@Disabled
 @Autonomous(name = "LB_AutoAdvancedPrecisionDrive")
-public class LB_AutoAdvancedPrecisionDrive_JRC extends LinearOpMode {
+public class LB_AutoAdvancedPrecisionDrive extends LinearOpMode {
 
   // Declare hardware
   private BNO055IMU imu;
