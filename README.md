@@ -2,7 +2,7 @@
 
 This repository contains the public FTC SDK for the Freight Frenzy (2021-2022) competition season.
 
-## Repository fork owner
+## Fork Information
 Forked by Lucas Bubner - Coder of the Murray Bridge Bunyips - FTC Team 15215
 
 ## Welcome!
