@@ -22,7 +22,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 // THIS CODE WAS INTENDED FOR USE WITH MINI BOT LISA, THIS WAS MERELY IMPORTED FOR CODE USAGE
 
 @SuppressWarnings({"unused", "SameParameterValue"})
-@Disabled
+@Disabled // Not for use with competition robot
 @Autonomous(name = "LB_AutoAdvancedPrecisionDrive")
 public class LB_AutoAdvancedPrecisionDrive extends LinearOpMode {
 
