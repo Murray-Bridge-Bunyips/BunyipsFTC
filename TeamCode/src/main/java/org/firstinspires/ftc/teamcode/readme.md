@@ -1,10 +1,5 @@
 ## TeamCode Module
-
-Welcome!
-
-This module, TeamCode, is the place where you will write/paste the code for your team's
-robot controller App. This module is currently empty (a clean slate) but the
-process for adding OpModes is straightforward.
+This is where all Bunyips (15215) Java based code will reside! Feel free to have a look around and steal any of our code. It's likely already stolen from elsewhere unless mentioned.
 
 ## Creating your own OpModes
 
