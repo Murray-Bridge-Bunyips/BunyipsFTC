@@ -192,8 +192,8 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
             } else {
 
                 // drive using manual POV Joystick mode.
-                drive = -gamepad1.left_stick_y  / 2.0;  // Reduce drive rate to 50%.
-                turn  =  gamepad1.right_stick_x / 4.0;  // Reduce turn rate to 25%.
+                drive = -gamepad1.left_stick_y;
+                turn  =  gamepad1.right_stick_x;
                 telemetry.addData("Manual","Drive %5.2f, Turn %5.2f", drive, turn);
             }
             telemetry.update();
