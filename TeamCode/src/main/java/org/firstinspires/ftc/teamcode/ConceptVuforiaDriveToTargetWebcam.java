@@ -130,11 +130,11 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
 
         waitForStart();
 
-        boolean targetFound     = false;    // Set to true when a target is detected by Vuforia
+        boolean targetFound;    // Set to true when a target is detected by Vuforia
         double  targetRange     = 0;        // Distance from camera to target in Inches
         double  targetBearing   = 0;        // Robot Heading, relative to target.  Positive degrees means target is to the right.
-        double  drive           = 0;        // Desired forward power (-1 to +1)
-        double  turn            = 0;        // Desired turning power (-1 to +1)
+        double  drive;        // Desired forward power (-1 to +1)
+        double  turn;        // Desired turning power (-1 to +1)
 
         while (opModeIsActive())
         {
@@ -183,11 +183,10 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
 
                 // Determine heading and range error so we can use them to control the robot automatically.
                 double  rangeError   = (targetRange - DESIRED_DISTANCE);
-                double  headingError = targetBearing;
 
                 // Use the speed and turn "gains" to calculate how we want the robot to move.
                 drive = rangeError * SPEED_GAIN;
-                turn  = headingError * TURN_GAIN ;
+                turn  = targetBearing * TURN_GAIN ;
 
                 telemetry.addData("Auto","Drive %5.2f, Turn %5.2f", drive, turn);
             } else {
