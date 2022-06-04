@@ -18,26 +18,15 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 /**
  * This OpMode illustrates using a webcam to locate and drive towards ANY Vuforia target.
- * The code assumes a basic two-wheel Robot Configuration with motors named left_drive and right_drive.
- * The motor directions must be set so a positive drive goes forward and a positive turn rotates to the right.
  *
  * Under manual control, the left stick will move forward/back, and the right stick will turn left/right.
  * This is called POV Joystick mode, different than Tank Drive (where each joystick controls a wheel).
  * Manually drive the robot until it displays Target data on the Driver Station.
- * Press and hold the *Left Bumper* to enable the automatic "Drive to target" mode.
- * Release the Left Bumper to return to manual driving mode.
+ * Press and hold the *Left Bumper* to disable the automatic "Drive to target" mode.
+ * Release the Left Bumper to return to auto driving mode.
  *
  * Use DESIRED_DISTANCE to set how close you want the robot to get to the target.
  * Speed and Turn sensitivity can be adjusted using the SPEED_GAIN and TURN_GAIN constants.
- *
- * For more Vuforia details, or to adapt this OpMode for a phone camera, view the
- *  ConceptVuforiaFieldNavigation and ConceptVuforiaFieldNavigationWebcam samples.
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- *
- * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
- * is explained below.
  */
 
 @SuppressWarnings("unused")
@@ -45,7 +34,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 // @Disabled
 public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
 {
-    // Adjust these numbers to suit your robot.
     final double DESIRED_DISTANCE = 10.0; //  this is how close the camera should get to the target (inches)
                                          //  The GAIN constants set the relationship between the measured position error,
                                          //  and how much power is applied to the drive motors.  Drive = Error * Gain
@@ -55,18 +43,6 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
 
     final double MM_PER_INCH = 25.40 ;   //  Metric conversion
 
-    /*
-     * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which
-     * 'parameters.vuforiaLicenseKey' is initialized is for illustration only, and will not function.
-     * A Vuforia 'Development' license key, can be obtained free of charge from the Vuforia developer
-     * web site at https://developer.vuforia.com/license-manager.
-     *
-     * Vuforia license keys are always 380 characters long, and look as if they contain mostly
-     * random data. As an example, here is a example of a fragment of a valid key:
-     *      ... yIgIzTqZ4mWjk9wd3cZO9T1axEqzuhxoGlfOOI2dRzKS4T0hQ8kT ...
-     * Once you've obtained a license key, copy the string from the Vuforia web site
-     * and paste it in to your code on the next line, between the double quotes.
-     */
     private static final String VUFORIA_KEY =
             "AUAUEO7/////AAABmaBhSSJLMEMkmztY3FQ8jc8fX/wM6mSSQMqcLVW4LjbkWOU5wMH4tLQR7u90fyd93G/7JgfGU5nn2fHF41Q+oaUFe4zI58cr7KsONh689X8o8nr6+7BPN9gMrz08bOzj4+4JwxJ1m84iTPqCpImzYMHr60dtlKBSHN53sRL476JHa+HxZZB4kVq0BhpHlDo7WSGUb6wb5qdgGS3GGx62kiZVCfuWkGY0CZY+pdenCmkNXG2w0/gaeKC5gNw+8G4oGPmAKYiVtCkVJOvjKFncom2h82seL9QA9k96YKns4pQcJn5jdkCbbKNPULv3sqvuvWsjfFOpvzJ0Wh36MrcXlRCetR5oNWctERDjujSjf1o1";
     // Vuforia key from Lucas Bubner
@@ -178,7 +154,7 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
                 telemetry.addData(">","Drive using joystick to find target\n");
             }
 
-            // Drive to target Automatically if Left Bumper is being pressed, AND we have found a target.
+            // Drive to target Automatically if Left Bumper is not being pressed, AND we have found a target.
             if (!gamepad1.left_bumper && targetFound) {
 
                 // Determine heading and range error so we can use them to control the robot automatically.
