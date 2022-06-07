@@ -43,6 +43,8 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
 
     final double MM_PER_INCH = 25.40 ;   //  Metric conversion
 
+    double armPosition = 1000;
+
     private static final String VUFORIA_KEY =
             "AUAUEO7/////AAABmaBhSSJLMEMkmztY3FQ8jc8fX/wM6mSSQMqcLVW4LjbkWOU5wMH4tLQR7u90fyd93G/7JgfGU5nn2fHF41Q+oaUFe4zI58cr7KsONh689X8o8nr6+7BPN9gMrz08bOzj4+4JwxJ1m84iTPqCpImzYMHr60dtlKBSHN53sRL476JHa+HxZZB4kVq0BhpHlDo7WSGUb6wb5qdgGS3GGx62kiZVCfuWkGY0CZY+pdenCmkNXG2w0/gaeKC5gNw+8G4oGPmAKYiVtCkVJOvjKFncom2h82seL9QA9k96YKns4pQcJn5jdkCbbKNPULv3sqvuvWsjfFOpvzJ0Wh36MrcXlRCetR5oNWctERDjujSjf1o1";
     // Vuforia key from Lucas Bubner
@@ -181,6 +183,19 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
             frontLeft.setPower(leftPower);
             backLeft.setPower(leftPower);
             backRight.setPower(rightPower);
+
+      // Arm controller, taken from LUCASBUBNERFreightFrenzyTeleOp.java
+      armPosition = (int) (armPosition + -gamepad2.right_stick_y * 14);
+      armMotor.setTargetPosition((int) armPosition < 1850 ? (int) armPosition : armMotor.getTargetPosition());
+      telemetry.addData("ArmPosition", armPosition);
+      telemetry.addData("TargetPosition", armMotor.getTargetPosition());
+      telemetry.addData("CurrentPosition", armMotor.getCurrentPosition());
+      armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      if (armMotor.getTargetPosition() > armMotor.getCurrentPosition() + 5 || armMotor.getTargetPosition() < armMotor.getCurrentPosition() - 5) {
+        armMotor.setPower(armMotor.getTargetPosition() > armMotor.getCurrentPosition() ? 0.25 : -0.25);
+      } else {
+        armMotor.setPower(0);
+      }
 
             sleep(10);
         }
