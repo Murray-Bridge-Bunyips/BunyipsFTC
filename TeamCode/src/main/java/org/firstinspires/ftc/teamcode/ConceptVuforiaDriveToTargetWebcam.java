@@ -184,7 +184,7 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
             backLeft.setPower(leftPower);
             backRight.setPower(rightPower);
 
-      // Arm controller taken from LUCASBUBNERFreightFrenzyTeleOp.java
+      // Arm controller, taken from LUCASBUBNERFreightFrenzyTeleOp.java
       armPosition = (int) (armPosition + -gamepad2.right_stick_y * 14);
       armMotor.setTargetPosition((int) armPosition < 1850 ? (int) armPosition : armMotor.getTargetPosition());
       telemetry.addData("ArmPosition", armPosition);
