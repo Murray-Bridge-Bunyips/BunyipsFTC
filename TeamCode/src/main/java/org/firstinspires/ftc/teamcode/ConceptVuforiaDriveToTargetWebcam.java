@@ -23,27 +23,27 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
  * This is called POV Joystick mode, different than Tank Drive (where each joystick controls a wheel).
  * Manually drive the robot until it displays Target data on the Driver Station.
  * Press and hold the *Left Bumper* to disable the automatic "Drive to target" mode.
- * Release the Left Bumper to return to auto driving mode.
+ * Release the Left Bumper to return to manual driving mode.
  *
  * Use DESIRED_DISTANCE to set how close you want the robot to get to the target.
  * Speed and Turn sensitivity can be adjusted using the SPEED_GAIN and TURN_GAIN constants.
  */
 
 @SuppressWarnings("unused")
-@TeleOp(name="Concept - Vuforia DriveToTarget", group = "Concept")
+@TeleOp(name="Vuforia DriveToTarget")
 // @Disabled
 public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
 {
-    final double DESIRED_DISTANCE = 10.0; //  this is how close the camera should get to the target (inches)
+    final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
                                          //  The GAIN constants set the relationship between the measured position error,
                                          //  and how much power is applied to the drive motors.  Drive = Error * Gain
                                          //  Make these values smaller for smoother control.
-    final double SPEED_GAIN =   0.09 ;   //  Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
-    final double TURN_GAIN  =   0.01 ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
+    final double SPEED_GAIN =   0.05 ;   //  Speed Control "Gain". eg: Ramp up to 50% power at a 25 inch error.   (0.50 / 25.0)
+    final double TURN_GAIN  =   0.02 ;   //  Turn Control "Gain".  eg: Ramp up to 25% power at a 25 degree error. (0.25 / 25.0)
 
     final double MM_PER_INCH = 25.40 ;   //  Metric conversion
 
-    double armPosition = 1000;
+    double armPosition = 1600;
 
     private static final String VUFORIA_KEY =
             "AUAUEO7/////AAABmaBhSSJLMEMkmztY3FQ8jc8fX/wM6mSSQMqcLVW4LjbkWOU5wMH4tLQR7u90fyd93G/7JgfGU5nn2fHF41Q+oaUFe4zI58cr7KsONh689X8o8nr6+7BPN9gMrz08bOzj4+4JwxJ1m84iTPqCpImzYMHr60dtlKBSHN53sRL476JHa+HxZZB4kVq0BhpHlDo7WSGUb6wb5qdgGS3GGx62kiZVCfuWkGY0CZY+pdenCmkNXG2w0/gaeKC5gNw+8G4oGPmAKYiVtCkVJOvjKFncom2h82seL9QA9k96YKns4pQcJn5jdkCbbKNPULv3sqvuvWsjfFOpvzJ0Wh36MrcXlRCetR5oNWctERDjujSjf1o1";
@@ -170,8 +170,8 @@ public class ConceptVuforiaDriveToTargetWebcam extends LinearOpMode
             } else {
 
                 // drive using manual POV Joystick mode.
-                drive = -gamepad1.left_stick_y;
-                turn  =  gamepad1.right_stick_x;
+                drive = -gamepad1.left_stick_y / 2;
+                turn  =  gamepad1.right_stick_x / 2;
                 telemetry.addData("Manual","Drive %5.2f, Turn %5.2f", drive, turn);
             }
             telemetry.update();
