@@ -1,31 +1,37 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 // This code uses fragments from the Advanced Precision Drive, original creation.
 
 /*
-*   CODED AND MAINTAINED BY LUCAS BUBNER
-*   15215 - MURRAY BRIDGE BUNYIPS
-*/
+ *   CODED AND MAINTAINED BY LUCAS BUBNER
+ *   15215 - MURRAY BRIDGE BUNYIPS
+ */
 
 @SuppressWarnings("unused")
 @Autonomous(name = "LUCASBUBNERFreightFrenzyAutonomous")
 @Disabled // Code declared in work progress: 31/05/22
 public class LUCASBUBNERFreightFrenzyAutonomous extends LinearOpMode {
+    private BNO055IMU imu;
 
     // Declare variables
     float yawAngle;
     double leftPower;
     double rightPower;
 
-    // Declare unit conversion variables
-    final float INCHES_TO_CM = 2.54;
-    final float GEAR_RATIO = // TODO: add gear ratio
-    final float WHEEL_DIAMETER_INCHES = // TODO: add wheel diameter in inches
+    // Declare unit conversion and onboard specification variables
+    final double INCHES_TO_CM = 2.54;
+
+    // final double GEAR_RATIO = // TODO: add gear ratio
+    // final double WHEEL_DIAMETER_INCHES = // TODO: add wheel diameter in inches
 
 
     // IMU Calibration Check function
@@ -33,36 +39,63 @@ public class LUCASBUBNERFreightFrenzyAutonomous extends LinearOpMode {
         telemetry.addData("IMU calibration status", imu.getCalibrationStatus());
         telemetry.addData("Gyro calibration", imu.isGyroCalibrated() ? "True" : "False");
         telemetry.addData("System status", imu.getSystemStatus().toString());
-    return imu.isGyroCalibrated();
+        return imu.isGyroCalibrated();
     }
 
     // getTranslatedDistance function modified from Advanced Precision Drive code
     private double getMovedTranslatedDistance() {
 
-
+        return 0; // TODO: add this function
     }
 
     // Ran on init
     @Override
-    public void runOpMode() throws InterruptedException {
-  
-    // Map hardware
-    DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
-    DcMotor frontRight = hardwareMap.get(DcMotor.class, "Front Right");
-    DcMotor backRight = hardwareMap.get(DcMotor.class, "Back Right");
-    CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
-    DcMotor frontLeft = hardwareMap.get(DcMotor.class, "Front Left");
-    DcMotor backLeft = hardwareMap.get(DcMotor.class, "Back Left");
-    CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
-    CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
-    BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "IMU");
+    public void runOpMode() {
 
-    // Set motor direction
-    frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-    backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-    spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
-    armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // Map hardware
+        DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
+        DcMotor frontRight = hardwareMap.get(DcMotor.class, "Front Right");
+        DcMotor backRight = hardwareMap.get(DcMotor.class, "Back Right");
+        CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
+        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "Front Left");
+        DcMotor backLeft = hardwareMap.get(DcMotor.class, "Back Left");
+        CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
+        CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
+        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "IMU");
 
-    // IMU initalisation process
+        // Set motor direction
+        frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // IMU initialisation process
+        BNO055IMU.Parameters imuParameters = new BNO055IMU.Parameters();
+        imuParameters.mode = BNO055IMU.SensorMode.IMU;
+        imuParameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        imuParameters.loggingEnabled = true;
+        imuParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        // Init IMU sequence
+        imu.initialize(imuParameters);
+        telemetry.addData("Status", "IMU successfully initialised");
+        telemetry.update();
+        // IMU calibration check
+        sleep(1000);
+
+        while (!imuCalibrated()) {
+            telemetry.addData("If calibration ", "doesn't complete after 3 seconds, move through 90 degree pitch, roll and yaw motions until calibration is complete.");
+            telemetry.update();
+            // Loop until IMU is calibrated
+            sleep(1000);
+        }
+
+        // Calibration complete - await for Driver
+        telemetry.addData("IMU", "Ready.");
+        telemetry.addData(">", "Ready to initialise code.");
+        telemetry.update();
+
+        waitForStart();
+        // Ready to start, run code below
     }
 }
