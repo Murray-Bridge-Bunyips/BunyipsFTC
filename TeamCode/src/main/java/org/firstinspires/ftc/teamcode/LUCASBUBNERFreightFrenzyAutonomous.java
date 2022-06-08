@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 
-// This code uses fragments from the Advanced Precision Drive, coded by Lucas Bubner
+// This code uses fragments from the Advanced Precision Drive, original creation.
 
 /*
 *   CODED AND MAINTAINED BY LUCAS BUBNER
@@ -17,6 +17,35 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @Disabled // Code declared in work progress: 31/05/22
 public class LUCASBUBNERFreightFrenzyAutonomous extends LinearOpMode {
 
+    // Declare variables
+    float yawAngle;
+    double leftPower;
+    double rightPower;
+
+    // Declare unit conversion variables
+    final float INCHES_TO_CM = 2.54;
+    final float GEAR_RATIO = // TODO: add gear ratio
+    final float WHEEL_DIAMETER_INCHES = // TODO: add wheel diameter in inches
+
+
+    // IMU Calibration Check function
+    private boolean imuCalibrated() {
+        telemetry.addData("IMU calibration status", imu.getCalibrationStatus());
+        telemetry.addData("Gyro calibration", imu.isGyroCalibrated() ? "True" : "False");
+        telemetry.addData("System status", imu.getSystemStatus().toString());
+    return imu.isGyroCalibrated();
+    }
+
+    // getTranslatedDistance function modified from Advanced Precision Drive code
+    private double getMovedTranslatedDistance() {
+
+
+    }
+
+    // Ran on init
+    @Override
+    public void runOpMode() throws InterruptedException {
+  
     // Map hardware
     DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
     DcMotor frontRight = hardwareMap.get(DcMotor.class, "Front Right");
@@ -26,25 +55,14 @@ public class LUCASBUBNERFreightFrenzyAutonomous extends LinearOpMode {
     DcMotor backLeft = hardwareMap.get(DcMotor.class, "Back Left");
     CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
     CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
-    SensorBNO055IMU imu = hardwareMap.get(BNO055IMU.class, "IMU");
+    BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "IMU");
 
-    // Declare variables
-    float yawAngle;
-    double leftPower;
-    double rightPower;
+    // Set motor direction
+    frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
+    backRight.setDirection(DcMotorSimple.Direction.REVERSE);
+    spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
+    armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-    // IMU Calibration Check
-    private boolean imuCalibrated() {
-        telemetry.addData("IMU calibration status", imu.getCalibrationStatus());
-        telemetry.addData("Gyro calibration", imu.isGyroCalibrated() ? "True" : "False");
-        telemetry.addData("System status", imu.getSystemStatus().toString());
-    return imu.isGyroCalibrated();
+    // IMU initalisation process
     }
-
-    // Ran on init
-    @Override
-    public void runOpMode() throws InterruptedException {
-
-    }
-
 }
