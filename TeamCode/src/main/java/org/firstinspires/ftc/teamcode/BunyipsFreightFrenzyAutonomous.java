@@ -17,9 +17,9 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
  */
 
 @SuppressWarnings("unused")
-@Autonomous(name = "LUCASBUBNERFreightFrenzyAutonomous")
+@Autonomous(name = "<> LUCAS BUBNER - Freight Frenzy Autonomous")
 @Disabled // Code declared in work progress: 31/05/22
-public class LUCASBUBNERFreightFrenzyAutonomous extends LinearOpMode {
+public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
     private BNO055IMU imu;
 
     // Declare variables

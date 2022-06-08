@@ -23,8 +23,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @SuppressWarnings({"unused", "SameParameterValue"})
 @Disabled // Not for use with competition robot
-@Autonomous(name = "LB_AutoAdvancedPrecisionDrive")
-public class LB_AutoAdvancedPrecisionDrive extends LinearOpMode {
+@Autonomous(name = "LB - Auto Advanced Precision Drive")
+public class ReferenceAdvancedPrecisionDrive extends LinearOpMode {
 
   // Declare hardware
   private BNO055IMU imu;

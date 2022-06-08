@@ -109,7 +109,7 @@ on the internet (trust me, everyone does it).
 */
 
 
-@TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
+@TeleOp(name="Reference - Linear OpMode")
 // This line is required at the top of every OpMode. Replace @TeleOp with @Autonomous to change the
 // code type to Autonomous. This is where you put the name of the OpMode between the quotes
 // in (name="").
@@ -159,6 +159,7 @@ public class REFERENCECode_LinearTeleOp extends LinearOpMode {
     // You will need to research more into OOP (object-oriented programming) in order to fully
     // understand this. In essence, it tells the computer that this is a completely fresh
     // and new function, independent from any higher classes.
+    // For FTC Java coding, knowing about superclasses and OOP isn't necessary
     public void runOpMode() {
         // public void runOpMode() {} declares to the computer that we are opening a new function.
         // It is better called a method, but for the sake of simplicity and comparison to Blocks,
@@ -244,8 +245,12 @@ public class REFERENCECode_LinearTeleOp extends LinearOpMode {
             // Now, we send off data to the Driver Station about our ElapsedTime runtime, and the motor power.
             // It might look a bit complex, but all this code does is
             telemetry.addData("Status", "Run Time: " + runtime.toString());
+            // Retrieve the runtime variable and convert it to a String (readable text), then send it to telemetry
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            // Retrieve the left and right motor power variables and send them to telemetry
+            // %.2f prints the motor power as a floating point type, which in essence only allows two digits after the decimal point to actually be printed. (similar to rounding to the hundredth)
             telemetry.update();
+            // Send it to the Driver Station
 
             // That's it! The code will see that the while loop is still on during the code execution,
             // and return back to the other curly bracket up the code, which will repeat everything again.
