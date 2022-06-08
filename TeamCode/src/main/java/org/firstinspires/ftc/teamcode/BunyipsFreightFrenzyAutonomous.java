@@ -8,6 +8,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+
 // This code uses fragments from the Advanced Precision Drive, original creation.
 
 /*
@@ -19,17 +23,29 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 @Autonomous(name = "<> LUCAS BUBNER - Freight Frenzy Autonomous")
 @Disabled // Code declared in work progress: 31/05/22
 public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
-    private BNO055IMU imu;
 
     // Declare variables
-    float yawAngle;
     double leftPower;
     double rightPower;
+    int armPositionCapture;
 
     // Declare unit conversion and onboard specification variables
     final double INCHES_TO_CM = 2.54;
     final double GEAR_RATIO = 0; // TODO: add gear ratio
     final double WHEEL_DIAMETER_INCHES = 0; // TODO: add wheel diameter in inches
+
+    // Declare Vuforia framework keys
+
+    // Map hardware
+    DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
+    DcMotor frontRight = hardwareMap.get(DcMotor.class, "Front Right");
+    DcMotor backRight = hardwareMap.get(DcMotor.class, "Back Right");
+    CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
+    DcMotor frontLeft = hardwareMap.get(DcMotor.class, "Front Left");
+    DcMotor backLeft = hardwareMap.get(DcMotor.class, "Back Left");
+    CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
+    CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
+    BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "Control Hub IMU");
 
     // IMU Calibration Check function
     private boolean imuCalibrated() {
@@ -45,20 +61,12 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
         return 0; // TODO: add this function
     }
 
+    // Functions to get data of the environment
+    private double getYawAngle() { return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle; }
+
     // Ran on init
     @Override
     public void runOpMode() {
-
-        // Map hardware
-        DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
-        DcMotor frontRight = hardwareMap.get(DcMotor.class, "Front Right");
-        DcMotor backRight = hardwareMap.get(DcMotor.class, "Back Right");
-        CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
-        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "Front Left");
-        DcMotor backLeft = hardwareMap.get(DcMotor.class, "Back Left");
-        CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
-        CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
-        BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "IMU");
 
         // Set motor direction
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -94,4 +102,15 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
         waitForStart();
         // Ready to start, run code below
     }
-}
+
+    private void moveArmToPosition(int desiredArmPosition) {
+        armMotor.setTargetPosition(desiredArmPosition < 1850 ? desiredArmPosition : armMotor.getTargetPosition());
+        armPositionCapture = desiredArmPosition;
+        while (armMotor.getTargetPosition() > armMotor.getCurrentPosition() + 5 || armMotor.getTargetPosition() < armMotor.getCurrentPosition() - 5) {
+            armMotor.setPower(armMotor.getTargetPosition() > armMotor.getCurrentPosition() ? 0.25 : -0.25);
+        }
+            armMotor.setPower(0);
+        // TODO: Have a method in which we can make sure the arm does not fall as the thread will no longer check the arm after the original adjustment
+        }
+    }
+
