@@ -57,7 +57,11 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
 
     // getTranslatedDistance function modified from Advanced Precision Drive code
     private double getMovedTranslatedDistance() {
-
+        /*
+        *   https://docs.google.com/document/d/1YqXxqQ4coYpGpb9xww9eVwUjlsdRepenzvxSz-adRe0/edit?usp=sharing
+        *   https://www.sae.org/binaries/content/assets/cm/content/learn/education/motortoycar-samplelessonplan.pdf
+        *   http://cmra.rec.ri.cmu.edu/previews/rcx_products/robotics_educator_workbook/content/mech/pages/Diameter_Distance_TraveledTEACH.pdf
+        */
         return 0; // TODO: add this function
     }
 
