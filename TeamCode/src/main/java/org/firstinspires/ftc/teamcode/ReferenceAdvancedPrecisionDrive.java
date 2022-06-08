@@ -22,7 +22,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 // THIS CODE WAS INTENDED FOR USE WITH MINI BOT LISA, THIS WAS MERELY IMPORTED FOR CODE USAGE
 
 @SuppressWarnings({"unused", "SameParameterValue"})
-@Disabled // Not for use with competition robot
+@Disabled
+// Not for use with competition robot, assumes two wheel config with names Left Motor, Right Motor,
+// and BNO055IMU named imu
 @Autonomous(name = "LB - Auto Advanced Precision Drive")
 public class ReferenceAdvancedPrecisionDrive extends LinearOpMode {
 
@@ -152,7 +154,7 @@ public class ReferenceAdvancedPrecisionDrive extends LinearOpMode {
    * the motor control to the following function in runOpMode.
    * Code written by Lucas Bubner.
    */
-  private void FWS_Collision_Avoidance_Check() {
+  private void FWSCollisionAvoidanceCheck() {
     double fwsDist;
     double captureCurrentDistance;
 
@@ -287,7 +289,7 @@ public class ReferenceAdvancedPrecisionDrive extends LinearOpMode {
       telemetry.update();
       // Loop correction algorithm and check FWS
       if (desiredDistance_cm > 0) {
-        FWS_Collision_Avoidance_Check();
+        FWSCollisionAvoidanceCheck();
       } else if (areMotorsOverexerting()) {
         break;
       }

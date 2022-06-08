@@ -117,7 +117,7 @@ on the internet (trust me, everyone does it).
 // Comment out the @Disabled text to make your OpMode visible in the Driver Station app. This
 // reference sheet is currently disabled as it is a reference code! When you make one yourself,
 // you'll need to comment this out with > //
-public class REFERENCECode_LinearTeleOp extends LinearOpMode {
+public class ReferenceLinearTeleOp extends LinearOpMode {
     // Java is a language based upon 'classes'. What this means is that everything ran in Java
     // is under a sort of template that allows you to write code. It is not important to know
     // the specifics of classes, just that the code 'public class' means that you are declaring

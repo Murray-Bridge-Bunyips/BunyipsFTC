@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -29,10 +28,8 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
 
     // Declare unit conversion and onboard specification variables
     final double INCHES_TO_CM = 2.54;
-
-    // final double GEAR_RATIO = // TODO: add gear ratio
-    // final double WHEEL_DIAMETER_INCHES = // TODO: add wheel diameter in inches
-
+    final double GEAR_RATIO = 0; // TODO: add gear ratio
+    final double WHEEL_DIAMETER_INCHES = 0; // TODO: add wheel diameter in inches
 
     // IMU Calibration Check function
     private boolean imuCalibrated() {
@@ -74,20 +71,19 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
         imuParameters.mode = BNO055IMU.SensorMode.IMU;
         imuParameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         imuParameters.loggingEnabled = true;
-        imuParameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
         // Init IMU sequence
         imu.initialize(imuParameters);
         telemetry.addData("Status", "IMU successfully initialised");
         telemetry.update();
-        // IMU calibration check
         sleep(1000);
 
+        // IMU calibration check
         while (!imuCalibrated()) {
-            telemetry.addData("If calibration ", "doesn't complete after 3 seconds, move through 90 degree pitch, roll and yaw motions until calibration is complete.");
+            telemetry.addData("Calibrating... ", " If doesn't complete after 3 seconds, move through 90 degree pitch, roll and yaw motions until calibration is complete.");
             telemetry.update();
-            // Loop until IMU is calibrated
-            sleep(1000);
+            // Hold thread until IMU is calibrated
+            sleep(250);
         }
 
         // Calibration complete - await for Driver
