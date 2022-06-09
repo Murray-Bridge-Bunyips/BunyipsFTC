@@ -3,8 +3,9 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+// Uses Extended DcMotor class
 
 @SuppressWarnings("unused")
 @TeleOp(name = "Motors - Max Velocity")
@@ -23,12 +24,12 @@ public class ConceptMotorVelocity extends LinearOpMode {
     public void runOpMode() {
         
         // Map hardware
-        DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor"); // Not using
-        DcMotor frontRight = hardwareMap.get(DcMotor.class, "Front Right");
-        DcMotor backRight = hardwareMap.get(DcMotor.class, "Back Right");
+        DcMotorEx armMotor = hardwareMap.get(DcMotorEx.class, "Arm Motor"); // Not using
+        DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class, "Front Right");
+        DcMotorEx backRight = hardwareMap.get(DcMotorEx.class, "Back Right");
         CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake"); // Not using
-        DcMotor frontLeft = hardwareMap.get(DcMotor.class, "Front Left");
-        DcMotor backLeft = hardwareMap.get(DcMotor.class, "Back Left");
+        DcMotorEx frontLeft = hardwareMap.get(DcMotorEx.class, "Front Left");
+        DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class, "Back Left");
         CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right"); // Not using
         CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left"); // Not using
 

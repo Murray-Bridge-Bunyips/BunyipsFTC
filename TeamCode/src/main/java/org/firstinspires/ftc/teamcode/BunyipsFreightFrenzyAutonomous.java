@@ -5,9 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -17,7 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-// This code uses fragments from the Advanced Precision Drive, original creation.
+// Uses Extended DcMotor class
 
 /*
  *   CODED AND MAINTAINED BY LUCAS BUBNER
@@ -55,12 +54,12 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
     String targetName           = "";
 
     // Map hardware
-    DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
-    DcMotor frontRight = hardwareMap.get(DcMotor.class, "Front Right");
-    DcMotor backRight = hardwareMap.get(DcMotor.class, "Back Right");
+    DcMotorEx armMotor = hardwareMap.get(DcMotorEx.class, "Arm Motor");
+    DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class, "Front Right");
+    DcMotorEx backRight = hardwareMap.get(DcMotorEx.class, "Back Right");
     CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
-    DcMotor frontLeft = hardwareMap.get(DcMotor.class, "Front Left");
-    DcMotor backLeft = hardwareMap.get(DcMotor.class, "Back Left");
+    DcMotorEx frontLeft = hardwareMap.get(DcMotorEx.class, "Front Left");
+    DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class, "Back Left");
     CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
     CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
     BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "Control Hub IMU");
@@ -95,7 +94,7 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
-        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
         // IMU initialisation process
         BNO055IMU.Parameters imuParameters = new BNO055IMU.Parameters();
