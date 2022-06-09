@@ -8,9 +8,14 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 // This code uses fragments from the Advanced Precision Drive, original creation.
 
@@ -27,8 +32,10 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
     // Declare variables
     double leftPower;
     double rightPower;
-    double leftSideAvgPosition;
-    double rightSideAvgPostion;
+    double frontLeftPosition;
+    double frontRightPosition;
+    double backLeftPosition;
+    double backRightPosition;
     boolean targetFound = false;
     double targetDist;
     double targetBearing;
@@ -58,14 +65,6 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
     CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
     BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "Control Hub IMU");
 
-    // PIDF configuration as we are using HD Hex Motors and they may not be calibrated properly
-    armMotor.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
-    frontLeft.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
-    frontRight.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
-    backLeft.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
-    backRight.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
-    // TODO: Calibrate these motors properly
-
     // IMU calibration check function
     private boolean imuCalibrated() {
         telemetry.addData("IMU calibration status", imu.getCalibrationStatus());
@@ -76,9 +75,11 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
 
     // getTranslatedDistance function modified from Advanced Precision Drive code, using gear ratio
     private double getMovedTranslatedDistance() {
-        leftSideAvgPosition = ((frontLeft.getCurrentPosition() + backLeft.getCurrentPosition()) / 2);
-        rightSideAvgPostion = ((backLeft.getCurrentPosition() + backRight.getCurrentPosition()) / 2);
-        return (WHEEL_DIAMETER_INCHES * Math.PI * ((leftSideAvgPosition + rightSideAvgPostion) / 2) / (MOTOR_TICKS_PER_REVOLUTION / FOLLOWER_GEAR_RATIO) * INCHES_TO_CM); // TODO: add this function
+        frontLeftPosition = frontLeft.getCurrentPosition();
+        frontRightPosition = frontRight.getCurrentPosition();
+        backLeftPosition = backLeft.getCurrentPosition();
+        backRightPosition = backRight.getCurrentPosition();
+        return (WHEEL_DIAMETER_INCHES * Math.PI * ((frontLeftPosition + frontRightPosition + backLeftPosition + backRightPosition) / 4) / (MOTOR_TICKS_PER_REVOLUTION / FOLLOWER_GEAR_RATIO) * INCHES_TO_CM); // TODO: add this function
     }
 
     // Functions to get data of the environment
@@ -116,7 +117,7 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
             sleep(250);
         }
 
-        // Calibration complete - start Vuforia initalisation
+        // Calibration complete - start Vuforia initialisation
         telemetry.addData("IMU", "Ready.");
         telemetry.addData(">", "Initialising Vuforia...");
         telemetry.update();
@@ -148,13 +149,13 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
         // TODO: Have a method in which we can make sure the arm does not fall as the thread will no longer check the arm after the original adjustment
         // This may not be an issue if the thread automatically holds the arm position as it is in RunToPosition mode
         }
-    
+    /*
     private void PrecisionDrive(int desiredDistance, double timeConstraint, double precision, double amplitude) {
         // TODO: PrecisionDrive 2
     }
 
     private void AngleAdjustment(int desiredAngle, int tolerance) {
         // TODO: Angle Adjustment Algorithm 2
-    }
+    } */
     }
 

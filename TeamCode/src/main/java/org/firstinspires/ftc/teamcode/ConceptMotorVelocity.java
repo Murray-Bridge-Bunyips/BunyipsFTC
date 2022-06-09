@@ -4,8 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+
+@SuppressWarnings("unused")
 @TeleOp(name = "Motors - Max Velocity")
 public class ConceptMotorVelocity extends LinearOpMode {
     double backLeftcurrentVelocity;
@@ -16,7 +17,8 @@ public class ConceptMotorVelocity extends LinearOpMode {
     double backRightmaxVelocity = 0.0;
     double frontRightcurrentVelocity;
     double frontRightmaxVelocity = 0.0;
- 
+    
+    @SuppressWarnings("unused")
     @Override
     public void runOpMode() {
         
