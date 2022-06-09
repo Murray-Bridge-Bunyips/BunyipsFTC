@@ -34,7 +34,9 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
     final double GEAR_RATIO = 0; // TODO: add gear ratio
     final double WHEEL_DIAMETER_INCHES = 0; // TODO: add wheel diameter in inches
 
-    // Declare Vuforia framework keys
+    // Declare Vuforia framework key
+    private static final String VUFORIA_KEY =
+            "AUAUEO7/////AAABmaBhSSJLMEMkmztY3FQ8jc8fX/wM6mSSQMqcLVW4LjbkWOU5wMH4tLQR7u90fyd93G/7JgfGU5nn2fHF41Q+oaUFe4zI58cr7KsONh689X8o8nr6+7BPN9gMrz08bOzj4+4JwxJ1m84iTPqCpImzYMHr60dtlKBSHN53sRL476JHa+HxZZB4kVq0BhpHlDo7WSGUb6wb5qdgGS3GGx62kiZVCfuWkGY0CZY+pdenCmkNXG2w0/gaeKC5gNw+8G4oGPmAKYiVtCkVJOvjKFncom2h82seL9QA9k96YKns4pQcJn5jdkCbbKNPULv3sqvuvWsjfFOpvzJ0Wh36MrcXlRCetR5oNWctERDjujSjf1o1";
 
     // Map hardware
     DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
