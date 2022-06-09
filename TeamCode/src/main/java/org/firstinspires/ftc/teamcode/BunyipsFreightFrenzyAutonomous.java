@@ -27,16 +27,25 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
     // Declare variables
     double leftPower;
     double rightPower;
+    double leftSideAvgPosition;
+    double rightSideAvgPostion;
+    boolean targetFound = false;
+    double targetDist;
+    double targetBearing;
     int armPositionCapture;
 
     // Declare unit conversion and onboard specification variables
     final double INCHES_TO_CM = 2.54;
-    final double GEAR_RATIO = 0; // TODO: add gear ratio
+    final double FOLLOWER_GEAR_RATIO = 0; // TODO: add following (driven) gear ratio, use 1:<ratio>
     final double WHEEL_DIAMETER_INCHES = 0; // TODO: add wheel diameter in inches
+    final double MOTOR_TICKS_PER_REVOLUTION = 0; // TODO: add the motor ticks per revolution
 
-    // Declare Vuforia framework key
+    // Declare Vuforia framework items (key, variables)
     private static final String VUFORIA_KEY =
             "AUAUEO7/////AAABmaBhSSJLMEMkmztY3FQ8jc8fX/wM6mSSQMqcLVW4LjbkWOU5wMH4tLQR7u90fyd93G/7JgfGU5nn2fHF41Q+oaUFe4zI58cr7KsONh689X8o8nr6+7BPN9gMrz08bOzj4+4JwxJ1m84iTPqCpImzYMHr60dtlKBSHN53sRL476JHa+HxZZB4kVq0BhpHlDo7WSGUb6wb5qdgGS3GGx62kiZVCfuWkGY0CZY+pdenCmkNXG2w0/gaeKC5gNw+8G4oGPmAKYiVtCkVJOvjKFncom2h82seL9QA9k96YKns4pQcJn5jdkCbbKNPULv3sqvuvWsjfFOpvzJ0Wh36MrcXlRCetR5oNWctERDjujSjf1o1";
+    VuforiaLocalizer vuforia    = null;
+    OpenGLMatrix targetPose     = null;
+    String targetName           = "";
 
     // Map hardware
     DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
@@ -49,7 +58,14 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
     CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
     BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "Control Hub IMU");
 
-    // IMU Calibration Check function
+    // PIDF configuration as we are using HD Hex Motors and they may not be calibrated properly
+    armMotor.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
+    frontLeft.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
+    frontRight.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
+    backLeft.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
+    backRight.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
+
+    // IMU calibration check function
     private boolean imuCalibrated() {
         telemetry.addData("IMU calibration status", imu.getCalibrationStatus());
         telemetry.addData("Gyro calibration", imu.isGyroCalibrated() ? "True" : "False");
@@ -57,18 +73,17 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
         return imu.isGyroCalibrated();
     }
 
-    // getTranslatedDistance function modified from Advanced Precision Drive code
+    // getTranslatedDistance function modified from Advanced Precision Drive code, using gear ratio
     private double getMovedTranslatedDistance() {
-        /*
-        *   https://docs.google.com/document/d/1YqXxqQ4coYpGpb9xww9eVwUjlsdRepenzvxSz-adRe0/edit?usp=sharing
-        *   https://www.sae.org/binaries/content/assets/cm/content/learn/education/motortoycar-samplelessonplan.pdf
-        *   http://cmra.rec.ri.cmu.edu/previews/rcx_products/robotics_educator_workbook/content/mech/pages/Diameter_Distance_TraveledTEACH.pdf
-        */
-        return 0; // TODO: add this function
+        leftSideAvgPosition = ((frontLeft.getCurrentPosition() + backLeft.getCurrentPosition()) / 2);
+        rightSideAvgPostion = ((backLeft.getCurrentPosition() + backRight.getCurrentPosition()) / 2);
+        return (WHEEL_DIAMETER_INCHES * Math.PI * ((leftSideAvgPosition + rightSideAvgPostion) / 2) / (MOTOR_TICKS_PER_REVOLUTION / FOLLOWER_GEAR_RATIO) * INCHES_TO_CM); // TODO: add this function
     }
 
     // Functions to get data of the environment
-    private double getYawAngle() { return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle; }
+    private double getYawAngle() {
+        return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).firstAngle;
+        }
 
     // Ran on init
     @Override
@@ -100,10 +115,23 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
             sleep(250);
         }
 
-        // Calibration complete - await for Driver
+        // Calibration complete - start Vuforia initalisation
         telemetry.addData("IMU", "Ready.");
-        telemetry.addData(">", "Ready to initialise code.");
+        telemetry.addData(">", "Initialising Vuforia...");
         telemetry.update();
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
+        parameters.useExtendedTracking = false;
+        parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+        this.vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        VuforiaTrackables targetsFreightFrenzy = this.vuforia.loadTrackablesFromAsset("FreightFrenzy");
+        targetsFreightFrenzy.get(0).setName("Blue Storage");
+        targetsFreightFrenzy.get(1).setName("Blue Alliance Wall");
+        targetsFreightFrenzy.get(2).setName("Red Storage");
+        targetsFreightFrenzy.get(3).setName("Red Alliance Wall");
+        targetsFreightFrenzy.activate();
 
         waitForStart();
         // Ready to start, run code below
@@ -117,6 +145,15 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
         }
             armMotor.setPower(0);
         // TODO: Have a method in which we can make sure the arm does not fall as the thread will no longer check the arm after the original adjustment
+        // This may not be an issue if the thread automatically holds the arm position as it is in RunToPosition mode
         }
+    
+    private void PrecisionDrive(int desiredDistance, double timeConstraint, double precision, double amplitude) {
+        // TODO: PrecisionDrive 2
+    }
+
+    private void AngleAdjustment(int desiredAngle, int tolerance) {
+        // TODO: Angle Adjustment Algorithm 2
+    }
     }
 
