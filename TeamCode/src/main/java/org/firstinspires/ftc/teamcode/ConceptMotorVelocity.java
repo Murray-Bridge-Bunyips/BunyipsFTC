@@ -4,12 +4,14 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Uses Extended DcMotor class
 
 @SuppressWarnings("unused")
 @TeleOp(name = "Motors - Max Velocity")
 public class ConceptMotorVelocity extends LinearOpMode {
+    private ElapsedTime runtime = new ElapsedTime();
     double backLeftcurrentVelocity;
     double backLeftmaxVelocity = 0.0;
     double frontLeftcurrentVelocity;
@@ -37,14 +39,16 @@ public class ConceptMotorVelocity extends LinearOpMode {
         telemetry.addData("!!!", " SET ROBOT ON STAND BEFORE STARTING, AND USE A CHARGED BATTERY.");
         telemetry.update();
         waitForStart();
-
+        runtime.reset()
+        
         // Start all motors
         backLeft.setPower(1); 
         frontLeft.setPower(1);
         backRight.setPower(1);
         frontRight.setPower(1);
 
-        while (opModeIsActive()) {
+        while (runtime.seconds() < 7) {
+            
             backLeftcurrentVelocity = backLeft.getVelocity();
             backRightcurrentVelocity = backRight.getVelocity();
             frontLeftcurrentVelocity = frontLeft.getVelocity();
@@ -66,6 +70,7 @@ public class ConceptMotorVelocity extends LinearOpMode {
                 frontRightmaxVelocity = frontRightcurrentVelocity;
             }
             
+            telemetry.addData("Runtime", runtime.toString());
             telemetry.addData("backLeftcurrentVelocity", backLeftcurrentVelocity);
             telemetry.addData("backLeftmaxVelocity", backLeftmaxVelocity);
             telemetry.addData("backRightcurrentVelocity", backRightcurrentVelocity);
@@ -80,5 +85,6 @@ public class ConceptMotorVelocity extends LinearOpMode {
         frontLeft.setPower(0);
         backRight.setPower(0);
         frontRight.setPower(0);
+        sleep(5000);
     }
 }
