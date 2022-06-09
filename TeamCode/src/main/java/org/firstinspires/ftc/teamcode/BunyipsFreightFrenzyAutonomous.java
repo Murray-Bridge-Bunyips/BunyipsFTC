@@ -64,6 +64,7 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
     frontRight.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
     backLeft.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
     backRight.setVelocityPIDFCoefficients(1.17, 0.117, 0, 11.7);
+    // TODO: Calibrate these motors properly
 
     // IMU calibration check function
     private boolean imuCalibrated() {
