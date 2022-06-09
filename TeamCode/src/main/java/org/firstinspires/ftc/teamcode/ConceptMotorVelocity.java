@@ -76,5 +76,9 @@ public class ConceptMotorVelocity extends LinearOpMode {
             telemetry.addData("frontRightmaxVelocity", frontRightmaxVelocity);
             telemetry.update();
         }
+        backLeft.setPower(0);
+        frontLeft.setPower(0);
+        backRight.setPower(0);
+        frontRight.setPower(0);
     }
 }

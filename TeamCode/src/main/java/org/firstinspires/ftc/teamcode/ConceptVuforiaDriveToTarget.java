@@ -16,19 +16,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
-/**
- * This OpMode illustrates using a webcam to locate and drive towards ANY Vuforia target.
- *
- * Under manual control, the left stick will move forward/back, and the right stick will turn left/right.
- * This is called POV Joystick mode, different than Tank Drive (where each joystick controls a wheel).
- * Manually drive the robot until it displays Target data on the Driver Station.
- * Press and hold the *Left Bumper* to disable the automatic "Drive to target" mode.
- * Release the Left Bumper to return to manual driving mode.
- *
- * Use DESIRED_DISTANCE to set how close you want the robot to get to the target.
- * Speed and Turn sensitivity can be adjusted using the SPEED_GAIN and TURN_GAIN constants.
- */
-
 @SuppressWarnings("unused")
 @TeleOp(name="Vuforia - Drive To Target")
 // @Disabled
