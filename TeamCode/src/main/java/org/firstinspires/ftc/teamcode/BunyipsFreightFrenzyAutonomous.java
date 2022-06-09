@@ -64,6 +64,8 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
     CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
     BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "Control Hub IMU");
 
+    // PIDF calibrations (manual velocity calibration xx/xx/xx)
+
     // IMU calibration check function
     private boolean imuCalibrated() {
         telemetry.addData("IMU calibration status", imu.getCalibrationStatus());

@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @SuppressWarnings("unused")
 @TeleOp(name = "Motors - Max Velocity")
-public class ConceptMotorVelocity extends LinearOpMode {
+public class TestMotorVelocity extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     double backLeftcurrentVelocity;
     double backLeftmaxVelocity = 0.0;
