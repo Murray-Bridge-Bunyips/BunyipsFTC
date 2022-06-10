@@ -4,12 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Uses Extended DcMotor class
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "FieldMayBeFinal"})
 @TeleOp(name = "Test - Drivetrain PIDF")
 public class TestMotorVelocity extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
@@ -43,55 +42,72 @@ public class TestMotorVelocity extends LinearOpMode {
         frontRight.setDirection(DcMotorEx.Direction.REVERSE);
         backRight.setDirection(DcMotorEx.Direction.REVERSE);
 
+        telemetry.addData("TEST READY", "Initialise to begin test (20s)");
         telemetry.addData("WARNING"," MOVEMENT MOTORS WILL ENGAGE AT FULL SPEED WHEN STARTED!!");
-        telemetry.addData("!!!", " SET ROBOT ON STAND BEFORE STARTING, AND USE A CHARGED BATTERY.");
+        telemetry.addData("!!!", " SET ROBOT ON STABLE STAND BEFORE STARTING, AND USE A FULLY CHARGED BATTERY.");
         telemetry.update();
+
         waitForStart();
         
-        // Start back left motor
+        // Back Left
         runtime.reset();
         backLeft.setPower(1);
-        while (runtime.seconds() < 4) {
+        while (runtime.seconds() < 5) {
             backLeftcurrentVelocity = backLeft.getVelocity();
-           /* backRightcurrentVelocity = backRight.getVelocity();
-            frontLeftcurrentVelocity = frontLeft.getVelocity();
-            frontRightcurrentVelocity = frontRight.getVelocity(); */
             if (backLeftcurrentVelocity > backLeftmaxVelocity) {
-                backLeftmaxVelocity = backLeftcurrentVelocity;
-            }
-
-         /*   if (backRightcurrentVelocity > backRightmaxVelocity) {
-                backRightmaxVelocity = backRightcurrentVelocity;
-            }
-
-            if (frontLeftcurrentVelocity > frontLeftmaxVelocity) {
-                frontLeftmaxVelocity = frontLeftcurrentVelocity;
-            }
-
-            if (frontRightcurrentVelocity > frontRightmaxVelocity) {
-                frontRightmaxVelocity = frontRightcurrentVelocity;
-            } */
-            
+                backLeftmaxVelocity = backLeftcurrentVelocity; }
+            telemetry.addData("TEST IN PROGRESS", "1/4, Back Left Motor");
             telemetry.addData("Runtime", runtime.toString());
             telemetry.addData("backLeftcurrentVelocity", backLeftcurrentVelocity);
             telemetry.addData("backLeftmaxVelocity", backLeftmaxVelocity);
-           /* telemetry.addData("backRightcurrentVelocity", backRightcurrentVelocity);
+            telemetry.update();
+        } finalBackLeftMVeloc = backLeftmaxVelocity;
+        backLeft.setPower(0);
+
+        // Back Right
+        runtime.reset();
+        backRight.setPower(1);
+        while (runtime.seconds() > 5) {
+            backRightcurrentVelocity = backRight.getVelocity();
+            if (backRightcurrentVelocity > backRightmaxVelocity) {
+                backRightmaxVelocity = backRightcurrentVelocity; }
+            telemetry.addData("TEST IN PROGRESS", "2/4, Back Right Motor");
+            telemetry.addData("Runtime", runtime.toString());
+            telemetry.addData("backRightcurrentVelocity", backRightcurrentVelocity);
             telemetry.addData("backRightmaxVelocity", backRightmaxVelocity);
+            telemetry.update();
+        } finalBackRightMVeloc = backRightmaxVelocity;
+        backRight.setPower(0);
+
+
+        // Front Left
+        runtime.reset();
+        frontLeft.setPower(1);
+        while (runtime.seconds() > 5) {
+            frontLeftcurrentVelocity = frontLeft.getVelocity();
+            if (frontLeftcurrentVelocity > frontLeftmaxVelocity) {
+                frontLeftmaxVelocity = frontLeftcurrentVelocity; }
+            telemetry.addData("TEST IN PROGRESS", "3/4, Front Left Motor");
+            telemetry.addData("Runtime", runtime.toString());
             telemetry.addData("frontLeftcurrentVelocity", frontLeftcurrentVelocity);
             telemetry.addData("frontLeftmaxVelocity", frontLeftmaxVelocity);
-            telemetry.addData("frontRightcurrentVelocity", frontRightcurrentVelocity);
-            telemetry.addData("frontRightmaxVelocity", frontRightmaxVelocity);
-            telemetry.update(); */
-        }
-
-        finalBackLeftMVeloc = backLeftmaxVelocity;
-        finalBackRightMVeloc = backRightmaxVelocity;
-        finalFrontLeftMVeloc = frontLeftmaxVelocity;
-        finalFrontRightMVeloc = frontRightmaxVelocity;
-
-        backLeft.setPower(0);
+            telemetry.update();
+        } finalFrontLeftMVeloc = frontLeftmaxVelocity;
         frontLeft.setPower(0);
-        backRight.setPower(0);
+
+        // Front Right
+        runtime.reset();
+        frontRight.setPower(1);
+        while (runtime.seconds() > 5) {
+            frontRightcurrentVelocity = frontRight.getVelocity();
+            if (frontRightcurrentVelocity > frontRightmaxVelocity) {
+                frontRightmaxVelocity = frontRightcurrentVelocity; }
+            telemetry.addData("TEST IN PROGRESS", "4/4, Front Right Motor");
+            telemetry.addData("Runtime", runtime.toString());
+            telemetry.addData("frontcurrentVelocity", frontRightcurrentVelocity);
+            telemetry.addData("frontmaxVelocity", frontRightmaxVelocity);
+            telemetry.update();
+        } finalFrontRightMVeloc = frontRightmaxVelocity;
         frontRight.setPower(0);
 
         telemetry.addData("TEST COMPLETE", "PIDF CALCULATED.");
