@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 // Uses Extended DcMotor class
@@ -39,30 +40,27 @@ public class TestMotorVelocity extends LinearOpMode {
         CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right"); // Not using
         CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left"); // Not using
 
-        telemetry.addData("WARNING"," ALL MOVEMENT MOTORS WILL ENGAGE AT FULL SPEED WHEN STARTED!!");
+        frontRight.setDirection(DcMotorEx.Direction.REVERSE);
+        backRight.setDirection(DcMotorEx.Direction.REVERSE);
+
+        telemetry.addData("WARNING"," MOVEMENT MOTORS WILL ENGAGE AT FULL SPEED WHEN STARTED!!");
         telemetry.addData("!!!", " SET ROBOT ON STAND BEFORE STARTING, AND USE A CHARGED BATTERY.");
         telemetry.update();
         waitForStart();
-        runtime.reset()
         
-        // Start all motors
-        backLeft.setPower(1); 
-        frontLeft.setPower(1);
-        backRight.setPower(1);
-        frontRight.setPower(1);
-
-        while (runtime.seconds() < 7) {
-            
+        // Start back left motor
+        runtime.reset();
+        backLeft.setPower(1);
+        while (runtime.seconds() < 4) {
             backLeftcurrentVelocity = backLeft.getVelocity();
-            backRightcurrentVelocity = backRight.getVelocity();
+           /* backRightcurrentVelocity = backRight.getVelocity();
             frontLeftcurrentVelocity = frontLeft.getVelocity();
-            frontRightcurrentVelocity = frontRight.getVelocity();
-        
+            frontRightcurrentVelocity = frontRight.getVelocity(); */
             if (backLeftcurrentVelocity > backLeftmaxVelocity) {
                 backLeftmaxVelocity = backLeftcurrentVelocity;
             }
 
-            if (backRightcurrentVelocity > backRightmaxVelocity) {
+         /*   if (backRightcurrentVelocity > backRightmaxVelocity) {
                 backRightmaxVelocity = backRightcurrentVelocity;
             }
 
@@ -72,19 +70,20 @@ public class TestMotorVelocity extends LinearOpMode {
 
             if (frontRightcurrentVelocity > frontRightmaxVelocity) {
                 frontRightmaxVelocity = frontRightcurrentVelocity;
-            }
+            } */
             
             telemetry.addData("Runtime", runtime.toString());
             telemetry.addData("backLeftcurrentVelocity", backLeftcurrentVelocity);
             telemetry.addData("backLeftmaxVelocity", backLeftmaxVelocity);
-            telemetry.addData("backRightcurrentVelocity", backRightcurrentVelocity);
+           /* telemetry.addData("backRightcurrentVelocity", backRightcurrentVelocity);
             telemetry.addData("backRightmaxVelocity", backRightmaxVelocity);
             telemetry.addData("frontLeftcurrentVelocity", frontLeftcurrentVelocity);
             telemetry.addData("frontLeftmaxVelocity", frontLeftmaxVelocity);
-            telemetry.addData("frontRightcurrentVelocity", backLeftcurrentVelocity);
+            telemetry.addData("frontRightcurrentVelocity", frontRightcurrentVelocity);
             telemetry.addData("frontRightmaxVelocity", frontRightmaxVelocity);
-            telemetry.update();
+            telemetry.update(); */
         }
+
         finalBackLeftMVeloc = backLeftmaxVelocity;
         finalBackRightMVeloc = backRightmaxVelocity;
         finalFrontLeftMVeloc = frontLeftmaxVelocity;
@@ -105,6 +104,6 @@ public class TestMotorVelocity extends LinearOpMode {
         telemetry.addData("Back Right Max Velocity", finalBackRightMVeloc);
         telemetry.addData("PIDF Back Right", "(" + 0.1*(32767/finalBackRightMVeloc) + ", " + 0.1*(0.1*(32767/finalBackRightMVeloc)) + ", " + "0" + ", " + (32767/finalBackRightMVeloc) + ")");
         telemetry.update();
-        sleep(10000);
+        sleep(60000);
     }
 }
