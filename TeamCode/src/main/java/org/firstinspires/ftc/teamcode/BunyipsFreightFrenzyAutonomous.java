@@ -64,7 +64,13 @@ public class BunyipsFreightFrenzyAutonomous extends LinearOpMode {
     CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
     BNO055IMU imu = hardwareMap.get(BNO055IMU.class, "Control Hub IMU");
 
-    // PIDF calibrations (manual velocity calibration xx/xx/xx)
+    /* TODO: Velocty PIDF calibrations
+    // PIDF calibrations for drivetrain (manual velocity calibration conducted xx/xx/xx)
+    motor.setVelocityPIDFCoefficients(0, 0, 0, 0);
+    motor.setVelocityPIDFCoefficients(0, 0, 0, 0);
+    motor.setVelocityPIDFCoefficients(0, 0, 0, 0);
+    motor.setVelocityPIDFCoefficients(0, 0, 0, 0);
+    */
 
     // IMU calibration check function
     private boolean imuCalibrated() {

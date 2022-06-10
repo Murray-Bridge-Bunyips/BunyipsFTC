@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 // Uses Extended DcMotor class
 
 @SuppressWarnings("unused")
-@TeleOp(name = "Motors - Max Velocity")
+@TeleOp(name = "Test - Drivetrain PIDF")
 public class TestMotorVelocity extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     double backLeftcurrentVelocity;
@@ -20,6 +20,10 @@ public class TestMotorVelocity extends LinearOpMode {
     double backRightmaxVelocity = 0.0;
     double frontRightcurrentVelocity;
     double frontRightmaxVelocity = 0.0;
+    double finalBackLeftMVeloc;
+    double finalBackRightMVeloc;
+    double finalFrontLeftMVeloc;
+    double finalFrontRightMVeloc;
     
     @SuppressWarnings("unused")
     @Override
@@ -81,10 +85,26 @@ public class TestMotorVelocity extends LinearOpMode {
             telemetry.addData("frontRightmaxVelocity", frontRightmaxVelocity);
             telemetry.update();
         }
+        finalBackLeftMVeloc = backLeftmaxVelocity;
+        finalBackRightMVeloc = backRightmaxVelocity;
+        finalFrontLeftMVeloc = frontLeftmaxVelocity;
+        finalFrontRightMVeloc = frontRightmaxVelocity;
+
         backLeft.setPower(0);
         frontLeft.setPower(0);
         backRight.setPower(0);
         frontRight.setPower(0);
-        sleep(5000);
+
+        telemetry.addData("TEST COMPLETE", "PIDF CALCULATED.");
+        telemetry.addData("Front Left Max Velocity", finalFrontLeftMVeloc);
+        telemetry.addData("PIDF Front Left", "(" + 0.1*(32767/finalFrontLeftMVeloc) + ", " + 0.1*(0.1*(32767/finalFrontLeftMVeloc)) + ", " + "0" + ", " + (32767/finalFrontLeftMVeloc) + ")");
+        telemetry.addData("Front Right Max Velocity", finalFrontRightMVeloc);
+        telemetry.addData("PIDF Front Right", "(" + 0.1*(32767/finalFrontRightMVeloc) + ", " + 0.1*(0.1*(32767/finalFrontRightMVeloc)) + ", " + "0" + ", " + (32767/finalFrontRightMVeloc) + ")");
+        telemetry.addData("Back Left Max Velocity", finalBackLeftMVeloc);
+        telemetry.addData("PIDF Back Left", "(" + 0.1*(32767/finalBackLeftMVeloc) + ", " + 0.1*(0.1*(32767/finalBackLeftMVeloc)) + ", " + "0" + ", " + (32767/finalBackLeftMVeloc) + ")");
+        telemetry.addData("Back Right Max Velocity", finalBackRightMVeloc);
+        telemetry.addData("PIDF Back Right", "(" + 0.1*(32767/finalBackRightMVeloc) + ", " + 0.1*(0.1*(32767/finalBackRightMVeloc)) + ", " + "0" + ", " + (32767/finalBackRightMVeloc) + ")");
+        telemetry.update();
+        sleep(10000);
     }
 }

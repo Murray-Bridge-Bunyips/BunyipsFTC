@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @SuppressWarnings("unused")
@@ -16,21 +16,29 @@ public class BunyipsFreightFrenzyTeleOp extends LinearOpMode {
     double armPosition;
 
     // Map hardware
-      DcMotor armMotor = hardwareMap.get(DcMotor.class, "Arm Motor");
-      DcMotor frontRight = hardwareMap.get(DcMotor.class, "Front Right");
-      DcMotor backRight = hardwareMap.get(DcMotor.class, "Back Right");
-      CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
-      DcMotor frontLeft = hardwareMap.get(DcMotor.class, "Front Left");
-      DcMotor backLeft = hardwareMap.get(DcMotor.class, "Back Left");
-      CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
-      CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
+    DcMotorEx armMotor = hardwareMap.get(DcMotorEx.class, "Arm Motor");
+    DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class, "Front Right");
+    DcMotorEx backRight = hardwareMap.get(DcMotorEx.class, "Back Right");
+    CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
+    DcMotorEx frontLeft = hardwareMap.get(DcMotorEx.class, "Front Left");
+    DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class, "Back Left");
+    CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
+    CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
+
+  /* TODO: Velocity PIDF calibrations
+    // Calibrate PIDF (velocity calibrations done xx/xx/xx)
+    backLeft.setVelocityPIDFCoefficients(0, 0, 0, 0);
+    backRight.setVelocityPIDFCoefficients(0, 0, 0, 0);
+    frontLeft.setVelocityPIDFCoefficients(0, 0, 0, 0);
+    frontRight.setVelocityPIDFCoefficients(0, 0, 0, 0);
+  */
 
     // Coded by Lucas Bubner
     armPosition = armMotor.getCurrentPosition();
     frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
     backRight.setDirection(DcMotorSimple.Direction.REVERSE);
     spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
-    armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    armMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
     waitForStart();
     while (opModeIsActive()) {
       // Standardised movements
@@ -54,7 +62,7 @@ public class BunyipsFreightFrenzyTeleOp extends LinearOpMode {
       telemetry.addData("TargetPosition", armMotor.getTargetPosition());
       telemetry.addData("CurrentPosition", armMotor.getCurrentPosition());
       telemetry.update();
-      armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+      armMotor.setMode(DcMotorEx.RunMode.RUN_TO_POSITION);
       if (armMotor.getTargetPosition() > armMotor.getCurrentPosition() + 5 || armMotor.getTargetPosition() < armMotor.getCurrentPosition() - 5) {
         armMotor.setPower(armMotor.getTargetPosition() > armMotor.getCurrentPosition() ? 0.25 : -0.25);
       } else {
