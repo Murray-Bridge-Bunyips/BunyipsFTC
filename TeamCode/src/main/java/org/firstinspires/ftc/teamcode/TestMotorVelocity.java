@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode;
  
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 // Uses Extended DcMotor class
 
 @SuppressWarnings({"unused", "FieldMayBeFinal"})
-@TeleOp(name = "Test - Drivetrain PIDF")
+@Autonomous(name = "Test - Drivetrain PIDF")
 public class TestMotorVelocity extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();
     double backLeftcurrentVelocity;

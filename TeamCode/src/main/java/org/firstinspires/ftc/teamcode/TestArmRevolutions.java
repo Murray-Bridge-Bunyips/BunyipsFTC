@@ -1,14 +1,14 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 // @Disabled
 @SuppressWarnings("unused")
-@TeleOp(name = "Test - Arm Revolutions")
+@Autonomous(name = "Test - Arm Revolutions")
 public class TestArmRevolutions extends LinearOpMode {
     public void runOpMode() {
         double armPosition;
