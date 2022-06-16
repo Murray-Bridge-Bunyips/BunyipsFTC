@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 public class TestArmRevolutions extends LinearOpMode {
     public void runOpMode() {
         double armPosition;
-        waitForStart();
+
         DcMotorEx armMotor = hardwareMap.get(DcMotorEx.class, "Arm Motor");
         DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class, "Front Right");
         DcMotorEx backRight = hardwareMap.get(DcMotorEx.class, "Back Right");
@@ -22,26 +22,32 @@ public class TestArmRevolutions extends LinearOpMode {
         CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
         CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
 
+        telemetry.addData("Ready", "Hardware mapped and variables declared. Continue when ready.");
+
+        waitForStart();
+
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
         while (opModeIsActive()) {
             armMotor.setTargetPosition(1800);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             armPosition = armMotor.getCurrentPosition();
             while (armPosition < 1800) {
                 armMotor.setPower(0.25);
                 armPosition = armMotor.getCurrentPosition();
-                telemetry.addData("armMotor Get Current Position", armPosition);
+                telemetry.addData("armMotor armPosition", armPosition);
                 telemetry.update();
             }
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             armMotor.setTargetPosition(100);
             armPosition = armMotor.getCurrentPosition();
             while (armPosition > 105) {
                 armMotor.setPower(-0.25);
                 armPosition = armMotor.getCurrentPosition();
-                telemetry.addData("armMotor Get Current Position", armPosition);
+                telemetry.addData("armMotor armPosition", armPosition);
                 telemetry.update();
             }
+            stop();
         }
     }
 }
