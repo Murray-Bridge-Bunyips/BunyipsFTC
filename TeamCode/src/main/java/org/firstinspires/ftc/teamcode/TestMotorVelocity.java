@@ -65,9 +65,8 @@ public class TestMotorVelocity extends LinearOpMode {
         backLeft.setPower(0);
 
         // Back Right
-        runtime.reset();
         backRight.setPower(1);
-        while (runtime.seconds() > 5) {
+        while (runtime.seconds() < 10) {
             backRightcurrentVelocity = backRight.getVelocity();
             if (backRightcurrentVelocity > backRightmaxVelocity) {
                 backRightmaxVelocity = backRightcurrentVelocity; }
@@ -79,11 +78,9 @@ public class TestMotorVelocity extends LinearOpMode {
         } finalBackRightMVeloc = backRightmaxVelocity;
         backRight.setPower(0);
 
-
         // Front Left
-        runtime.reset();
         frontLeft.setPower(1);
-        while (runtime.seconds() > 5) {
+        while (runtime.seconds() < 15) {
             frontLeftcurrentVelocity = frontLeft.getVelocity();
             if (frontLeftcurrentVelocity > frontLeftmaxVelocity) {
                 frontLeftmaxVelocity = frontLeftcurrentVelocity; }
@@ -96,9 +93,8 @@ public class TestMotorVelocity extends LinearOpMode {
         frontLeft.setPower(0);
 
         // Front Right
-        runtime.reset();
         frontRight.setPower(1);
-        while (runtime.seconds() > 5) {
+        while (runtime.seconds() < 20) {
             frontRightcurrentVelocity = frontRight.getVelocity();
             if (frontRightcurrentVelocity > frontRightmaxVelocity) {
                 frontRightmaxVelocity = frontRightcurrentVelocity; }
