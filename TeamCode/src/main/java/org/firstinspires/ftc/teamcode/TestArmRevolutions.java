@@ -48,7 +48,7 @@ public class TestArmRevolutions extends LinearOpMode {
                 telemetry.addData("armMotor armPosition", armPosition);
                 telemetry.update();
             }
-            stop();
         }
+        stop();
     }
 }
