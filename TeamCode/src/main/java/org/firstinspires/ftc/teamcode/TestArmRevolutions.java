@@ -22,7 +22,7 @@ public class TestArmRevolutions extends LinearOpMode {
         CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
         CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
 
-        telemetry.addData("Ready", "Hardware mapped and variables declared. Continue when ready.");
+        telemetry.addData("Ready", "Hardware mapped and variables declared. ENSURE ARM MOTOR IS READY TO MOVE FROM RESTING POSITION. Continue when ready.");
 
         waitForStart();
 
