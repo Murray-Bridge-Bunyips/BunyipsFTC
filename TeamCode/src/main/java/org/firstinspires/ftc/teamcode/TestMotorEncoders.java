@@ -47,10 +47,19 @@ public class TestMotorEncoders extends LinearOpMode {
         backRight.setPower(1);
         backLeft.setPower(1);
 
+    while (opModeIsActive()) {
         telemetry.addData("frontRight Encoder", frontRight.getCurrentPosition());
         telemetry.addData("frontLeft Encoder", frontLeft.getCurrentPosition());
         telemetry.addData("backRight Encoder", backRight.getCurrentPosition());
         telemetry.addData("backLeft Encoder", backLeft.getCurrentPosition());
         telemetry.update();
+        if (isStopRequested()) {
+            frontRight.setPower(0);
+            frontLeft.setPower(0);
+            backRight.setPower(0);
+            backLeft.setPower(0);
+            stop();
+        }
+        }
     }
 }
