@@ -39,8 +39,11 @@ public class TestMotorVelocity extends LinearOpMode {
         CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right"); // Not using
         CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left"); // Not using
 
-        frontRight.setDirection(DcMotorEx.Direction.REVERSE);
-        backRight.setDirection(DcMotorEx.Direction.REVERSE);
+        // Set all motors to forward drive, although we wouldn't do this to move forward
+        frontRight.setDirection(DcMotorEx.Direction.FORWARD);
+        backRight.setDirection(DcMotorEx.Direction.FORWARD);
+        frontLeft.setDirection(DcMotorEx.Direction.FORWARD);
+        backLeft.setDirection(DcMotorEx.Direction.FORWARD);
 
         telemetry.addData("TEST READY", "Initialise to begin test (20s)");
         telemetry.addData("WARNING"," MOVEMENT MOTORS WILL ENGAGE AT FULL SPEED WHEN STARTED!!");
@@ -60,6 +63,7 @@ public class TestMotorVelocity extends LinearOpMode {
             telemetry.addData("Runtime", runtime.toString());
             telemetry.addData("backLeftcurrentVelocity", backLeftcurrentVelocity);
             telemetry.addData("backLeftmaxVelocity", backLeftmaxVelocity);
+            telemetry.addData("backLeftReportedVelocity", backLeft.getVelocity());
             telemetry.update();
         } finalBackLeftMVeloc = backLeftmaxVelocity;
         backLeft.setPower(0);
@@ -74,6 +78,7 @@ public class TestMotorVelocity extends LinearOpMode {
             telemetry.addData("Runtime", runtime.toString());
             telemetry.addData("backRightcurrentVelocity", backRightcurrentVelocity);
             telemetry.addData("backRightmaxVelocity", backRightmaxVelocity);
+            telemetry.addData("backRightReportedVelocity", backRight.getVelocity());
             telemetry.update();
         } finalBackRightMVeloc = backRightmaxVelocity;
         backRight.setPower(0);
@@ -88,6 +93,7 @@ public class TestMotorVelocity extends LinearOpMode {
             telemetry.addData("Runtime", runtime.toString());
             telemetry.addData("frontLeftcurrentVelocity", frontLeftcurrentVelocity);
             telemetry.addData("frontLeftmaxVelocity", frontLeftmaxVelocity);
+            telemetry.addData("frontLeftReportedVelocity", frontLeft.getVelocity());
             telemetry.update();
         } finalFrontLeftMVeloc = frontLeftmaxVelocity;
         frontLeft.setPower(0);
@@ -102,6 +108,7 @@ public class TestMotorVelocity extends LinearOpMode {
             telemetry.addData("Runtime", runtime.toString());
             telemetry.addData("frontcurrentVelocity", frontRightcurrentVelocity);
             telemetry.addData("frontmaxVelocity", frontRightmaxVelocity);
+            telemetry.addData("frontRightReportedVelocity", frontRight.getVelocity());
             telemetry.update();
         } finalFrontRightMVeloc = frontRightmaxVelocity;
         frontRight.setPower(0);

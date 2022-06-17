@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @SuppressWarnings("unused")
 @Autonomous(name = "Test - Arm Revolutions")
 public class TestArmRevolutions extends LinearOpMode {
+    @Override
     public void runOpMode() {
         double armPosition;
 
