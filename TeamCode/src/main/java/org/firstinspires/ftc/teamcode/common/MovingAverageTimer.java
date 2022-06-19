@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.utils;
+package org.firstinspires.ftc.teamcode.common;
 
 /**
  * Created by Shaun on 11/06/2017.
