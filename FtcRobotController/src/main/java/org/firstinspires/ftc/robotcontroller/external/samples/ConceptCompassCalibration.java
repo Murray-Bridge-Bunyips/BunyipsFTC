@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
  * This file illustrates the concept of calibrating a MR Compass
- * It uses the common Pushbot hardware class to define the drive on the robot.
+ * It uses the org.firstinspires.ftc.teamcode.common Pushbot hardware class to define the drive on the robot.
  * The code is structured as a LinearOpMode
  *
  *   This code assumes there is a compass configured with the name "compass"

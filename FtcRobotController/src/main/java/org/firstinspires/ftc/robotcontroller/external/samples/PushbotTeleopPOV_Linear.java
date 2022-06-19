@@ -35,7 +35,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.Range;
 
 /**
- * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
+ * This OpMode uses the org.firstinspires.ftc.teamcode.common Pushbot hardware class to define the devices on the robot.
  * All device access is managed through the HardwarePushbot class.
  * The code is structured as a LinearOpMode
  *

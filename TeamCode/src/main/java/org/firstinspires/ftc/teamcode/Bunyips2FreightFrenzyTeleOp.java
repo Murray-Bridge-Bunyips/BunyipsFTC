@@ -1,29 +1,42 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+
 @SuppressWarnings("unused")
 @TeleOp(name = "<> LUCAS BUBNER - Freight Frenzy TeleOp")
-public class BunyipsFreightFrenzyTeleOp extends LinearOpMode {
+public class Bunyips2FreightFrenzyTeleOp extends BunyipsOpMode {
 
-    // Primary thread that is ran from the Driver Station.
+  private DcMotorEx armMotor;
+  private DcMotorEx frontLeft;
+  private DcMotorEx frontRight;
+  private DcMotorEx backLeft;
+  private DcMotorEx backRight;
+  private CRServo spinIntake;
+  private CRServo carouselLeft;
+  private CRServo carouselRight;
+
+  @Override
+  protected void onInit() {
+
+  }
+
+  @Override
+  protected void activeLoop() throws InterruptedException {
+
+  }
+
+
+  // Primary thread that is ran from the Driver Station.
   @Override
   public void runOpMode() {
     double armPosition;
 
-    // Map hardware
-    DcMotorEx armMotor = hardwareMap.get(DcMotorEx.class, "Arm Motor");
-    DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class, "Front Right");
-    DcMotorEx backRight = hardwareMap.get(DcMotorEx.class, "Back Right");
-    CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
-    DcMotorEx frontLeft = hardwareMap.get(DcMotorEx.class, "Front Left");
-    DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class, "Back Left");
-    CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
-    CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
+
 
   /* TODO: Velocity PIDF calibrations
     // Calibrate PIDF (velocity calibrations done xx/xx/xx)

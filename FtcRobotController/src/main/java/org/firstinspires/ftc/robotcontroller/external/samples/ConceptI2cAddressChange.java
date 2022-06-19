@@ -72,7 +72,7 @@ public class ConceptI2cAddressChange extends LinearOpMode {
   public static final byte FIRMWARE_REV = IR_SEEKER_V3_FIRMWARE_REV;
   public static final byte SENSOR_ID = IR_SEEKER_V3_SENSOR_ID;
 
-  // These byte values are common with most Modern Robotics sensors.
+  // These byte values are org.firstinspires.ftc.teamcode.common with most Modern Robotics sensors.
   public static final int READ_MODE = 0x80;
   public static final int ADDRESS_MEMORY_START = 0x0;
   public static final int TOTAL_MEMORY_LENGTH = 0x0c;

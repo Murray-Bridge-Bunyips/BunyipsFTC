@@ -36,7 +36,7 @@ import com.qualcomm.robotcore.hardware.LightSensor;
 
 /**
  * This file illustrates the concept of driving up to a line and then stopping.
- * It uses the common Pushbot hardware class to define the drive on the robot.
+ * It uses the org.firstinspires.ftc.teamcode.common Pushbot hardware class to define the drive on the robot.
  * The code is structured as a LinearOpMode
  *
  * The code shows using two different light sensors:

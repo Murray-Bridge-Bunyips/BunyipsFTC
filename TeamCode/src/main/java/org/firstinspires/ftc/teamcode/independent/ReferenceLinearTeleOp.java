@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.independent;
 // This line indicates that everything below is under the TeamCode directory, the purpose is
 // similar to a file name; it helps with organisation of code. These lines are usually auto-filled.
 

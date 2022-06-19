@@ -152,7 +152,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
       <!-- When visible, the error message will overlay and thus partially
            obscure part of the camera monitor. We make this trade off so as to
-           allow for a bigger camera monitor view in the common case when the
+           allow for a bigger camera monitor view in the org.firstinspires.ftc.teamcode.common case when the
            error is not in fact present
         -->
         <TextView style="@style/FtcTextViewStyleBold"

@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.util.Range;
  * This file provides basic Telop driving for a Pushbot robot.
  * The code is structured as an Iterative OpMode
  *
- * This OpMode uses the common Pushbot hardware class to define the devices on the robot.
+ * This OpMode uses the org.firstinspires.ftc.teamcode.common Pushbot hardware class to define the devices on the robot.
  * All device access is managed through the HardwarePushbot class.
  *
  * This particular OpMode executes a basic Tank Drive Teleop for a PushBot
