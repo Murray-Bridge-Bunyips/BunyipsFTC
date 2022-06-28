@@ -6,23 +6,19 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import java.util.ArrayDeque;
 
 @SuppressWarnings("unused")
 @TeleOp(name = "<> LUCAS BUBNER - Freight Frenzy TeleOp")
 public class Bunyips2FreightFrenzyTeleOp extends BunyipsOpMode {
 
-  private DcMotorEx armMotor;
-  private DcMotorEx frontLeft;
-  private DcMotorEx frontRight;
-  private DcMotorEx backLeft;
-  private DcMotorEx backRight;
-  private CRServo spinIntake;
-  private CRServo carouselLeft;
-  private CRServo carouselRight;
+  private BertieBunyipConfiguration config;
+
+  private ArrayDeque<Task> tasks = new ArrayDeque<>();
 
   @Override
   protected void onInit() {
-
+   
   }
 
   @Override
