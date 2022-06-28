@@ -1,46 +1,31 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.bertie_independent;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import java.util.ArrayDeque;
-
 @SuppressWarnings("unused")
-@TeleOp(name = "<> LUCAS BUBNER - Freight Frenzy TeleOp")
-public class Bunyips2FreightFrenzyTeleOp extends BunyipsOpMode {
+// @Disabled // May soon be deprecated by 'bertie' package
+@TeleOp(name = "<BERTIE-I> TeleOp Drive")
+public class BertieTeleOp extends LinearOpMode {
 
-  private BertieBunyipConfiguration config;
-
-  private ArrayDeque<Task> tasks = new ArrayDeque<>();
-
-  @Override
-  protected void onInit() {
-   
-  }
-
-  @Override
-  protected void activeLoop() throws InterruptedException {
-
-  }
-
-
-  // Primary thread that is ran from the Driver Station.
+    // Primary thread that is ran from the Driver Station.
   @Override
   public void runOpMode() {
     double armPosition;
 
-
-
-  /* TODO: Velocity PIDF calibrations
-    // Calibrate PIDF (velocity calibrations done xx/xx/xx)
-    backLeft.setVelocityPIDFCoefficients(0, 0, 0, 0);
-    backRight.setVelocityPIDFCoefficients(0, 0, 0, 0);
-    frontLeft.setVelocityPIDFCoefficients(0, 0, 0, 0);
-    frontRight.setVelocityPIDFCoefficients(0, 0, 0, 0);
-  */
+    // Map hardware
+    DcMotorEx armMotor = hardwareMap.get(DcMotorEx.class, "Arm Motor");
+    DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class, "Front Right");
+    DcMotorEx backRight = hardwareMap.get(DcMotorEx.class, "Back Right");
+    CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
+    DcMotorEx frontLeft = hardwareMap.get(DcMotorEx.class, "Front Left");
+    DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class, "Back Left");
+    CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
+    CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
 
     // Coded by Lucas Bubner
     armPosition = armMotor.getCurrentPosition();

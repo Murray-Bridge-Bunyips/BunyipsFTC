@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.independent;
+package org.firstinspires.ftc.teamcode.bertie_independent;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 // Uses Extended DcMotor class
 
 @SuppressWarnings({"unused", "FieldMayBeFinal"})
-@Autonomous(name = "Test - Motor Encoder Report")
+@Autonomous(name = "<BERTIE-I> Test All Motor Encoders")
 public class TestMotorEncoders extends LinearOpMode {
 
     @Override

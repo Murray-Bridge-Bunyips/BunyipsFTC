@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.independent;
+package org.firstinspires.ftc.teamcode.bertie_independent;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 // @Disabled
 @SuppressWarnings("unused")
-@Autonomous(name = "Test - Arm Revolutions")
+@Autonomous(name = "<BERTIE-I> Test Arm Revolutions")
 public class TestArmRevolutions extends LinearOpMode {
     @Override
     public void runOpMode() {

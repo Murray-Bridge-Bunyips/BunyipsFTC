@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.independent;
+package org.firstinspires.ftc.teamcode.lisa_independent;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -19,14 +19,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
   // Murray Bridge Bunyips - 15215
   // ----------------------------------------------
 
-// THIS CODE WAS INTENDED FOR USE WITH MINI BOT LISA, THIS WAS MERELY IMPORTED FOR CODE USAGE
-
 @SuppressWarnings({"unused", "SameParameterValue"})
-@Disabled
-// Not for use with competition robot, assumes two wheel config with names Left Motor, Right Motor,
-// and BNO055IMU named imu
-@Autonomous(name = "LB - Auto Advanced Precision Drive")
-public class ReferenceAdvancedPrecisionDrive extends LinearOpMode {
+@Disabled // TODO: Lisa independent code for APD
+@Autonomous(name = "<LISA-I> Advanced Precision Drive - 24M STRAIGHT")
+public class APD24m extends LinearOpMode {
 
   // Declare hardware
   private BNO055IMU imu;

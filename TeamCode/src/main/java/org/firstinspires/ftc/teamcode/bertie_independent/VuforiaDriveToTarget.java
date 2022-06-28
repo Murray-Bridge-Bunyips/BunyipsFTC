@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.independent;
+package org.firstinspires.ftc.teamcode.bertie_independent;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -17,10 +17,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 @SuppressWarnings("unused")
-@TeleOp(name="Vuforia - Drive To Target")
+@TeleOp(name="<BERTIE-I> Vuforia Drive To Target")
 // @Disabled
-public class ConceptVuforiaDriveToTarget extends LinearOpMode
-{
+public class VuforiaDriveToTarget extends LinearOpMode {
     final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
                                          //  The GAIN constants set the relationship between the measured position error,
                                          //  and how much power is applied to the drive motors.  Drive = Error * Gain
