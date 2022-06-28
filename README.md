@@ -1,10 +1,10 @@
 ## REPO INFO
 - Freight Frenzy (2021-2022)  
-- Murray Bridge Bunyips for competition robot <i>Bertie Bunyip</i>  
-- Team 15215 FTC
+- South Australian FTC Team 15215, Murray Bridge High School   
+- Close collaboration with Team 4537 RoboRoos and Team 18003 Paladins of St Paul's
 
 ## Fork Information
-Forked by Lucas Bubner - Coder of the Murray Bridge Bunyips - FTC Team 15215
+Forked by Lucas Bubner - Captain of the Murray Bridge Bunyips - FTC Team 15215
 
 ## Our Code
 Feel free to look at our code under:  
