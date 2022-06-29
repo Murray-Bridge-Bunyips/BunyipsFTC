@@ -47,16 +47,11 @@ public class APD24m extends LinearOpMode {
     return imu.isGyroCalibrated();
   }
 
-  /**
-   * Simple detection algorithm to detect if the robot is
-   * over 10 degrees pitch, which would indicate that the
-   * motors have driven into something and are overexerting.
-   */
+  // If pitch over 30 degrees, run fwsalert
   private boolean areMotorsOverexerting() {
-    return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle > 10;
+    return imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES).secondAngle > 30;
   }
 
-    // Primary thread that is ran from the Driver Station.
   @Override
   public void runOpMode() {
     BNO055IMU.Parameters imuParameters;
@@ -69,8 +64,9 @@ public class APD24m extends LinearOpMode {
     RightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     // Neutralise the FWS stop system
     fwsAlert = false;
-    // Reverse direction of motor for one-direction travel
-    LeftMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+    // Reverse direction of both motors for one-direction travel
+    LeftMotor.setDirection(DcMotor.Direction.REVERSE);
+    RightMotor.setDirection(DcMotor.Direction.REVERSE);
     // Reset encoders for distance calc
     LeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     RightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -97,20 +93,10 @@ public class APD24m extends LinearOpMode {
     telemetry.addData(">", "Ready to initialise code.");
     telemetry.update();
     waitForStart();
-    // Ready to start, run blocks below
     if (opModeIsActive()) {
-      // Create new timer for various operations
       elapsedTime = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
       // Call to main variable functions
-      TurnUsingAngleAdjustmentAlgorithm(60, 3);
-      MoveDesiredDistanceWithPrecisionDriveAlgorithm(243, 0, 1, 0.9);
-      TurnUsingAngleAdjustmentAlgorithm(-1, 5);
-      for (int count = 0; count < 2; count++) {
-        MoveDesiredDistanceWithPrecisionDriveAlgorithm(100, 0, 0.75, 0.8);
-        MoveDesiredDistanceWithPrecisionDriveAlgorithm(-100, 0, 0.75, 0.8);
-      }
-      TurnUsingAngleAdjustmentAlgorithm(-75, 2);
-      MoveDesiredDistanceWithPrecisionDriveAlgorithm(175, 0, 1, 0.9);
+        MoveDesiredDistanceWithPrecisionDriveAlgorithm(2400, 0, 5, 0.9);
       // Execution complete.
       leftPower = 0;
       rightPower = 0;
@@ -135,11 +121,12 @@ public class APD24m extends LinearOpMode {
    * inches * 2.54 = cm
    *
    * We get the translated distance travelled by the encoders in centimetres.
+   * After motor changes, return value has been additively inversed due to different encoders.
    */
   private double getTranslatedDistance() {
     leftMotorCurrentPosition = LeftMotor.getCurrentPosition();
     rightMotorCurrentPosition = RightMotor.getCurrentPosition();
-    return 3.34646 * Math.PI * ((leftMotorCurrentPosition + rightMotorCurrentPosition) / 2) / 288 * 2.54;
+    return -(3.34646 * Math.PI * ((leftMotorCurrentPosition + rightMotorCurrentPosition) / 2) / 288 * 2.54);
   }
 
   /**
