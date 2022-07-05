@@ -3,12 +3,11 @@ package org.firstinspires.ftc.teamcode.lisa_independent;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
@@ -20,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
   // ----------------------------------------------
 
 @SuppressWarnings({"unused", "SameParameterValue"})
-@Disabled // TODO: Lisa independent code for APD
+//@Disabled // TODO: Lisa independent code for APD
 @Autonomous(name = "<LISA-I> Advanced Precision Drive - 24M STRAIGHT")
 public class APD24m extends LinearOpMode {
 
