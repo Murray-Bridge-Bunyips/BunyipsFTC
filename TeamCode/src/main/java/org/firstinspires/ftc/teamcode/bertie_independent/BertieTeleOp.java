@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -33,6 +34,7 @@ public class BertieTeleOp extends LinearOpMode {
     backRight.setDirection(DcMotorSimple.Direction.REVERSE);
     spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
     armMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+    armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     waitForStart();
     while (opModeIsActive()) {
       // Standardised movements

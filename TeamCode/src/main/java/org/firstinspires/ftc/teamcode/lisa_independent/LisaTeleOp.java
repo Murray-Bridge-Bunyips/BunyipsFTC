@@ -26,17 +26,11 @@ public class LisaTeleOp extends LinearOpMode {
 
     if (opModeIsActive()) {
       while (opModeIsActive()) {
-        turn = Range.clip(gamepad1.left_stick_x, -1.0, 1.0);
+        // Motor efficiency is halved as they are very strong
+        turn = Range.clip(gamepad1.left_stick_x, -0.5, 0.5);
         drive = gamepad1.right_trigger - gamepad1.left_trigger;
-        leftPower = Range.clip(drive + turn, -1.0, 1.0);
-        rightPower = Range.clip(drive - turn, -1.0, 1.0);
-        // Stopping range
-        if (leftPower < 0.27 && leftPower > -0.30) {
-          leftPower = 0;
-        }
-        if (rightPower < 0.28 && rightPower > -0.30) {
-            rightPower = 0;
-        }
+        leftPower = Range.clip(drive + turn, -0.5, 0.5);
+        rightPower = Range.clip(drive - turn, -0.5, 0.5);
         leftMotor.setPower(leftPower);
         rightMotor.setPower(rightPower);
         telemetry.addData("Left Motor Power", leftMotor.getPower());

@@ -88,6 +88,7 @@ public class VuforiaDriveToTarget extends LinearOpMode {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         telemetry.addData(">", "Press Play to start");
         telemetry.update();
