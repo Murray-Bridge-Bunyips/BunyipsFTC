@@ -21,8 +21,8 @@ public class LisaTeleOp extends LinearOpMode {
     waitForStart();
     leftMotor.setDirection(DcMotorSimple.Direction.FORWARD);
     rightMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-    rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-    leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
     if (opModeIsActive()) {
       while (opModeIsActive()) {
@@ -34,7 +34,7 @@ public class LisaTeleOp extends LinearOpMode {
         if (leftPower < 0.27 && leftPower > -0.30) {
           leftPower = 0;
         }
-        if (rightPower < 0.27 && rightPower > -0.30) {
+        if (rightPower < 0.28 && rightPower > -0.30) {
             rightPower = 0;
         }
         leftMotor.setPower(leftPower);
