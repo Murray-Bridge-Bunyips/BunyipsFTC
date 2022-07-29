@@ -1,14 +1,8 @@
-## REPO INFO
-- Freight Frenzy (2021-2022)  
-- South Australian FTC Team 15215, Murray Bridge High School   
-- Close collaboration with Team 4537 RoboRoos and Team 18003 Paladins of St Paul's
-
-## Fork Information
-Forked by Lucas Bubner - Captain of the Murray Bridge Bunyips - FTC Team 15215
-
-## Our Code
-Feel free to look at our code under:  
-/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/
+	MURRAY BRIDGE BUNYIPS
+	South Australian FTC Team 15215, Murray Bridge High School   
+	Close collaboration with Team 4537 RoboRoos and Team 18003 Paladins of St Paul's
+	Freight Frenzy (2021-2022)  
+	
 
 ## Version 7.2 (20220723-130006)
 
