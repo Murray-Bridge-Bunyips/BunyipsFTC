@@ -15,7 +15,9 @@ public class BertieTeleOp extends LinearOpMode {
     // Primary thread that is ran from the Driver Station.
   @Override
   public void runOpMode() {
+    // Declare variables
     double armPosition;
+    double frontRightPower, backRightPower, backLeftPower, frontLeftPower;
 
     // Map hardware
     DcMotorEx armMotor = hardwareMap.get(DcMotorEx.class, "Arm Motor");
@@ -39,17 +41,22 @@ public class BertieTeleOp extends LinearOpMode {
       // Standardised movements, and accelerated movements if the driver holds down the A button while moving
       spinIntake.setPower(gamepad2.left_stick_y);
 
-      if (gamepad1.a) {
-        frontLeft.setPower(gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x);
-        backLeft.setPower(gamepad1.left_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x);
-        frontRight.setPower(gamepad1.left_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x);
-        backRight.setPower(gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x);
-      } else {
-        frontLeft.setPower((gamepad1.left_stick_y - gamepad1.right_stick_x / 2) - gamepad1.left_stick_x / 2);
-        backLeft.setPower((gamepad1.left_stick_y + gamepad1.right_stick_x / 2) - gamepad1.left_stick_x / 2);
-        frontRight.setPower(gamepad1.left_stick_y + gamepad1.right_stick_x / 2 + gamepad1.left_stick_x / 2);
-        backRight.setPower((gamepad1.left_stick_y - gamepad1.right_stick_x / 2) + gamepad1.left_stick_x / 2);
+      frontLeftPower = gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
+      backLeftPower = gamepad1.left_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
+      frontRightPower = gamepad1.left_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
+      backRightPower = gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
+
+      if (!gamepad1.a) {
+        frontLeftPower /= 2;
+        backLeftPower /= 2;
+        frontRightPower /= 2;
+        backRightPower /= 2;
       }
+
+      frontLeft.setPower(frontLeftPower);
+      backLeft.setPower(backLeftPower);
+      frontRight.setPower(frontRightPower);
+      backRight.setPower(backRightPower);
 
       // Carousel movements
       if (gamepad2.a || gamepad2.b) {
