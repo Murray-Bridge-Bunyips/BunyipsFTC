@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.Range;
 
 @SuppressWarnings("unused")
 // @Disabled // May soon be deprecated by 'bertie' package
@@ -41,10 +42,10 @@ public class BertieTeleOp extends LinearOpMode {
       // Standardised movements, and accelerated movements if the driver holds down the A button while moving
       spinIntake.setPower(gamepad2.left_stick_y);
 
-      frontLeftPower = gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x;
-      backLeftPower = gamepad1.left_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x;
-      frontRightPower = gamepad1.left_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x;
-      backRightPower = gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x;
+      frontLeftPower = Range.clip(gamepad1.left_stick_y - gamepad1.right_stick_x - gamepad1.left_stick_x, -1.0, 1.0);
+      backLeftPower = Range.clip(gamepad1.left_stick_y + gamepad1.right_stick_x - gamepad1.left_stick_x, -1.0, 1.0);
+      frontRightPower = Range.clip(gamepad1.left_stick_y + gamepad1.right_stick_x + gamepad1.left_stick_x, -1.0, 1.0);
+      backRightPower = Range.clip(gamepad1.left_stick_y - gamepad1.right_stick_x + gamepad1.left_stick_x, -1.0, 1.0);
 
       if (!gamepad1.a) {
         frontLeftPower /= 2;
