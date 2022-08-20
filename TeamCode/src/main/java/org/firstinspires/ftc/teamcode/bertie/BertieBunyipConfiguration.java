@@ -22,14 +22,6 @@ public class BertieBunyipConfiguration extends RobotConfig {
 
     BNO055IMU imu;
 
-/* No dummy wheel to use encoders with
-    public double countsPerMotorRev = 288;
-    public double driveGearReduction = 72.0 / 90.0; // 72 Teeth -> 90 Teeth
-    public double wheelDiameterCm = 9.0;
-
-    public double countsPerCm = (countsPerMotorRev * driveGearReduction) / (wheelDiameterCm * Math.PI);
-*/
-
     /**
      * Factory method for this class
      *
@@ -100,18 +92,18 @@ public class BertieBunyipConfiguration extends RobotConfig {
         spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
         armMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        telemetry.addData("Initialisation", "Activated");
+        telemetry.addData("Initialisation of all onboard motors", "Activated");
         telemetry.update();
 
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        /* BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
         parameters.loggingEnabled      = true;
         parameters.loggingTag          = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator(); */
 
         // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
         // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",

@@ -11,7 +11,7 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 
-@Autonomous(name = "<BERTIE> Bertie Auto test")
+@Autonomous(name = "<BERTIE> Bertie Autonomous Testing")
 public class BertieAutonomous extends BunyipsOpMode {
     private BertieBunyipConfiguration config;
     private BertieBunyipDrive drive = null;
@@ -86,9 +86,9 @@ public class BertieAutonomous extends BunyipsOpMode {
                 tasks.add(new BertieDriveTask(this, 1, drive, -1,0,0));
                 tasks.add(new BertieDriveTask(this, 1, drive, 0,-1,0));
                 break;
-                case B:
-                    tasks.add(new MessageTask(this, 1, "Loaded blue"));
-                    break;
+            case B:
+                tasks.add(new MessageTask(this, 1, "Loaded blue"));
+                break;
         }
     }
 
