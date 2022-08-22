@@ -22,8 +22,8 @@ public class LisaTeleOp extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() throws InterruptedException {
-        double leftPower = gamepad1.right_trigger - gamepad1.left_trigger;
-        double rightPower = gamepad1.right_trigger - gamepad1.left_trigger;
+        double leftPower = (gamepad1.right_trigger - gamepad1.left_trigger) + gamepad1.left_stick_x;
+        double rightPower = (gamepad1.right_trigger - gamepad1.left_trigger) - gamepad1.left_stick_x;
 
         drive.setPower(leftPower, rightPower);
         drive.update();
