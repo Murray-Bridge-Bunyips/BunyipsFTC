@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.lisa;
 
-import org.firstinspires.ftc.teamcode.bertie.BertieArm;
-import org.firstinspires.ftc.teamcode.bertie.BertieBunyipConfiguration;
-import org.firstinspires.ftc.teamcode.bertie.BertieBunyipDrive;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
+@TeleOp(name="<LISA> TeleOp")
 public class LisaTeleOp extends BunyipsOpMode {
     private LisaConfiguration config;
     private LisaDrive drive = null;
@@ -22,10 +22,10 @@ public class LisaTeleOp extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() throws InterruptedException {
-        double leftPower = (gamepad1.right_trigger - gamepad1.left_trigger) + gamepad1.left_stick_x;
-        double rightPower = (gamepad1.right_trigger - gamepad1.left_trigger) - gamepad1.left_stick_x;
+        double leftPower = (gamepad1.left_trigger - gamepad1.right_trigger) + gamepad1.left_stick_x;
+        double rightPower = (gamepad1.left_trigger - gamepad1.right_trigger) - gamepad1.left_stick_x;
 
-        drive.setPower(leftPower, rightPower);
+        drive.setPower(rightPower, leftPower);
         drive.update();
     }
 }
