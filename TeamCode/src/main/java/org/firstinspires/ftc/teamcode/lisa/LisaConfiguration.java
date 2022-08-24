@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.lisa;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -12,6 +13,9 @@ public class LisaConfiguration extends RobotConfig {
     public DcMotorEx left;
     public DcMotorEx right;
 
+    // Other components
+    public ColorSensor forwardvision;
+    public ColorSensor downwardvision;
     BNO055IMU imu;
 
     /**
@@ -48,15 +52,22 @@ public class LisaConfiguration extends RobotConfig {
         } catch (Exception e) {
             telemetry.addLine("Right Motor failed to configure.");
         }
+        try {
+            fws = hardwareMap.get(ColorSensor.class, "Forward Vision System");
+        } catch (Exception e) {
+            telemetry.addLine("Forward Vision System failed to configure.");
+        }
+        try {
+            dws = hardwareMap.get(ColorSensor.class, "Downward Vision System"); 
+        } catch (Exception e) {
+            telemetry.addLine("Downward Vision System failed to configure.");
+        }
 
         right.setDirection(DcMotorEx.Direction.REVERSE);
 
-        telemetry.addData("Initialisation of all onboard motors", "Activated");
+        telemetry.addData("BunyipsOpMode Initialisation", "Complete");
         telemetry.update();
 
-        // Set up the parameters with which we will use our IMU. Note that integration
-        // algorithm here just reports accelerations to the logcat log; it doesn't actually
-        // provide positional information.
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
@@ -64,12 +75,7 @@ public class LisaConfiguration extends RobotConfig {
         parameters.loggingTag          = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
-        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
-        // and named "imu".
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
     }
-
-
 }
