@@ -2,22 +2,25 @@ package org.firstinspires.ftc.teamcode.lisa;
 
 import android.annotation.SuppressLint;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.common.BunyipsController;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public class LisaDrive extends BunyipsController {
     final private DcMotorEx left;
     final private DcMotorEx right;
-    final private ColorSensor fws;
+    final private DistanceSensor fws;
     final private ColorSensor dws;
 
     private double leftPower;
     private double rightPower;
 
-    public LisaDrive(BunyipsOpMode opMode, DcMotorEx left, DcMotorEx right, ColorSensor fws, ColorSensor dws) {
+    public LisaDrive(BunyipsOpMode opMode, DcMotorEx left, DcMotorEx right, DistanceSensor fws, ColorSensor dws) {
         super(opMode);
 
         this.left = left;
@@ -61,7 +64,24 @@ public class LisaDrive extends BunyipsController {
     public void update() {
         left.setPower(leftPower);
         right.setPower(rightPower);
-        getOpMode().telemetry.addLine(String.format("Left Encoder: %d, Right Encoder: %d\nFWS dist: %d cm, DWS dist: %d cm",
-        left.getCurrentPosition(), right.getCurrentPosition(), fws.getDistance(DistanceUnit.CM), dws.getDistance(DistanceUnit.CM)));
+        getOpMode().telemetry.addLine(String.format("Left Encoder: %d, Right Encoder: %d\nFWS dist: %s cm\nDWS Red, Green, Blue: %d, %d, %d",
+        left.getCurrentPosition(), right.getCurrentPosition(), fws.getDistance(DistanceUnit.CM), dws.red(), dws.green(), dws.blue()));
+    }
+
+    public boolean targetPositionReached() {
+        return !(left.isBusy() || right.isBusy());
+    }
+
+    public void setTargetPosition(double leftDistance, double rightDistance) {
+
+        int newLeftTarget;
+        int newRightTarget;
+        newLeftTarget = left.getCurrentPosition() + (int) leftDistance;
+        newRightTarget =  right.getCurrentPosition() + (int) rightDistance;
+        left.setTargetPosition(newLeftTarget);
+        right.setTargetPosition(newRightTarget);
+
+        left.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        right.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }

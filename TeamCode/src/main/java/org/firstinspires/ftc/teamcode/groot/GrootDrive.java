@@ -14,7 +14,7 @@ public class GrootDrive extends BunyipsController {
     private double leftPower;
     private double rightPower;
 
-    public LisaDrive(BunyipsOpMode opMode, DcMotor left, DcMotor right) {
+    public GrootDrive(BunyipsOpMode opMode, DcMotor left, DcMotor right) {
         super(opMode);
 
         this.left = left;

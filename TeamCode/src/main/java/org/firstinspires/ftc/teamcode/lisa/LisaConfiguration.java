@@ -3,6 +3,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -14,8 +15,8 @@ public class LisaConfiguration extends RobotConfig {
     public DcMotorEx right;
 
     // Other components
-    public ColorSensor forwardvision;
-    public ColorSensor downwardvision;
+    public DistanceSensor fws;
+    public ColorSensor dws;
     BNO055IMU imu;
 
     /**
@@ -53,7 +54,7 @@ public class LisaConfiguration extends RobotConfig {
             telemetry.addLine("Right Motor failed to configure.");
         }
         try {
-            fws = hardwareMap.get(ColorSensor.class, "Forward Vision System");
+            fws = hardwareMap.get(DistanceSensor.class, "Forward Vision System");
         } catch (Exception e) {
             telemetry.addLine("Forward Vision System failed to configure.");
         }

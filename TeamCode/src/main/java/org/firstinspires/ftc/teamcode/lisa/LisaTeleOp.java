@@ -14,7 +14,7 @@ public class LisaTeleOp extends BunyipsOpMode {
         config = LisaConfiguration.newConfig(hardwareMap, telemetry);
         try {
             drive = new LisaDrive(this,
-                    config.left, config.right);
+                    config.left, config.right, config.fws, config.dws);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise motors.");
         }

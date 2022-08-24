@@ -1,10 +1,18 @@
 package org.firstinspires.ftc.teamcode.lisa;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.MessageTask;
+import org.firstinspires.ftc.teamcode.common.Task;
+
+import java.util.ArrayDeque;
+
 @Autonomous(name="<LISA> 24M Straight Drive")
 public class LisaAuto extends BunyipsOpMode {
 
-    final private LisaConfiguration config;
-    final private LisaDrive drive = null;
+    private LisaConfiguration config;
+    private LisaDrive drive = null;
     private ArrayDeque<Task> tasks = new ArrayDeque<>();
 
     @Override
@@ -13,7 +21,7 @@ public class LisaAuto extends BunyipsOpMode {
 
         try {
             drive = new LisaDrive(this,
-                        config.left, config.right);
+                        config.left, config.right, config.fws, config.dws);
         } catch (Exception e) {
             telemetry.addLine("Failed to initalise motors.");
         }

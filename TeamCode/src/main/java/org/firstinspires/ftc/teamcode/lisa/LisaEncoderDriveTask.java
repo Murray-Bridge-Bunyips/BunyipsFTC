@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode.lisa;
 
+import org.firstinspires.ftc.teamcode.common.BaseTask;
+import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.Task;
+
 public class LisaEncoderDriveTask extends BaseTask implements Task {
 
     private final LisaDrive drive;
@@ -9,7 +13,7 @@ public class LisaEncoderDriveTask extends BaseTask implements Task {
     private final double rightPower;
 
     public LisaEncoderDriveTask(BunyipsOpMode opMode, double time, LisaDrive drive, double leftCM, double rightCM, double leftPower, double rightPower) {
-        super(opMode, telemetry);
+        super(opMode, time);
         this.drive = drive;
 
         final double TICKS_PER_REVOLUTION = 0; // TODO

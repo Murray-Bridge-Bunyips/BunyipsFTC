@@ -1,10 +1,25 @@
 package org.firstinspires.ftc.teamcode.lisa;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.robotcore.external.navigation.Position;
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
+import org.firstinspires.ftc.teamcode.common.BaseTask;
+import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.Task;
+
 public class LisaIMUTask extends BaseTask implements Task {
 
     private final LisaDrive drive;
-    private final double leftSpeed;
-    private final double rightSpeed;
+    private final BNO055IMU imu;
+    private final double speed;
+    private final boolean ccw;
+    private final float angle;
+    private Orientation angles;
 
     public LisaIMUTask(BunyipsOpMode opMode, double time, LisaDrive drive, double speed, boolean ccw, BNO055IMU imu, double angle) {
         super(opMode, time);
@@ -20,8 +35,8 @@ public class LisaIMUTask extends BaseTask implements Task {
         super.init();
         imu.startAccelerationIntegration(new Position(), new Velocity(), 50);
         angles = imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        leftSpeed = (ccw ? speed : -speed);
-        rightSpeed - (ccw ? -speed : speed);
+        double leftSpeed = (ccw ? speed : -speed);
+        double rightSpeed = (ccw ? -speed : speed);
         drive.setPower(leftSpeed, rightSpeed);
         drive.update();
     }
