@@ -31,17 +31,17 @@ public class GrootConfiguration extends RobotConfig {
         setTelemetry(telemetry);
 
         try {
-            left = (DcMotorEx) getHardwareOn("left_motor", hardwareMap.dcMotor);
+            left = (DcMotor) getHardwareOn("left_motor", hardwareMap.dcMotor);
         } catch (Exception e) {
             telemetry.addLine("left_motor failed to configure.");
         }
         try {
-            right = (DcMotorEx) getHardwareOn("right_motor", hardwareMap.dcMotor);
+            right = (DcMotor) getHardwareOn("right_motor", hardwareMap.dcMotor);
         } catch (Exception e) {
             telemetry.addLine("right_motor failed to configure.");
         }
 
-        right.setDirection(DcMotorEx.Direction.REVERSE);
+        right.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addData("BunyipsOpMode Initialisation", "Complete");
         telemetry.update();
@@ -56,6 +56,4 @@ public class GrootConfiguration extends RobotConfig {
         imu = hardwareMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
     }
-}
-
 }
