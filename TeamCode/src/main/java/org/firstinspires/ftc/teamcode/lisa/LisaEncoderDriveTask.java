@@ -16,8 +16,9 @@ public class LisaEncoderDriveTask extends BaseTask implements Task {
         super(opMode, time);
         this.drive = drive;
 
-        final double TICKS_PER_REVOLUTION = 0; // TODO
-        final double WHEEL_DIAMETER_CM = 0; // TODO
+        // UltraPlanetary HD Hex Motor specification
+        final double TICKS_PER_REVOLUTION = 28;
+        final double WHEEL_DIAMETER_CM = 8.5;
 
         this.leftDistance = (leftCM * 10) * TICKS_PER_REVOLUTION / ((WHEEL_DIAMETER_CM / 10) * Math.PI);
         this.rightDistance = (rightCM * 10) * TICKS_PER_REVOLUTION / ((WHEEL_DIAMETER_CM / 10) * Math.PI);
