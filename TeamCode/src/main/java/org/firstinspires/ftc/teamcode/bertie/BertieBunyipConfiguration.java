@@ -92,7 +92,7 @@ public class BertieBunyipConfiguration extends RobotConfig {
         spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
         armMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 
-        telemetry.addData("Initialisation of all onboard motors", "Activated");
+        telemetry.addData("BunyipsOpMode Initialisation", "Complete");
         telemetry.update();
 
         // We don't need the IMU for Bertie
