@@ -7,4 +7,5 @@ It's likely already stolen from elsewhere unless mentioned.
 All OpModes use '<robot name(+ -I if independent class)> OpMode name' in their Driver Station name declaration to avoid confusion.  
 Classes are organised based on their package name and should only be run on their respective robot.  
 '_independent' packages do not rely on common packages and can be run without the need of external classes.
+This however is the old method and is deprecated and instead replaced with common class reliance.
 
