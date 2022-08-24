@@ -95,6 +95,8 @@ public class BertieBunyipConfiguration extends RobotConfig {
         telemetry.addData("Initialisation of all onboard motors", "Activated");
         telemetry.update();
 
+        // We don't need the IMU for Bertie
+
         // Set up the parameters with which we will use our IMU. Note that integration
         // algorithm here just reports accelerations to the logcat log; it doesn't actually
         // provide positional information.

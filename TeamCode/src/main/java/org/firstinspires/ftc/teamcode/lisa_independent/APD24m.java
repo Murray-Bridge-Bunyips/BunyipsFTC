@@ -14,12 +14,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
   // ----------------------------------------------
-  // Code maintained and written by Lucas Bubner
+  // Code written by Lucas Bubner through Blocks
   // Murray Bridge Bunyips - 15215
   // ----------------------------------------------
 
 @SuppressWarnings({"unused", "SameParameterValue"})
-@Disabled // No longer works and is now deprecated
+@Disabled // No longer works and is now deprecated and used for information only
 @Autonomous(name = "<LISA-I> Advanced Precision Drive - 24M STRAIGHT")
 public class APD24m extends LinearOpMode {
 

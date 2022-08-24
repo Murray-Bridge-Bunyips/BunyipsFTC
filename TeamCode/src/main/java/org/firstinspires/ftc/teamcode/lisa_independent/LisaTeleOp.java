@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
+@Disabled // Deprecated in usage of common class OOP
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "<LISA-I> TeleOp")
 public class LisaTeleOp extends LinearOpMode {
 
