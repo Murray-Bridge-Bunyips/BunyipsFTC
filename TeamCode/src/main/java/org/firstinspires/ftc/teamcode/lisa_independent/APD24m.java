@@ -19,7 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
   // ----------------------------------------------
 
 @SuppressWarnings({"unused", "SameParameterValue"})
-//@Disabled // TODO: Lisa independent code for APD
+@Disabled // No longer works and is now deprecated
 @Autonomous(name = "<LISA-I> Advanced Precision Drive - 24M STRAIGHT")
 public class APD24m extends LinearOpMode {
 
