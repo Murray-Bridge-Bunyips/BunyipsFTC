@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.bertie_independent;
  
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 // Uses Extended DcMotor class
 
 @SuppressWarnings({"unused", "FieldMayBeFinal"})
+@Disabled // Test file that doesn't need to be active for now
 @Autonomous(name = "<BERTIE-I> Calculate PIDF of All Motors")
 public class TestMotorVelocity extends LinearOpMode {
     private ElapsedTime runtime = new ElapsedTime();

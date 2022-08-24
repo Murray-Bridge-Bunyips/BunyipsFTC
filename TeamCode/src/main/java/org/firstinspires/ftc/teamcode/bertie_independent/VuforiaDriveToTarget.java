@@ -18,7 +18,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 @SuppressWarnings("unused")
 @TeleOp(name="<BERTIE-I> Vuforia Drive To Target")
-// @Disabled
 public class VuforiaDriveToTarget extends LinearOpMode {
     final double DESIRED_DISTANCE = 12.0; //  this is how close the camera should get to the target (inches)
                                          //  The GAIN constants set the relationship between the measured position error,

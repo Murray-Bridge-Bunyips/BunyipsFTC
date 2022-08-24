@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.common.Task;
 
 import java.util.ArrayDeque;
 
-@Autonomous(name="<LISA> 24M Straight Drive")
+@Autonomous(name="<LISA> Autonomous Testing")
 public class LisaAuto extends BunyipsOpMode {
 
     private LisaConfiguration config;

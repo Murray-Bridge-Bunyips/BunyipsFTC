@@ -2,12 +2,13 @@ package org.firstinspires.ftc.teamcode.lisa_independent;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
 @Disabled // Deprecated in usage of common class OOP
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "<LISA-I> TeleOp")
+@TeleOp(name = "<LISA-I> TeleOp")
 public class LisaTeleOp extends LinearOpMode {
 
   @Override

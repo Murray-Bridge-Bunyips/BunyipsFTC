@@ -1,12 +1,13 @@
 package org.firstinspires.ftc.teamcode.bertie_independent;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-// @Disabled
+@Disabled // Test file that doesn't need to be active for now
 @SuppressWarnings("unused")
 @Autonomous(name = "<BERTIE-I> Test Arm Revolutions")
 public class TestArmRevolutions extends LinearOpMode {

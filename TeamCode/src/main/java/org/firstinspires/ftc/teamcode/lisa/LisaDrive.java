@@ -50,14 +50,9 @@ public class LisaDrive extends BunyipsController {
         if (encoder) {
             left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-            left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        } else {
-            left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
+        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     @SuppressLint("DefaultLocale")

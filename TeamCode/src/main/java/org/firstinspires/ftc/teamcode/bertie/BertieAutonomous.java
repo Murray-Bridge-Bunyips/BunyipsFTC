@@ -11,7 +11,7 @@ import java.util.ArrayDeque;
 import java.util.HashMap;
 import java.util.Map;
 
-@Autonomous(name = "<BERTIE> Bertie Autonomous Testing")
+@Autonomous(name = "<BERTIE> Autonomous Testing")
 public class BertieAutonomous extends BunyipsOpMode {
     private BertieBunyipConfiguration config;
     private BertieBunyipDrive drive = null;
