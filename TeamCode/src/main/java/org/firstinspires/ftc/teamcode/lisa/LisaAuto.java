@@ -20,6 +20,7 @@ public class LisaAuto extends BunyipsOpMode {
 
         tasks.add(new MessageTask(this, 3, "Activating drive in three seconds."));
         tasks.add(new LisaBaseDriveTask(this, 2, drive, 0.1, 0.1));
+        // tasks.add(new LisaIMUTask(this, 4, drive, 0.2, true, config.imu, 90));
     }
 
     @Override
