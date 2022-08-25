@@ -9,7 +9,6 @@ public class MessageTask extends BaseTask implements Task {
     public MessageTask(BunyipsOpMode opMode, double time, String message) {
         super(opMode, time);
         this.message = message;
-
     }
 
     @SuppressLint("DefaultLocale")
@@ -18,7 +17,7 @@ public class MessageTask extends BaseTask implements Task {
         if (isFinished()) {
             return;
         }
-        opMode.telemetry.addLine(String.format("%s %.2f", message, time));
+        opMode.telemetry.addLine(String.format("%s || %.2f", message, time));
     }
 
 }

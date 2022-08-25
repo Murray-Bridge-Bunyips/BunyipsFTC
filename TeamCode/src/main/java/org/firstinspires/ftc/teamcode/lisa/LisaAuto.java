@@ -23,10 +23,10 @@ public class LisaAuto extends BunyipsOpMode {
             drive = new LisaDrive(this,
                         config.left, config.right, config.fws, config.dws);
         } catch (Exception e) {
-            telemetry.addLine("Failed to initalise motors.");
+            telemetry.addLine("Failed to initalise drive.");
         }
 
-        tasks.add(new MessageTask(this, 3, "Activating drive in three seconds."));
+        tasks.add(new MessageTask(this, 3, "Activating drive tasks in three seconds."));
         tasks.add(new LisaBaseDriveTask(this, 2, drive, 0.1, 0.1));
         // tasks.add(new LisaIMUTask(this, 4, drive, 0.2, true, config.imu, 90));
     }
