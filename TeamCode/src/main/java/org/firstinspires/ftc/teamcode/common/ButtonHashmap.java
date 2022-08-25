@@ -1,14 +1,16 @@
 package org.firstinspires.ftc.teamcode.common;
 
-public class ButtonHashmap {
-    private String option1;
-    private String option2;
-    private char button1;
-    private char button2;
-    private char defaultsel;
+import java.util.HashMap;
+import java.util.Map;
 
-    public ButtonHashmap(BunyipsOpMode opMode, String option1, String option2, char button1, char button2, char defaultbutton) {
-        super(opMode);
+public class ButtonHashmap {
+    private final String option1;
+    private final String option2;
+    private final ButtonControl button1;
+    private final ButtonControl button2;
+    private final ButtonControl defaultbutton;
+
+    public ButtonHashmap(BunyipsOpMode opMode, String option1, String option2, ButtonControl button1, ButtonControl button2, ButtonControl defaultbutton) {
         this.option1 = option1;
         this.option2 = option2;
         this.button1 = button1;
@@ -16,28 +18,28 @@ public class ButtonHashmap {
         this.defaultbutton = defaultbutton;
     }
 
-    public void map() {
+    public ButtonControl map(BunyipsOpMode opMode) {
         HashMap<ButtonControl, String> buttonMap = new HashMap<>();
 
-        buttonMap.put(ButtonControl.button1, option1);
-        buttonMap.put(ButtonControl.button2, option2);
-        ButtonControl selectedButton = ButtonControl.defaultbutton;
+        buttonMap.put(button1, option1);
+        buttonMap.put(button2, option2);
+        ButtonControl selectedButton = defaultbutton;
 
-        boolean autoClearState = telemetry.isAutoClear();
+        boolean autoClearState = opMode.telemetry.isAutoClear();
 
-        telemetry.setAutoClear(false);
+        opMode.telemetry.setAutoClear(false);
 
-        telemetry.addLine("PRESSING ONE OF THE FOLLOWING BUTTONS WILL INITIALISE THE ROBOT TO THE RELEVANT OPERATION MODE:");
+        opMode.telemetry.addLine("PRESSING ONE OF THE FOLLOWING BUTTONS WILL INITIALISE THE ROBOT TO THE RELEVANT OPERATION MODE:");
         for (Map.Entry<ButtonControl, String> es : buttonMap.entrySet()) {
             System.out.printf("%s: %s%n", es.getKey().name(), es.getValue());
-            telemetry.addLine(String.format("%s: %s", es.getKey().name(), es.getValue()));
-            if (ButtonControl.isSelected(gamepad1, es.getKey())) {
+            opMode.telemetry.addLine(String.format("%s: %s", es.getKey().name(), es.getValue()));
+            if (ButtonControl.isSelected(opMode.gamepad1, es.getKey())) {
                 selectedButton = es.getKey();
             }
         }
 
-        telemetry.addLine(String.format("IF NO BUTTON IS PRESSED WITHIN 3 SECONDS, *%s* WILL BE RUN", buttonMap.get(selectedButton)));
-        telemetry.update();
+        opMode.telemetry.addLine(String.format("IF NO BUTTON IS PRESSED WITHIN 3 SECONDS, *%s* WILL BE RUN", buttonMap.get(selectedButton)));
+        opMode.telemetry.update();
 
 
         long startTime = System.nanoTime();
@@ -45,25 +47,23 @@ public class ButtonHashmap {
         outerLoop:
         while (System.nanoTime() < startTime + 3000000000L) {
             for (Map.Entry<ButtonControl, String> es : buttonMap.entrySet()) {
-//                System.out.printf("%s: %s%n", es.getKey().name(), es.getValue());
-//                telemetry.addLine(String.format("%s: %s", es.getKey().name(), es.getValue()));
-                if (ButtonControl.isSelected(gamepad1, es.getKey())) {
+                if (ButtonControl.isSelected(opMode.gamepad1, es.getKey())) {
                     selectedButton = es.getKey();
                     break outerLoop;
                 }
             }
 
-            idle();
+            opMode.idle();
         }
 
-        telemetry.addLine(String.format("%s was selected: Running %s", selectedButton.name(), buttonMap.get(selectedButton)));
-        telemetry.addLine("IF THIS SELECTION IS INCORRECT, QUIT THE OPMODE AND CHOOSE RESELECT");
-        telemetry.update();
+        opMode.telemetry.addLine(String.format("%s was selected: Running %s", selectedButton.name(), buttonMap.get(selectedButton)));
+        opMode.telemetry.addLine("IF THIS SELECTION IS INCORRECT, QUIT THE OPMODE AND CHOOSE RESELECT");
+        opMode.telemetry.update();
 
-        telemetry.setAutoClear(autoClearState);
+        opMode.telemetry.setAutoClear(autoClearState);
 
 
-        telemetry.addLine(String.format("Loading tasks for %s", selectedButton.name()));
+        opMode.telemetry.addLine(String.format("Loading tasks for %s", selectedButton.name()));
         return selectedButton;
     }
 }
