@@ -11,6 +11,7 @@ public class BertieTeleOp extends BunyipsOpMode {
     private BertieArm lift = null;
     private boolean up_pressed = false;
     private boolean down_pressed = false;
+    private boolean drop_pressed = false;
 
     @Override
     protected void onInit() {
@@ -35,11 +36,13 @@ public class BertieTeleOp extends BunyipsOpMode {
         drive.setSpeedXYR(y, -x, r);
         drive.update();
 
-        lift.setPower(0.2);
+        lift.setPower(0.3);
         if (up_pressed && !gamepad2.dpad_up) {
             lift.liftUp();
         } else if (down_pressed && !gamepad2.dpad_down) {
             lift.liftDown();
+        } else if (drop_pressed && !gamepad2.left_bumper) {
+            lift.liftReset();
         }
 
         if (gamepad2.a) {
@@ -69,6 +72,7 @@ public class BertieTeleOp extends BunyipsOpMode {
 
         up_pressed = gamepad2.dpad_up;
         down_pressed = gamepad2.dpad_down;
+        drop_pressed = gamepad2.left_bumper;
 
         lift.update();
         }
