@@ -20,8 +20,6 @@ public class BertieBunyipConfiguration extends RobotConfig {
     public CRServo carouselLeft;
     public CRServo carouselRight;
 
-    BNO055IMU imu;
-
     /**
      * Factory method for this class
      *
@@ -94,25 +92,5 @@ public class BertieBunyipConfiguration extends RobotConfig {
 
         telemetry.addData("BunyipsOpMode Initialisation", "Complete");
         telemetry.update();
-
-        // We don't need the IMU for Bertie
-
-        // Set up the parameters with which we will use our IMU. Note that integration
-        // algorithm here just reports accelerations to the logcat log; it doesn't actually
-        // provide positional information.
-        /* BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator(); */
-
-        // Retrieve and initialize the IMU. We expect the IMU to be attached to an I2C port
-        // on a Core Device Interface Module, configured to be a sensor of type "AdaFruit IMU",
-        // and named "imu".
-        // imu = hardwareMap.get(BNO055IMU.class, "Control Hub IMU");
-        // imu.initialize(parameters);
     }
-
-
 }
