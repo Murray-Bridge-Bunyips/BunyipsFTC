@@ -17,6 +17,8 @@ public class LisaEncoderDriveTask extends BaseTask implements Task {
         this.drive = drive;
 
         // UltraPlanetary HD Hex Motor specification
+
+        // TODO: Verify these formulas as they don't work as intended
         final double TICKS_PER_REVOLUTION = 28;
         final double WHEEL_DIAMETER_CM = 8.5;
 

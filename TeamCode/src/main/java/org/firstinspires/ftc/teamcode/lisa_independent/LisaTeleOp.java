@@ -27,6 +27,7 @@ public class LisaTeleOp extends LinearOpMode {
     rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+    // TODO: Reoptimise this
     while (opModeIsActive()) {
         // Motor efficiency is halved as they are very strong, unless A is pressed which is overdrive or B is pressed which is smoothdrive
         if (gamepad1.a) {

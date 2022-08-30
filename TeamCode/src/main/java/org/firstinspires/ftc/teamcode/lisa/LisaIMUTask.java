@@ -12,6 +12,8 @@ import org.firstinspires.ftc.teamcode.common.BaseTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Task;
 
+
+// TODO: Check if negative values are needed for CW rotation, and change tolerance code
 public class LisaIMUTask extends BaseTask implements Task {
 
     private final LisaDrive drive;
@@ -19,17 +21,15 @@ public class LisaIMUTask extends BaseTask implements Task {
     private final double speed;
     private final boolean ccw;
     private final float angle;
-    private final float turnTo;
     private Orientation angles;
 
-    public LisaIMUTask(BunyipsOpMode opMode, double time, LisaDrive drive, double speed, boolean ccw, BNO055IMU imu, float angle, float turnTo) {
+    public LisaIMUTask(BunyipsOpMode opMode, double time, LisaDrive drive, double speed, boolean ccw, BNO055IMU imu, float angle) {
         super(opMode, time);
         this.drive = drive;
         this.speed = speed;
         this.imu = imu;
         this.ccw = ccw;
         this.angle = angle;
-        this.turnTo = turnTo;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class LisaIMUTask extends BaseTask implements Task {
 
         opMode.telemetry.addData("Original Angle", angles.firstAngle);
         opMode.telemetry.addData("Current Angle", currentAngles.firstAngle);
-        if (currentAngles.firstAngle > (angles.firstAngle + turnTo)) {
+        if (currentAngles.firstAngle > (angles.firstAngle + (angle - 15))) {
             drive.setPower(0.0, 0.0);
             drive.update();
             if (currentAngles.firstAngle > (angles.firstAngle + angle)) {
