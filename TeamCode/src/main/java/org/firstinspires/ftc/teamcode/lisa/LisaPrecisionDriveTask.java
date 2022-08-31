@@ -32,6 +32,7 @@ public class LisaPrecisionDriveTask extends BaseTask implements Task {
         this.reduction = reduction;
 
         // UltraPlanetary HD Hex Motors revolution count
+        // TODO: Check these formulas
         final double TICKS_PER_REVOLUTION = 28;
         final double WHEEL_DIAMETER_CM = 8.5;
 

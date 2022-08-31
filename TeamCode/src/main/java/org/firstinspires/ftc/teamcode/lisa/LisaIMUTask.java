@@ -29,7 +29,7 @@ public class LisaIMUTask extends BaseTask implements Task {
         this.speed = speed;
         this.imu = imu;
         this.ccw = ccw;
-        this.angle = angle;
+        this.angle = ccw ? angle : -angle;
     }
 
     @Override
@@ -56,7 +56,7 @@ public class LisaIMUTask extends BaseTask implements Task {
 
         opMode.telemetry.addData("Original Angle", angles.firstAngle);
         opMode.telemetry.addData("Current Angle", currentAngles.firstAngle);
-        if (currentAngles.firstAngle > (angles.firstAngle + (angle - 15))) {
+        if (currentAngles.firstAngle > (angles.firstAngle + (ccw ? angle - 15 : angle + 15))) {
             drive.setPower(0.0, 0.0);
             drive.update();
             if (currentAngles.firstAngle > (angles.firstAngle + angle)) {
