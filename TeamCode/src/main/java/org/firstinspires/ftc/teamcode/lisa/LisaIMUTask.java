@@ -23,13 +23,13 @@ public class LisaIMUTask extends BaseTask implements Task {
     private final float angle;
     private Orientation angles;
 
-    public LisaIMUTask(BunyipsOpMode opMode, double time, LisaDrive drive, double speed, boolean ccw, BNO055IMU imu, float angle) {
+    public LisaIMUTask(BunyipsOpMode opMode, double time, LisaDrive drive, double speed, boolean ccw, BNO055IMU imu, double angle) {
         super(opMode, time);
         this.drive = drive;
         this.speed = speed;
         this.imu = imu;
         this.ccw = ccw;
-        this.angle = ccw ? angle : -angle;
+        this.angle = ccw ? (float) angle : (float) -angle;
     }
 
     @Override
@@ -59,7 +59,7 @@ public class LisaIMUTask extends BaseTask implements Task {
         if (currentAngles.firstAngle > (angles.firstAngle + (ccw ? angle - 15 : angle + 15))) {
             drive.setPower(0.0, 0.0);
             drive.update();
-            if (currentAngles.firstAngle > (angles.firstAngle + angle)) {
+            if (currentAngles.firstAngle > (angles.firstAngle + (ccw ? angle : -angle))) {
                 drive.setPower(ccw ? 0.1 : -0.1, ccw ? -0.1 : 0.1);
                 drive.update();
             } else {

@@ -23,13 +23,13 @@ public class LisaPrecisionDriveTask extends BaseTask implements Task {
     private final float reduction;
     private Orientation captureAngle;
 
-    public LisaPrecisionDriveTask(BunyipsOpMode opMode, LisaDrive drive, BNO055IMU imu, double time, double distanceCM, double speed, float tolerance, float reduction) {
+    public LisaPrecisionDriveTask(BunyipsOpMode opMode, LisaDrive drive, BNO055IMU imu, double time, double distanceCM, double speed, double tolerance, double reduction) {
         super(opMode, time);
         this.drive = drive;
         this.speed = speed;
         this.imu = imu;
-        this.tolerance = tolerance;
-        this.reduction = reduction;
+        this.tolerance = (float) tolerance;
+        this.reduction = (float) reduction;
 
         // UltraPlanetary HD Hex Motors revolution count
         // TODO: Check these formulas
