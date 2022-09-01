@@ -75,11 +75,11 @@ public class LisaPrecisionDriveTask extends BaseTask implements Task {
         double reducedspeed = speed > 0 ? speed - reduction : speed + reduction;
         if (currentAngle.firstAngle > captureAngle.firstAngle + tolerance) {
             // Rotate CCW
-            drive.setPower(reducedspeed, speed);
+            drive.setPower(speed, reducedspeed);
             drive.update();
         } else if (currentAngle.firstAngle < captureAngle.firstAngle - tolerance) {
             // Rotate CW
-            drive.setPower(speed, reducedspeed);
+            drive.setPower(reducedspeed, speed);
             drive.update();
         } else {
             // Continue straight
