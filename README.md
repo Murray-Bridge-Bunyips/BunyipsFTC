@@ -2,7 +2,7 @@
 	South Australian FTC Team 15215, Murray Bridge High School   
 	Close collaboration with Team 4537 RoboRoos and Team 18003 Paladins of St Paul's  
 	
-	Master branch: Protected branch with a primary collation of all of our active code - Minibots, Freight Frenzy (2021-2022)  
+	Master branch: Protected branch with a primary collation of all of our active and non-active code
 	PowerPlay branch: POWERPLAY (2022-2023)  
 	Minibots branch: Minibot development  
 	
