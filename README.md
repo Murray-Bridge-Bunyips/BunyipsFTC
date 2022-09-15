@@ -1,10 +1,10 @@
 	MURRAY BRIDGE BUNYIPS
-	South Australian FTC Team 15215, Murray Bridge High School   
-	Close collaboration with Team 4537 RoboRoos and Team 18003 Paladins of St Paul's  
+	South Australian FTC Team 15215, Murray Bridge High School
+	Close collaboration with Team 4537 RoboRoos and Team 18003 Paladins of St Paul's
 	
-	Master branch: Protected branch with a primary collation of all of our active and non-active code
-	PowerPlay branch: POWERPLAY (2022-2023)  
-	Minibots branch: Minibot development  
+	Master branch: Protected branch with a primary collation of all of our working active and non-active code
+	PowerPlay branch: POWERPLAY (2022-2023) development
+	Minibots branch: Specific minibot development
 	
 
 ## Version 8.0 (20220907-131644)
