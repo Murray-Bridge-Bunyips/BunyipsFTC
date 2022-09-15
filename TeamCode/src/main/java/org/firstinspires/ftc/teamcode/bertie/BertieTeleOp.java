@@ -2,6 +2,9 @@ package org.firstinspires.ftc.teamcode.bertie;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.bertie.config.BertieArm;
+import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipConfiguration;
+import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipDrive;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 @TeleOp(name = "<BERTIE> TeleOp")

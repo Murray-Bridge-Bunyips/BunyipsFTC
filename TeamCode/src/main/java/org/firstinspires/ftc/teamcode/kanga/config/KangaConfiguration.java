@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.kanga;
+package org.firstinspires.ftc.teamcode.kanga.config;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;

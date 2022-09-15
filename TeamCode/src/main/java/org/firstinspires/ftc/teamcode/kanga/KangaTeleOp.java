@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.kanga;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.kanga.config.KangaConfiguration;
+import org.firstinspires.ftc.teamcode.kanga.config.KangaDrive;
 
 @TeleOp(name="<KANGA> TeleOp")
 public class KangaTeleOp extends BunyipsOpMode {

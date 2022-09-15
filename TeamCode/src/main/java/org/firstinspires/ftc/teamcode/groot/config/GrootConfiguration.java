@@ -1,22 +1,17 @@
-package org.firstinspires.ftc.teamcode.lisa;
+package org.firstinspires.ftc.teamcode.groot.config;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
-public class LisaConfiguration extends RobotConfig {
-    // Motors
-    public DcMotorEx left;
-    public DcMotorEx right;
+public class GrootConfiguration extends RobotConfig {
+    public DcMotor left;
+    public DcMotor right;
 
-    // Other components
-    public DistanceSensor fws;
-    public ColorSensor dws;
     BNO055IMU imu;
 
     /**
@@ -26,8 +21,8 @@ public class LisaConfiguration extends RobotConfig {
      * @param telemetry
      * @return
      */
-    public static LisaConfiguration newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
-        LisaConfiguration config = new LisaConfiguration();
+    public static GrootConfiguration newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
+        GrootConfiguration config = new GrootConfiguration();
         config.init(hardwareMap, telemetry);
         return config;
     }
@@ -44,27 +39,17 @@ public class LisaConfiguration extends RobotConfig {
         setTelemetry(telemetry);
 
         try {
-            left = (DcMotorEx) getHardwareOn("Left Motor", hardwareMap.dcMotor);
+            left = (DcMotor) getHardwareOn("left_motor", hardwareMap.dcMotor);
         } catch (Exception e) {
-            telemetry.addLine("Left Motor failed to configure.");
+            telemetry.addLine("left_motor failed to configure.");
         }
         try {
-            right = (DcMotorEx) getHardwareOn("Right Motor", hardwareMap.dcMotor);
+            right = (DcMotor) getHardwareOn("right_motor", hardwareMap.dcMotor);
         } catch (Exception e) {
-            telemetry.addLine("Right Motor failed to configure.");
-        }
-        try {
-            fws = hardwareMap.get(DistanceSensor.class, "Forward Vision System");
-        } catch (Exception e) {
-            telemetry.addLine("Forward Vision System failed to configure.");
-        }
-        try {
-            dws = hardwareMap.get(ColorSensor.class, "Downward Vision System"); 
-        } catch (Exception e) {
-            telemetry.addLine("Downward Vision System failed to configure.");
+            telemetry.addLine("right_motor failed to configure.");
         }
 
-        right.setDirection(DcMotorEx.Direction.REVERSE);
+        right.setDirection(DcMotor.Direction.REVERSE);
 
         telemetry.addData("BunyipsOpMode Initialisation", "Complete");
         telemetry.update();

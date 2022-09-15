@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.bertie;
+package org.firstinspires.ftc.teamcode.bertie.config;
 
 import android.annotation.SuppressLint;
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lisa;
+package org.firstinspires.ftc.teamcode.lisa.config;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
