@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lisa;
+package org.firstinspires.ftc.teamcode.lisa.config;
 
 import org.firstinspires.ftc.teamcode.common.BaseTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;

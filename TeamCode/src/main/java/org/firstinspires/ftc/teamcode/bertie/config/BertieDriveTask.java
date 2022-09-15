@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.bertie;
+package org.firstinspires.ftc.teamcode.bertie.config;
 
 import org.firstinspires.ftc.teamcode.common.BaseTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.common.Task;
 
 public class BertieDriveTask extends BaseTask implements Task {
 
-    private final org.firstinspires.ftc.teamcode.bertie.BertieBunyipDrive drive;
+    private final BertieBunyipDrive drive;
     private final double x;
     private final double y;
     private final double r;
