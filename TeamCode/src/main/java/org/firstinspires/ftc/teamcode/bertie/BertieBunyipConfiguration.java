@@ -44,46 +44,15 @@ public class BertieBunyipConfiguration extends RobotConfig {
 
         setTelemetry(telemetry);
 
-        try {
-            backLeft = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
-        } catch (Exception e) {
-            telemetry.addLine("backLeft failed to configure.");
-        }
-        try {
-            backRight = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
-        } catch (Exception e) {
-            telemetry.addLine("backRight failed to configure.");
-        }
-        try {
-            frontLeft = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
-        } catch (Exception e) {
-            telemetry.addLine("frontRight failed to configure.");
-        }
-        try {
-            frontRight = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
-        } catch (Exception e) {
-            telemetry.addLine("frontRight failed to configure.");
-        }
-        try {
-            armMotor = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
-        } catch (Exception e) {
-            telemetry.addLine("armMotor failed to configure.");
-        }
-        try {
-            carouselLeft = (CRServo) getHardwareOn("Carousel Left", hardwareMap.crservo);
-        } catch (Exception e) {
-            telemetry.addLine("carouselLeft failed to configure.");
-        }
-        try {
-            carouselRight = (CRServo) getHardwareOn("Carousel Right", hardwareMap.crservo);
-        } catch (Exception e) {
-            telemetry.addLine("carouselRight failed to configure.");
-        }
-        try {
-            spinIntake = (CRServo) getHardwareOn("Spin Intake", hardwareMap.crservo);
-        } catch (Exception e) {
-            telemetry.addLine("spinIntake failed to configure.");
-        }
+        backLeft = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
+        backRight = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
+        frontLeft = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
+        frontRight = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
+        armMotor = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
+        carouselLeft = (CRServo) getHardwareOn("Carousel Left", hardwareMap.crservo);
+        carouselRight = (CRServo) getHardwareOn("Carousel Right", hardwareMap.crservo);
+        spinIntake = (CRServo) getHardwareOn("Spin Intake", hardwareMap.crservo);
+
 
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);

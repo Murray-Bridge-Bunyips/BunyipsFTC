@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.common;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 /**
- * Base class for components used in BaconOpModes
+ * Base class for components used in BunyipsOpModes
  */
 
 public class BunyipsController {
