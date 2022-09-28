@@ -43,7 +43,7 @@ public class CameraOp extends BunyipsController {
 
     public CameraOp(BunyipsOpMode opmode, CameraName webcam, int tfodMonitorViewId) {
         super(opmode);
-        // Vuforia engine localizer initialisation
+        // Vuforia localizer engine initialisation
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -62,10 +62,49 @@ public class CameraOp extends BunyipsController {
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
+
+        // Activate TFOD
+        if (tfod != null) {
+            tfod.activate();
+            tfod.setZoom(1.0, 16.0/9.0);
+        }
     }
 
+    public String determineSignal() {
+        // TFOD updated recognitions will return null if the data is the same as the last call
+        if (updatedRecognitions == null) { return null; }
+
+        // Debug telemetry
+        getOpMode().telemetry.addLine(String.format("Objects found: %i", updatedRecognitions.size()));
+        for (Recognition recognition : updatedRecognitions) {
+            double col = (recognition.getLeft() + recognition.getRight()) / 2;
+            double row = (recognition.getTop()  + recognition.getBottom()) / 2;
+            double width  = Math.abs(recognition.getRight() - recognition.getLeft());
+            double height = Math.abs(recognition.getTop()  - recognition.getBottom());
+ 
+            getOpMode().telemetry.addLine(String.format("Image", "%s (%.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 ));
+            getOpMode().telemetry.addLine(String.format("- Position (Row/Col)","%.0f / %.0f", row, col));
+            getOpMode().telemetry.addLine(String.format("- Size (Width/Height)","%.0f / %.0f", width, height));
+
+            // If the computer is more than 75% sure that the signal is what it thinks it is, then return it.
+            // This will prevent an instant locking of the signal, and allow the engine a bit of time to think.
+            // Combined with a task, this can be time constrained in the event this method keeps returning null
+            if (recognition.getConfidence() > 0.75) {
+                return recognition.getLabel();
+            } else {
+                return null;
+            }
+        }
+    }
+
+    public void determinePosition() {
+        // TODO: Use Vuforia Field Navigation class to inherit methods used for determining position on field
+    }
 
     public void tick() {
+        // TFOD update
         List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+
+        // TODO: Vuforia field positioning update
     }
 }
