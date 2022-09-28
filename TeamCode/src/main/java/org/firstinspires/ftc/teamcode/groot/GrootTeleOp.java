@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.groot;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.groot.config.GrootConfiguration;
+import org.firstinspires.ftc.teamcode.groot.config.GrootDrive;
 
 @TeleOp(name="<GROOT> TeleOp")
 public class GrootTeleOp extends BunyipsOpMode {

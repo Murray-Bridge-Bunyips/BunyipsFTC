@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.groot;
+package org.firstinspires.ftc.teamcode.groot.config;
 
 import android.annotation.SuppressLint;
 

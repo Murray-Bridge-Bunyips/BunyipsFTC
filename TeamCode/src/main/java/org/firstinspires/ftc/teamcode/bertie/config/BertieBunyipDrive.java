@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.bertie;
+package org.firstinspires.ftc.teamcode.bertie.config;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;

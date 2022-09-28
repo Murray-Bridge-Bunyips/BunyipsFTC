@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.kanga;
+package org.firstinspires.ftc.teamcode.kanga.config;
 
 import android.annotation.SuppressLint;
 

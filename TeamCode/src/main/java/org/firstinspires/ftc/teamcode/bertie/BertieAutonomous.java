@@ -3,6 +3,10 @@ package org.firstinspires.ftc.teamcode.bertie;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.firstinspires.ftc.teamcode.bertie.config.BertieArm;
+import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipConfiguration;
+import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipDrive;
+import org.firstinspires.ftc.teamcode.bertie.config.BertieDriveTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.ButtonControl;
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap;
@@ -10,8 +14,6 @@ import org.firstinspires.ftc.teamcode.common.MessageTask;
 import org.firstinspires.ftc.teamcode.common.Task;
 
 import java.util.ArrayDeque;
-import java.util.HashMap;
-import java.util.Map;
 
 @Autonomous(name = "<BERTIE> Autonomous Testing")
 @Disabled

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.groot;
+package org.firstinspires.ftc.teamcode.kanga.config;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
-public class GrootConfiguration extends RobotConfig {
+public class KangaConfiguration extends RobotConfig {
     public DcMotor left;
     public DcMotor right;
 
@@ -21,8 +21,8 @@ public class GrootConfiguration extends RobotConfig {
      * @param telemetry
      * @return
      */
-    public static GrootConfiguration newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
-        GrootConfiguration config = new GrootConfiguration();
+    public static KangaConfiguration newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
+        KangaConfiguration config = new KangaConfiguration();
         config.init(hardwareMap, telemetry);
         return config;
     }

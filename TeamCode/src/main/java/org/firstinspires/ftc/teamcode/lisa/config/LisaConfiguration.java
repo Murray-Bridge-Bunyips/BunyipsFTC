@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lisa;
+package org.firstinspires.ftc.teamcode.lisa.config;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -17,7 +17,7 @@ public class LisaConfiguration extends RobotConfig {
     // Other components
     public DistanceSensor fws;
     public ColorSensor dws;
-    BNO055IMU imu;
+    public BNO055IMU imu;
 
     /**
      * Factory method for this class
