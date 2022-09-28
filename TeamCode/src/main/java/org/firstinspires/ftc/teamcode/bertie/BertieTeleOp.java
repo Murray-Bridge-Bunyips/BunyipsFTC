@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.bertie;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 @TeleOp(name = "<BERTIE> TeleOp")
+@Disabled
 public class BertieTeleOp extends BunyipsOpMode {
     private BertieBunyipConfiguration config;
     private BertieBunyipDrive drive = null;

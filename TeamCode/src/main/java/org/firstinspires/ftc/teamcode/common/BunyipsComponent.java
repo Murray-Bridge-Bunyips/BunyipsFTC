@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  * Base class for components used in BunyipsOpModes
  */
 
-public class BunyipsController {
+public class BunyipsComponent {
 
     private BunyipsOpMode opMode;
 
-    public BunyipsController(BunyipsOpMode bunyipsOpMode) {
+    public BunyipsComponent(BunyipsOpMode bunyipsOpMode) {
         opMode = bunyipsOpMode;
     }
 

@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.common.BunyipsController;
+import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
-public class BertieBunyipDrive extends BunyipsController {
+public class BertieBunyipDrive extends BunyipsComponent {
 
     public enum MecanumDriveMode {
         NORMALIZED, ROTATION_PRIORITY_NORMALIZED

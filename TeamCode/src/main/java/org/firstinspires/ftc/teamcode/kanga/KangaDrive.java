@@ -4,10 +4,10 @@ import android.annotation.SuppressLint;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.common.BunyipsController;
+import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
-public class KangaDrive extends BunyipsController {
+public class KangaDrive extends BunyipsComponent {
     final private DcMotor left;
     final private DcMotor right;
 

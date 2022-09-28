@@ -4,10 +4,10 @@ import android.annotation.SuppressLint;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.common.BunyipsController;
+import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
-public class BertieArm extends BunyipsController {
+public class BertieArm extends BunyipsComponent {
     // Adjust these numbers for encoder positions
     private static final int[] lift_positions = {0, 100, 400, 800, 1100};
 

@@ -8,10 +8,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.common.BunyipsController;
+import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
-public class LisaDrive extends BunyipsController {
+public class LisaDrive extends BunyipsComponent {
     final private DcMotorEx left;
     final private DcMotorEx right;
     final private DistanceSensor fws;

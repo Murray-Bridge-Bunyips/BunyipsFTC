@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.bertie;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.ButtonControl;
@@ -13,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Autonomous(name = "<BERTIE> Autonomous Testing")
+@Disabled
 public class BertieAutonomous extends BunyipsOpMode {
     private BertieBunyipConfiguration config;
     private BertieBunyipDrive drive = null;
