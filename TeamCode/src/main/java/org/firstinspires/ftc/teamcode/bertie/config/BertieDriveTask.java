@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.bertie.config;
 
-import org.firstinspires.ftc.teamcode.common.BaseTask;
+import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.Task;
 
 public class BertieDriveTask extends BaseTask implements Task {
 

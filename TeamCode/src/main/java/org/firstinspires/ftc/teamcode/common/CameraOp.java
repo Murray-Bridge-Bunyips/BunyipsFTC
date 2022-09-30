@@ -20,6 +20,7 @@ public class CameraOp extends BunyipsComponent {
 
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
+    public String seeingSignal = null;
     List<Recognition> updatedRecognitions;
 
     // TFOD MODEL FOR 2022-2023 POWERPLAY SEASON

@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.lisa;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.MessageTask;
-import org.firstinspires.ftc.teamcode.common.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
+import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaConfiguration;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaPrecisionDriveTask;

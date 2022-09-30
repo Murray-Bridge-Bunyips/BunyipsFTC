@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.bertie.config.BertieDriveTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.ButtonControl;
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap;
-import org.firstinspires.ftc.teamcode.common.MessageTask;
-import org.firstinspires.ftc.teamcode.common.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
+import org.firstinspires.ftc.teamcode.common.tasks.Task;
 
 import java.util.ArrayDeque;
 

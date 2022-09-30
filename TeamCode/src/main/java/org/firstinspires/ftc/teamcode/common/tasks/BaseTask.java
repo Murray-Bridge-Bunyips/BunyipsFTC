@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.common;
+package org.firstinspires.ftc.teamcode.common.tasks;
+
+import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public abstract class BaseTask implements Task {
 
