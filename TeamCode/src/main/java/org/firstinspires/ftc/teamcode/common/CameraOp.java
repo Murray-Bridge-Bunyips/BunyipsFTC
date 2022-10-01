@@ -65,7 +65,7 @@ public class CameraOp extends BunyipsComponent {
     }
 
     @SuppressLint("DefaultLocale")
-    public String determineSignal() {
+    public String determineTFOD() {
         // TFOD updated recognitions will return null if the data is the same as the last call
         if (updatedRecognitions == null) { return null; }
 

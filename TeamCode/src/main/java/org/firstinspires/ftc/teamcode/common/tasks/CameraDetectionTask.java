@@ -16,10 +16,10 @@ public class CameraDetectionTask extends BaseTask implements Task {
     public void run() {
         // Check the signal and determine whether it can calculate which one it is (1, 2, 3)
         // If the time restraint is reached, then return nothing which defaults to null
-        String signal = cam.determineSignal();
+        String signal = cam.determineTFOD();
         while (signal == null) {
             cam.tick();
-            signal = cam.determineSignal();
+            signal = cam.determineTFOD();
         }
 
         // Write it to the CameraOp variables, returning null if it still hasn't seen a signal

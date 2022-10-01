@@ -27,7 +27,7 @@ public class ProtoConfig extends RobotConfig {
         try {
             // Using manual error catching as the hardwareMap for getHardwareOn does not include
             // webcam configurations
-            webcam = (CameraName) hardwareMap.get(WebcamName.class, "Webcam");
+            webcam = hardwareMap.get(WebcamName.class, "Webcam");
             tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                     "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         } catch (Exception e) {
