@@ -112,7 +112,7 @@ public abstract class BunyipsOpMode extends LinearOpMode {
      */
     protected void setOperationsCompleted() {
         this.operationsCompleted = true;
-        telemetry.addData("Opmode Status", "Operations completed");
+        telemetry.addData("BunyipsOpMode Status", "Operations completed");
     }
 
 }

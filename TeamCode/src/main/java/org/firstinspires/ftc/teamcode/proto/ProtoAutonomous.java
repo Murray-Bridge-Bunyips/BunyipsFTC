@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
-import org.firstinspires.ftc.teamcode.common.tasks.CameraDetectionTask;
+import org.firstinspires.ftc.teamcode.common.tasks.TFODDetectionTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoSignalParkTask;
@@ -29,7 +29,7 @@ public class ProtoAutonomous extends BunyipsOpMode {
         }
 
         // Add tasks here
-        tasks.add(new CameraDetectionTask(this, 5, cam));
+        tasks.add(new TFODDetectionTask(this, 5, cam));
         tasks.add(new ProtoSignalParkTask(this, 7));
     }
 
