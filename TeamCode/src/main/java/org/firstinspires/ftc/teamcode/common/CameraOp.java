@@ -39,6 +39,7 @@ public class CameraOp extends BunyipsComponent {
     private boolean targetVisible = false;
 
     public String seeingTfod = null;
+    public String bestguess = null;
 
     public volatile boolean vuforiaEnabled = false;
     public volatile boolean tfodEnabled = false;
@@ -97,9 +98,9 @@ public class CameraOp extends BunyipsComponent {
         identifyTarget(3, "Blue Rear Wall",       halfField,   oneAndHalfTile, mmTargetHeight, 90, 0, -90);
 
         // Create a transformation matrix to let the computer know where the camera is relative to the robot
-        final float CAMERA_FORWARD_DISPLACEMENT  = 0.0f * mmPerInch;   // Enter the forward distance from the center of the robot to the camera lens
-        final float CAMERA_VERTICAL_DISPLACEMENT = 6.0f * mmPerInch;   // Enter vertical height from the ground to the camera
-        final float CAMERA_LEFT_DISPLACEMENT     = 0.0f * mmPerInch;   // Enter the left distance from the center of the robot to the camera lens
+        final float CAMERA_FORWARD_DISPLACEMENT  = 0.0f;   // Enter the forward distance from the center of the robot to the camera lens (mm)
+        final float CAMERA_VERTICAL_DISPLACEMENT = 0.0f;   // Enter vertical height from the ground to the camera (mm)
+        final float CAMERA_LEFT_DISPLACEMENT     = 0.0f;   // Enter the left distance from the center of the robot to the camera lens (mm)
 
         OpenGLMatrix cameraLocationOnRobot = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
@@ -144,6 +145,7 @@ public class CameraOp extends BunyipsComponent {
             // If the computer is more than 75% sure that the signal is what it thinks it is, then return it.
             // This will prevent an instant locking of the signal, and allow the engine a bit of time to think.
             // Combined with a task, this can be time constrained in the event this method keeps returning null
+            bestguess = recognition.getLabel();
             if (recognition.getConfidence() > 0.75) {
                 return recognition.getLabel();
             }

@@ -23,10 +23,10 @@ public class TFODDetectionTask extends BaseTask implements Task {
         // Check the signal and determine whether it can calculate which one it is (1, 2, 3)
         // If the time restraint is reached, then return the second
         while (seeingtfod == null) {
-            // If we hit the time constraint, return that we had simply found the second result
+            // If we hit the time constraint, return the latest result; and if that doesn't exist, return the second
             if (isFinished()) {
                 cam.stopTFOD();
-                cam.seeingTfod = CameraOp.LABELS[1];
+                cam.seeingTfod = cam.bestguess != null ? cam.bestguess : CameraOp.LABELS[1];
             }
             cam.tick();
             seeingtfod = cam.determineTFOD();
@@ -35,5 +35,6 @@ public class TFODDetectionTask extends BaseTask implements Task {
         // Write it to the CameraOp variables, and return task as finished
         cam.seeingTfod = seeingtfod;
         isFinished = true;
+        cam.stopTFOD();
     }
 }
