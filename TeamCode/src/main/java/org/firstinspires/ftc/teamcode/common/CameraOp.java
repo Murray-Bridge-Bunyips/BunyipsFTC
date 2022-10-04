@@ -138,9 +138,9 @@ public class CameraOp extends BunyipsComponent {
             double width  = Math.abs(recognition.getRight() - recognition.getLeft());
             double height = Math.abs(recognition.getTop()  - recognition.getBottom());
  
-            getOpMode().telemetry.addLine(String.format("Image", "%1$s (%2$.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 ));
-            getOpMode().telemetry.addLine(String.format("- Position (Row/Col)","%1$.0f / %2$.0f", row, col));
-            getOpMode().telemetry.addLine(String.format("- Size (Width/Height)","%1$.0f / %2$.0f", width, height));
+            getOpMode().telemetry.addLine(String.format("Image: %1$s (%2$.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 ));
+            getOpMode().telemetry.addLine(String.format("- Position (Row/Col): %1$.0f / %2$.0f", row, col));
+            getOpMode().telemetry.addLine(String.format("- Size (Width/Height): %1$.0f / %2$.0f", width, height));
 
             // If the computer is more than 75% sure that the signal is what it thinks it is, then return it.
             // This will prevent an instant locking of the signal, and allow the engine a bit of time to think.
@@ -153,16 +153,17 @@ public class CameraOp extends BunyipsComponent {
         return null;
     }
 
+    @SuppressLint("DefaultLocale")
     public OpenGLMatrix targetRawMatrix() {
         if (targetVisible) {
             // Express position (translation) of robot in millimetres.
             VectorF translation = lastLocation.getTranslation();
-            getOpMode().telemetry.addLine(String.format("Pos (mm)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+            getOpMode().telemetry.addLine(String.format("Pos (mm): {X, Y, Z} = %.1f, %.1f, %.1f",
                     translation.get(0), translation.get(1), translation.get(2)));
 
             // Express the rotation of the robot in degrees.
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-            getOpMode().telemetry.addLine(String.format("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle));
+            getOpMode().telemetry.addLine(String.format("Rot (deg): {Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle));
 
             /*
              * METHODS TO CALL WITH VUFORIA CAMERA OP

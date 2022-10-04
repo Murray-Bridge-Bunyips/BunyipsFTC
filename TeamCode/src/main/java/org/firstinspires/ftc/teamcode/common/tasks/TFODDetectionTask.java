@@ -15,6 +15,7 @@ public class TFODDetectionTask extends BaseTask implements Task {
 
     @Override
     public void init() {
+        super.init();
         cam.startTFOD();
     }
 
@@ -27,6 +28,7 @@ public class TFODDetectionTask extends BaseTask implements Task {
             if (isFinished()) {
                 cam.stopTFOD();
                 cam.seeingTfod = cam.bestguess != null ? cam.bestguess : CameraOp.LABELS[1];
+                return;
             }
             cam.tick();
             seeingtfod = cam.determineTFOD();
