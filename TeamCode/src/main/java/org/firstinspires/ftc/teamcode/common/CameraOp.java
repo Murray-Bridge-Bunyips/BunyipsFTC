@@ -23,9 +23,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * Created by Lucas Bubner - FTC 15215 Captain
- * Oct 2022 - Murray Bridge Bunyips
+/**
+ * Custom common class to operate Vuforia and TensorFlow through an attached Webcam
+ * @author Lucas Bubner - FTC 15215 Captain; Oct 2022 - Murray Bridge Bunyips
  */
 
 public class CameraOp extends BunyipsComponent {
@@ -38,7 +38,9 @@ public class CameraOp extends BunyipsComponent {
     private final VuforiaTrackables targets;
     private boolean targetVisible = false;
 
+    // Use seeingTfod public String for saving a TFOD value for usage in other tasks
     public String seeingTfod = null;
+    // Best guess is used when time limits are reached, then is saved to seeingTfod
     public String bestguess = null;
 
     public volatile boolean vuforiaEnabled = false;
@@ -65,6 +67,12 @@ public class CameraOp extends BunyipsComponent {
     private static final float halfTile       = 12 * mmPerInch;
     private static final float oneAndHalfTile = 36 * mmPerInch;
 
+    /**
+     * CameraOperation custom common class for USB-connected webcams (TFOD Objects + Vuforia Field Pos)
+     * @param opmode Pass abstract opmode class for telemetry
+     * @param webcam hardwareMap.get(WebcamName.class, "NAME_OF_CAMERA")
+     * @param tfodMonitorViewId hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+     */
     public CameraOp(BunyipsOpMode opmode, CameraName webcam, int tfodMonitorViewId) {
         super(opmode);
         // Vuforia localizer engine initialisation
@@ -125,6 +133,10 @@ public class CameraOp extends BunyipsComponent {
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
     }
 
+    /**
+     * TensorFlow detection return function to determine a label. TFOD must be activated.
+     * @return Returns the String of the detected TFOD label if the confidence is above 75%, otherwise returns null
+     */
     @SuppressLint("DefaultLocale")
     public String determineTFOD() {
         // TFOD updated recognitions will return null if the data is the same as the last call
@@ -147,12 +159,39 @@ public class CameraOp extends BunyipsComponent {
             // Combined with a task, this can be time constrained in the event this method keeps returning null
             bestguess = recognition.getLabel();
             if (recognition.getConfidence() > 0.75) {
+                // Will not automatically save label to public seeingTfod variable and is left for the task/opmode to do
+                // Uncomment the next line if auto saving to cam.seeingTfod is desired
+                // this.seeingTfod = recognition.getLabel();
                 return recognition.getLabel();
             }
         }
         return null;
     }
 
+
+    /**
+     * Returns the raw OpenGLMatrix info from the Vuforia engine for OpMode interpretation. See this method's definition for more information. Vuforia must be activated.
+     * @return OpenGLMatrix from the current identified target identified by the Vuforia engine.
+     *          Returns null if no target is currently visible.
+     */
+    /*
+     * Call these methods for interpreted data
+     *     OpenGLMatrix VuforiaMatrix = cam.targetRawMatrix();
+     *     VectorF translation = VuforiaMatrix.getTranslation();
+     *     Orientation rotation = Orientation.getOrientation(VuforiaMatrix, EXTRINSIC, XYZ, DEGREES);
+     *
+     * Interpreted data calls
+     *     translation.get(0) || Position X (mm)
+     *     translation.get(1) || Position Y (mm)
+     *     translation.get(2) || Position Z (mm)
+     *
+     *     rotation.firstAngle || Roll (X) (degs)
+     *     rotation.secondAngle || Pitch (Y) (degs)
+     *     rotation.thirdAngle || Heading (Z) (degs)
+     *
+     * See: https://github.com/FIRST-Tech-Challenge/FtcRobotController/blob/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples/FTC_FieldCoordinateSystemDefinition.pdf
+     * for information regarding field positioning with these coordinates.
+     */
     @SuppressLint("DefaultLocale")
     public OpenGLMatrix targetRawMatrix() {
         if (targetVisible) {
@@ -165,22 +204,6 @@ public class CameraOp extends BunyipsComponent {
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
             getOpMode().telemetry.addLine(String.format("Rot (deg): {Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle));
 
-            /*
-             * METHODS TO CALL WITH VUFORIA CAMERA OP
-             *  OpenGLMatrix VuforiaMatrix = cam.targetRawMatrix();
-             *  VectorF translation = VuforiaMatrix.getTranslation();
-             *  Orientation rotation = Orientation.getOrientation(VuforiaMatrix, EXTRINSIC, XYZ, DEGREES);
-             *
-             * TRANSLATED DATA CALLS
-             *  translation.get(0): Position X (mm)
-             *  translation.get(1): Position Y (mm)
-             *  translation.get(2): Position Z (mm)
-             *
-             *  rotation.firstAngle: Roll (X) (degs)
-             *  rotation.secondAngle: Pitch (Y) (degs)
-             *  rotation.thirdAngle: Heading (Z) (degs)
-             */
-
             // Return the raw matrix for the OpMode data interpretation
             return lastLocation;
         }
@@ -190,10 +213,8 @@ public class CameraOp extends BunyipsComponent {
         return null;
     }
 
-    /***
+    /**
      * Identify a target by naming it, and setting its position and orientation on the field
-     * @param targetIndex
-     * @param targetName
      * @param dx, dy, dz  Target offsets in x,y,z axes
      * @param rx, ry, rz  Target rotations in x,y,z axes
      */
@@ -204,6 +225,9 @@ public class CameraOp extends BunyipsComponent {
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, rx, ry, rz)));
     }
 
+    /**
+     * Start TensorFlow Object Detection and allow detections to be made
+     */
     public void startTFOD() {
         if (tfod != null) {
             tfod.activate();
@@ -212,6 +236,9 @@ public class CameraOp extends BunyipsComponent {
         }
     }
 
+    /**
+     * Start Vuforia engine and allow field positioning data to be made
+     */
     public void startVuforia() {
         if (vuforia != null) {
             targets.activate();
@@ -219,16 +246,25 @@ public class CameraOp extends BunyipsComponent {
         }
     }
 
+    /**
+     * Stop Vuforia engine and camera field positioning data
+     */
     public void stopVuforia() {
         targets.deactivate();
         vuforiaEnabled = false;
     }
 
+    /**
+     * Stop TensorFlow Object Detection
+     */
     public void stopTFOD() {
         tfod.deactivate();
         tfodEnabled = false;
     }
 
+    /**
+     * Update and tick TFOD detections and/or Vuforia field positions
+     */
     public void tick() {
         // Update the TensorFlow and Vuforia recognitions by the webcam if they're enabled
         if (tfodEnabled) {
