@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.proto.config;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -12,6 +13,10 @@ public class ProtoConfig extends RobotConfig {
     // Add declarations here
     public CameraName webcam;
     public int tfodMonitorViewId;
+    public DcMotorEx bl;
+    public DcMotorEx br;
+    public DcMotorEx fl;
+    public DcMotorEx fr;
 
     public static ProtoConfig newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
         ProtoConfig config = new ProtoConfig();
@@ -34,6 +39,10 @@ public class ProtoConfig extends RobotConfig {
             telemetry.addLine("Error configuring device 'Webcam'. Check connections.");
         }
 
+        bl = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
+        br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
+        fl = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
+        fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
 
         telemetry.addData("BunyipsOpMode Initialisation", "Complete");
         telemetry.update();
