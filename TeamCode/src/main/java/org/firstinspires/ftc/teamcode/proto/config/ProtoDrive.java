@@ -42,7 +42,8 @@ public class ProtoDrive extends BunyipsComponent {
         this.showTelemetry = showTelemetry;
 
         if (showTelemetry) {
-            item = opMode.telemetry.addData("Mecanum Drive", "Forward: %.2f, Strafe: %0.02f, Rotate: %.2f", speedX, speedY, speedR);
+//            item = opMode.telemetry.addData("Mecanum Drive", "Forward: %.2f, Strafe: %0.02f, Rotate: %.2f", speedX, speedY, speedR);
+            item = null;
             item.setRetained(true);
         } else {
             item = null;
