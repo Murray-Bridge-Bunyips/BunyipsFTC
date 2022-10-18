@@ -43,8 +43,8 @@ public class CameraOp extends BunyipsComponent {
     // Best guess is used when time limits are reached, then is saved to seeingTfod
     public String bestguess = null;
 
-    public volatile boolean vuforiaEnabled = false;
-    public volatile boolean tfodEnabled = false;
+    public boolean vuforiaEnabled = false;
+    public boolean tfodEnabled = false;
 
     // USING 2022-2023 POWERPLAY SEASON TFOD ASSETS
     private static final String TFOD_MODEL_ASSET = "PowerPlay.tflite";

@@ -16,38 +16,29 @@ import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 
+import java.util.Locale;
+
 public class ProtoDrive extends BunyipsComponent {
 
     private BunyipsOpMode opmode;
-    private DcMotorEx bl;
-    private DcMotorEx br;
-    private DcMotorEx fl;
-    private DcMotorEx fr;
+    final private DcMotorEx bl;
+    final private DcMotorEx br;
+    final private DcMotorEx fl;
+    final private DcMotorEx fr;
 
     private double speedX = 0.0;
     private double speedY = 0.0;
     private double speedR = 0.0;
 
-    private final Telemetry.Item item;
-    private boolean showTelemetry = true;
 
     public ProtoDrive(BunyipsOpMode opMode,
-                      DcMotorEx bl, DcMotorEx br, DcMotorEx fl, DcMotorEx fr,
-                      boolean showTelemetry) {
+                      DcMotorEx bl, DcMotorEx br,
+                      DcMotorEx fl, DcMotorEx fr) {
         super(opMode);
         this.bl = bl;
         this.br = br;
         this.fl = fl;
         this.fr = fr;
-        this.showTelemetry = showTelemetry;
-
-        if (showTelemetry) {
-//            item = opMode.telemetry.addData("Mecanum Drive", "Forward: %.2f, Strafe: %0.02f, Rotate: %.2f", speedX, speedY, speedR);
-            item = null;
-            item.setRetained(true);
-        } else {
-            item = null;
-        }
     }
 
     /**
@@ -73,6 +64,8 @@ public class ProtoDrive extends BunyipsComponent {
         fr.setPower(frontRightPower);
         bl.setPower(backLeftPower);
         br.setPower(backRightPower);
+
+        getOpMode().telemetry.addLine(String.format(Locale.getDefault(),"Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR));
     }
 
     /**
