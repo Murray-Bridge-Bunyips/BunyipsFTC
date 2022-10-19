@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoArm;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "<PROTO> TeleOp testing")
 public class ProtoTeleOp extends BunyipsOpMode {
@@ -48,7 +50,9 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        double r = gamepad1.left_stick_x;
         double y2 = gamepad2.left_stick_y;
         
+        // Using for debug telemetry during testing phases
         OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
+        String tfodDetection = cam.determineTFOD();
 
 //        boolean up_pressed = gamepad2.dpad_up;
 //        boolean down_pressed = gamepad2.dpad_down;
@@ -57,8 +61,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
         // Set speeds of motors and interpret any data
 //        drive.setSpeedXYR(x, y, r);
 //        arm.setLiftPower(0.25);
-        VectorF translation = VuforiaMatrix.getTranslation();
-        Orientation rotation = Orientation.getOrientation(VuforiaMatrix, EXTRINSIC, XYZ, DEGREES);
+
 //        if (up_pressed && !gamepad2.dpad_up) {
 //            arm.liftUp();
 //        } else if (down_pressed && !gamepad2.dpad_down) {
