@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.common;
 import java.util.HashMap;
 import java.util.Map;
 
-public static class ButtonHashmap {
+public class ButtonHashmap {
     private final String option1;
     private final String option2;
     private final ButtonControl button1;
@@ -11,7 +11,6 @@ public static class ButtonHashmap {
     private final ButtonControl defaultbutton;
 
     public ButtonHashmap(BunyipsOpMode opMode, String option1, String option2, ButtonControl button1, ButtonControl button2, ButtonControl defaultbutton) {
-        super(opMode);
         this.option1 = option1;
         this.option2 = option2;
         this.button1 = button1;
@@ -19,7 +18,7 @@ public static class ButtonHashmap {
         this.defaultbutton = defaultbutton;
     }
 
-    public ButtonControl map(BunyipsOpMode opMode) {
+    public static ButtonControl map(BunyipsOpMode opMode) {
         HashMap<ButtonControl, String> buttonMap = new HashMap<>();
 
         buttonMap.put(button1, option1);

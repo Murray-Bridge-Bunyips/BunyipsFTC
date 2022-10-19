@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common;
 
+import com.qualcomm.hardware.bosch.BNO055IMU;
+
 /**
  * IMUOperation custom common class for internal BNO055IMUs
  * @author Lucas Bubner - FTC 15215 Captain; Oct 2022 - Murray Bridge Bunyips
