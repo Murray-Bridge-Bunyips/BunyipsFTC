@@ -52,27 +52,27 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
         // Limit heading readings to only be in a (0, 360) index
         if (heading >= 360.0) {
-            heading = 0.0;
+            heading -= 360.0;
         } else if (heading < 0.0) {
-            heading = 360.0;
+            heading += 360.0;
         }
 
         return heading;
     }
 
     /**
-     * Get the current pitch reading from the internal IMU
+     * Get the current roll reading from the internal IMU
      * @return Y value of Orientation axes
      */
-    public double getPitch() {
+    public double getRoll() {
         return currentAngles.secondAngle;
     }
 
     /**
-     * Get the current roll reading from the internal IMU
+     * Get the current pitch reading from the internal IMU
      * @return X value of Orientation axes
      */
-    public double getRoll() {
+    public double getPitch() {
         return currentAngles.firstAngle;
     }
  }
