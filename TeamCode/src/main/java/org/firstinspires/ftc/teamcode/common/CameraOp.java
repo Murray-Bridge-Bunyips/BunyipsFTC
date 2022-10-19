@@ -37,6 +37,9 @@ public class CameraOp extends BunyipsComponent {
     private OpenGLMatrix lastLocation = null;
     private final VuforiaTrackables targets;
     private boolean targetVisible = false;
+    
+    private final CameraName webcam;
+    private final int tfodMonitorViewId;
 
     // Use seeingTfod public String for saving a TFOD value for usage in other tasks
     public String seeingTfod = null;
@@ -75,6 +78,9 @@ public class CameraOp extends BunyipsComponent {
      */
     public CameraOp(BunyipsOpMode opmode, CameraName webcam, int tfodMonitorViewId) {
         super(opmode);
+        this.webcam = webcam;
+        this.tfodMonitorViewId = tfodMonitorViewId;
+
         // Vuforia localizer engine initialisation
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
         parameters.vuforiaLicenseKey = VUFORIA_KEY;

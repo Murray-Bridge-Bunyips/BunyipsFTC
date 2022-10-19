@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.proto.config;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -21,6 +23,7 @@ public class ProtoConfig extends RobotConfig {
     public DcMotorEx fr;
     public CRServo claw;
     public DcMotorEx arm;
+    public BNO055IMU imu;
 
     public static ProtoConfig newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
         ProtoConfig config = new ProtoConfig();
@@ -49,6 +52,20 @@ public class ProtoConfig extends RobotConfig {
 //        fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
 //        arm = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
         claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
+
+        // Control Hub IMU configuration
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled      = true;
+        parameters.loggingTag          = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+        try {
+            imu = hardwareMap.get(BNO055IMU.class, "imu");
+            imu.initialize(parameters);
+        } catch (Exception e) {
+            telemetry.addLine("An internal error occurred configuring the IMU.");
+        }
 
         telemetry.addData("BunyipsOpMode Initialisation", "Complete");
         telemetry.update();
