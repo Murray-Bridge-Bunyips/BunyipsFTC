@@ -18,7 +18,7 @@ public class ButtonHashmap {
         this.defaultbutton = defaultbutton;
     }
 
-    public static ButtonControl map(BunyipsOpMode opMode) {
+    public ButtonControl map(BunyipsOpMode opMode) {
         HashMap<ButtonControl, String> buttonMap = new HashMap<>();
 
         buttonMap.put(button1, option1);
