@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.common.tasks.TFODDetectionTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoDrive;
-import org.firstinspires.ftc.teamcode.proto.config.ProtoSignalParkTask;
 
 import java.util.ArrayDeque;
 
