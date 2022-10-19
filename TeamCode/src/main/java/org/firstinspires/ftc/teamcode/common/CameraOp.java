@@ -228,7 +228,7 @@ public class CameraOp extends BunyipsComponent {
      * @return translated position vector from Vuforia, returns null if there are no datapoints
      */
     public VectorF getTargetTranslation() {
-        OpenGLMatrix matrix = this.targetRawMatrix();
+        OpenGLMatrix matrix = this.getTargetRawMatrix();
         return matrix.getTranslation();
     }
 
@@ -237,7 +237,7 @@ public class CameraOp extends BunyipsComponent {
      * @return translated orientation matrix from Vuforia, returns null if there are no datapoints
      */
     public Orientation getOrientationTranslation() {
-        OpenGLMatrix matrix = this.targetRawMatrix();
+        OpenGLMatrix matrix = this.getTargetRawMatrix();
         return Orientation.getOrientation(matrix, EXTRINSIC, XYZ, DEGREES);
     }
 
