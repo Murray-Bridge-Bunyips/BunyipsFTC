@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.proto;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoArm;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "<PROTO> TeleOp testing")
 public class ProtoTeleOp extends BunyipsOpMode {

@@ -83,8 +83,7 @@ public class BertieAutonomous extends BunyipsOpMode {
 
 
 //         telemetry.addLine(String.format("Loading tasks for %s", selectedButton.name()));
-        // ButtonControl selectedButton = ButtonHashmap.map(this, "Red", "Blue", ButtonControl.A, ButtonControl.B, ButtonControl.A);
-        ButtonControl selectedButton = null;
+        ButtonControl selectedButton = ButtonHashmap.map(this, "Red", "Blue", ButtonControl.A, ButtonControl.B, ButtonControl.A);
         switch (selectedButton) {
             case A:
                 tasks.add(new MessageTask(this, 1, "Loaded red"));
