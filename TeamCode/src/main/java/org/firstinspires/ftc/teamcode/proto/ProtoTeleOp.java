@@ -48,7 +48,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        double r = gamepad1.left_stick_x;
         double y2 = gamepad2.left_stick_y;
         
-        OpenGLMatrix VuforiaMatrix = cam.targetRawMatrix();
+        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
 
 //        boolean up_pressed = gamepad2.dpad_up;
 //        boolean down_pressed = gamepad2.dpad_down;
