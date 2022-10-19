@@ -33,22 +33,43 @@ public class ProtoTeleOp extends BunyipsOpMode {
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Arm System.");
         }
+
+        // Using TFOD and Vuforia for debugging purposes, will likely
+        // not use this in actual TeleOp due to resource consumption
+        cam.startVuforia();
+        cam.startTFOD();
     }
 
     @Override
     protected void activeLoop() throws InterruptedException {
+        // Set changing variables and gather raw data
 //        double x = gamepad1.right_stick_x;
 //        double y = gamepad1.left_stick_y;
 //        double r = gamepad1.left_stick_x;
-        boolean up_pressed = gamepad2.dpad_up;
-        boolean down_pressed = gamepad2.dpad_down;
-        boolean drop_pressed = gamepad2.left_bumper;
-        if (up_pressed) {
-            arm.clawRun(1);
-        } else if (down_pressed) {
-            arm.clawRun(-1);
-        } else {
-            arm.clawStop();
-        }
+        double y2 = gamepad2.left_stick_y;
+        
+        OpenGLMatrix VuforiaMatrix = cam.targetRawMatrix();
+
+//        boolean up_pressed = gamepad2.dpad_up;
+//        boolean down_pressed = gamepad2.dpad_down;
+//        boolean drop_pressed = gamepad2.left_bumper;
+        
+        // Set speeds of motors and interpret any data
+//        drive.setSpeedXYR(x, y, r);
+//        arm.setLiftPower(0.25);
+        VectorF translation = VuforiaMatrix.getTranslation();
+        Orientation rotation = Orientation.getOrientation(VuforiaMatrix, EXTRINSIC, XYZ, DEGREES);
+//        if (up_pressed && !gamepad2.dpad_up) {
+//            arm.liftUp();
+//        } else if (down_pressed && !gamepad2.dpad_down) {
+//            arm.liftDown();
+//        } else if (drop_pressed && !gamepad2.left_bumper) {
+//            arm.liftReset();
+//        }
+
+        // Update live movements of all motors
+        arm.clawRun(Range.clip(y2, -1, 1));
+//        drive.update();
+//        arm.update();
     }
 }

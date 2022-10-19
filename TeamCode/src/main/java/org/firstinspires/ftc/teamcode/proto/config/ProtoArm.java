@@ -84,7 +84,7 @@ public class ProtoArm extends BunyipsComponent {
      * Set arm power for positional movements
      * @param power desired power
      */
-    public void setArmPower(double power) {
+    public void liftSetPower(double power) {
         liftPower = power;
     }
 

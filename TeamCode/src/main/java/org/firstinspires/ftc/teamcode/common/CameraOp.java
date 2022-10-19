@@ -149,10 +149,11 @@ public class CameraOp extends BunyipsComponent {
             double row = (recognition.getTop()  + recognition.getBottom()) / 2;
             double width  = Math.abs(recognition.getRight() - recognition.getLeft());
             double height = Math.abs(recognition.getTop()  - recognition.getBottom());
- 
-//            getOpMode().telemetry.addLine(String.format("Image: %1$s (%2$.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 ));
-//            getOpMode().telemetry.addLine(String.format("- Position (Row/Col): %1$.0f / %2$.0f", row, col));
-//            getOpMode().telemetry.addLine(String.format("- Size (Width/Height): %1$.0f / %2$.0f", width, height));
+
+            // Debugging telemetry
+            getOpMode().telemetry.addLine(String.format("Image: %1$s (%2$.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 ));
+            getOpMode().telemetry.addLine(String.format("- Position (Row/Col): %1$.0f / %2$.0f", row, col));
+            getOpMode().telemetry.addLine(String.format("- Size (Width/Height): %1$.0f / %2$.0f", width, height));
 
             // If the computer is more than 75% sure that the signal is what it thinks it is, then return it.
             // This will prevent an instant locking of the signal, and allow the engine a bit of time to think.
@@ -175,10 +176,13 @@ public class CameraOp extends BunyipsComponent {
      *          Returns null if no target is currently visible.
      */
     /*
-     * Call these methods for interpreted data
-     *     OpenGLMatrix VuforiaMatrix = cam.targetRawMatrix();
-     *     VectorF translation = VuforiaMatrix.getTranslation();
-     *     Orientation rotation = Orientation.getOrientation(VuforiaMatrix, EXTRINSIC, XYZ, DEGREES);
+     * Call these methods for fully pre-interpreted data
+     *     cam.getX();
+     *     cam.getY();
+     *     cam.getZ();
+     *     cam.getRoll();
+     *     cam.getPitch();
+     *     cam.getHeading();
      *
      * Interpreted data calls
      *     translation.get(0) || Position X (mm)
@@ -193,8 +197,15 @@ public class CameraOp extends BunyipsComponent {
      * for information regarding field positioning with these coordinates.
      */
     @SuppressLint("DefaultLocale")
-    public OpenGLMatrix targetRawMatrix() {
+    public OpenGLMatrix getTargetRawMatrix() {
         if (targetVisible) {
+
+            /*
+             * Debugging telemetry should be disabled and replaced by OpMode telemetry
+             * at some point once the system works properly, as data interpretation
+             * is up to the OpMode
+             */
+
             // Express position (translation) of robot in millimetres.
             VectorF translation = lastLocation.getTranslation();
             getOpMode().telemetry.addLine(String.format("Pos (mm): {X, Y, Z} = %.1f, %.1f, %.1f",
@@ -204,14 +215,85 @@ public class CameraOp extends BunyipsComponent {
             Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
             getOpMode().telemetry.addLine(String.format("Rot (deg): {Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle));
 
-            // Return the raw matrix for the OpMode data interpretation
+            // Return the raw matrix detected if it is visible to the camera, otherwise return null
             return lastLocation;
         }
-        else {
-            getOpMode().telemetry.addLine("Vuforia Visible Target: none");
-        }
+        getOpMode().telemetry.addLine("Vuforia Visible Target: none");
         return null;
     }
+
+    /**
+     * Offers raw matrices for custom OpMode interpretation of data, if something needs to be done
+     * outside of standard pre-interpreted data. Vuforia must be enabled.
+     * @return translated position vector from Vuforia, returns null if there are no datapoints
+     */
+    public VectorF getTargetTranslation() {
+        OpenGLMatrix matrix = this.targetRawMatrix();
+        return matrix.getTranslation();
+    }
+
+    /**
+     * Returns raw orientation matrix for custom OpMode interpretation of Vuforia information. Vuforia must be enabled.
+     * @return translated orientation matrix from Vuforia, returns null if there are no datapoints
+     */
+    public Orientation getOrientationTranslation() {
+        OpenGLMatrix matrix = this.targetRawMatrix();
+        return Orientation.getOrientation(matrix, EXTRINSIC, XYZ, DEGREES);
+    }
+
+    /**
+     * Get positional X coordinate from Vuforia
+     * @return mm of interpreted position X data
+     */
+     public double getX() {
+        VectorF translation = this.getTargetTranslation();
+        return translation.get(0);
+     }
+
+    /**
+     * Get positional Y coordinate from Vuforia
+     * @return mm of interpreted position Y data
+     */
+     public double getY() {
+        VectorF translation = this.getTargetTranslation();
+        return translation.get(1);
+     }
+
+    /**
+     * Get positional Z coordiate from Vuforia
+     * @return mm of interpreted position Z data
+     */
+     public double getZ() {
+        VectorF translation = this.getTargetTranslation();
+        return translation.get(2);
+     }
+
+    /**
+     * Get X (roll) orientation from Vuforia
+     * @return X orientation in degrees
+     */
+     public double getRoll() {
+        Orientation orientation = this.getOrientationTranslation();
+        return orientation.firstAngle;
+     }
+
+    /**
+     * Get Y (pitch) orientation from Vuforia
+     * @return Y orientation in degrees
+     */
+     public double getPitch() {
+        Orientation orientation = this.getOrientationTranslation();
+        return orientation.secondAngle;
+     }
+
+    /**
+     * Get Z (heading) orientation from Vuforia
+     * @return Z orientation in degrees
+     */
+     public double getHeading() {
+        Orientation orientation = this.getOrientationTranslation();
+        return orientation.thirdAngle;
+     }
 
     /**
      * Identify a target by naming it, and setting its position and orientation on the field

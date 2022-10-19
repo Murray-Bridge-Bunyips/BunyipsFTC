@@ -37,7 +37,17 @@ public class ProtoAutonomous extends BunyipsOpMode {
 
         // Add tasks here
         tasks.add(new TFODDetectionTask(this, 5, cam));
-        // tasks.add(new ProtoSignalParkTask(this, 7));
+        switch (cam.seeingTfod) {
+            case "1 Bolt":
+
+            break;
+            case "2 Bulb":
+
+            break;
+            case "3 Panel":
+
+            break;
+        }
     }
 
     @Override
