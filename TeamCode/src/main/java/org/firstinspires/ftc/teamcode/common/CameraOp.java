@@ -148,8 +148,6 @@ public class CameraOp extends BunyipsComponent {
         // TFOD updated recognitions will return null if the data is the same as the last call
         if (updatedRecognitions == null || tfod == null) { return null; }
 
-        // Debug telemetry
-        getOpMode().telemetry.addData("Objects found: ", updatedRecognitions.size());
         for (Recognition recognition : updatedRecognitions) {
             double col = (recognition.getLeft() + recognition.getRight()) / 2;
             double row = (recognition.getTop()  + recognition.getBottom()) / 2;
@@ -161,11 +159,11 @@ public class CameraOp extends BunyipsComponent {
             getOpMode().telemetry.addLine(String.format("- Position (Row/Col): %1$.0f / %2$.0f", row, col));
             getOpMode().telemetry.addLine(String.format("- Size (Width/Height): %1$.0f / %2$.0f", width, height));
 
-            // If the computer is more than 75% sure that the signal is what it thinks it is, then return it.
+            // If the computer is more than 90% sure that the signal is what it thinks it is, then return it.
             // This will prevent an instant locking of the signal, and allow the engine a bit of time to think.
             // Combined with a task, this can be time constrained in the event this method keeps returning null
             bestguess = recognition.getLabel();
-            if (recognition.getConfidence() > 0.75) {
+            if (recognition.getConfidence() > 0.90) {
                 // Will not automatically save label to public seeingTfod variable and is left for the task/opmode to do
                 // Uncomment the next line if auto saving to cam.seeingTfod is desired
                 // this.seeingTfod = recognition.getLabel();
@@ -180,24 +178,16 @@ public class CameraOp extends BunyipsComponent {
      * Returns the raw OpenGLMatrix info from the Vuforia engine for OpMode interpretation. See this method's definition for more information. Vuforia must be activated.
      * @return OpenGLMatrix from the current identified target identified by the Vuforia engine.
      *          Returns null if no target is currently visible.
+     * For the most part, this method shouldn't have to be called in an OpMode unless for debugging.
      */
     /*
      * Call these methods for fully pre-interpreted data
-     *     cam.getX();
-     *     cam.getY();
-     *     cam.getZ();
-     *     cam.getRoll();
-     *     cam.getPitch();
-     *     cam.getHeading();
-     *
-     * Interpreted data calls
-     *     translation.get(0) || Position X (mm)
-     *     translation.get(1) || Position Y (mm)
-     *     translation.get(2) || Position Z (mm)
-     *
-     *     rotation.firstAngle || Roll (X) (degs)
-     *     rotation.secondAngle || Pitch (Y) (degs)
-     *     rotation.thirdAngle || Heading (Z) (degs)
+     *     cam.getX(); Position X (mm)
+     *     cam.getY(); Position Y (mm)
+     *     cam.getZ(); Position Z (mm)
+     *     cam.getPitch(); Pitch (X) (degs)
+     *     cam.getRoll(); Roll (Y) (degs)
+     *     cam.getHeading(); Heading (Z) (degs)
      *
      * See: https://github.com/FIRST-Tech-Challenge/FtcRobotController/blob/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples/FTC_FieldCoordinateSystemDefinition.pdf
      * for information regarding field positioning with these coordinates.
@@ -207,30 +197,29 @@ public class CameraOp extends BunyipsComponent {
         if (targetVisible) {
 
             /*
-             * Debugging telemetry should be disabled and replaced by OpMode telemetry
-             * at some point once the system works properly, as data interpretation
-             * is up to the OpMode
+             * This method shouldn't be called unless a raw matrix is required or for debugging.
+             * Debugging telemetry from this method should be used from the calling OpMode + get methods (see above)
+             * However, if needed for testing, call getTargetRawMatrix to a junk variable and
+             * uncomment the lines below to get all interpreted data readings for debugging.
              */
 
-            // Express position (translation) of robot in millimetres.
-            VectorF translation = lastLocation.getTranslation();
-            getOpMode().telemetry.addLine(String.format("Pos (mm): {X, Y, Z} = %.1f, %.1f, %.1f",
-                    translation.get(0), translation.get(1), translation.get(2)));
+//            VectorF translation = lastLocation.getTranslation();
+//            getOpMode().telemetry.addLine(String.format("Pos (mm): {X, Y, Z} = %.1f, %.1f, %.1f",
+//                    translation.get(0), translation.get(1), translation.get(2)));
 
-            // Express the rotation of the robot in degrees.
-            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-            getOpMode().telemetry.addLine(String.format("Rot (deg): {Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle));
+//            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+//            getOpMode().telemetry.addLine(String.format("Rot (deg): {Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle));
 
             // Return the raw matrix detected if it is visible to the camera, otherwise return null
             return lastLocation;
         }
-        getOpMode().telemetry.addLine("Vuforia Visible Target: none");
         return null;
     }
 
     /**
-     * Offers raw matrices for custom OpMode interpretation of data, if something needs to be done
+     * Offers raw position matrices for custom OpMode interpretation of data, if something needs to be done
      * outside of standard pre-interpreted data. Vuforia must be enabled.
+     * For the most part, you will not need to call this method and instead use the getX,Y,Z methods
      * @return translated position vector from Vuforia, returns null if there are no datapoints
      */
     public VectorF getTargetTranslation() {
@@ -239,7 +228,8 @@ public class CameraOp extends BunyipsComponent {
     }
 
     /**
-     * Returns raw orientation matrix for custom OpMode interpretation of Vuforia information. Vuforia must be enabled.
+     * Offers raw orientation matrix for custom OpMode interpretation of Vuforia information. Vuforia must be enabled.
+     * For the most part, you will not need to call this method and instead use the getRoll,Pitch,Heading methods
      * @return translated orientation matrix from Vuforia, returns null if there are no datapoints
      */
     public Orientation getOrientationTranslation() {
@@ -352,6 +342,7 @@ public class CameraOp extends BunyipsComponent {
 
     /**
      * Update and tick TFOD detections and/or Vuforia field positions
+     * Ensure to call this method in an active loop
      */
     public void tick() {
         // Update the TensorFlow and Vuforia recognitions by the webcam if they're enabled

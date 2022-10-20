@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.common.Deadwheel;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
 public class ProtoConfig extends RobotConfig {
@@ -20,7 +21,7 @@ public class ProtoConfig extends RobotConfig {
     public DcMotorEx br;
     public DcMotorEx fl;
     public DcMotorEx fr;
-    public DcMotorEx x, y;
+    public Deadwheel x, y;
     public CRServo claw;
     public DcMotorEx arm;
     public BNO055IMU imu;
@@ -53,13 +54,13 @@ public class ProtoConfig extends RobotConfig {
 //        arm = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
         claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
 
-        // Deadwheel configuration (Using modified DcMotorEx classes)
-//        try {
-//            x = hardwareMap.get(DcMotorEx.class, "X Encoder");
-//            y = hardwareMap.get(DcMotorEx.class, "Y Encoder");
-//        } catch (Exception e) {
-//            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
-//        }
+        // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
+        try {
+            x = hardwareMap.get(Deadwheel.class, "X Encoder");
+            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
+        } catch (Exception e) {
+            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
+        }
 
         // Control Hub IMU configuration
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
