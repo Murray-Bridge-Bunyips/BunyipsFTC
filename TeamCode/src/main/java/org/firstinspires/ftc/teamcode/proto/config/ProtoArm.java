@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
@@ -23,6 +24,7 @@ public class ProtoArm extends BunyipsComponent {
         super(opMode);
         this.claw = claw;
 //        this.arm = arm;
+        claw.setDirection(CRServo.Direction.FORWARD);
 //        arm.setDirection(DcMotorEx.Direction.FORWARD);
 //        arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 //        arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
@@ -32,20 +34,11 @@ public class ProtoArm extends BunyipsComponent {
 
     /**
      * Set claw motor speed
-     * @param speed desired speed (-1, 1)
+     * @param speed desired speed (-1, 0, 1)
      */
     public void clawRun(double speed) {
-        claw.setPower(speed);
+        claw.setPower(Range.clip(speed, -1, 1));
     }
-
-
-    /**
-     * Stop claw motor (speed 0)
-     */
-    public void clawStop() {
-        claw.setPower(0);
-    }
-
 
     /**
      * Lift arm motor up by one index of the LIFT_POSITIONS index

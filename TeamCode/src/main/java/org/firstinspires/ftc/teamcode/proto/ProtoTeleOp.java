@@ -38,8 +38,8 @@ public class ProtoTeleOp extends BunyipsOpMode {
 
         // Using TFOD and Vuforia for debugging purposes, will likely
         // not use this in actual TeleOp due to resource consumption
-        cam.startVuforia();
-        cam.startTFOD();
+//        cam.startVuforia();
+//        cam.startTFOD();
     }
 
     @Override
@@ -51,8 +51,9 @@ public class ProtoTeleOp extends BunyipsOpMode {
         double y2 = gamepad2.left_stick_y;
         
         // Using for debug telemetry during testing phases
-        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
-        String tfodDetection = cam.determineTFOD();
+//        cam.tick();
+//        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
+//        String tfodDetection = cam.determineTFOD();
 
 //        boolean up_pressed = gamepad2.dpad_up;
 //        boolean down_pressed = gamepad2.dpad_down;
@@ -71,7 +72,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        }
 
         // Update live movements of all motors
-        arm.clawRun(Range.clip(y2, -1, 1));
+        arm.clawRun(y2);
 //        drive.update();
 //        arm.update();
     }

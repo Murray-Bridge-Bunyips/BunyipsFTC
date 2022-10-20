@@ -149,7 +149,7 @@ public class CameraOp extends BunyipsComponent {
         if (updatedRecognitions == null || tfod == null) { return null; }
 
         // Debug telemetry
-        getOpMode().telemetry.addLine(String.format("Objects found: %d", updatedRecognitions.size()));
+        getOpMode().telemetry.addData("Objects found: ", updatedRecognitions.size());
         for (Recognition recognition : updatedRecognitions) {
             double col = (recognition.getLeft() + recognition.getRight()) / 2;
             double row = (recognition.getTop()  + recognition.getBottom()) / 2;
