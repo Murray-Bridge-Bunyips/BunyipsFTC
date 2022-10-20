@@ -45,9 +45,9 @@ public class ProtoTeleOp extends BunyipsOpMode {
     @Override
     protected void activeLoop() throws InterruptedException {
         // Set changing variables and gather raw data
-//        double x = gamepad1.right_stick_x;
+//        double x = gamepad1.left_stick_x;
 //        double y = gamepad1.left_stick_y;
-//        double r = gamepad1.left_stick_x;
+//        double r = gamepad1.right_stick_x;
         double y2 = gamepad2.left_stick_y;
         
         // Using for debug telemetry during testing phases

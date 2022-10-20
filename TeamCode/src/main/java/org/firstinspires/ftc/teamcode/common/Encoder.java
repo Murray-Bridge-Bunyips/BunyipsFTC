@@ -21,12 +21,14 @@ public interface Encoder extends DcMotor {
 
     /**
      * Get the distance travelled by the encoder since the last reset and if tracking was enabled
+     *
      * @return millimetres indicating how far the encoder has travelled
      */
     double getTravelledMM(double wheel_diameter_mm, int ticks_per_revolution);
 
     /**
      * Get the reading from the encoder
+     *
      * @return encoder value
      */
     double getEncoderReading();

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.common;
 
 public abstract class Deadwheel implements Encoder {
 
-    double position = 0.0;
+    volatile double position = 0.0;
 
     /**
      * Enable encoder and begin tracking location (Ensure to reset to zero unless intended)

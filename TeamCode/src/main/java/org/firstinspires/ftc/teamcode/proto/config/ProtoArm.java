@@ -24,7 +24,7 @@ public class ProtoArm extends BunyipsComponent {
         super(opMode);
         this.claw = claw;
 //        this.arm = arm;
-        claw.setDirection(CRServo.Direction.FORWARD);
+        claw.setDirection(CRServo.Direction.REVERSE);
 //        arm.setDirection(DcMotorEx.Direction.FORWARD);
 //        arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
 //        arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
