@@ -20,6 +20,7 @@ public class ProtoConfig extends RobotConfig {
     public DcMotorEx br;
     public DcMotorEx fl;
     public DcMotorEx fr;
+    public DcMotorEx x, y;
     public CRServo claw;
     public DcMotorEx arm;
     public BNO055IMU imu;
@@ -51,6 +52,14 @@ public class ProtoConfig extends RobotConfig {
 //        fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
 //        arm = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
         claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
+
+        // Deadwheel configuration (Using modified DcMotorEx classes)
+//        try {
+//            x = hardwareMap.get(DcMotorEx.class, "X Encoder");
+//            y = hardwareMap.get(DcMotorEx.class, "Y Encoder");
+//        } catch (Exception e) {
+//            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
+//        }
 
         // Control Hub IMU configuration
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
