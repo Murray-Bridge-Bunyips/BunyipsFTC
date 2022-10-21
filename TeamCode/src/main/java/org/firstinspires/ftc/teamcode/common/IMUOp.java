@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
     private final BNO055IMU imu;
     public volatile Orientation currentAngles;
-    private double previousHeading = 0, heading = 0;
+    private double previousHeading = 0, heading = 0, capture = 0;
     private boolean precisionDrive = false;
 
     public IMUOp(BunyipsOpMode opMode, BNO055IMU imu) {
@@ -87,14 +87,24 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
     }
 
     /**
-     * Query motor alignment speed through PrecisionDrive
+     * Query motor alignment speed for left side motors through PrecisionDrive
      */
-     public double getPrecisionSpeed(double original_speed, int tolerance) {
+     public double getLeftPrecisionSpeed(double original_speed, int tolerance) {
+        double current = this.getHeading();
+        if (current > capture - tolerance) {
+            return original_speed - 0.1;
+        }
+        return original_speed;
+     } 
+
+     /**
+     * Query motor alignment speed for right side motors through PrecisionDrive
+     */
+     public double getRightPrecisionSpeed(double original_speed, int tolerance) {
         double current = this.getHeading();
         if (current < capture + tolerance) {
-            return Math.abs(original_speed) - 0.1;
-        } else if (current > capture - tolerance) {
-            return Math.abs(original_speed) - 0.1;
+            return original_speed - 0.1;
         }
-     } 
+        return original_speed;
+     }
  }
