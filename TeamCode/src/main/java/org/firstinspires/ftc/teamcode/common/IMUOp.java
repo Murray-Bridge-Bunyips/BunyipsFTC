@@ -96,10 +96,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
      * @param original_speed supply the intended speed for the motor
      * @param tolerance supply the tolerance range (tol < x <  tol) before making a correction
      * @param isLeft state whether the returned speed of the motor is on the left side of the robot
-     * @return queried speed based on parameters given, returns null if PrecisionDrive is not online
+     * @return queried speed based on parameters given, returns the unaltered speed if PrecisionDrive is not online
      */
      public double getPrecisionSpeed(double original_speed, int tolerance, boolean isLeft) {
-        if (capture == null) { return null; }
+        if (capture == null) { return original_speed; }
 
         double current = this.getHeading();
         if (isLeft && original_speed > 0 ? current > capture - tolerance : current < capture + tolerance) {
