@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.proto.config;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.proto.config.ProtoDrive;
+import org.firstinspires.ftc.teamcode.common.Deadwheel;
 import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 
@@ -35,19 +37,19 @@ public class ProtoDeadwheelDriveTask extends BaseTask implements Task {
 
     @Override
     public void run() {
+        while (x.getTravelledMM() <= px_mm && !isFinished()) {
+            drive.setSpeedXYR(xspeed, 0, 0);
+            drive.update();
+        }
+        while (y.getTravelledMM() <= py_mm && !isFinished()) {
+            drive.setSpeedXYR(0, yspeed, 0);
+            drive.update();
+        }
         if (isFinished()) {
             x.disableTracking();
             y.disableTracking();
             drive.deinit();
             return;
         }
-        if (x.getTravelledMM() >= px_mm) {
-            xspeed = 0.0;
-        }
-        if (y.getTravelledMM() >= py_mm) {
-            yspeed = 0.0;
-        }
-        drive.setSpeedXYR(xspeed, yspeed, 0);
-        drive.update();
     }
 }
