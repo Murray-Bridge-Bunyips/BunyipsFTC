@@ -15,7 +15,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
     private final BNO055IMU imu;
     public volatile Orientation currentAngles;
-    private double previousHeading = 0, heading = 0, capture = null;
+    private double previousHeading = 0, heading = 0;
+    private Double capture = null;
 
     public IMUOp(BunyipsOpMode opMode, BNO055IMU imu) {
         super(opMode);
