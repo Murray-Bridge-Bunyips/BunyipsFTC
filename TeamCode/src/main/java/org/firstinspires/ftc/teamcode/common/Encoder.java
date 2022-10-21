@@ -24,7 +24,7 @@ public interface Encoder extends DcMotor {
      *
      * @return millimetres indicating how far the encoder has travelled
      */
-    double getTravelledMM(double wheel_diameter_mm, int ticks_per_revolution);
+    double getTravelledMM();
 
     /**
      * Get the reading from the encoder
@@ -32,4 +32,10 @@ public interface Encoder extends DcMotor {
      * @return encoder value
      */
     double getEncoderReading();
+
+    /**
+     * Return whether the encoders have reached a goal
+     * @return
+     */
+    boolean targetReached(double goal);
 }

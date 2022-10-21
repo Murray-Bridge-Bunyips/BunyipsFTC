@@ -12,7 +12,7 @@ public class ProtoDeadwheelDriveTask extends BaseTask implements Task {
     private final Deadwheel x, y;
     private final double px_mm, py_mm, xspeed, yspeed;
 
-    public ProtoDeadwheelDriveTask(BunyipsOpMode opMode, double time, LisaDrive drive, Deadwheel x, Deadwheel y, double px_mm, double py_mm, double xspeed, double yspeed) {
+    public ProtoDeadwheelDriveTask(BunyipsOpMode opMode, double time, ProtoDrive drive, Deadwheel x, Deadwheel y, double px_mm, double py_mm, double xspeed, double yspeed) {
         super(opMode, time);
         this.drive = drive;
         this.x = x;
@@ -32,7 +32,7 @@ public class ProtoDeadwheelDriveTask extends BaseTask implements Task {
 
     @Override
     public boolean isFinished() {
-        return super.isFinished() || (x.targetPositionReached() && y.targetPositionReached());
+        return super.isFinished() || (x.targetReached(px_mm) && y.targetReached(py_mm));
     }
 
     @Override
@@ -49,7 +49,6 @@ public class ProtoDeadwheelDriveTask extends BaseTask implements Task {
             x.disableTracking();
             y.disableTracking();
             drive.deinit();
-            return;
         }
     }
 }

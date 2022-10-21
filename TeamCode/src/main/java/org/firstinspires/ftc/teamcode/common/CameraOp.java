@@ -36,7 +36,7 @@ public class CameraOp extends BunyipsComponent {
     private final List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
     private OpenGLMatrix lastLocation = null;
     private final VuforiaTrackables targets;
-    private boolean targetVisible = false;
+    public boolean targetVisible = false;
     
     private final CameraName webcam;
     private final int tfodMonitorViewId;

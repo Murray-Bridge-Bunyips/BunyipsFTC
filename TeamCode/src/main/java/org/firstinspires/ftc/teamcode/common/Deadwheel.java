@@ -2,7 +2,10 @@ package org.firstinspires.ftc.teamcode.common;
 
 public abstract class Deadwheel implements Encoder {
 
-    volatile double position = 0.0;
+    double position = 0.0;
+
+    private static final int WHEEL_DIAMETER_MM = 0;
+    private static final int TICKS_PER_REVOLUTION = 0;
 
     /**
      * Enable encoder and begin tracking location (Ensure to reset to zero unless intended)
@@ -36,8 +39,8 @@ public abstract class Deadwheel implements Encoder {
      * @return millimetres indicating how far the encoder has travelled
      */
     @Override
-    public double getTravelledMM(double wheel_diameter_mm, int ticks_per_revolution) {
-        return (Math.PI * wheel_diameter_mm) * (this.getEncoderReading() / ticks_per_revolution) + position;
+    public double getTravelledMM() {
+        return (Math.PI * WHEEL_DIAMETER_MM) * (this.getEncoderReading() / TICKS_PER_REVOLUTION) + position;
     }
 
     /**
@@ -48,5 +51,16 @@ public abstract class Deadwheel implements Encoder {
     @Override
     public double getEncoderReading() {
         return this.getCurrentPosition() + position;
+    }
+
+    /**
+     * Return whether the encoders have reached a goal
+     *
+     * @param goal
+     * @return
+     */
+    @Override
+    public boolean targetReached(double goal) {
+        return Math.abs(this.getTravelledMM()) > Math.abs(goal);
     }
 }
