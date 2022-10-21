@@ -15,8 +15,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
     private final BNO055IMU imu;
     public volatile Orientation currentAngles;
-    private double previousHeading = 0, heading = 0, capture = 0;
-    private boolean precisionDrive = false;
+    private double previousHeading = 0, heading = 0, capture = null;
 
     public IMUOp(BunyipsOpMode opMode, BNO055IMU imu) {
         super(opMode);
@@ -78,33 +77,33 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
     }
 
     /**
-     * Start PrecisionDrive IMU alignment algorithm
+     * Start PrecisionDrive IMU alignment algorithm and capture the original angle
      */
-    public void startPrecisionDrive() {
-        imu.startAccelerationIntegration(new Position(), new Velocity(), 50);
+    public void startCapture() {
         capture = this.getHeading();
-        precisionDrive = true;
     }
 
     /**
-     * Query motor alignment speed for left side motors through PrecisionDrive
+     * Stop and reset PrecisionDrive IMU alignment algorithm
      */
-     public double getLeftPrecisionSpeed(double original_speed, int tolerance) {
-        double current = this.getHeading();
-        if (current > capture - tolerance) {
-            return original_speed - 0.1;
-        }
-        return original_speed;
-     } 
-
-     /**
-     * Query motor alignment speed for right side motors through PrecisionDrive
-     */
-     public double getRightPrecisionSpeed(double original_speed, int tolerance) {
-        double current = this.getHeading();
-        if (current < capture + tolerance) {
-            return original_speed - 0.1;
-        }
-        return original_speed;
+     public void resetCapture() {
+        capture = null;
      }
+
+    /**
+     * Query motor alignment speed for a motor through PrecisionDrive
+     * @param original_speed supply the intended speed for the motor
+     * @param tolerance supply the tolerance range (tol < x <  tol) before making a correction
+     * @param isLeft state whether the returned speed of the motor is on the left side of the robot
+     * @return queried speed based on parameters given, returns null if PrecisionDrive is not online
+     */
+     public double getPrecisionSpeed(double original_speed, int tolerance, boolean isLeft) {
+        if (capture == null) { return null; }
+
+        double current = this.getHeading();
+        if (isLeft && original_speed > 0 ? current > capture - tolerance : current < capture + tolerance) {
+            return Math.abs(original_speed) - 0.1;
+        }
+        return Math.abs(original_speed);
+     } 
  }
