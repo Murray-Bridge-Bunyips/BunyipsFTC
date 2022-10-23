@@ -241,7 +241,7 @@ public class CameraOp extends BunyipsComponent {
      * Get positional X coordinate from Vuforia
      * @return mm of interpreted position X data
      */
-     public double getX() {
+     public Double getX() {
         VectorF translation = this.getTargetTranslation();
         return translation.get(0);
      }
@@ -250,7 +250,7 @@ public class CameraOp extends BunyipsComponent {
      * Get positional Y coordinate from Vuforia
      * @return mm of interpreted position Y data
      */
-     public double getY() {
+     public Double getY() {
         VectorF translation = this.getTargetTranslation();
         return translation.get(1);
      }
@@ -259,7 +259,7 @@ public class CameraOp extends BunyipsComponent {
      * Get positional Z coordiate from Vuforia
      * @return mm of interpreted position Z data
      */
-     public double getZ() {
+     public Double getZ() {
         VectorF translation = this.getTargetTranslation();
         return translation.get(2);
      }
@@ -268,7 +268,7 @@ public class CameraOp extends BunyipsComponent {
      * Get X (roll) orientation from Vuforia
      * @return X orientation in degrees
      */
-     public double getRoll() {
+     public Double getRoll() {
         Orientation orientation = this.getOrientationTranslation();
         return orientation.firstAngle;
      }
@@ -277,7 +277,7 @@ public class CameraOp extends BunyipsComponent {
      * Get Y (pitch) orientation from Vuforia
      * @return Y orientation in degrees
      */
-     public double getPitch() {
+     public Double getPitch() {
         Orientation orientation = this.getOrientationTranslation();
         return orientation.secondAngle;
      }
@@ -286,7 +286,7 @@ public class CameraOp extends BunyipsComponent {
      * Get Z (heading) orientation from Vuforia
      * @return Z orientation in degrees
      */
-     public double getHeading() {
+     public Double getHeading() {
         Orientation orientation = this.getOrientationTranslation();
         return orientation.thirdAngle;
      }

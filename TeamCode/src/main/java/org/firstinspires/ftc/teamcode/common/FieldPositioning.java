@@ -15,20 +15,19 @@ public class FieldPositioning extends BunyipsComponent {
         this.x = x;
         this.y = y;
         this.imu = imu;
+        pX = 0;
+        pY = 0;
     }
 
     public void update() {
-        int[] gX = new int[3];
-        int[] gY = new int[3];
-        int[] gZ = new int[3];
-        int[] gXr = new int[3];
-        int[] gYr = new int[3];
-        int[] gZr = new int[3];
+        int[] gXr = new int[2];
+        int[] gYr = new int[2];
+        int[] gZr = new int[2];
 
         if (cam.vuforiaEnabled && cam.targetVisible) {
-            gX[0] = (int) cam.getX();
-            gY[0] = (int) cam.getY();
-            gZ[0] = (int) cam.getZ();
+            pX = (int) cam.getX();
+            pY = (int) cam.getY();
+            pZ = (int) cam.getZ();
             gXr[0] = (int) cam.getPitch();
             gYr[0] = (int) cam.getRoll();
             gZr[0] = (int) cam.getHeading();
@@ -37,6 +36,13 @@ public class FieldPositioning extends BunyipsComponent {
         gXr[1] = (int) imu.getPitch();
         gYr[1] = (int) imu.getRoll();
         gZr[1] = (int) imu.getHeading();
-    }
 
+        // Prioritise Vuforia readings over IMU, unless Vuforia is not online/no target is seen
+        rX = cam.targetVisible ? gXr[0] : gXr[1];
+        rY = cam.targetVisible ? gYr[0] : gYr[1];
+        rZ = cam.targetVisible ? gZr[0] : gZr[1];
+
+        pX += x.getEncoderReading();
+        pY += y.getEncoderReading();
+    }
 }
