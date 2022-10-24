@@ -42,7 +42,7 @@ public class FieldPositioning extends BunyipsComponent {
         rY = cam.targetVisible ? gYr[0] : gYr[1];
         rZ = cam.targetVisible ? gZr[0] : gZr[1];
 
-        pX += x.getEncoderReading();
-        pY += y.getEncoderReading();
+        pX += (int) x.getTravelledMM();
+        pY += (int) y.getTravelledMM();
     }
 }
