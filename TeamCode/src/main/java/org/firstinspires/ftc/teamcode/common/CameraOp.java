@@ -19,12 +19,17 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
+import org.opencv.core.Scalar;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Custom common class to operate Vuforia and TensorFlow through an attached Webcam
+ * Custom common class to operate Vuforia, OpenCV, and TensorFlow through a single attached Webcam
  * @author Lucas Bubner - FTC 15215 Captain; Oct 2022 - Murray Bridge Bunyips
  */
 
@@ -36,16 +41,19 @@ public class CameraOp extends BunyipsComponent {
     private final List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
     private OpenGLMatrix lastLocation = null;
     private final VuforiaTrackables targets;
-    public boolean targetVisible = false;
-    
     private final CameraName webcam;
     private final int tfodMonitorViewId;
 
     // Use seeingTfod public String for saving a TFOD value for usage in other tasks
     public String seeingTfod = null;
+
     // Best guess is used when time limits are reached, then is saved to seeingTfod
     public String bestguess = null;
 
+    // Allow other classes to access the OpenCV configuration powered by Vuforia passthrough
+    public final OpenCvCamera vuforiaPassthroughCam;
+
+    public boolean targetVisible = false;
     public boolean vuforiaEnabled = false;
     public boolean tfodEnabled = false;
 
@@ -71,7 +79,7 @@ public class CameraOp extends BunyipsComponent {
     private static final float oneAndHalfTile = 36 * mmPerInch;
 
     /**
-     * CameraOperation custom common class for USB-connected webcams (TFOD Objects + Vuforia Field Pos)
+     * CameraOperation custom common class for USB-connected webcams (TFOD Objects + Vuforia Field Pos + OpenCV async features)
      * @param opmode Pass abstract opmode class for telemetry
      * @param webcam hardwareMap.get(WebcamName.class, "NAME_OF_CAMERA")
      * @param tfodMonitorViewId hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -80,6 +88,9 @@ public class CameraOp extends BunyipsComponent {
         super(opmode);
         this.webcam = webcam;
         this.tfodMonitorViewId = tfodMonitorViewId;
+
+        // OpenCV viewport configs
+        int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(tfodMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
 
         // Vuforia localizer engine initialisation
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
@@ -137,6 +148,31 @@ public class CameraOp extends BunyipsComponent {
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
+
+        vuforiaPassthroughCam = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters, viewportContainerIds[1]);
+        vuforiaPassthroughCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                vuforiaPassthroughCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                vuforiaPassthroughCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+                vuforiaPassthroughCam.startStreaming(0,0, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+                getOpMode().telemetry.addLine("Unable to initialise OpenCV functions. Error code: " + errorCode);
+            }
+        });
+    }
+
+    /**
+     * Set the OpenCV pipeline of the camera to provide information based on arguments provided
+     */
+    public void setOpenCVPipeline(OpenCvPipeline pipeline) {
+        vuforiaPassthroughCam.setPipeline(pipeline);
     }
 
     /**
