@@ -377,7 +377,7 @@ public class CameraOp extends BunyipsComponent {
     }
 
     /**
-     * Update and tick TFOD detections and/or Vuforia field positions
+     * Update and tick TFOD detections and/or Vuforia field positions. OpenCV is controlled automatically.
      * Ensure to call this method in an active loop
      */
     public void tick() {
