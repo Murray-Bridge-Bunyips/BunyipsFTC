@@ -64,7 +64,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
 
           imu.tick();
           telemetry.addLine(String.format("Heading: %d, Roll: %d, Pitch: %d",
-                                          imu.getHeading(), imu.getRoll(), imu.getPitch()))
+                                          imu.getHeading(), imu.getRoll(), imu.getPitch()));
 
 //        boolean up_pressed = gamepad2.dpad_up;
 //        boolean down_pressed = gamepad2.dpad_down;
