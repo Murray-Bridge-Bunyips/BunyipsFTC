@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
+import org.firstinspires.ftc.teamcode.common.IMUOp;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoArm;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
 
@@ -15,7 +16,8 @@ public class ProtoTeleOp extends BunyipsOpMode {
     private ProtoConfig config;
 //    private ProtoDrive drive;
     private CameraOp cam;
-    private ProtoArm arm;
+    private IMUOp imu;
+//    private ProtoArm arm;
 
     @Override
     protected void onInit() {
@@ -30,10 +32,15 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        } catch (Exception e) {
 //            telemetry.addLine("Failed to initialise Drive System.");
 //        }
+//        try {
+//            arm = new ProtoArm(this, config.claw);
+//        } catch (Exception e) {
+//            telemetry.addLine("Failed to initialise Arm System.");
+//        }
         try {
-            arm = new ProtoArm(this, config.claw);
+            imu = new IMUOp(this, config.imu);
         } catch (Exception e) {
-            telemetry.addLine("Failed to initialise Arm System.");
+            telemetry.addLine("Failed to initalise IMU Operation.");
         }
 
         // Using TFOD and Vuforia for debugging purposes, will likely
@@ -48,12 +55,16 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        double x = gamepad1.left_stick_x;
 //        double y = gamepad1.left_stick_y;
 //        double r = gamepad1.right_stick_x;
-        double y2 = gamepad2.left_stick_y;
+//        double y2 = gamepad2.left_stick_y;
         
         // Using for debug telemetry during testing phases
 //        cam.tick();
 //        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
 //        String tfodDetection = cam.determineTFOD();
+
+          imu.tick();
+          telemetry.addLine(String.format("Heading: %d, Roll: %d, Pitch: %d",
+                                          imu.getHeading(), imu.getRoll(), imu.getPitch()))
 
 //        boolean up_pressed = gamepad2.dpad_up;
 //        boolean down_pressed = gamepad2.dpad_down;
@@ -72,7 +83,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        }
 
         // Update live movements of all motors
-        arm.clawRun(y2);
+//        arm.clawRun(y2);
 //        drive.update();
 //        arm.update();
     }

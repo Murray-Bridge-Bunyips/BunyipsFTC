@@ -149,6 +149,8 @@ public class CameraOp extends BunyipsComponent {
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
 
+        // Initialise OpenCV, and as this will be running on an async thread,
+        // this should not impact performance of the OpMode
         vuforiaPassthroughCam = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters, viewportContainerIds[1]);
         vuforiaPassthroughCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
