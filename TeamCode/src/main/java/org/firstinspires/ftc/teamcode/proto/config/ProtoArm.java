@@ -38,6 +38,7 @@ public class ProtoArm extends BunyipsComponent {
      */
     public void clawRun(double speed) {
         claw.setPower(Range.clip(speed, -1, 1));
+        getOpMode().telemetry.addLine("Claw is running.");
     }
 
     /**

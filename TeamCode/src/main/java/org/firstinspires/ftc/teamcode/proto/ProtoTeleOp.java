@@ -9,12 +9,13 @@ import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.IMUOp;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoArm;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
+import org.firstinspires.ftc.teamcode.proto.config.ProtoDrive;
 
 @TeleOp(name = "<PROTO> TeleOp testing")
 public class ProtoTeleOp extends BunyipsOpMode {
 
     private ProtoConfig config;
-//    private ProtoDrive drive;
+    private ProtoDrive drive;
     private CameraOp cam;
     private IMUOp imu;
 //    private ProtoArm arm;
@@ -28,7 +29,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
             telemetry.addLine("Failed to initialise Camera Operation.");
         }
 //        try {
-//            drive = new ProtoDrive(this, config.bl, config.br, config.fl, config.fr, true);
+//            drive = new ProtoDrive(this, config.bl, config.br, config.fl, config.fr);
 //        } catch (Exception e) {
 //            telemetry.addLine("Failed to initialise Drive System.");
 //        }
@@ -37,16 +38,16 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        } catch (Exception e) {
 //            telemetry.addLine("Failed to initialise Arm System.");
 //        }
-        try {
-            imu = new IMUOp(this, config.imu);
-        } catch (Exception e) {
-            telemetry.addLine("Failed to initalise IMU Operation.");
-        }
+//        try {
+//            imu = new IMUOp(this, config.imu);
+//        } catch (Exception e) {
+//            telemetry.addLine("Failed to initalise IMU Operation.");
+//        }
 
         // Using TFOD and Vuforia for debugging purposes, will likely
         // not use this in actual TeleOp due to resource consumption
-//        cam.startVuforia();
-//        cam.startTFOD();
+        cam.startVuforia();
+        cam.startTFOD();
     }
 
     @Override
@@ -58,13 +59,13 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        double y2 = gamepad2.left_stick_y;
         
         // Using for debug telemetry during testing phases
-//        cam.tick();
-//        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
-//        String tfodDetection = cam.determineTFOD();
+        cam.tick();
+        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
+        String tfodDetection = cam.determineTFOD();
 
-          imu.tick();
-          telemetry.addLine(String.format("Heading: %d, Roll: %d, Pitch: %d",
-                                          imu.getHeading(), imu.getRoll(), imu.getPitch()));
+//          imu.tick();
+//          telemetry.addLine(String.format("Heading: %.2f, Roll: %.2f, Pitch: %.2f",
+//                                          imu.getHeading(), imu.getRoll(), imu.getPitch()));
 
 //        boolean up_pressed = gamepad2.dpad_up;
 //        boolean down_pressed = gamepad2.dpad_down;
@@ -84,7 +85,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
 
         // Update live movements of all motors
 //        arm.clawRun(y2);
-//        drive.update();
+        drive.update();
 //        arm.update();
     }
 }

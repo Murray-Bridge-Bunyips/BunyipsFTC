@@ -47,12 +47,12 @@ public class ProtoConfig extends RobotConfig {
             telemetry.addLine("Error configuring device 'Webcam'. Check connections.");
         }
 
-//        bl = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
-//        br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
-//        fl = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
-//        fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
+        bl = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
+        br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
+        fl = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
+        fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
 //        arm = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
-        claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
+//        claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
 
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
         try {
