@@ -90,15 +90,18 @@ public class CameraOp extends BunyipsComponent {
         this.tfodMonitorViewId = tfodMonitorViewId;
 
         // OpenCV viewport configs
-        int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(tfodMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
+        int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(
+                tfodMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
 
         // Vuforia localizer engine initialisation
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(viewportContainerIds[0]);
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = webcam;
         parameters.useExtendedTracking = false;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        vuforiaPassthroughCam = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(
+                                vuforia, parameters, viewportContainerIds[1]);
 
         // USING 2022-2023 POWERPLAY SEASON VUFORIA TRACKABLES
         targets = this.vuforia.loadTrackablesFromAsset("PowerPlay");
@@ -148,33 +151,6 @@ public class CameraOp extends BunyipsComponent {
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
-
-        // Initialise OpenCV, and as this will be running on an async thread,
-        // this should not impact performance of the OpMode
-        vuforiaPassthroughCam = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters, viewportContainerIds[1]);
-        vuforiaPassthroughCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened()
-            {
-                vuforiaPassthroughCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-                vuforiaPassthroughCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
-                vuforiaPassthroughCam.startStreaming(0,0, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode)
-            {
-                getOpMode().telemetry.addLine("Unable to initialise OpenCV functions. Error code: " + errorCode);
-            }
-        });
-    }
-
-    /**
-     * Set the OpenCV pipeline of the camera to provide information based on arguments provided
-     */
-    public void setOpenCVPipeline(OpenCvPipeline pipeline) {
-        vuforiaPassthroughCam.setPipeline(pipeline);
     }
 
     /**
@@ -406,4 +382,45 @@ public class CameraOp extends BunyipsComponent {
             }
         }
     }
+
+    // OpenCV Vuforia Async methods
+
+    /**
+     * Initialise and start streaming on a Vuforia passthrough OpenCV camera
+     */
+    public void initOpenCV() {
+        // Initialise OpenCV, and as this will be running on an async thread,
+        // this should not impact performance of the OpMode
+        vuforiaPassthroughCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                vuforiaPassthroughCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                vuforiaPassthroughCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+                vuforiaPassthroughCam.startStreaming(0,0, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+                getOpMode().telemetry.addLine("Unable to initialise OpenCV functions. Error code: " + errorCode);
+            }
+        });
+    }
+
+    /**
+     * Set the OpenCV pipeline of the camera to provide information based on arguments provided
+     */
+    public void setOpenCVPipeline(OpenCvPipeline pipeline) {
+        vuforiaPassthroughCam.setPipeline(pipeline);
+    }
+
+    /**
+     * Manually close an OpenCV stream, if required. (Note that OpenCV will automatically do this)
+     */
+    public void closeOpenCV() {
+        vuforiaPassthroughCam.closeCameraDeviceAsync(() -> {});
+    }
+
 }
