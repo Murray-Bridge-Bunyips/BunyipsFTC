@@ -90,18 +90,19 @@ public class CameraOp extends BunyipsComponent {
         this.tfodMonitorViewId = tfodMonitorViewId;
 
         // OpenCV viewport configs
-        int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(
-                tfodMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
+//        int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(
+//                tfodMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
+
 
         // Vuforia localizer engine initialisation
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(viewportContainerIds[0]);
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(tfodMonitorViewId);
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = webcam;
         parameters.useExtendedTracking = false;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
         vuforiaPassthroughCam = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(
-                                vuforia, parameters, viewportContainerIds[1]);
+                                vuforia, parameters, tfodMonitorViewId);
 
         // USING 2022-2023 POWERPLAY SEASON VUFORIA TRACKABLES
         targets = this.vuforia.loadTrackablesFromAsset("PowerPlay");

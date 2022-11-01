@@ -16,23 +16,23 @@ public class ProtoTeleOp extends BunyipsOpMode {
 
     private ProtoConfig config;
     private ProtoDrive drive;
-    private CameraOp cam;
+//    private CameraOp cam;
     private IMUOp imu;
 //    private ProtoArm arm;
 
     @Override
     protected void onInit() {
         config = ProtoConfig.newConfig(hardwareMap, telemetry);
-        try {
-            cam = new CameraOp(this, config.webcam, config.tfodMonitorViewId);
-        } catch (Exception e) {
-            telemetry.addLine("Failed to initialise Camera Operation.");
-        }
 //        try {
-//            drive = new ProtoDrive(this, config.bl, config.br, config.fl, config.fr);
+//            cam = new CameraOp(this, config.webcam, config.tfodMonitorViewId);
 //        } catch (Exception e) {
-//            telemetry.addLine("Failed to initialise Drive System.");
+//            telemetry.addLine("Failed to initialise Camera Operation.");
 //        }
+        try {
+            drive = new ProtoDrive(this, config.bl, config.br, config.fl, config.fr);
+        } catch (Exception e) {
+            telemetry.addLine("Failed to initialise Drive System.");
+        }
 //        try {
 //            arm = new ProtoArm(this, config.claw);
 //        } catch (Exception e) {
@@ -46,22 +46,26 @@ public class ProtoTeleOp extends BunyipsOpMode {
 
         // Using TFOD and Vuforia for debugging purposes, will likely
         // not use this in actual TeleOp due to resource consumption
-        cam.startVuforia();
-        cam.startTFOD();
+//        cam.startVuforia();
+//        cam.startTFOD();
     }
 
     @Override
     protected void activeLoop() throws InterruptedException {
         // Set changing variables and gather raw data
-//        double x = gamepad1.left_stick_x;
-//        double y = gamepad1.left_stick_y;
-//        double r = gamepad1.right_stick_x;
+
+        // X and Y are swapped and X is inverted, this is a temporary solution
+        // until I can fix this in the config
+        double x = -gamepad1.left_stick_y;
+        double y = gamepad1.left_stick_x;
+
+        double r = gamepad1.right_stick_x;
 //        double y2 = gamepad2.left_stick_y;
         
         // Using for debug telemetry during testing phases
-        cam.tick();
-        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
-        String tfodDetection = cam.determineTFOD();
+//        cam.tick();
+//        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
+//        String tfodDetection = cam.determineTFOD();
 
 //          imu.tick();
 //          telemetry.addLine(String.format("Heading: %.2f, Roll: %.2f, Pitch: %.2f",
@@ -72,7 +76,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        boolean drop_pressed = gamepad2.left_bumper;
         
         // Set speeds of motors and interpret any data
-//        drive.setSpeedXYR(x, y, r);
+        drive.setSpeedXYR(x, y, r);
 //        arm.setLiftPower(0.25);
 
 //        if (up_pressed && !gamepad2.dpad_up) {

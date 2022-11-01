@@ -4,6 +4,7 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -54,13 +55,19 @@ public class ProtoConfig extends RobotConfig {
 //        arm = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
 //        claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
 
+        // Motor direction configuration
+        fl.setDirection(DcMotorEx.Direction.FORWARD);
+        fr.setDirection(DcMotorEx.Direction.FORWARD);
+        bl.setDirection(DcMotorEx.Direction.REVERSE);
+        br.setDirection(DcMotorEx.Direction.REVERSE);
+
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
-        try {
-            x = hardwareMap.get(Deadwheel.class, "X Encoder");
-            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
-        } catch (Exception e) {
-            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
-        }
+//        try {
+//            x = hardwareMap.get(Deadwheel.class, "X Encoder");
+//            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
+//        } catch (Exception e) {
+//            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
+//        }
 
         // Control Hub IMU configuration
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
