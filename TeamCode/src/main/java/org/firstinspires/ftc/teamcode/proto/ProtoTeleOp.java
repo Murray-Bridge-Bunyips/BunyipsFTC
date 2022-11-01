@@ -53,12 +53,8 @@ public class ProtoTeleOp extends BunyipsOpMode {
     @Override
     protected void activeLoop() throws InterruptedException {
         // Set changing variables and gather raw data
-
-        // X and Y are swapped and X is inverted, this is a temporary solution
-        // until I can fix this in the config
-        double x = -gamepad1.left_stick_y;
-        double y = gamepad1.left_stick_x;
-
+        double x = gamepad1.left_stick_x;
+        double y = gamepad1.left_stick_y;
         double r = gamepad1.right_stick_x;
 //        double y2 = gamepad2.left_stick_y;
         

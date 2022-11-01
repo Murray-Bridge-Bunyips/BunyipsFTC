@@ -88,8 +88,10 @@ public class ProtoDrive extends BunyipsComponent {
      * @param speedR rotation speed - positive: clockwise
      */
     public void setSpeedXYR(double speedX, double speedY, double speedR) {
-        this.speedX = clipMotorPower(speedX);
-        this.speedY = clipMotorPower(speedY);
+        // X and Y have been swapped, and X has been inverted
+        // This is to calibrate the controller movement to the robot
+        this.speedX = clipMotorPower(-speedY);
+        this.speedY = clipMotorPower(speedX);
         this.speedR = clipMotorPower(speedR);
     }
 
