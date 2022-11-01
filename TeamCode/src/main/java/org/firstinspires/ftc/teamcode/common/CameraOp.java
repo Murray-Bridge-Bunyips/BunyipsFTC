@@ -42,13 +42,21 @@ public class CameraOp extends BunyipsComponent {
     private OpenGLMatrix lastLocation = null;
     private final VuforiaTrackables targets;
     private final CameraName webcam;
-    private final int tfodMonitorViewId;
+    private final int monitorID;
 
     // Use seeingTfod public String for saving a TFOD value for usage in other tasks
-    public String seeingTfod = null;
+    public volatile String seeingTfod = null;
 
-    // Best guess is used when time limits are reached, then is saved to seeingTfod
-    public String bestguess = null;
+    // Additionally, we use an enum for the parking position to simplify things a little, in the event
+    // the opmode/task does not want to manage the output from TFOD, or in other cases, where the user
+    // wishes to use OpenCV pipelines. In this case, change the static enum through CameraOp.ParkingPosition.
+    // THIS ENUM IS FOR 2022-2023 POWERPLAY PARKING, SET A DEFAULT POSITION HERE
+    public static volatile ParkingPosition parkingPosition = ParkingPosition.LEFT;
+    public enum ParkingPosition {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
 
     // Allow other classes to access the OpenCV configuration powered by Vuforia passthrough
     public final OpenCvCamera vuforiaPassthroughCam;
@@ -82,29 +90,46 @@ public class CameraOp extends BunyipsComponent {
      * CameraOperation custom common class for USB-connected webcams (TFOD Objects + Vuforia Field Pos + OpenCV async features)
      * @param opmode Pass abstract opmode class for telemetry
      * @param webcam hardwareMap.get(WebcamName.class, "NAME_OF_CAMERA")
-     * @param tfodMonitorViewId hardwareMap.appContext.getResources().getIdentifier("tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+     * @param monitorID hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
      */
-    public CameraOp(BunyipsOpMode opmode, CameraName webcam, int tfodMonitorViewId) {
+    public CameraOp(BunyipsOpMode opmode, CameraName webcam, int monitorID) {
         super(opmode);
         this.webcam = webcam;
-        this.tfodMonitorViewId = tfodMonitorViewId;
+        this.monitorID = monitorID;
 
         // OpenCV viewport configs
-//        int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(
-//                tfodMonitorViewId, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
-
+        int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(
+                monitorID, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
 
         // Vuforia localizer engine initialisation
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(tfodMonitorViewId);
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(viewportContainerIds[0]);
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = webcam;
-        parameters.useExtendedTracking = false;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        vuforiaPassthroughCam = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(
-                                vuforia, parameters, tfodMonitorViewId);
 
-        // USING 2022-2023 POWERPLAY SEASON VUFORIA TRACKABLES
+
+        // Initialise OpenCV, and as this will be running on an async thread,
+        // this should not impact performance of the OpMode
+        vuforiaPassthroughCam = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters, viewportContainerIds[1]);
+        vuforiaPassthroughCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                vuforiaPassthroughCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
+                vuforiaPassthroughCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
+                vuforiaPassthroughCam.startStreaming(0,0, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+                getOpMode().telemetry.addLine("Unable to initialise OpenCV functions. Error code: " + errorCode);
+            }
+        });
+
+        // Init Vuforia targets using 2022-2023 POWERPLAY Season Trackables
         targets = this.vuforia.loadTrackablesFromAsset("PowerPlay");
         allTrackables.addAll(targets);
 
@@ -142,7 +167,7 @@ public class CameraOp extends BunyipsComponent {
         }
 
         // TensorFlow object detection initialisation
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(viewportContainerIds[0]);
         tfodParameters.minResultConfidence = 0.75f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 300;
@@ -152,6 +177,13 @@ public class CameraOp extends BunyipsComponent {
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
+    }
+
+    /**
+     * Set the OpenCV pipeline of the camera to provide information based on arguments provided
+     */
+    public void setOpenCVPipeline(OpenCvPipeline pipeline) {
+        vuforiaPassthroughCam.setPipeline(pipeline);
     }
 
     /**
@@ -174,14 +206,27 @@ public class CameraOp extends BunyipsComponent {
             getOpMode().telemetry.addLine(String.format("- Position (Row/Col): %1$.0f / %2$.0f", row, col));
             getOpMode().telemetry.addLine(String.format("- Size (Width/Height): %1$.0f / %2$.0f", width, height));
 
-            // If the computer is more than 90% sure that the signal is what it thinks it is, then return it.
+            // If the computer is more than 85% sure that the signal is what it thinks it is, then return it.
             // This will prevent an instant locking of the signal, and allow the engine a bit of time to think.
             // Combined with a task, this can be time constrained in the event this method keeps returning null
-            bestguess = recognition.getLabel();
-            if (recognition.getConfidence() > 0.90) {
-                // Will not automatically save label to public seeingTfod variable and is left for the task/opmode to do
-                // Uncomment the next line if auto saving to cam.seeingTfod is desired
-                // this.seeingTfod = recognition.getLabel();
+            if (recognition.getConfidence() > 0.85) {
+                // Automatically save this value to the enum, as we know we need to park for POWERPLAY
+                switch (recognition.getLabel()) {
+                    case "1 Bolt":
+                        parkingPosition = ParkingPosition.LEFT;
+                        break;
+                    case "2 Bulb":
+                        parkingPosition = ParkingPosition.CENTER;
+                        break;
+                    case "3 Panel":
+                        parkingPosition = ParkingPosition.RIGHT;
+                        break;
+                }
+
+                // Save the string of this result as well to the camera instance for non-parking operations
+                this.seeingTfod = recognition.getLabel();
+
+                // Return the result to the opmode to let it know we're done
                 return recognition.getLabel();
             }
         }
@@ -256,55 +301,55 @@ public class CameraOp extends BunyipsComponent {
      * Get positional X coordinate from Vuforia
      * @return mm of interpreted position X data
      */
-     public double getX() {
+    public double getX() {
         VectorF translation = this.getTargetTranslation();
         return translation.get(0);
-     }
+    }
 
     /**
      * Get positional Y coordinate from Vuforia
      * @return mm of interpreted position Y data
      */
-     public double getY() {
+    public double getY() {
         VectorF translation = this.getTargetTranslation();
         return translation.get(1);
-     }
+    }
 
     /**
      * Get positional Z coordiate from Vuforia
      * @return mm of interpreted position Z data
      */
-     public double getZ() {
+    public double getZ() {
         VectorF translation = this.getTargetTranslation();
         return translation.get(2);
-     }
+    }
 
     /**
      * Get X (roll) orientation from Vuforia
      * @return X orientation in degrees
      */
-     public double getRoll() {
+    public double getRoll() {
         Orientation orientation = this.getOrientationTranslation();
         return orientation.firstAngle;
-     }
+    }
 
     /**
      * Get Y (pitch) orientation from Vuforia
      * @return Y orientation in degrees
      */
-     public double getPitch() {
+    public double getPitch() {
         Orientation orientation = this.getOrientationTranslation();
         return orientation.secondAngle;
-     }
+    }
 
     /**
      * Get Z (heading) orientation from Vuforia
      * @return Z orientation in degrees
      */
-     public double getHeading() {
+    public double getHeading() {
         Orientation orientation = this.getOrientationTranslation();
         return orientation.thirdAngle;
-     }
+    }
 
     /**
      * Identify a target by naming it, and setting its position and orientation on the field
@@ -383,45 +428,4 @@ public class CameraOp extends BunyipsComponent {
             }
         }
     }
-
-    // OpenCV Vuforia Async methods
-
-    /**
-     * Initialise and start streaming on a Vuforia passthrough OpenCV camera
-     */
-    public void initOpenCV() {
-        // Initialise OpenCV, and as this will be running on an async thread,
-        // this should not impact performance of the OpMode
-        vuforiaPassthroughCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened()
-            {
-                vuforiaPassthroughCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-                vuforiaPassthroughCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
-                vuforiaPassthroughCam.startStreaming(0,0, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode)
-            {
-                getOpMode().telemetry.addLine("Unable to initialise OpenCV functions. Error code: " + errorCode);
-            }
-        });
-    }
-
-    /**
-     * Set the OpenCV pipeline of the camera to provide information based on arguments provided
-     */
-    public void setOpenCVPipeline(OpenCvPipeline pipeline) {
-        vuforiaPassthroughCam.setPipeline(pipeline);
-    }
-
-    /**
-     * Manually close an OpenCV stream, if required. (Note that OpenCV will automatically do this)
-     */
-    public void closeOpenCV() {
-        vuforiaPassthroughCam.closeCameraDeviceAsync(() -> {});
-    }
-
 }

@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.proto.config;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 
@@ -24,11 +25,26 @@ public class ProtoDrive extends BunyipsComponent {
     public ProtoDrive(BunyipsOpMode opMode,
                       DcMotorEx bl, DcMotorEx br,
                       DcMotorEx fl, DcMotorEx fr) {
+        // Encoders are not attached and therefore should not be initialised
         super(opMode);
         this.bl = bl;
         this.br = br;
         this.fl = fl;
         this.fr = fr;
+    }
+
+    public void setToFloat() {
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+
+    public void setToBrake() {
+        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     /**

@@ -17,7 +17,7 @@ public class ProtoConfig extends RobotConfig {
 
     // Add declarations here
     public CameraName webcam;
-    public int tfodMonitorViewId;
+    public int monitorID;
     public DcMotorEx bl;
     public DcMotorEx br;
     public DcMotorEx fl;
@@ -42,8 +42,8 @@ public class ProtoConfig extends RobotConfig {
             // Using manual error catching as the hardwareMap for getHardwareOn does not include
             // webcam configurations
             webcam = hardwareMap.get(WebcamName.class, "Webcam");
-            tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                    "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+            monitorID = hardwareMap.appContext.getResources().getIdentifier(
+                    "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         } catch (Exception e) {
             telemetry.addLine("Error configuring device 'Webcam'. Check connections.");
         }

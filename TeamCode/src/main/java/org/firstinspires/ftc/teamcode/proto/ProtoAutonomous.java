@@ -23,7 +23,7 @@ public class ProtoAutonomous extends BunyipsOpMode {
     protected void onInit() {
         config = ProtoConfig.newConfig(hardwareMap, telemetry);
         try {
-            cam = new CameraOp(this, config.webcam, config.tfodMonitorViewId);
+            cam = new CameraOp(this, config.webcam, config.monitorID);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Camera Operation.");
         }
@@ -36,14 +36,14 @@ public class ProtoAutonomous extends BunyipsOpMode {
 
         // Add tasks here
         tasks.add(new TFODDetectionTask(this, 5, cam));
-        switch (cam.seeingTfod) {
-            case "1 Bolt":
+        switch (cam.parkingPosition) {
+            case LEFT:
 
             break;
-            case "2 Bulb":
+            case CENTER:
 
             break;
-            case "3 Panel":
+            case RIGHT:
 
             break;
         }

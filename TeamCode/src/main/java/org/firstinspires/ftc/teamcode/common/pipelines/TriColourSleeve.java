@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.pipelines;
 
+import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -15,16 +16,10 @@ import org.openftc.easyopencv.OpenCvPipeline;
  */
 public class TriColourSleeve extends OpenCvPipeline {
     /*
-    YELLOW  = Parking Left
-    CYAN    = Parking Middle
-    MAGENTA = Parking Right
-     */
-
-    public enum ParkingPosition {
-        LEFT,
-        CENTER,
-        RIGHT
-    }
+        YELLOW  = Parking Left
+        CYAN    = Parking Middle
+        MAGENTA = Parking Right
+    */
 
     // TOPLEFT anchor point for the bounding box
     private static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
@@ -60,9 +55,6 @@ public class TriColourSleeve extends OpenCvPipeline {
             SLEEVE_TOPLEFT_ANCHOR_POINT.x + REGION_WIDTH,
             SLEEVE_TOPLEFT_ANCHOR_POINT.y + REGION_HEIGHT);
 
-    // Running variable storing the parking position
-    private volatile ParkingPosition position = ParkingPosition.LEFT;
-
     @Override
     public Mat processFrame(Mat input) {
         // Noise reduction
@@ -89,7 +81,7 @@ public class TriColourSleeve extends OpenCvPipeline {
         // Checks all percentages, will highlight bounding box in camera preview
         // based on what color is being detected
         if (maxPercent == yelPercent) {
-            position = ParkingPosition.LEFT;
+            CameraOp.parkingPosition = CameraOp.ParkingPosition.LEFT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -98,7 +90,7 @@ public class TriColourSleeve extends OpenCvPipeline {
                     2
             );
         } else if (maxPercent == cyaPercent) {
-            position = ParkingPosition.CENTER;
+            CameraOp.parkingPosition = CameraOp.ParkingPosition.CENTER;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -107,7 +99,7 @@ public class TriColourSleeve extends OpenCvPipeline {
                     2
             );
         } else if (maxPercent == magPercent) {
-            position = ParkingPosition.RIGHT;
+            CameraOp.parkingPosition = CameraOp.ParkingPosition.RIGHT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -125,10 +117,5 @@ public class TriColourSleeve extends OpenCvPipeline {
         kernel.release();
 
         return input;
-    }
-
-    // Returns an enum being the current position where the robot will park
-    public ParkingPosition getPosition() {
-        return position;
     }
 }
