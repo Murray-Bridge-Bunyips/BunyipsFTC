@@ -36,17 +36,6 @@ public class ProtoAutonomous extends BunyipsOpMode {
 
         // Add tasks here
         tasks.add(new TFODDetectionTask(this, 5, cam));
-        switch (cam.parkingPosition) {
-            case LEFT:
-
-            break;
-            case CENTER:
-
-            break;
-            case RIGHT:
-
-            break;
-        }
     }
 
     @Override

@@ -38,7 +38,7 @@ public class TFODDetectionTask extends BaseTask implements Task {
         // CameraOp should automatically save a parking position (and String) to the camera instance,
         // so we can report it to telemetry and finish task. We do not have to do anything further
         // in terms of saving this result.
-        opMode.telemetry.addLine("Parking position found: " + cam.parkingPosition);
+//        opMode.telemetry.addLine("Parking position found: " + cam.parkingPosition);
         isFinished = true;
         cam.stopTFOD();
     }

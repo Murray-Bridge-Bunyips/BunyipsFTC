@@ -19,7 +19,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefau
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.opencv.core.Scalar;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
@@ -46,17 +45,6 @@ public class CameraOp extends BunyipsComponent {
 
     // Use seeingTfod public String for saving a TFOD value for usage in other tasks
     public volatile String seeingTfod = null;
-
-    // Additionally, we use an enum for the parking position to simplify things a little, in the event
-    // the opmode/task does not want to manage the output from TFOD, or in other cases, where the user
-    // wishes to use OpenCV pipelines. In this case, change the static enum through CameraOp.ParkingPosition.
-    // THIS ENUM IS FOR 2022-2023 POWERPLAY PARKING, SET A DEFAULT POSITION HERE
-    public static volatile ParkingPosition parkingPosition = ParkingPosition.LEFT;
-    public enum ParkingPosition {
-        LEFT,
-        CENTER,
-        RIGHT
-    }
 
     // Allow other classes to access the OpenCV configuration powered by Vuforia passthrough
     public final OpenCvCamera vuforiaPassthroughCam;
@@ -213,13 +201,10 @@ public class CameraOp extends BunyipsComponent {
                 // Automatically save this value to the enum, as we know we need to park for POWERPLAY
                 switch (recognition.getLabel()) {
                     case "1 Bolt":
-                        parkingPosition = ParkingPosition.LEFT;
                         break;
                     case "2 Bulb":
-                        parkingPosition = ParkingPosition.CENTER;
                         break;
                     case "3 Panel":
-                        parkingPosition = ParkingPosition.RIGHT;
                         break;
                 }
 

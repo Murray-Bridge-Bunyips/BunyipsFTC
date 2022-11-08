@@ -7,32 +7,35 @@ import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.IMUOp;
+import org.firstinspires.ftc.teamcode.common.pipelines.TriColourSleeve;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoArm;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoDrive;
+import org.openftc.easyopencv.OpenCvPipeline;
 
 @TeleOp(name = "<PROTO> TeleOp testing")
 public class ProtoTeleOp extends BunyipsOpMode {
 
     private ProtoConfig config;
-    private ProtoDrive drive;
-//    private CameraOp cam;
-    private IMUOp imu;
+//    private ProtoDrive drive;
+    private CameraOp cam;
+//    private IMUOp imu;
 //    private ProtoArm arm;
+    TriColourSleeve triColourSleeve;
 
     @Override
     protected void onInit() {
         config = ProtoConfig.newConfig(hardwareMap, telemetry);
-//        try {
-//            cam = new CameraOp(this, config.webcam, config.tfodMonitorViewId);
-//        } catch (Exception e) {
-//            telemetry.addLine("Failed to initialise Camera Operation.");
-//        }
         try {
-            drive = new ProtoDrive(this, config.bl, config.br, config.fl, config.fr);
+            cam = new CameraOp(this, config.webcam, config.monitorID);
         } catch (Exception e) {
-            telemetry.addLine("Failed to initialise Drive System.");
+            telemetry.addLine("Failed to initialise Camera Operation.");
         }
+//        try {
+//            drive = new ProtoDrive(this, config.bl, config.br, config.fl, config.fr);
+//        } catch (Exception e) {
+//            telemetry.addLine("Failed to initialise Drive System.");
+//        }
 //        try {
 //            arm = new ProtoArm(this, config.claw);
 //        } catch (Exception e) {
@@ -48,20 +51,23 @@ public class ProtoTeleOp extends BunyipsOpMode {
         // not use this in actual TeleOp due to resource consumption
 //        cam.startVuforia();
 //        cam.startTFOD();
+        triColourSleeve = new TriColourSleeve();
+        cam.setOpenCVPipeline(triColourSleeve);
     }
 
     @Override
     protected void activeLoop() throws InterruptedException {
         // Set changing variables and gather raw data
-        double x = gamepad1.left_stick_x;
-        double y = gamepad1.left_stick_y;
-        double r = gamepad1.right_stick_x;
+//        double x = gamepad1.left_stick_x;
+//        double y = gamepad1.left_stick_y;
+//        double r = gamepad1.right_stick_x;
 //        double y2 = gamepad2.left_stick_y;
         
         // Using for debug telemetry during testing phases
 //        cam.tick();
 //        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
 //        String tfodDetection = cam.determineTFOD();
+        telemetry.addLine(triColourSleeve.getPosition().toString());
 
 //          imu.tick();
 //          telemetry.addLine(String.format("Heading: %.2f, Roll: %.2f, Pitch: %.2f",
@@ -72,7 +78,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        boolean drop_pressed = gamepad2.left_bumper;
         
         // Set speeds of motors and interpret any data
-        drive.setSpeedXYR(x, y, r);
+//        drive.setSpeedXYR(x, y, r);
 //        arm.setLiftPower(0.25);
 
 //        if (up_pressed && !gamepad2.dpad_up) {
@@ -85,7 +91,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
 
         // Update live movements of all motors
 //        arm.clawRun(y2);
-        drive.update();
+//        drive.update();
 //        arm.update();
     }
 }

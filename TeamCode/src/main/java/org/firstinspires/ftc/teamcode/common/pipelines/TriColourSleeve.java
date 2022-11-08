@@ -21,6 +21,13 @@ public class TriColourSleeve extends OpenCvPipeline {
         MAGENTA = Parking Right
     */
 
+    public volatile ParkingPosition position = ParkingPosition.LEFT;
+    public enum ParkingPosition {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
     // TOPLEFT anchor point for the bounding box
     private static Point SLEEVE_TOPLEFT_ANCHOR_POINT = new Point(145, 168);
 
@@ -81,7 +88,7 @@ public class TriColourSleeve extends OpenCvPipeline {
         // Checks all percentages, will highlight bounding box in camera preview
         // based on what color is being detected
         if (maxPercent == yelPercent) {
-            CameraOp.parkingPosition = CameraOp.ParkingPosition.LEFT;
+            position = ParkingPosition.LEFT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -90,7 +97,7 @@ public class TriColourSleeve extends OpenCvPipeline {
                     2
             );
         } else if (maxPercent == cyaPercent) {
-            CameraOp.parkingPosition = CameraOp.ParkingPosition.CENTER;
+            position = ParkingPosition.LEFT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -99,7 +106,7 @@ public class TriColourSleeve extends OpenCvPipeline {
                     2
             );
         } else if (maxPercent == magPercent) {
-            CameraOp.parkingPosition = CameraOp.ParkingPosition.RIGHT;
+            position = ParkingPosition.RIGHT;
             Imgproc.rectangle(
                     input,
                     sleeve_pointA,
@@ -117,5 +124,9 @@ public class TriColourSleeve extends OpenCvPipeline {
         kernel.release();
 
         return input;
+    }
+
+    public ParkingPosition getPosition() {
+        return position;
     }
 }
