@@ -21,6 +21,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
     public IMUOp(BunyipsOpMode opMode, BNO055IMU imu) {
         super(opMode);
         this.imu = imu;
+        assert imu != null;
     }
 
     /**

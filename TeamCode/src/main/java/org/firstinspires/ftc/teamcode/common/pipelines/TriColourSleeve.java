@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.common.pipelines;
 
-import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
@@ -126,6 +125,9 @@ public class TriColourSleeve extends OpenCvPipeline {
         return input;
     }
 
+    /**
+     * Returns an enum of where the robot should park
+     */
     public ParkingPosition getPosition() {
         return position;
     }

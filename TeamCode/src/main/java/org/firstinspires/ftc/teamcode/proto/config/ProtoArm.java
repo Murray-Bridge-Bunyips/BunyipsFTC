@@ -19,17 +19,19 @@ public class ProtoArm extends BunyipsComponent {
     public CRServo claw;
     public DcMotorEx arm;
 
-//    public ProtoArm(BunyipsOpMode opMode, CRServo claw, DcMotorEx arm) {
-    public ProtoArm(BunyipsOpMode opMode, CRServo claw) {
+    public ProtoArm(BunyipsOpMode opMode, CRServo claw, DcMotorEx arm) {
         super(opMode);
         this.claw = claw;
-//        this.arm = arm;
+        this.arm = arm;
         claw.setDirection(CRServo.Direction.REVERSE);
-//        arm.setDirection(DcMotorEx.Direction.FORWARD);
-//        arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-//        arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-//        arm.setTargetPosition(0);
-//        liftPower = 0;
+        arm.setDirection(DcMotorEx.Direction.FORWARD);
+        arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setTargetPosition(0);
+        liftPower = 0;
+
+        // Ensure motors exist onboard
+        assert claw != null && arm != null;
     }
 
     /**

@@ -54,6 +54,7 @@ public abstract class RobotConfig {
             hardwareDevice = deviceMapping.get(name);
         } catch (Throwable e) {
             try {
+                getTelemetry().addLine("A fatal error occurred configuring the device: " + name);
                 ErrorUtil.handleCatchAllException(e, getTelemetry());
             } catch (InterruptedException e1) {
                 DbgLog.msg(e.getLocalizedMessage());

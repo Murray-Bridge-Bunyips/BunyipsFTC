@@ -78,7 +78,7 @@ public abstract class BunyipsOpMode extends LinearOpMode {
                 idle();
             }
 
-            //wait for user to hit stop
+            // Wait for user to hit stop
             while (opModeIsActive()) {
                 idle();
             }
@@ -108,7 +108,7 @@ public abstract class BunyipsOpMode extends LinearOpMode {
     }
 
     /**
-     * call to prevent leave the loop calling activeLoop()
+     * Call to prevent leave the loop calling activeLoop()
      */
     protected void setOperationsCompleted() {
         this.operationsCompleted = true;

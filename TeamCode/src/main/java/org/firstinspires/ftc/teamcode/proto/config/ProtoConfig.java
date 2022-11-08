@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
 public class ProtoConfig extends RobotConfig {
 
     // Add declarations here
-    public CameraName webcam;
+    public WebcamName webcam;
     public int monitorID;
     public DcMotorEx bl;
     public DcMotorEx br;
@@ -46,14 +46,15 @@ public class ProtoConfig extends RobotConfig {
                     "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         } catch (Exception e) {
             telemetry.addLine("Error configuring device 'Webcam'. Check connections.");
+            webcam = null;
         }
 
         bl = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
         br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
         fl = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
         fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
-//        arm = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
-//        claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
+        arm = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
+        claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
 
         // Motor direction configuration
         fl.setDirection(DcMotorEx.Direction.FORWARD);
@@ -62,12 +63,13 @@ public class ProtoConfig extends RobotConfig {
         br.setDirection(DcMotorEx.Direction.REVERSE);
 
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
-//        try {
-//            x = hardwareMap.get(Deadwheel.class, "X Encoder");
-//            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
-//        } catch (Exception e) {
-//            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
-//        }
+        try {
+            x = hardwareMap.get(Deadwheel.class, "X Encoder");
+            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
+        } catch (Exception e) {
+            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
+            x = y = null;
+        }
 
         // Control Hub IMU configuration
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
@@ -89,6 +91,7 @@ public class ProtoConfig extends RobotConfig {
             }
         } catch (Exception e) {
             telemetry.addLine("An internal error occurred configuring the IMU.");
+            imu = null;
         } finally {
             telemetry.addData("BunyipsOpMode Initialisation", "Complete.");
             telemetry.update();

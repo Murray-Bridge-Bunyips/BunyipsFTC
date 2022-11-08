@@ -25,12 +25,16 @@ public class ProtoDrive extends BunyipsComponent {
     public ProtoDrive(BunyipsOpMode opMode,
                       DcMotorEx bl, DcMotorEx br,
                       DcMotorEx fl, DcMotorEx fr) {
-        // Encoders are not attached and therefore should not be initialised
+        // Encoders are not controlled by ProtoDrive
         super(opMode);
         this.bl = bl;
         this.br = br;
         this.fl = fl;
         this.fr = fr;
+
+        // Make sure all the motors actually exist
+        // The OpMode will catch this error if a motor is for some reason not connected
+        assert bl != null && br != null && fl != null && fr != null;
     }
 
     public void setToFloat() {

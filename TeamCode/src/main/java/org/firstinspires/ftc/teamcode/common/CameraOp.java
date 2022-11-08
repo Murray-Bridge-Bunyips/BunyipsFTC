@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
@@ -40,10 +41,10 @@ public class CameraOp extends BunyipsComponent {
     private final List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
     private OpenGLMatrix lastLocation = null;
     private final VuforiaTrackables targets;
-    private final CameraName webcam;
+    private final WebcamName webcam;
     private final int monitorID;
 
-    // Use seeingTfod public String for saving a TFOD value for usage in other tasks
+    // Running variable which stores the last seen TFOD element (used for cross-task application)
     public volatile String seeingTfod = null;
 
     // Allow other classes to access the OpenCV configuration powered by Vuforia passthrough
@@ -80,10 +81,13 @@ public class CameraOp extends BunyipsComponent {
      * @param webcam hardwareMap.get(WebcamName.class, "NAME_OF_CAMERA")
      * @param monitorID hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
      */
-    public CameraOp(BunyipsOpMode opmode, CameraName webcam, int monitorID) {
+    public CameraOp(BunyipsOpMode opmode, WebcamName webcam, int monitorID) {
         super(opmode);
         this.webcam = webcam;
         this.monitorID = monitorID;
+
+        // Make sure we're actually initialising a camera
+        assert webcam != null;
 
         // OpenCV viewport configs
         int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(
@@ -106,7 +110,6 @@ public class CameraOp extends BunyipsComponent {
             public void onOpened()
             {
                 vuforiaPassthroughCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-                vuforiaPassthroughCam.setViewportRenderingPolicy(OpenCvCamera.ViewportRenderingPolicy.OPTIMIZE_VIEW);
                 vuforiaPassthroughCam.startStreaming(0,0, OpenCvCameraRotation.UPRIGHT);
             }
 
@@ -154,8 +157,8 @@ public class CameraOp extends BunyipsComponent {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(parameters.cameraName, cameraLocationOnRobot);
         }
 
-        // TensorFlow object detection initialisation
-        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(viewportContainerIds[0]);
+        // TensorFlow object detection initialisation, and we don't need a viewport for this
+        TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
         tfodParameters.minResultConfidence = 0.75f;
         tfodParameters.isModelTensorFlow2 = true;
         tfodParameters.inputSize = 300;
@@ -184,31 +187,21 @@ public class CameraOp extends BunyipsComponent {
         if (updatedRecognitions == null || tfod == null) { return null; }
 
         for (Recognition recognition : updatedRecognitions) {
-            double col = (recognition.getLeft() + recognition.getRight()) / 2;
-            double row = (recognition.getTop()  + recognition.getBottom()) / 2;
-            double width  = Math.abs(recognition.getRight() - recognition.getLeft());
-            double height = Math.abs(recognition.getTop()  - recognition.getBottom());
 
-            // Debugging telemetry
-            getOpMode().telemetry.addLine(String.format("Image: %1$s (%2$.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 ));
-            getOpMode().telemetry.addLine(String.format("- Position (Row/Col): %1$.0f / %2$.0f", row, col));
-            getOpMode().telemetry.addLine(String.format("- Size (Width/Height): %1$.0f / %2$.0f", width, height));
+            // Debugging telemetry, uncomment if required
+//            double col = (recognition.getLeft() + recognition.getRight()) / 2;
+//            double row = (recognition.getTop()  + recognition.getBottom()) / 2;
+//            double width  = Math.abs(recognition.getRight() - recognition.getLeft());
+//            double height = Math.abs(recognition.getTop()  - recognition.getBottom());
+//            getOpMode().telemetry.addLine(String.format("Image: %1$s (%2$.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 ));
+//            getOpMode().telemetry.addLine(String.format("- Position (Row/Col): %1$.0f / %2$.0f", row, col));
+//            getOpMode().telemetry.addLine(String.format("- Size (Width/Height): %1$.0f / %2$.0f", width, height));
 
             // If the computer is more than 85% sure that the signal is what it thinks it is, then return it.
             // This will prevent an instant locking of the signal, and allow the engine a bit of time to think.
             // Combined with a task, this can be time constrained in the event this method keeps returning null
             if (recognition.getConfidence() > 0.85) {
-                // Automatically save this value to the enum, as we know we need to park for POWERPLAY
-                switch (recognition.getLabel()) {
-                    case "1 Bolt":
-                        break;
-                    case "2 Bulb":
-                        break;
-                    case "3 Panel":
-                        break;
-                }
-
-                // Save the string of this result as well to the camera instance for non-parking operations
+                // Save the string of this result as well to the running variable camera instance
                 this.seeingTfod = recognition.getLabel();
 
                 // Return the result to the opmode to let it know we're done
