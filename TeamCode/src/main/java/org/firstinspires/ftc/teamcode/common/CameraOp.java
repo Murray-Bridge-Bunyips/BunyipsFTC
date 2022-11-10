@@ -29,23 +29,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Custom common class to operate alL Vuforia and TensorFlow operations through a single attached Webcam
- * @author Lucas Bubner - FTC 15215 Captain; Oct 2022 - Murray Bridge Bunyips
+ * Custom common class to operate all Vuforia and TensorFlow operations through a single attached Webcam
+ * Allows swapping to an EasyOpenCV mode as well, and supports hotswapping within the same instance
+ * @author Lucas Bubner - FTC 15215 Captain; Oct-Nov 2022 - Murray Bridge Bunyips
  */
 
 public class CameraOp extends BunyipsComponent {
 
-    private final VuforiaLocalizer vuforia;
-    private final TFObjectDetector tfod;
+    private VuforiaLocalizer vuforia;
+    private TFObjectDetector tfod;
     private List<Recognition> updatedRecognitions;
     private final List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
     private OpenGLMatrix lastLocation = null;
-    private final VuforiaTrackables targets;
+    private VuforiaTrackables targets;
     private final WebcamName webcam;
     private final int monitorID;
+    protected OpenCvCamera OCVcam;
 
     // Running variable which stores the last seen TFOD element (used for cross-task application)
     public volatile String seeingTfod = null;
+
+    // Enum to indicate whether the camera should run in OpenCV mode or TFOD + Vuforia mode
+    private CamMode mode = CamMode.STANDARD;
+    public enum CamMode {
+        OPENCV,
+        STANDARD
+    }
 
     public boolean targetVisible = false;
     public boolean vuforiaEnabled = false;
@@ -73,19 +82,31 @@ public class CameraOp extends BunyipsComponent {
     private static final float oneAndHalfTile = 36 * mmPerInch;
 
     /**
-     * CameraOperation custom common class for USB-connected webcams (TFOD Objects + Vuforia Field Pos)
+     * CameraOperation custom common class for USB-connected webcams (TFOD Objects + Vuforia Field Pos or OpenCV mode)
      * @param opmode Pass abstract opmode class for telemetry
      * @param webcam hardwareMap.get(WebcamName.class, "NAME_OF_CAMERA")
      * @param monitorID hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
      */
-    public CameraOp(BunyipsOpMode opmode, WebcamName webcam, int monitorID) {
+    public CameraOp(BunyipsOpMode opmode, WebcamName webcam, int monitorID, CamMode mode) {
         super(opmode);
         this.webcam = webcam;
         this.monitorID = monitorID;
+        this.mode = mode;
 
         // Make sure we're actually initialising a camera
         assert webcam != null;
 
+        // Initialise the camera based on the mode selected
+        switch (mode) {
+            case STANDARD:
+                stdinit();
+                break;
+            case OPENCV:
+                OpenCVinit();
+        }
+    }
+
+    private void stdinit() {
         // Vuforia localizer engine initialisation, Camera Stream will be Vuforia's
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(monitorID);
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -143,6 +164,60 @@ public class CameraOp extends BunyipsComponent {
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
     }
 
+    private void OpenCVinit() {
+        // Instead of using Vuforia and OpenCV on the same camera, we instead init the camera
+        // using OpenCV's own camera instance. It is highly unlikely one camera would need to use
+        // both Vuforia/TF and OpenCV at the same time, as this would be very taxing on components.
+        // Besides, a hardware camera should not have multiple instances of a camera object running
+        // on it at the same time, so this provides a way to pick between the two.
+        OCVcam = OpenCvCameraFactory.getInstance().createWebcam(webcam, monitorID);
+        OCVcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                OCVcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+                getOpMode().telemetry.addLine("An error occurred in initalising OpenCV. Standard mode will be activated. Error code: " + errorCode);
+                OCVcam = null;
+                mode = CamMode.STANDARD;
+                stdinit();
+            }
+        });
+    }
+
+    /**
+     * Call this function to swap the modes of the camera without having to re-instantiate the class
+     */
+    public void swapModes() {
+        switch (mode) {
+            case STANDARD:
+                stopVuforia();
+                stopTFOD();
+                tfod = null;
+                vuforia = null;
+                OpenCVinit();
+                break;
+            case OPENCV:
+                OCVcam.stopStreaming();
+                OCVcam.closeCameraDeviceAsync(() -> {});
+                OCVcam = null;
+                stdinit();
+        }
+    }
+
+    /**
+     * Change the OpenCV pipeline on the fly by calling this method
+     */
+    public void setPipeline(OpenCvPipeline pipeline) {
+        if (OCVcam != null)
+        OCVcam.setPipeline(pipeline);
+    }
+
     /**
      * TensorFlow detection return function to determine a label. TFOD must be activated.
      * @return Returns the String of the detected TFOD label if the confidence is above 75%, otherwise returns null
@@ -150,7 +225,7 @@ public class CameraOp extends BunyipsComponent {
     @SuppressLint("DefaultLocale")
     public String determineTFOD() {
         // TFOD updated recognitions will return null if the data is the same as the last call
-        if (updatedRecognitions == null || tfod == null) { return null; }
+        if (updatedRecognitions == null || tfod == null) return null;
 
         for (Recognition recognition : updatedRecognitions) {
 
@@ -198,7 +273,7 @@ public class CameraOp extends BunyipsComponent {
      */
     @SuppressLint("DefaultLocale")
     public OpenGLMatrix getTargetRawMatrix() {
-        if (targetVisible) {
+        if (targetVisible && vuforia != null) {
 
             /*
              * This method shouldn't be called unless a raw matrix is required or for debugging.
@@ -245,7 +320,7 @@ public class CameraOp extends BunyipsComponent {
      * Get positional X coordinate from Vuforia
      * @return mm of interpreted position X data
      */
-    public double getX() {
+    public double vuGetX() {
         VectorF translation = this.getTargetTranslation();
         return translation.get(0);
     }
@@ -254,7 +329,7 @@ public class CameraOp extends BunyipsComponent {
      * Get positional Y coordinate from Vuforia
      * @return mm of interpreted position Y data
      */
-    public double getY() {
+    public double vuGetY() {
         VectorF translation = this.getTargetTranslation();
         return translation.get(1);
     }
@@ -263,7 +338,7 @@ public class CameraOp extends BunyipsComponent {
      * Get positional Z coordiate from Vuforia
      * @return mm of interpreted position Z data
      */
-    public double getZ() {
+    public double vuGetZ() {
         VectorF translation = this.getTargetTranslation();
         return translation.get(2);
     }
@@ -272,7 +347,7 @@ public class CameraOp extends BunyipsComponent {
      * Get X (roll) orientation from Vuforia
      * @return X orientation in degrees
      */
-    public double getRoll() {
+    public double vuGetRoll() {
         Orientation orientation = this.getOrientationTranslation();
         return orientation.firstAngle;
     }
@@ -281,7 +356,7 @@ public class CameraOp extends BunyipsComponent {
      * Get Y (pitch) orientation from Vuforia
      * @return Y orientation in degrees
      */
-    public double getPitch() {
+    public double vuGetPitch() {
         Orientation orientation = this.getOrientationTranslation();
         return orientation.secondAngle;
     }
@@ -290,7 +365,7 @@ public class CameraOp extends BunyipsComponent {
      * Get Z (heading) orientation from Vuforia
      * @return Z orientation in degrees
      */
-    public double getHeading() {
+    public double vuGetHeading() {
         Orientation orientation = this.getOrientationTranslation();
         return orientation.thirdAngle;
     }

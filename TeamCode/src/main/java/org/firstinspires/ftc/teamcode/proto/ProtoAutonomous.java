@@ -23,7 +23,7 @@ public class ProtoAutonomous extends BunyipsOpMode {
     protected void onInit() {
         config = ProtoConfig.newConfig(hardwareMap, telemetry);
         try {
-            cam = new CameraOp(this, config.webcam, config.monitorID);
+            cam = new CameraOp(this, config.webcam, config.monitorID, CameraOp.CamMode.STANDARD);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Camera Operation.");
         }
