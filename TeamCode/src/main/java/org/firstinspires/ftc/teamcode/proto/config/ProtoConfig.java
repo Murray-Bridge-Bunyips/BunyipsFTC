@@ -18,13 +18,13 @@ public class ProtoConfig extends RobotConfig {
     // Add declarations here
     public WebcamName webcam;
     public int monitorID;
-    public DcMotorEx bl;
-    public DcMotorEx br;
-    public DcMotorEx fl;
-    public DcMotorEx fr;
-    public Deadwheel x, y;
-    public CRServo claw;
-    public DcMotorEx arm;
+//    public DcMotorEx bl;
+//    public DcMotorEx br;
+//    public DcMotorEx fl;
+//    public DcMotorEx fr;
+//    public Deadwheel x, y;
+//    public CRServo claw;
+//    public DcMotorEx arm;
     public BNO055IMU imu;
 
     public static ProtoConfig newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
@@ -49,27 +49,27 @@ public class ProtoConfig extends RobotConfig {
             webcam = null;
         }
 
-        bl = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
-        br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
-        fl = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
-        fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
-        arm = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
-        claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
+//        bl = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
+//        br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
+//        fl = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
+//        fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
+//        arm = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
+//        claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
 
         // Motor direction configuration
-        fl.setDirection(DcMotorEx.Direction.FORWARD);
-        fr.setDirection(DcMotorEx.Direction.FORWARD);
-        bl.setDirection(DcMotorEx.Direction.REVERSE);
-        br.setDirection(DcMotorEx.Direction.REVERSE);
+//        fl.setDirection(DcMotorEx.Direction.FORWARD);
+//        fr.setDirection(DcMotorEx.Direction.FORWARD);
+//        bl.setDirection(DcMotorEx.Direction.REVERSE);
+//        br.setDirection(DcMotorEx.Direction.REVERSE);
 
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
-        try {
-            x = hardwareMap.get(Deadwheel.class, "X Encoder");
-            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
-        } catch (Exception e) {
-            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
-            x = y = null;
-        }
+//        try {
+//            x = hardwareMap.get(Deadwheel.class, "X Encoder");
+//            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
+//        } catch (Exception e) {
+//            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
+//            x = y = null;
+//        }
 
         // Control Hub IMU configuration
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

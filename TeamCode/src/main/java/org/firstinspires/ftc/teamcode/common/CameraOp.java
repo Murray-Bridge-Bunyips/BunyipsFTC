@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Custom common class to operate Vuforia, OpenCV, and TensorFlow through a single attached Webcam
+ * Custom common class to operate alL Vuforia and TensorFlow operations through a single attached Webcam
  * @author Lucas Bubner - FTC 15215 Captain; Oct 2022 - Murray Bridge Bunyips
  */
 
@@ -46,9 +46,6 @@ public class CameraOp extends BunyipsComponent {
 
     // Running variable which stores the last seen TFOD element (used for cross-task application)
     public volatile String seeingTfod = null;
-
-    // Allow other classes to access the OpenCV configuration powered by Vuforia passthrough
-    public final OpenCvCamera vuforiaPassthroughCam;
 
     public boolean targetVisible = false;
     public boolean vuforiaEnabled = false;
@@ -76,7 +73,7 @@ public class CameraOp extends BunyipsComponent {
     private static final float oneAndHalfTile = 36 * mmPerInch;
 
     /**
-     * CameraOperation custom common class for USB-connected webcams (TFOD Objects + Vuforia Field Pos + OpenCV async features)
+     * CameraOperation custom common class for USB-connected webcams (TFOD Objects + Vuforia Field Pos)
      * @param opmode Pass abstract opmode class for telemetry
      * @param webcam hardwareMap.get(WebcamName.class, "NAME_OF_CAMERA")
      * @param monitorID hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -89,36 +86,12 @@ public class CameraOp extends BunyipsComponent {
         // Make sure we're actually initialising a camera
         assert webcam != null;
 
-        // OpenCV viewport configs
-        int[] viewportContainerIds = OpenCvCameraFactory.getInstance().splitLayoutForMultipleViewports(
-                monitorID, 2, OpenCvCameraFactory.ViewportSplitMethod.VERTICALLY);
-
-        // Vuforia localizer engine initialisation
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(viewportContainerIds[0]);
+        // Vuforia localizer engine initialisation, Camera Stream will be Vuforia's
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(monitorID);
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraName = webcam;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
-
-
-        // Initialise OpenCV, and as this will be running on an async thread,
-        // this should not impact performance of the OpMode
-        vuforiaPassthroughCam = OpenCvCameraFactory.getInstance().createVuforiaPassthrough(vuforia, parameters, viewportContainerIds[1]);
-        vuforiaPassthroughCam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
-            @Override
-            public void onOpened()
-            {
-                vuforiaPassthroughCam.setViewportRenderer(OpenCvCamera.ViewportRenderer.GPU_ACCELERATED);
-                vuforiaPassthroughCam.startStreaming(0,0, OpenCvCameraRotation.UPRIGHT);
-            }
-
-            @Override
-            public void onError(int errorCode)
-            {
-                getOpMode().telemetry.addLine("Unable to initialise OpenCV functions. Error code: " + errorCode);
-            }
-        });
 
         // Init Vuforia targets using 2022-2023 POWERPLAY Season Trackables
         targets = this.vuforia.loadTrackablesFromAsset("PowerPlay");
@@ -157,7 +130,7 @@ public class CameraOp extends BunyipsComponent {
             ((VuforiaTrackableDefaultListener) trackable.getListener()).setCameraLocationOnRobot(parameters.cameraName, cameraLocationOnRobot);
         }
 
-        // TensorFlow object detection initialisation, and we don't need a viewport for this
+        // TensorFlow object detection initialisation
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters();
         tfodParameters.minResultConfidence = 0.75f;
         tfodParameters.isModelTensorFlow2 = true;
@@ -168,13 +141,6 @@ public class CameraOp extends BunyipsComponent {
         // Use loadModelFromFile() if you have downloaded a custom team model to the Robot Controller's FLASH.
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABELS);
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
-    }
-
-    /**
-     * Set the OpenCV pipeline of the camera to provide information based on arguments provided
-     */
-    public void setOpenCVPipeline(OpenCvPipeline pipeline) {
-        vuforiaPassthroughCam.setPipeline(pipeline);
     }
 
     /**
@@ -189,13 +155,13 @@ public class CameraOp extends BunyipsComponent {
         for (Recognition recognition : updatedRecognitions) {
 
             // Debugging telemetry, uncomment if required
-//            double col = (recognition.getLeft() + recognition.getRight()) / 2;
-//            double row = (recognition.getTop()  + recognition.getBottom()) / 2;
-//            double width  = Math.abs(recognition.getRight() - recognition.getLeft());
-//            double height = Math.abs(recognition.getTop()  - recognition.getBottom());
-//            getOpMode().telemetry.addLine(String.format("Image: %1$s (%2$.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 ));
-//            getOpMode().telemetry.addLine(String.format("- Position (Row/Col): %1$.0f / %2$.0f", row, col));
-//            getOpMode().telemetry.addLine(String.format("- Size (Width/Height): %1$.0f / %2$.0f", width, height));
+            double col = (recognition.getLeft() + recognition.getRight()) / 2;
+            double row = (recognition.getTop()  + recognition.getBottom()) / 2;
+            double width  = Math.abs(recognition.getRight() - recognition.getLeft());
+            double height = Math.abs(recognition.getTop()  - recognition.getBottom());
+            getOpMode().telemetry.addLine(String.format("Image: %1$s (%2$.0f %% Conf.)", recognition.getLabel(), recognition.getConfidence() * 100 ));
+            getOpMode().telemetry.addLine(String.format("- Position (Row/Col): %1$.0f / %2$.0f", row, col));
+            getOpMode().telemetry.addLine(String.format("- Size (Width/Height): %1$.0f / %2$.0f", width, height));
 
             // If the computer is more than 85% sure that the signal is what it thinks it is, then return it.
             // This will prevent an instant locking of the signal, and allow the engine a bit of time to think.
@@ -241,12 +207,12 @@ public class CameraOp extends BunyipsComponent {
              * uncomment the lines below to get all interpreted data readings for debugging.
              */
 
-//            VectorF translation = lastLocation.getTranslation();
-//            getOpMode().telemetry.addLine(String.format("Pos (mm): {X, Y, Z} = %.1f, %.1f, %.1f",
-//                    translation.get(0), translation.get(1), translation.get(2)));
+            VectorF translation = lastLocation.getTranslation();
+            getOpMode().telemetry.addLine(String.format("Pos (mm): {X, Y, Z} = %.1f, %.1f, %.1f",
+                    translation.get(0), translation.get(1), translation.get(2)));
 
-//            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-//            getOpMode().telemetry.addLine(String.format("Rot (deg): {Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle));
+            Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+            getOpMode().telemetry.addLine(String.format("Rot (deg): {Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle));
 
             // Return the raw matrix detected if it is visible to the camera, otherwise return null
             return lastLocation;

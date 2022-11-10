@@ -27,11 +27,11 @@ public class ProtoAutonomous extends BunyipsOpMode {
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Camera Operation.");
         }
-        try {
-            drive = new ProtoDrive(this, config.bl, config.br, config.fl, config.fr);
-        } catch (Exception e) {
-            telemetry.addLine("Failed to initialise Drive System.");
-        }
+//        try {
+//            drive = new ProtoDrive(this, config.bl, config.br, config.fl, config.fr);
+//        } catch (Exception e) {
+//            telemetry.addLine("Failed to initialise Drive System.");
+//        }
 
 
         // Add tasks here

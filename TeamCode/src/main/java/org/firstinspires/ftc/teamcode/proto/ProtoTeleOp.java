@@ -19,9 +19,8 @@ public class ProtoTeleOp extends BunyipsOpMode {
     private ProtoConfig config;
 //    private ProtoDrive drive;
     private CameraOp cam;
-//    private IMUOp imu;
+    private IMUOp imu;
 //    private ProtoArm arm;
-    TriColourSleeve triColourSleeve;
 
     @Override
     protected void onInit() {
@@ -49,10 +48,8 @@ public class ProtoTeleOp extends BunyipsOpMode {
 
         // Using TFOD and Vuforia for debugging purposes, will likely
         // not use this in actual TeleOp due to resource consumption
-//        cam.startVuforia();
-//        cam.startTFOD();
-        triColourSleeve = new TriColourSleeve();
-        cam.setOpenCVPipeline(triColourSleeve);
+        cam.startVuforia();
+        cam.startTFOD();
     }
 
     @Override
@@ -64,10 +61,9 @@ public class ProtoTeleOp extends BunyipsOpMode {
 //        double y2 = gamepad2.left_stick_y;
         
         // Using for debug telemetry during testing phases
-//        cam.tick();
-//        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
-//        String tfodDetection = cam.determineTFOD();
-        telemetry.addLine(triColourSleeve.getPosition().toString());
+        cam.tick();
+        OpenGLMatrix VuforiaMatrix = cam.getTargetRawMatrix();
+        String tfodDetection = cam.determineTFOD();
 
 //          imu.tick();
 //          telemetry.addLine(String.format("Heading: %.2f, Roll: %.2f, Pitch: %.2f",
