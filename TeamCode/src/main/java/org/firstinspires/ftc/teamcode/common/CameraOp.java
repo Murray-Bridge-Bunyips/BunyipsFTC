@@ -56,6 +56,14 @@ public class CameraOp extends BunyipsComponent {
         STANDARD
     }
 
+    /**
+     * Get the current mode that the camera is currently initialised in
+     * @return CamMode enum value currently selected by this instance
+     */
+    public CamMode getMode() {
+        return mode;
+    }
+
     public boolean targetVisible = false;
     public boolean vuforiaEnabled = false;
     public boolean tfodEnabled = false;
@@ -215,7 +223,7 @@ public class CameraOp extends BunyipsComponent {
      */
     public void setPipeline(OpenCvPipeline pipeline) {
         if (OCVcam != null)
-        OCVcam.setPipeline(pipeline);
+            OCVcam.setPipeline(pipeline);
     }
 
     /**
