@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.proto.config;
+package org.firstinspires.ftc.teamcode.proto.tasks;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoDrive;

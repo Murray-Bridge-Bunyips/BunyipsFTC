@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaConfiguration;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
-import org.firstinspires.ftc.teamcode.lisa.config.LisaPrecisionDriveTask;
+import org.firstinspires.ftc.teamcode.lisa.tasks.LisaPrecisionDriveTask;
 
 import java.util.ArrayDeque;
 

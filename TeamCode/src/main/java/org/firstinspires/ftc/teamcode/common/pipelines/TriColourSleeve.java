@@ -20,8 +20,8 @@ public class TriColourSleeve extends OpenCvPipeline {
         MAGENTA = Parking Right
      */
 
-    // Running variable storing the parking position
-    protected volatile ParkingPosition position = ParkingPosition.LEFT;
+    // Running variable storing the parking position, held at null to begin with
+    protected volatile ParkingPosition position = null;
     public enum ParkingPosition {
         LEFT,
         CENTER,

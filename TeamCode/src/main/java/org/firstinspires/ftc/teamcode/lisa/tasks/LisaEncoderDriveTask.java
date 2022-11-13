@@ -1,8 +1,9 @@
-package org.firstinspires.ftc.teamcode.lisa.config;
+package org.firstinspires.ftc.teamcode.lisa.tasks;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
 
 public class LisaEncoderDriveTask extends BaseTask implements Task {
 

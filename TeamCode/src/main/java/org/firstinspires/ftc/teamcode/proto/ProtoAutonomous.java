@@ -41,8 +41,10 @@ public class ProtoAutonomous extends BunyipsOpMode {
         }
 
 
-        // 1. Detect signal position (with OpenCV) and save it to a variable saved to the static class
-        tasks.add(new TFODDetectionTask(this, 5, cam));
+        // 1. Detect signal position (with OpenCV) and save it to a variable in OpMode GlobalStorage
+        // Run this as soon as we hit init and armed the tasks, as we are permitted to do so.
+        Task initTask = new TFODDetectionTask(this, 5, cam);
+        initTask.run();
     }
 
     @Override

@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.bertie.config.BertieArm;
 import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipConfiguration;
 import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipDrive;
-import org.firstinspires.ftc.teamcode.bertie.config.BertieDriveTask;
+import org.firstinspires.ftc.teamcode.bertie.tasks.BertieDriveTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.ButtonControl;
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap;

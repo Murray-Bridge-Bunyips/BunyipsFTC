@@ -1,17 +1,16 @@
-package org.firstinspires.ftc.teamcode.bertie.config;
+package org.firstinspires.ftc.teamcode.proto.tasks;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.proto.config.ProtoDrive;
 
-public class BertieDriveTask extends BaseTask implements Task {
+public class ProtoBaseDriveTask extends BaseTask implements Task {
 
-    private final BertieBunyipDrive drive;
-    private final double x;
-    private final double y;
-    private final double r;
+    private final ProtoDrive drive;
+    private final double x, y, r;
 
-    public BertieDriveTask(BunyipsOpMode opMode, double time, BertieBunyipDrive drive, double x, double y, double r) {
+    public ProtoBaseDriveTask(BunyipsOpMode opMode, double time, ProtoDrive drive, double x, double y, double r) {
         super(opMode, time);
         this.drive = drive;
         this.x = x;
@@ -26,14 +25,13 @@ public class BertieDriveTask extends BaseTask implements Task {
 
     @Override
     public void run() {
-        drive.setSpeedXYR(x,y,r);
+        drive.setSpeedXYR(x, y, r);
         drive.update();
+
         if (isFinished()) {
-            drive.setSpeedXYR(0,0,0);
-            drive.update();
+            drive.deinit();
             return;
         }
-
     }
 
 }

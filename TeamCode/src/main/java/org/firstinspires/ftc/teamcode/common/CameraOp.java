@@ -50,7 +50,7 @@ public class CameraOp extends BunyipsComponent {
     public volatile String seeingTfod = null;
 
     // Enum to indicate whether the camera should run in OpenCV mode or TFOD + Vuforia mode
-    private CamMode mode = CamMode.STANDARD;
+    private CamMode mode;
     public enum CamMode {
         OPENCV,
         STANDARD

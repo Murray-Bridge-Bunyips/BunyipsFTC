@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lisa.config;
+package org.firstinspires.ftc.teamcode.lisa.tasks;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 
@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
 
 
 // TODO: Check if negative values are needed for CW rotation, and change tolerance code
