@@ -17,22 +17,28 @@ public class ProtoArm extends BunyipsComponent {
     private int liftIndex = 0;
     private double liftPower;
     public CRServo claw;
-    public DcMotorEx arm;
+    public DcMotorEx arm1;
+    public DcMotorEx arm2;
 
-    public ProtoArm(BunyipsOpMode opMode, CRServo claw, DcMotorEx arm) {
+    public ProtoArm(BunyipsOpMode opMode, CRServo claw, DcMotorEx arm1, DcMotorEx arm2) {
         super(opMode);
         this.claw = claw;
-        this.arm = arm;
+        this.arm1 = arm1;
+        this.arm2 = arm2;
         liftPower = 0;
 
         // Ensure motors exist onboard
-        assert claw != null && arm != null;
+        assert claw != null && arm1 != null && arm2 != null;
 
         claw.setDirection(CRServo.Direction.REVERSE);
-        arm.setDirection(DcMotorEx.Direction.FORWARD);
-        arm.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-        arm.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
-        arm.setTargetPosition(0);
+        arm1.setDirection(DcMotorEx.Direction.FORWARD);
+        arm2.setDirection(DcMotorEx.Direction.FORWARD);
+        arm1.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        arm2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
+        arm1.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        arm2.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);
+        arm1.setTargetPosition(0);
+        arm2.setTargetPosition(0);
     }
 
     /**
@@ -52,7 +58,8 @@ public class ProtoArm extends BunyipsComponent {
         if (liftIndex > LIFT_POSITIONS.length - 1) {
             liftIndex = LIFT_POSITIONS.length - 1;
         }
-        arm.setTargetPosition(LIFT_POSITIONS[liftIndex]);
+        arm1.setTargetPosition(LIFT_POSITIONS[liftIndex]);
+        arm2.setTargetPosition(LIFT_POSITIONS[liftIndex]);
     }
 
 
@@ -64,7 +71,8 @@ public class ProtoArm extends BunyipsComponent {
         if (liftIndex < 0) {
             liftIndex = 0;
         }
-        arm.setTargetPosition(LIFT_POSITIONS[liftIndex]);
+        arm1.setTargetPosition(LIFT_POSITIONS[liftIndex]);
+        arm2.setTargetPosition(LIFT_POSITIONS[liftIndex]);
     }
 
 
@@ -73,7 +81,8 @@ public class ProtoArm extends BunyipsComponent {
      */
     public void liftReset() {
         liftIndex = 0;
-        arm.setTargetPosition(LIFT_POSITIONS[0]);
+        arm1.setTargetPosition(LIFT_POSITIONS[0]);
+        arm2.setTargetPosition(LIFT_POSITIONS[0]);
     }
 
 
@@ -91,9 +100,12 @@ public class ProtoArm extends BunyipsComponent {
      */
     @SuppressLint("DefaultLocale")
     public void update() {
-        getOpMode().telemetry.addLine(String.format("Arm Position: %d", arm.getCurrentPosition()));
-        arm.setPower(liftPower);
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        getOpMode().telemetry.addLine(String.format("Arm1 Position: %d", arm1.getCurrentPosition()));
+        getOpMode().telemetry.addLine(String.format("Arm2 Position: %d", arm2.getCurrentPosition()));
+        arm1.setPower(liftPower);
+        arm2.setPower(liftPower);
+        arm1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm2.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
 }

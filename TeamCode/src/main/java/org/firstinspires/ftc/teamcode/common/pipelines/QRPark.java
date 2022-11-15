@@ -4,6 +4,9 @@ import org.opencv.core.Mat;
 import org.opencv.objdetect.QRCodeDetector;
 import org.openftc.easyopencv.OpenCvPipeline;
 
+// This pipeline might be unreliable, as tests done on an sleeve prove not accurate.
+// It is for this reason that this code is not in use, but still exists for other applications
+// Perhaps one day or in another application this will be useful.
 public class QRPark extends OpenCvPipeline {
 
     private volatile ParkingPosition parkingPosition = null;

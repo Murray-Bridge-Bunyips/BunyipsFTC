@@ -184,7 +184,7 @@ public class CameraOp extends BunyipsComponent {
             @Override
             public void onOpened()
             {
-                OCVcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
+                OCVcam.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override

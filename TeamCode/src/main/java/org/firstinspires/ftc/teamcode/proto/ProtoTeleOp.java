@@ -29,7 +29,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
             telemetry.addLine("Failed to initialise Drive System.");
         }
         try {
-            arm = new ProtoArm(this, config.claw, config.arm);
+            arm = new ProtoArm(this, config.claw, config.arm1, config.arm2);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Arm System.");
         }
