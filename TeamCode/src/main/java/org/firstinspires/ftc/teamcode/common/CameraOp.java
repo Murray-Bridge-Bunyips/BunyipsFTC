@@ -9,7 +9,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import android.annotation.SuppressLint;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -39,7 +38,7 @@ public class CameraOp extends BunyipsComponent {
     private VuforiaLocalizer vuforia;
     private TFObjectDetector tfod;
     private List<Recognition> updatedRecognitions;
-    private final List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
+    private final List<VuforiaTrackable> allTrackables = new ArrayList<>();
     private OpenGLMatrix lastLocation = null;
     private VuforiaTrackables targets;
     private final WebcamName webcam;
@@ -173,11 +172,15 @@ public class CameraOp extends BunyipsComponent {
     }
 
     private void OpenCVinit() {
-        // Instead of using Vuforia and OpenCV on the same camera, we instead init the camera
-        // using OpenCV's own camera instance. It is highly unlikely one camera would need to use
-        // both Vuforia/TF and OpenCV at the same time, as this would be very taxing on components.
-        // Besides, a hardware camera should not have multiple instances of a camera object running
-        // on it at the same time, so this provides a way to pick between the two.
+
+        /*
+         * Instead of using Vuforia and OpenCV on the same camera, we instead init the camera
+         * using OpenCV's own camera instance. It is highly unlikely one camera would need to use
+         * both Vuforia/TF and OpenCV at the same time, as this would be very taxing on components.
+         * Besides, a hardware camera should not have multiple instances of a camera object running
+         * on it at the same time, so this provides a way to pick between the two.
+         */
+
         OCVcam = OpenCvCameraFactory.getInstance().createWebcam(webcam, monitorID);
         OCVcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {
@@ -428,8 +431,8 @@ public class CameraOp extends BunyipsComponent {
     }
 
     /**
-     * Update and tick TFOD detections and/or Vuforia field positions. OpenCV is controlled automatically.
-     * Ensure to call this method in an active loop
+     * Call this method in STANDARD mode to update TFOD and Vuforia recognitions.
+     * This is not needed in OPENCV mode.
      */
     public void tick() {
         // Update the TensorFlow and Vuforia recognitions by the webcam if they're enabled

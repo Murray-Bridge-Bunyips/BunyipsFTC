@@ -2,8 +2,9 @@ package org.firstinspires.ftc.teamcode.common;
 
 public abstract class Deadwheel implements Encoder {
 
-    double position = 0.0;
+    volatile double position = 0.0;
 
+    // These inputs are for the <> encoders with small omni wheels.
     private static final int WHEEL_DIAMETER_MM = 0;
     private static final int TICKS_PER_REVOLUTION = 0;
 
@@ -19,7 +20,7 @@ public abstract class Deadwheel implements Encoder {
      * Disable encoder and keep last saved position
      */
     @Override
-    public void disableTracking() {
+    public synchronized void disableTracking() {
         position += this.getCurrentPosition();
         this.setMode(RunMode.STOP_AND_RESET_ENCODER);
     }
@@ -56,8 +57,8 @@ public abstract class Deadwheel implements Encoder {
     /**
      * Return whether the encoders have reached a goal
      *
-     * @param goal
-     * @return
+     * @param goal Goal in mm
+     * @return boolean expression whether the encoders read a goal has been completed
      */
     @Override
     public boolean targetReached(double goal) {

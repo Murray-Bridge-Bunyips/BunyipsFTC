@@ -4,11 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
-import org.firstinspires.ftc.teamcode.common.tasks.TFODDetectionTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoArm;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
 import org.firstinspires.ftc.teamcode.proto.config.ProtoDrive;
+import org.firstinspires.ftc.teamcode.common.tasks.GetQRSleeveTask;
 
 import java.util.ArrayDeque;
 
@@ -25,7 +25,7 @@ public class ProtoAutonomous extends BunyipsOpMode {
     protected void onInit() {
         config = ProtoConfig.newConfig(hardwareMap, telemetry);
         try {
-            cam = new CameraOp(this, config.webcam, config.monitorID, CameraOp.CamMode.STANDARD);
+            cam = new CameraOp(this, config.webcam, config.monitorID, CameraOp.CamMode.OPENCV);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Camera Operation.");
         }
@@ -35,7 +35,7 @@ public class ProtoAutonomous extends BunyipsOpMode {
             telemetry.addLine("Failed to initialise Drive System.");
         }
         try {
-            arm = new ProtoArm(this, config.claw1, config.claw2);
+            arm = new ProtoArm(this, config.claw1, config.claw2, config.arm1, config.arm2);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Arm System.");
         }
@@ -43,7 +43,7 @@ public class ProtoAutonomous extends BunyipsOpMode {
 
         // 1. Detect signal position (with OpenCV) and save it to a variable in OpMode GlobalStorage
         // Run this as soon as we hit init and armed the tasks, as we are permitted to do so.
-        Task initTask = new TFODDetectionTask(this, 5, cam);
+        Task initTask = new GetQRSleeveTask(this, 5, cam);
         initTask.run();
     }
 

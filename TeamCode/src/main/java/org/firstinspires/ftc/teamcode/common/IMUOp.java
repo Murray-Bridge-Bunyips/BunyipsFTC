@@ -100,12 +100,16 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
      * @return queried speed based on parameters given, returns the unaltered speed if PrecisionDrive is not online
      */
      public double getPrecisionSpeed(double original_speed, int tolerance, boolean isLeft) {
-        if (capture == null) { return original_speed; }
+        if (capture == null) return original_speed;
 
         double current = this.getHeading();
-        if (isLeft && original_speed > 0 ? current > capture - tolerance : current < capture + tolerance) {
+
+        if (isLeft && original_speed > 0 ?
+                current > capture - tolerance :
+                current < capture + tolerance) {
             return Math.abs(original_speed) - 0.1;
         }
+
         return Math.abs(original_speed);
      } 
  }
