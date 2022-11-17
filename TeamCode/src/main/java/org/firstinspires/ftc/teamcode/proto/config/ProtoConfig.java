@@ -23,7 +23,8 @@ public class ProtoConfig extends RobotConfig {
     public DcMotorEx fl;
     public DcMotorEx fr;
     public Deadwheel x, y;
-    public CRServo claw;
+    public CRServo claw1;
+    public CRServo claw2;
     public DcMotorEx arm1;
     public DcMotorEx arm2;
     public BNO055IMU imu;
@@ -50,19 +51,20 @@ public class ProtoConfig extends RobotConfig {
             webcam = null;
         }
 
-//        bl = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
-//        br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
-//        fl = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
-//        fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
+        bl = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
+        br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
+        fl = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
+        fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
 //        arm1 = (DcMotorEx) getHardwareOn("Arm Motor 1", hardwareMap.dcMotor);
 //        arm2 = (DcMotorEx) getHardwareOn("Arm Motor 2", hardwareMap.dcMotor);
-//        claw = (CRServo) getHardwareOn("Arm Servo", hardwareMap.crservo);
+        claw1 = (CRServo) getHardwareOn("Claw Servo 1", hardwareMap.crservo);
+        claw2 = (CRServo) getHardwareOn("Claw Servo 2", hardwareMap.crservo);
 
         // Motor direction configuration
-//        fl.setDirection(DcMotorEx.Direction.FORWARD);
-//        fr.setDirection(DcMotorEx.Direction.FORWARD);
-//        bl.setDirection(DcMotorEx.Direction.REVERSE);
-//        br.setDirection(DcMotorEx.Direction.REVERSE);
+        fl.setDirection(DcMotorEx.Direction.REVERSE);
+        fr.setDirection(DcMotorEx.Direction.FORWARD);
+        bl.setDirection(DcMotorEx.Direction.FORWARD);
+        br.setDirection(DcMotorEx.Direction.REVERSE);
 
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
 //        try {

@@ -96,7 +96,7 @@ public class ProtoDrive extends BunyipsComponent {
         // This is to calibrate the controller movement to the robot
         this.speedX = clipMotorPower(-speedY);
         this.speedY = clipMotorPower(speedX);
-        this.speedR = clipMotorPower(speedR);
+        this.speedR = clipMotorPower(-speedR);
     }
 
     private double clipMotorPower(double p) {

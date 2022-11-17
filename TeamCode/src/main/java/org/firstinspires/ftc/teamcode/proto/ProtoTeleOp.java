@@ -29,7 +29,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
             telemetry.addLine("Failed to initialise Drive System.");
         }
         try {
-            arm = new ProtoArm(this, config.claw, config.arm1, config.arm2);
+            arm = new ProtoArm(this, config.claw1, config.claw2);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Arm System.");
         }
@@ -43,21 +43,21 @@ public class ProtoTeleOp extends BunyipsOpMode {
         double r = gamepad1.right_stick_x;
         double y2 = gamepad2.left_stick_y;
 
-        boolean up_pressed = gamepad2.dpad_up;
-        boolean down_pressed = gamepad2.dpad_down;
-        boolean drop_pressed = gamepad2.left_bumper;
+//        boolean up_pressed = gamepad2.dpad_up;
+//        boolean down_pressed = gamepad2.dpad_down;
+//        boolean drop_pressed = gamepad2.left_bumper;
         
         // Set speeds of motors and interpret any data
         drive.setSpeedXYR(x, y, r);
-        arm.liftSetPower(0.25);
+//        arm.liftSetPower(0.25);
 
-        if (up_pressed && !gamepad2.dpad_up) {
-            arm.liftUp();
-        } else if (down_pressed && !gamepad2.dpad_down) {
-            arm.liftDown();
-        } else if (drop_pressed && !gamepad2.left_bumper) {
-            arm.liftReset();
-        }
+//        if (up_pressed && !gamepad2.dpad_up) {
+//            arm.liftUp();
+//        } else if (down_pressed && !gamepad2.dpad_down) {
+//            arm.liftDown();
+//        } else if (drop_pressed && !gamepad2.left_bumper) {
+//            arm.liftReset();
+//        }
 
         // Update live movements of all motors
         arm.clawRun(y2);
