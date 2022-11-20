@@ -42,6 +42,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
         double x = gamepad1.left_stick_x;
         double y = gamepad1.left_stick_y;
         double r = gamepad1.right_stick_x;
+        double l = gamepad2.left_stick_y;
 
 
         // Set speeds of motors and interpret any data
@@ -55,6 +56,8 @@ public class ProtoTeleOp extends BunyipsOpMode {
         } else if (drop_pressed && !gamepad2.left_bumper) {
             arm.liftReset();
         }
+
+        arm.liftControl(l);
 
         // Update live movements of all motors
         if (gamepad2.a) {

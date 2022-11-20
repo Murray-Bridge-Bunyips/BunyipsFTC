@@ -104,11 +104,16 @@ public class ProtoArm extends BunyipsComponent {
     }
 
 
-    public void liftControl(int add) {
+    /**
+     * Manually control arm speed by setting the position manually through variable input
+     * Try not to call this method, and instead use the Up/Down methods
+     */
+    public void liftControl(double offset) {
+        offset *= 10;
         int position1 = arm1.getCurrentPosition();
         int position2 = arm2.getCurrentPosition();
-        arm1.setTargetPosition(position1 + add);
-        arm2.setTargetPosition(position2 + add);
+        arm1.setTargetPosition(position1 - (int) offset);
+        arm2.setTargetPosition(position2 - (int) offset);
     }
 
 
