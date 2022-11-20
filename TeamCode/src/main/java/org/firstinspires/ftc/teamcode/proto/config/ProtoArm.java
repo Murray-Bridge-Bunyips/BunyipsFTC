@@ -104,6 +104,14 @@ public class ProtoArm extends BunyipsComponent {
     }
 
 
+    public void liftControl(int add) {
+        int position1 = arm1.getCurrentPosition();
+        int position2 = arm2.getCurrentPosition();
+        arm1.setTargetPosition(position1 + add);
+        arm2.setTargetPosition(position2 + add);
+    }
+
+
     /**
      * Set arm power for positional movements
      * @param power desired power

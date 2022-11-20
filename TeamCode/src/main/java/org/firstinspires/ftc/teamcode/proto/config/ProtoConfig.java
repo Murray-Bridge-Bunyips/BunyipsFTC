@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -28,6 +29,7 @@ public class ProtoConfig extends RobotConfig {
     public DcMotorEx arm1;
     public DcMotorEx arm2;
     public BNO055IMU imu;
+    public TouchSensor stop;
 
     public static ProtoConfig newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
         ProtoConfig config = new ProtoConfig();
@@ -59,6 +61,7 @@ public class ProtoConfig extends RobotConfig {
         arm2 = (DcMotorEx) getHardwareOn("Arm Motor 2", hardwareMap.dcMotor);
         claw1 = (CRServo) getHardwareOn("Claw Servo 1", hardwareMap.crservo);
         claw2 = (CRServo) getHardwareOn("Claw Servo 2", hardwareMap.crservo);
+        stop = (TouchSensor) getHardwareOn("Arm Stop", hardwareMap.touchSensor);
 
         // Motor direction configuration
         fl.setDirection(DcMotorEx.Direction.REVERSE);
