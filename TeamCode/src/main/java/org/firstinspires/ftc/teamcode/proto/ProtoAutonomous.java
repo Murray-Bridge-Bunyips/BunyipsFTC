@@ -35,7 +35,7 @@ public class ProtoAutonomous extends BunyipsOpMode {
             telemetry.addLine("Failed to initialise Drive System.");
         }
         try {
-            arm = new ProtoArm(this, config.claw1, config.claw2, config.arm1, config.arm2);
+            arm = new ProtoArm(this, config.claw1, config.claw2, config.arm1, config.arm2, config.limit);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Arm System.");
         }

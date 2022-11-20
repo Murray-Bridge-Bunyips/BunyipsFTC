@@ -4,7 +4,7 @@ public abstract class Deadwheel implements Encoder {
 
     volatile double position = 0.0;
 
-    // These inputs are for the <> encoders with small omni wheels.
+    // These inputs are for the BQLZR 600P/R (?) encoders
     private static final int WHEEL_DIAMETER_MM = 0;
     private static final int TICKS_PER_REVOLUTION = 0;
 

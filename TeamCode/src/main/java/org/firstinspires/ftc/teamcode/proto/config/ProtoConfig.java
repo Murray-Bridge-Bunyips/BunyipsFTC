@@ -4,12 +4,10 @@ import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.Deadwheel;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
@@ -29,7 +27,7 @@ public class ProtoConfig extends RobotConfig {
     public DcMotorEx arm1;
     public DcMotorEx arm2;
     public BNO055IMU imu;
-    public TouchSensor stop;
+    public TouchSensor limit;
 
     public static ProtoConfig newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
         ProtoConfig config = new ProtoConfig();
@@ -61,7 +59,7 @@ public class ProtoConfig extends RobotConfig {
         arm2 = (DcMotorEx) getHardwareOn("Arm Motor 2", hardwareMap.dcMotor);
         claw1 = (CRServo) getHardwareOn("Claw Servo 1", hardwareMap.crservo);
         claw2 = (CRServo) getHardwareOn("Claw Servo 2", hardwareMap.crservo);
-        stop = (TouchSensor) getHardwareOn("Arm Stop", hardwareMap.touchSensor);
+        limit = (TouchSensor) getHardwareOn("Arm Stop", hardwareMap.touchSensor);
 
         // Motor direction configuration
         fl.setDirection(DcMotorEx.Direction.REVERSE);
@@ -70,13 +68,10 @@ public class ProtoConfig extends RobotConfig {
         br.setDirection(DcMotorEx.Direction.REVERSE);
 
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
-        try {
-            x = hardwareMap.get(Deadwheel.class, "X Encoder");
-            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
-        } catch (Exception e) {
-            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
-            x = y = null;
-        }
+        // These encoders will mirror a DcMotor, but will be attached to their own port (for example,
+        // motor 0 and 1 on Expansion Hub, but without any power connection)
+        x = hardwareMap.get(Deadwheel.class, "X Encoder");
+        y = hardwareMap.get(Deadwheel.class, "Y Encoder");
 
         // Control Hub IMU configuration
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

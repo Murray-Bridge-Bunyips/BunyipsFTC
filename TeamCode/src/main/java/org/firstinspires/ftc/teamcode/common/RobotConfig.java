@@ -40,7 +40,7 @@ public abstract class RobotConfig {
     }
 
     /**
-     * Convenience method for reading the devce from the hardwareMap without having to check for exceptions
+     * Convenience method for reading the device from the hardwareMap without having to check for exceptions
      *
      * @param name                  name of device saved in the configuration file
      * @param hardwareDeviceMapping
