@@ -55,8 +55,8 @@ public class ProtoConfig extends RobotConfig {
         br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
         fl = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
         fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
-//        arm1 = (DcMotorEx) getHardwareOn("Arm Motor 1", hardwareMap.dcMotor);
-//        arm2 = (DcMotorEx) getHardwareOn("Arm Motor 2", hardwareMap.dcMotor);
+        arm1 = (DcMotorEx) getHardwareOn("Arm Motor 1", hardwareMap.dcMotor);
+        arm2 = (DcMotorEx) getHardwareOn("Arm Motor 2", hardwareMap.dcMotor);
         claw1 = (CRServo) getHardwareOn("Claw Servo 1", hardwareMap.crservo);
         claw2 = (CRServo) getHardwareOn("Claw Servo 2", hardwareMap.crservo);
 
@@ -67,13 +67,13 @@ public class ProtoConfig extends RobotConfig {
         br.setDirection(DcMotorEx.Direction.REVERSE);
 
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
-//        try {
-//            x = hardwareMap.get(Deadwheel.class, "X Encoder");
-//            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
-//        } catch (Exception e) {
-//            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
-//            x = y = null;
-//        }
+        try {
+            x = hardwareMap.get(Deadwheel.class, "X Encoder");
+            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
+        } catch (Exception e) {
+            telemetry.addLine("Error configuring X,Y deadwheel encoders. Check connections.");
+            x = y = null;
+        }
 
         // Control Hub IMU configuration
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

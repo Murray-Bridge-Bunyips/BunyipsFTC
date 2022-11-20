@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
 public class ProtoCamTesting extends BunyipsOpMode {
 
     private CameraOp cam;
-    private TriColourSleeve sd;
+    private QRPark qr;
 
     @Override
     protected void onInit() {
@@ -22,12 +22,12 @@ public class ProtoCamTesting extends BunyipsOpMode {
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Camera Operation.");
         }
-        sd = new TriColourSleeve();
-        cam.setPipeline(sd);
+        qr = new QRPark();
+        cam.setPipeline(qr);
     }
 
     @Override
     protected void activeLoop() throws InterruptedException {
-        telemetry.addData("TriColourSleeve", String.valueOf(sd.getPosition()));
+        telemetry.addData("QR Parking Position", String.valueOf(qr.getPosition()));
     }
 }

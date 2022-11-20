@@ -18,6 +18,7 @@ public class ProtoTeleOp extends BunyipsOpMode {
 
     private ProtoDrive drive;
     private ProtoArm arm;
+    private boolean up_pressed, down_pressed, drop_pressed;
 
     @Override
     protected void onInit() {
@@ -41,15 +42,11 @@ public class ProtoTeleOp extends BunyipsOpMode {
         double x = gamepad1.left_stick_x;
         double y = gamepad1.left_stick_y;
         double r = gamepad1.right_stick_x;
-        double y2 = gamepad2.left_stick_y;
 
-        boolean up_pressed = gamepad2.dpad_up;
-        boolean down_pressed = gamepad2.dpad_down;
-        boolean drop_pressed = gamepad2.left_bumper;
-        
+
         // Set speeds of motors and interpret any data
         drive.setSpeedXYR(x, y, r);
-        arm.liftSetPower(0);
+        arm.liftSetPower(0.2);
 
         if (up_pressed && !gamepad2.dpad_up) {
             arm.liftUp();
@@ -67,6 +64,10 @@ public class ProtoTeleOp extends BunyipsOpMode {
             // "Red for dead"
             arm.clawClose();
         }
+
+        up_pressed = gamepad2.dpad_up;
+        down_pressed = gamepad2.dpad_down;
+        drop_pressed = gamepad2.left_bumper;
 
         drive.update();
         arm.update();

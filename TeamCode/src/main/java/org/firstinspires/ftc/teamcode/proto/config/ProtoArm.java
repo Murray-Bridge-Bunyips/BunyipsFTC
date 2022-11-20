@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public class ProtoArm extends BunyipsComponent {
 
-    private static final int[] LIFT_POSITIONS = {0, 100, 500, 1000, 1300};
+    private static final int[] LIFT_POSITIONS = {0, 200, 400};
 
     private int liftIndex = 0;
     private double liftPower;
@@ -36,7 +36,7 @@ public class ProtoArm extends BunyipsComponent {
         claw2.setDirection(CRServo.Direction.REVERSE);
 
         arm1.setDirection(DcMotorEx.Direction.FORWARD);
-        arm2.setDirection(DcMotorEx.Direction.FORWARD);
+        arm2.setDirection(DcMotorEx.Direction.REVERSE);
 
         arm1.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
         arm2.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
@@ -118,8 +118,7 @@ public class ProtoArm extends BunyipsComponent {
      */
     @SuppressLint("DefaultLocale")
     public void update() {
-        getOpMode().telemetry.addLine(String.format("Arm1 Position: %d", arm1.getCurrentPosition()));
-        getOpMode().telemetry.addLine(String.format("Arm2 Position: %d", arm2.getCurrentPosition()));
+        getOpMode().telemetry.addLine(String.format("Arms (pos1, pos2, index): %d, %d, %s", arm1.getCurrentPosition(), arm2.getCurrentPosition(), liftIndex));
         arm1.setPower(liftPower);
         arm2.setPower(liftPower);
         arm1.setMode(DcMotor.RunMode.RUN_TO_POSITION);
