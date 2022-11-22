@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.proto.config;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+
 import android.annotation.SuppressLint;
 import android.text.method.Touch;
 
@@ -24,7 +26,7 @@ public class ProtoArm extends BunyipsComponent {
     public CRServo claw2;
 
     private final DcMotorEx[] motors = new DcMotorEx[2];
-    private boolean isCalibrating = false;
+    private boolean isCalibrating, alreadyCalibrated = false;
     public DcMotorEx arm1;
     public DcMotorEx arm2;
     public TouchSensor limit;
@@ -71,6 +73,7 @@ public class ProtoArm extends BunyipsComponent {
     public void liftCalibrate() {
         // Lock down the instance to have full control over the arm
         isCalibrating = true;
+        alreadyCalibrated = true;
 
         for (DcMotorEx motor : motors) {
             // Set motors to power-only mode and let them run
@@ -89,10 +92,12 @@ public class ProtoArm extends BunyipsComponent {
         // the bounds detection. Either way works and it won't hurt to use both, incase the limit
         // switch breaks for some reason.
         while (!limit.isPressed()) {
+            System.out.println(limit.isPressed());
             if (motors[0].isOverCurrent() || motors[1].isOverCurrent()) break;
             getOpMode().telemetry.addLine(String.format("ARM IS CALIBRATING... ENCODER VALUES: %d, %d",
                     arm1.getCurrentPosition(),
                     arm2.getCurrentPosition()));
+            getOpMode().telemetry.update();
         }
 
         for (DcMotorEx motor : motors) {
@@ -150,8 +155,8 @@ public class ProtoArm extends BunyipsComponent {
      */
     public void liftDown() {
         liftIndex--;
-        if (liftIndex < 0) {
-            liftIndex = 0;
+        if (liftIndex <= 0) {
+            liftReset();
         }
         for (DcMotorEx motor : motors) {
             motor.setTargetPosition(LIFT_POSITIONS[liftIndex]);
@@ -199,6 +204,11 @@ public class ProtoArm extends BunyipsComponent {
     public void update() {
         // If the arm is in the process of calibration, don't interrupt it
         if (isCalibrating) return;
+
+        // To make sure we don't accidentally get stuck in a loop of infinite calibration
+        // Also zeroes out the encoders if we hit the switch.
+        if (limit.isPressed() && !alreadyCalibrated) liftCalibrate();
+        if (!limit.isPressed()) alreadyCalibrated = false;
 
         getOpMode().telemetry.addLine(String.format("Arms (pos1, pos2, index): %d, %d, %s",
                                                     arm1.getCurrentPosition(),

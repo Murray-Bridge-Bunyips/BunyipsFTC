@@ -70,9 +70,12 @@ public class ProtoConfig extends RobotConfig {
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
         // These encoders will mirror a DcMotor, but will be attached to their own port (for example,
         // motor 0 and 1 on Expansion Hub, but without any power connection)
-        x = hardwareMap.get(Deadwheel.class, "X Encoder");
-        y = hardwareMap.get(Deadwheel.class, "Y Encoder");
-
+        try {
+            x = hardwareMap.get(Deadwheel.class, "X Encoder");
+            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
+        } catch (Exception e) {
+            telemetry.addLine("Error configuring deadwheels. Check connections.");
+        }
         // Control Hub IMU configuration
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
