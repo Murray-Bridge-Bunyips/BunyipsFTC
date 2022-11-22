@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.proto.config;
+package org.firstinspires.ftc.teamcode.jerry.config;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.Deadwheel;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
-public class ProtoConfig extends RobotConfig {
+public class JerryConfig extends RobotConfig {
 
     // Add declarations here
     public WebcamName webcam;
@@ -29,8 +29,8 @@ public class ProtoConfig extends RobotConfig {
     public BNO055IMU imu;
     public TouchSensor limit;
 
-    public static ProtoConfig newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
-        ProtoConfig config = new ProtoConfig();
+    public static JerryConfig newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
+        JerryConfig config = new JerryConfig();
         config.init(hardwareMap, telemetry);
         return config;
     }

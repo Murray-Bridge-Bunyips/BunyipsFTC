@@ -1,18 +1,18 @@
-package org.firstinspires.ftc.teamcode.proto.tasks;
+package org.firstinspires.ftc.teamcode.jerry.tasks;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.IMUOp;
 import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
-import org.firstinspires.ftc.teamcode.proto.config.ProtoDrive;
+import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
 
-public class ProtoRotationTask extends BaseTask implements Task {
+public class JerryRotationTask extends BaseTask implements Task {
 
     private final IMUOp imu;
-    private final ProtoDrive drive;
+    private final JerryDrive drive;
     private final double angle, speed;
 
-    public ProtoRotationTask(BunyipsOpMode opMode, double time, IMUOp imu, ProtoDrive drive, double angle, double speed) {
+    public JerryRotationTask(BunyipsOpMode opMode, double time, IMUOp imu, JerryDrive drive, double angle, double speed) {
         super(opMode, time);
         this.imu = imu;
         this.drive = drive;

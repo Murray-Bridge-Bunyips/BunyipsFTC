@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.proto.config;
+package org.firstinspires.ftc.teamcode.jerry.config;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 import java.util.Locale;
 
-public class ProtoDrive extends BunyipsComponent {
+public class JerryDrive extends BunyipsComponent {
 
     private BunyipsOpMode opmode;
     final private DcMotorEx bl;
@@ -22,10 +22,10 @@ public class ProtoDrive extends BunyipsComponent {
     private double speedR = 0.0;
 
 
-    public ProtoDrive(BunyipsOpMode opMode,
+    public JerryDrive(BunyipsOpMode opMode,
                       DcMotorEx bl, DcMotorEx br,
                       DcMotorEx fl, DcMotorEx fr) {
-        // Encoders are not controlled by ProtoDrive
+        // Encoders are not controlled by JerryDrive
         super(opMode);
         this.bl = bl;
         this.br = br;

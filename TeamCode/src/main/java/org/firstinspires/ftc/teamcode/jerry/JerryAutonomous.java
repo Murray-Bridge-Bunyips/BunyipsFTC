@@ -1,41 +1,41 @@
-package org.firstinspires.ftc.teamcode.proto;
+package org.firstinspires.ftc.teamcode.jerry;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
-import org.firstinspires.ftc.teamcode.proto.config.ProtoArm;
-import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
-import org.firstinspires.ftc.teamcode.proto.config.ProtoDrive;
+import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
+import org.firstinspires.ftc.teamcode.jerry.config.JerryConfig;
+import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
 import org.firstinspires.ftc.teamcode.common.tasks.GetQRSleeveTask;
 
 import java.util.ArrayDeque;
 
-@Autonomous(name="<PROTO> Autonomous Testing")
-public class ProtoAutonomous extends BunyipsOpMode {
+@Autonomous(name="<JERRY> Autonomous Testing")
+public class JerryAutonomous extends BunyipsOpMode {
 
-    private ProtoConfig config;
+    private JerryConfig config;
     private CameraOp cam = null;
-    private ProtoDrive drive;
-    private ProtoArm arm;
+    private JerryDrive drive;
+    private JerryArm arm;
     private ArrayDeque<Task> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
-        config = ProtoConfig.newConfig(hardwareMap, telemetry);
+        config = JerryConfig.newConfig(hardwareMap, telemetry);
         try {
             cam = new CameraOp(this, config.webcam, config.monitorID, CameraOp.CamMode.OPENCV);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Camera Operation.");
         }
         try {
-            drive = new ProtoDrive(this, config.bl, config.br, config.fl, config.fr);
+            drive = new JerryDrive(this, config.bl, config.br, config.fl, config.fr);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Drive System.");
         }
         try {
-            arm = new ProtoArm(this, config.claw1, config.claw2, config.arm1, config.arm2, config.limit);
+            arm = new JerryArm(this, config.claw1, config.claw2, config.arm1, config.arm2, config.limit);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Arm System.");
         }

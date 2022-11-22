@@ -1,21 +1,17 @@
-package org.firstinspires.ftc.teamcode.proto.config;
-
-import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
+package org.firstinspires.ftc.teamcode.jerry.config;
 
 import android.annotation.SuppressLint;
-import android.text.method.Touch;
 
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.TouchSensor;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
-public class ProtoArm extends BunyipsComponent {
+public class JerryArm extends BunyipsComponent {
 
     // Adjust encoder values for lift positions here. Index 0 should always be near 0.
     private static final int[] LIFT_POSITIONS = { 40, 200, 400 };
@@ -32,7 +28,7 @@ public class ProtoArm extends BunyipsComponent {
     public TouchSensor limit;
 
 
-    public ProtoArm(BunyipsOpMode opMode, CRServo claw1, CRServo claw2, DcMotorEx arm1, DcMotorEx arm2, TouchSensor limit) {
+    public JerryArm(BunyipsOpMode opMode, CRServo claw1, CRServo claw2, DcMotorEx arm1, DcMotorEx arm2, TouchSensor limit) {
         super(opMode);
         this.arm1 = arm1;
         this.arm2 = arm2;

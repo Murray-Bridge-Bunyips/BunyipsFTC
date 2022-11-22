@@ -1,36 +1,30 @@
-package org.firstinspires.ftc.teamcode.proto;
+package org.firstinspires.ftc.teamcode.jerry;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.CameraOp;
-import org.firstinspires.ftc.teamcode.common.IMUOp;
-import org.firstinspires.ftc.teamcode.common.pipelines.TriColourSleeve;
-import org.firstinspires.ftc.teamcode.proto.config.ProtoArm;
-import org.firstinspires.ftc.teamcode.proto.config.ProtoConfig;
-import org.firstinspires.ftc.teamcode.proto.config.ProtoDrive;
-import org.openftc.easyopencv.OpenCvPipeline;
+import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
+import org.firstinspires.ftc.teamcode.jerry.config.JerryConfig;
+import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
 
-@TeleOp(name = "<PROTO> POWERPLAY TeleOp")
-public class ProtoTeleOp extends BunyipsOpMode {
+@TeleOp(name = "<JERRY> POWERPLAY TeleOp")
+public class JerryTeleOp extends BunyipsOpMode {
 
-    private ProtoDrive drive;
-    private ProtoArm arm;
+    private JerryDrive drive;
+    private JerryArm arm;
     private boolean up_pressed, down_pressed, drop_pressed;
 
     @Override
     protected void onInit() {
         // Configure drive and arm subsystems
-        ProtoConfig config = ProtoConfig.newConfig(hardwareMap, telemetry);
+        JerryConfig config = JerryConfig.newConfig(hardwareMap, telemetry);
         try {
-            drive = new ProtoDrive(this, config.bl, config.br, config.fl, config.fr);
+            drive = new JerryDrive(this, config.bl, config.br, config.fl, config.fr);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Drive System.");
         }
         try {
-            arm = new ProtoArm(this, config.claw1, config.claw2, config.arm1, config.arm2, config.limit);
+            arm = new JerryArm(this, config.claw1, config.claw2, config.arm1, config.arm2, config.limit);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Arm System.");
         }
