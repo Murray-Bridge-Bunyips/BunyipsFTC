@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public class ProtoArm extends BunyipsComponent {
 
-    // Adjust encoder values for lift positions here. Index 0 should always be 0.
-    private static final int[] LIFT_POSITIONS = { 0, 200, 400 };
+    // Adjust encoder values for lift positions here. Index 0 should always be near 0.
+    private static final int[] LIFT_POSITIONS = { 40, 200, 400 };
 
     private int liftIndex = 0;
     private double liftPower;
@@ -92,7 +92,6 @@ public class ProtoArm extends BunyipsComponent {
         // the bounds detection. Either way works and it won't hurt to use both, incase the limit
         // switch breaks for some reason.
         while (!limit.isPressed()) {
-            System.out.println(limit.isPressed());
             if (motors[0].isOverCurrent() || motors[1].isOverCurrent()) break;
             getOpMode().telemetry.addLine(String.format("ARM IS CALIBRATING... ENCODER VALUES: %d, %d",
                     arm1.getCurrentPosition(),
@@ -111,15 +110,16 @@ public class ProtoArm extends BunyipsComponent {
         // then return arm control permission back to the instance.
         liftIndex = 0;
         isCalibrating = false;
+        getOpMode().telemetry.addLine("Arm has been calibrated.");
     }
 
 
     /**
-     * Call to open claw system and allow picking up of items (allow servos to reset to 0 degrees)
+     * Call to open claw system and allow picking up of items (allow servos to swing to open)
      */
     public void clawOpen() {
-        claw1.setPower(0);
-        claw2.setPower(0);
+        claw1.setPower(-1);
+        claw2.setPower(-1);
         getOpMode().telemetry.addLine("Claws are opening...");
     }
 
@@ -130,8 +130,8 @@ public class ProtoArm extends BunyipsComponent {
      * with these limits in mind, as the code will simply continue commanding power to the servo)
      */
     public void clawClose() {
-        claw1.setPower(1);
-        claw2.setPower(1);
+        claw1.setPower(0.1);
+        claw2.setPower(0.1);
         getOpMode().telemetry.addLine("Claws are closing...");
     }
 

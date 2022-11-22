@@ -4,9 +4,11 @@ import org.opencv.core.Mat;
 import org.opencv.objdetect.QRCodeDetector;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-// This pipeline might be unreliable, as tests done on an sleeve prove not accurate.
-// It is for this reason that this code is not in use, but still exists for other applications
-// Perhaps one day or in another application this will be useful.
+/**
+ * Utilises the OpenCV detection for QR codes in order to determine parking position.
+ * Simple, effective, and intelligent. It may take a few seconds to detect a QR code.
+ * @author Lucas Bubner - FTC 15215 Captain; Nov 2022
+ */
 public class QRPark extends OpenCvPipeline {
 
     private volatile ParkingPosition parkingPosition = null;
@@ -25,7 +27,10 @@ public class QRPark extends OpenCvPipeline {
 
     @Override
     public Mat processFrame(Mat input) {
-        String result = qr.detectAndDecode(input);
+
+        // Must use a curved decoder, as the cone is a curved surface
+        String result = qr.detectAndDecodeCurved(input);
+
         // Check the QR code to see what it is
         // If it matches the strings, then set parking position and the task running this pipeline
         // should detect this change by calling getPosition();
