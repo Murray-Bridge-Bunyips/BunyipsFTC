@@ -84,6 +84,8 @@ public class JerryConfig extends RobotConfig {
         parameters.loggingTag          = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
+        // This uses the legacy methods for IMU initalisation, this should be refactored and updated
+        // at some point in time. (23 Nov 2022)
         try {
             imu = hardwareMap.get(BNO055IMU.class, "imu");
             if (imu.initialize(parameters)) {

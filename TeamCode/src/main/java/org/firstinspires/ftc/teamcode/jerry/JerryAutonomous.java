@@ -43,8 +43,24 @@ public class JerryAutonomous extends BunyipsOpMode {
 
         // 1. Detect signal position (with OpenCV) and save it to a variable in OpMode GlobalStorage
         // Run this as soon as we hit init and armed the tasks, as we are permitted to do so.
-        Task initTask = new GetQRSleeveTask(this, 5, cam);
-        initTask.run();
+        Task Krankenhaus = new GetQRSleeveTask(this, 7, cam);
+        while (!Krankenhaus.isFinished())
+            Krankenhaus.run();
+
+        // 2. Do stuff
+
+        // 3. Park based on position saved in GlobalStorage
+        switch (globalStorage.getItem("PARKING_POSITION")) {
+            case "LEFT":
+
+                break;
+            case "CENTER":
+
+                break;
+            case "RIGHT":
+                
+                break;
+        }
     }
 
     @Override

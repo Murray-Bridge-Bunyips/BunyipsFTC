@@ -99,7 +99,7 @@ public class JerryArm extends BunyipsComponent {
             // Finally, we reset the motors and we are now zeroed out again.
             motor.setPower(0);
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setTargetPosition(0);
+            motor.setTargetPosition(LIFT_POSITIONS[0]);
         }
 
         // Prevent 'slingshotting' the arm back to whatever position the arm was originally in,
