@@ -30,19 +30,24 @@ public class JerryDeadwheelDriveTask extends BaseTask implements Task {
     }
 
     @Override
+    public boolean isFinished() {
+        return super.isFinished() || (x.targetReached(px_mm) && y.targetReached(py_mm));
+    }
+
+    @Override
     public void run() {
         // Run x before y, moving until the goal is reached
         // Only start the encoder that needs to be tracked, to prevent false readings
 
         x.enableTracking();
-        while (x.getTravelledMM() <= px_mm && !isFinished()) {
+        while (!x.targetReached(px_mm) && !isFinished()) {
             drive.setSpeedXYR(xspeed, 0, 0);
             drive.update();
         }
         x.disableTracking();
 
         y.enableTracking();
-        while (y.getTravelledMM() <= py_mm && !isFinished()) {
+        while (!y.targetReached(py_mm) && !isFinished()) {
             drive.setSpeedXYR(0, yspeed, 0);
             drive.update();
         }

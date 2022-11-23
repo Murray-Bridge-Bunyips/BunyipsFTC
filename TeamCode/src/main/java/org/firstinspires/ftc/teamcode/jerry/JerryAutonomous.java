@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryConfig;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
 import org.firstinspires.ftc.teamcode.common.tasks.GetQRSleeveTask;
+import org.firstinspires.ftc.teamcode.jerry.tasks.JerryBaseDriveTask;
+import org.firstinspires.ftc.teamcode.jerry.tasks.JerryDeadwheelDriveTask;
 
 import java.util.ArrayDeque;
 
@@ -47,7 +49,15 @@ public class JerryAutonomous extends BunyipsOpMode {
         while (!Krankenhaus.isFinished())
             Krankenhaus.run();
 
-        // 2. Do stuff
+        // 2. Check if we have deadwheel capabilities, if we do, use the respective tasks with
+        // deadwheel field positioning, otherwise we will need to use time as that is our only option
+        if (config.x != null && config.y != null) {
+            // Deadwheels are available
+            tasks.add(new JerryDeadwheelDriveTask(this, 5, drive, config.x, config.y, 100, 100, 1, 1));
+        } else {
+            // Deadwheels are NOT available
+            tasks.add(new JerryBaseDriveTask(this, 2, drive, 1, 0, 0));
+        }
 
         // 3. Park based on position saved in GlobalStorage
         switch (globalStorage.getItem("PARKING_POSITION")) {

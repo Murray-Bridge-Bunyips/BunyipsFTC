@@ -75,6 +75,7 @@ public class JerryConfig extends RobotConfig {
             y = hardwareMap.get(Deadwheel.class, "Y Encoder");
         } catch (Exception e) {
             telemetry.addLine("Error configuring deadwheels. Check connections.");
+            x = y = null;
         }
         // Control Hub IMU configuration
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();

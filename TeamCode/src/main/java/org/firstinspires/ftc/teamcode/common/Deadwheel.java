@@ -62,6 +62,6 @@ public abstract class Deadwheel implements Encoder {
      */
     @Override
     public boolean targetReached(double goal) {
-        return Math.abs(this.getTravelledMM()) > Math.abs(goal);
+        return Math.abs(this.getTravelledMM()) >= Math.abs(goal);
     }
 }
