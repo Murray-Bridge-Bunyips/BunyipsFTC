@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.pipelines;
 
+import org.firstinspires.ftc.teamcode.common.tasks.GetQRSleeveTask;
 import org.opencv.core.Mat;
 import org.opencv.objdetect.QRCodeDetector;
 import org.openftc.easyopencv.OpenCvPipeline;
@@ -11,14 +12,9 @@ import org.openftc.easyopencv.OpenCvPipeline;
  */
 public class QRPark extends OpenCvPipeline {
 
-    private volatile ParkingPosition parkingPosition = null;
-    public enum ParkingPosition {
-        LEFT,
-        CENTER,
-        RIGHT
-    }
+    private volatile GetQRSleeveTask.ParkingPosition parkingPosition = null;
 
-    public ParkingPosition getPosition() {
+    public GetQRSleeveTask.ParkingPosition getPosition() {
         return parkingPosition;
     }
 
@@ -36,13 +32,13 @@ public class QRPark extends OpenCvPipeline {
         // should detect this change by calling getPosition();
         switch (result) {
             case "MURRAY": // 1
-                parkingPosition = ParkingPosition.LEFT;
+                parkingPosition = GetQRSleeveTask.ParkingPosition.LEFT;
                 break;
             case "BRIDGE": // 2
-                parkingPosition = ParkingPosition.CENTER;
+                parkingPosition = GetQRSleeveTask.ParkingPosition.CENTER;
                 break;
             case "BUNYIPS": // 3
-                parkingPosition = ParkingPosition.RIGHT;
+                parkingPosition = GetQRSleeveTask.ParkingPosition.RIGHT;
                 break;
         }
         return input;

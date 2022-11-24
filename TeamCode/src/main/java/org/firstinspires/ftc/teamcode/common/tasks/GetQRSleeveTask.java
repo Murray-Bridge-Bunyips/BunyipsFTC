@@ -3,13 +3,22 @@ package org.firstinspires.ftc.teamcode.common.tasks;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.pipelines.QRPark;
-import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
-import org.firstinspires.ftc.teamcode.common.tasks.Task;
 
 public class GetQRSleeveTask extends BaseTask implements Task {
 
     private final CameraOp cam;
     private QRPark qr;
+
+    private volatile ParkingPosition position;
+    public enum ParkingPosition {
+        LEFT,
+        CENTER,
+        RIGHT
+    }
+
+    public ParkingPosition getPosition() {
+        return position;
+    }
 
     public GetQRSleeveTask(BunyipsOpMode opMode, double time, CameraOp cam) {
         super(opMode, time);
@@ -30,18 +39,15 @@ public class GetQRSleeveTask extends BaseTask implements Task {
 
     @Override
     public void run() {
-        if (isFinished()) {
-            // If we run out of time, then select the second value as a guess
-            // It isn't calculated at all, but there's a 1/3 chance we're right...
-            opMode.globalStorage.updateItem("PARKING_POSITION", "CENTER");
-            return;
-        }
+        // Null case needs to be done by the opMode, do this by checking the result if it is null,
+        // and select a custom result based on the default (null) result
 
         // Try to get the position of the sleeve using QR codes
         // The string to parking position conversion is done by the pipeline
-        QRPark.ParkingPosition result = qr.getPosition();
+        ParkingPosition result = qr.getPosition();
+        opMode.telemetry.addLine("Waiting for QR Code detection... Currently seeing: " + String.valueOf(result));
+        opMode.telemetry.update();
         if (result != null) {
-            opMode.globalStorage.updateItem("PARKING_POSITION", String.valueOf(result));
             isFinished = true;
             return;
         }

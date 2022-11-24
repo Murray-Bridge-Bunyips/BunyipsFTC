@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 public class JerryArm extends BunyipsComponent {
 
     // Adjust encoder values for lift positions here. Index 0 should always be near 0.
-    private static final int[] LIFT_POSITIONS = { 40, 200, 400 };
+    private static final int[] LIFT_POSITIONS = { 40, 100, 300, 400, 600 };
 
     private int liftIndex = 0;
     private double liftPower;
@@ -99,7 +99,7 @@ public class JerryArm extends BunyipsComponent {
             // Finally, we reset the motors and we are now zeroed out again.
             motor.setPower(0);
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setTargetPosition(LIFT_POSITIONS[0]);
+            motor.setTargetPosition(LIFT_POSITIONS[1]);
         }
 
         // Prevent 'slingshotting' the arm back to whatever position the arm was originally in,

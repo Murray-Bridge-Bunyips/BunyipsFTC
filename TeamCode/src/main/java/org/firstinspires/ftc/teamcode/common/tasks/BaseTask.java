@@ -36,7 +36,7 @@ public abstract class BaseTask implements Task {
             init();
             startTime = getCurrentTime();
         }
-        if (getCurrentTime() > (startTime + time)) {
+        if (getCurrentTime() > (startTime + time) || opMode.isStopRequested()) {
             isFinished = true;
         }
         return isFinished;

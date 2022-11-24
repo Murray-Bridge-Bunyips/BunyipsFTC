@@ -10,7 +10,6 @@ public abstract class BunyipsOpMode extends LinearOpMode {
 
 
     protected MovingAverageTimer movingAverageTimer;
-    public GlobalStorage globalStorage;
     protected long loopCount = 0;
     private boolean operationsCompleted;
 
@@ -90,7 +89,6 @@ public abstract class BunyipsOpMode extends LinearOpMode {
 
     private void setup() {
         movingAverageTimer = new MovingAverageTimer(100);
-        globalStorage = new GlobalStorage();
     }
 
     /**

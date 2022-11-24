@@ -82,6 +82,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
      * Start PrecisionDrive IMU alignment algorithm and capture the original angle
      */
     public void startCapture() {
+        this.tick();
         capture = this.getHeading();
     }
 
@@ -93,23 +94,21 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
      }
 
     /**
-     * Query motor alignment speed for a motor through PrecisionDrive
+     * Query motor alignment speed for R speed through PrecisionDrive
      * @param original_speed supply the intended speed for the motor
-     * @param tolerance supply the tolerance range (tol < x <  tol) before making a correction
-     * @param isLeft state whether the returned speed of the motor is on the left side of the robot
      * @return queried speed based on parameters given, returns the unaltered speed if PrecisionDrive is not online
      */
-     public double getPrecisionSpeed(double original_speed, int tolerance, boolean isLeft) {
+     public double getRPrecisionSpeed(double original_speed, int tolerance) {
         if (capture == null) return original_speed;
 
         double current = this.getHeading();
 
-        if (isLeft && original_speed > 0 ?
-                current > capture - tolerance :
-                current < capture + tolerance) {
-            return Math.abs(original_speed) - 0.1;
-        }
+        if (current < capture - tolerance)
+            return Math.abs(original_speed + 0.1);
 
-        return Math.abs(original_speed);
+        if (current > capture + tolerance)
+            return Math.abs(original_speed - 0.1);
+
+        return original_speed;
      } 
  }
