@@ -5,6 +5,7 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -22,8 +23,8 @@ public class JerryConfig extends RobotConfig {
     public DcMotorEx fl;
     public DcMotorEx fr;
     public Deadwheel x, y;
-    public CRServo claw1;
-    public CRServo claw2;
+    public Servo claw1;
+    public Servo claw2;
     public DcMotorEx arm1;
     public DcMotorEx arm2;
     public BNO055IMU imu;
@@ -57,8 +58,8 @@ public class JerryConfig extends RobotConfig {
         fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
         arm1 = (DcMotorEx) getHardwareOn("Arm Motor 1", hardwareMap.dcMotor);
         arm2 = (DcMotorEx) getHardwareOn("Arm Motor 2", hardwareMap.dcMotor);
-        claw1 = (CRServo) getHardwareOn("Claw Servo 1", hardwareMap.crservo);
-        claw2 = (CRServo) getHardwareOn("Claw Servo 2", hardwareMap.crservo);
+        claw1 = (Servo) getHardwareOn("Claw Servo 1", hardwareMap.servo);
+        claw2 = (Servo) getHardwareOn("Claw Servo 2", hardwareMap.servo);
         limit = (TouchSensor) getHardwareOn("Arm Stop", hardwareMap.touchSensor);
 
         // Motor direction configuration

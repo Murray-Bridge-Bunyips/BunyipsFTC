@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
@@ -13,13 +14,20 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public class JerryArm extends BunyipsComponent {
 
-    // Adjust encoder values for lift positions here. Index 0 should always be near 0.
     private static final int[] LIFT_POSITIONS = { 40, 100, 300, 400, 600 };
+    /*
+        LIFT_POSITIONS index
+        0: Cone obtaining/neutral height
+        1: Above cone, allows for drive to position cone under arm
+        2: Pole position 1
+        3: Pole position 2
+        4: Pole position 3
+     */
 
     private int liftIndex = 0;
     private double liftPower;
-    public CRServo claw1;
-    public CRServo claw2;
+    public Servo claw1;
+    public Servo claw2;
 
     private final DcMotorEx[] motors = new DcMotorEx[2];
     private boolean isCalibrating, alreadyCalibrated = false;
@@ -28,7 +36,7 @@ public class JerryArm extends BunyipsComponent {
     public TouchSensor limit;
 
 
-    public JerryArm(BunyipsOpMode opMode, CRServo claw1, CRServo claw2, DcMotorEx arm1, DcMotorEx arm2, TouchSensor limit) {
+    public JerryArm(BunyipsOpMode opMode, Servo claw1, Servo claw2, DcMotorEx arm1, DcMotorEx arm2, TouchSensor limit) {
         super(opMode);
         this.arm1 = arm1;
         this.arm2 = arm2;
@@ -44,8 +52,8 @@ public class JerryArm extends BunyipsComponent {
         assert claw1 != null && claw2 != null && arm1 != null && arm2 != null;
 
         // Set directions of motors so they move the correct way
-        claw1.setDirection(CRServo.Direction.FORWARD);
-        claw2.setDirection(CRServo.Direction.REVERSE);
+        claw1.setDirection(Servo.Direction.FORWARD);
+        claw2.setDirection(Servo.Direction.REVERSE);
 
         arm1.setDirection(DcMotorEx.Direction.FORWARD);
         arm2.setDirection(DcMotorEx.Direction.REVERSE);
@@ -114,20 +122,19 @@ public class JerryArm extends BunyipsComponent {
      * Call to open claw system and allow picking up of items (allow servos to swing to open)
      */
     public void clawOpen() {
-        claw1.setPower(-1);
-        claw2.setPower(-1);
+        claw1.setPosition(0.0);
+        claw2.setPosition(0.0);
         getOpMode().telemetry.addLine("Claws are opening...");
     }
 
 
     /**
-     * Call to close claw system and pick up an object (the motors will continuously run, in order
-     * to provide a gripping power that will not let the cone go) (CR servos must be programmed
-     * with these limits in mind, as the code will simply continue commanding power to the servo)
+     * Call to close claw system and pick up an object by setting the target position to the closed
+     * position. Using Servo mode as opposed to CRServo mode.
      */
     public void clawClose() {
-        claw1.setPower(0.1);
-        claw2.setPower(0.1);
+        claw1.setPosition(1.0);
+        claw2.setPosition(1.0);
         getOpMode().telemetry.addLine("Claws are closing...");
     }
 
