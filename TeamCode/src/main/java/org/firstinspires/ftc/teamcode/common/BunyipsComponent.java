@@ -5,13 +5,12 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 /**
  * Base class for components used in BunyipsOpModes
  */
-
 public class BunyipsComponent {
 
     private BunyipsOpMode opMode;
 
-    public BunyipsComponent(BunyipsOpMode bunyipsOpMode) {
-        opMode = bunyipsOpMode;
+    public BunyipsComponent(BunyipsOpMode opMode) {
+        this.opMode = opMode;
     }
 
     protected BunyipsOpMode getOpMode() {

@@ -2,12 +2,12 @@ package org.firstinspires.ftc.teamcode.common.tasks;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
-import org.firstinspires.ftc.teamcode.common.pipelines.QRPark;
+import org.firstinspires.ftc.teamcode.common.pipelines.QRParkPipeline;
 
 public class GetQRSleeveTask extends BaseTask implements Task {
 
     private final CameraOp cam;
-    private QRPark qr;
+    private QRParkPipeline qr;
 
     private volatile ParkingPosition position;
     public enum ParkingPosition {
@@ -33,7 +33,7 @@ public class GetQRSleeveTask extends BaseTask implements Task {
             cam.swapModes();
 
         // Setup the pipeline for operation
-        qr = new QRPark();
+        qr = new QRParkPipeline();
         cam.setPipeline(qr);
     }
 
@@ -41,6 +41,7 @@ public class GetQRSleeveTask extends BaseTask implements Task {
     public void run() {
         // Null case needs to be done by the opMode, do this by checking the result if it is null,
         // and select a custom result based on the default (null) result
+        if (isFinished()) return;
 
         // Try to get the position of the sleeve using QR codes
         // The string to parking position conversion is done by the pipeline

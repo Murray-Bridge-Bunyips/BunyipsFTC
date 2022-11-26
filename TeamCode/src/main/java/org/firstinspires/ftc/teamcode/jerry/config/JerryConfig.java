@@ -91,20 +91,13 @@ public class JerryConfig extends RobotConfig {
         // at some point in time. (23 Nov 2022)
         try {
             imu = hardwareMap.get(BNO055IMU.class, "imu");
-            if (imu.initialize(parameters)) {
-                while (!imu.isGyroCalibrated()) {
-                    telemetry.addData("Please wait for IMU initialisation", imu.getCalibrationStatus());
-                    telemetry.update();
-                }
-            } else {
-                throw new Exception("IMU initialisation was unsuccessful.");
-            }
+            imu.initialize(parameters);
         } catch (Exception e) {
             telemetry.addLine("An internal error occurred configuring the IMU.");
             imu = null;
-        } finally {
-            telemetry.addData("BunyipsOpMode Initialisation", "Complete.");
-            telemetry.update();
         }
+
+        telemetry.addData("BunyipsOpMode Initialisation", "Complete.");
+        telemetry.update();
     }
 }

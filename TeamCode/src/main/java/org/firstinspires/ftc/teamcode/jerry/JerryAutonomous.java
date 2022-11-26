@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
+import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryConfig;
@@ -54,15 +55,19 @@ public class JerryAutonomous extends BunyipsOpMode {
 
         // 2. Detect signal position (with OpenCV) and save the result to the task instance
         // Run this as soon as we hit init and armed the tasks, as we are permitted to do so.
-        GetQRSleeveTask Krankenhaus = new GetQRSleeveTask(this, 7, cam);
-        while (!Krankenhaus.isFinished() && !isStarted() && !isStopRequested())
+        GetAprilTagTask Krankenhaus = new GetAprilTagTask(this, 7, cam);
+
+        // Init-loop that will stop either once the task has finished or the driver ends Init section
+        while (!Krankenhaus.isFinished() && opModeInInit())
             Krankenhaus.run();
 
         // 3. Park based on position saved in the task instance, or resort to center if the task was
         // prematurely ended (assuming the value may be null if play was pressed before isFinished activated)
-        GetQRSleeveTask.ParkingPosition position = Krankenhaus.getPosition();
+        GetAprilTagTask.ParkingPosition position = Krankenhaus.getPosition();
+
         if (position == null)
-            position = GetQRSleeveTask.ParkingPosition.CENTER;
+            position = GetAprilTagTask.ParkingPosition.CENTER;
+
         switch (position) {
             case LEFT:
 
