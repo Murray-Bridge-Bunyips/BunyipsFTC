@@ -4,13 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ButtonHashmap {
-
-    private static final String option1 = null;
-    private static final String option2 = null;
-    private static final ButtonControl button1 = null;
-    private static final ButtonControl button2 = null;
-    private static final ButtonControl defaultbutton = null;
-
     public static ButtonControl map(BunyipsOpMode opMode, String option1, String option2, ButtonControl button1, ButtonControl button2, ButtonControl defaultbutton) {
         HashMap<ButtonControl, String> buttonMap = new HashMap<>();
 
@@ -59,5 +52,4 @@ public class ButtonHashmap {
         opMode.telemetry.addLine(String.format("Loading tasks for %s", selectedButton.name()));
         return selectedButton;
     }
-    
 }

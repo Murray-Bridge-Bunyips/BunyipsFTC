@@ -201,6 +201,16 @@ public class JerryArm extends BunyipsComponent {
 
 
     /**
+     * Manually set arm position index
+     * @param pos Arm position index in LIFT_POSITIONS
+     */
+    public void liftSetPosition(int pos) {
+        // Avoid positions that are outside of the length of the array itself
+        if (pos < 0 || pos >= LIFT_POSITIONS.length) return;
+        liftIndex = pos;
+    }
+
+    /**
      * Call to update desired arm motor speeds
      */
     @SuppressLint("DefaultLocale")

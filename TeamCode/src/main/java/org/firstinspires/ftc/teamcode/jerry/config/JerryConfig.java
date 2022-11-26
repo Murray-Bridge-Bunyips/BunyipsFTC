@@ -78,6 +78,7 @@ public class JerryConfig extends RobotConfig {
             telemetry.addLine("Error configuring deadwheels. Check connections.");
             x = y = null;
         }
+
         // Control Hub IMU configuration
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
@@ -86,7 +87,7 @@ public class JerryConfig extends RobotConfig {
         parameters.loggingTag          = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        // This uses the legacy methods for IMU initalisation, this should be refactored and updated
+        // This uses the legacy methods for IMU initialisation, this should be refactored and updated
         // at some point in time. (23 Nov 2022)
         try {
             imu = hardwareMap.get(BNO055IMU.class, "imu");
