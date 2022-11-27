@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public class JerryArm extends BunyipsComponent {
 
-    private static final int[] LIFT_POSITIONS = { 40, 100, 300, 400, 600 };
+    private static final int[] LIFT_POSITIONS = { 50, 120, 350, 500, 700 };
     /*
         LIFT_POSITIONS index
         0: Cone obtaining/neutral height
