@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.lisa.config;
+
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -40,26 +41,18 @@ public class LisaConfiguration extends RobotConfig {
      */
     @Override
     protected void init(HardwareMap hardwareMap, Telemetry telemetry) {
-
         setTelemetry(telemetry);
 
-        try {
-            left = (DcMotorEx) getHardwareOn("Left Motor", hardwareMap.dcMotor);
-        } catch (Exception e) {
-            telemetry.addLine("Left Motor failed to configure.");
-        }
-        try {
-            right = (DcMotorEx) getHardwareOn("Right Motor", hardwareMap.dcMotor);
-        } catch (Exception e) {
-            telemetry.addLine("Right Motor failed to configure.");
-        }
+        left = (DcMotorEx) getHardwareOn("Left Motor", hardwareMap.dcMotor);
+        right = (DcMotorEx) getHardwareOn("Right Motor", hardwareMap.dcMotor);
+
         try {
             fws = hardwareMap.get(DistanceSensor.class, "Forward Vision System");
         } catch (Exception e) {
             telemetry.addLine("Forward Vision System failed to configure.");
         }
         try {
-            dws = hardwareMap.get(ColorSensor.class, "Downward Vision System"); 
+            dws = hardwareMap.get(ColorSensor.class, "Downward Vision System");
         } catch (Exception e) {
             telemetry.addLine("Downward Vision System failed to configure.");
         }

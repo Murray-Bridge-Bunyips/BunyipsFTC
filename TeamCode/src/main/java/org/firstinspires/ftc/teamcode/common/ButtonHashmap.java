@@ -4,21 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ButtonHashmap {
-    private final String option1;
-    private final String option2;
-    private final ButtonControl button1;
-    private final ButtonControl button2;
-    private final ButtonControl defaultbutton;
-
-    public ButtonHashmap(BunyipsOpMode opMode, String option1, String option2, ButtonControl button1, ButtonControl button2, ButtonControl defaultbutton) {
-        this.option1 = option1;
-        this.option2 = option2;
-        this.button1 = button1;
-        this.button2 = button2;
-        this.defaultbutton = defaultbutton;
-    }
-
-    public ButtonControl map(BunyipsOpMode opMode) {
+    public static ButtonControl map(BunyipsOpMode opMode, String option1, String option2, ButtonControl button1, ButtonControl button2, ButtonControl defaultbutton) {
         HashMap<ButtonControl, String> buttonMap = new HashMap<>();
 
         buttonMap.put(button1, option1);

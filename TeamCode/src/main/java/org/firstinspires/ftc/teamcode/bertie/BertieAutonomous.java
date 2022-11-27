@@ -1,20 +1,22 @@
 package org.firstinspires.ftc.teamcode.bertie;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.bertie.config.BertieArm;
 import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipConfiguration;
 import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipDrive;
-import org.firstinspires.ftc.teamcode.bertie.config.BertieDriveTask;
+import org.firstinspires.ftc.teamcode.bertie.tasks.BertieDriveTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.ButtonControl;
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap;
-import org.firstinspires.ftc.teamcode.common.MessageTask;
-import org.firstinspires.ftc.teamcode.common.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
+import org.firstinspires.ftc.teamcode.common.tasks.Task;
 
 import java.util.ArrayDeque;
 
 @Autonomous(name = "<BERTIE> Autonomous Testing")
+@Disabled
 public class BertieAutonomous extends BunyipsOpMode {
     private BertieBunyipConfiguration config;
     private BertieBunyipDrive drive = null;
@@ -81,8 +83,7 @@ public class BertieAutonomous extends BunyipsOpMode {
 
 
 //         telemetry.addLine(String.format("Loading tasks for %s", selectedButton.name()));
-        ButtonHashmap hmap = new ButtonHashmap(this, "Red", "Blue", ButtonControl.A, ButtonControl.B, ButtonControl.A);
-        ButtonControl selectedButton = hmap.map(this);
+        ButtonControl selectedButton = ButtonHashmap.map(this, "Red", "Blue", ButtonControl.A, ButtonControl.B, ButtonControl.A);
         switch (selectedButton) {
             case A:
                 tasks.add(new MessageTask(this, 1, "Loaded red"));

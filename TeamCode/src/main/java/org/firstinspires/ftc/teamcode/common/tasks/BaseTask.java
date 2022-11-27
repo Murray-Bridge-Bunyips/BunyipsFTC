@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.common;
+package org.firstinspires.ftc.teamcode.common.tasks;
+
+import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public abstract class BaseTask implements Task {
 
@@ -34,7 +36,7 @@ public abstract class BaseTask implements Task {
             init();
             startTime = getCurrentTime();
         }
-        if (getCurrentTime() > (startTime + time)) {
+        if (getCurrentTime() > (startTime + time) || opMode.isStopRequested()) {
             isFinished = true;
         }
         return isFinished;

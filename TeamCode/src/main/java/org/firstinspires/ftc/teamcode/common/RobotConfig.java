@@ -40,7 +40,7 @@ public abstract class RobotConfig {
     }
 
     /**
-     * Convenience method for reading the devce from the hardwareMap without having to check for exceptions
+     * Convenience method for reading the device from the hardwareMap without having to check for exceptions
      *
      * @param name                  name of device saved in the configuration file
      * @param hardwareDeviceMapping
@@ -54,6 +54,7 @@ public abstract class RobotConfig {
             hardwareDevice = deviceMapping.get(name);
         } catch (Throwable e) {
             try {
+                getTelemetry().addLine("A fatal error occurred configuring the device: " + name);
                 ErrorUtil.handleCatchAllException(e, getTelemetry());
             } catch (InterruptedException e1) {
                 DbgLog.msg(e.getLocalizedMessage());
