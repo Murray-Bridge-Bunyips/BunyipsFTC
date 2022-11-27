@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.common.tasks;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.pipelines.QRParkPipeline;
+import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
 
 public class GetQRSleeveTask extends BaseTask implements Task {
 
     private final CameraOp cam;
+    private final JerryArm arm;
     private QRParkPipeline qr;
 
     private volatile ParkingPosition position;
@@ -20,9 +22,10 @@ public class GetQRSleeveTask extends BaseTask implements Task {
         return position;
     }
 
-    public GetQRSleeveTask(BunyipsOpMode opMode, double time, CameraOp cam) {
+    public GetQRSleeveTask(BunyipsOpMode opMode, double time, CameraOp cam, JerryArm arm) {
         super(opMode, time);
         this.cam = cam;
+        this.arm = arm;
     }
 
     @Override
@@ -35,6 +38,8 @@ public class GetQRSleeveTask extends BaseTask implements Task {
         // Setup the pipeline for operation
         qr = new QRParkPipeline();
         cam.setPipeline(qr);
+        arm.liftSetPower(0.4);
+        arm.liftSetPosition(2);
     }
 
     @Override
@@ -42,6 +47,7 @@ public class GetQRSleeveTask extends BaseTask implements Task {
         // Null case needs to be done by the opMode, do this by checking the result if it is null,
         // and select a custom result based on the default (null) result
         if (isFinished()) return;
+        arm.update();
 
         // Try to get the position of the sleeve using QR codes
         // The string to parking position conversion is done by the pipeline

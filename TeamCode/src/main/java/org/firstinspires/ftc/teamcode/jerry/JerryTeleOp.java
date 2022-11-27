@@ -12,12 +12,13 @@ public class JerryTeleOp extends BunyipsOpMode {
 
     private JerryDrive drive;
     private JerryArm arm;
+    private JerryConfig config;
     private boolean up_pressed, down_pressed, drop_pressed;
 
     @Override
     protected void onInit() {
         // Configure drive and arm subsystems
-        JerryConfig config = JerryConfig.newConfig(hardwareMap, telemetry);
+        config = JerryConfig.newConfig(hardwareMap, telemetry);
         try {
             drive = new JerryDrive(this, config.bl, config.br, config.fl, config.fr);
         } catch (Exception e) {
@@ -38,8 +39,8 @@ public class JerryTeleOp extends BunyipsOpMode {
         double r = gamepad1.right_stick_x;
 
         // Set speeds of motors and interpret any data
-        drive.setSpeedXYR(x, y, r);
-        arm.liftSetPower(0.4);
+        drive.setSpeedXYR(-x, -y, -r);
+        arm.liftSetPower(0.2);
 
         if (up_pressed && !gamepad2.dpad_up) {
             arm.liftUp();

@@ -88,15 +88,16 @@ public class JerryArm extends BunyipsComponent {
             motor.setPower(-0.1);
 
             // Core Hex motors have a stall amperage of 4.4 amps, so we set it slightly lower
-            motor.setCurrentAlert(4.3, CurrentUnit.AMPS);
+             motor.setCurrentAlert(4.3, CurrentUnit.AMPS);
         }
 
         // Now we wait for the limit switch to be hit, or if there is a sudden stall current in the
         // arm motors, which means either the button failed or the motors had already triggered
         // the bounds detection. Either way works and it won't hurt to use both, incase the limit
-        // switch breaks for some reason.
-        while (!limit.isPressed()) {
-            if (motors[0].isOverCurrent() || motors[1].isOverCurrent()) break;
+        // switch breaks for some reason. Press right bumper to cancel the loop.
+        // Using reversed operation as pressing results in the limit switch reporting false
+        while (limit.isPressed() && !getOpMode().gamepad2.right_bumper) {
+             if (motors[0].isOverCurrent() || motors[1].isOverCurrent()) break;
             getOpMode().telemetry.addLine(String.format("ARM IS CALIBRATING... ENCODER VALUES: %d, %d",
                     arm1.getCurrentPosition(),
                     arm2.getCurrentPosition()));
@@ -107,7 +108,7 @@ public class JerryArm extends BunyipsComponent {
             // Finally, we reset the motors and we are now zeroed out again.
             motor.setPower(0);
             motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            motor.setTargetPosition(LIFT_POSITIONS[1]);
+            motor.setTargetPosition(0);
         }
 
         // Prevent 'slingshotting' the arm back to whatever position the arm was originally in,
@@ -123,7 +124,7 @@ public class JerryArm extends BunyipsComponent {
      */
     public void clawOpen() {
         claw1.setPosition(0.0);
-        claw2.setPosition(0.0);
+        claw2.setPosition(1.0);
         getOpMode().telemetry.addLine("Claws are opening...");
     }
 
@@ -133,8 +134,8 @@ public class JerryArm extends BunyipsComponent {
      * position. Using Servo mode as opposed to CRServo mode.
      */
     public void clawClose() {
-        claw1.setPosition(1.0);
-        claw2.setPosition(1.0);
+        claw1.setPosition(0.0);
+        claw2.setPosition(0.0);
         getOpMode().telemetry.addLine("Claws are closing...");
     }
 
@@ -159,7 +160,7 @@ public class JerryArm extends BunyipsComponent {
     public void liftDown() {
         liftIndex--;
         if (liftIndex <= 0) {
-            liftReset();
+            liftIndex = 0;
         }
         for (DcMotorEx motor : motors) {
             motor.setTargetPosition(LIFT_POSITIONS[liftIndex]);
@@ -220,8 +221,8 @@ public class JerryArm extends BunyipsComponent {
 
         // To make sure we don't accidentally get stuck in a loop of infinite calibration
         // Also zeroes out the encoders if we hit the switch.
-        if (limit.isPressed() && !alreadyCalibrated) liftCalibrate();
-        if (!limit.isPressed()) alreadyCalibrated = false;
+        if (!limit.isPressed() && !alreadyCalibrated) liftCalibrate();
+        if (limit.isPressed()) alreadyCalibrated = false;
 
         getOpMode().telemetry.addLine(String.format("Arms (pos1, pos2, index): %d, %d, %s",
                                                     arm1.getCurrentPosition(),
