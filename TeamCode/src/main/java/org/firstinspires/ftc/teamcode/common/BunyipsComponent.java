@@ -3,15 +3,14 @@ package org.firstinspires.ftc.teamcode.common;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 /**
- * Base class for components used in BaconOpModes
+ * Base class for components used in BunyipsOpModes
  */
-
-public class BunyipsController {
+public class BunyipsComponent {
 
     private BunyipsOpMode opMode;
 
-    public BunyipsController(BunyipsOpMode bunyipsOpMode) {
-        opMode = bunyipsOpMode;
+    public BunyipsComponent(BunyipsOpMode opMode) {
+        this.opMode = opMode;
     }
 
     protected BunyipsOpMode getOpMode() {

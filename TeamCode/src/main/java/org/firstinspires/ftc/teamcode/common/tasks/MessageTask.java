@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.common;
+package org.firstinspires.ftc.teamcode.common.tasks;
 
 import android.annotation.SuppressLint;
+
+import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public class MessageTask extends BaseTask implements Task {
 

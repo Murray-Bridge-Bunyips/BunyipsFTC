@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lisa.config;
+package org.firstinspires.ftc.teamcode.lisa.tasks;
 
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
@@ -9,9 +9,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
-import org.firstinspires.ftc.teamcode.common.BaseTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
+import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
 
 // PrecisionDrive Algorithm II, Lucas Bubner, 2022
 public class LisaPrecisionDriveTask extends BaseTask implements Task {

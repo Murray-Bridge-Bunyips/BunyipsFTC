@@ -20,7 +20,7 @@ public abstract class BunyipsOpMode extends LinearOpMode {
 
 
     /**
-     * override to this method to perform one time operations after start is pressed
+     * Override to this method to perform one time operations after start is pressed
      */
     protected void onStart() throws InterruptedException {
         clearTelemetryData();
@@ -28,14 +28,14 @@ public abstract class BunyipsOpMode extends LinearOpMode {
     }
 
     /**
-     * override to this method to perform one time operations after the activeLoop finishes
+     * Override to this method to perform one time operations after the activeLoop finishes
      */
     protected void onStop() throws InterruptedException {
     }
 
     /**
      * Implement this method to define the code to run when the Start button is pressed on the Driver station.
-     * This method will be called on each hardware cycle
+     * This method will be called on each hardware cycle.
      *
      * @throws InterruptedException
      */
@@ -78,7 +78,7 @@ public abstract class BunyipsOpMode extends LinearOpMode {
                 idle();
             }
 
-            //wait for user to hit stop
+            // Wait for user to hit stop
             while (opModeIsActive()) {
                 idle();
             }
@@ -88,9 +88,7 @@ public abstract class BunyipsOpMode extends LinearOpMode {
     }
 
     private void setup() {
-
         movingAverageTimer = new MovingAverageTimer(100);
-
     }
 
     /**
@@ -108,11 +106,11 @@ public abstract class BunyipsOpMode extends LinearOpMode {
     }
 
     /**
-     * call to prevent leave the loop calling activeLoop()
+     * Call to prevent leave the loop calling activeLoop()
      */
     protected void setOperationsCompleted() {
         this.operationsCompleted = true;
-        telemetry.addData("Opmode Status", "Operations completed");
+        telemetry.addData("BunyipsOpMode Status", "Operations completed");
     }
 
 }
