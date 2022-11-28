@@ -94,15 +94,15 @@ public class GetAprilTagTask extends BaseTask implements Task {
                 for (AprilTagDetection detection : detections) {
                     switch (detection.id) {
                         // LEFT POSITION APRILTAG
-                        case 0:
+                        case 17:
                             position = ParkingPosition.LEFT;
                             return;
                         // CENTER POSITION APRILTAG
-                        case 1:
+                        case 13:
                             position = ParkingPosition.CENTER;
                             return;
                         // RIGHT POSITION APRILTAG
-                        case 2:
+                        case 7:
                             position = ParkingPosition.RIGHT;
                             return;
                         default:
