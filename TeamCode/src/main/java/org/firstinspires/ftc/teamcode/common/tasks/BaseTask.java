@@ -8,24 +8,35 @@ public abstract class BaseTask implements Task {
      * the number of nanoseconds in a second
      */
     public static final double NANOS_IN_SECONDS = 1000000000.0;
-    protected double time;
+    protected double time = 0;
     protected volatile boolean isFinished = false;
     protected double startTime = 0;
     protected BunyipsOpMode opMode;
 
 
     public BaseTask(BunyipsOpMode opMode, double time) {
-
         this.time = time;
         this.opMode = opMode;
-
     }
 
+    // Overloading BaseTask to allow any tasks that may not want to use a time restriction,
+    // such as an init-loop task or some other always-active task. This will perform the same
+    // as a task also defined with a time of 0 seconds.
+    public BaseTask(BunyipsOpMode opMode) {
+        this.opMode = opMode;
+    }
+
+    /**
+     * Define code to run once, upon when the task is started.
+     */
     @Override
-    public void init() {
+    public void init() {}
 
-    }
-
+    /**
+     * Override to this method to add custom criteria if a task should be considered finished.
+     * Recommended to override with a super call even if not using a time restriction.
+     * @return bool expression indicating whether the task is finished or not
+     */
     @Override
     public boolean isFinished() {
         if (isFinished) {
@@ -36,9 +47,11 @@ public abstract class BaseTask implements Task {
             init();
             startTime = getCurrentTime();
         }
-        if (getCurrentTime() > (startTime + time) || opMode.isStopRequested()) {
+
+        if ((getCurrentTime() > (startTime + time) && time != 0) || opMode.isStopRequested()) {
             isFinished = true;
         }
+
         return isFinished;
     }
 

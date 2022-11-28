@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.jerry.config;
 
 import android.annotation.SuppressLint;
 
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -98,7 +97,7 @@ public class JerryArm extends BunyipsComponent {
         // Using reversed operation as pressing results in the limit switch reporting false
         while (limit.isPressed() && !getOpMode().gamepad2.right_bumper) {
              if (motors[0].isOverCurrent() || motors[1].isOverCurrent()) break;
-            getOpMode().telemetry.addLine(String.format("ARM IS CALIBRATING... ENCODER VALUES: %d, %d",
+            getOpMode().telemetry.addLine(String.format("ARM IS CALIBRATING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
                     arm1.getCurrentPosition(),
                     arm2.getCurrentPosition()));
             getOpMode().telemetry.update();

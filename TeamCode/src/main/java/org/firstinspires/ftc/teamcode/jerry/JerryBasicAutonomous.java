@@ -23,7 +23,7 @@ public class JerryBasicAutonomous extends BunyipsOpMode {
     private CameraOp cam;
     private JerryDrive drive;
     private JerryArm arm;
-    private ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
@@ -37,7 +37,6 @@ public class JerryBasicAutonomous extends BunyipsOpMode {
         tasks.add(new JerryBaseDriveTask(this, 1, drive, 0, 1, 0));
 
         telemetry.addLine("Ready to go. Parking position has been set to: CENTER");
-        telemetry.update();
     }
 
     @Override

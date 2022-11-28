@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
  */
 public class BunyipsComponent {
 
-    private BunyipsOpMode opMode;
+    private final BunyipsOpMode opMode;
 
     public BunyipsComponent(BunyipsOpMode opMode) {
         this.opMode = opMode;

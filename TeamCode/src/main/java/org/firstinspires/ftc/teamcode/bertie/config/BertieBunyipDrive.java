@@ -22,11 +22,11 @@ public class BertieBunyipDrive extends BunyipsComponent {
     private double speedY = 0.0;
     private double speedR = 0.0;
 
-    private BunyipsOpMode opMode;
-    private DcMotor frontLeftMotor;
-    private DcMotor frontRightMotor;
-    private DcMotor backLeftMotor;
-    private DcMotor backRightMotor;
+    private final BunyipsOpMode opMode;
+    private final DcMotor frontLeftMotor;
+    private final DcMotor frontRightMotor;
+    private final DcMotor backLeftMotor;
+    private final DcMotor backRightMotor;
 
     private final Telemetry.Item item;
     private boolean showTelemetry = true;
@@ -113,13 +113,13 @@ public class BertieBunyipDrive extends BunyipsComponent {
      */
     private void rotationPriorityNormalized() {
         //calculate motor powers
-        double translationValues[] = {
+        double[] translationValues = {
                 speedX + speedY,
                 speedX - speedY,
                 speedX - speedY,
                 speedX + speedY};
 
-        double rotationValues[] = {
+        double[] rotationValues = {
                 -speedR,
                 speedR,
                 -speedR,

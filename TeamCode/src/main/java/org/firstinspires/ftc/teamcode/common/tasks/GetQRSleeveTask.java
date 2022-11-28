@@ -52,7 +52,7 @@ public class GetQRSleeveTask extends BaseTask implements Task {
         // Try to get the position of the sleeve using QR codes
         // The string to parking position conversion is done by the pipeline
         ParkingPosition result = qr.getPosition();
-        opMode.telemetry.addLine("Waiting for QR Code detection... Currently seeing: " + String.valueOf(result));
+        opMode.telemetry.addLine("Waiting for QR Code detection... Currently seeing: " + result);
         opMode.telemetry.update();
         if (result != null) {
             isFinished = true;

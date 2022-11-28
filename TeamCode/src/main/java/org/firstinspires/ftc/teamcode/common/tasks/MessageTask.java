@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public class MessageTask extends BaseTask implements Task {
 
-    private String message;
+    private final String message;
 
     public MessageTask(BunyipsOpMode opMode, double time, String message) {
         super(opMode, time);

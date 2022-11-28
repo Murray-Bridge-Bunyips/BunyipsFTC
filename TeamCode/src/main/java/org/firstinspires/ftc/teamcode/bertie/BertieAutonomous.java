@@ -20,8 +20,8 @@ import java.util.ArrayDeque;
 public class BertieAutonomous extends BunyipsOpMode {
     private BertieBunyipConfiguration config;
     private BertieBunyipDrive drive = null;
-    private BertieArm lift = null;
-    private ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private final BertieArm lift = null;
+    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
@@ -83,7 +83,7 @@ public class BertieAutonomous extends BunyipsOpMode {
 
 
 //         telemetry.addLine(String.format("Loading tasks for %s", selectedButton.name()));
-        ButtonControl selectedButton = ButtonHashmap.map(this, "Red", "Blue", ButtonControl.A, ButtonControl.B, ButtonControl.A);
+        ButtonControl selectedButton = ButtonHashmap.map(this, "Red", "Blue", "", "");
         switch (selectedButton) {
             case A:
                 tasks.add(new MessageTask(this, 1, "Loaded red"));

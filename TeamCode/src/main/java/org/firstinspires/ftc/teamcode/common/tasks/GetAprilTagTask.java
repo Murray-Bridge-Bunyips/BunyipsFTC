@@ -10,8 +10,8 @@ import org.openftc.apriltag.AprilTagDetection;
 import java.util.ArrayList;
 
 /**
- * Intermediate task for using the AprilTagDetectionPipeline to detect a Signal position
- * @author Lucas, Nov 2022
+ * Intermediate task for using the AprilTagDetectionPipeline to detect a Signal position during an initLoop.
+ * @author Lucas Bubner, FTC 15215; Nov 2022
  */
 public class GetAprilTagTask extends BaseTask implements Task {
 
@@ -41,8 +41,8 @@ public class GetAprilTagTask extends BaseTask implements Task {
         return position;
     }
 
-    public GetAprilTagTask(BunyipsOpMode opMode, double time, CameraOp cam) {
-        super(opMode, time);
+    public GetAprilTagTask(BunyipsOpMode opMode, CameraOp cam) {
+        super(opMode);
         this.cam = cam;
     }
 
