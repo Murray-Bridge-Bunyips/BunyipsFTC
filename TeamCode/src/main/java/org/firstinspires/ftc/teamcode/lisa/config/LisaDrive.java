@@ -14,19 +14,14 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 public class LisaDrive extends BunyipsComponent {
     final private DcMotorEx left;
     final private DcMotorEx right;
-    final private DistanceSensor fws;
-    final private ColorSensor dws;
 
     private double leftPower;
     private double rightPower;
 
-    public LisaDrive(BunyipsOpMode opMode, DcMotorEx left, DcMotorEx right, DistanceSensor fws, ColorSensor dws) {
+    public LisaDrive(BunyipsOpMode opMode, DcMotorEx left, DcMotorEx right) {
         super(opMode);
-
         this.left = left;
         this.right = right;
-        this.fws = fws;
-        this.dws = dws;
         leftPower = 0;
         rightPower = 0;
     }
@@ -59,8 +54,8 @@ public class LisaDrive extends BunyipsComponent {
     public void update() {
         left.setPower(leftPower);
         right.setPower(rightPower);
-        getOpMode().telemetry.addLine(String.format("Left Encoder: %d, Right Encoder: %d\nFWS dist: %s cm\nDWS Red, Green, Blue: %d, %d, %d",
-        left.getCurrentPosition(), right.getCurrentPosition(), fws.getDistance(DistanceUnit.CM), dws.red(), dws.green(), dws.blue()));
+        getOpMode().telemetry.addLine(String.format("Left Encoder: %d, Right Encoder: %d",
+        left.getCurrentPosition(), right.getCurrentPosition()));
     }
 
     public boolean targetPositionReached() {
