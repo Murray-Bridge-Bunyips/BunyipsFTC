@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.pipelines.QRParkPipeline;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
 
-public class GetQRSleeveTask extends BaseTask implements Task {
+public class GetQRSleeveTask extends Task implements TaskImpl {
 
     private final CameraOp cam;
     private final JerryArm arm;

@@ -4,15 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
-import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask;
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
-import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryConfig;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
 import org.firstinspires.ftc.teamcode.common.tasks.GetQRSleeveTask;
-import org.firstinspires.ftc.teamcode.jerry.tasks.JerryBaseDriveTask;
-import org.firstinspires.ftc.teamcode.jerry.tasks.JerryDeadwheelDriveTask;
 
 import java.util.ArrayDeque;
 
@@ -23,7 +20,7 @@ public class JerryAutonomous extends BunyipsOpMode {
     private CameraOp cam = null;
     private JerryDrive drive;
     private JerryArm arm;
-    private ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
@@ -90,7 +87,7 @@ public class JerryAutonomous extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() throws InterruptedException {
-        Task currentTask = tasks.peekFirst();
+        TaskImpl currentTask = tasks.peekFirst();
         if (currentTask == null) {
             return;
         }

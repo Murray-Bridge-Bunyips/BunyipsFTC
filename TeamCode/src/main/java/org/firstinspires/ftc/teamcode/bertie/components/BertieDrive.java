@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.bertie.config;
+package org.firstinspires.ftc.teamcode.bertie.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
@@ -7,7 +7,11 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
-public class BertieBunyipDrive extends BunyipsComponent {
+/*
+    Robot BERTIE no longer exists; new robot is now JERRY
+    This code now remains for archival purposes only.
+ */
+public class BertieDrive extends BunyipsComponent {
 
     public enum MecanumDriveMode {
         NORMALIZED, ROTATION_PRIORITY_NORMALIZED
@@ -32,10 +36,10 @@ public class BertieBunyipDrive extends BunyipsComponent {
     private boolean showTelemetry = true;
 
 
-    public BertieBunyipDrive(BunyipsOpMode opmode,
-                             DcMotor frontLeftMotor, DcMotor frontRightMotor,
-                             DcMotor backLeftMotor, DcMotor backRightMotor,
-                             boolean showTelemetry) {
+    public BertieDrive(BunyipsOpMode opmode,
+                       DcMotor frontLeftMotor, DcMotor frontRightMotor,
+                       DcMotor backLeftMotor, DcMotor backRightMotor,
+                       boolean showTelemetry) {
         super(opmode);
         this.opMode = opmode;
         this.frontLeftMotor = frontLeftMotor;
@@ -87,7 +91,7 @@ public class BertieBunyipDrive extends BunyipsComponent {
     }
 
     private void updateNormalized() {
-        //calculate motor powers
+        // Calculate motor powers
         double frontLeftPower = speedX + speedY - speedR;
         double frontRightPower = speedX - speedY + speedR;
         double backLeftPower = speedX - speedY - speedR;
@@ -112,7 +116,7 @@ public class BertieBunyipDrive extends BunyipsComponent {
      * Calculate rotational speed first, and use remaining headway for translation.
      */
     private void rotationPriorityNormalized() {
-        //calculate motor powers
+        // Calculate motor powers
         double translationValues[] = {
                 speedX + speedY,
                 speedX - speedY,
@@ -152,7 +156,6 @@ public class BertieBunyipDrive extends BunyipsComponent {
         backLeftMotor.setPower(backLeftPower);
         backRightMotor.setPower(backRightPower);
     }
-
 
     private double clipMotorPower(double p) {
         return Range.clip(p, -1.0, 1.0);

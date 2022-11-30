@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
-import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaConfig;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
 import org.firstinspires.ftc.teamcode.lisa.tasks.LisaPrecisionDriveTask;
@@ -12,11 +12,11 @@ import org.firstinspires.ftc.teamcode.lisa.tasks.LisaPrecisionDriveTask;
 import java.util.ArrayDeque;
 
 @Autonomous(name="<LISA> Autonomous Testing")
-public class LisaAuto extends BunyipsOpMode {
+public class LisaAutonomous extends BunyipsOpMode {
 
     private LisaConfig config;
     private LisaDrive drive = null;
-    private ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
@@ -37,7 +37,7 @@ public class LisaAuto extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() throws InterruptedException {
-        Task currentTask = tasks.peekFirst();
+        TaskImpl currentTask = tasks.peekFirst();
         if (currentTask == null) {
             return;
         }

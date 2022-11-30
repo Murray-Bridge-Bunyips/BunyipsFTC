@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
 
-public class JerryArmTask extends BaseTask implements Task {
+public class JerryArmTask extends Task implements TaskImpl {
 
     private final JerryArm arm;
     private final int targetposition;

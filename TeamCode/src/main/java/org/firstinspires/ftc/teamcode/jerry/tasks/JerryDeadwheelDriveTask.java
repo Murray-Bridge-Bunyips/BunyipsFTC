@@ -3,13 +3,13 @@ package org.firstinspires.ftc.teamcode.jerry.tasks;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
 import org.firstinspires.ftc.teamcode.common.Deadwheel;
-import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 
 // Advanced drive task which will use the deadwheel encoders to X Y position on field
 // For this robot, we don't actually need a precision IMU drive, and as such we don't need to
 // implement one (although IMUOp has the methods available to make this work)
-public class JerryDeadwheelDriveTask extends BaseTask implements Task {
+public class JerryDeadwheelDriveTask extends Task implements TaskImpl {
 
     private final JerryDrive drive;
     private final Deadwheel x, y;

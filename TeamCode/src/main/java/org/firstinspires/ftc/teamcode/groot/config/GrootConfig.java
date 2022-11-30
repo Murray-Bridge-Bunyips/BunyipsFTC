@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
-public class GrootConfiguration extends RobotConfig {
+public class GrootConfig extends RobotConfig {
     public DcMotor left;
     public DcMotor right;
 
@@ -21,8 +21,8 @@ public class GrootConfiguration extends RobotConfig {
      * @param telemetry
      * @return
      */
-    public static GrootConfiguration newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
-        GrootConfiguration config = new GrootConfiguration();
+    public static GrootConfig newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
+        GrootConfig config = new GrootConfig();
         config.init(hardwareMap, telemetry);
         return config;
     }

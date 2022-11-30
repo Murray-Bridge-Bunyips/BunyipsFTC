@@ -94,8 +94,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
      }
 
     /**
-     * Query motor alignment speed for R speed through PrecisionDrive
-     * @param original_speed supply the intended speed for the motor
+     * Query motor alignment speed for ROTATIONAL speed through PrecisionDrive
+     * @param original_speed supply the intended speed for the R SPEED value
      * @return queried speed based on parameters given, returns the unaltered speed if PrecisionDrive is not online
      */
      public double getRPrecisionSpeed(double original_speed, int tolerance) {

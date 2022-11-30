@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.jerry.tasks;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.IMUOp;
-import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
 
-public class JerryIMUDriveTask extends BaseTask implements Task {
+public class JerryIMUDriveTask extends Task implements TaskImpl {
 
     private final JerryDrive drive;
     private final IMUOp imu;

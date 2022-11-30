@@ -11,34 +11,19 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
 public class LisaConfig extends RobotConfig {
-    // Motors
+
     public DcMotorEx left;
     public DcMotorEx right;
-
-    // Other components
     public DistanceSensor fws;
     public ColorSensor dws;
     public BNO055IMU imu;
 
-    /**
-     * Factory method for this class
-     *
-     * @param hardwareMap
-     * @param telemetry
-     * @return
-     */
     public static LisaConfig newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
         LisaConfig config = new LisaConfig();
         config.init(hardwareMap, telemetry);
         return config;
     }
 
-    /**
-     * Assign your class instance variables to the saved device names in the hardware map
-     *
-     * @param hardwareMap
-     * @param telemetry
-     */
     @Override
     protected void init(HardwareMap hardwareMap, Telemetry telemetry) {
         setTelemetry(telemetry);

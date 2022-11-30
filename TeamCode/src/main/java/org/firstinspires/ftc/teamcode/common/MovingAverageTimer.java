@@ -1,22 +1,19 @@
 package org.firstinspires.ftc.teamcode.common;
 
 /**
- * Created by Shaun on 11/06/2017.
+ * Time utilities for robot operation.
+ * @author Shaun, 11/06/2017.
  */
-
 public class MovingAverageTimer {
 
-    /**
-     * the number of nanoseconds in a second
-     */
+
     public static final double SECOND_IN_NANO = 1000000000.0;
-    /**
-     * the number of nanoseconds in a millisecond
-     */
     public static final double MILLIS_IN_NANO = 1000000.0;
+
     // A ring buffer is used to keep track of a moving average
     private final int ringBufferSize;
     private final long[] loopTimeRingBuffer;
+
     private final double resolution;
     private final String avgFormatStr;
     private final String toStringFormatStr;
@@ -54,7 +51,6 @@ public class MovingAverageTimer {
                 this.resolution = SECOND_IN_NANO;
                 avgFormatStr = "%3.3f secs";
                 toStringFormatStr = hdr + " seconds\n%-12d%-12.3f%-12.3f%-12.3f\n min        %-12.3f%-12.3f%-12.3f\n max        %-12.3f%-12.3f%-12.3f";
-
                 break;
             case MILLISECONDS:
             default:
@@ -91,7 +87,7 @@ public class MovingAverageTimer {
         // Add the new value
         loopTimeRingBuffer[ringBufferIndex] = loopTime;
 
-        // wrap the current index
+        // Wrap the current index
         ringBufferIndex = (ringBufferIndex + 1) % ringBufferSize;
 
         loopCount += 1;

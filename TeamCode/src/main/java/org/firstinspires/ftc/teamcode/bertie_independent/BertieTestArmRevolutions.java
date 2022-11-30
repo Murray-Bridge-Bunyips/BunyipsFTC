@@ -3,26 +3,20 @@ package org.firstinspires.ftc.teamcode.bertie_independent;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-@Disabled // Test file that doesn't need to be active for now
-@SuppressWarnings("unused")
+/*
+    Robot BERTIE no longer exists; new robot is now JERRY
+    This code now remains for archival purposes only.
+ */
 @Autonomous(name = "<BERTIE-I> Test Arm Revolutions")
-public class TestArmRevolutions extends LinearOpMode {
+@Disabled
+public class BertieTestArmRevolutions extends LinearOpMode {
     @Override
     public void runOpMode() {
         double armPosition;
-
         DcMotorEx armMotor = hardwareMap.get(DcMotorEx.class, "Arm Motor");
-        DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class, "Front Right");
-        DcMotorEx backRight = hardwareMap.get(DcMotorEx.class, "Back Right");
-        CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake");
-        DcMotorEx frontLeft = hardwareMap.get(DcMotorEx.class, "Front Left");
-        DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class, "Back Left");
-        CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right");
-        CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left");
 
         telemetry.addData("Ready", "Hardware mapped and variables declared. ENSURE ARM MOTOR IS READY TO MOVE FROM RESTING POSITION. Continue when ready.");
         telemetry.update();
@@ -51,6 +45,5 @@ public class TestArmRevolutions extends LinearOpMode {
                 telemetry.update();
             }
         }
-        stop();
     }
 }

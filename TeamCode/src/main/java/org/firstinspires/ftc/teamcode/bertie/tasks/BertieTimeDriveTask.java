@@ -1,18 +1,22 @@
 package org.firstinspires.ftc.teamcode.bertie.tasks;
 
-import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipDrive;
+import org.firstinspires.ftc.teamcode.bertie.components.BertieDrive;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 
-public class BertieDriveTask extends BaseTask implements Task {
+/*
+    Robot BERTIE no longer exists; new robot is now JERRY
+    This code now remains for archival purposes only.
+ */
+public class BertieTimeDriveTask extends Task implements TaskImpl {
 
-    private final BertieBunyipDrive drive;
+    private final BertieDrive drive;
     private final double x;
     private final double y;
     private final double r;
 
-    public BertieDriveTask(BunyipsOpMode opMode, double time, BertieBunyipDrive drive, double x, double y, double r) {
+    public BertieTimeDriveTask(BunyipsOpMode opMode, double time, BertieDrive drive, double x, double y, double r) {
         super(opMode, time);
         this.drive = drive;
         this.x = x;
@@ -34,7 +38,5 @@ public class BertieDriveTask extends BaseTask implements Task {
             drive.update();
             return;
         }
-
     }
-
 }

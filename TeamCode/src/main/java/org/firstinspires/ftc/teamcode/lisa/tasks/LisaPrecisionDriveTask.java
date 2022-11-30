@@ -10,12 +10,12 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
 
 // PrecisionDrive Algorithm II, Lucas Bubner, 2022
-public class LisaPrecisionDriveTask extends BaseTask implements Task {
+public class LisaPrecisionDriveTask extends Task implements TaskImpl {
     private final LisaDrive drive;
     private final BNO055IMU imu;
     private final double speed;

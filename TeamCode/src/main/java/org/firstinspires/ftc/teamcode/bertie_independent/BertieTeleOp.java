@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.bertie_independent;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -8,13 +9,12 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.Range;
 
-@SuppressWarnings("unused")
 /*
-    Deprecated by common class configuration, however, this code works and is active for complete
-    manual control of motors and for team members who are still used to the original controls
-*/
-
+    Robot BERTIE no longer exists; new robot is now JERRY
+    This code now remains for archival purposes only.
+ */
 @TeleOp(name = "<BERTIE-I> Original TeleOp")
+@Disabled
 public class BertieTeleOp extends LinearOpMode {
 
     // Primary thread that is ran from the Driver Station.

@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
 
 // Base drive task which will run XYR speed for a given time
 // Only used for tests, do not use in actual OpMode as field positioning data is lost
-public class JerryBaseDriveTask extends BaseTask implements Task {
+public class JerryBaseDriveTask extends Task implements TaskImpl {
 
     private final JerryDrive drive;
     private final double x, y, r;

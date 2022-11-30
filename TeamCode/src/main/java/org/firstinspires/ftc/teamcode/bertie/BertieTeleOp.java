@@ -3,16 +3,20 @@ package org.firstinspires.ftc.teamcode.bertie;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.bertie.config.BertieArm;
-import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipConfiguration;
-import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipDrive;
+import org.firstinspires.ftc.teamcode.bertie.components.BertieArm;
+import org.firstinspires.ftc.teamcode.bertie.components.BertieConfig;
+import org.firstinspires.ftc.teamcode.bertie.components.BertieDrive;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
+/*
+    Robot BERTIE no longer exists; new robot is now JERRY
+    This code now remains for archival purposes only.
+ */
 @TeleOp(name = "<BERTIE> TeleOp")
 @Disabled
 public class BertieTeleOp extends BunyipsOpMode {
-    private BertieBunyipConfiguration config;
-    private BertieBunyipDrive drive = null;
+    private BertieConfig config;
+    private BertieDrive drive = null;
     private BertieArm lift = null;
     private boolean up_pressed = false;
     private boolean down_pressed = false;
@@ -20,10 +24,10 @@ public class BertieTeleOp extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config = BertieBunyipConfiguration.newConfig(hardwareMap, telemetry);
+        config = BertieConfig.newConfig(hardwareMap, telemetry);
 
         try {
-            drive = new BertieBunyipDrive(this,
+            drive = new BertieDrive(this,
                     config.frontLeft, config.frontRight,
                     config.backLeft, config.backRight,
                     false);
@@ -80,5 +84,5 @@ public class BertieTeleOp extends BunyipsOpMode {
         drop_pressed = gamepad2.left_bumper;
 
         lift.update();
-        }
     }
+}

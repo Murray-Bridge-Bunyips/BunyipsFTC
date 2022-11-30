@@ -21,6 +21,7 @@ public class JerryTeleOp extends BunyipsOpMode {
         config = JerryConfig.newConfig(hardwareMap, telemetry);
         try {
             drive = new JerryDrive(this, config.bl, config.br, config.fl, config.fr);
+            drive.setToBrake();
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise Drive System.");
         }

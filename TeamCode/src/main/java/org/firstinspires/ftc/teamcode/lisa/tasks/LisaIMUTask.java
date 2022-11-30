@@ -9,13 +9,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.Position;
 import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.tasks.BaseTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
 
 
 // TODO: Check if negative values are needed for CW rotation, and change tolerance code
-public class LisaIMUTask extends BaseTask implements Task {
+public class LisaIMUTask extends Task implements TaskImpl {
 
     private final LisaDrive drive;
     private final BNO055IMU imu;

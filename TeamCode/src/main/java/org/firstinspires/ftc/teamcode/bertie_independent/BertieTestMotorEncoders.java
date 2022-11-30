@@ -3,28 +3,24 @@ package org.firstinspires.ftc.teamcode.bertie_independent;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-// Uses Extended DcMotor class
 
-@SuppressWarnings({"unused", "FieldMayBeFinal"})
-@Disabled // Test file that doesn't need to be active for now
+/*
+    Robot BERTIE no longer exists; new robot is now JERRY
+    This code now remains for archival purposes only.
+ */
 @Autonomous(name = "<BERTIE-I> Test All Motor Encoders")
-public class TestMotorEncoders extends LinearOpMode {
+@Disabled
+public class BertieTestMotorEncoders extends LinearOpMode {
 
     @Override
     public void runOpMode() {
 
-        // Map hardware
-        DcMotorEx armMotor = hardwareMap.get(DcMotorEx.class, "Arm Motor"); // Not using
         DcMotorEx frontRight = hardwareMap.get(DcMotorEx.class, "Front Right");
         DcMotorEx backRight = hardwareMap.get(DcMotorEx.class, "Back Right");
-        CRServo spinIntake = hardwareMap.get(CRServo.class, "Spin Intake"); // Not using
         DcMotorEx frontLeft = hardwareMap.get(DcMotorEx.class, "Front Left");
         DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class, "Back Left");
-        CRServo carouselRight = hardwareMap.get(CRServo.class, "Carousel Right"); // Not using
-        CRServo carouselLeft = hardwareMap.get(CRServo.class, "Carousel Left"); // Not using
 
         // Set all motors to forward drive, although we wouldn't do this to move forward
         frontRight.setDirection(DcMotorEx.Direction.FORWARD);
@@ -49,19 +45,12 @@ public class TestMotorEncoders extends LinearOpMode {
         backRight.setPower(1);
         backLeft.setPower(1);
 
-    while (opModeIsActive()) {
-        telemetry.addData("frontRight Encoder", frontRight.getCurrentPosition());
-        telemetry.addData("frontLeft Encoder", frontLeft.getCurrentPosition());
-        telemetry.addData("backRight Encoder", backRight.getCurrentPosition());
-        telemetry.addData("backLeft Encoder", backLeft.getCurrentPosition());
-        telemetry.update();
-        if (isStopRequested()) {
-            frontRight.setPower(0);
-            frontLeft.setPower(0);
-            backRight.setPower(0);
-            backLeft.setPower(0);
-            stop();
-        }
+        while (opModeIsActive()) {
+            telemetry.addData("frontRight Encoder", frontRight.getCurrentPosition());
+            telemetry.addData("frontLeft Encoder", frontLeft.getCurrentPosition());
+            telemetry.addData("backRight Encoder", backRight.getCurrentPosition());
+            telemetry.addData("backLeft Encoder", backLeft.getCurrentPosition());
+            telemetry.update();
         }
     }
 }

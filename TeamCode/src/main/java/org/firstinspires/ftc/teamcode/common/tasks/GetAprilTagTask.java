@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * Intermediate task for using the AprilTagDetectionPipeline to detect a Signal position
  * @author Lucas, Nov 2022
  */
-public class GetAprilTagTask extends BaseTask implements Task {
+public class GetAprilTagTask extends Task implements TaskImpl {
 
     private final CameraOp cam;
     private AprilTagDetectionPipeline at;
@@ -76,9 +76,8 @@ public class GetAprilTagTask extends BaseTask implements Task {
     @Override
     @SuppressLint("DefaultLocale")
     public void run() {
-        // In the event the camera cannot find an AprilTag, the OpMode should handle a default value
-        // This is because in case the operator exits the init-loop before the time based end,
-        // the parking position value will be null.
+        // Caution! ParkingPosition will be null if the camera does not pick up anything in it's task runtime.
+        // Be sure to check if ParkingPosition is null before setting up your specific tasks, to handle a fallback value.
         if (isFinished()) return;
 
         ArrayList<AprilTagDetection> detections = at.getDetectionsUpdate();
