@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.bertie.config;
+package org.firstinspires.ftc.teamcode.bertie.components;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -7,8 +7,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
-public class BertieBunyipConfiguration extends RobotConfig {
-    //  Motors
+/*
+    Robot BERTIE no longer exists; new robot is now JERRY
+    This code now remains for archival purposes only.
+ */
+public class BertieConfig extends RobotConfig {
+
     public DcMotorEx backLeft;
     public DcMotorEx backRight;
     public DcMotorEx frontLeft;
@@ -18,28 +22,14 @@ public class BertieBunyipConfiguration extends RobotConfig {
     public CRServo carouselLeft;
     public CRServo carouselRight;
 
-    /**
-     * Factory method for this class
-     *
-     * @param hardwareMap
-     * @param telemetry
-     * @return
-     */
-    public static BertieBunyipConfiguration newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
-        BertieBunyipConfiguration config = new BertieBunyipConfiguration();
+    public static BertieConfig newConfig(HardwareMap hardwareMap, Telemetry telemetry) {
+        BertieConfig config = new BertieConfig();
         config.init(hardwareMap, telemetry);
         return config;
     }
 
-    /**
-     * Assign your class instance variables to the saved device names in the hardware map
-     *
-     * @param hardwareMap
-     * @param telemetry
-     */
     @Override
     protected void init(HardwareMap hardwareMap, Telemetry telemetry) {
-
         setTelemetry(telemetry);
 
         backLeft = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
@@ -51,13 +41,9 @@ public class BertieBunyipConfiguration extends RobotConfig {
         carouselRight = (CRServo) getHardwareOn("Carousel Right", hardwareMap.crservo);
         spinIntake = (CRServo) getHardwareOn("Spin Intake", hardwareMap.crservo);
 
-
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);
         spinIntake.setDirection(DcMotorSimple.Direction.REVERSE);
         armMotor.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.BRAKE);
-
-        telemetry.addData("BunyipsOpMode Initialisation", "Complete");
-        telemetry.update();
     }
 }

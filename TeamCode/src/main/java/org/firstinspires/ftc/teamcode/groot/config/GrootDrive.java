@@ -38,13 +38,16 @@ public class GrootDrive extends BunyipsComponent {
         right.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
-    public void setEncoder(boolean encoder) {
-        if (encoder) {
+    public void setEncoder(boolean encoderState) {
+        if (encoderState) {
             left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             right.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            return;
         }
-        left.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        right.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        left.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @SuppressLint("DefaultLocale")

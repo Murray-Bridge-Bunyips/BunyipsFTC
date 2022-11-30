@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.common.tasks;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 
-public class TFODDetectionTask extends BaseTask implements Task {
+public class TFODDetectionTask extends Task implements TaskImpl {
 
     private final CameraOp cam;
 

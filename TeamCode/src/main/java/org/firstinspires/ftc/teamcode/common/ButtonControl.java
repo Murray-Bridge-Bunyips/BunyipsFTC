@@ -22,7 +22,6 @@ public enum ButtonControl {
     public static boolean isSelected(Gamepad gamepad, ButtonControl buttonControl) {
         boolean buttonPressed = false;
         switch (buttonControl) {
-
             case DPAD_UP:
                 buttonPressed = gamepad.dpad_up;
                 break;
@@ -36,14 +35,14 @@ public enum ButtonControl {
                 buttonPressed = gamepad.dpad_right;
                 break;
             case A:
-                // ignore if start is also pressed to avoid triggering when initialising the
+                // Ignore if start is also pressed to avoid triggering when initialising the
                 // controllers
                 if (!gamepad.start) {
                     buttonPressed = gamepad.a;
                 }
                 break;
             case B:
-                // ignore if start is also pressed to avoid triggering when initialising the
+                // Ignore if start is also pressed to avoid triggering when initialising the
                 // controllers
                 if (!gamepad.start) {
                     buttonPressed = gamepad.b;
@@ -74,7 +73,6 @@ public enum ButtonControl {
                 buttonPressed = gamepad.right_stick_button;
                 break;
             case NONE:
-                buttonPressed = false;
                 break;
         }
 

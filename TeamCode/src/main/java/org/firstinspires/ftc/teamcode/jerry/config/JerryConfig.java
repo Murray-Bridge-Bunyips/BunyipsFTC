@@ -97,7 +97,6 @@ public class JerryConfig extends RobotConfig {
             imu = null;
         }
 
-        telemetry.addData("BunyipsOpMode Initialisation", "Complete.");
-        telemetry.update();
+        telemetry.addData("BunyipsOpMode Status", "ROBOT CONFIGURATION COMPLETED.");
     }
 }

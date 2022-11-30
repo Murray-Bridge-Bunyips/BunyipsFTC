@@ -28,8 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Custom common class to operate all Vuforia and TensorFlow operations through a single attached Webcam
- * Allows swapping to an EasyOpenCV mode as well, and supports hotswapping within the same instance
+ * Custom common class to operate all Vuforia, TensorFlow, and OpenCV operations through a single attached Webcam
+ * Allows hot-swapping between two modes, STANDARD (VF + TFOD) and OPENCV, for respective operation.
  * @author Lucas Bubner - FTC 15215 Captain; Oct-Nov 2022 - Murray Bridge Bunyips
  */
 
@@ -223,6 +223,7 @@ public class CameraOp extends BunyipsComponent {
 
     /**
      * Change the OpenCV pipeline on the fly by calling this method
+     * @param pipeline Supply an OpenCVPipeline to set the camera to
      */
     public void setPipeline(OpenCvPipeline pipeline) {
         if (OCVcam != null)

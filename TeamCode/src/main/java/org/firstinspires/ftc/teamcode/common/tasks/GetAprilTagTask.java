@@ -10,10 +10,10 @@ import org.openftc.apriltag.AprilTagDetection;
 import java.util.ArrayList;
 
 /**
- * Intermediate task for using the AprilTagDetectionPipeline to detect a Signal position
- * @author Lucas, Nov 2022
+ * Intermediate task for using the AprilTagDetectionPipeline to detect a Signal position during an initLoop.
+ * @author Lucas Bubner, FTC 15215; Nov 2022
  */
-public class GetAprilTagTask extends BaseTask implements Task {
+public class GetAprilTagTask extends Task implements TaskImpl {
 
     private final CameraOp cam;
     private AprilTagDetectionPipeline at;
@@ -41,8 +41,8 @@ public class GetAprilTagTask extends BaseTask implements Task {
         return position;
     }
 
-    public GetAprilTagTask(BunyipsOpMode opMode, double time, CameraOp cam) {
-        super(opMode, time);
+    public GetAprilTagTask(BunyipsOpMode opMode, CameraOp cam) {
+        super(opMode);
         this.cam = cam;
     }
 
@@ -76,9 +76,8 @@ public class GetAprilTagTask extends BaseTask implements Task {
     @Override
     @SuppressLint("DefaultLocale")
     public void run() {
-        // In the event the camera cannot find an AprilTag, the OpMode should handle a default value
-        // This is because in case the operator exits the init-loop before the time based end,
-        // the parking position value will be null.
+        // Caution! ParkingPosition will be null if the camera does not pick up anything in it's task runtime.
+        // Be sure to check if ParkingPosition is null before setting up your specific tasks, to handle a fallback value.
         if (isFinished()) return;
 
         ArrayList<AprilTagDetection> detections = at.getDetectionsUpdate();
@@ -94,15 +93,15 @@ public class GetAprilTagTask extends BaseTask implements Task {
                 for (AprilTagDetection detection : detections) {
                     switch (detection.id) {
                         // LEFT POSITION APRILTAG
-                        case 0:
+                        case 17:
                             position = ParkingPosition.LEFT;
                             return;
                         // CENTER POSITION APRILTAG
-                        case 1:
+                        case 13:
                             position = ParkingPosition.CENTER;
                             return;
                         // RIGHT POSITION APRILTAG
-                        case 2:
+                        case 7:
                             position = ParkingPosition.RIGHT;
                             return;
                         default:

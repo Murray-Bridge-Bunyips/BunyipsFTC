@@ -4,9 +4,9 @@ import android.annotation.SuppressLint;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
-public class MessageTask extends BaseTask implements Task {
+public class MessageTask extends Task implements TaskImpl {
 
-    private String message;
+    private final String message;
 
     public MessageTask(BunyipsOpMode opMode, double time, String message) {
         super(opMode, time);

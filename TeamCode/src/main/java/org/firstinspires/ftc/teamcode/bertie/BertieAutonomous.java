@@ -3,32 +3,36 @@ package org.firstinspires.ftc.teamcode.bertie;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.firstinspires.ftc.teamcode.bertie.config.BertieArm;
-import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipConfiguration;
-import org.firstinspires.ftc.teamcode.bertie.config.BertieBunyipDrive;
-import org.firstinspires.ftc.teamcode.bertie.tasks.BertieDriveTask;
+import org.firstinspires.ftc.teamcode.bertie.components.BertieArm;
+import org.firstinspires.ftc.teamcode.bertie.components.BertieConfig;
+import org.firstinspires.ftc.teamcode.bertie.components.BertieDrive;
+import org.firstinspires.ftc.teamcode.bertie.tasks.BertieTimeDriveTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.ButtonControl;
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap;
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
-import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 
 import java.util.ArrayDeque;
 
+/*
+    Robot BERTIE no longer exists; new robot is now JERRY
+    This code now remains for archival purposes only.
+ */
 @Autonomous(name = "<BERTIE> Autonomous Testing")
 @Disabled
 public class BertieAutonomous extends BunyipsOpMode {
-    private BertieBunyipConfiguration config;
-    private BertieBunyipDrive drive = null;
+    private BertieConfig config;
+    private BertieDrive drive = null;
     private BertieArm lift = null;
-    private ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
-        config = BertieBunyipConfiguration.newConfig(hardwareMap, telemetry);
+        config = BertieConfig.newConfig(hardwareMap, telemetry);
 
         try {
-            drive = new BertieBunyipDrive(this,
+            drive = new BertieDrive(this,
                     config.frontLeft, config.frontRight,
                     config.backLeft, config.backRight,
                     false);
@@ -36,61 +40,14 @@ public class BertieAutonomous extends BunyipsOpMode {
             telemetry.addLine("Failed to initialise motors.");
         }
 
-//         HashMap<ButtonControl, String> buttonMap = new HashMap<>();
-
-//         buttonMap.put(ButtonControl.B, "Blue");
-//         buttonMap.put(ButtonControl.A, "Red");
-//         ButtonControl selectedButton = ButtonControl.A;
-
-//         boolean autoClearState = telemetry.isAutoClear();
-
-//         telemetry.setAutoClear(false);
-
-//         telemetry.addLine("PRESSING ONE OF THE FOLLOWING BUTTONS WILL INITIALISE THE ROBOT TO THE RELEVANT OPERATION MODE:");
-//         for (Map.Entry<ButtonControl, String> es : buttonMap.entrySet()) {
-//             System.out.printf("%s: %s%n", es.getKey().name(), es.getValue());
-//             telemetry.addLine(String.format("%s: %s", es.getKey().name(), es.getValue()));
-//             if (ButtonControl.isSelected(gamepad1, es.getKey())) {
-//                 selectedButton = es.getKey();
-//             }
-//         }
-
-//         telemetry.addLine(String.format("IF NO BUTTON IS PRESSED WITHIN 3 SECONDS, *%s* WILL BE RUN", buttonMap.get(selectedButton)));
-//         telemetry.update();
-
-
-//         long startTime = System.nanoTime();
-
-//         outerLoop:
-//         while (System.nanoTime() < startTime + 3000000000L) {
-//             for (Map.Entry<ButtonControl, String> es : buttonMap.entrySet()) {
-// //                System.out.printf("%s: %s%n", es.getKey().name(), es.getValue());
-// //                telemetry.addLine(String.format("%s: %s", es.getKey().name(), es.getValue()));
-//                 if (ButtonControl.isSelected(gamepad1, es.getKey())) {
-//                     selectedButton = es.getKey();
-//                     break outerLoop;
-//                 }
-//             }
-
-//             idle();
-//         }
-
-//         telemetry.addLine(String.format("%s was selected: Running %s", selectedButton.name(), buttonMap.get(selectedButton)));
-//         telemetry.addLine("IF THIS SELECTION IS INCORRECT, QUIT THE OPMODE AND CHOOSE RESELECT");
-//         telemetry.update();
-
-//         telemetry.setAutoClear(autoClearState);
-
-
-//         telemetry.addLine(String.format("Loading tasks for %s", selectedButton.name()));
-        ButtonControl selectedButton = ButtonHashmap.map(this, "Red", "Blue", ButtonControl.A, ButtonControl.B, ButtonControl.A);
+        ButtonControl selectedButton = ButtonHashmap.map(this, "Red", "Blue", "", "");
         switch (selectedButton) {
             case A:
                 tasks.add(new MessageTask(this, 1, "Loaded red"));
-                tasks.add(new BertieDriveTask(this, 0.5, drive, 1,0,0));
-                tasks.add(new BertieDriveTask(this, 0.5, drive, 0,1,0));
-                tasks.add(new BertieDriveTask(this, 1, drive, -1,0,0));
-                tasks.add(new BertieDriveTask(this, 1, drive, 0,-1,0));
+                tasks.add(new BertieTimeDriveTask(this, 0.5, drive, 1, 0, 0));
+                tasks.add(new BertieTimeDriveTask(this, 0.5, drive, 0, 1, 0));
+                tasks.add(new BertieTimeDriveTask(this, 1, drive, -1, 0, 0));
+                tasks.add(new BertieTimeDriveTask(this, 1, drive, 0, -1, 0));
                 break;
             case B:
                 tasks.add(new MessageTask(this, 1, "Loaded blue"));
@@ -100,7 +57,7 @@ public class BertieAutonomous extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() throws InterruptedException {
-        Task currentTask = tasks.peekFirst();
+        TaskImpl currentTask = tasks.peekFirst();
         if (currentTask == null) {
             return;
         }
@@ -109,7 +66,7 @@ public class BertieAutonomous extends BunyipsOpMode {
             tasks.removeFirst();
         }
         if (tasks.isEmpty()) {
-            drive.setSpeedXYR(0,0,0);
+            drive.setSpeedXYR(0, 0, 0);
             drive.update();
         }
     }

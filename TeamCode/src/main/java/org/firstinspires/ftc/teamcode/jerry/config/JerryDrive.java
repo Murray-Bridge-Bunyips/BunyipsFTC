@@ -22,10 +22,20 @@ public class JerryDrive extends BunyipsComponent {
     private double speedR = 0.0;
 
 
+    // Drive mode functionality to change between normal and rotational modes
+    public enum MecanumDriveMode {
+        NORMALIZED, ROTATION_PRIORITY_NORMALIZED
+    }
+
+    private MecanumDriveMode driveMode = MecanumDriveMode.NORMALIZED;
+    public void setDriveMode(MecanumDriveMode mode) {
+        driveMode = mode;
+    }
+
     public JerryDrive(BunyipsOpMode opMode,
                       DcMotorEx bl, DcMotorEx br,
                       DcMotorEx fl, DcMotorEx fr) {
-        // Encoders are not controlled by JerryDrive
+        // Encoders are not controlled by JerryDrive, as they are not connected
         super(opMode);
         this.bl = bl;
         this.br = br;
@@ -52,9 +62,13 @@ public class JerryDrive extends BunyipsComponent {
     }
 
     /**
-     * Call to update motor speeds
+     * Call to update motor speeds through the selected drivemode.
+     * Rotation Priority will calculate rotation speed before translation speed, while normalised
+     * will do the opposite, calculating
      */
     public void update() {
+        if (driveMode == MecanumDriveMode.ROTATION_PRIORITY_NORMALIZED) rotationalPriority();
+
         // Calculate motor powers
         double frontLeftPower = speedX + speedY - speedR;
         double frontRightPower = speedX - speedY + speedR;
@@ -79,6 +93,52 @@ public class JerryDrive extends BunyipsComponent {
     }
 
     /**
+     * This method is automatically called when required from the driveMode.
+     * Calculate rotational speed first, and use remaining headway for translation.
+     */
+    private void rotationalPriority() {
+        // Calculate motor powers
+        double[] translationValues = {
+                speedX + speedY,
+                speedX - speedY,
+                speedX - speedY,
+                speedX + speedY};
+
+        double[] rotationValues = {
+                -speedR,
+                speedR,
+                -speedR,
+                speedR};
+
+        double scaleFactor = 1.0;
+        double tmpScale = 1.0;
+
+        // Solve this equation backwards:
+        // MotorX = TranslationX * scaleFactor + RotationX
+        // to find scaleFactor that ensures -1 <= MotorX <= 1 and 0 < scaleFactor <= 1
+        for (int i = 0; i < 4; i++) {
+            if (Math.abs(translationValues[i] + rotationValues[i]) > 1) {
+                tmpScale = (1 - rotationValues[i]) / translationValues[i];
+            } else if (translationValues[i] + rotationValues[i] < -1) {
+                tmpScale = (rotationValues[i] - 1) / translationValues[i];
+            }
+            if (tmpScale < scaleFactor) {
+                scaleFactor = tmpScale;
+            }
+        }
+
+        double frontLeftPower = translationValues[0] * scaleFactor + rotationValues[0];
+        double frontRightPower = translationValues[1] * scaleFactor + rotationValues[1];
+        double backLeftPower = translationValues[2] * scaleFactor + rotationValues[2];
+        double backRightPower = translationValues[3] * scaleFactor + rotationValues[3];
+
+        fl.setPower(frontLeftPower);
+        fr.setPower(frontRightPower);
+        bl.setPower(backLeftPower);
+        br.setPower(backRightPower);
+    }
+
+    /**
      * Set all motor speeds to zero
      */
     public void deinit() {
@@ -87,9 +147,9 @@ public class JerryDrive extends BunyipsComponent {
     }
 
     /**
-     * @param speedX relative north-south speed - positive: north
-     * @param speedY relative east-west speed - positive: east
-     * @param speedR rotation speed - positive: clockwise
+     * @param speedX relative east-west speed - positive: left
+     * @param speedY relative north-south speed - positive: north
+     * @param speedR rotation speed - positive: anti-clockwise
      */
     public void setSpeedXYR(double speedX, double speedY, double speedR) {
         // X and Y have been swapped, and X has been inverted
@@ -97,6 +157,18 @@ public class JerryDrive extends BunyipsComponent {
         this.speedX = clipMotorPower(-speedY);
         this.speedY = clipMotorPower(speedX);
         this.speedR = clipMotorPower(-speedR);
+    }
+
+    /**
+     * @param speed speed at which the motors will operate
+     * @param direction_degrees direction at which the motors will move toward
+     * @param speedR rotation speed - positive: anti-clockwise
+     */
+    public void setSpeedPolarR(double speed, double direction_degrees, double speedR) {
+        double radians = Math.toRadians(direction_degrees);
+        this.speedX = clipMotorPower(speed * Math.cos(radians));
+        this.speedY = clipMotorPower(speed * Math.sin(radians));
+        this.speedR = clipMotorPower(speedR);
     }
 
     private double clipMotorPower(double p) {

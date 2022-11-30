@@ -7,23 +7,19 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 
 /**
- * Abstract class to use as parent to the class you will define to mirror a "saved configuration" on the Robot controller
+ * Abstract class to use as parent to the class you will define to mirror a "saved configuration" on the Robot Controller
  */
 public abstract class RobotConfig {
 
     private Telemetry telemetry;
 
     /**
-     * assign your class instance variables to the saved device names in the hardware map
-     *
-     * @param hardwareMap
-     * @param telemetry
+     * Assign your class instance variables to the saved device names in the hardware map
      */
     abstract protected void init(HardwareMap hardwareMap, Telemetry telemetry);
 
     /**
-     * accessor for the telemetry utility
-     *
+     * Accessor for the telemetry utility
      * @return {@link Telemetry}
      */
     protected Telemetry getTelemetry() {
@@ -31,8 +27,7 @@ public abstract class RobotConfig {
     }
 
     /**
-     * setter method for telemetry utility
-     *
+     * Setter method for telemetry utility
      * @param {@link TelemetryUtil}
      */
     protected void setTelemetry(Telemetry telemetry) {
@@ -41,10 +36,8 @@ public abstract class RobotConfig {
 
     /**
      * Convenience method for reading the device from the hardwareMap without having to check for exceptions
-     *
-     * @param name                  name of device saved in the configuration file
-     * @param hardwareDeviceMapping
-     * @return
+     * @param name name of device saved in the configuration file
+     * @param hardwareDeviceMapping the HardwareMap object of the item to configure
      */
     protected HardwareDevice getHardwareOn(String name, Object hardwareDeviceMapping) {
 

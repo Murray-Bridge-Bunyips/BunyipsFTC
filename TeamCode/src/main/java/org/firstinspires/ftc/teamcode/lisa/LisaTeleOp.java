@@ -3,20 +3,20 @@ package org.firstinspires.ftc.teamcode.lisa;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.lisa.config.LisaConfiguration;
+import org.firstinspires.ftc.teamcode.lisa.config.LisaConfig;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
 
 @TeleOp(name="<LISA> TeleOp")
 public class LisaTeleOp extends BunyipsOpMode {
-    private LisaConfiguration config;
+    private LisaConfig config;
     private LisaDrive drive = null;
 
     @Override
     protected void onInit() {
-        config = LisaConfiguration.newConfig(hardwareMap, telemetry);
+        config = LisaConfig.newConfig(hardwareMap, telemetry);
         try {
             drive = new LisaDrive(this,
-                    config.left, config.right, config.fws, config.dws);
+                    config.left, config.right);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise motors.");
         }

@@ -4,27 +4,27 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
-import org.firstinspires.ftc.teamcode.common.tasks.Task;
-import org.firstinspires.ftc.teamcode.lisa.config.LisaConfiguration;
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
+import org.firstinspires.ftc.teamcode.lisa.config.LisaConfig;
 import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
 import org.firstinspires.ftc.teamcode.lisa.tasks.LisaPrecisionDriveTask;
 
 import java.util.ArrayDeque;
 
-@Autonomous(name="<LISA> Autonomous Testing")
-public class LisaAuto extends BunyipsOpMode {
+@Autonomous(name = "<LISA> Autonomous Testing")
+public class LisaAutonomous extends BunyipsOpMode {
 
-    private LisaConfiguration config;
+    private LisaConfig config;
     private LisaDrive drive = null;
-    private ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private final ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
-        config = LisaConfiguration.newConfig(hardwareMap, telemetry);
+        config = LisaConfig.newConfig(hardwareMap, telemetry);
 
         try {
             drive = new LisaDrive(this,
-                        config.left, config.right, config.fws, config.dws);
+                    config.left, config.right);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise drive.");
         }
@@ -37,7 +37,7 @@ public class LisaAuto extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() throws InterruptedException {
-        Task currentTask = tasks.peekFirst();
+        TaskImpl currentTask = tasks.peekFirst();
         if (currentTask == null) {
             return;
         }
