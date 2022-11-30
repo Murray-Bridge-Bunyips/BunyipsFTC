@@ -1,10 +1,23 @@
-	MURRAY BRIDGE BUNYIPS
-	South Australian FTC Team 15215, Murray Bridge High School
-	Close collaboration with Team 4537 RoboRoos and Team 18003 Paladins of St Paul's
+	=== MURRAY BRIDGE BUNYIPS JAVA CODE REPOSITORY ===
+	Contains SDK used for all Java-developed FTC robots
 	
-	Master branch: Protected branch with a primary collation of all of our working active and non-active code
-	PowerPlay branch: POWERPLAY (2022-2023) development
-	Minibots branch: Specific minibot development
+	South Australian FTC Team 15215, Murray Bridge High School
+	Close collaboration with RoboRoos, Paladins of St Paul's, Popups, and more!
+	
+	Robot code in this repository:
+		JERRY: Mecanum-drive PowerPlay robot for 2022-2023 season
+		LISA: Two-wheel-drive minibot for high-speed performance
+		BERTIE: Mecanum-drive FreightFrenzy robot for 2021-2022 season (Deconstructed and migrated into JERRY)
+	
+	Robot code not in this repository (written in Blocks by other members of the club):
+		FTC22407: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS
+		FTC15215-2: Two-wheel-drive PowerPlay robot for PowerPlay, serves as a backup to JERRY
+		GROOT: Two-wheel-drive minibot for versatility and education
+		
+	Branch info:
+		Master branch: Protected branch with a primary collation of all of our working active and non-active code
+		PowerPlay branch: POWERPLAY (2022-2023) development
+		Minibots branch: Specific minibot development
 	
 ## NOTICE
 
