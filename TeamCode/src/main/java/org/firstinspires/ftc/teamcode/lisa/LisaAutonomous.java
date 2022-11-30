@@ -11,12 +11,12 @@ import org.firstinspires.ftc.teamcode.lisa.tasks.LisaPrecisionDriveTask;
 
 import java.util.ArrayDeque;
 
-@Autonomous(name="<LISA> Autonomous Testing")
+@Autonomous(name = "<LISA> Autonomous Testing")
 public class LisaAutonomous extends BunyipsOpMode {
 
     private LisaConfig config;
     private LisaDrive drive = null;
-    private ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
+    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
@@ -24,7 +24,7 @@ public class LisaAutonomous extends BunyipsOpMode {
 
         try {
             drive = new LisaDrive(this,
-                        config.left, config.right);
+                    config.left, config.right);
         } catch (Exception e) {
             telemetry.addLine("Failed to initialise drive.");
         }

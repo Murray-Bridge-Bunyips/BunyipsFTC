@@ -40,15 +40,14 @@ public class BertieAutonomous extends BunyipsOpMode {
             telemetry.addLine("Failed to initialise motors.");
         }
 
-        ButtonControl selectedButton = ButtonHashmap.map(this, "Red", "Blue", ButtonControl.A, ButtonControl.B, ButtonControl.A);
-
+        ButtonControl selectedButton = ButtonHashmap.map(this, "Red", "Blue", "", "");
         switch (selectedButton) {
             case A:
                 tasks.add(new MessageTask(this, 1, "Loaded red"));
-                tasks.add(new BertieTimeDriveTask(this, 0.5, drive, 1,0,0));
-                tasks.add(new BertieTimeDriveTask(this, 0.5, drive, 0,1,0));
-                tasks.add(new BertieTimeDriveTask(this, 1, drive, -1,0,0));
-                tasks.add(new BertieTimeDriveTask(this, 1, drive, 0,-1,0));
+                tasks.add(new BertieTimeDriveTask(this, 0.5, drive, 1, 0, 0));
+                tasks.add(new BertieTimeDriveTask(this, 0.5, drive, 0, 1, 0));
+                tasks.add(new BertieTimeDriveTask(this, 1, drive, -1, 0, 0));
+                tasks.add(new BertieTimeDriveTask(this, 1, drive, 0, -1, 0));
                 break;
             case B:
                 tasks.add(new MessageTask(this, 1, "Loaded blue"));
@@ -67,7 +66,7 @@ public class BertieAutonomous extends BunyipsOpMode {
             tasks.removeFirst();
         }
         if (tasks.isEmpty()) {
-            drive.setSpeedXYR(0,0,0);
+            drive.setSpeedXYR(0, 0, 0);
             drive.update();
         }
     }

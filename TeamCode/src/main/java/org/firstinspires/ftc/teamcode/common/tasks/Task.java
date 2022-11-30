@@ -3,7 +3,8 @@ package org.firstinspires.ftc.teamcode.common.tasks;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 /**
- * Abstract implementation class to use custom ArrayDeque tasks in an activeLoop, simulating
+ * Abstract implementation class to use custom ArrayDeque tasks in an
+ * activeLoop, simulating
  * multiple different looping operations in a linear sense.
  */
 public abstract class Task implements TaskImpl {
@@ -20,7 +21,8 @@ public abstract class Task implements TaskImpl {
     }
 
     @Override
-    public void init() {}
+    public void init() {
+    }
 
     @Override
     public boolean isFinished() {

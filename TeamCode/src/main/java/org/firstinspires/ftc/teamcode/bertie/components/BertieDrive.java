@@ -26,20 +26,19 @@ public class BertieDrive extends BunyipsComponent {
     private double speedY = 0.0;
     private double speedR = 0.0;
 
-    private BunyipsOpMode opMode;
-    private DcMotor frontLeftMotor;
-    private DcMotor frontRightMotor;
-    private DcMotor backLeftMotor;
-    private DcMotor backRightMotor;
+    private final BunyipsOpMode opMode;
+    private final DcMotor frontLeftMotor;
+    private final DcMotor frontRightMotor;
+    private final DcMotor backLeftMotor;
+    private final DcMotor backRightMotor;
 
     private final Telemetry.Item item;
     private boolean showTelemetry = true;
 
-
     public BertieDrive(BunyipsOpMode opmode,
-                       DcMotor frontLeftMotor, DcMotor frontRightMotor,
-                       DcMotor backLeftMotor, DcMotor backRightMotor,
-                       boolean showTelemetry) {
+            DcMotor frontLeftMotor, DcMotor frontRightMotor,
+            DcMotor backLeftMotor, DcMotor backRightMotor,
+            boolean showTelemetry) {
         super(opmode);
         this.opMode = opmode;
         this.frontLeftMotor = frontLeftMotor;
@@ -49,7 +48,8 @@ public class BertieDrive extends BunyipsComponent {
         this.showTelemetry = showTelemetry;
 
         if (showTelemetry) {
-            item = opMode.telemetry.addData("Mecanum", "Forward: %.2f, Strafe: %0.02f, Rotate: %.2f", speedX, speedY, speedR);
+            item = opMode.telemetry.addData("Mecanum", "Forward: %.2f, Strafe: %0.02f, Rotate: %.2f", speedX, speedY,
+                    speedR);
             item.setRetained(true);
         } else {
             item = null;
@@ -65,13 +65,13 @@ public class BertieDrive extends BunyipsComponent {
         this.speedY = clipMotorPower(speedY);
         this.speedR = clipMotorPower(speedR);
     }
-    
+
     public void setSpeedPolarR(double speed, double direction, double speedR) {
         double radians = Math.toRadians(direction);
         this.speedX = clipMotorPower(speed * Math.cos(radians));
         this.speedY = clipMotorPower(speed * Math.sin(radians));
         this.speedR = clipMotorPower(speedR);
-    }    
+    }
 
     /**
      * Update motors with latest state
@@ -97,7 +97,8 @@ public class BertieDrive extends BunyipsComponent {
         double backLeftPower = speedX - speedY - speedR;
         double backRightPower = speedX + speedY + speedR;
 
-        double maxPower = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
+        double maxPower = Math.max(Math.abs(frontLeftPower),
+                Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
         // If the maximum number is greater than 1.0, then normalise by that number
         if (maxPower > 1.0) {
             frontLeftPower = frontLeftPower / maxPower;
@@ -116,18 +117,18 @@ public class BertieDrive extends BunyipsComponent {
      * Calculate rotational speed first, and use remaining headway for translation.
      */
     private void rotationPriorityNormalized() {
-        // Calculate motor powers
+        // calculate motor powers
         double translationValues[] = {
                 speedX + speedY,
                 speedX - speedY,
                 speedX - speedY,
-                speedX + speedY};
+                speedX + speedY };
 
-        double rotationValues[] = {
+        double[] rotationValues = {
                 -speedR,
                 speedR,
                 -speedR,
-                speedR};
+                speedR };
 
         double scaleFactor = 1.0;
         double tmpScale = 1.0;

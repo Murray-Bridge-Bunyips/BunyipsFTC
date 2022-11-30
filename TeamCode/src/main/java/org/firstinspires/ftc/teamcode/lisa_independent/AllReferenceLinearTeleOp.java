@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode.lisa_independent;
 // This line indicates that everything below is under the TeamCode directory, the purpose is
 // similar to a file name; it helps with organisation of code. These lines are usually auto-filled.
 
@@ -132,7 +132,7 @@ public class AllReferenceLinearTeleOp extends LinearOpMode {
 
     // In this section of the code, we place variable declarations, and other library declarations.
 
-    private ElapsedTime runtime = new ElapsedTime();
+    private final ElapsedTime runtime = new ElapsedTime();
     private DcMotor leftDrive = null;
     private DcMotor rightDrive = null;
     // These three lines assign a few things, which will require a better understanding of
@@ -172,8 +172,8 @@ public class AllReferenceLinearTeleOp extends LinearOpMode {
         // to them when required. The variable in deviceName must match what the robot calls it,
         // just like Blocks. If this isn't followed, you'll get an error.
         // Once you do this, you must refer to the motor in the code with the variable on the left which was declared previously.
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_motor");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_motor");
+        leftDrive  = hardwareMap.get(DcMotor.class, "Left Motor");
+        rightDrive = hardwareMap.get(DcMotor.class, "Right Motor");
 
         telemetry.addData("Key", "Text");
         // Finally! Some code that can be cross-transferred from Blocks. This snippet of code

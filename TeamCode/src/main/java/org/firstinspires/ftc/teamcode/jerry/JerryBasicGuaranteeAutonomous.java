@@ -14,14 +14,14 @@ import org.firstinspires.ftc.teamcode.jerry.tasks.JerryBaseDriveTask;
 
 import java.util.ArrayDeque;
 
-@Autonomous(name="<JERRY> POWERPLAY BASIC PARK Autonomous")
+@Autonomous(name = "<JERRY> POWERPLAY BASIC PARK Autonomous")
 public class JerryBasicGuaranteeAutonomous extends BunyipsOpMode {
 
     private JerryConfig config;
     private CameraOp cam;
     private JerryDrive drive;
     private JerryArm arm;
-    private ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
+    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
@@ -32,7 +32,7 @@ public class JerryBasicGuaranteeAutonomous extends BunyipsOpMode {
             telemetry.addLine("Failed to initialise Drive System.");
         }
 
-        ButtonControl selectedButton = ButtonHashmap.map(this, "Red", "Blue", ButtonControl.A, ButtonControl.B, ButtonControl.A);
+        ButtonControl selectedButton = ButtonHashmap.map(this, "Red Drive Left", "Blue Drive Right", "", "");
         switch (selectedButton) {
             case A:
                 // Move left
@@ -44,8 +44,7 @@ public class JerryBasicGuaranteeAutonomous extends BunyipsOpMode {
                 break;
         }
 
-        telemetry.addLine("Ready to go under config: " + String.valueOf(selectedButton));
-        telemetry.update();
+        telemetry.addLine("Ready to go under config: " + selectedButton);
     }
 
     @Override

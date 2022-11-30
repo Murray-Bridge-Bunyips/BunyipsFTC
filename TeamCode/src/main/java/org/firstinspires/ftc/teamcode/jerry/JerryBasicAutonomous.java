@@ -12,14 +12,14 @@ import org.firstinspires.ftc.teamcode.jerry.tasks.JerryBaseDriveTask;
 
 import java.util.ArrayDeque;
 
-@Autonomous(name="<JERRY> POWERPLAY BASIC SIGNAL Autonomous")
+@Autonomous(name = "<JERRY> POWERPLAY BASIC SIGNAL Autonomous")
 public class JerryBasicAutonomous extends BunyipsOpMode {
 
     private JerryConfig config;
     private CameraOp cam;
     private JerryDrive drive;
     private JerryArm arm;
-    private ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
+    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
@@ -33,7 +33,6 @@ public class JerryBasicAutonomous extends BunyipsOpMode {
         tasks.add(new JerryBaseDriveTask(this, 1, drive, 0, 1, 0));
 
         telemetry.addLine("Ready to go. Parking position has been set to: CENTER");
-        telemetry.update();
     }
 
     @Override
