@@ -16,7 +16,7 @@ public class LisaAutonomous extends BunyipsOpMode {
 
     private LisaConfig config;
     private LisaDrive drive = null;
-    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private final ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {

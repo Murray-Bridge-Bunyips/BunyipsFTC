@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
+import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask;
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
@@ -21,7 +22,7 @@ public class JerryAutonomous extends BunyipsOpMode {
     private JerryDrive drive;
     private JerryArm arm;
     private GetAprilTagTask Krankenhaus;
-    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private final ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
@@ -42,8 +43,7 @@ public class JerryAutonomous extends BunyipsOpMode {
             telemetry.addLine("Failed to initialise Arm System.");
         }
 
-        // Check if we have deadwheel capabilities, if we do, use the respective tasks
-        // with
+        // Check if we have deadwheel capabilities, if we do, use the respective tasks with
         // deadwheel field positioning, otherwise we will need to use time as that is
         // our only option
         if (config.x != null && config.y != null) {

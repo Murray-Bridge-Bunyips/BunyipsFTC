@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryConfig;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
-import org.firstinspires.ftc.teamcode.jerry.tasks.JerryBaseDriveTask;
+import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask;
 
 import java.util.ArrayDeque;
 
@@ -19,7 +19,7 @@ public class JerryBasicAutonomous extends BunyipsOpMode {
     private CameraOp cam;
     private JerryDrive drive;
     private JerryArm arm;
-    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private final ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
@@ -30,7 +30,7 @@ public class JerryBasicAutonomous extends BunyipsOpMode {
             telemetry.addLine("Failed to initialise Drive System.");
         }
 
-        tasks.add(new JerryBaseDriveTask(this, 1, drive, 0, 1, 0));
+        tasks.add(new JerryTimeDriveTask(this, 1, drive, 0, 1, 0));
 
         telemetry.addLine("Ready to go. Parking position has been set to: CENTER");
     }

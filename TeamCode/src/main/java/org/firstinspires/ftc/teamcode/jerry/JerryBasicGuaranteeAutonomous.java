@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryConfig;
 import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
-import org.firstinspires.ftc.teamcode.jerry.tasks.JerryBaseDriveTask;
+import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask;
 
 import java.util.ArrayDeque;
 
@@ -21,7 +21,7 @@ public class JerryBasicGuaranteeAutonomous extends BunyipsOpMode {
     private CameraOp cam;
     private JerryDrive drive;
     private JerryArm arm;
-    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private final ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {
@@ -36,11 +36,11 @@ public class JerryBasicGuaranteeAutonomous extends BunyipsOpMode {
         switch (selectedButton) {
             case A:
                 // Move left
-                tasks.add(new JerryBaseDriveTask(this, 1.5, drive, 1, 0, 0));
+                tasks.add(new JerryTimeDriveTask(this, 1.5, drive, 1, 0, 0));
                 break;
             case B:
                 // Move right
-                tasks.add(new JerryBaseDriveTask(this, 1.5, drive, -1, 0, 0));
+                tasks.add(new JerryTimeDriveTask(this, 1.5, drive, -1, 0, 0));
                 break;
         }
 
