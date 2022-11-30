@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.jerry.config;
+package org.firstinspires.ftc.teamcode.jerry.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;

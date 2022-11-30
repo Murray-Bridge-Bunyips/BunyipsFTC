@@ -1,8 +1,7 @@
-package org.firstinspires.ftc.teamcode.jerry.config;
+package org.firstinspires.ftc.teamcode.jerry.components;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -12,6 +11,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.Deadwheel;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class JerryConfig extends RobotConfig {
 
@@ -40,17 +42,9 @@ public class JerryConfig extends RobotConfig {
     protected void init(HardwareMap hardwareMap, Telemetry telemetry) {
         setTelemetry(telemetry);
 
-        // Add configurations here
-        try {
-            // Using manual error catching as the hardwareMap for getHardwareOn does not include
-            // webcam configurations
-            webcam = hardwareMap.get(WebcamName.class, "Webcam");
-            monitorID = hardwareMap.appContext.getResources().getIdentifier(
-                    "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        } catch (Exception e) {
-            telemetry.addLine("Error configuring device 'Webcam'. Check connections.");
-            webcam = null;
-        }
+        webcam = (WebcamName) getHardwareOn("Webcam", WebcamName.class);
+        monitorID = hardwareMap.appContext.getResources().getIdentifier(
+                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
         bl = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
         br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
@@ -71,32 +65,34 @@ public class JerryConfig extends RobotConfig {
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
         // These encoders will mirror a DcMotor, but will be attached to their own port (for example,
         // motor 0 and 1 on Expansion Hub, but without any power connection)
-        try {
-            x = hardwareMap.get(Deadwheel.class, "X Encoder");
-            y = hardwareMap.get(Deadwheel.class, "Y Encoder");
-        } catch (Exception e) {
-            telemetry.addLine("Error configuring deadwheels. Check connections.");
-            x = y = null;
-        }
+        x = (Deadwheel) getHardwareOn("X Encoder", Deadwheel.class);
+        y = (Deadwheel) getHardwareOn("Y Encoder", Deadwheel.class);
+
 
         // Control Hub IMU configuration
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
-        parameters.accelUnit           = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
-        parameters.loggingEnabled      = true;
-        parameters.loggingTag          = "IMU";
-        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-
         // This uses the legacy methods for IMU initialisation, this should be refactored and updated
         // at some point in time. (23 Nov 2022)
-        try {
-            imu = hardwareMap.get(BNO055IMU.class, "imu");
+        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
+        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES;
+        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC;
+        parameters.loggingEnabled = true;
+        parameters.loggingTag = "IMU";
+        parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
+
+        imu = (BNO055IMU) getHardwareOn("imu", BNO055IMU.class);
+        if (imu != null)
             imu.initialize(parameters);
-        } catch (Exception e) {
-            telemetry.addLine("An internal error occurred configuring the IMU.");
-            imu = null;
+
+        ArrayList<String> errors = getHardwareErrors();
+        if (errors == null) {
+            telemetry.addData("BunyipsOpMode Status", "ROBOT CONFIGURATION COMPLETED SUCCESSFULLY WITH NO ERRORS.");
+            return;
         }
 
-        telemetry.addData("BunyipsOpMode Status", "ROBOT CONFIGURATION COMPLETED.");
+        telemetry.addData("BunyipsOpMode Status", "ERROR(S) DURING CONFIGURATION, THESE DEVICES WERE NOT ABLE TO BE CONFIGURED.");
+        Iterator<String> error = errors.iterator();
+        for (int i = 0; i < errors.size(); i++) {
+            telemetry.addData(String.valueOf(i), error.next());
+        }
     }
 }

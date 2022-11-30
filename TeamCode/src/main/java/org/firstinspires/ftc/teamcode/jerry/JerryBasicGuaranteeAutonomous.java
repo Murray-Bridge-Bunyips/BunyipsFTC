@@ -7,9 +7,9 @@ import org.firstinspires.ftc.teamcode.common.ButtonControl;
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryConfig;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryArm;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive;
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask;
 
 import java.util.ArrayDeque;

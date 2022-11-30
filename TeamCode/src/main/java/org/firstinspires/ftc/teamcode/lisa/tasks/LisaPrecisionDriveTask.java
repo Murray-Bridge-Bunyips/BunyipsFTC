@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
-import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
+import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive;
 
 // PrecisionDrive Algorithm II, Lucas Bubner, 2022
 public class LisaPrecisionDriveTask extends Task implements TaskImpl {

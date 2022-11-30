@@ -5,12 +5,15 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.ArrayList;
+
 
 /**
  * Abstract class to use as parent to the class you will define to mirror a "saved configuration" on the Robot Controller
  */
 public abstract class RobotConfig {
 
+    private static final ArrayList<String> errors = new ArrayList<>();
     private Telemetry telemetry;
 
     /**
@@ -28,6 +31,7 @@ public abstract class RobotConfig {
 
     /**
      * Setter method for telemetry utility
+     *
      * @param {@link TelemetryUtil}
      */
     protected void setTelemetry(Telemetry telemetry) {
@@ -35,12 +39,21 @@ public abstract class RobotConfig {
     }
 
     /**
+     * Return an ArrayList of the hardware errors that happened during hardware initialisation
+     *
+     * @return ArrayList of Strings that correlate to hardware devices that failed to initialise
+     */
+    protected static ArrayList<String> getHardwareErrors() {
+        return errors.size() != 0 ? errors : null;
+    }
+
+    /**
      * Convenience method for reading the device from the hardwareMap without having to check for exceptions
-     * @param name name of device saved in the configuration file
-     * @param hardwareDeviceMapping the HardwareMap object of the item to configure
+     *
+     * @param name                  name of device saved in the configuration file
+     * @param hardwareDeviceMapping the object of the item to configure
      */
     protected HardwareDevice getHardwareOn(String name, Object hardwareDeviceMapping) {
-
         HardwareDevice hardwareDevice = null;
         try {
             HardwareMap.DeviceMapping<HardwareDevice> deviceMapping = (HardwareMap.DeviceMapping<HardwareDevice>) hardwareDeviceMapping;
@@ -48,15 +61,13 @@ public abstract class RobotConfig {
         } catch (Throwable e) {
             try {
                 getTelemetry().addLine("A fatal error occurred configuring the device: " + name);
+                errors.add(name);
                 ErrorUtil.handleCatchAllException(e, getTelemetry());
             } catch (InterruptedException e1) {
                 DbgLog.msg(e.getLocalizedMessage());
             }
-
         }
 
         return hardwareDevice;
     }
-
-
 }
