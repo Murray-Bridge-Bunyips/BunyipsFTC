@@ -5,8 +5,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
-import org.firstinspires.ftc.teamcode.lisa.config.LisaConfig;
-import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
+import org.firstinspires.ftc.teamcode.lisa.components.LisaConfig;
+import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive;
 import org.firstinspires.ftc.teamcode.lisa.tasks.LisaPrecisionDriveTask;
 
 import java.util.ArrayDeque;

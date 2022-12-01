@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive;
 import org.firstinspires.ftc.teamcode.common.Deadwheel;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;

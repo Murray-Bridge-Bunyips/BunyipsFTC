@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.lisa;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.lisa.config.LisaConfig;
-import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
+import org.firstinspires.ftc.teamcode.lisa.components.LisaConfig;
+import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive;
 
 @TeleOp(name="<LISA> TeleOp")
 public class LisaTeleOp extends BunyipsOpMode {

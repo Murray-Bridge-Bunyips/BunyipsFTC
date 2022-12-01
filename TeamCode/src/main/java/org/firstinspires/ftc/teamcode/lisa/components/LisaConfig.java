@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lisa.config;
+package org.firstinspires.ftc.teamcode.lisa.components;
 
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;

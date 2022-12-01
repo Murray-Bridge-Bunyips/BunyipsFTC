@@ -3,9 +3,9 @@ package org.firstinspires.ftc.teamcode.jerry;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryConfig;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryArm;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive;
 
 @TeleOp(name = "<JERRY> POWERPLAY TeleOp")
 public class JerryTeleOp extends BunyipsOpMode {

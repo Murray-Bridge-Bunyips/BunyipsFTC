@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.common.Deadwheel;
 import org.firstinspires.ftc.teamcode.common.IMUOp;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive;
 
 public class JerryPrecisionDriveTask extends Task implements TaskImpl {
 

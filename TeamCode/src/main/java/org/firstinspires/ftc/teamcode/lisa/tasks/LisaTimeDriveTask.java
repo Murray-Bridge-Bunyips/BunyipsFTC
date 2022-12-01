@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.lisa.tasks;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
-import org.firstinspires.ftc.teamcode.lisa.config.LisaDrive;
+import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive;
 
 public class LisaTimeDriveTask extends Task implements TaskImpl {
 

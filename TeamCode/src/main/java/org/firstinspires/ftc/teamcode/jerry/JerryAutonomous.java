@@ -7,10 +7,9 @@ import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask;
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryConfig;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryDrive;
-import org.firstinspires.ftc.teamcode.common.tasks.GetQRSleeveTask;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryArm;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive;
 
 import java.util.ArrayDeque;
 
@@ -67,16 +66,19 @@ public class JerryAutonomous extends BunyipsOpMode {
     @Override
     protected void onInitDone() {
         // Determine our final task based on the parking position from the camera
-        switch (Krankenhaus.getPosition()) {
+        GetAprilTagTask.ParkingPosition position = Krankenhaus.getPosition();
+        switch (position) {
             case LEFT:
-
+                tasks.add(new MessageTask(this, 10, "LEFT"));
                 break;
-            default:
             case CENTER:
-
+                tasks.add(new MessageTask(this, 10, "CENTER"));
                 break;
             case RIGHT:
-
+                tasks.add(new MessageTask(this, 10, "RIGHT"));
+                break;
+            default:
+                tasks.add(new MessageTask(this, 10, "NONE"));
                 break;
         }
     }

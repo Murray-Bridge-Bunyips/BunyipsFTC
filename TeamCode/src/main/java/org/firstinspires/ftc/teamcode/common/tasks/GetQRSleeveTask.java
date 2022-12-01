@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.common.tasks;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.pipelines.QRParkPipeline;
-import org.firstinspires.ftc.teamcode.jerry.config.JerryArm;
+import org.firstinspires.ftc.teamcode.jerry.components.JerryArm;
 
 public class GetQRSleeveTask extends Task implements TaskImpl {
 
