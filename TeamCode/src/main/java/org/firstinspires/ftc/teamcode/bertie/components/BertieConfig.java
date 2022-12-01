@@ -32,14 +32,14 @@ public class BertieConfig extends RobotConfig {
     protected void init(HardwareMap hardwareMap, Telemetry telemetry) {
         setTelemetry(telemetry);
 
-        backLeft = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
-        backRight = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
-        frontLeft = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
-        frontRight = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
-        armMotor = (DcMotorEx) getHardwareOn("Arm Motor", hardwareMap.dcMotor);
-        carouselLeft = (CRServo) getHardwareOn("Carousel Left", hardwareMap.crservo);
-        carouselRight = (CRServo) getHardwareOn("Carousel Right", hardwareMap.crservo);
-        spinIntake = (CRServo) getHardwareOn("Spin Intake", hardwareMap.crservo);
+        backLeft = (DcMotorEx) getHardware("Back Left", DcMotorEx.class);
+        backRight = (DcMotorEx) getHardware("Back Right", DcMotorEx.class);
+        frontLeft = (DcMotorEx) getHardware("Front Left", DcMotorEx.class);
+        frontRight = (DcMotorEx) getHardware("Front Right", DcMotorEx.class);
+        armMotor = (DcMotorEx) getHardware("Arm Motor", DcMotorEx.class);
+        carouselLeft = (CRServo) getHardware("Carousel Left", CRServo.class);
+        carouselRight = (CRServo) getHardware("Carousel Right", CRServo.class);
+        spinIntake = (CRServo) getHardware("Spin Intake", CRServo.class);
 
         frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
         backRight.setDirection(DcMotorSimple.Direction.REVERSE);

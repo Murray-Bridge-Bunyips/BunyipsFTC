@@ -31,10 +31,10 @@ public class LisaConfig extends RobotConfig {
     protected void init(HardwareMap hardwareMap, Telemetry telemetry) {
         setTelemetry(telemetry);
 
-        left = (DcMotorEx) getHardwareOn("Left Motor", hardwareMap.dcMotor);
-        right = (DcMotorEx) getHardwareOn("Right Motor", hardwareMap.dcMotor);
-        dws = (ColorSensor) getHardwareOn("Downward Vision System", hardwareMap.colorSensor);
-        fws = (DistanceSensor) getHardwareOn("Forward Vision System", DistanceSensor.class);
+        left = (DcMotorEx) getHardware("Left Motor", DcMotorEx.class);
+        right = (DcMotorEx) getHardware("Right Motor", DcMotorEx.class);
+        dws = (ColorSensor) getHardware("Downward Vision System", ColorSensor.class);
+        fws = (DistanceSensor) getHardware("Forward Vision System", DistanceSensor.class);
 
         right.setDirection(DcMotorEx.Direction.REVERSE);
 
@@ -48,7 +48,7 @@ public class LisaConfig extends RobotConfig {
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        imu = (BNO055IMU) getHardwareOn("imu", BNO055IMU.class);
+        imu = (BNO055IMU) getHardware("imu", BNO055IMU.class);
         if (imu != null)
             imu.initialize(parameters);
 

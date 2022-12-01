@@ -41,20 +41,21 @@ public class JerryConfig extends RobotConfig {
     @Override
     protected void init(HardwareMap hardwareMap, Telemetry telemetry) {
         setTelemetry(telemetry);
+//        setHardwareMap(hardwareMap);
 
-        webcam = (WebcamName) getHardwareOn("Webcam", WebcamName.class);
+        webcam = (WebcamName) getHardware("Webcam", WebcamName.class);
         monitorID = hardwareMap.appContext.getResources().getIdentifier(
                 "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
 
-        bl = (DcMotorEx) getHardwareOn("Back Left", hardwareMap.dcMotor);
-        br = (DcMotorEx) getHardwareOn("Back Right", hardwareMap.dcMotor);
-        fl = (DcMotorEx) getHardwareOn("Front Left", hardwareMap.dcMotor);
-        fr = (DcMotorEx) getHardwareOn("Front Right", hardwareMap.dcMotor);
-        arm1 = (DcMotorEx) getHardwareOn("Arm Motor 1", hardwareMap.dcMotor);
-        arm2 = (DcMotorEx) getHardwareOn("Arm Motor 2", hardwareMap.dcMotor);
-        claw1 = (Servo) getHardwareOn("Claw Servo 1", hardwareMap.servo);
-        claw2 = (Servo) getHardwareOn("Claw Servo 2", hardwareMap.servo);
-        limit = (TouchSensor) getHardwareOn("Arm Stop", hardwareMap.touchSensor);
+        bl = (DcMotorEx) getHardware("Back Left", DcMotorEx.class);
+        br = (DcMotorEx) getHardware("Back Right", DcMotorEx.class);
+        fl = (DcMotorEx) getHardware("Front Left", DcMotorEx.class);
+        fr = (DcMotorEx) getHardware("Front Right", DcMotorEx.class);
+        arm1 = (DcMotorEx) getHardware("Arm Motor 1", DcMotorEx.class);
+        arm2 = (DcMotorEx) getHardware("Arm Motor 2", DcMotorEx.class);
+        claw1 = (Servo) getHardware("Claw Servo 1", Servo.class);
+        claw2 = (Servo) getHardware("Claw Servo 2", Servo.class);
+        limit = (TouchSensor) getHardware("Arm Stop", TouchSensor.class);
 
         // Motor direction configuration
         fl.setDirection(DcMotorEx.Direction.REVERSE);
@@ -65,8 +66,8 @@ public class JerryConfig extends RobotConfig {
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
         // These encoders will mirror a DcMotor, but will be attached to their own port (for example,
         // motor 0 and 1 on Expansion Hub, but without any power connection)
-        x = (Deadwheel) getHardwareOn("X Encoder", Deadwheel.class);
-        y = (Deadwheel) getHardwareOn("Y Encoder", Deadwheel.class);
+        x = (Deadwheel) getHardware("X Encoder", Deadwheel.class);
+        y = (Deadwheel) getHardware("Y Encoder", Deadwheel.class);
 
 
         // Control Hub IMU configuration
@@ -79,20 +80,20 @@ public class JerryConfig extends RobotConfig {
         parameters.loggingTag = "IMU";
         parameters.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
 
-        imu = (BNO055IMU) getHardwareOn("imu", BNO055IMU.class);
+        imu = (BNO055IMU) getHardware("imu", BNO055IMU.class);
         if (imu != null)
             imu.initialize(parameters);
 
         ArrayList<String> errors = getHardwareErrors();
         if (errors == null) {
-            telemetry.addData("BunyipsOpMode Status", "ROBOT CONFIGURATION COMPLETED SUCCESSFULLY WITH NO ERRORS.");
+            getTelemetry().addData("BunyipsOpMode Status", "ROBOT CONFIGURATION COMPLETED SUCCESSFULLY WITH NO ERRORS.");
             return;
         }
 
-        telemetry.addData("BunyipsOpMode Status", "ERROR(S) DURING CONFIGURATION, THESE DEVICES WERE NOT ABLE TO BE CONFIGURED.");
+        getTelemetry().addData("BunyipsOpMode Status", "ERROR(S) DURING CONFIGURATION, THESE DEVICES WERE NOT ABLE TO BE CONFIGURED.");
         Iterator<String> error = errors.iterator();
         for (int i = 0; i < errors.size(); i++) {
-            telemetry.addData(String.valueOf(i), error.next());
+            getTelemetry().addData(String.valueOf(i), error.next());
         }
     }
 }

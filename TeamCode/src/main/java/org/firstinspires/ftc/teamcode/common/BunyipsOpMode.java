@@ -73,12 +73,11 @@ public abstract class BunyipsOpMode extends LinearOpMode {
                 telemetry.addData("BunyipsOpMode Status", "INIT COMPLETE -- PLAY WHEN READY.");
                 telemetry.update();
 
-                waitForStart();
-
             } catch (Throwable e) {
                 ErrorUtil.handleCatchAllException(e, telemetry);
             }
 
+            waitForStart();
             clearTelemetryData();
             movingAverageTimer.reset();
             onStart();
