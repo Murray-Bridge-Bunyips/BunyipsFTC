@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask;
-import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm;
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig;
