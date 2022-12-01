@@ -12,9 +12,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.Deadwheel;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-
 public class JerryConfig extends RobotConfig {
 
     // Add declarations here
@@ -41,11 +38,11 @@ public class JerryConfig extends RobotConfig {
     @Override
     protected void init(HardwareMap hardwareMap, Telemetry telemetry) {
         setTelemetry(telemetry);
-//        setHardwareMap(hardwareMap);
+        setHardwareMap(hardwareMap);
 
         webcam = (WebcamName) getHardware("Webcam", WebcamName.class);
-        monitorID = hardwareMap.appContext.getResources().getIdentifier(
-                "cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        monitorID = getHardwareMap().appContext.getResources().getIdentifier(
+                "cameraMonitorViewId", "id", getHardwareMap().appContext.getPackageName());
 
         bl = (DcMotorEx) getHardware("Back Left", DcMotorEx.class);
         br = (DcMotorEx) getHardware("Back Right", DcMotorEx.class);
@@ -84,16 +81,6 @@ public class JerryConfig extends RobotConfig {
         if (imu != null)
             imu.initialize(parameters);
 
-        ArrayList<String> errors = getHardwareErrors();
-        if (errors == null) {
-            getTelemetry().addData("BunyipsOpMode Status", "ROBOT CONFIGURATION COMPLETED SUCCESSFULLY WITH NO ERRORS.");
-            return;
-        }
-
-        getTelemetry().addData("BunyipsOpMode Status", "ERROR(S) DURING CONFIGURATION, THESE DEVICES WERE NOT ABLE TO BE CONFIGURED.");
-        Iterator<String> error = errors.iterator();
-        for (int i = 0; i < errors.size(); i++) {
-            getTelemetry().addData(String.valueOf(i), error.next());
-        }
+        printHardwareErrors();
     }
 }
