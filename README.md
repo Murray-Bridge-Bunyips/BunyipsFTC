@@ -10,7 +10,7 @@
 		BERTIE: Mecanum-drive FreightFrenzy robot for 2021-2022 season (Deconstructed and migrated into JERRY)
 	
 	Robot code not in this repository (written in Blocks by other members of the club):
-		FTC22407: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS
+		DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS
 		FTC15215-2: Two-wheel-drive PowerPlay robot for PowerPlay, serves as a backup to JERRY
 		GROOT: Two-wheel-drive minibot for versatility and education
 		

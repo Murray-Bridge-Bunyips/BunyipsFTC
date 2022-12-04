@@ -11,17 +11,36 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
  * IMUOperation custom common class for internal BNO055IMUs
  * @author Lucas Bubner - FTC 15215 Captain; Oct 2022 - Murray Bridge Bunyips
  */
- public class IMUOp extends BunyipsComponent {
+public class IMUOp extends BunyipsComponent {
 
     private final BNO055IMU imu;
     public volatile Orientation currentAngles;
     private double previousHeading = 0, heading = 0;
     private Double capture = null;
 
+    /**
+     * Offset used for Field-centric navigation, as defined in FieldPositioning
+     */
+    private double offset = 0;
+
     public IMUOp(BunyipsOpMode opMode, BNO055IMU imu) {
         super(opMode);
         this.imu = imu;
         assert imu != null;
+    }
+
+    /**
+     * Set a heading offset for the IMU Z reading
+     */
+    public void setOffset(double offset) {
+        this.offset = offset;
+    }
+
+    /**
+     * Get current heading offset for the IMU Z reading
+     */
+    public double getOffset() {
+        return offset;
     }
 
     /**
@@ -38,7 +57,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
      * @return Z value of Orientation axes in human-friendly reading range [0, 360]
      */
     public double getHeading() {
-        double currentHeading = currentAngles.thirdAngle;
+        double currentHeading = currentAngles.thirdAngle + offset;
         double delta = currentHeading - previousHeading;
 
         // Detects if there is a sudden 180 turn which means we have turned more than the 180
