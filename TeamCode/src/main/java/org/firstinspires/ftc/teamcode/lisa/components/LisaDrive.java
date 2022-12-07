@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.lisa.components;
 
-import android.annotation.SuppressLint;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -50,7 +48,6 @@ public class LisaDrive extends BunyipsComponent {
         right.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    @SuppressLint("DefaultLocale")
     public void update() {
         left.setPower(leftPower);
         right.setPower(rightPower);

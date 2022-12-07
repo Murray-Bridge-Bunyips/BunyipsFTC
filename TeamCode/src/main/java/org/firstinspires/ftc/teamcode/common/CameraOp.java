@@ -6,8 +6,6 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XZY;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 
-import android.annotation.SuppressLint;
-
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -234,7 +232,6 @@ public class CameraOp extends BunyipsComponent {
      * TensorFlow detection return function to determine a label. TFOD must be activated.
      * @return Returns the String of the detected TFOD label if the confidence is above 75%, otherwise returns null
      */
-    @SuppressLint("DefaultLocale")
     public String determineTFOD() {
         // TFOD updated recognitions will return null if the data is the same as the last call
         if (updatedRecognitions == null || tfod == null) return null;
@@ -283,7 +280,6 @@ public class CameraOp extends BunyipsComponent {
      * See: https://github.com/FIRST-Tech-Challenge/FtcRobotController/blob/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples/FTC_FieldCoordinateSystemDefinition.pdf
      * for information regarding field positioning with these coordinates.
      */
-    @SuppressLint("DefaultLocale")
     public OpenGLMatrix getTargetRawMatrix() {
         if (targetVisible && vuforia != null) {
 

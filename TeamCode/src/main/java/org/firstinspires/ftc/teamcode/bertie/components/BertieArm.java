@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.bertie.components;
 
-import android.annotation.SuppressLint;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
@@ -19,7 +17,6 @@ public class BertieArm extends BunyipsComponent {
     private double liftPower;
     private int liftIndex = 0;
 
-    @SuppressLint("DefaultLocale")
     public BertieArm(BunyipsOpMode opMode, DcMotor liftMotor) {
         super(opMode);
         this.liftMotor = liftMotor;
@@ -54,8 +51,6 @@ public class BertieArm extends BunyipsComponent {
     public void setPower(double power) {
         liftPower = power;
     }
-
-    @SuppressLint("DefaultLocale")
     public void update() {
         getOpMode().telemetry.addLine(String.format("Arm Position: %d", liftMotor.getCurrentPosition()));
         liftMotor.setPower(liftPower);

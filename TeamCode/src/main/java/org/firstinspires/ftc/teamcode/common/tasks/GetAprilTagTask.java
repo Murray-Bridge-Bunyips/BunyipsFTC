@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.common.tasks;
 
-import android.annotation.SuppressLint;
-
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.CameraOp;
 import org.firstinspires.ftc.teamcode.common.pipelines.AprilTagDetectionPipeline;
@@ -74,7 +72,6 @@ public class GetAprilTagTask extends Task implements TaskImpl {
     }
 
     @Override
-    @SuppressLint("DefaultLocale")
     public void run() {
         // Caution! ParkingPosition will be null if the camera does not pick up anything in it's task runtime.
         // Be sure to check if ParkingPosition is null before setting up your specific tasks, to handle a fallback value.

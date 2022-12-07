@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.common.tasks;
 
-import android.annotation.SuppressLint;
-
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public class MessageTask extends Task implements TaskImpl {
@@ -13,7 +11,6 @@ public class MessageTask extends Task implements TaskImpl {
         this.message = message;
     }
 
-    @SuppressLint("DefaultLocale")
     @Override
     public void run() {
         if (isFinished()) {

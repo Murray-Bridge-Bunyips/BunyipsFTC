@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.jerry.components;
 
-import android.annotation.SuppressLint;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -72,7 +70,6 @@ public class JerryArm extends BunyipsComponent {
      * over-current detection in the event the hard-limit switch isn't working correctly.
      * This will lockout the update method while it runs.
      */
-    @SuppressLint("DefaultLocale")
     public void liftCalibrate() {
         // Lock down the instance to have full control over the arm
         isCalibrating = true;
@@ -213,7 +210,6 @@ public class JerryArm extends BunyipsComponent {
     /**
      * Call to update desired arm motor speeds
      */
-    @SuppressLint("DefaultLocale")
     public void update() {
         // If the arm is in the process of calibration, don't interrupt it
         if (isCalibrating) return;
