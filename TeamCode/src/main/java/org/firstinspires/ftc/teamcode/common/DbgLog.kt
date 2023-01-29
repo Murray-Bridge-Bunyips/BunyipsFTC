@@ -28,55 +28,53 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
+package org.firstinspires.ftc.teamcode.common
 
-package org.firstinspires.ftc.teamcode.common;
+import android.util.Log
 
 /**
  * Provide utility methods for debug logging
  */
-public class DbgLog {
+object DbgLog {
     /**
      * Tag used by logcat
      */
-    public static final String TAG = "FIRST";
-    public static final String ERROR_PREPEND = "### ERROR: ";
-
-    private DbgLog() {
-    }
+    const val TAG = "FIRST"
+    const val ERROR_PREPEND = "### ERROR: "
 
     /**
      * Log a debug message
      *
      * @param message
      */
-    public static void msg(String message) {
-        android.util.Log.i(TAG, message);
+    fun msg(message: String) {
+        Log.i(TAG, message)
     }
 
-    public static void msg(String format, Object... args) {
-        msg(String.format(format, args));
+    fun msg(format: String?, vararg args: Any?) {
+        msg(String.format(format!!, *args))
     }
-
 
     /**
      * Log an error message
-     * <p>
+     *
+     *
      * Messages will be prepended with the ERROR_PREPEND string
      *
      * @param message
      */
-    public static void error(String message) {
-        android.util.Log.e(TAG, ERROR_PREPEND + message);
+    fun error(message: String) {
+        Log.e(TAG, ERROR_PREPEND + message)
     }
 
-    public static void error(String format, Object... args) {
-        error(String.format(format, args));
+    fun error(format: String?, vararg args: Any?) {
+        error(String.format(format!!, *args))
     }
 
-    public static void logStacktrace(Exception e) {
-        msg(e.toString());
-        for (StackTraceElement el : e.getStackTrace()) {
-            msg(el.toString());
+    fun logStacktrace(e: Exception) {
+        msg(e.toString())
+        for (el in e.stackTrace) {
+            msg(el.toString())
         }
     }
 }

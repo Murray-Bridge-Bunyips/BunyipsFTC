@@ -1,180 +1,190 @@
-package org.firstinspires.ftc.teamcode.common;
+package org.firstinspires.ftc.teamcode.common
 
 /**
  * Time utilities for robot operation.
  * @author Shaun, 11/06/2017.
  */
-public class MovingAverageTimer {
-
-
-    public static final double SECOND_IN_NANO = 1000000000.0;
-    public static final double MILLIS_IN_NANO = 1000000.0;
-
+class MovingAverageTimer @JvmOverloads constructor(
+    num: Int = 100,
+    resolution: Resolution? = Resolution.MILLISECONDS
+) {
     // A ring buffer is used to keep track of a moving average
-    private final int ringBufferSize;
-    private final long[] loopTimeRingBuffer;
+    private val ringBufferSize: Int
+    private val loopTimeRingBuffer: LongArray
+    private var resolution = 0.0
+    private var avgFormatStr: String? = null
+    private var toStringFormatStr: String? = null
+    private var ringBufferIndex = 0
+    private var loopCount: Long = 0
+    private var movingTotal: Long = 0
+    private var runningTotal: Long = 0
+    private var previousTime: Long = 0
+    private var movingAverage = 0.0
+    private var minMovingAverage = Double.MAX_VALUE
+    private var maxMovingAverage = Double.MIN_VALUE
+    private var average = 0.0
+    private var minAverage = Double.MAX_VALUE
+    private var maxAverage = Double.MIN_VALUE
+    private var minLoopTime = Double.MAX_VALUE
+    private var maxLoopTime = Double.MIN_VALUE
 
-    private final double resolution;
-    private final String avgFormatStr;
-    private final String toStringFormatStr;
-    private int ringBufferIndex = 0;
-    private long loopCount = 0;
-    private long movingTotal = 0;
-    private long runningTotal = 0;
-    private long previousTime = 0;
-    private double movingAverage = 0;
-    private double minMovingAverage = Double.MAX_VALUE;
-    private double maxMovingAverage = Double.MIN_VALUE;
-    private double average = 0.0;
-    private double minAverage = Double.MAX_VALUE;
-    private double maxAverage = Double.MIN_VALUE;
-    private double minLoopTime = Double.MAX_VALUE;
-    private double maxLoopTime = Double.MIN_VALUE;
+    init {
+        reset()
+        ringBufferSize = num
+        loopTimeRingBuffer = LongArray(ringBufferSize)
+        val hdr = String.format("\n%-12s%-12s%-12s%-12s", "Loops", "TotalTime", "MovAvg", "Avg")
+        when (resolution) {
+            Resolution.SECONDS -> {
+                this.resolution = SECOND_IN_NANO
+                avgFormatStr = "%3.3f secs"
+                toStringFormatStr =
+                    "$hdr seconds\n%-12d%-12.3f%-12.3f%-12.3f\n min        %-12.3f%-12.3f%-12.3f\n max        %-12.3f%-12.3f%-12.3f"
+            }
 
-    public MovingAverageTimer() {
-        this(100, Resolution.MILLISECONDS);
-    }
+            Resolution.MILLISECONDS -> {
+                this.resolution = MILLIS_IN_NANO
+                avgFormatStr = "%3.3f msecs"
+                toStringFormatStr = """${hdr}msecs
+%-12d%-12.3f%-12.3f%-12.3f
+ min        %-12.3f%-12.3f%-12.3f
+ max        %-12.3f%-12.3f%-12.3f"""
+            }
 
-    public MovingAverageTimer(int num) {
-        this(num, Resolution.MILLISECONDS);
-    }
-
-    public MovingAverageTimer(int num, Resolution resolution) {
-        reset();
-        ringBufferSize = num;
-        loopTimeRingBuffer = new long[ringBufferSize];
-
-        String hdr = String.format("\n%-12s%-12s%-12s%-12s", "Loops", "TotalTime", "MovAvg", "Avg");
-
-        switch (resolution) {
-            case SECONDS:
-                this.resolution = SECOND_IN_NANO;
-                avgFormatStr = "%3.3f secs";
-                toStringFormatStr = hdr + " seconds\n%-12d%-12.3f%-12.3f%-12.3f\n min        %-12.3f%-12.3f%-12.3f\n max        %-12.3f%-12.3f%-12.3f";
-                break;
-            case MILLISECONDS:
-            default:
-                this.resolution = MILLIS_IN_NANO;
-                avgFormatStr = "%3.3f msecs";
-                toStringFormatStr = hdr + "msecs\n%-12d%-12.3f%-12.3f%-12.3f\n min        %-12.3f%-12.3f%-12.3f\n max        %-12.3f%-12.3f%-12.3f";
-                break;
+            else -> {
+                this.resolution = MILLIS_IN_NANO
+                avgFormatStr = "%3.3f msecs"
+                toStringFormatStr = """${hdr}msecs
+%-12d%-12.3f%-12.3f%-12.3f
+ min        %-12.3f%-12.3f%-12.3f
+ max        %-12.3f%-12.3f%-12.3f"""
+            }
         }
     }
 
-    public void reset() {
-        loopCount = 0;
-        previousTime = System.nanoTime();
-        movingTotal = 0;
-        runningTotal = 0;
-        movingAverage = 0;
-        average = 0.0;
+    fun reset() {
+        loopCount = 0
+        previousTime = System.nanoTime()
+        movingTotal = 0
+        runningTotal = 0
+        movingAverage = 0.0
+        average = 0.0
     }
 
-    public void update() {
-        long now = System.nanoTime();
-        long loopTime = now - previousTime;
-        previousTime = now;
-
+    fun update() {
+        val now = System.nanoTime()
+        val loopTime = now - previousTime
+        previousTime = now
         if (loopCount > 0) {
-            minLoopTime = Math.min(minLoopTime, loopTime);
-            maxLoopTime = Math.max(maxLoopTime, loopTime);
+            minLoopTime = Math.min(minLoopTime, loopTime.toDouble())
+            maxLoopTime = Math.max(maxLoopTime, loopTime.toDouble())
         }
 
         // Adjust the running total
-        movingTotal = movingTotal - loopTimeRingBuffer[ringBufferIndex] + loopTime;
-        runningTotal = runningTotal + loopTime;
+        movingTotal = movingTotal - loopTimeRingBuffer[ringBufferIndex] + loopTime
+        runningTotal = runningTotal + loopTime
 
         // Add the new value
-        loopTimeRingBuffer[ringBufferIndex] = loopTime;
+        loopTimeRingBuffer[ringBufferIndex] = loopTime
 
         // Wrap the current index
-        ringBufferIndex = (ringBufferIndex + 1) % ringBufferSize;
-
-        loopCount += 1;
-
+        ringBufferIndex = (ringBufferIndex + 1) % ringBufferSize
+        loopCount += 1
         if (loopCount < ringBufferSize) {
-            if (loopCount == 0) {
-                movingAverage = 0.0;
+            movingAverage = if (loopCount == 0L) {
+                0.0
             } else {
-                movingAverage = (double) movingTotal / (double) loopCount / resolution;
+                movingTotal.toDouble() / loopCount.toDouble() / resolution
             }
             // Temporarily fill the min/max movingAverage
-            minMovingAverage = Math.min(minMovingAverage, movingAverage);
-            maxMovingAverage = Math.max(maxMovingAverage, movingAverage);
-
+            minMovingAverage = Math.min(minMovingAverage, movingAverage)
+            maxMovingAverage = Math.max(maxMovingAverage, movingAverage)
         } else {
-            movingAverage = (double) movingTotal / (double) ringBufferSize / resolution;
+            movingAverage = movingTotal.toDouble() / ringBufferSize.toDouble() / resolution
 
             // Reset the min/max movingAverage values the each time the buffer is filled
             if (ringBufferIndex == 0) {
-                minMovingAverage = movingAverage;
-                maxMovingAverage = movingAverage;
+                minMovingAverage = movingAverage
+                maxMovingAverage = movingAverage
             } else {
-                minMovingAverage = Math.min(minMovingAverage, movingAverage);
-                maxMovingAverage = Math.max(maxMovingAverage, movingAverage);
+                minMovingAverage = Math.min(minMovingAverage, movingAverage)
+                maxMovingAverage = Math.max(maxMovingAverage, movingAverage)
             }
         }
-
-        average = (double) runningTotal / loopCount / resolution;
-        minAverage = Math.min(minAverage, average);
-        maxAverage = Math.max(maxAverage, average);
+        average = runningTotal.toDouble() / loopCount / resolution
+        minAverage = Math.min(minAverage, average)
+        maxAverage = Math.max(maxAverage, average)
     }
 
-    public long count() {
-        return loopCount;
+    fun count(): Long {
+        return loopCount
     }
 
-    public double movingAverage() {
-        return movingAverage;
+    fun movingAverage(): Double {
+        return movingAverage
     }
 
-    public double minMovingAverage() {
-        return minMovingAverage;
+    fun minMovingAverage(): Double {
+        return minMovingAverage
     }
 
-    public double maxMovingAverage() {
-        return maxMovingAverage;
+    fun maxMovingAverage(): Double {
+        return maxMovingAverage
     }
 
-    public String movingAverageString() {
-        return String.format(avgFormatStr, movingAverage);
+    fun movingAverageString(): String {
+        return String.format(avgFormatStr!!, movingAverage)
     }
 
-    public double average() {
-        return average;
+    fun average(): Double {
+        return average
     }
 
-    public double minAverage() {
-        return minAverage;
+    fun minAverage(): Double {
+        return minAverage
     }
 
-    public double maxAverage() {
-        return maxAverage;
+    fun maxAverage(): Double {
+        return maxAverage
     }
 
-    public double minLoopTime() {
-        return minLoopTime / resolution;
+    fun minLoopTime(): Double {
+        return minLoopTime / resolution
     }
 
-    public double maxLoopTime() {
-        return maxLoopTime / resolution;
+    fun maxLoopTime(): Double {
+        return maxLoopTime / resolution
     }
 
-    public double elapsedTime() {
-        return runningTotal / resolution;
+    fun elapsedTime(): Double {
+        return runningTotal / resolution
     }
 
-    public String averageString() {
-        return String.format(avgFormatStr, average);
+    fun averageString(): String {
+        return String.format(avgFormatStr!!, average)
     }
 
-    @Override
-    public String toString() {
-        return String.format(toStringFormatStr, loopCount, elapsedTime(), movingAverage, average, minLoopTime(), minMovingAverage, minAverage, maxLoopTime(), maxMovingAverage, maxAverage);
+    override fun toString(): String {
+        return String.format(
+            toStringFormatStr!!,
+            loopCount,
+            elapsedTime(),
+            movingAverage,
+            average,
+            minLoopTime(),
+            minMovingAverage,
+            minAverage,
+            maxLoopTime(),
+            maxMovingAverage,
+            maxAverage
+        )
     }
 
-    public enum Resolution {
-        SECONDS,
-        MILLISECONDS
+    enum class Resolution {
+        SECONDS, MILLISECONDS
+    }
+
+    companion object {
+        const val SECOND_IN_NANO = 1000000000.0
+        const val MILLIS_IN_NANO = 1000000.0
     }
 }

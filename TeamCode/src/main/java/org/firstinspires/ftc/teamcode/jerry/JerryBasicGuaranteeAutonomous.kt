@@ -1,64 +1,53 @@
-package org.firstinspires.ftc.teamcode.jerry;
+package org.firstinspires.ftc.teamcode.jerry
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.ButtonControl;
-import org.firstinspires.ftc.teamcode.common.ButtonHashmap;
-import org.firstinspires.ftc.teamcode.common.CameraOp;
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
-import org.firstinspires.ftc.teamcode.jerry.components.JerryArm;
-import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig;
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive;
-import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask;
-
-import java.util.ArrayDeque;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.ButtonControl
+import org.firstinspires.ftc.teamcode.common.ButtonHashmap
+import org.firstinspires.ftc.teamcode.common.CameraOp
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
+import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
+import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
+import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
+import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
+import java.util.ArrayDeque
 
 @Autonomous(name = "<JERRY> POWERPLAY BASIC PARK Autonomous")
-public class JerryBasicGuaranteeAutonomous extends BunyipsOpMode {
-
-    private JerryConfig config;
-    private CameraOp cam;
-    private JerryDrive drive;
-    private JerryArm arm;
-    private final ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
-
-    @Override
-    protected void onInit() {
-        config = JerryConfig.newConfig(hardwareMap, telemetry);
+class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
+    private var config: JerryConfig? = null
+    private val cam: CameraOp? = null
+    private var drive: JerryDrive? = null
+    private val arm: JerryArm? = null
+    private val tasks = ArrayDeque<TaskImpl>()
+    override fun onInit() {
+        config = JerryConfig.newConfig(hardwareMap, telemetry)
         try {
-            drive = new JerryDrive(this, config.bl, config.br, config.fl, config.fr);
-        } catch (Exception e) {
-            telemetry.addLine("Failed to initialise Drive System.");
+            drive = JerryDrive(this, config!!.bl, config!!.br, config!!.fl, config!!.fr)
+        } catch (e: Exception) {
+            telemetry.addLine("Failed to initialise Drive System.")
         }
+        val selectedButton = ButtonHashmap.map(this, "Red Drive Left", "Blue Drive Right", "", "")
+        when (selectedButton) {
+            ButtonControl.A ->                 // Move left
+                tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
 
-        ButtonControl selectedButton = ButtonHashmap.map(this, "Red Drive Left", "Blue Drive Right", "", "");
-        switch (selectedButton) {
-            case A:
-                // Move left
-                tasks.add(new JerryTimeDriveTask(this, 1.5, drive, 1, 0, 0));
-                break;
-            case B:
-                // Move right
-                tasks.add(new JerryTimeDriveTask(this, 1.5, drive, -1, 0, 0));
-                break;
+            ButtonControl.B ->                 // Move right
+                tasks.add(JerryTimeDriveTask(this, 1.5, drive, -1.0, 0.0, 0.0))
+
+            else -> {}
         }
-
-        telemetry.addLine("Ready to go under config: " + selectedButton);
+        telemetry.addLine("Ready to go under config: $selectedButton")
     }
 
-    @Override
-    protected void activeLoop() throws InterruptedException {
-        TaskImpl currentTask = tasks.peekFirst();
-        if (currentTask == null) {
-            return;
-        }
-        currentTask.run();
+    @Throws(InterruptedException::class)
+    override fun activeLoop() {
+        val currentTask = tasks.peekFirst() ?: return
+        currentTask.run()
         if (currentTask.isFinished()) {
-            tasks.removeFirst();
+            tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive.deinit();
+            drive!!.deinit()
         }
     }
 }

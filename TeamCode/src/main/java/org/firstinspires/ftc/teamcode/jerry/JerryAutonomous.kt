@@ -1,100 +1,90 @@
-package org.firstinspires.ftc.teamcode.jerry;
+package org.firstinspires.ftc.teamcode.jerry
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-
-import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.CameraOp;
-import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask;
-import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
-import org.firstinspires.ftc.teamcode.jerry.components.JerryArm;
-import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig;
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive;
-
-import java.util.ArrayDeque;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.CameraOp
+import org.firstinspires.ftc.teamcode.common.CameraOp.CamMode
+import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
+import org.firstinspires.ftc.teamcode.common.tasks.MessageTask
+import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
+import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
+import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
+import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
+import java.util.ArrayDeque
 
 @Autonomous(name = "<JERRY> POWERPLAY Autonomous")
-public class JerryAutonomous extends BunyipsOpMode {
-
-    private JerryConfig config;
-    private CameraOp cam = null;
-    private JerryDrive drive;
-    private JerryArm arm;
-    private GetAprilTagTask Krankenhaus;
-    private final ArrayDeque<TaskImpl> tasks = new ArrayDeque<>();
-
-    @Override
-    protected void onInit() {
-        config = JerryConfig.newConfig(hardwareMap, telemetry);
+class JerryAutonomous : BunyipsOpMode() {
+    private var config: JerryConfig? = null
+    private var cam: CameraOp? = null
+    private var drive: JerryDrive? = null
+    private var arm: JerryArm? = null
+    private var Krankenhaus: GetAprilTagTask? = null
+    private val tasks = ArrayDeque<TaskImpl>()
+    override fun onInit() {
+        config = JerryConfig.newConfig(hardwareMap, telemetry)
         try {
-            cam = new CameraOp(this, config.webcam, config.monitorID, CameraOp.CamMode.OPENCV);
-        } catch (Exception e) {
-            telemetry.addLine("Failed to initialise Camera Operation.");
+            cam = CameraOp(this, config!!.webcam, config!!.monitorID, CamMode.OPENCV)
+        } catch (e: Exception) {
+            telemetry.addLine("Failed to initialise Camera Operation.")
         }
         try {
-            drive = new JerryDrive(this, config.bl, config.br, config.fl, config.fr);
-        } catch (Exception e) {
-            telemetry.addLine("Failed to initialise Drive System.");
+            drive = JerryDrive(this, config!!.bl, config!!.br, config!!.fl, config!!.fr)
+        } catch (e: Exception) {
+            telemetry.addLine("Failed to initialise Drive System.")
         }
         try {
-            arm = new JerryArm(this, config.claw1, config.claw2, config.arm1, config.arm2, config.limit);
-        } catch (Exception e) {
-            telemetry.addLine("Failed to initialise Arm System.");
+            arm = JerryArm(
+                this,
+                config!!.claw1,
+                config!!.claw2,
+                config!!.arm1,
+                config!!.arm2,
+                config!!.limit
+            )
+        } catch (e: Exception) {
+            telemetry.addLine("Failed to initialise Arm System.")
         }
 
         // Check if we have deadwheel capabilities, if we do, use the respective tasks with
         // deadwheel field positioning, otherwise we will need to use time as that is
         // our only option
-        if (config.x != null && config.y != null) {
-            telemetry.addLine("Deadwheels are available. Using Precision/Deadwheel tasks.");
+        if (config!!.x != null && config!!.y != null) {
+            telemetry.addLine("Deadwheels are available. Using Precision/Deadwheel tasks.")
         } else {
-            telemetry.addLine("No deadwheels available. Using BaseDrive/IMU tasks only.");
+            telemetry.addLine("No deadwheels available. Using BaseDrive/IMU tasks only.")
         }
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
-        Krankenhaus = new GetAprilTagTask(this, cam);
+        Krankenhaus = GetAprilTagTask(this, cam)
     }
 
-    @Override
-    protected boolean onInitLoop() {
+    override fun onInitLoop(): Boolean {
         // Using CameraOp OPENCV and AprilTags in order to detect the Signal sleeve
-        Krankenhaus.run();
-        return Krankenhaus.isFinished();
+        Krankenhaus!!.run()
+        return Krankenhaus!!.isFinished()
     }
 
-    @Override
-    protected void onInitDone() {
+    override fun onInitDone() {
         // Determine our final task based on the parking position from the camera
-        GetAprilTagTask.ParkingPosition position = Krankenhaus.getPosition();
-        switch (position) {
-            case LEFT:
-                tasks.add(new MessageTask(this, 10, "LEFT"));
-                break;
-            case CENTER:
-                tasks.add(new MessageTask(this, 10, "CENTER"));
-                break;
-            case RIGHT:
-                tasks.add(new MessageTask(this, 10, "RIGHT"));
-                break;
-            default:
-                tasks.add(new MessageTask(this, 10, "NONE"));
-                break;
+        val position = Krankenhaus?.position
+        when (position) {
+            GetAprilTagTask.ParkingPosition.LEFT -> tasks.add(MessageTask(this, 10.0, "LEFT"))
+            GetAprilTagTask.ParkingPosition.CENTER -> tasks.add(MessageTask(this, 10.0, "CENTER"))
+            GetAprilTagTask.ParkingPosition.RIGHT -> tasks.add(MessageTask(this, 10.0, "RIGHT"))
+            else -> tasks.add(MessageTask(this, 10.0, "NONE"))
         }
     }
 
-    @Override
-    protected void activeLoop() throws InterruptedException {
-        TaskImpl currentTask = tasks.peekFirst();
-        if (currentTask == null) {
-            return;
-        }
-        currentTask.run();
+    @Throws(InterruptedException::class)
+    override fun activeLoop() {
+        val currentTask = tasks.peekFirst() ?: return
+        currentTask.run()
         if (currentTask.isFinished()) {
-            tasks.removeFirst();
+            tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive.deinit();
+            drive!!.deinit()
         }
     }
 }

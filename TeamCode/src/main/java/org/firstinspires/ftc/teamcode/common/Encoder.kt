@@ -1,41 +1,40 @@
-package org.firstinspires.ftc.teamcode.common;
+package org.firstinspires.ftc.teamcode.common
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotor
 
-public interface Encoder extends DcMotor {
-
+interface Encoder : DcMotor {
     /**
      * Enable encoder and begin tracking location (Ensure to reset to zero unless intended)
      */
-    void enableTracking();
+    fun enableTracking()
 
     /**
      * Disable encoder and keep last saved position
      */
-    void disableTracking();
+    fun disableTracking()
 
     /**
      * Reset encoder position to zero
      */
-    void resetTracking();
+    fun resetTracking()
 
     /**
      * Get the distance travelled by the encoder since the last reset and if tracking was enabled
      *
      * @return millimetres indicating how far the encoder has travelled
      */
-    double getTravelledMM();
+    val travelledMM: Double
 
     /**
      * Get the reading from the encoder
      *
      * @return encoder value
      */
-    double getEncoderReading();
+    val encoderReading: Double
 
     /**
      * Return whether the encoders have reached a goal
      * @return
      */
-    boolean targetReached(double goal);
+    fun targetReached(goal: Double): Boolean
 }

@@ -1,11 +1,7 @@
-package org.firstinspires.ftc.teamcode.common.tasks;
+package org.firstinspires.ftc.teamcode.common.tasks
 
-public interface TaskImpl {
-
-    void init();
-
-    void run();
-
-    boolean isFinished();
-
+interface TaskImpl {
+    fun init()
+    fun run()
+    fun isFinished(): Boolean
 }

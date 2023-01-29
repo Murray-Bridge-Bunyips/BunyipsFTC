@@ -1,64 +1,52 @@
-package org.firstinspires.ftc.teamcode.jerry.components;
+package org.firstinspires.ftc.teamcode.jerry.components
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorEx
+import com.qualcomm.robotcore.util.Range
+import org.firstinspires.ftc.teamcode.common.BunyipsComponent
+import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import java.util.Locale
+import kotlin.math.abs
+import kotlin.math.cos
+import kotlin.math.sin
 
-import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
-import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-
-import java.util.Locale;
-
-public class JerryDrive extends BunyipsComponent {
-
-    private BunyipsOpMode opmode;
-    final private DcMotorEx bl;
-    final private DcMotorEx br;
-    final private DcMotorEx fl;
-    final private DcMotorEx fr;
-
-    private double speedX = 0.0;
-    private double speedY = 0.0;
-    private double speedR = 0.0;
-
+class JerryDrive(
+    opMode: BunyipsOpMode?,
+    private val bl: DcMotorEx?, private val br: DcMotorEx?,
+    private val fl: DcMotorEx?, private val fr: DcMotorEx?
+) : BunyipsComponent(opMode) {
+    private val opmode: BunyipsOpMode? = null
+    private var speedX = 0.0
+    private var speedY = 0.0
+    private var speedR = 0.0
 
     // Drive mode functionality to change between normal and rotational modes
-    public enum MecanumDriveMode {
+    enum class MecanumDriveMode {
         NORMALIZED, ROTATION_PRIORITY_NORMALIZED
     }
 
-    private MecanumDriveMode driveMode = MecanumDriveMode.NORMALIZED;
-    public void setDriveMode(MecanumDriveMode mode) {
-        driveMode = mode;
+    private var driveMode = MecanumDriveMode.NORMALIZED
+    fun setDriveMode(mode: MecanumDriveMode) {
+        driveMode = mode
     }
 
-    public JerryDrive(BunyipsOpMode opMode,
-                      DcMotorEx bl, DcMotorEx br,
-                      DcMotorEx fl, DcMotorEx fr) {
+    init {
         // Encoders are not controlled by JerryDrive, as they are not connected
-        super(opMode);
-        this.bl = bl;
-        this.br = br;
-        this.fl = fl;
-        this.fr = fr;
-
-        // Make sure all the motors actually exist
-        // The OpMode will catch this error if a motor is for some reason not connected
-        assert bl != null && br != null && fl != null && fr != null;
+        assert(bl != null && br != null && fl != null && fr != null)
     }
 
-    public void setToFloat() {
-        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    fun setToFloat() {
+        bl!!.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        br!!.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        fl!!.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        fr!!.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
     }
 
-    public void setToBrake() {
-        bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    fun setToBrake() {
+        bl!!.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        br!!.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        fl!!.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        fr!!.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
     }
 
     /**
@@ -66,84 +54,91 @@ public class JerryDrive extends BunyipsComponent {
      * Rotation Priority will calculate rotation speed before translation speed, while normalised
      * will do the opposite, calculating
      */
-    public void update() {
-        if (driveMode == MecanumDriveMode.ROTATION_PRIORITY_NORMALIZED) rotationalPriority();
+    fun update() {
+        if (driveMode == MecanumDriveMode.ROTATION_PRIORITY_NORMALIZED) rotationalPriority()
 
         // Calculate motor powers
-        double frontLeftPower = speedX + speedY - speedR;
-        double frontRightPower = speedX - speedY + speedR;
-        double backLeftPower = speedX - speedY - speedR;
-        double backRightPower = speedX + speedY + speedR;
-
-        double maxPower = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
+        var frontLeftPower = speedX + speedY - speedR
+        var frontRightPower = speedX - speedY + speedR
+        var backLeftPower = speedX - speedY - speedR
+        var backRightPower = speedX + speedY + speedR
+        val maxPower = abs(frontLeftPower).coerceAtLeast(
+            abs(frontRightPower).coerceAtLeast(
+                abs(backLeftPower).coerceAtLeast(abs(backRightPower))
+            )
+        )
         // If the maximum number is greater than 1.0, then normalise by that number
         if (maxPower > 1.0) {
-            frontLeftPower = frontLeftPower / maxPower;
-            frontRightPower = frontRightPower / maxPower;
-            backLeftPower = backLeftPower / maxPower;
-            backRightPower = backRightPower / maxPower;
+            frontLeftPower /= maxPower
+            frontRightPower /= maxPower
+            backLeftPower /= maxPower
+            backRightPower /= maxPower
         }
-
-        fl.setPower(frontLeftPower);
-        fr.setPower(frontRightPower);
-        bl.setPower(backLeftPower);
-        br.setPower(backRightPower);
-
-        getOpMode().telemetry.addLine(String.format(Locale.getDefault(),"Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR));
+        fl?.power = frontLeftPower
+        fr?.power = frontRightPower
+        bl?.power = backLeftPower
+        br?.power = backRightPower
+        opMode!!.telemetry.addLine(
+            String.format(
+                Locale.getDefault(),
+                "Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f",
+                speedX,
+                speedY,
+                speedR
+            )
+        )
     }
 
     /**
      * This method is automatically called when required from the driveMode.
      * Calculate rotational speed first, and use remaining headway for translation.
      */
-    private void rotationalPriority() {
+    private fun rotationalPriority() {
         // Calculate motor powers
-        double[] translationValues = {
-                speedX + speedY,
-                speedX - speedY,
-                speedX - speedY,
-                speedX + speedY};
-
-        double[] rotationValues = {
-                -speedR,
-                speedR,
-                -speedR,
-                speedR};
-
-        double scaleFactor = 1.0;
-        double tmpScale = 1.0;
+        val translationValues = doubleArrayOf(
+            speedX + speedY,
+            speedX - speedY,
+            speedX - speedY,
+            speedX + speedY
+        )
+        val rotationValues = doubleArrayOf(
+            -speedR,
+            speedR,
+            -speedR,
+            speedR
+        )
+        var scaleFactor = 1.0
+        var tmpScale = 1.0
 
         // Solve this equation backwards:
         // MotorX = TranslationX * scaleFactor + RotationX
         // to find scaleFactor that ensures -1 <= MotorX <= 1 and 0 < scaleFactor <= 1
-        for (int i = 0; i < 4; i++) {
-            if (Math.abs(translationValues[i] + rotationValues[i]) > 1) {
-                tmpScale = (1 - rotationValues[i]) / translationValues[i];
+        for (i in 0..3) {
+            if (abs(translationValues[i] + rotationValues[i]) > 1) {
+                tmpScale = (1 - rotationValues[i]) / translationValues[i]
             } else if (translationValues[i] + rotationValues[i] < -1) {
-                tmpScale = (rotationValues[i] - 1) / translationValues[i];
+                tmpScale = (rotationValues[i] - 1) / translationValues[i]
             }
             if (tmpScale < scaleFactor) {
-                scaleFactor = tmpScale;
+                scaleFactor = tmpScale
             }
         }
-
-        double frontLeftPower = translationValues[0] * scaleFactor + rotationValues[0];
-        double frontRightPower = translationValues[1] * scaleFactor + rotationValues[1];
-        double backLeftPower = translationValues[2] * scaleFactor + rotationValues[2];
-        double backRightPower = translationValues[3] * scaleFactor + rotationValues[3];
-
-        fl.setPower(frontLeftPower);
-        fr.setPower(frontRightPower);
-        bl.setPower(backLeftPower);
-        br.setPower(backRightPower);
+        val frontLeftPower = translationValues[0] * scaleFactor + rotationValues[0]
+        val frontRightPower = translationValues[1] * scaleFactor + rotationValues[1]
+        val backLeftPower = translationValues[2] * scaleFactor + rotationValues[2]
+        val backRightPower = translationValues[3] * scaleFactor + rotationValues[3]
+        fl?.power = frontLeftPower
+        fr?.power = frontRightPower
+        bl?.power = backLeftPower
+        br?.power = backRightPower
     }
 
     /**
      * Set all motor speeds to zero
      */
-    public void deinit() {
-        this.setSpeedXYR(0, 0, 0);
-        this.update();
+    fun deinit() {
+        setSpeedXYR(0.0, 0.0, 0.0)
+        update()
     }
 
     /**
@@ -151,12 +146,12 @@ public class JerryDrive extends BunyipsComponent {
      * @param speedY relative north-south speed - positive: north
      * @param speedR rotation speed - positive: anti-clockwise
      */
-    public void setSpeedXYR(double speedX, double speedY, double speedR) {
+    fun setSpeedXYR(speedX: Double, speedY: Double, speedR: Double) {
         // X and Y have been swapped, and X has been inverted
         // This is to calibrate the controller movement to the robot
-        this.speedX = clipMotorPower(-speedY);
-        this.speedY = clipMotorPower(speedX);
-        this.speedR = clipMotorPower(-speedR);
+        this.speedX = clipMotorPower(-speedY)
+        this.speedY = clipMotorPower(speedX)
+        this.speedR = clipMotorPower(-speedR)
     }
 
     /**
@@ -164,15 +159,14 @@ public class JerryDrive extends BunyipsComponent {
      * @param direction_degrees direction at which the motors will move toward
      * @param speedR rotation speed - positive: anti-clockwise
      */
-    public void setSpeedPolarR(double speed, double direction_degrees, double speedR) {
-        double radians = Math.toRadians(direction_degrees);
-        this.speedX = clipMotorPower(speed * Math.cos(radians));
-        this.speedY = clipMotorPower(speed * Math.sin(radians));
-        this.speedR = clipMotorPower(speedR);
+    fun setSpeedPolarR(speed: Double, direction_degrees: Double, speedR: Double) {
+        val radians = Math.toRadians(direction_degrees)
+        speedX = clipMotorPower(speed * cos(radians))
+        speedY = clipMotorPower(speed * sin(radians))
+        this.speedR = clipMotorPower(speedR)
     }
 
-    private double clipMotorPower(double p) {
-        return Range.clip(p, -1.0, 1.0);
+    private fun clipMotorPower(p: Double): Double {
+        return Range.clip(p, -1.0, 1.0)
     }
-
 }
