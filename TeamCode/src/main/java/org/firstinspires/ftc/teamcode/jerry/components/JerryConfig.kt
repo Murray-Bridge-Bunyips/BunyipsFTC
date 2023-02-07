@@ -31,19 +31,19 @@ class JerryConfig : RobotConfig() {
     override fun init(hardwareMap: HardwareMap?, telemetry: Telemetry) {
         setTelemetry(telemetry)
         this.hardwareMap = hardwareMap
-        webcam = getHardware("Webcam", WebcamName::class.java) as WebcamName
+        webcam = getHardware("Webcam", WebcamName::class.java) as? WebcamName
         monitorID = hardwareMap!!.appContext.resources.getIdentifier(
             "cameraMonitorViewId", "id", hardwareMap.appContext.packageName
         )
-        bl = getHardware("Back Left", DcMotorEx::class.java) as DcMotorEx
-        br = getHardware("Back Right", DcMotorEx::class.java) as DcMotorEx
-        fl = getHardware("Front Left", DcMotorEx::class.java) as DcMotorEx
-        fr = getHardware("Front Right", DcMotorEx::class.java) as DcMotorEx
-        arm1 = getHardware("Arm Motor 1", DcMotorEx::class.java) as DcMotorEx
-        arm2 = getHardware("Arm Motor 2", DcMotorEx::class.java) as DcMotorEx
-        claw1 = getHardware("Claw Servo 1", Servo::class.java) as Servo
-        claw2 = getHardware("Claw Servo 2", Servo::class.java) as Servo
-        limit = getHardware("Arm Stop", TouchSensor::class.java) as TouchSensor
+        bl = getHardware("Back Left", DcMotorEx::class.java) as? DcMotorEx
+        br = getHardware("Back Right", DcMotorEx::class.java) as? DcMotorEx
+        fl = getHardware("Front Left", DcMotorEx::class.java) as? DcMotorEx
+        fr = getHardware("Front Right", DcMotorEx::class.java) as? DcMotorEx
+        arm1 = getHardware("Arm Motor 1", DcMotorEx::class.java) as? DcMotorEx
+        arm2 = getHardware("Arm Motor 2", DcMotorEx::class.java) as? DcMotorEx
+        claw1 = getHardware("Claw Servo 1", Servo::class.java) as? Servo
+        claw2 = getHardware("Claw Servo 2", Servo::class.java) as? Servo
+        limit = getHardware("Arm Stop", TouchSensor::class.java) as? TouchSensor
 
         // Motor direction configuration
         fl!!.direction = Direction.REVERSE
@@ -54,8 +54,8 @@ class JerryConfig : RobotConfig() {
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
         // These encoders will mirror a DcMotor, but will be attached to their own port (for example,
         // motor 0 and 1 on Expansion Hub, but without any power connection)
-        x = getHardware("X Encoder", Deadwheel::class.java) as Deadwheel
-        y = getHardware("Y Encoder", Deadwheel::class.java) as Deadwheel
+        x = getHardware("X Encoder", Deadwheel::class.java) as? Deadwheel
+        y = getHardware("Y Encoder", Deadwheel::class.java) as? Deadwheel
 
 
         // Control Hub IMU configuration

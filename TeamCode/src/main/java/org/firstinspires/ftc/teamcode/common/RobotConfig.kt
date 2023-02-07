@@ -36,7 +36,8 @@ abstract class RobotConfig {
         try {
             hardwareDevice = hardwareMap!![device, name] as HardwareDevice
         } catch (e: Throwable) {
-            errors.add(name)
+            if (!errors.contains(name))
+                errors.add(name)
             // ErrorUtil.handleCatchAllException(e, getTelemetry());
             // getTelemetry().addLine("A fatal error occurred configuring the device: " + name);
 

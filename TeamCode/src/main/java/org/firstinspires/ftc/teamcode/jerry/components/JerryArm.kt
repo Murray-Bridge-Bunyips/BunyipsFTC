@@ -80,7 +80,7 @@ class JerryArm(
         // the bounds detection. Either way works and it won't hurt to use both, incase the limit
         // switch breaks for some reason. Press right bumper to cancel the loop.
         // Using reversed operation as pressing results in the limit switch reporting false
-        while (limit!!.isPressed && !opMode!!.gamepad2.right_bumper) {
+        while (!limit!!.isPressed && !opMode!!.gamepad2.right_bumper) {
             if (motors[0]!!.isOverCurrent || motors[1]!!.isOverCurrent) break
             opMode.telemetry.addLine(
                 String.format(
@@ -201,8 +201,8 @@ class JerryArm(
 
         // To make sure we don't accidentally get stuck in a loop of infinite calibration
         // Also zeroes out the encoders if we hit the switch.
-        if (!limit!!.isPressed && !alreadyCalibrated) liftCalibrate()
-        if (limit!!.isPressed) alreadyCalibrated = false
+        if (limit!!.isPressed && !alreadyCalibrated) liftCalibrate()
+        if (!limit!!.isPressed) alreadyCalibrated = false
         opMode!!.telemetry.addLine(
             String.format(
                 "Arms (pos1, pos2, index): %d, %d, %s",
