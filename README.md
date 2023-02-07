@@ -1,23 +1,21 @@
-	=== MURRAY BRIDGE BUNYIPS JAVA CODE REPOSITORY ===
-	Contains SDK used for all Java-developed FTC robots
+	=== MURRAY BRIDGE BUNYIPS CODE REPOSITORY ===
+	Contains SDK used for all Android Studio developed FTC robots
 	
 	South Australian FTC Team 15215, Murray Bridge High School
 	Close collaboration with RoboRoos, Paladins of St Paul's, Popups, and more!
 	
-	Robot code in this repository:
-		JERRY: Mecanum-drive PowerPlay robot for 2022-2023 season
+	ACTIVE ROBOT CODE in this repository (under src/main/java/.../teamcode):
+        	JERRY: Mecanum-drive PowerPlay robot for 2022-2023 season
 		LISA: Two-wheel-drive minibot for high-speed performance
-		BERTIE: Mecanum-drive FreightFrenzy robot for 2021-2022 season (Deconstructed and migrated into JERRY)
+
+	Archived robot code in this repository (under src/main/archived):
+		BERTIE: Mecanum-drive FreightFrenzy robot for 2021-2022 season
+		LISA-I: Old legacy code for Lisa minibot, dangerous territory.
 	
 	Robot code not in this repository (written in Blocks by other members of the club):
 		FTC22407: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS
 		FTC15215-2: Two-wheel-drive PowerPlay robot for PowerPlay, serves as a backup to JERRY
 		GROOT: Two-wheel-drive minibot for versatility and education
-		
-	Branch info:
-		Master branch: Protected branch with a primary collation of all of our working active and non-active code
-		PowerPlay branch: POWERPLAY (2022-2023) development
-		Minibots branch: Specific minibot development
 	
 ## NOTICE
 
@@ -74,6 +72,16 @@ Samples Folder: &nbsp;&nbsp; [/FtcRobotController/src/main/java/org/firstinspire
 The readme.md file located in the [/TeamCode/src/main/java/org/firstinspires/ftc/teamcode](TeamCode/src/main/java/org/firstinspires/ftc/teamcode) folder contains an explanation of the sample naming convention, and instructions on how to copy them to your own project space.
 
 # Release Information
+
+## Version 8.1.1 (20221201-150726)
+
+This is a bug fix only release to address the following four issues.
+
+* [Issue #495](https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/495) - Can't create new blocks opmodes.
+* [Issue #492](https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/492) - Remove the final modifier from the OpMode's Telemetry object.
+* [Issue #500](https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/500) - Some devices cannot be configured when the Driver Station app has been updated to 8.1
+  * Updating either the Robot Controller app or the Driver Station app to 8.1.1 or later will fix this issue.
+* The Modern Robotics touch sensor was configurable as a  Digital Device. It can only be used as an Analog Device.
 
 ## Version 8.1 (20221121-115119)
 
