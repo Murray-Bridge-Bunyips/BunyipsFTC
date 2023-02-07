@@ -4,10 +4,13 @@
 	South Australian FTC Team 15215, Murray Bridge High School
 	Close collaboration with RoboRoos, Paladins of St Paul's, Popups, and more!
 	
-	Robot code in this repository:
-		JERRY: Mecanum-drive PowerPlay robot for 2022-2023 season
+	ACTIVE ROBOT CODE in this repository (under src/main/java/.../teamcode):
+        JERRY: Mecanum-drive PowerPlay robot for 2022-2023 season
 		LISA: Two-wheel-drive minibot for high-speed performance
-		BERTIE: Mecanum-drive FreightFrenzy robot for 2021-2022 season (Deconstructed and migrated into JERRY)
+
+    Archived robot code in this repository (under src/main/archived):
+        BERTIE: Mecanum-drive FreightFrenzy robot for 2021-2022 season
+        LISA-I: Old legacy code for Lisa minibot, dangerous territory.
 	
 	Robot code not in this repository (written in Blocks by other members of the club):
 		FTC22407: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS

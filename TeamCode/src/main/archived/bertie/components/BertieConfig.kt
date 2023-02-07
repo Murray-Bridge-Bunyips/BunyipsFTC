@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.bertie.components
+package org.firstinspires.ftc.archived.bertie.components
 
 import com.qualcomm.robotcore.hardware.CRServo
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
@@ -23,18 +23,18 @@ class BertieConfig : RobotConfig() {
     var carouselRight: CRServo? = null
     override fun init(hardwareMap: HardwareMap?, telemetry: Telemetry) {
         setTelemetry(telemetry)
-        backLeft = getHardware("Back Left", DcMotorEx::class.java) as DcMotorEx
-        backRight = getHardware("Back Right", DcMotorEx::class.java) as DcMotorEx
-        frontLeft = getHardware("Front Left", DcMotorEx::class.java) as DcMotorEx
-        frontRight = getHardware("Front Right", DcMotorEx::class.java) as DcMotorEx
-        armMotor = getHardware("Arm Motor", DcMotorEx::class.java) as DcMotorEx
-        carouselLeft = getHardware("Carousel Left", CRServo::class.java) as CRServo
-        carouselRight = getHardware("Carousel Right", CRServo::class.java) as CRServo
-        spinIntake = getHardware("Spin Intake", CRServo::class.java) as CRServo
-        frontRight!!.direction = DcMotorSimple.Direction.REVERSE
-        backRight!!.direction = DcMotorSimple.Direction.REVERSE
-        spinIntake!!.direction = DcMotorSimple.Direction.REVERSE
-        armMotor!!.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
+        backLeft = getHardware("Back Left", DcMotorEx::class.java) as? DcMotorEx
+        backRight = getHardware("Back Right", DcMotorEx::class.java) as? DcMotorEx
+        frontLeft = getHardware("Front Left", DcMotorEx::class.java) as? DcMotorEx
+        frontRight = getHardware("Front Right", DcMotorEx::class.java) as? DcMotorEx
+        armMotor = getHardware("Arm Motor", DcMotorEx::class.java) as? DcMotorEx
+        carouselLeft = getHardware("Carousel Left", CRServo::class.java) as? CRServo
+        carouselRight = getHardware("Carousel Right", CRServo::class.java) as? CRServo
+        spinIntake = getHardware("Spin Intake", CRServo::class.java) as? CRServo
+        frontRight?.direction = DcMotorSimple.Direction.REVERSE
+        backRight?.direction = DcMotorSimple.Direction.REVERSE
+        spinIntake?.direction = DcMotorSimple.Direction.REVERSE
+        armMotor?.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
     }
 
     companion object {

@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.bertie
+package org.firstinspires.ftc.archived.bertie
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import org.firstinspires.ftc.teamcode.bertie.components.BertieArm
-import org.firstinspires.ftc.teamcode.bertie.components.BertieConfig
-import org.firstinspires.ftc.teamcode.bertie.components.BertieDrive
+import org.firstinspires.ftc.archived.bertie.components.BertieArm
+import org.firstinspires.ftc.archived.bertie.components.BertieConfig
+import org.firstinspires.ftc.archived.bertie.components.BertieDrive
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 
 /*
@@ -25,11 +25,11 @@ class BertieTeleOp : BunyipsOpMode() {
         try {
             drive = BertieDrive(
                 this,
-                config!!.frontLeft, config!!.frontRight,
-                config!!.backLeft, config!!.backRight,
+                config?.frontLeft, config?.frontRight,
+                config?.backLeft, config?.backRight,
                 false
             )
-            lift = BertieArm(this, config!!.armMotor)
+            lift = BertieArm(this, config?.armMotor)
         } catch (e: Exception) {
             telemetry.addLine("Failed to initialise motors.")
         }
@@ -40,42 +40,42 @@ class BertieTeleOp : BunyipsOpMode() {
         val x = gamepad1.right_stick_x.toDouble()
         val y = gamepad1.left_stick_y.toDouble()
         val r = gamepad1.left_stick_x.toDouble()
-        drive!!.setSpeedXYR(y, -x, r)
-        drive!!.update()
-        lift!!.setPower(0.3)
+        drive?.setSpeedXYR(y, -x, r)
+        drive?.update()
+        lift?.setPower(0.3)
         if (up_pressed && !gamepad2.dpad_up) {
-            lift!!.liftUp()
+            lift?.liftUp()
         } else if (down_pressed && !gamepad2.dpad_down) {
-            lift!!.liftDown()
+            lift?.liftDown()
         } else if (drop_pressed && !gamepad2.left_bumper) {
-            lift!!.liftReset()
+            lift?.liftReset()
         }
         if (gamepad2.a) {
-            config!!.spinIntake!!.power = -1.0
+            config?.spinIntake?.power = -1.0
         } else if (gamepad2.b) {
-            config!!.spinIntake!!.power = 1.0
+            config?.spinIntake?.power = 1.0
         } else {
-            config!!.spinIntake!!.power = 0.0
+            config?.spinIntake?.power = 0.0
         }
         if (gamepad2.left_bumper) {
             if (gamepad2.x) {
-                config!!.carouselLeft!!.power = -1.0
+                config?.carouselLeft?.power = -1.0
             } else if (gamepad2.y) {
-                config!!.carouselLeft!!.power = 1.0
+                config?.carouselLeft?.power = 1.0
             }
         } else if (gamepad2.right_bumper) {
             if (gamepad2.x) {
-                config!!.carouselRight!!.power = -1.0
+                config?.carouselRight?.power = -1.0
             } else if (gamepad2.y) {
-                config!!.carouselRight!!.power = 1.0
+                config?.carouselRight?.power = 1.0
             }
         } else {
-            config!!.carouselLeft!!.power = 0.0
-            config!!.carouselRight!!.power = 0.0
+            config?.carouselLeft?.power = 0.0
+            config?.carouselRight?.power = 0.0
         }
         up_pressed = gamepad2.dpad_up
         down_pressed = gamepad2.dpad_down
         drop_pressed = gamepad2.left_bumper
-        lift!!.update()
+        lift?.update()
     }
 }

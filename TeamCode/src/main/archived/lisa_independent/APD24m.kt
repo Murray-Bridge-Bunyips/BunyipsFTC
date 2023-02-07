@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lisa_independent
+package org.firstinspires.ftc.archived.lisa_independent
 
 // ----------------------------------------------
 // Code written by Lucas Bubner through Blocks
@@ -30,15 +30,15 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //
 //    // IMU calibration check method
 //    private fun IMU_Calibrated(): Boolean {
-//        telemetry.addData("IMU calibration status", imu!!.calibrationStatus)
-//        telemetry.addData("Gyro calibration", if (imu!!.isGyroCalibrated) "True" else "False")
-//        telemetry.addData("System status", imu!!.systemStatus.toString())
-//        return imu!!.isGyroCalibrated
+//        telemetry.addData("IMU calibration status", imu?.calibrationStatus)
+//        telemetry.addData("Gyro calibration", if (imu?.isGyroCalibrated) "True" else "False")
+//        telemetry.addData("System status", imu?.systemStatus.toString())
+//        return imu?.isGyroCalibrated
 //    }
 //
 //    // If pitch over 30 degrees, run fwsalert
 //    private fun areMotorsOverexerting(): Boolean {
-//        return imu!!.getAngularOrientation(
+//        return imu?.getAngularOrientation(
 //            AxesReference.INTRINSIC,
 //            AxesOrder.XYZ,
 //            AngleUnit.DEGREES
@@ -120,8 +120,8 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //     */
 //    private val translatedDistance: Double
 //        private get() {
-//            leftMotorCurrentPosition = LeftMotor!!.currentPosition.toDouble()
-//            rightMotorCurrentPosition = RightMotor!!.currentPosition.toDouble()
+//            leftMotorCurrentPosition = LeftMotor?.currentPosition.toDouble()
+//            rightMotorCurrentPosition = RightMotor?.currentPosition.toDouble()
 //            return -(3.34646 * Math.PI * ((leftMotorCurrentPosition + rightMotorCurrentPosition) / 2) / 288 * 2.54)
 //        }
 //
@@ -136,28 +136,28 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //    private fun FWSCollisionAvoidanceCheck() {
 //        val fwsDist: Double
 //        val captureCurrentDistance: Double
-//        fwsDist = ForwardVisionSystem_DistanceSensor!!.getDistance(DistanceUnit.CM)
+//        fwsDist = ForwardVisionSystem_DistanceSensor?.getDistance(DistanceUnit.CM)
 //        if (fwsDist < 7 || areMotorsOverexerting()) {
 //            // Activating FWS procedure
 //            // Broadcast to code to stop operations
 //            fwsAlert = true
 //            // Take over motor control to reverse x distance
-//            LeftMotor!!.mode = RunMode.RUN_USING_ENCODER
-//            RightMotor!!.mode = RunMode.RUN_USING_ENCODER
-//            LeftMotor!!.power = 0.0
-//            RightMotor!!.power = 0.0
+//            LeftMotor?.mode = RunMode.RUN_USING_ENCODER
+//            RightMotor?.mode = RunMode.RUN_USING_ENCODER
+//            LeftMotor?.power = 0.0
+//            RightMotor?.power = 0.0
 //            sleep(200)
 //            captureCurrentDistance = translatedDistance
-//            LeftMotor!!.power = -1.0
-//            RightMotor!!.power = -1.0
+//            LeftMotor?.power = -1.0
+//            RightMotor?.power = -1.0
 //            // Reverse distance is 7cm
 //            while (translatedDistance > captureCurrentDistance - 7) {
 //                // Allow robot to move backwards until reverse_dist
 //                telemetry.addData("Debug", "fws_alert currently active")
 //                telemetry.update()
 //            }
-//            LeftMotor!!.power = 0.0
-//            RightMotor!!.power = 0.0
+//            LeftMotor?.power = 0.0
+//            RightMotor?.power = 0.0
 //            sleep(200)
 //            // Reset FWS and allow code to continue
 //            fwsAlert = false
@@ -172,10 +172,10 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //        val turnSwitch: Boolean
 //        var i: Double
 //        val desiredAngleCompensated: Int
-//        LeftMotor!!.mode = RunMode.STOP_AND_RESET_ENCODER
-//        RightMotor!!.mode = RunMode.STOP_AND_RESET_ENCODER
-//        LeftMotor!!.mode = RunMode.RUN_USING_ENCODER
-//        RightMotor!!.mode = RunMode.RUN_USING_ENCODER
+//        LeftMotor?.mode = RunMode.STOP_AND_RESET_ENCODER
+//        RightMotor?.mode = RunMode.STOP_AND_RESET_ENCODER
+//        LeftMotor?.mode = RunMode.RUN_USING_ENCODER
+//        RightMotor?.mode = RunMode.RUN_USING_ENCODER
 //        // Check direction of turn and latch codes
 //        if (desiredAngle >= 0) {
 //            turnSwitch = true
@@ -190,10 +190,10 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //        while (i <= 3) {
 //            if (turnSwitch) {
 //                // Turn left
-//                LeftMotor!!.power = if (i >= 3) -0.25 else -1.5 + i / 2
-//                RightMotor!!.power = if (i >= 3) 0.25 else 1.5 - i / 2
+//                LeftMotor?.power = if (i >= 3) -0.25 else -1.5 + i / 2
+//                RightMotor?.power = if (i >= 3) 0.25 else 1.5 - i / 2
 //                while (yawAngle < if (i >= 2) desiredAngle else desiredAngleCompensated) {
-//                    yawAngle = imu!!.getAngularOrientation(
+//                    yawAngle = imu?.getAngularOrientation(
 //                        AxesReference.INTRINSIC,
 //                        AxesOrder.XYZ,
 //                        AngleUnit.DEGREES
@@ -204,11 +204,11 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //                }
 //            } else {
 //                // Turn right
-//                LeftMotor!!.power = if (i >= 3) 0.25 else 1.5 - i / 2
-//                RightMotor!!.power = if (i >= 3) -0.25 else -1.5 + i / 2
+//                LeftMotor?.power = if (i >= 3) 0.25 else 1.5 - i / 2
+//                RightMotor?.power = if (i >= 3) -0.25 else -1.5 + i / 2
 //                while (yawAngle > if (i >= 2) desiredAngle else desiredAngleCompensated) {
 //                    // Update Yaw-Angle variable with current yaw.
-//                    yawAngle = imu!!.getAngularOrientation(
+//                    yawAngle = imu?.getAngularOrientation(
 //                        AxesReference.INTRINSIC,
 //                        AxesOrder.XYZ,
 //                        AngleUnit.DEGREES
@@ -218,12 +218,12 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //                    telemetry.update()
 //                }
 //            }
-//            LeftMotor!!.power = 0.0
-//            RightMotor!!.power = 0.0
+//            LeftMotor?.power = 0.0
+//            RightMotor?.power = 0.0
 //            // Allow robot to remove momentum
 //            sleep(150)
 //            // Check if within tolerance
-//            yawAngle = imu!!.getAngularOrientation(
+//            yawAngle = imu?.getAngularOrientation(
 //                AxesReference.INTRINSIC,
 //                AxesOrder.XYZ,
 //                AngleUnit.DEGREES
@@ -249,17 +249,17 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //    ) {
 //        val originalDesiredAngle: Float
 //        // Reset encoders and run
-//        LeftMotor!!.mode = RunMode.STOP_AND_RESET_ENCODER
-//        RightMotor!!.mode = RunMode.STOP_AND_RESET_ENCODER
-//        LeftMotor!!.mode = RunMode.RUN_USING_ENCODER
-//        RightMotor!!.mode = RunMode.RUN_USING_ENCODER
-//        originalDesiredAngle = imu!!.getAngularOrientation(
+//        LeftMotor?.mode = RunMode.STOP_AND_RESET_ENCODER
+//        RightMotor?.mode = RunMode.STOP_AND_RESET_ENCODER
+//        LeftMotor?.mode = RunMode.RUN_USING_ENCODER
+//        RightMotor?.mode = RunMode.RUN_USING_ENCODER
+//        originalDesiredAngle = imu?.getAngularOrientation(
 //            AxesReference.INTRINSIC,
 //            AxesOrder.XYZ,
 //            AngleUnit.DEGREES
 //        ).thirdAngle
 //        // Utilises auto-latching for forward or backward cmd
-//        while (!(if ((if (desiredDistance_cm > 0) translatedDistance else -translatedDistance) >= if (desiredDistance_cm > 0) desiredDistance_cm else -desiredDistance_cm || timeLimit != 0.0) elapsedTime!!.milliseconds() >= timeLimit * Math.pow(
+//        while (!(if ((if (desiredDistance_cm > 0) translatedDistance else -translatedDistance) >= if (desiredDistance_cm > 0) desiredDistance_cm else -desiredDistance_cm || timeLimit != 0.0) elapsedTime?.milliseconds() >= timeLimit * Math.pow(
 //                10.0,
 //                3.0
 //            ) || isStopRequested else isStopRequested) || if (desiredDistance_cm > 0) fwsAlert else isStopRequested
@@ -267,7 +267,7 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //            if (fwsAlert) {
 //                break
 //            }
-//            yawAngle = imu!!.getAngularOrientation(
+//            yawAngle = imu?.getAngularOrientation(
 //                AxesReference.INTRINSIC,
 //                AxesOrder.XYZ,
 //                AngleUnit.DEGREES
@@ -295,8 +295,8 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //                "Debug translatedDistance:",
 //                if (desiredDistance_cm > 0) translatedDistance else -translatedDistance
 //            )
-//            LeftMotor!!.power = leftPower
-//            RightMotor!!.power = rightPower
+//            LeftMotor?.power = leftPower
+//            RightMotor?.power = rightPower
 //            telemetry.update()
 //            // Loop correction algorithm and check FWS
 //            if (desiredDistance_cm > 0) {
@@ -308,8 +308,8 @@ package org.firstinspires.ftc.teamcode.lisa_independent
 //        }
 //        leftPower = 0.0
 //        rightPower = 0.0
-//        LeftMotor!!.power = leftPower
-//        RightMotor!!.power = rightPower
+//        LeftMotor?.power = leftPower
+//        RightMotor?.power = rightPower
 //        sleep(200)
 //    }
 //}

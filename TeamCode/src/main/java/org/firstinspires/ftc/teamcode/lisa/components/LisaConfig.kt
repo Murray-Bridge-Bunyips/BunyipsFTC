@@ -22,7 +22,7 @@ class LisaConfig : RobotConfig() {
         right = getHardware("Right Motor", DcMotorEx::class.java) as DcMotorEx
         dws = getHardware("Downward Vision System", ColorSensor::class.java) as ColorSensor
         fws = getHardware("Forward Vision System", DistanceSensor::class.java) as DistanceSensor
-        right!!.direction = Direction.REVERSE
+        right?.direction = Direction.REVERSE
 
         // Control Hub IMU configuration
         // This uses the legacy methods for IMU initialisation, this should be refactored and updated
@@ -34,7 +34,7 @@ class LisaConfig : RobotConfig() {
         parameters.loggingTag = "IMU"
         parameters.accelerationIntegrationAlgorithm = JustLoggingAccelerationIntegrator()
         imu = getHardware("imu", BNO055IMU::class.java) as BNO055IMU
-        if (imu != null) imu!!.initialize(parameters)
+        if (imu != null) imu?.initialize(parameters)
         val errors: ArrayList<String>? = hardwareErrors
         if (errors == null) {
             telemetry.addData(

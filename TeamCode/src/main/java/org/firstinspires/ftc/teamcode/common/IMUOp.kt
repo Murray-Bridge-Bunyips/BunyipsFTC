@@ -13,8 +13,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation
 class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsComponent(opMode) {
     @Volatile
     var currentAngles: Orientation? = null
-    private var previousHeading =
-        0.0// Detects if there is a sudden 180 turn which means we have turned more than the 180
+    private var previousHeading = 0.0
+    // Detects if there is a sudden 180 turn which means we have turned more than the 180
     // degree threshold. Adds 360 to additively inverse the value and give us a proper delta
 
     // Limit heading readings to only be in a (0, 360) index
@@ -57,7 +57,7 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
      * Update the latest state in the IMU to current data
      */
     fun tick() {
-        currentAngles = imu!!.getAngularOrientation(
+        currentAngles = imu?.getAngularOrientation(
             AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES
         )
     }

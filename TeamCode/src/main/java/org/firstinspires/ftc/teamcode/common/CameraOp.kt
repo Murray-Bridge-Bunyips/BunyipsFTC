@@ -214,8 +214,8 @@ class CameraOp(
             }
 
             CamMode.OPENCV -> {
-                OCVcam!!.stopStreaming()
-                OCVcam!!.closeCameraDeviceAsync {}
+                OCVcam?.stopStreaming()
+                OCVcam?.closeCameraDeviceAsync {}
                 OCVcam = null
                 stdinit()
             }
@@ -227,7 +227,7 @@ class CameraOp(
      * @param pipeline Supply an OpenCVPipeline to set the camera to
      */
     fun setPipeline(pipeline: OpenCvPipeline?) {
-        if (OCVcam != null) OCVcam!!.setPipeline(pipeline)
+        if (OCVcam != null) OCVcam?.setPipeline(pipeline)
     }
 
     /**
@@ -443,7 +443,6 @@ class CameraOp(
         rz: Float
     ) {
         val aTarget = targets!![targetIndex]
-        aTarget.name = targetName
         aTarget.location = OpenGLMatrix.translation(dx, dy, dz)
             .multiplied(
                 Orientation.getRotationMatrix(
@@ -462,8 +461,8 @@ class CameraOp(
      */
     fun startTFOD() {
         if (tfod != null) {
-            tfod!!.activate()
-            tfod!!.setZoom(1.0, 16.0 / 9.0)
+            tfod?.activate()
+            tfod?.setZoom(1.0, 16.0 / 9.0)
             tfodEnabled = true
         }
     }
@@ -473,7 +472,7 @@ class CameraOp(
      */
     fun startVuforia() {
         if (vuforia != null) {
-            targets!!.activate()
+            targets?.activate()
             vuforiaEnabled = true
         }
     }
@@ -482,7 +481,7 @@ class CameraOp(
      * Stop Vuforia engine and camera field positioning data
      */
     fun stopVuforia() {
-        targets!!.deactivate()
+        targets?.deactivate()
         vuforiaEnabled = false
     }
 
@@ -490,7 +489,7 @@ class CameraOp(
      * Stop TensorFlow Object Detection
      */
     fun stopTFOD() {
-        tfod!!.deactivate()
+        tfod?.deactivate()
         tfodEnabled = false
     }
 
@@ -501,7 +500,7 @@ class CameraOp(
     fun tick() {
         // Update the TensorFlow and Vuforia recognitions by the webcam if they're enabled
         if (tfodEnabled) {
-            updatedRecognitions = tfod!!.updatedRecognitions
+            updatedRecognitions = tfod?.updatedRecognitions
         }
         if (vuforiaEnabled) {
             for (trackable in allTrackables) {

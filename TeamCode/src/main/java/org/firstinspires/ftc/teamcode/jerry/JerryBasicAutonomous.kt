@@ -2,25 +2,21 @@ package org.firstinspires.ftc.teamcode.jerry
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
-import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
 
-@Autonomous(name = "<JERRY> POWERPLAY BASIC SIGNAL Autonomous")
+@Autonomous(name = "<JERRY> POWERPLAY Drive Forward Autonomous")
 class JerryBasicAutonomous : BunyipsOpMode() {
     private var config: JerryConfig? = null
-    private val cam: CameraOp? = null
     private var drive: JerryDrive? = null
-    private val arm: JerryArm? = null
     private val tasks = ArrayDeque<TaskImpl>()
     override fun onInit() {
         config = JerryConfig.newConfig(hardwareMap, telemetry)
         try {
-            drive = JerryDrive(this, config!!.bl, config!!.br, config!!.fl, config!!.fr)
+            drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
         } catch (e: Exception) {
             telemetry.addLine("Failed to initialise Drive System.")
         }
@@ -36,7 +32,7 @@ class JerryBasicAutonomous : BunyipsOpMode() {
             tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive!!.deinit()
+            drive?.deinit()
         }
     }
 }

@@ -46,10 +46,12 @@ class LisaIMUTask(
         }
         val currentAngles =
             imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
-        opMode.telemetry.addData("Original Angle", angles!!.firstAngle)
+        opMode.telemetry.addData("Original Angle", angles?.firstAngle)
         opMode.telemetry.addData("Current Angle", currentAngles.firstAngle)
         // 15 degree automatic tolerance
-        if (currentAngles.firstAngle > angles!!.firstAngle + if (angle > 0) angle - 15 else angle + 15) {
+        if (currentAngles.firstAngle > (angles?.firstAngle?.plus(if (angle > 0) angle - 15 else angle + 15)
+                ?: if (angle > 0) angle - 15 else angle + 15)
+        ) {
             drive.setPower(0.0, 0.0)
             drive.update()
             taskFinished = true

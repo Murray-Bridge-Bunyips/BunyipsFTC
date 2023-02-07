@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.bertie.components
+package org.firstinspires.ftc.archived.bertie.components
 
 import android.annotation.SuppressLint
 import com.qualcomm.robotcore.hardware.DcMotor
@@ -12,17 +12,17 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
     This code now remains for archival purposes only.
  */
 class BertieArm @SuppressLint("DefaultLocale") constructor(
-    opMode: BunyipsOpMode?,
+    opMode: BunyipsOpMode,
     private val liftMotor: DcMotor?
 ) : BunyipsComponent(opMode) {
     private var liftPower: Double
     private var liftIndex = 0
 
     init {
-        liftMotor!!.direction = Direction.FORWARD
-        liftMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        liftMotor.mode = RunMode.STOP_AND_RESET_ENCODER
-        liftMotor.targetPosition = 0
+        liftMotor?.direction = Direction.FORWARD
+        liftMotor?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        liftMotor?.mode = RunMode.STOP_AND_RESET_ENCODER
+        liftMotor?.targetPosition = 0
         liftPower = 0.0
     }
 
@@ -31,7 +31,7 @@ class BertieArm @SuppressLint("DefaultLocale") constructor(
         if (liftIndex > lift_positions.size - 1) {
             liftIndex = lift_positions.size - 1
         }
-        liftMotor!!.targetPosition = lift_positions[liftIndex]
+        liftMotor?.targetPosition = lift_positions[liftIndex]
     }
 
     fun liftDown() {
@@ -39,12 +39,12 @@ class BertieArm @SuppressLint("DefaultLocale") constructor(
         if (liftIndex < 0) {
             liftIndex = 0
         }
-        liftMotor!!.targetPosition = lift_positions[liftIndex]
+        liftMotor?.targetPosition = lift_positions[liftIndex]
     }
 
     fun liftReset() {
         liftIndex = 0
-        liftMotor!!.targetPosition = lift_positions[0]
+        liftMotor?.targetPosition = lift_positions[0]
     }
 
     fun setPower(power: Double) {
@@ -53,9 +53,9 @@ class BertieArm @SuppressLint("DefaultLocale") constructor(
 
     @SuppressLint("DefaultLocale")
     fun update() {
-        opMode!!.telemetry.addLine(String.format("Arm Position: %d", liftMotor!!.currentPosition))
-        liftMotor.power = liftPower
-        liftMotor.mode = RunMode.RUN_TO_POSITION
+        opMode?.telemetry?.addLine(String.format("Arm Position: %d", liftMotor?.currentPosition))
+        liftMotor?.power = liftPower
+        liftMotor?.mode = RunMode.RUN_TO_POSITION
     }
 
     companion object {

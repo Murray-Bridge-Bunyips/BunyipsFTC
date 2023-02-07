@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.hardware.HardwareDevice
 import com.qualcomm.robotcore.hardware.HardwareMap
-import com.qualcomm.robotcore.hardware.HardwareMap.DeviceMapping
 import org.firstinspires.ftc.robotcore.external.Telemetry
 
 /**
@@ -32,11 +31,10 @@ abstract class RobotConfig {
      * @param name   name of device saved in the configuration file
      * @param device the class of the item to configure, in final abstraction extending HardwareDevice
      */
-    protected fun getHardware(name: String, deviceMapping: Any?): HardwareDevice? {
+    protected fun getHardware(name: String, device: Class<*>?): HardwareDevice? {
         var hardwareDevice: HardwareDevice? = null
         try {
-            val deviceMapping = deviceMapping as DeviceMapping<HardwareDevice>
-            hardwareDevice = deviceMapping[name]
+            hardwareDevice = hardwareMap?.get(device, name) as HardwareDevice
         } catch (e: Throwable) {
             if (!errors.contains(name))
                 errors.add(name)
@@ -81,19 +79,19 @@ abstract class RobotConfig {
         @JvmStatic
         protected fun printHardwareErrors() {
             if (errors.size == 0) {
-                telemetry!!.addData(
+                telemetry?.addData(
                     "BunyipsOpMode Status",
                     "ROBOT HARDWARE CONFIGURATION COMPLETE. ALL SYSTEMS GO."
                 )
                 return
             }
-            telemetry!!.addData(
+            telemetry?.addData(
                 "BunyipsOpMode Status",
                 "ERROR(S) DURING CONFIGURATION. THESE DEVICES WERE NOT ABLE TO BE INITIALISED."
             )
             val error: Iterator<String> = errors.iterator()
             for (i in errors.indices) {
-                telemetry!!.addData("DEVICE $i", error.next())
+                telemetry?.addData("DEVICE $i", error.next())
             }
         }
     }

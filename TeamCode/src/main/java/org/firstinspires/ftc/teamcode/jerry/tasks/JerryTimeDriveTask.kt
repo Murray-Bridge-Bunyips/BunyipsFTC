@@ -16,10 +16,10 @@ class JerryTimeDriveTask(
     private val r: Double
 ) : Task(opMode, time), TaskImpl {
     override fun run() {
-        drive!!.setSpeedXYR(x, y, r)
-        drive.update()
+        drive?.setSpeedXYR(x, y, r)
+        drive?.update()
         if (isFinished()) {
-            drive.deinit()
+            drive?.deinit()
             return
         }
     }

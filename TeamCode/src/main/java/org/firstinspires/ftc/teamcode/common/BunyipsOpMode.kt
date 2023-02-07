@@ -81,7 +81,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
             }
             waitForStart()
             clearTelemetryData()
-            movingAverageTimer!!.reset()
+            movingAverageTimer?.reset()
             onStart()
             while (opModeIsActive() && !operationsCompleted) {
                 try {
@@ -92,7 +92,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 } catch (e: Throwable) {
                     ErrorUtil.handleCatchAllException(e, telemetry)
                 }
-                movingAverageTimer!!.update()
+                movingAverageTimer?.update()
                 telemetry.update()
                 idle()
             }

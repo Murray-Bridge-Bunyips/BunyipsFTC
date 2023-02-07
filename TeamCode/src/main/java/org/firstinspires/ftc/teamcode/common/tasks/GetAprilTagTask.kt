@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.common.pipelines.AprilTagDetectionPipeline
  * Intermediate task for using the AprilTagDetectionPipeline to detect a Signal position during an initLoop.
  * @author Lucas Bubner, FTC 15215; Nov 2022
  */
-class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp?) : Task(opMode), TaskImpl {
+class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp) : Task(opMode), TaskImpl {
     private var at: AprilTagDetectionPipeline? = null
     private var noDetections = 0
 
@@ -37,7 +37,7 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp?) : Task(
         super.init()
 
         // Ensure camera is in the correct mode
-        if (cam?.mode != CamMode.OPENCV) cam!!.swapModes()
+        if (cam.mode != CamMode.OPENCV) cam.swapModes()
 
         // Tag size in metres
         val tagsize = 0.166
@@ -61,14 +61,14 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp?) : Task(
         // Caution! ParkingPosition will be null if the camera does not pick up anything in it's task runtime.
         // Be sure to check if ParkingPosition is null before setting up your specific tasks, to handle a fallback value.
         if (isFinished()) return
-        val detections = at!!.detectionsUpdate
+        val detections = at?.detectionsUpdate
         // Check if there are new frames
         if (detections != null) {
             // If there are, check if we see any tags
             if (detections.size > 0) {
                 // If we do, set parking position based on this information and end the task
                 // Will compare detected tags to the APRILTAG_ID array.
-                if (detections[0].pose.z < DECIMATION_HIGH_METERS_THRESHOLD) at!!.setDecimation(
+                if (detections[0].pose.z < DECIMATION_HIGH_METERS_THRESHOLD) at?.setDecimation(
                     DECIMATION_HIGH
                 )
                 for (detection in detections) {
@@ -95,7 +95,7 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp?) : Task(
                 // Otherwise, count these frames since our last detection
                 // and change to low decimation if it's been long enough
                 noDetections++
-                if (noDetections >= DECIMATION_LOW_THRESHOLD) at!!.setDecimation(DECIMATION_LOW)
+                if (noDetections >= DECIMATION_LOW_THRESHOLD) at?.setDecimation(DECIMATION_LOW)
             }
         }
     }

@@ -14,7 +14,7 @@ class LisaTeleOp : BunyipsOpMode() {
         try {
             drive = LisaDrive(
                 this,
-                config!!.left, config!!.right
+                config?.left, config?.right
             )
         } catch (e: Exception) {
             telemetry.addLine("Failed to initialise motors.")
@@ -27,7 +27,7 @@ class LisaTeleOp : BunyipsOpMode() {
             (gamepad1.left_trigger - gamepad1.right_trigger + gamepad1.left_stick_x).toDouble()
         val rightPower =
             (gamepad1.left_trigger - gamepad1.right_trigger - gamepad1.left_stick_x).toDouble()
-        drive!!.setPower(rightPower, leftPower)
-        drive!!.update()
+        drive?.setPower(rightPower, leftPower)
+        drive?.update()
     }
 }

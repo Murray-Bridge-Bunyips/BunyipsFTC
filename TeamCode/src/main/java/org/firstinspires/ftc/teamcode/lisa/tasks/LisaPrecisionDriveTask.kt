@@ -42,53 +42,55 @@ class LisaPrecisionDriveTask(
 
     override fun init() {
         super.init()
-        drive!!.setEncoder(true)
-        imu!!.startAccelerationIntegration(Position(), Velocity(), 50)
+        drive?.setEncoder(true)
+        imu?.startAccelerationIntegration(Position(), Velocity(), 50)
         captureAngle =
-            imu.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
+            imu?.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
         // Start driving with a distance goal
-        drive.setTargetPosition(distanceCM, distanceCM)
-        drive.setPower(speed, speed)
-        drive.update()
+        drive?.setTargetPosition(distanceCM, distanceCM)
+        drive?.setPower(speed, speed)
+        drive?.update()
     }
 
     override fun isFinished(): Boolean {
-        return super.isFinished() || drive!!.targetPositionReached()
+        return super.isFinished() || drive?.targetPositionReached() == true
     }
 
     override fun run() {
 
         // Stop if we've finished the distance or time goal
         if (isFinished()) {
-            drive!!.setPower(0.0, 0.0)
-            drive.update()
-            drive.setEncoder(false)
-            imu!!.stopAccelerationIntegration()
+            drive?.setPower(0.0, 0.0)
+            drive?.update()
+            drive?.setEncoder(false)
+            imu?.stopAccelerationIntegration()
             return
         }
 
         // Update angles and see if we need to adjust them
         val currentAngle =
-            imu!!.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
+            imu?.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES)
 
         // Account for if we're travelling backwards
         val reducedspeed = if (speed > 0) speed - reduction else speed + reduction
-        if (currentAngle.firstAngle > captureAngle!!.firstAngle + tolerance) {
+        if (currentAngle?.firstAngle!! > (captureAngle?.firstAngle?.plus(tolerance) ?: tolerance)) {
             // Rotate CCW
-            drive!!.setPower(speed, reducedspeed)
-            drive.update()
-        } else if (currentAngle.firstAngle < captureAngle!!.firstAngle - tolerance) {
+            drive?.setPower(speed, reducedspeed)
+            drive?.update()
+        } else if (currentAngle.firstAngle < (captureAngle?.firstAngle?.minus(tolerance)
+                ?: tolerance)
+        ) {
             // Rotate CW
-            drive!!.setPower(reducedspeed, speed)
-            drive.update()
+            drive?.setPower(reducedspeed, speed)
+            drive?.update()
         } else {
             // Continue straight
-            drive!!.setPower(speed, speed)
-            drive.update()
+            drive?.setPower(speed, speed)
+            drive?.update()
         }
 
         // Telemetry data
-        opMode.telemetry.addData("Original Angle", captureAngle!!.firstAngle)
+        opMode.telemetry.addData("Original Angle", captureAngle?.firstAngle)
         opMode.telemetry.addData("Current Angle", currentAngle.firstAngle)
     }
 }

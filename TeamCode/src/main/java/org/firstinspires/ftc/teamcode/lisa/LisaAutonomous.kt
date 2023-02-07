@@ -19,19 +19,19 @@ class LisaAutonomous : BunyipsOpMode() {
         try {
             drive = LisaDrive(
                 this,
-                config!!.left, config!!.right
+                config?.left, config?.right
             )
         } catch (e: Exception) {
             telemetry.addLine("Failed to initialise drive.")
         }
-        drive!!.setToBrake()
+        drive?.setToBrake()
         tasks.add(MessageTask(this, 3.0, "Activating drive tasks in three seconds."))
         // tasks.add(new LisaIMUTask(this, 4, drive, 0.2, config.imu, 90));
         tasks.add(
             LisaPrecisionDriveTask(
                 this,
                 drive,
-                config!!.imu,
+                config?.imu,
                 100.0,
                 100000.0,
                 0.25,
@@ -50,8 +50,8 @@ class LisaAutonomous : BunyipsOpMode() {
             tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive!!.setPower(0.0, 0.0)
-            drive!!.update()
+            drive?.setPower(0.0, 0.0)
+            drive?.update()
         }
     }
 }

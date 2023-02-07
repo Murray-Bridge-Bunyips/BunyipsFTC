@@ -23,23 +23,23 @@ class JerryAutonomous : BunyipsOpMode() {
     override fun onInit() {
         config = JerryConfig.newConfig(hardwareMap, telemetry)
         try {
-            cam = CameraOp(this, config!!.webcam, config!!.monitorID, CamMode.OPENCV)
+            cam = CameraOp(this, config?.webcam, config!!.monitorID, CamMode.OPENCV)
         } catch (e: Exception) {
             telemetry.addLine("Failed to initialise Camera Operation.")
         }
         try {
-            drive = JerryDrive(this, config!!.bl, config!!.br, config!!.fl, config!!.fr)
+            drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
         } catch (e: Exception) {
             telemetry.addLine("Failed to initialise Drive System.")
         }
         try {
             arm = JerryArm(
                 this,
-                config!!.claw1,
-                config!!.claw2,
-                config!!.arm1,
-                config!!.arm2,
-                config!!.limit
+                config?.claw1,
+                config?.claw2,
+                config?.arm1,
+                config?.arm2,
+                config?.limit
             )
         } catch (e: Exception) {
             telemetry.addLine("Failed to initialise Arm System.")
@@ -48,7 +48,7 @@ class JerryAutonomous : BunyipsOpMode() {
         // Check if we have deadwheel capabilities, if we do, use the respective tasks with
         // deadwheel field positioning, otherwise we will need to use time as that is
         // our only option
-        if (config!!.x != null && config!!.y != null) {
+        if (config?.x != null && config?.y != null) {
             telemetry.addLine("Deadwheels are available. Using Precision/Deadwheel tasks.")
         } else {
             telemetry.addLine("No deadwheels available. Using BaseDrive/IMU tasks only.")
@@ -56,13 +56,13 @@ class JerryAutonomous : BunyipsOpMode() {
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
-        Krankenhaus = GetAprilTagTask(this, cam)
+        Krankenhaus = cam?.let { GetAprilTagTask(this, it) }
     }
 
     override fun onInitLoop(): Boolean {
         // Using CameraOp OPENCV and AprilTags in order to detect the Signal sleeve
-        Krankenhaus!!.run()
-        return Krankenhaus!!.isFinished()
+        Krankenhaus?.run()
+        return Krankenhaus?.isFinished() ?: true
     }
 
     override fun onInitDone() {
@@ -84,7 +84,7 @@ class JerryAutonomous : BunyipsOpMode() {
             tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive!!.deinit()
+            drive?.deinit()
         }
     }
 }

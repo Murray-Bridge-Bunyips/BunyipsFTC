@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.bertie_independent
+package org.firstinspires.ftc.archived.bertie_independent
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
@@ -26,8 +26,8 @@ class BertieTestMotorEncoders : LinearOpMode() {
         frontLeft.direction = Direction.FORWARD
         backLeft.direction = Direction.FORWARD
         telemetry.addData("TEST READY", "Initialise to begin test")
-        telemetry.addData("WARNING", " ALL MOVEMENT MOTORS WILL ENGAGE WHEN STARTED!!")
-        telemetry.addData("!!!", " SET ROBOT ON STABLE STAND BEFORE STARTING")
+        telemetry.addData("WARNING", " ALL MOVEMENT MOTORS WILL ENGAGE WHEN STARTED?")
+        telemetry.addData("?!", " SET ROBOT ON STABLE STAND BEFORE STARTING")
         telemetry.update()
         waitForStart()
         frontRight.mode = RunMode.RUN_USING_ENCODER

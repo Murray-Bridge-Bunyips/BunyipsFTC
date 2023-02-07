@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.bertie.components
+package org.firstinspires.ftc.archived.bertie.components
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.util.Range
@@ -94,10 +94,10 @@ class BertieDrive(
             backLeftPower = backLeftPower / maxPower
             backRightPower = backRightPower / maxPower
         }
-        frontLeftMotor!!.power = frontLeftPower
-        frontRightMotor!!.power = frontRightPower
-        backLeftMotor!!.power = backLeftPower
-        backRightMotor!!.power = backRightPower
+        frontLeftMotor?.power = frontLeftPower
+        frontRightMotor?.power = frontRightPower
+        backLeftMotor?.power = backLeftPower
+        backRightMotor?.power = backRightPower
     }
 
     /**
@@ -137,10 +137,10 @@ class BertieDrive(
         val frontRightPower = translationValues[1] * scaleFactor + rotationValues[1]
         val backLeftPower = translationValues[2] * scaleFactor + rotationValues[2]
         val backRightPower = translationValues[3] * scaleFactor + rotationValues[3]
-        frontLeftMotor!!.power = frontLeftPower
-        frontRightMotor!!.power = frontRightPower
-        backLeftMotor!!.power = backLeftPower
-        backRightMotor!!.power = backRightPower
+        frontLeftMotor?.power = frontLeftPower
+        frontRightMotor?.power = frontRightPower
+        backLeftMotor?.power = backLeftPower
+        backRightMotor?.power = backRightPower
     }
 
     private fun clipMotorPower(p: Double): Double {

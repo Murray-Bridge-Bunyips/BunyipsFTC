@@ -4,34 +4,30 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.ButtonControl
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap
-import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
-import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
 
-@Autonomous(name = "<JERRY> POWERPLAY BASIC PARK Autonomous")
+@Autonomous(name = "<JERRY> POWERPLAY Left-Right Park Autonomous")
 class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
     private var config: JerryConfig? = null
-    private val cam: CameraOp? = null
     private var drive: JerryDrive? = null
-    private val arm: JerryArm? = null
     private val tasks = ArrayDeque<TaskImpl>()
     override fun onInit() {
         config = JerryConfig.newConfig(hardwareMap, telemetry)
         try {
-            drive = JerryDrive(this, config!!.bl, config!!.br, config!!.fl, config!!.fr)
+            drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
         } catch (e: Exception) {
             telemetry.addLine("Failed to initialise Drive System.")
         }
         val selectedButton = ButtonHashmap.map(this, "Red Drive Left", "Blue Drive Right", "", "")
         when (selectedButton) {
-            ButtonControl.A ->                 // Move left
+            ButtonControl.A -> // Move left
                 tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
 
-            ButtonControl.B ->                 // Move right
+            ButtonControl.B -> // Move right
                 tasks.add(JerryTimeDriveTask(this, 1.5, drive, -1.0, 0.0, 0.0))
 
             else -> {}
@@ -47,7 +43,7 @@ class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
             tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive!!.deinit()
+            drive?.deinit()
         }
     }
 }

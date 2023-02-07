@@ -18,19 +18,19 @@ class JerryTeleOp : BunyipsOpMode() {
         // Configure drive and arm subsystems
         config = JerryConfig.newConfig(hardwareMap, telemetry)
         try {
-            drive = JerryDrive(this, config!!.bl, config!!.br, config!!.fl, config!!.fr)
-            drive!!.setToBrake()
+            drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
+            drive?.setToBrake()
         } catch (e: Exception) {
             telemetry.addLine("Failed to initialise Drive System.")
         }
         try {
             arm = JerryArm(
                 this,
-                config!!.claw1,
-                config!!.claw2,
-                config!!.arm1,
-                config!!.arm2,
-                config!!.limit
+                config?.claw1,
+                config?.claw2,
+                config?.arm1,
+                config?.arm2,
+                config?.limit
             )
         } catch (e: Exception) {
             telemetry.addLine("Failed to initialise Arm System.")
@@ -45,28 +45,28 @@ class JerryTeleOp : BunyipsOpMode() {
         val r = gamepad1.right_stick_x.toDouble()
 
         // Set speeds of motors and interpret any data
-        drive!!.setSpeedXYR(-x, -y, -r)
-        arm!!.liftSetPower(0.2)
+        drive?.setSpeedXYR(-x, -y, -r)
+        arm?.liftSetPower(0.2)
         if (up_pressed && !gamepad2.dpad_up) {
-            arm!!.liftUp()
+            arm?.liftUp()
         } else if (down_pressed && !gamepad2.dpad_down) {
-            arm!!.liftDown()
+            arm?.liftDown()
         } else if (drop_pressed && !gamepad2.left_bumper) {
-            arm!!.liftReset()
+            arm?.liftReset()
         }
 
         // Update live movements of all motors
         if (gamepad2.a) {
             // "Green for seen"
-            arm!!.clawOpen()
+            arm?.clawOpen()
         } else if (gamepad2.b) {
             // "Red for dead"
-            arm!!.clawClose()
+            arm?.clawClose()
         }
         up_pressed = gamepad2.dpad_up
         down_pressed = gamepad2.dpad_down
         drop_pressed = gamepad2.left_bumper
-        drive!!.update()
-        arm!!.update()
+        drive?.update()
+        arm?.update()
     }
 }

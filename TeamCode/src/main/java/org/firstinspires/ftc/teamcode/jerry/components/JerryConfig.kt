@@ -46,10 +46,10 @@ class JerryConfig : RobotConfig() {
         limit = getHardware("Arm Stop", TouchSensor::class.java) as? TouchSensor
 
         // Motor direction configuration
-        fl!!.direction = Direction.REVERSE
-        fr!!.direction = Direction.FORWARD
-        bl!!.direction = Direction.FORWARD
-        br!!.direction = Direction.REVERSE
+        fl?.direction = Direction.REVERSE
+        fr?.direction = Direction.FORWARD
+        bl?.direction = Direction.FORWARD
+        br?.direction = Direction.REVERSE
 
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
         // These encoders will mirror a DcMotor, but will be attached to their own port (for example,
@@ -68,7 +68,7 @@ class JerryConfig : RobotConfig() {
         parameters.loggingTag = "IMU"
         parameters.accelerationIntegrationAlgorithm = JustLoggingAccelerationIntegrator()
         imu = getHardware("imu", BNO055IMU::class.java) as BNO055IMU
-        if (imu != null) imu!!.initialize(parameters)
+        if (imu != null) imu?.initialize(parameters)
         printHardwareErrors()
     }
 

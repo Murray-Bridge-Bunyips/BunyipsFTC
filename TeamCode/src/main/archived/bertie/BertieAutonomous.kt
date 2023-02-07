@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.bertie
+package org.firstinspires.ftc.archived.bertie
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
-import org.firstinspires.ftc.teamcode.bertie.components.BertieArm
-import org.firstinspires.ftc.teamcode.bertie.components.BertieConfig
-import org.firstinspires.ftc.teamcode.bertie.components.BertieDrive
-import org.firstinspires.ftc.teamcode.bertie.tasks.BertieTimeDriveTask
+import org.firstinspires.ftc.archived.bertie.components.BertieArm
+import org.firstinspires.ftc.archived.bertie.components.BertieConfig
+import org.firstinspires.ftc.archived.bertie.components.BertieDrive
+import org.firstinspires.ftc.archived.bertie.tasks.BertieTimeDriveTask
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.ButtonControl
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap
@@ -29,8 +29,8 @@ class BertieAutonomous : BunyipsOpMode() {
         try {
             drive = BertieDrive(
                 this,
-                config!!.frontLeft, config!!.frontRight,
-                config!!.backLeft, config!!.backRight,
+                config?.frontLeft, config?.frontRight,
+                config?.backLeft, config?.backRight,
                 false
             )
         } catch (e: Exception) {
@@ -60,8 +60,8 @@ class BertieAutonomous : BunyipsOpMode() {
             tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive!!.setSpeedXYR(0.0, 0.0, 0.0)
-            drive!!.update()
+            drive?.setSpeedXYR(0.0, 0.0, 0.0)
+            drive?.update()
         }
     }
 }

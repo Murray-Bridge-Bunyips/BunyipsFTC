@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 
 class JerryArm(
-    opMode: BunyipsOpMode?,
+    opMode: BunyipsOpMode,
     var claw1: Servo?,
     var claw2: Servo?,
     var arm1: DcMotorEx?,
@@ -40,12 +40,12 @@ class JerryArm(
         assert(claw1 != null && claw2 != null && arm1 != null && arm2 != null)
 
         // Set directions of motors so they move the correct way
-        claw1!!.direction = Servo.Direction.FORWARD
-        claw2!!.direction = Servo.Direction.REVERSE
-        arm1!!.direction = Direction.FORWARD
-        arm2!!.direction = Direction.REVERSE
+        claw1?.direction = Servo.Direction.FORWARD
+        claw2?.direction = Servo.Direction.REVERSE
+        arm1?.direction = Direction.FORWARD
+        arm2?.direction = Direction.REVERSE
         for (motor in motors) {
-            motor!!.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
+            motor?.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
         }
 
         // When the arm is first initialised, calibrate it (as the arm may not already be zeroed)
@@ -85,8 +85,8 @@ class JerryArm(
             opMode.telemetry.addLine(
                 String.format(
                     "ARM IS CALIBRATING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
-                    arm1!!.currentPosition,
-                    arm2!!.currentPosition
+                    arm1?.currentPosition,
+                    arm2?.currentPosition
                 )
             )
             opMode.telemetry.update()
@@ -109,8 +109,8 @@ class JerryArm(
      * Call to open claw system and allow picking up of items (allow servos to swing to open)
      */
     fun clawOpen() {
-        claw1!!.position = 0.0
-        claw2!!.position = 1.0
+        claw1?.position = 0.0
+        claw2?.position = 1.0
         opMode!!.telemetry.addLine("Claws are opening...")
     }
 
@@ -119,8 +119,8 @@ class JerryArm(
      * position. Using Servo mode as opposed to CRServo mode.
      */
     fun clawClose() {
-        claw1!!.position = 0.0
-        claw2!!.position = 0.0
+        claw1?.position = 0.0
+        claw2?.position = 0.0
         opMode!!.telemetry.addLine("Claws are closing...")
     }
 
@@ -133,7 +133,7 @@ class JerryArm(
             liftIndex = LIFT_POSITIONS.size - 1
         }
         for (motor in motors) {
-            motor!!.targetPosition = LIFT_POSITIONS[liftIndex]
+            motor?.targetPosition = LIFT_POSITIONS[liftIndex]
         }
     }
 
@@ -146,7 +146,7 @@ class JerryArm(
             liftIndex = 0
         }
         for (motor in motors) {
-            motor!!.targetPosition = LIFT_POSITIONS[liftIndex]
+            motor?.targetPosition = LIFT_POSITIONS[liftIndex]
         }
     }
 
@@ -167,9 +167,11 @@ class JerryArm(
     fun liftControl(o: Double) {
         var offset = o
         offset *= 10.0
-        val positions = (arm1!!.currentPosition + arm2!!.currentPosition) / 2
+        val positions = (arm1?.currentPosition?.plus(arm2?.currentPosition!!))?.div(2)
         for (motor in motors) {
-            motor!!.targetPosition = (positions - offset).toInt()
+            if (positions != null) {
+                motor?.targetPosition = (positions - offset).toInt()
+            }
         }
     }
 
@@ -206,14 +208,14 @@ class JerryArm(
         opMode!!.telemetry.addLine(
             String.format(
                 "Arms (pos1, pos2, index): %d, %d, %s",
-                arm1!!.currentPosition,
-                arm2!!.currentPosition,
+                arm1?.currentPosition,
+                arm2?.currentPosition,
                 liftIndex
             )
         )
         for (motor in motors) {
-            motor!!.power = liftPower
-            motor.mode = RunMode.RUN_TO_POSITION
+            motor?.power = liftPower
+            motor?.mode = RunMode.RUN_TO_POSITION
         }
     }
 
