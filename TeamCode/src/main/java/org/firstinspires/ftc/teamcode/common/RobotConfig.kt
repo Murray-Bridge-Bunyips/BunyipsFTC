@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.hardware.HardwareDevice
 import com.qualcomm.robotcore.hardware.HardwareMap
+import com.qualcomm.robotcore.hardware.HardwareMap.DeviceMapping
 import org.firstinspires.ftc.robotcore.external.Telemetry
 
 /**
@@ -31,10 +32,11 @@ abstract class RobotConfig {
      * @param name   name of device saved in the configuration file
      * @param device the class of the item to configure, in final abstraction extending HardwareDevice
      */
-    protected fun getHardware(name: String, device: Class<*>?): HardwareDevice? {
+    protected fun getHardware(name: String, deviceMapping: Any?): HardwareDevice? {
         var hardwareDevice: HardwareDevice? = null
         try {
-            hardwareDevice = hardwareMap!![device, name] as HardwareDevice
+            val deviceMapping = deviceMapping as DeviceMapping<HardwareDevice>
+            hardwareDevice = deviceMapping[name]
         } catch (e: Throwable) {
             if (!errors.contains(name))
                 errors.add(name)
