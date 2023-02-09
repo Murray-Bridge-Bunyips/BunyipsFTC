@@ -19,14 +19,6 @@ class JerryArm(
     var arm2: DcMotorEx?,
     var limit: TouchSensor?
 ) : BunyipsComponent(opMode) {
-    /*
-        LIFT_POSITIONS index
-        0: Cone obtaining/neutral height
-        1: Above cone, allows for drive to position cone under arm
-        2: Pole position 1
-        3: Pole position 2
-        4: Pole position 3
-     */
     private var liftIndex = 0
     private var liftPower: Double
     private val motors = arrayOfNulls<DcMotorEx>(2)
@@ -219,7 +211,16 @@ class JerryArm(
         }
     }
 
+    /*
+        LIFT_POSITIONS index
+        0: Cone obtaining/neutral height
+        1: Above cone, allows for drive to position cone under arm
+        2: Pole position 1
+        3: Pole position 2
+        4: Pole position 3
+    */
     companion object {
-        private val LIFT_POSITIONS = intArrayOf(50, 120, 350, 500, 700)
+        private val LIFT_POSITIONS = intArrayOf(20, 80, 350, 500, 700)
+        // i am contributing nothing to the project -lachlan
     }
 }
