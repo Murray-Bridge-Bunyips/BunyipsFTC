@@ -15,6 +15,9 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     var currentAngles: Orientation? = null
     private var previousHeading = 0.0
 
+    // Offset used for Field-centric navigation, defined in FieldPositioning.kt
+    var offset = 0.0
+
     /**
      * Get the current heading reading from the internal IMU, with support for 360 degree readings
      * Instead of using Euler readings, this will return a number within 0 to 360
@@ -22,7 +25,7 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
      */
     var heading = 0.0
         get() {
-            val currentHeading = currentAngles!!.thirdAngle.toDouble()
+            val currentHeading = currentAngles!!.thirdAngle.toDouble() + offset
             var delta = currentHeading - previousHeading
 
             // Detects if there is a sudden 180 turn which means we have turned more than the 180

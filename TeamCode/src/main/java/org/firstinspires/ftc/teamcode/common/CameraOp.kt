@@ -27,13 +27,7 @@ import org.openftc.easyopencv.OpenCvPipeline
  * @author Lucas Bubner - FTC 15215 Captain; Oct-Nov 2022 - Murray Bridge Bunyips
  */
 class CameraOp(
-    opmode: BunyipsOpMode?, private val webcam: WebcamName?, private val monitorID: Int,
-    /**
-     * Get the current mode that the camera is currently initialised in
-     * @return CamMode enum value currently selected by this instance
-     */
-    // Enum to indicate whether the camera should run in OpenCV mode or TFOD + Vuforia mode
-    var mode: CamMode
+    opmode: BunyipsOpMode?, private val webcam: WebcamName?, private val monitorID: Int, var mode: CamMode
 ) : BunyipsComponent(opmode) {
     private var vuforia: VuforiaLocalizer? = null
     private var tfod: TFObjectDetector? = null
