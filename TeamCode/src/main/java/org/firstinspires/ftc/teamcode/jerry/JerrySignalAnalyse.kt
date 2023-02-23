@@ -24,7 +24,7 @@ class JerrySignalAnalyse : BunyipsOpMode() {
 
     override fun activeLoop() {
         task?.run()
-        telemetry.addLine(task?.position.toString())
+        telemetry.addLine("Currently seeing position: ${task?.position ?: "NONE"}")
         telemetry.update()
     }
 }

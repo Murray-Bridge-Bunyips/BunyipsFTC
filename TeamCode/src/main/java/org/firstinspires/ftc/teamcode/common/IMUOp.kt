@@ -14,10 +14,7 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     @Volatile
     var currentAngles: Orientation? = null
     private var previousHeading = 0.0
-    // Detects if there is a sudden 180 turn which means we have turned more than the 180
-    // degree threshold. Adds 360 to additively inverse the value and give us a proper delta
 
-    // Limit heading readings to only be in a (0, 360) index
     /**
      * Get the current heading reading from the internal IMU, with support for 360 degree readings
      * Instead of using Euler readings, this will return a number within 0 to 360

@@ -526,7 +526,6 @@ class CameraOp(
         // USING 2022-2023 POWERPLAY SEASON TFOD ASSETS
         private const val TFOD_MODEL_ASSET = "PowerPlay.tflite"
 
-        // private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/CustomTeamModel.tflite";
         val LABELS = arrayOf(
             "1 Bolt",
             "2 Bulb",
