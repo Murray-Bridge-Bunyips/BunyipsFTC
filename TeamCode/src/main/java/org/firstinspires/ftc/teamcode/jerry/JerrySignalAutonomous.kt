@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.CameraOp.CamMode
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
+import org.firstinspires.ftc.teamcode.common.tasks.MessageTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -56,7 +57,6 @@ class JerrySignalAutonomous : BunyipsOpMode() {
             tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, 1.0, 0.0))
         }
 
-
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
         Krankenhaus = cam?.let { GetAprilTagTask(this, it) }
@@ -75,12 +75,16 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         // if you are reading this
         // please seek medical attention
         val position = Krankenhaus?.position
-        if (config?.x != null && config?.y != null) {
+        telemetry.addLine("ParkingPosition set to: $position")
+        if (config?.x == null || config?.y == null) {
             // Deadwheel configurations not available
             // Drive forward if the position of the signal is LEFT
-            tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
-            // Drive backward if the position of the signal is RIGHT
-            tasks.add(JerryTimeDriveTask(this, 1.5, drive, -1.0, 0.0, 0.0))
+            if (position == GetAprilTagTask.ParkingPosition.LEFT) {
+                tasks.add(JerryTimeDriveTask(this, 1.5, drive, -1.0, 0.0, 0.0))
+            } else if (position == GetAprilTagTask.ParkingPosition.RIGHT) {
+                // Drive backward if the position of the signal is RIGHT
+                tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
+            }
         } else {
             // Deadwheel configurations available
             // why are you bad at coding

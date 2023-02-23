@@ -149,8 +149,8 @@ class JerryDrive(
     fun setSpeedXYR(speedX: Double, speedY: Double, speedR: Double) {
         // X and Y have been swapped, and X has been inverted
         // This is to calibrate the controller movement to the robot
-        this.speedX = clipMotorPower(-speedY)
-        this.speedY = clipMotorPower(speedX)
+        this.speedX = clipMotorPower(speedX)
+        this.speedY = clipMotorPower(-speedY)
         this.speedR = clipMotorPower(-speedR)
     }
 
