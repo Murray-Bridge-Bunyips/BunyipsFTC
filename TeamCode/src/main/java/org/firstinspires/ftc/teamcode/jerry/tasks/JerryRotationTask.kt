@@ -24,7 +24,13 @@ class JerryRotationTask(
     override fun init() {
         super.init()
         imu.tick()
+
         val currentAngle = imu.heading
+        // If we can't get angle info, then terminate task as we can't do anything
+        if (currentAngle == null) {
+            taskFinished = true
+            return
+        }
 
         // Find out which way we need to turn based on the information provided
         direction = if (currentAngle < angle && angle <= 180) {
