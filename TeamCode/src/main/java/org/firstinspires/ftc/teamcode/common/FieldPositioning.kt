@@ -9,12 +9,12 @@ package org.firstinspires.ftc.teamcode.common
  */
 class FieldPositioning(
     opMode: BunyipsOpMode?,
-    x: Deadwheel,
-    y: Deadwheel,
+    x: Deadwheel?,
+    y: Deadwheel?,
     cam: CameraOp,
     imu: IMUOp,
-    position: StartingPositions?,
-    direction: StartingDirections?
+    position: StartingPositions,
+    direction: StartingDirections
 ) :
     BunyipsComponent(opMode) {
 
@@ -41,8 +41,8 @@ class FieldPositioning(
         FORWARD, BACKWARD, LEFTWARD, RIGHTWARD
     }
 
-    private val x: Deadwheel
-    private val y: Deadwheel
+    private var x: Deadwheel? = null
+    private var y: Deadwheel? = null
     private val cam: CameraOp
     private val imu: IMUOp
 
@@ -50,8 +50,12 @@ class FieldPositioning(
      * Initial orientation of the robot on the field.
      */
     init {
-        this.x = x
-        this.y = y
+        if (x != null) {
+            this.x = x
+        }
+        if (y != null) {
+            this.y = y
+        }
         this.cam = cam
         this.imu = imu
         when (position) {
@@ -87,12 +91,14 @@ class FieldPositioning(
     fun update() {
         // Calculate delta of deadwheel encoders using distance they have travelled
         // Each square is 23 and a half inches wide and tall
-        val deltaX = x.travelledMM / 595.0
-        val deltaY = y.travelledMM / 595.0
+        if (x != null && y != null) {
+            val deltaX = x!!.travelledMM.div(595.0)
+            val deltaY = y!!.travelledMM.div(595.0)
 
-        // Use calculation to determine how many squares the array should be modified
-        val xSquares = deltaX.toInt()
-        val ySquares = deltaY.toInt()
+            // Use calculation to determine how many squares the array should be modified
+            val xSquares = deltaX.toInt()
+            val ySquares = deltaY.toInt()
+        }
 
         // Integrate Vuforia data to determine robot orientation
         if (cam.mode == CameraOp.CamMode.STANDARD) {
@@ -121,7 +127,7 @@ class FieldPositioning(
         }
 
         // Update field position
-        fieldPosition += xSquares + ySquares * Field[0].size
+//        fieldPosition += xSquares + ySquares * Field[0].size
 
         // Update heading with IMU if possible, otherwise try to use Vuforia
         val imuHeading = imu.heading
