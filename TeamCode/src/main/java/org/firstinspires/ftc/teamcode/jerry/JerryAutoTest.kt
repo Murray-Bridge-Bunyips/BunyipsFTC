@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.jerry
 
-import android.os.Message
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
@@ -23,7 +22,7 @@ class JerryAutoTest : BunyipsOpMode() {
         config = JerryConfig.newConfig(hardwareMap, telemetry)
         drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
         drive?.setToBrake()
-        tasks.add(MessageTask(this, 1.0, "well here we are again, it's always such a pleasure"))
+        tasks.add(MessageTask(this, 1.0, "well here we are again, it's always such a pleasure, remember when you tried to kill me twice"))
 
         arm = JerryArm(
             this,

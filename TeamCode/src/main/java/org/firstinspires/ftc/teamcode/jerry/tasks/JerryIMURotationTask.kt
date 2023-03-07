@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
-class JerryRotationTask(
+class JerryIMURotationTask(
     opMode: BunyipsOpMode,
     time: Double,
     private val imu: IMUOp,

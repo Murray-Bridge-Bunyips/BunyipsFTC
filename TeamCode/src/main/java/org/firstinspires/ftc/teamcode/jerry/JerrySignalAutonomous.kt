@@ -5,7 +5,6 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.CameraOp.CamMode
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
-import org.firstinspires.ftc.teamcode.common.tasks.MessageTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -49,7 +48,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         // Check if we have deadwheel capabilities, if we do, use the respective tasks with
         // deadwheel field positioning, otherwise we will need to use time as that is
         // our only option
-        if (config?.x != null && config?.y != null) {
+        if (config?.x1 != null && config?.y != null) {
             telemetry.addLine("Deadwheels are available. Using Precision/Deadwheel tasks.")
         } else {
             telemetry.addLine("No deadwheels available. Using BaseDrive/IMU tasks only.")
@@ -76,7 +75,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         // please seek medical attention
         val position = Krankenhaus?.position
         telemetry.addLine("ParkingPosition set to: $position")
-        if (config?.x == null || config?.y == null) {
+        if (config?.areDeadwheelsAvail() == true) {
             // Deadwheel configurations not available
             // Drive forward if the position of the signal is LEFT
             if (position == GetAprilTagTask.ParkingPosition.LEFT) {

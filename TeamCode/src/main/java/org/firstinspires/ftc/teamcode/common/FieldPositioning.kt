@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.common
 
 /**
+ *
+ * THIS CLASS IS NOT USED IN THE CURRENT VERSION OF THE CODE, BUT IS A WORK IN PROGRESS.
+ *
  * Custom odometer class to control and monitor field positioning data through all available means
  * of sensor input, including deadwheels, IMU, and camera readings.
  * This class aims to provide field-centric functionality, instead of absolute positioning.
