@@ -51,6 +51,13 @@ captures/
 .idea/modules.xml
 # Comment next line if keeping position of elements in Navigation Editor is relevant for you
 .idea/navEditor.xml
+# additional ignores for kotlin
+.idea/compiler.xml
+.idea/misc.xml
+.idea/discord.xml
+# any replit config
+.replit
+replit.nix
 
 # Keystore files
 # Uncomment the following lines if you do not want to check your keystore files in.

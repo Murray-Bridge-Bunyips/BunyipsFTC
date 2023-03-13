@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
-class JerryRotationTask(
+class JerryIMURotationTask(
     opMode: BunyipsOpMode,
     time: Double,
     private val imu: IMUOp,
@@ -24,7 +24,13 @@ class JerryRotationTask(
     override fun init() {
         super.init()
         imu.tick()
+
         val currentAngle = imu.heading
+        // If we can't get angle info, then terminate task as we can't do anything
+        if (currentAngle == null) {
+            taskFinished = true
+            return
+        }
 
         // Find out which way we need to turn based on the information provided
         direction = if (currentAngle < angle && angle <= 180) {

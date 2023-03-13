@@ -5,15 +5,15 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.CameraOp.CamMode
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
-import org.firstinspires.ftc.teamcode.common.tasks.MessageTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
+import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
 
-@Autonomous(name = "<JERRY> POWERPLAY Autonomous")
-class JerryAutonomous : BunyipsOpMode() {
+@Autonomous(name = "<JERRY> POWERPLAY Autonomous Simple Signal Read Park")
+class JerrySignalAutonomous : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var cam: CameraOp? = null
     private var drive: JerryDrive? = null
@@ -48,10 +48,12 @@ class JerryAutonomous : BunyipsOpMode() {
         // Check if we have deadwheel capabilities, if we do, use the respective tasks with
         // deadwheel field positioning, otherwise we will need to use time as that is
         // our only option
-        if (config?.x != null && config?.y != null) {
+        if (config?.x1 != null && config?.y != null) {
             telemetry.addLine("Deadwheels are available. Using Precision/Deadwheel tasks.")
         } else {
             telemetry.addLine("No deadwheels available. Using BaseDrive/IMU tasks only.")
+            // Drive right to be on square [1,1] [4,1] [4,1] [4,4]
+            tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, 1.0, 0.0))
         }
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
@@ -67,12 +69,35 @@ class JerryAutonomous : BunyipsOpMode() {
 
     override fun onInitDone() {
         // Determine our final task based on the parking position from the camera
+        // If on center or NONE, do nothing and just stay in the center
+        // you may have a very minor case of serious brain damage
+        // if you are reading this
+        // please seek medical attention
         val position = Krankenhaus?.position
-        when (position) {
-            GetAprilTagTask.ParkingPosition.LEFT -> tasks.add(MessageTask(this, 10.0, "LEFT"))
-            GetAprilTagTask.ParkingPosition.CENTER -> tasks.add(MessageTask(this, 10.0, "CENTER"))
-            GetAprilTagTask.ParkingPosition.RIGHT -> tasks.add(MessageTask(this, 10.0, "RIGHT"))
-            else -> tasks.add(MessageTask(this, 10.0, "NONE"))
+        telemetry.addLine("ParkingPosition set to: $position")
+        if (config?.areDeadwheelsAvail() == true) {
+            // Deadwheel configurations not available
+            // Drive forward if the position of the signal is LEFT
+            if (position == GetAprilTagTask.ParkingPosition.LEFT) {
+                tasks.add(JerryTimeDriveTask(this, 1.5, drive, -1.0, 0.0, 0.0))
+            } else if (position == GetAprilTagTask.ParkingPosition.RIGHT) {
+                // Drive backward if the position of the signal is RIGHT
+                tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
+            }
+        } else {
+            // Deadwheel configurations available
+            // why are you bad at coding
+            // why is lucas a better programmer than lachlan
+            // why is lachlan a better programmer than lucas
+            // why is lucas a better programmer than lachlan
+            // why is lachlan a better programmer than lucas
+            // why is lucas a better programmer than lachlan
+            // why is lachlan a better programmer than lucas
+            // why is lucas a better programmer than lachlan
+            // why is lachlan a better programmer than lucas
+            // why is lucas a better programmer than lachlan
+            // why is lachlan a better programmer than lucas
+            // thank you for your input github copilot
         }
     }
 

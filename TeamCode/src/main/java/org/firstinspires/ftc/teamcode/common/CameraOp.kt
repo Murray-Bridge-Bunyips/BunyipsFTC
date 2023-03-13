@@ -27,13 +27,7 @@ import org.openftc.easyopencv.OpenCvPipeline
  * @author Lucas Bubner - FTC 15215 Captain; Oct-Nov 2022 - Murray Bridge Bunyips
  */
 class CameraOp(
-    opmode: BunyipsOpMode?, private val webcam: WebcamName?, private val monitorID: Int,
-    /**
-     * Get the current mode that the camera is currently initialised in
-     * @return CamMode enum value currently selected by this instance
-     */
-    // Enum to indicate whether the camera should run in OpenCV mode or TFOD + Vuforia mode
-    var mode: CamMode
+    opmode: BunyipsOpMode?, private val webcam: WebcamName?, private val monitorID: Int, var mode: CamMode
 ) : BunyipsComponent(opmode) {
     private var vuforia: VuforiaLocalizer? = null
     private var tfod: TFObjectDetector? = null
@@ -351,10 +345,10 @@ class CameraOp(
      * For the most part, you will not need to call this method and instead use the getX,Y,Z methods
      * @return translated position vector from Vuforia, returns null if there are no datapoints
      */
-    val targetTranslation: VectorF
+    val targetTranslation: VectorF?
         get() {
             val matrix = targetRawMatrix
-            return matrix!!.translation
+            return matrix?.translation
         }
 
     /**
@@ -362,7 +356,7 @@ class CameraOp(
      * For the most part, you will not need to call this method and instead use the getRoll,Pitch,Heading methods
      * @return translated orientation matrix from Vuforia, returns null if there are no datapoints
      */
-    val orientationTranslation: Orientation
+    val orientationTranslation: Orientation?
         get() {
             val matrix = targetRawMatrix
             return Orientation.getOrientation(
@@ -370,61 +364,61 @@ class CameraOp(
                 AxesReference.EXTRINSIC,
                 AxesOrder.XYZ,
                 AngleUnit.DEGREES
-            )
+            ) ?: null
         }
 
     /**
      * Get positional X coordinate from Vuforia
      * @return mm of interpreted position X data
      */
-    fun vuGetX(): Double {
+    fun vuGetX(): Double? {
         val translation = targetTranslation
-        return translation[0].toDouble()
+        return translation?.get(0)?.toDouble()
     }
 
     /**
      * Get positional Y coordinate from Vuforia
      * @return mm of interpreted position Y data
      */
-    fun vuGetY(): Double {
+    fun vuGetY(): Double? {
         val translation = targetTranslation
-        return translation[1].toDouble()
+        return translation?.get(1)?.toDouble()
     }
 
     /**
      * Get positional Z coordiate from Vuforia
      * @return mm of interpreted position Z data
      */
-    fun vuGetZ(): Double {
+    fun vuGetZ(): Double? {
         val translation = targetTranslation
-        return translation[2].toDouble()
+        return translation?.get(2)?.toDouble()
     }
 
     /**
      * Get X (roll) orientation from Vuforia
      * @return X orientation in degrees
      */
-    fun vuGetRoll(): Double {
+    fun vuGetRoll(): Double? {
         val orientation = orientationTranslation
-        return orientation.firstAngle.toDouble()
+        return orientation?.firstAngle?.toDouble()
     }
 
     /**
      * Get Y (pitch) orientation from Vuforia
      * @return Y orientation in degrees
      */
-    fun vuGetPitch(): Double {
+    fun vuGetPitch(): Double? {
         val orientation = orientationTranslation
-        return orientation.secondAngle.toDouble()
+        return orientation?.secondAngle?.toDouble()
     }
 
     /**
      * Get Z (heading) orientation from Vuforia
      * @return Z orientation in degrees
      */
-    fun vuGetHeading(): Double {
+    fun vuGetHeading(): Double? {
         val orientation = orientationTranslation
-        return orientation.thirdAngle.toDouble()
+        return orientation?.thirdAngle?.toDouble()
     }
 
     /**
@@ -526,7 +520,6 @@ class CameraOp(
         // USING 2022-2023 POWERPLAY SEASON TFOD ASSETS
         private const val TFOD_MODEL_ASSET = "PowerPlay.tflite"
 
-        // private static final String TFOD_MODEL_FILE  = "/sdcard/FIRST/tflitemodels/CustomTeamModel.tflite";
         val LABELS = arrayOf(
             "1 Bolt",
             "2 Bulb",

@@ -14,35 +14,40 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     @Volatile
     var currentAngles: Orientation? = null
     private var previousHeading = 0.0
-    // Detects if there is a sudden 180 turn which means we have turned more than the 180
-    // degree threshold. Adds 360 to additively inverse the value and give us a proper delta
 
-    // Limit heading readings to only be in a (0, 360) index
+    // Offset used for Field-centric navigation, defined in FieldPositioning.kt
+    var offset = 0.0
+
     /**
      * Get the current heading reading from the internal IMU, with support for 360 degree readings
      * Instead of using Euler readings, this will return a number within 0 to 360
      * @return Z value of Orientation axes in human-friendly reading range [0, 360]
      */
-    var heading = 0.0
+    var heading: Double? = null
         get() {
-            val currentHeading = currentAngles!!.thirdAngle.toDouble()
-            var delta = currentHeading - previousHeading
+            val currentHeading = currentAngles?.thirdAngle?.toDouble()?.plus(offset)
+            var delta = currentHeading?.minus(previousHeading)
 
             // Detects if there is a sudden 180 turn which means we have turned more than the 180
             // degree threshold. Adds 360 to additively inverse the value and give us a proper delta
-            if (delta < -180) {
-                delta += 360.0
-            } else if (delta >= 180) {
-                delta -= 360.0
+            if (delta != null) {
+                if (delta < -180) {
+                    delta += 360.0
+                } else if (delta >= 180) {
+                    delta -= 360.0
+                }
+                field = field?.plus(delta)
+
+                if (currentHeading != null) {
+                    previousHeading = currentHeading
+                }
             }
-            field += delta
-            previousHeading = currentHeading
 
             // Limit heading readings to only be in a (0, 360) index
-            if (field >= 360.0) {
-                field -= 360.0
-            } else if (field < 0.0) {
-                field += 360.0
+            if (field!! >= 360.0) {
+                field = field!! - 360.0
+            } else if (field!! < 0.0) {
+                field = field!! + 360.0
             }
             return field
         }
@@ -66,15 +71,15 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
      * Get the current roll reading from the internal IMU
      * @return Y value of Orientation axes
      */
-    val roll: Double
-        get() = currentAngles!!.secondAngle.toDouble()
+    val roll: Double?
+        get() = currentAngles?.secondAngle?.toDouble()
 
     /**
      * Get the current pitch reading from the internal IMU
      * @return X value of Orientation axes
      */
-    val pitch: Double
-        get() = currentAngles!!.firstAngle.toDouble()
+    val pitch: Double?
+        get() = currentAngles?.firstAngle?.toDouble()
 
     /**
      * Start PrecisionDrive IMU alignment algorithm and capture the original angle
@@ -99,7 +104,12 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     fun getRPrecisionSpeed(original_speed: Double, tolerance: Int): Double {
         if (capture == null) return original_speed
         val current = heading
-        if (current < capture!! - tolerance) return Math.abs(original_speed + 0.1)
-        return if (current > capture!! + tolerance) Math.abs(original_speed - 0.1) else original_speed
+        if (current != null) {
+            if (current < capture!! - tolerance) return Math.abs(original_speed + 0.1)
+        }
+        if (current != null) {
+            return if (current > capture!! + tolerance) Math.abs(original_speed - 0.1) else original_speed
+        }
+        return original_speed
     }
 }

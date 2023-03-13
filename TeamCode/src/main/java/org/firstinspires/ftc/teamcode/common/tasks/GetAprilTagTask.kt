@@ -24,7 +24,6 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp) : Task(o
      * Get the saved position of where to park.
      * @return An enum of either LEFT, CENTER, or RIGHT determining where to park
      */
-    // We also use an instance variable to store the result
     @Volatile
     var position: ParkingPosition? = null
         private set
@@ -43,7 +42,7 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp) : Task(o
         val tagsize = 0.166
 
         // Lens intrinsics calibrations, units in pixels
-        // TODO: This configuration is for the C920 webcam at 800x448. This must be calibrated.
+        // This is calibrated for the Logitech C920 camera, FTC season 2022-2023
         val fx = 578.272
         val fy = 578.272
         val cx = 402.145

@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
+import java.util.Locale
 
 @TeleOp(name = "<JERRY> POWERPLAY TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
@@ -44,8 +45,11 @@ class JerryTeleOp : BunyipsOpMode() {
         val y = gamepad1.left_stick_y.toDouble()
         val r = gamepad1.right_stick_x.toDouble()
 
+//        telemetry.addLine(String.format(Locale.getDefault(),
+//            "Controller: X: %.2f, Y: %.2f, R: %.2f", x, y, r))
+
         // Set speeds of motors and interpret any data
-        drive?.setSpeedXYR(-x, -y, -r)
+        drive?.setSpeedXYR(x, y, r)
         arm?.liftSetPower(0.2)
         if (up_pressed && !gamepad2.dpad_up) {
             arm?.liftUp()
@@ -57,7 +61,7 @@ class JerryTeleOp : BunyipsOpMode() {
 
         // Update live movements of all motors
         if (gamepad2.a) {
-            // "Green for seen"
+            // "Green (un)for seen(consequences)"
             arm?.clawOpen()
         } else if (gamepad2.b) {
             // "Red for dead"

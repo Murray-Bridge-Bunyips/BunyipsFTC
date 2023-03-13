@@ -81,9 +81,9 @@ class JerryDrive(
         opMode!!.telemetry.addLine(
             String.format(
                 Locale.getDefault(),
-                "Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f",
-                speedX,
-                speedY,
+                "Mecanum Drive: X: %.2f, Y: %.2f, R: %.2f",
+                -speedY,
+                -speedX,
                 speedR
             )
         )
@@ -142,16 +142,16 @@ class JerryDrive(
     }
 
     /**
-     * @param speedX relative east-west speed - positive: left
-     * @param speedY relative north-south speed - positive: north
-     * @param speedR rotation speed - positive: anti-clockwise
+     * @param speedX relative east-west speed - positive: east
+     * @param speedY relative north-south speed - positive: south
+     * @param speedR rotation speed - positive: clockwise
      */
     fun setSpeedXYR(speedX: Double, speedY: Double, speedR: Double) {
         // X and Y have been swapped, and X has been inverted
         // This is to calibrate the controller movement to the robot
-        this.speedX = clipMotorPower(-speedY)
-        this.speedY = clipMotorPower(speedX)
-        this.speedR = clipMotorPower(-speedR)
+        this.speedX = clipMotorPower(speedY)
+        this.speedY = clipMotorPower(-speedX)
+        this.speedR = clipMotorPower(speedR)
     }
 
     /**
