@@ -48,7 +48,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         // Check if we have deadwheel capabilities, if we do, use the respective tasks with
         // deadwheel field positioning, otherwise we will need to use time as that is
         // our only option
-        if (config?.x1 != null && config?.y != null) {
+        if (config?.areDeadwheelsAvail() == true) {
             telemetry.addLine("Deadwheels are available. Using Precision/Deadwheel tasks.")
         } else {
             telemetry.addLine("No deadwheels available. Using BaseDrive/IMU tasks only.")

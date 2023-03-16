@@ -20,8 +20,7 @@ class JerryConfig : RobotConfig() {
     var br: DcMotorEx? = null
     var fl: DcMotorEx? = null
     var fr: DcMotorEx? = null
-    var x1: Deadwheel? = null
-    var x2: Deadwheel? = null
+    var x: Deadwheel? = null
     var y: Deadwheel? = null
     var claw1: Servo? = null
     var claw2: Servo? = null
@@ -56,8 +55,7 @@ class JerryConfig : RobotConfig() {
         // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
         // These encoders will mirror a DcMotor, but will be attached to their own port (for example,
         // motor 0 and 1 on Expansion Hub, but without any power connection)
-        x1 = getHardware("X1 Encoder", Deadwheel::class.java) as? Deadwheel
-        x2 = getHardware("X2 Encoder", Deadwheel::class.java) as? Deadwheel
+        x = getHardware("X Encoder", Deadwheel::class.java) as? Deadwheel
         y = getHardware("Y Encoder", Deadwheel::class.java) as? Deadwheel
 
 
@@ -76,7 +74,7 @@ class JerryConfig : RobotConfig() {
     }
 
     fun areDeadwheelsAvail(): Boolean {
-        return x1 != null && x2 != null && y != null
+        return x != null && y != null
     }
 
     companion object {

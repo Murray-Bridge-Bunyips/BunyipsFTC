@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 
@@ -47,7 +46,7 @@ class JerryArm(
 
     /**
      * Use the configured hard-limit switch to calibrate and zero out the encoders. Will also use
-     * over-current detection in the event the hard-limit switch isn't working correctly.
+     * no-movement detection in the event the hard-limit switch isn't working correctly.
      * This will lockout the update method while it runs.
      */
     @SuppressLint("DefaultLocale")
