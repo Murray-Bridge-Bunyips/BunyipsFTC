@@ -57,14 +57,11 @@ class JerryArm(
         alreadyCalibrated = true
         for (motor in motors) {
             // Set motors to power-only mode and let them run
-            motor!!.mode = RunMode.RUN_WITHOUT_ENCODER
+            motor!!.mode = RunMode.RUN_USING_ENCODER
 
             // Set the motor power to something low as we will be descending and don't want to damage
             // any gears or parts with excessive force. Gravity should do the heavy work.
             motor.power = -0.1
-
-            // Core Hex motors have a stall amperage of 4.4 amps, so we set it slightly lower
-            motor.setCurrentAlert(4.3, CurrentUnit.AMPS)
         }
 
         // Now we wait for the limit switch to be hit, or if there is a sudden stall current in the
@@ -72,8 +69,8 @@ class JerryArm(
         // the bounds detection. Either way works and it won't hurt to use both, incase the limit
         // switch breaks for some reason. Press right bumper to cancel the loop.
         // Using reversed operation as pressing results in the limit switch reporting false
+        var e = 0
         while (!limit!!.isPressed && !opMode!!.gamepad2.right_bumper) {
-            if (motors[0]!!.isOverCurrent || motors[1]!!.isOverCurrent) break
             opMode.telemetry.addLine(
                 String.format(
                     "ARM IS CALIBRATING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
@@ -82,6 +79,16 @@ class JerryArm(
                 )
             )
             opMode.telemetry.update()
+
+            // Check if the delta is above 0 for 5 consecutive loops, if so, we have hit the limit
+            val prev = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2)
+            val delta = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2) - prev
+            if (delta >= 0) {
+                e++
+            } else {
+                e = 0
+            }
+            if (e > 5) break
         }
         for (motor in motors) {
             // Finally, we reset the motors and we are now zeroed out again.
@@ -220,6 +227,7 @@ class JerryArm(
         4: Pole position 3
     */
     companion object {
+        // TODO: Update these values to match the actual arm positions
         private val LIFT_POSITIONS = intArrayOf(20, 80, 350, 500, 700)
         // i am contributing nothing to the project -lachlan
     }

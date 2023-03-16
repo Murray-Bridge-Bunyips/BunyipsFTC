@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.jerry
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.IMUOp
@@ -13,6 +15,7 @@ import org.firstinspires.ftc.teamcode.jerry.tasks.JerryIMURotationTask
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
 
+@Autonomous(name = "<JERRY> Patriarch of the Bunyips Family")
 class JerryAutoTest : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var drive: JerryDrive? = null
