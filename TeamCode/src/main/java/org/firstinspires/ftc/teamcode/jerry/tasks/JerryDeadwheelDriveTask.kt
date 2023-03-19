@@ -7,30 +7,23 @@ import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // Advanced drive task which will use the deadwheel encoders to X Y position on field
-// For this robot, we don't actually need a precision IMU drive, and as such we don't need to
-// implement one (although IMUOp has the methods available to make this work)
+// This task DOES NOT use IMU tracking to correct orientation, and only runs on the deadwheels
 class JerryDeadwheelDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
     private val drive: JerryDrive,
     private val x: Deadwheel,
     private val y: Deadwheel,
-    px_mm: Double,
-    py_mm: Double,
-    xspeed: Double,
-    yspeed: Double
-) : Task(opMode, time), TaskImpl {
-    private val px_mm: Double
-    private val py_mm: Double
-    private val xspeed: Double
+    private var px_mm: Double,
+    private var py_mm: Double,
+    private val xspeed: Double,
     private val yspeed: Double
+) : Task(opMode, time), TaskImpl {
 
     init {
         // Subtract 6 centimetres from the target distance to account for momentum
         this.px_mm = px_mm - 60
         this.py_mm = py_mm - 60
-        this.xspeed = xspeed
-        this.yspeed = yspeed
     }
 
     override fun isFinished(): Boolean {

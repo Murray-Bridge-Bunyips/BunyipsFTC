@@ -14,6 +14,7 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     @Volatile
     var currentAngles: Orientation? = null
     private var previousHeading = 0.0
+    private var capture: Double? = null
 
     // Offset used for Field-centric navigation, defined in FieldPositioning.kt
     var offset = 0.0
@@ -52,11 +53,6 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
             return field
         }
         private set
-    private var capture: Double? = null
-
-    init {
-        assert(imu != null)
-    }
 
     /**
      * Update the latest state in the IMU to current data
@@ -87,6 +83,22 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     fun startCapture() {
         tick()
         capture = heading
+    }
+
+    /**
+     * Run a self-test of the heading capture system and return the result
+     */
+    fun selfTest(): Boolean {
+        this.startCapture()
+        this.tick()
+        return if (currentAngles == null || capture == null) {
+            // Yikes
+            false
+        } else {
+            this.resetCapture()
+            // Ready to go
+            true
+        }
     }
 
     /**

@@ -6,6 +6,8 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
+// This tasks only uses the IMU and time in order to drive, to see the implementation of both deadwheel and IMU
+// see the PrecisionDrive task
 class JerryIMUDriveTask(
     opMode: BunyipsOpMode,
     time: Double,

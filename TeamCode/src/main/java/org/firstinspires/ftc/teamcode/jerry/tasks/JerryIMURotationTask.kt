@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
+// Rotate the robot to a specific degree angle. This cannot be done with deadwheel assistance due to configuration.
 class JerryIMURotationTask(
     opMode: BunyipsOpMode,
     time: Double,
@@ -34,7 +35,7 @@ class JerryIMURotationTask(
 
         // Find out which way we need to turn based on the information provided
         direction = if (currentAngle < angle && angle <= 180) {
-            // Faster to turn right to get to the target. If the desired angle is 180 degrees,
+            // Faster to turn right to get to the target. If the desired angle is equal distance both ways,
             // will also turn right (as it is equal, just mere preference)
             Direction.RIGHT
         } else {
@@ -43,12 +44,23 @@ class JerryIMURotationTask(
         }
     }
 
-    override fun run() {
-        when (direction) {
-            Direction.LEFT -> drive.setSpeedXYR(0.0, 0.0, -speed)
-            Direction.RIGHT -> drive.setSpeedXYR(0.0, 0.0, speed)
-            else -> {}
+    // Stop turning when we reach the target angle
+    override fun isFinished(): Boolean {
+        return super.isFinished() || if (direction == Direction.LEFT) {
+            // Angle will be decreasing
+            imu.heading!! <= angle
+        } else {
+            // Angle will be increasing
+            imu.heading!! >= angle
         }
+    }
+
+    override fun run() {
+        if (direction == Direction.LEFT)
+            drive.setSpeedXYR(0.0, 0.0, -speed)
+        else
+            drive.setSpeedXYR(0.0, 0.0, speed)
+
         imu.tick()
         drive.update()
     }

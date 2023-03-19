@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // Base drive task which will run XYR speed for a given time
-// Only used for tests, do not use in actual OpMode as field positioning data is lost
+// Only used for tests and as a failsafe, do not use in actual OpMode as field positioning data is lost
 class JerryTimeDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
