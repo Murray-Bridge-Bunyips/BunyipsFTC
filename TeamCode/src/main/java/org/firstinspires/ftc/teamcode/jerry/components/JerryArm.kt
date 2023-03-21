@@ -164,7 +164,7 @@ class JerryArm(
      */
     fun liftControl(o: Double) {
         var offset = o
-        offset *= 10.0
+        offset *= 100.0
         val positions = (arm1?.currentPosition?.plus(arm2?.currentPosition!!))?.div(2)
         for (motor in motors) {
             if (positions != null) {
@@ -228,6 +228,10 @@ class JerryArm(
     companion object {
         // TODO: Update these values to match the actual arm positions
         private val LIFT_POSITIONS = intArrayOf(20, 80, 350, 500, 700)
+        // i am contributing nothing to the project -lachlan
+        // i am contributing a little bit to the project -lachlan
+        // i am contributing a lot to the project -lachlan
+        // i am contributing everything to the project -lachlan
         // i am contributing nothing to the project -lachlan
     }
 }

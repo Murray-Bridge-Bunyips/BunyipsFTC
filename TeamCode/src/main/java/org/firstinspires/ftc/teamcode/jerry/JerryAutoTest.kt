@@ -29,7 +29,7 @@ class JerryAutoTest : BunyipsOpMode() {
         config = JerryConfig.newConfig(hardwareMap, telemetry)
         drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
         drive?.setToBrake()
-        Krankenhaus = cam?.let { GetAprilTagTask(this, it) }
+
         imu = IMUOp(this, config?.imu)
         tasks.add(MessageTask(this, 1.0, "well here we are again, it's always such a pleasure, remember when you tried to kill me twice"))
 
@@ -47,6 +47,7 @@ class JerryAutoTest : BunyipsOpMode() {
             config?.webcam, config!!.monitorID, CameraOp.CamMode.OPENCV
         )
 
+        Krankenhaus = cam?.let { GetAprilTagTask(this, it) }
     }
 
     override fun onInitLoop(): Boolean {

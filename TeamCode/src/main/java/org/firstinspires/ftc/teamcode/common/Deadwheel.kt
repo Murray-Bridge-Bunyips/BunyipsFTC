@@ -57,7 +57,7 @@ abstract class Deadwheel : Encoder {
     }
 
     companion object {
-        // These inputs are for the BQLZR 600P/R (?) encoders
+        // These inputs are for the BQLZR 600P/R encoders
         private const val WHEEL_DIAMETER_MM = 0
         private const val TICKS_PER_REVOLUTION = 0
     }
