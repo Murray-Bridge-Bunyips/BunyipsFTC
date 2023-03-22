@@ -33,7 +33,11 @@ class JerryPrecisionDriveTask(
     }
 
     override fun isFinished(): Boolean {
-        return super.isFinished()
+        return super.isFinished() || if (direction == Directions.LEFT || direction == Directions.RIGHT) {
+            x?.targetReached(distance_mm) ?: false
+        } else {
+            y?.targetReached(distance_mm)?: false
+        }
     }
 
     override fun init() {
@@ -58,26 +62,34 @@ class JerryPrecisionDriveTask(
             DEADWHEEL_FAULT: IMU and time       [cannot travel a specific distance]
             CATASTROPHE: Hellfire and brimstone [can only rely on time]
          */
+
+        imu?.startCapture()
+        if (direction == Directions.LEFT || direction == Directions.RIGHT) {
+            x?.enableTracking()
+        } else {
+            y?.enableTracking()
+        }
     }
 
     override fun run() {
+        if (isFinished()) {
+            drive.deinit()
+            x?.disableTracking()
+            y?.disableTracking()
+            return
+        }
+
         when (operatingMode) {
-            OperatingMode.NORM -> {
+            OperatingMode.NORM, OperatingMode.DEADWHEEL_FAULT -> {
                 // Normal operation, use everything we can to drive to the target
-
+                drive.setSpeedXYR(
+                    if (direction == Directions.LEFT) -power else power,
+                    if (direction == Directions.FORWARD) -power else power,
+                    imu?.getRPrecisionSpeed(0.0, 2) ?: 0.0
+                )
             }
 
-            OperatingMode.IMU_FAULT -> {
-                // IMU is not working, use deadwheels to drive to the target
-
-            }
-
-            OperatingMode.DEADWHEEL_FAULT -> {
-                // Deadwheels are not working, must use time but still can align with IMU
-
-            }
-
-            OperatingMode.CATASTROPHE -> {
+            OperatingMode.CATASTROPHE, OperatingMode.IMU_FAULT -> {
                 // Everything is broken, please send help
                 drive.setSpeedXYR(
                     if (direction == Directions.LEFT) -power else power,
@@ -86,5 +98,15 @@ class JerryPrecisionDriveTask(
                 )
             }
         }
+        /*
+            The term "bussin" is a slang term that originated in Black American Vernacular English (AAVE)
+            and has since become popularized in mainstream culture. It is often used to describe something
+            that is really good, enjoyable, or exciting, especially in the context of food, music,
+            or social situations. For example, someone might say "This pizza is bussin'!" to express
+            that the pizza is delicious, or "This party is bussin'!" to mean that the party is
+            really fun and lively. Therefore, this code is 'bussin'
+        */
+        drive.update()
+        imu?.tick()
     }
 }
