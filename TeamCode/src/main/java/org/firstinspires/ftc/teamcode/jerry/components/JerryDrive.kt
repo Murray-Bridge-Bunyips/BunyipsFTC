@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import java.util.Locale
+import java.util.*
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
@@ -31,7 +31,7 @@ class JerryDrive(
     }
 
     init {
-        // Encoders are not controlled by JerryDrive, as they are not connected
+        // Encoders are not controlled by JerryDrive, but by their own configuration as stated in the Deadwheel class.
         assert(bl != null && br != null && fl != null && fr != null)
     }
 
@@ -52,7 +52,7 @@ class JerryDrive(
     /**
      * Call to update motor speeds through the selected drivemode.
      * Rotation Priority will calculate rotation speed before translation speed, while normalised
-     * will do the opposite, calculating
+     * will do the opposite, calculating translation before rotati
      */
     fun update() {
         if (driveMode == MecanumDriveMode.ROTATION_PRIORITY_NORMALIZED) rotationalPriority()
@@ -62,11 +62,14 @@ class JerryDrive(
         var frontRightPower = speedX - speedY + speedR
         var backLeftPower = speedX - speedY - speedR
         var backRightPower = speedX + speedY + speedR
+
+        // Get the maximum power from all four powers
         val maxPower = abs(frontLeftPower).coerceAtLeast(
             abs(frontRightPower).coerceAtLeast(
                 abs(backLeftPower).coerceAtLeast(abs(backRightPower))
             )
         )
+
         // If the maximum number is greater than 1.0, then normalise by that number
         if (maxPower > 1.0) {
             frontLeftPower /= maxPower
@@ -74,10 +77,13 @@ class JerryDrive(
             backLeftPower /= maxPower
             backRightPower /= maxPower
         }
+
+        // Update motor powers with the calculated values
         fl?.power = frontLeftPower
         fr?.power = frontRightPower
         bl?.power = backLeftPower
         br?.power = backRightPower
+
         opMode!!.telemetry.addLine(
             String.format(
                 Locale.getDefault(),
@@ -156,11 +162,11 @@ class JerryDrive(
 
     /**
      * @param speed speed at which the motors will operate
-     * @param direction_degrees direction at which the motors will move toward
+     * @param directionDegrees direction at which the motors will move toward
      * @param speedR rotation speed - positive: anti-clockwise
      */
-    fun setSpeedPolarR(speed: Double, direction_degrees: Double, speedR: Double) {
-        val radians = Math.toRadians(direction_degrees)
+    fun setSpeedPolarR(speed: Double, directionDegrees: Double, speedR: Double) {
+        val radians = Math.toRadians(directionDegrees)
         speedX = clipMotorPower(speed * cos(radians))
         speedY = clipMotorPower(speed * sin(radians))
         this.speedR = clipMotorPower(speedR)

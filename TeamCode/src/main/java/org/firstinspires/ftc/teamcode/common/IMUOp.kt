@@ -14,10 +14,15 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     @Volatile
     var currentAngles: Orientation? = null
     private var previousHeading = 0.0
-    private var capture: Double? = null
+    var capture: Double? = null
+        private set
 
     // Offset used for Field-centric navigation, defined in FieldPositioning.kt
+    // May not be used, but is here for any potential use cases.
     var offset = 0.0
+        set(value) {
+            if (value >= 0 && value < 360) field = value
+        }
 
     /**
      * Get the current heading reading from the internal IMU, with support for 360 degree readings
@@ -111,17 +116,26 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     /**
      * Query motor alignment speed for ROTATIONAL speed through PrecisionDrive
      * @param original_speed supply the intended speed for the R SPEED value
+     * @param tolerance supply the tolerance in degrees for the IMU to be within to stop adjusting
      * @return queried speed based on parameters given, returns the unaltered speed if PrecisionDrive is not online
      */
     fun getRPrecisionSpeed(original_speed: Double, tolerance: Int): Double {
+        // If we're not capturing, return the original speed
         if (capture == null) return original_speed
-        val current = heading
-        if (current != null) {
-            if (current < capture!! - tolerance) return Math.abs(original_speed + 0.1)
+
+        // If something goes wrong in getting current IMU data, try to tick the IMU first, as the user may not have
+        // reached that hardware cycle yet or has not called tick() in the main loop
+        var current = heading
+        if (current == null) {
+            tick()
+            // If still nothing, bail out.
+            current = heading ?: return original_speed
         }
-        if (current != null) {
-            return if (current > capture!! + tolerance) Math.abs(original_speed - 0.1) else original_speed
-        }
-        return original_speed
+
+        // If we're at the minimum tolerance, increase turn rate
+        if (current < capture!! - tolerance) return Math.abs(original_speed + 0.1)
+
+        // If we're at maximum tolerance, decrease turn rate
+        return if (current > capture!! + tolerance) Math.abs(original_speed - 0.1) else original_speed
     }
 }

@@ -36,7 +36,7 @@ abstract class Deadwheel : Encoder {
      * @return millimetres indicating how far the encoder has travelled
      */
     override val travelledMM: Double
-        get() = Math.PI * WHEEL_DIAMETER_MM * (encoderReading / TICKS_PER_REVOLUTION) + position
+        get() = Math.PI * WHEEL_DIAMETER_MM * ((encoderReading + position) / TICKS_PER_REVOLUTION)
 
     /**
      * Get the reading from the encoder
@@ -58,7 +58,7 @@ abstract class Deadwheel : Encoder {
 
     companion object {
         // These inputs are for the BQLZR 600P/R encoders
-        private const val WHEEL_DIAMETER_MM = 0
         private const val TICKS_PER_REVOLUTION = 0
+        private const val WHEEL_DIAMETER_MM = 0
     }
 }

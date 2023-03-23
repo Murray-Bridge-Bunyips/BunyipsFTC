@@ -55,7 +55,7 @@ class JerryArm(
         isCalibrating = true
         alreadyCalibrated = true
         for (motor in motors) {
-            // Set motors to power-only mode and let them run
+            // Ensure motors are running in the correct mode
             motor!!.mode = RunMode.RUN_USING_ENCODER
 
             // Set the motor power to something low as we will be descending and don't want to damage
@@ -63,8 +63,8 @@ class JerryArm(
             motor.power = -0.1
         }
 
-        // Now we wait for the limit switch to be hit, or if there is a sudden stall current in the
-        // arm motors, which means either the button failed or the motors had already triggered
+        // Now we wait for the limit switch to be hit, or if the movement of the arm stops for long enough,
+        // which means either the button failed or the motors had already triggered
         // the bounds detection. Either way works and it won't hurt to use both, incase the limit
         // switch breaks for some reason. Press right bumper to cancel the loop.
         // Using reversed operation as pressing results in the limit switch reporting false
@@ -79,7 +79,7 @@ class JerryArm(
             )
             opMode.telemetry.update()
 
-            // Check if the delta is above 0 for 5 consecutive loops, if so, we have hit the limit
+            // Check if the delta is above 0 for 10 consecutive loops, if so, we have hit the limit
             val prev = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2)
             val delta = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2) - prev
             if (delta >= 0) {
@@ -87,7 +87,8 @@ class JerryArm(
             } else {
                 e = 0
             }
-            if (e > 5) break
+
+            if (e > 10) break
         }
         for (motor in motors) {
             // Finally, we reset the motors and we are now zeroed out again.

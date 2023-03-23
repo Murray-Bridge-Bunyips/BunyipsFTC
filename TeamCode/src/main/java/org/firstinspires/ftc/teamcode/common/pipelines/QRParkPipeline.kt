@@ -10,6 +10,7 @@ import org.openftc.easyopencv.OpenCvPipeline
  * Simple, effective, and intelligent. It may take a few seconds to detect a QR code.
  * @author Lucas Bubner - FTC 15215 Captain; Nov 2022
  */
+@Deprecated("Old system, use AprilTags instead")
 class QRParkPipeline : OpenCvPipeline() {
     @Volatile
     var position: GetQRSleeveTask.ParkingPosition? = null

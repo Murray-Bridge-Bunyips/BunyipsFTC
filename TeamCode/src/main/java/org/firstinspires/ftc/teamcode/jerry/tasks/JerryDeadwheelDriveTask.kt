@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // Advanced drive task which will use the deadwheel encoders to X Y position on field
 // This task DOES NOT use IMU tracking to correct orientation, and only runs on the deadwheels
+@Deprecated("Use JerryPrecisionDriveTask instead")
 class JerryDeadwheelDriveTask(
     opMode: BunyipsOpMode,
     time: Double,

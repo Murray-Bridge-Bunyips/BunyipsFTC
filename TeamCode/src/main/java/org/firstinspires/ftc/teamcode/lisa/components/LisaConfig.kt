@@ -35,22 +35,7 @@ class LisaConfig : RobotConfig() {
         parameters.accelerationIntegrationAlgorithm = JustLoggingAccelerationIntegrator()
         imu = getHardware("imu", BNO055IMU::class.java) as BNO055IMU
         if (imu != null) imu?.initialize(parameters)
-        val errors: ArrayList<String>? = hardwareErrors
-        if (errors == null) {
-            telemetry.addData(
-                "BunyipsOpMode Status",
-                "ROBOT CONFIGURATION COMPLETED SUCCESSFULLY WITH NO ERRORS."
-            )
-            return
-        }
-        telemetry.addData(
-            "BunyipsOpMode Status",
-            "ERROR(S) DURING CONFIGURATION, THESE DEVICES WERE NOT ABLE TO BE CONFIGURED."
-        )
-        val error: Iterator<String> = errors.iterator()
-        for (i in errors.indices) {
-            telemetry.addData(i.toString(), error.next())
-        }
+        printHardwareErrors()
     }
 
     companion object {

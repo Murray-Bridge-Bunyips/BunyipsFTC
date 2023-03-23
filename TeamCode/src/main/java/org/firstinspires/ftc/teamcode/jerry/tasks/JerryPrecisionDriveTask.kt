@@ -7,7 +7,11 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
-// Full-featured task for driving to a specific distance, with fail safes in case configuration is not available
+/**
+ * Full-featured task for driving to a specific distance, with fail safes in case configuration is not available.
+ * This supports movement throughout the 2D plane, and can be used to move in any one direction
+ * @author Lucas Bubner, 2023
+ */
 class JerryPrecisionDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
@@ -17,10 +21,9 @@ class JerryPrecisionDriveTask(
     private val y: Deadwheel?,
     private val distance_mm: Double,
     private val direction: Directions,
-    private val power: Double
+    private val power: Double,
+    private val tolerance: Double = 2.0 // Optional tolerance can be specified if 2 degrees is inadequate
 ) : Task(opMode, time), TaskImpl {
-    private var capture: Double? = 0.0
-
     // Track the operating mode of the task to account for any robot faults
     private var operatingMode: OperatingMode = OperatingMode.NORM
 
@@ -33,10 +36,13 @@ class JerryPrecisionDriveTask(
     }
 
     override fun isFinished(): Boolean {
+        // Check if the task is done by checking if it has timed out in the supercall or if the target has been reached
+        // by the respective deadwheel. If the deadwheel is not available, then we cannot check if the target has been
+        // reached, so we will just rely on the timeout.
         return super.isFinished() || if (direction == Directions.LEFT || direction == Directions.RIGHT) {
             x?.targetReached(distance_mm) ?: false
         } else {
-            y?.targetReached(distance_mm)?: false
+            y?.targetReached(distance_mm) ?: false
         }
     }
 
@@ -63,10 +69,13 @@ class JerryPrecisionDriveTask(
             CATASTROPHE: Hellfire and brimstone [can only rely on time]
          */
 
+        // Safe call all components to start their tracking and capture vectors
         imu?.startCapture()
         if (direction == Directions.LEFT || direction == Directions.RIGHT) {
+            // If moving along the X axis enable the X deadwheel
             x?.enableTracking()
         } else {
+            // Otherwise we are moving along the Y axis, and we need to enable the Y deadwheel
             y?.enableTracking()
         }
     }
@@ -83,8 +92,8 @@ class JerryPrecisionDriveTask(
             OperatingMode.NORM, OperatingMode.DEADWHEEL_FAULT -> {
                 // Normal operation, use everything we can to drive to the target
                 drive.setSpeedXYR(
-                    if (direction == Directions.LEFT) -power else power,
-                    if (direction == Directions.FORWARD) -power else power,
+                    if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
+                    if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
                     imu?.getRPrecisionSpeed(0.0, 2) ?: 0.0
                 )
             }
@@ -92,21 +101,26 @@ class JerryPrecisionDriveTask(
             OperatingMode.CATASTROPHE, OperatingMode.IMU_FAULT -> {
                 // Everything is broken, please send help
                 drive.setSpeedXYR(
-                    if (direction == Directions.LEFT) -power else power,
-                    if (direction == Directions.FORWARD) -power else power,
+                    if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
+                    if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
                     0.0
                 )
             }
         }
-        /*
-            The term "bussin" is a slang term that originated in Black American Vernacular English (AAVE)
-            and has since become popularized in mainstream culture. It is often used to describe something
-            that is really good, enjoyable, or exciting, especially in the context of food, music,
-            or social situations. For example, someone might say "This pizza is bussin'!" to express
-            that the pizza is delicious, or "This party is bussin'!" to mean that the party is
-            really fun and lively. Therefore, this code is 'bussin'
-        */
+
+        // Update drive and tick IMU if possible. Deadwheels will continue to track if they are enabled.
         drive.update()
         imu?.tick()
+
+        // Add telemetry of current operation
+        opMode.telemetry.addLine("PrecisionDrive is active under operating mode: $operatingMode")
+        opMode.telemetry.addLine("Distance progress: ${if (direction == Directions.LEFT || direction == Directions.RIGHT) x?.travelledMM ?: "N/A" else y?.travelledMM ?: "N/A"}/$distance_mm")
+        opMode.telemetry.addLine(
+            "Axis correction: ${imu?.capture?.minus(tolerance) ?: "N/A"} <= ${imu?.heading ?: "N/A"} <= ${
+                imu?.capture?.plus(
+                    tolerance
+                ) ?: "N/A"
+            }"
+        )
     }
 }

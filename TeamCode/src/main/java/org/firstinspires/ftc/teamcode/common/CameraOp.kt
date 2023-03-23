@@ -5,14 +5,7 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables
+import org.firstinspires.ftc.robotcore.external.navigation.*
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector
 import org.openftc.easyopencv.OpenCvCamera
@@ -186,7 +179,7 @@ class CameraOp(
             }
 
             override fun onError(errorCode: Int) {
-                opMode!!.telemetry.addLine("An error occurred in initalising OpenCV. Standard mode will be activated. Error code: $errorCode")
+                opMode!!.telemetry.addLine("An error occurred in initialising OpenCV. Standard mode will be activated. Error code: $errorCode")
                 OCVcam = null
                 mode = CamMode.STANDARD
                 stdinit()
@@ -274,12 +267,6 @@ class CameraOp(
         }
         return null
     }
-    /*
-     * This method shouldn't be called unless a raw matrix is required or for debugging.
-     * Debugging telemetry from this method should be used from the calling OpMode + get methods (see above)
-     * However, if needed for testing, call getTargetRawMatrix to a junk variable and
-     * uncomment the lines below to get all interpreted data readings for debugging.
-     */
 
     // Return the raw matrix detected if it is visible to the camera, otherwise return null
     /**

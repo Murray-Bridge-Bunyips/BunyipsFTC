@@ -73,8 +73,24 @@ class JerryConfig : RobotConfig() {
         printHardwareErrors()
     }
 
+    // Deadwheel specific functions
     fun areDeadwheelsAvail(): Boolean {
         return x != null && y != null
+    }
+
+    fun resetDeadwheels() {
+        x?.resetTracking()
+        y?.resetTracking()
+    }
+
+    fun startDeadwheels() {
+        x?.enableTracking()
+        y?.enableTracking()
+    }
+
+    fun stopDeadwheels() {
+        x?.disableTracking()
+        y?.disableTracking()
     }
 
     companion object {

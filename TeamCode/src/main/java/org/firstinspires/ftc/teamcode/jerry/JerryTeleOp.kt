@@ -5,7 +5,6 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
-import java.util.Locale
 
 @TeleOp(name = "<JERRY> POWERPLAY TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
@@ -15,27 +14,23 @@ class JerryTeleOp : BunyipsOpMode() {
     private var up_pressed = false
     private var down_pressed = false
     private var drop_pressed = false
+
     override fun onInit() {
         // Configure drive and arm subsystems
         config = JerryConfig.newConfig(hardwareMap, telemetry)
-        try {
-            drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
-            drive?.setToBrake()
-        } catch (e: Exception) {
-            telemetry.addLine("Failed to initialise Drive System.")
-        }
-        try {
-            arm = JerryArm(
-                this,
-                config?.claw1,
-                config?.claw2,
-                config?.arm1,
-                config?.arm2,
-                config?.limit
-            )
-        } catch (e: Exception) {
-            telemetry.addLine("Failed to initialise Arm System.")
-        }
+        drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
+        drive?.setToBrake()
+        arm = JerryArm(
+            this,
+            config?.claw1,
+            config?.claw2,
+            config?.arm1,
+            config?.arm2,
+            config?.limit
+        )
+
+        // Run any additional configuration
+        arm?.liftSetPower(0.2)
     }
 
     @Throws(InterruptedException::class)
@@ -50,7 +45,6 @@ class JerryTeleOp : BunyipsOpMode() {
 
         // Set speeds of motors and interpret any data
         drive?.setSpeedXYR(x, y, r)
-        arm?.liftSetPower(0.2)
         if (up_pressed && !gamepad2.dpad_up) {
             arm?.liftUp()
         } else if (down_pressed && !gamepad2.dpad_down) {
@@ -64,12 +58,15 @@ class JerryTeleOp : BunyipsOpMode() {
             // "Green (un)for seen(consequences)"
             arm?.clawOpen()
         } else if (gamepad2.b) {
-            // "Red for dead"
+            // "Red for dead 2"
             arm?.clawClose()
         }
+
+        // Prevent continued presses of buttons due to the nature of the active loop
         up_pressed = gamepad2.dpad_up
         down_pressed = gamepad2.dpad_down
         drop_pressed = gamepad2.left_bumper
+
         drive?.update()
         arm?.update()
     }
