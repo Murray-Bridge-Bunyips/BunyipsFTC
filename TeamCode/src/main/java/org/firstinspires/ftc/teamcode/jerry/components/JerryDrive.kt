@@ -32,7 +32,12 @@ class JerryDrive(
 
     init {
         // Encoders are not controlled by JerryDrive, but by their own configuration as stated in the Deadwheel class.
-        assert(bl != null && br != null && fl != null && fr != null)
+        // Ensure that the motors exist before continuing.
+        try {
+            assert(bl != null && br != null && fl != null && fr != null)
+        } catch (e: AssertionError) {
+            opMode.telemetry.addLine("Failed to initialise Drive System, check config for motors.")
+        }
     }
 
     fun setToFloat() {

@@ -12,92 +12,51 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
 
-@Autonomous(name = "<JERRY> POWERPLAY Autonomous Simple Signal Read Park")
+/**
+ * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
+ */
+@Autonomous(name = "<JERRY> POWERPLAY Auto Signal Read & Park")
 class JerrySignalAutonomous : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var cam: CameraOp? = null
     private var drive: JerryDrive? = null
     private var arm: JerryArm? = null
-    private var Krankenhaus: GetAprilTagTask? = null
+    private var tagtask: GetAprilTagTask? = null
     private val tasks = ArrayDeque<TaskImpl>()
     override fun onInit() {
+        // Configuration of camera and drive components
         config = JerryConfig.newConfig(hardwareMap, telemetry)
-        try {
-            cam = CameraOp(this, config?.webcam, config!!.monitorID, CamMode.OPENCV)
-        } catch (e: Exception) {
-            telemetry.addLine("Failed to initialise Camera Operation.")
-        }
-        try {
-            drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
-        } catch (e: Exception) {
-            telemetry.addLine("Failed to initialise Drive System.")
-        }
-        try {
-            arm = JerryArm(
-                this,
-                config?.claw1,
-                config?.claw2,
-                config?.arm1,
-                config?.arm2,
-                config?.limit
-            )
-        } catch (e: Exception) {
-            telemetry.addLine("Failed to initialise Arm System.")
-        }
+        cam = CameraOp(this, config?.webcam, config!!.monitorID, CamMode.OPENCV)
+        drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
 
-        // Check if we have deadwheel capabilities, if we do, use the respective tasks with
-        // deadwheel field positioning, otherwise we will need to use time as that is
-        // our only option
-        if (config?.areDeadwheelsAvail() == true) {
-            telemetry.addLine("Deadwheels are available. Using Precision/Deadwheel tasks.")
-        } else {
-            telemetry.addLine("No deadwheels available. Using BaseDrive/IMU tasks only.")
-            // Drive right to be on square [1,1] [4,1] [4,1] [4,4]
-            tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, 1.0, 0.0))
-        }
+        // Use PrecisionDrive to move rightwards for 1.5 seconds
+        // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
+        tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, 1.0, 0.0))
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
-        Krankenhaus = cam?.let { GetAprilTagTask(this, it) }
+        tagtask = cam?.let { GetAprilTagTask(this, it) }
     }
 
     override fun onInitLoop(): Boolean {
         // Using CameraOp OPENCV and AprilTags in order to detect the Signal sleeve
-        Krankenhaus?.run()
-        return Krankenhaus?.isFinished() ?: true
+        tagtask?.run()
+        return tagtask?.isFinished() ?: true
     }
 
     override fun onInitDone() {
         // Determine our final task based on the parking position from the camera
         // If on center or NONE, do nothing and just stay in the center
-        // you may have a very minor case of serious brain damage
-        // if you are reading this
-        // please seek medical attention
-        val position = Krankenhaus?.position
+        val position = tagtask?.position
         telemetry.addLine("ParkingPosition set to: $position")
-        if (config?.areDeadwheelsAvail() == true) {
-            // Deadwheel configurations not available
+
+        // Add movement tasks based on the signal position
+        if (position == GetAprilTagTask.ParkingPosition.LEFT) {
             // Drive forward if the position of the signal is LEFT
-            if (position == GetAprilTagTask.ParkingPosition.LEFT) {
-                tasks.add(JerryTimeDriveTask(this, 1.5, drive, -1.0, 0.0, 0.0))
-            } else if (position == GetAprilTagTask.ParkingPosition.RIGHT) {
-                // Drive backward if the position of the signal is RIGHT
-                tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
-            }
-        } else {
-            // Deadwheel configurations available
-            // why are you bad at coding
-            // why is lucas a better programmer than lachlan
-            // why is lachlan a better programmer than lucas
-            // why is lucas a better programmer than lachlan
-            // why is lachlan a better programmer than lucas
-            // why is lucas a better programmer than lachlan
-            // why is lachlan a better programmer than lucas
-            // why is lucas a better programmer than lachlan
-            // why is lachlan a better programmer than lucas
-            // why is lucas a better programmer than lachlan
-            // why is lachlan a better programmer than lucas
-            // thank you for your input github copilot
+            tasks.add(JerryTimeDriveTask(this, 1.5, drive, -1.0, 0.0, 0.0))
+        } else if (position == GetAprilTagTask.ParkingPosition.RIGHT) {
+            // Drive backward if the position of the signal is RIGHT
+            tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
         }
     }
 

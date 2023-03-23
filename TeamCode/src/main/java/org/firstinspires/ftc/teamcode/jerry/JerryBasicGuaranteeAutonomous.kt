@@ -10,7 +10,11 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
 
-@Autonomous(name = "<JERRY> POWERPLAY Left-Right Park Autonomous")
+/**
+ * Basic autonomous that guarantees the robot will park in a corner or centre.
+ * Incredibly simple, uses only the drive.
+ */
+@Autonomous(name = "<JERRY> POWERPLAY Auto Left-Right Park")
 class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var drive: JerryDrive? = null

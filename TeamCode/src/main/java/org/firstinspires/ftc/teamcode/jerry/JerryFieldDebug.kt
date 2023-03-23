@@ -6,6 +6,9 @@ import org.firstinspires.ftc.teamcode.common.FieldPositioning
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
+/**
+ * Experimental OpMode for testing field positioning
+ */
 class JerryFieldDebug : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var field: FieldPositioning? = null

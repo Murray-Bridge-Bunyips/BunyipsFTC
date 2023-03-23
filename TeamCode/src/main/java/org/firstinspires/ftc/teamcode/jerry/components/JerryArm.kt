@@ -28,8 +28,12 @@ class JerryArm(
         motors[0] = arm1
         motors[1] = arm2
         liftPower = 0.0
-        assert(claw1 != null && claw2 != null && arm1 != null && arm2 != null)
-
+        try {
+            assert(claw1 != null && claw2 != null && arm1 != null && arm2 != null)
+        } catch (e: AssertionError) {
+            opMode.telemetry.addLine("Failed to initialise Arm System, check config for all components.")
+        }
+        
         // Set directions of motors so they move the correct way
         claw1?.direction = Servo.Direction.FORWARD
         claw2?.direction = Servo.Direction.REVERSE

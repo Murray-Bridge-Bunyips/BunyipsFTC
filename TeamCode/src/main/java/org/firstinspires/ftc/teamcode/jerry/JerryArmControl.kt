@@ -5,6 +5,9 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
+/**
+ * Manual arm control used for calibration purposes, using gamepad2 left stick.
+ */
 @TeleOp(name = "<JERRY> Manual Arm Control")
 class JerryArmControl : BunyipsOpMode() {
     private var config: JerryConfig? = null

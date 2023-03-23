@@ -6,6 +6,9 @@ import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
+/**
+ * Debug OpMode to continually output what Sleeve the robot is currently seeing.
+ */
 @Autonomous(name = "<JERRY> POWERPLAY Signal Test")
 class JerrySignalAnalyse : BunyipsOpMode() {
     private var config: JerryConfig? = null
@@ -14,11 +17,7 @@ class JerrySignalAnalyse : BunyipsOpMode() {
 
     override fun onInit() {
         config = JerryConfig.newConfig(hardwareMap, telemetry)
-        try {
-            cam = CameraOp(this, config?.webcam, config!!.monitorID, CameraOp.CamMode.OPENCV)
-        } catch (e: Exception) {
-            telemetry.addLine("Failed to initialise Camera Operation.")
-        }
+        cam = CameraOp(this, config?.webcam, config!!.monitorID, CameraOp.CamMode.OPENCV)
         task = cam?.let { GetAprilTagTask(this, it) }
     }
 
