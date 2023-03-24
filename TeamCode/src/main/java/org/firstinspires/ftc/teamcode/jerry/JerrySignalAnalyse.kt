@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.jerry
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 /**
  * Debug OpMode to continually output what Sleeve the robot is currently seeing.
  */
-@Autonomous(name = "<JERRY> POWERPLAY Signal Test")
+@TeleOp(name = "<JERRY> POWERPLAY Signal Debug")
 class JerrySignalAnalyse : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var cam: CameraOp? = null
@@ -24,6 +24,5 @@ class JerrySignalAnalyse : BunyipsOpMode() {
     override fun activeLoop() {
         task?.run()
         telemetry.addLine("Currently seeing position: ${task?.position ?: "NONE"}")
-        telemetry.update()
     }
 }

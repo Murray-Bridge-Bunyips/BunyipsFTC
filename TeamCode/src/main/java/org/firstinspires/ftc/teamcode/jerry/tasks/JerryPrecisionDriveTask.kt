@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.Deadwheel
+import org.firstinspires.ftc.teamcode.common.DeadwheelMotor
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
@@ -17,8 +17,8 @@ class JerryPrecisionDriveTask(
     time: Double,
     private val drive: JerryDrive?,
     private val imu: IMUOp?,
-    private val x: Deadwheel?,
-    private val y: Deadwheel?,
+    private val x: DeadwheelMotor?,
+    private val y: DeadwheelMotor?,
     private val distance_mm: Double,
     private val direction: Directions,
     private var power: Double,

@@ -12,8 +12,8 @@ package org.firstinspires.ftc.teamcode.common
  */
 class FieldPositioning(
     opMode: BunyipsOpMode?,
-    x: Deadwheel?,
-    y: Deadwheel?,
+    x: DeadwheelMotor?,
+    y: DeadwheelMotor?,
     cam: CameraOp,
     imu: IMUOp,
     position: StartingPositions,
@@ -44,8 +44,8 @@ class FieldPositioning(
         FORWARD, BACKWARD, LEFTWARD, RIGHTWARD
     }
 
-    private var x: Deadwheel? = null
-    private var y: Deadwheel? = null
+    private var x: DeadwheelMotor? = null
+    private var y: DeadwheelMotor? = null
     private val cam: CameraOp
     private val imu: IMUOp
 

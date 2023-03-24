@@ -19,7 +19,7 @@ class JerryFieldDebug : BunyipsOpMode() {
         config = JerryConfig.newConfig(hardwareMap, telemetry)
         imu = IMUOp(this, config?.imu)
         cam = CameraOp(this, config?.webcam, config!!.monitorID, CameraOp.CamMode.STANDARD)
-        field = FieldPositioning(this, config?.x, config?.y, cam!!, imu!!, FieldPositioning.StartingPositions.BLUE_LEFT, FieldPositioning.StartingDirections.RIGHTWARD)
+//        field = FieldPositioning(this, config?.fl, config?.fr, cam!!, imu!!, FieldPositioning.StartingPositions.BLUE_LEFT, FieldPositioning.StartingDirections.RIGHTWARD)
     }
 
     override fun activeLoop() {

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode
 
-abstract class Deadwheel : Encoder {
+abstract class DeadwheelMotor : Encoder {
     @Volatile
     var position = 0.0
 

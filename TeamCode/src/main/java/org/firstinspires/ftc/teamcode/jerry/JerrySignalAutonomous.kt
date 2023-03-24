@@ -33,7 +33,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
 
         // Use PrecisionDrive to move rightwards for 1.5 seconds
         // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
-        tasks.add(JerryPrecisionDriveTask(this, 1.5, drive, imu, config?.x, config?.y, 1250.0, JerryPrecisionDriveTask.Directions.RIGHT, 1.0))
+//        tasks.add(JerryPrecisionDriveTask(this, 1.5, drive, imu, config?.fl, config?.fr, 1250.0, JerryPrecisionDriveTask.Directions.RIGHT, 1.0))
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
@@ -55,10 +55,10 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         // Add movement tasks based on the signal position
         if (position == GetAprilTagTask.ParkingPosition.LEFT) {
             // Drive forward if the position of the signal is LEFT
-            tasks.add(JerryPrecisionDriveTask(this, 1.5, drive, imu, config?.x, config?.y, 1250.0, JerryPrecisionDriveTask.Directions.FORWARD, 1.0))
+//            tasks.add(JerryPrecisionDriveTask(this, 1.5, drive, imu, config?.fl, config?.fr, 1250.0, JerryPrecisionDriveTask.Directions.FORWARD, 1.0))
         } else if (position == GetAprilTagTask.ParkingPosition.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
-            tasks.add(JerryPrecisionDriveTask(this, 1.5, drive, imu, config?.x, config?.y, 1250.0, JerryPrecisionDriveTask.Directions.BACKWARD, 1.0))
+//            tasks.add(JerryPrecisionDriveTask(this, 1.5, drive, imu, config?.fl, config?.fr, 1250.0, JerryPrecisionDriveTask.Directions.BACKWARD, 1.0))
         }
     }
 

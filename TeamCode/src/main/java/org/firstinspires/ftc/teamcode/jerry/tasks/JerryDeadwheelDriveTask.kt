@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.Deadwheel
+import org.firstinspires.ftc.teamcode.common.DeadwheelMotor
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
@@ -13,8 +13,8 @@ class JerryDeadwheelDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
     private val drive: JerryDrive,
-    private val x: Deadwheel,
-    private val y: Deadwheel,
+    private val x: DeadwheelMotor,
+    private val y: DeadwheelMotor,
     private var px_mm: Double,
     private var py_mm: Double,
     private val xspeed: Double,

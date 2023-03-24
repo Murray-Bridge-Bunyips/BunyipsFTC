@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.common
 
-import com.qualcomm.robotcore.hardware.DcMotor
+import com.qualcomm.robotcore.hardware.DcMotorEx
 
-interface Encoder : DcMotor {
+interface Encoder : DcMotorEx {
     /**
      * Enable encoder and begin tracking location (Ensure to reset to zero unless intended)
      */
