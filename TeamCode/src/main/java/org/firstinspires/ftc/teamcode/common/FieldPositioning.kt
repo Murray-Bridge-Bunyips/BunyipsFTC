@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.common
 
 /**
  *
- * THIS CLASS IS NOT USED IN THE CURRENT VERSION OF THE CODE, BUT IS A WORK IN PROGRESS.
+ * THIS CLASS IS NOT USED IN THE CURRENT VERSION OF THE CODE.
  *
  * Custom odometer class to control and monitor field positioning data through all available means
  * of sensor input, including deadwheels, IMU, and camera readings.
@@ -10,10 +10,11 @@ package org.firstinspires.ftc.teamcode.common
  *
  * @author Lucas Bubner - FTC 15215 Captain; Feb-Mar 2023 - Murray Bridge Bunyips
  */
+@Deprecated("Should not be used, as this was experimental and there are better solutions.")
 class FieldPositioning(
     opMode: BunyipsOpMode?,
-    x: DeadwheelMotor?,
-    y: DeadwheelMotor?,
+    x: Deadwheels?,
+    y: Deadwheels?,
     cam: CameraOp,
     imu: IMUOp,
     position: StartingPositions,
@@ -44,8 +45,8 @@ class FieldPositioning(
         FORWARD, BACKWARD, LEFTWARD, RIGHTWARD
     }
 
-    private var x: DeadwheelMotor? = null
-    private var y: DeadwheelMotor? = null
+    private var x: Deadwheels? = null
+    private var y: Deadwheels? = null
     private val cam: CameraOp
     private val imu: IMUOp
 
@@ -66,7 +67,6 @@ class FieldPositioning(
             StartingPositions.RED_RIGHT -> fieldPosition = Field[0][4]
             StartingPositions.BLUE_LEFT -> fieldPosition = Field[5][1]
             StartingPositions.BLUE_RIGHT -> fieldPosition = Field[5][4]
-            else -> {}
         }
         when (direction) {
             StartingDirections.FORWARD -> {}
@@ -79,7 +79,6 @@ class FieldPositioning(
             StartingDirections.RIGHTWARD ->
                 // Facing 90 degrees towards the right
                 imu.offset = 90.0
-            else -> {}
         }
         // If the camera is available, initialise it into Vuforia mode as a default
         // The OpMode will change it accordingly and will not account it into the update loop
@@ -92,57 +91,57 @@ class FieldPositioning(
      * Update matrices and data with newest information
      */
     fun update() {
-        // Calculate delta of deadwheel encoders using distance they have travelled
-        // Each square is 23 and a half inches wide and tall
-        if (x != null && y != null) {
-            val deltaX = x!!.travelledMM.div(595.0)
-            val deltaY = y!!.travelledMM.div(595.0)
-
-            // Use calculation to determine how many squares the array should be modified
-            val xSquares = deltaX.toInt()
-            val ySquares = deltaY.toInt()
-        }
-
-        // Integrate Vuforia data to determine robot orientation
-        if (cam.mode == CameraOp.CamMode.STANDARD) {
-            // Get the robot's translation from the camera
-            val x = cam.vuGetX()
-            val y = cam.vuGetY()
-
-            // Abandon ship if we don't have x or y data
-            if (x == null || y == null) return
-
-            // ** TRANSLATE DATA INTO FIELD POSITION **
-            // The (0, 0) Vuforia location is located in the middle of the field,
-            // in the intersection between 15, 16, 21, and 22
-            // The Y value faces towards the blue alliance, the X value faces 90 degrees to the right
-            // if the observer was facing blue alliance from the centre
-            // Z axis is not used as it represents vertical alignment.
-            if (x > 0 && y > 0) {
-                // Robot is in the top left quadrant of the Field map
-            } else if (x > 0 && y < 0) {
-                // Robot is in the top right quadrant of the Field map
-            } else if (x < 0 && y < 0) {
-                // Robot is in the bottom right quadrant of the Field map
-            } else if (x < 0 && y > 0) {
-                // Robot is in the bottom left quadrant of the Field map
-            }
-        }
-
-        // Update field position
-//        fieldPosition += xSquares + ySquares * Field[0].size
-
-        // Update heading with IMU if possible, otherwise try to use Vuforia
-        val imuHeading = imu.heading
-        val vuHeading = cam.vuGetHeading()
-
-        // Check if Vuforia and IMU are out of sync and report this to the Driver Station
-        if (imuHeading != null && vuHeading != null) {
-            if (((imuHeading - vuHeading) > 10) || ((imuHeading - vuHeading) < -10)) {
-                // Report factor of offset
-                opMode!!.telemetry.addData("Heading differential", imuHeading - vuHeading)
-            }
-        }
+//        // Calculate delta of deadwheel encoders using distance they have travelled
+//        // Each square is 23 and a half inches wide and tall
+//        if (x != null && y != null) {
+//            val deltaX = x!!.travelledMM.div(595.0)
+//            val deltaY = y!!.travelledMM.div(595.0)
+//
+//            // Use calculation to determine how many squares the array should be modified
+//            val xSquares = deltaX.toInt()
+//            val ySquares = deltaY.toInt()
+//        }
+//
+//        // Integrate Vuforia data to determine robot orientation
+//        if (cam.mode == CameraOp.CamMode.STANDARD) {
+//            // Get the robot's translation from the camera
+//            val x = cam.vuGetX()
+//            val y = cam.vuGetY()
+//
+//            // Abandon ship if we don't have x or y data
+//            if (x == null || y == null) return
+//
+//            // ** TRANSLATE DATA INTO FIELD POSITION **
+//            // The (0, 0) Vuforia location is located in the middle of the field,
+//            // in the intersection between 15, 16, 21, and 22
+//            // The Y value faces towards the blue alliance, the X value faces 90 degrees to the right
+//            // if the observer was facing blue alliance from the centre
+//            // Z axis is not used as it represents vertical alignment.
+//            if (x > 0 && y > 0) {
+//                // Robot is in the top left quadrant of the Field map
+//            } else if (x > 0 && y < 0) {
+//                // Robot is in the top right quadrant of the Field map
+//            } else if (x < 0 && y < 0) {
+//                // Robot is in the bottom right quadrant of the Field map
+//            } else if (x < 0 && y > 0) {
+//                // Robot is in the bottom left quadrant of the Field map
+//            }
+//        }
+//
+//        // Update field position
+////        fieldPosition += xSquares + ySquares * Field[0].size
+//
+//        // Update heading with IMU if possible, otherwise try to use Vuforia
+//        val imuHeading = imu.heading
+//        val vuHeading = cam.vuGetHeading()
+//
+//        // Check if Vuforia and IMU are out of sync and report this to the Driver Station
+//        if (imuHeading != null && vuHeading != null) {
+//            if (((imuHeading - vuHeading) > 10) || ((imuHeading - vuHeading) < -10)) {
+//                // Report factor of offset
+//                opMode!!.telemetry.addData("Heading differential", imuHeading - vuHeading)
+//            }
+//        }
     }
 
     /**
