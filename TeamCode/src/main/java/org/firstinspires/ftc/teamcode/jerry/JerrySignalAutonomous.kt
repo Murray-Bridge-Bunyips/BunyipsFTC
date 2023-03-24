@@ -3,13 +3,14 @@ package org.firstinspires.ftc.teamcode.jerry
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
+import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.CameraOp.CamMode
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
-import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
+import org.firstinspires.ftc.teamcode.jerry.tasks.JerryPrecisionDriveTask
 import java.util.ArrayDeque
 
 /**
@@ -20,7 +21,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var cam: CameraOp? = null
     private var drive: JerryDrive? = null
-    private var arm: JerryArm? = null
+    private var imu: IMUOp? = null
     private var tagtask: GetAprilTagTask? = null
     private val tasks = ArrayDeque<TaskImpl>()
     override fun onInit() {
@@ -28,10 +29,11 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         config = JerryConfig.newConfig(hardwareMap, telemetry)
         cam = CameraOp(this, config?.webcam, config!!.monitorID, CamMode.OPENCV)
         drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
+        imu = IMUOp(this, config?.imu)
 
         // Use PrecisionDrive to move rightwards for 1.5 seconds
         // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
-        tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, 1.0, 0.0))
+        tasks.add(JerryPrecisionDriveTask(this, 1.5, drive, imu, config?.x, config?.y, 1250.0, JerryPrecisionDriveTask.Directions.RIGHT, 1.0))
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
@@ -53,10 +55,10 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         // Add movement tasks based on the signal position
         if (position == GetAprilTagTask.ParkingPosition.LEFT) {
             // Drive forward if the position of the signal is LEFT
-            tasks.add(JerryTimeDriveTask(this, 1.5, drive, -1.0, 0.0, 0.0))
+            tasks.add(JerryPrecisionDriveTask(this, 1.5, drive, imu, config?.x, config?.y, 1250.0, JerryPrecisionDriveTask.Directions.FORWARD, 1.0))
         } else if (position == GetAprilTagTask.ParkingPosition.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
-            tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
+            tasks.add(JerryPrecisionDriveTask(this, 1.5, drive, imu, config?.x, config?.y, 1250.0, JerryPrecisionDriveTask.Directions.BACKWARD, 1.0))
         }
     }
 

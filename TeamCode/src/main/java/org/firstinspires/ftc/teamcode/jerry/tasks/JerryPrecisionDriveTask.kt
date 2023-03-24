@@ -15,17 +15,28 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 class JerryPrecisionDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
-    private val drive: JerryDrive,
+    private val drive: JerryDrive?,
     private val imu: IMUOp?,
     private val x: Deadwheel?,
     private val y: Deadwheel?,
     private val distance_mm: Double,
     private val direction: Directions,
-    private val power: Double,
+    private var power: Double,
     private val tolerance: Double = 2.0 // Optional tolerance can be specified if 2 degrees is inadequate
 ) : Task(opMode, time), TaskImpl {
     // Track the operating mode of the task to account for any robot faults
     private var operatingMode: OperatingMode = OperatingMode.NORM
+
+    init {
+        try {
+            assert(drive != null)
+        } catch (e: AssertionError) {
+            opMode.telemetry.addLine("Failed to initialise a drive task as the drive system is unavailable.")
+        }
+        // Use absolute values of power to ensure that the robot moves correctly and is not fed with negative values
+        // This is because the task will handle the power management and determine whether the value 
+        this.power = Math.abs(power)
+    }
 
     enum class OperatingMode {
         NORM, IMU_FAULT, DEADWHEEL_FAULT, CATASTROPHE
@@ -82,7 +93,7 @@ class JerryPrecisionDriveTask(
 
     override fun run() {
         if (isFinished()) {
-            drive.deinit()
+            drive!!.deinit()
             x?.disableTracking()
             y?.disableTracking()
             return
@@ -91,7 +102,7 @@ class JerryPrecisionDriveTask(
         when (operatingMode) {
             OperatingMode.NORM, OperatingMode.DEADWHEEL_FAULT -> {
                 // Normal operation, use everything we can to drive to the target
-                drive.setSpeedXYR(
+                drive!!.setSpeedXYR(
                     if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
                     if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
                     imu?.getRPrecisionSpeed(0.0, 2) ?: 0.0
@@ -100,7 +111,7 @@ class JerryPrecisionDriveTask(
 
             OperatingMode.CATASTROPHE, OperatingMode.IMU_FAULT -> {
                 // Everything is broken, please send help
-                drive.setSpeedXYR(
+                drive!!.setSpeedXYR(
                     if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
                     if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
                     0.0
