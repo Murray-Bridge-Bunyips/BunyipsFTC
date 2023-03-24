@@ -36,7 +36,7 @@ abstract class DeadwheelMotor : Encoder {
      * @return millimetres indicating how far the encoder has travelled
      */
     override val travelledMM: Double
-        get() = Math.PI * WHEEL_DIAMETER_MM * ((encoderReading + position) / TICKS_PER_REVOLUTION)
+        get() = Math.PI * WHEEL_DIAMETER_MM * ((encoderReading + position) / TICKS_PER_REVOLUTION) * 10
 
     /**
      * Get the reading from the encoder
@@ -57,8 +57,9 @@ abstract class DeadwheelMotor : Encoder {
     }
 
     companion object {
-        // These inputs are for the BQLZR 600P/R encoders
-        private const val TICKS_PER_REVOLUTION = 0
-        private const val WHEEL_DIAMETER_MM = 0
+        // These inputs are for the BQLZR 600P/R encoders, using two-phase output
+        // https://www.amazon.com.au/Signswise-Incremental-Encoder-Dc5-24v-Voltage/dp/B00UTIFCVA
+        private const val TICKS_PER_REVOLUTION = 2400
+        private const val WHEEL_DIAMETER_MM = 50
     }
 }
