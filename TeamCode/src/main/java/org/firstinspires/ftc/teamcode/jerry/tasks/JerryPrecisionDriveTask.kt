@@ -22,7 +22,7 @@ class JerryPrecisionDriveTask(
     private val distance_mm: Double,
     private val direction: Directions,
     private var power: Double,
-    private val tolerance: Double = 2.0 // Optional tolerance can be specified if 2 degrees is inadequate
+    private val tolerance: Double = 3.0 // Optional tolerance can be specified if 2 degrees is inadequate
 ) : Task(opMode, time), TaskImpl {
     // Track the operating mode of the task to account for any robot faults
     private var operatingMode: OperatingMode = OperatingMode.NORM
@@ -66,7 +66,7 @@ class JerryPrecisionDriveTask(
         }
 
         // Check if the deadwheels are online
-        if (pos?.selfTest(Encoder.Axis.BOTH) == true) {
+        if (pos?.selfTest(Encoder.Axis.BOTH) == false) {
             operatingMode =
                 if (operatingMode == OperatingMode.NORM) OperatingMode.DEADWHEEL_FAULT else OperatingMode.CATASTROPHE
         }

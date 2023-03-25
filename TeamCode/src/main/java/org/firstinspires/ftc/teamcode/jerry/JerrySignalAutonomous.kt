@@ -38,13 +38,13 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         tasks.add(
             JerryPrecisionDriveTask(
                 this,
-                1.5,
+                5.0,
                 drive,
                 imu,
                 pos,
-                1250.0,
+                400.0,
                 JerryPrecisionDriveTask.Directions.RIGHT,
-                1.0
+                0.5
             )
         )
 
@@ -71,13 +71,13 @@ class JerrySignalAutonomous : BunyipsOpMode() {
             tasks.add(
                 JerryPrecisionDriveTask(
                     this,
-                    1.5,
+                    5.0,
                     drive,
                     imu,
                     pos,
-                    1250.0,
+                    400.0,
                     JerryPrecisionDriveTask.Directions.FORWARD,
-                    1.0
+                    0.5
                 )
             )
         } else if (position == GetAprilTagTask.ParkingPosition.RIGHT) {
@@ -85,13 +85,13 @@ class JerrySignalAutonomous : BunyipsOpMode() {
             tasks.add(
                 JerryPrecisionDriveTask(
                     this,
-                    1.5,
+                    5.0,
                     drive,
                     imu,
                     pos,
-                    1250.0,
+                    400.0,
                     JerryPrecisionDriveTask.Directions.BACKWARD,
-                    1.0
+                    0.5
                 )
             )
         }

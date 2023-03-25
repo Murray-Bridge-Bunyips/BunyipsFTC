@@ -65,7 +65,6 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
      * Update the latest state in the IMU to current data
      */
     fun tick() {
-        opMode!!.telemetry.addLine(this.currentAngles.toString())
         this.currentAngles = imu?.getAngularOrientation(
             AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES
         )
@@ -138,9 +137,9 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
         }
 
         // If we're at the minimum tolerance, increase turn rate
-        if (current < this.capture!! - tolerance) return Math.abs(original_speed + 0.1)
+        if (current < this.capture!! - tolerance) return original_speed - 0.15
 
         // If we're at maximum tolerance, decrease turn rate
-        return if (current > this.capture!! + tolerance) Math.abs(original_speed - 0.1) else original_speed
+        return if (current > this.capture!! + tolerance) original_speed + 0.15 else original_speed
     }
 }

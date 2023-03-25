@@ -21,16 +21,16 @@ class Deadwheels(
     override fun enableTracking(encoder: Encoder.Axis) {
         when (encoder) {
             Encoder.Axis.X -> {
-                x.mode = RunMode.RUN_USING_ENCODER
+                x.mode = RunMode.RUN_WITHOUT_ENCODER
             }
 
             Encoder.Axis.Y -> {
-                y.mode = RunMode.RUN_USING_ENCODER
+                y.mode = RunMode.RUN_WITHOUT_ENCODER
             }
 
             Encoder.Axis.BOTH -> {
-                x.mode = RunMode.RUN_USING_ENCODER
-                y.mode = RunMode.RUN_USING_ENCODER
+                x.mode = RunMode.RUN_WITHOUT_ENCODER
+                y.mode = RunMode.RUN_WITHOUT_ENCODER
             }
         }
     }
@@ -59,12 +59,15 @@ class Deadwheels(
                 y.mode = RunMode.STOP_AND_RESET_ENCODER
             }
         }
+        x.mode = RunMode.RUN_WITHOUT_ENCODER
+        y.mode = RunMode.RUN_WITHOUT_ENCODER
     }
 
     override fun resetTracking(encoder: Encoder.Axis) {
         when (encoder) {
             Encoder.Axis.X -> {
                 x.mode = RunMode.STOP_AND_RESET_ENCODER
+                y.mode = RunMode.STOP_AND_RESET_ENCODER
             }
 
             Encoder.Axis.Y -> {
@@ -74,9 +77,10 @@ class Deadwheels(
             Encoder.Axis.BOTH -> {
                 x.mode = RunMode.STOP_AND_RESET_ENCODER
                 y.mode = RunMode.STOP_AND_RESET_ENCODER
-
             }
         }
+        x.mode = RunMode.RUN_WITHOUT_ENCODER
+        y.mode = RunMode.RUN_WITHOUT_ENCODER
         positions = mutableMapOf(Encoder.Axis.X to 0.0, Encoder.Axis.Y to 0.0)
         selfTestErrorCount = 0
     }
@@ -114,7 +118,7 @@ class Deadwheels(
 
     override fun travelledMM(encoder: Encoder.Axis): Double {
         // Equation: (2 * pi * r * (encoderReading + position)) / ticksPerRevolution
-        return Math.PI * WHEEL_DIAMETER_MM * ((encoderReading(encoder) + positions[encoder]!!) / TICKS_PER_REVOLUTION) * 10
+        return Math.PI * WHEEL_DIAMETER_MM * ((encoderReading(encoder) + positions[encoder]!!) / TICKS_PER_REVOLUTION)
     }
 
     override fun encoderReading(encoder: Encoder.Axis): Double {
