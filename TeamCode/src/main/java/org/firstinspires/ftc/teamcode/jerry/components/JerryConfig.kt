@@ -64,7 +64,7 @@ class JerryConfig : RobotConfig() {
         parameters.loggingTag = "IMU"
         parameters.accelerationIntegrationAlgorithm = JustLoggingAccelerationIntegrator()
         imu = getHardware("imu", BNO055IMU::class.java) as BNO055IMU
-        if (imu != null) imu?.initialize(parameters)
+        imu?.initialize(parameters)
         printHardwareErrors()
     }
 

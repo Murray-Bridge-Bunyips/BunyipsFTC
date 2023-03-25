@@ -12,7 +12,7 @@ object ErrorUtil {
     fun handleCatchAllException(e: Throwable, telemetry: Telemetry) {
         telemetry.log().add("Opmode Exception:" + e.message)
         val stckTrace = stackTraceAsString(e)
-        telemetry.log().add("Opmode Stacktrace: " + stckTrace.substring(0, 200))
+        telemetry.log().add("Opmode Stacktrace: $stckTrace")
         if (e is InterruptedException) {
             throw e
         }
