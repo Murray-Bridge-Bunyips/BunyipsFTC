@@ -82,6 +82,21 @@ class Deadwheels(
     }
 
     override fun selfTest(encoder: Encoder.Axis): Boolean {
+        var x = true
+        var y = true
+        var encoderRes = true
+
+        if (encoder == Encoder.Axis.BOTH) {
+            x = testEncoder(Encoder.Axis.X)
+            y = testEncoder(Encoder.Axis.Y)
+        } else {
+            encoderRes = testEncoder(encoder)
+        }
+
+        return x && y && encoderRes
+    }
+
+    private fun testEncoder(encoder: Encoder.Axis): Boolean {
         // Cycle encoder tracking off and back on to ensure a value is currently in the positions array
         enableTracking(encoder)
         disableTracking(encoder)
@@ -131,7 +146,7 @@ class Deadwheels(
 
         // Count any errors that occur in the self test. If the values of the encoders are not
         // moving after a task multiple times, then we can assume the encoder is not working.
-        private const val SELF_TEST_ERROR_THRESHOLD = 2
+        private const val SELF_TEST_ERROR_THRESHOLD = 4
         var selfTestErrorCount = 0
     }
 }
