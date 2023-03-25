@@ -7,11 +7,12 @@ import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // Rotate the robot to a specific degree angle. This cannot be done with deadwheel assistance due to configuration.
+// TODO: Faulty and does not work. Needs immediate debugging at earliest convenience
 class JerryIMURotationTask(
     opMode: BunyipsOpMode,
     time: Double,
-    private val imu: IMUOp,
-    private val drive: JerryDrive,
+    private val imu: IMUOp?,
+    private val drive: JerryDrive?,
     private val angle: Double,
     private val speed: Double
 ) : Task(opMode, time), TaskImpl {
@@ -24,9 +25,9 @@ class JerryIMURotationTask(
 
     override fun init() {
         super.init()
-        imu.tick()
+        imu?.tick()
 
-        val currentAngle = imu.heading
+        val currentAngle = imu?.heading
         // If we can't get angle info, then terminate task as we can't do anything
         if (currentAngle == null) {
             taskFinished = true
@@ -48,20 +49,24 @@ class JerryIMURotationTask(
     override fun isFinished(): Boolean {
         return super.isFinished() || if (direction == Direction.LEFT) {
             // Angle will be decreasing
-            imu.heading!! <= angle
+            imu?.heading!! <= angle // && imu.heading!! < angle + 10
         } else {
             // Angle will be increasing
-            imu.heading!! >= angle
+            imu?.heading!! >= angle // && imu.heading!! > angle - 10
         }
     }
 
     override fun run() {
+        if (isFinished()) {
+            drive?.deinit()
+            return
+        }
         if (direction == Direction.LEFT)
-            drive.setSpeedXYR(0.0, 0.0, -speed)
+            drive?.setSpeedXYR(0.0, 0.0, -speed)
         else
-            drive.setSpeedXYR(0.0, 0.0, speed)
+            drive?.setSpeedXYR(0.0, 0.0, speed)
 
-        imu.tick()
-        drive.update()
+        imu?.tick()
+        drive?.update()
     }
 }
