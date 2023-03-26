@@ -38,11 +38,11 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         tasks.add(
             JerryPrecisionDriveTask(
                 this,
-                5.0,
+                4.0,
                 drive,
                 imu,
                 pos,
-                400.0,
+                600.0,
                 JerryPrecisionDriveTask.Directions.RIGHT,
                 0.5
             )
@@ -71,7 +71,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
             tasks.add(
                 JerryPrecisionDriveTask(
                     this,
-                    5.0,
+                    3.5,
                     drive,
                     imu,
                     pos,
@@ -85,7 +85,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
             tasks.add(
                 JerryPrecisionDriveTask(
                     this,
-                    5.0,
+                    3.5,
                     drive,
                     imu,
                     pos,

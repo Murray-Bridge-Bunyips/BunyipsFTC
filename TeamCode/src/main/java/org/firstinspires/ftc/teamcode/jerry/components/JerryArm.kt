@@ -232,7 +232,7 @@ class JerryArm(
     */
     companion object {
         // These arm positions have been roughly calibrated, but are not fully accurate
-        private val LIFT_POSITIONS = intArrayOf(0, 20, 80, 130, 150, 175, 200, 230)
+        private val LIFT_POSITIONS = intArrayOf(0, 20, 30, 40, 80, 130, 150, 175, 200, 230)
         // i am contributing nothing to the project -lachlan
         // i am contributing a little bit to the project -lachlan
         // i am contributing a lot to the project -lachlan

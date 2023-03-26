@@ -94,7 +94,7 @@ class JerryPrecisionDriveTask(
     override fun run() {
         if (isFinished()) {
             drive!!.deinit()
-            pos?.disableTracking(Encoder.Axis.BOTH)
+            pos?.resetTracking(Encoder.Axis.BOTH)
             return
         }
 
