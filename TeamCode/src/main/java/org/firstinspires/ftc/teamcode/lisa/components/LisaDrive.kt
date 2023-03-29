@@ -7,6 +7,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 
+/**
+ * Drive control system for Lisa, controlling movement.
+ */
+// TODO: Rewrite to have encoder usages rely on a common class schema similar to Jerry robot.
 class LisaDrive(
     opMode: BunyipsOpMode?,
     private val left: DcMotorEx?,
@@ -58,10 +62,10 @@ class LisaDrive(
     }
 
     fun setTargetPosition(leftDistance: Double, rightDistance: Double) {
-        val newLeftTarget: Int
-        val newRightTarget: Int
-        newLeftTarget = left?.currentPosition?.plus(leftDistance.toInt()) ?: leftDistance.toInt()
-        newRightTarget = right?.currentPosition?.plus(rightDistance.toInt()) ?: rightDistance.toInt()
+        val newLeftTarget =
+            left?.currentPosition?.plus(leftDistance.toInt()) ?: leftDistance.toInt()
+        val newRightTarget =
+            right?.currentPosition?.plus(rightDistance.toInt()) ?: rightDistance.toInt()
         left?.targetPosition = newLeftTarget
         right?.targetPosition = newRightTarget
         left?.mode = RunMode.RUN_TO_POSITION

@@ -9,8 +9,10 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 /**
  * Primary TeleOp for all of Jerry's functions. Uses gamepad1 for driving and gamepad2 for arm.
  * Standard controls involve gamepad1 left stick for driving, gamepad1 right stick for turning,
- * gamepad2 dpad up/down for lift, gamepad2 left bumper for reset, gamepad2 a/b for claw, use gamepad2 right bumper to cancel calibration.
+ * gamepad2 dpad up/down for lift, gamepad2 left bumper for recalibration, gamepad2 a/b for claw, use gamepad2 right bumper to cancel calibration.
+ * @author Lucas Bubner, 2022
  */
+// TODO: Add manual arm control override as sometimes the gearing causes problems with positioning.
 @TeleOp(name = "<JERRY> POWERPLAY TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
     private var drive: JerryDrive? = null

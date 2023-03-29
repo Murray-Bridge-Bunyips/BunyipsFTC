@@ -5,6 +5,9 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 
+/**
+ * Autonomous operation arm control task for Jerry robot.
+ */
 class JerryArmTask(
     opMode: BunyipsOpMode,
     time: Double,

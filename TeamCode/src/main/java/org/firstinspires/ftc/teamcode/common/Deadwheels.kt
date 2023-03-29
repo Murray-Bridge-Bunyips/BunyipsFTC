@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import kotlin.math.abs
 
 /**
- * Deadwheel operation class for X and Y axis configurations.
+ * Deadwheel operation class for X and Y axis configurations, including tracking and translation.
  * @author Lucas Bubner, 2023
  */
 class Deadwheels(

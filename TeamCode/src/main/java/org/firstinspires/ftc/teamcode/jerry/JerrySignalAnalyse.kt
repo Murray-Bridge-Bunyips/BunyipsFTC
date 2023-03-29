@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
 /**
- * Debug OpMode to continually output what Sleeve the robot is currently seeing.
+ * Debug OpMode to continually output what AprilTag position the robot is currently seeing.
  */
 @TeleOp(name = "<JERRY> POWERPLAY Signal Debug")
 class JerrySignalAnalyse : BunyipsOpMode() {

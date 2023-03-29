@@ -12,7 +12,7 @@ import java.util.ArrayDeque
 
 /**
  * Basic autonomous that guarantees the robot will park in a corner or centre.
- * Incredibly simple, uses only the drive.
+ * Incredibly simple, uses only time drive.
  */
 @Autonomous(name = "<JERRY> POWERPLAY Auto Left-Right Park")
 class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {

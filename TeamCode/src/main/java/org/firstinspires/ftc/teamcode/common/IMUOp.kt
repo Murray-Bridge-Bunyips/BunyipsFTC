@@ -10,6 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity
 
 /**
  * IMUOperation custom common class for internal BNO055IMUs
+ * This class is used to abstract the IMU reading and provide a more human-friendly reading,
+ * while allowing operation such as the PrecisionDrive system to be used.
  * @author Lucas Bubner - FTC 15215 Captain; Oct 2022 - Murray Bridge Bunyips
  */
 class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsComponent(opMode) {

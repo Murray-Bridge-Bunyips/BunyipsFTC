@@ -37,6 +37,11 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
+/**
+ * Pipeline to drive AprilTag detection.
+ *
+ * @author OpenFTC, 2021
+ */
 public class AprilTagDetectionPipeline extends OpenCvPipeline {
     private final Object detectionsUpdateSync = new Object();
     private final Object decimationSync = new Object();

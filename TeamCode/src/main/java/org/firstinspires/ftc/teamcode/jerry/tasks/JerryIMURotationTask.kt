@@ -8,6 +8,11 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // Rotate the robot to a specific degree angle. This cannot be done with deadwheel assistance due to configuration.
 // TODO: Faulty and does not work. Needs immediate debugging at earliest convenience
+/**
+ * Autonomous operation IMU rotation task for Jerry robot.
+ * Turns to a specific angle using the IMU.
+ * @author Lucas Bubner, 2023
+ */
 class JerryIMURotationTask(
     opMode: BunyipsOpMode,
     time: Double,

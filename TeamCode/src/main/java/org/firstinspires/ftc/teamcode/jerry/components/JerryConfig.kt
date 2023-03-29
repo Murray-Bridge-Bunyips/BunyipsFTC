@@ -11,6 +11,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 
+/**
+ * Jerry robot configuration and hardware declarations.
+ */
 class JerryConfig : RobotConfig() {
     // Add declarations here
     var webcam: WebcamName? = null
@@ -67,26 +70,6 @@ class JerryConfig : RobotConfig() {
         imu?.initialize(parameters)
         printHardwareErrors()
     }
-
-    // Deadwheel specific functions
-    fun areDeadwheelsAvail(): Boolean {
-        return fl != null && fr != null
-    }
-
-//    fun resetDeadwheels() {
-//        fl?.resetTracking()
-//        fr?.resetTracking()
-//    }
-//
-//    fun startDeadwheels() {
-//        fl?.enableTracking()
-//        fr?.enableTracking()
-//    }
-//
-//    fun stopDeadwheels() {
-//        fl?.disableTracking()
-//        fr?.disableTracking()
-//    }
 
     companion object {
         fun newConfig(hardwareMap: HardwareMap?, telemetry: Telemetry): JerryConfig {

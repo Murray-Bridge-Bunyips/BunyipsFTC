@@ -6,6 +6,9 @@ import org.firstinspires.ftc.teamcode.common.Deadwheels
 import org.firstinspires.ftc.teamcode.common.Encoder
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
+/**
+ * Debug opmode for deadwheel readouts.
+ */
 @TeleOp(name = "<JERRY> Deadwheel Debug Data")
 class JerryDeadwheelDebug : BunyipsOpMode() {
     private var config: JerryConfig? = null

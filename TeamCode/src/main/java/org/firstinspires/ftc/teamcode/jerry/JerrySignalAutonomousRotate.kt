@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.jerry
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.CameraOp.CamMode
@@ -15,11 +16,12 @@ import org.firstinspires.ftc.teamcode.jerry.tasks.JerryPrecisionDriveTask
 import java.util.ArrayDeque
 
 /**
- * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
+ * Duplicate of JerrySignalAutonomous.
+ * Modified by Lachlan to rely on rotating the robot instead, and to use the IMU to rotate.
+ * This was to combat a mechanical problem having to do with losing two motor functions.
  */
-
-// Modification done by Lachlan
 @Autonomous(name = "<JERRY> POWERPLAY Auto Signal Read & Park ROTATION")
+@Disabled
 class JerrySignalAutonomousRotate : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var cam: CameraOp? = null

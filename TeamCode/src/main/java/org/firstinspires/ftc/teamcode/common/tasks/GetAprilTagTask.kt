@@ -87,7 +87,9 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp) : Task(o
                             return
                         }
 
-                        else -> {}
+                        else -> {
+                            // Must be seeing a different tag, important we ignore it
+                        }
                     }
                 }
             } else {

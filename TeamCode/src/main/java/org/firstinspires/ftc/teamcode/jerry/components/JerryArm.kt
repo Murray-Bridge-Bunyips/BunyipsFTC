@@ -10,6 +10,10 @@ import com.qualcomm.robotcore.hardware.TouchSensor
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 
+/**
+ * Arm controller for Jerry bot. Includes a claw and a lift.
+ * @author Lucas Bubner, 2022-2023
+ */
 class JerryArm(
     opMode: BunyipsOpMode,
     var claw1: Servo?,
@@ -33,7 +37,7 @@ class JerryArm(
         } catch (e: AssertionError) {
             opMode.telemetry.addLine("Failed to initialise Arm System, check config for all components.")
         }
-        
+
         // Set directions of motors so they move the correct way
         claw1?.direction = Servo.Direction.FORWARD
         claw2?.direction = Servo.Direction.REVERSE

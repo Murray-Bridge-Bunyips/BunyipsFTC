@@ -5,11 +5,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import java.util.*
+import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Jerry robot drivetrain operation module.
+ */
 class JerryDrive(
     opMode: BunyipsOpMode,
     private val bl: DcMotorEx?, private val br: DcMotorEx?,

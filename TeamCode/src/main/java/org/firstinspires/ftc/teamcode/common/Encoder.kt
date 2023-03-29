@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.common
 
+/**
+ * Additional abstraction for DcMotors for use with X-Y encoders.
+ */
 interface Encoder {
     /**
      * Enum for the axis of the encoder
