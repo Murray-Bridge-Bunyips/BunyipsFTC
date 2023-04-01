@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 
 /**
  * Arm controller for Jerry bot. Includes a claw and a lift.
- * @author Lucas Bubner, 2022-2023
+ * @author Lucas Bubner, Lachlan Paul, 2022-2023
  */
 class JerryArm(
     opMode: BunyipsOpMode,
@@ -22,6 +22,7 @@ class JerryArm(
     var arm2: DcMotorEx?,
     var limit: TouchSensor?
 ) : BunyipsComponent(opMode) {
+    private var offset: Int = 0
     private var liftIndex = 0
     private var liftPower: Double
     private val motors = arrayOfNulls<DcMotorEx>(2)
@@ -172,14 +173,7 @@ class JerryArm(
      * for manual debugging of the arm motors.
      */
     fun liftControl(o: Double) {
-        var offset = o
-        offset *= 100.0
-        val positions = (arm1?.currentPosition?.plus(arm2?.currentPosition!!))?.div(2)
-        for (motor in motors) {
-            if (positions != null) {
-                motor?.targetPosition = (positions - offset).toInt()
-            }
-        }
+        offset += o.toInt() * 100
     }
 
     /**

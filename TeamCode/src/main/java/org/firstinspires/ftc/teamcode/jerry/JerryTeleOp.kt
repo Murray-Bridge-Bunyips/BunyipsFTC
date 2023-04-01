@@ -10,9 +10,9 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
  * Primary TeleOp for all of Jerry's functions. Uses gamepad1 for driving and gamepad2 for arm.
  * Standard controls involve gamepad1 left stick for driving, gamepad1 right stick for turning,
  * gamepad2 dpad up/down for lift, gamepad2 left bumper for recalibration, gamepad2 a/b for claw, use gamepad2 right bumper to cancel calibration.
- * @author Lucas Bubner, 2022
+ * gamepad2 right bumper + gamepad2 left stick y to control arm offset
+ * @author Lucas Bubner, Lachlan Paul, 2022-2023
  */
-// TODO: Add manual arm control override as sometimes the gearing causes problems with positioning.
 @TeleOp(name = "<JERRY> POWERPLAY TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
     private var drive: JerryDrive? = null
@@ -46,7 +46,12 @@ class JerryTeleOp : BunyipsOpMode() {
         val x = gamepad1.left_stick_x.toDouble()
         val y = gamepad1.left_stick_y.toDouble()
         val r = gamepad1.right_stick_x.toDouble()
+        val v = gamepad2.left_stick_y.toDouble()
 
+        if (gamepad2.right_bumper) {
+            // Unlock the manual arm override when gp2 right bumper is pressed
+            arm?.liftControl(v)
+        }
 //        telemetry.addLine(String.format(Locale.getDefault(),
 //            "Controller: X: %.2f, Y: %.2f, R: %.2f", x, y, r))
 
@@ -65,7 +70,7 @@ class JerryTeleOp : BunyipsOpMode() {
             // "Green (un)for seen(consequences)"
             arm?.clawOpen()
         } else if (gamepad2.b) {
-            // "Red for dead 2"
+            // "Red 4 dead 2"
             arm?.clawClose()
         }
 
