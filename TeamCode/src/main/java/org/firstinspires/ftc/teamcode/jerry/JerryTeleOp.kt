@@ -11,7 +11,8 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
  * Standard controls involve gamepad1 left stick for driving, gamepad1 right stick for turning,
  * gamepad2 dpad up/down for lift, gamepad2 left bumper for recalibration, gamepad2 a/b for claw, use gamepad2 right bumper to cancel calibration.
  * gamepad2 right bumper + gamepad2 left stick y to control arm offset
- * @author Lucas Bubner, Lachlan Paul, 2022-2023
+ * @author Lucas Bubner - 2022
+ * @author Lachlan Paul - 2023
  */
 @TeleOp(name = "<JERRY> POWERPLAY TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
@@ -50,13 +51,15 @@ class JerryTeleOp : BunyipsOpMode() {
 
         if (gamepad2.right_bumper) {
             // Unlock the manual arm override when gp2 right bumper is pressed
-            arm?.liftControl(v)
+            arm?.liftAdjustOffset(v)
         }
+
 //        telemetry.addLine(String.format(Locale.getDefault(),
 //            "Controller: X: %.2f, Y: %.2f, R: %.2f", x, y, r))
 
         // Set speeds of motors and interpret any data
         drive?.setSpeedXYR(x, y, r)
+
         if (up_pressed && !gamepad2.dpad_up) {
             arm?.liftUp()
         } else if (down_pressed && !gamepad2.dpad_down) {
@@ -65,7 +68,6 @@ class JerryTeleOp : BunyipsOpMode() {
             arm?.liftReset()
         }
 
-        // Update live movements of all motors
         if (gamepad2.a) {
             // "Green (un)for seen(consequences)"
             arm?.clawOpen()
@@ -79,6 +81,7 @@ class JerryTeleOp : BunyipsOpMode() {
         down_pressed = gamepad2.dpad_down
         drop_pressed = gamepad2.left_bumper
 
+        // Update live movements of all motors
         drive?.update()
         arm?.update()
     }

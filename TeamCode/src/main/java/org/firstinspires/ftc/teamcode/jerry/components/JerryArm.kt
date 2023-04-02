@@ -171,11 +171,10 @@ class JerryArm(
     }
 
     /**
-     * Manually control arm speed by setting the position manually through variable input
-     * Try not to call this method, and instead use the Up/Down methods. Should only be used
-     * for manual debugging of the arm motors.
+     * Manually control arm speed by setting an 'offset' that will be reflected in the target position
+     * @param o Offset to add to the target position, multiplied by 100 to allow for faster control
      */
-    fun liftControl(o: Double) {
+    fun liftAdjustOffset(o: Double) {
         offset += o.toInt() * 100
     }
 
@@ -184,17 +183,19 @@ class JerryArm(
      * @param power desired power
      */
     fun liftSetPower(power: Double) {
-        liftPower = power
+        // Cap powers at -1 to 1
+        liftPower = power.coerceIn(-1.0, 1.0)
     }
 
     /**
-     * Manually set arm position index
+     * Manually set arm position index. Returns a boolean indicating if the position was set or not.
      * @param pos Arm position index in LIFT_POSITIONS
      */
-    fun liftSetPosition(pos: Int) {
+    fun liftSetPosition(pos: Int): Boolean {
         // Avoid positions that are outside of the length of the array itself
-        if (pos < 0 || pos >= LIFT_POSITIONS.size) return
+        if (pos < 0 || pos >= LIFT_POSITIONS.size) return false
         liftIndex = pos
+        return true
     }
 
     /**
@@ -205,18 +206,22 @@ class JerryArm(
         // If the arm is in the process of calibration, don't interrupt it
         if (isCalibrating) return
 
-        // To make sure we don't accidentally get stuck in a loop of infinite calibration
-        // Also zeroes out the encoders if we hit the switch.
+        // Ensure we don't get stuck in a loop of calibration
         if (limit!!.isPressed && !alreadyCalibrated) liftCalibrate()
         if (!limit!!.isPressed) alreadyCalibrated = false
+
+        // TODO: Over-bounds detection algorithm for offset
+
         opMode!!.telemetry.addLine(
             String.format(
-                "Arms (pos1, pos2, index): %d, %d, %s",
+                "Arms (pos1, pos2, index, offset): %d, %d, %s, %s",
                 arm1?.currentPosition,
                 arm2?.currentPosition,
-                liftIndex
+                liftIndex,
+                offset
             )
         )
+
         for (motor in motors) {
             motor?.power = liftPower
             motor?.mode = RunMode.RUN_TO_POSITION

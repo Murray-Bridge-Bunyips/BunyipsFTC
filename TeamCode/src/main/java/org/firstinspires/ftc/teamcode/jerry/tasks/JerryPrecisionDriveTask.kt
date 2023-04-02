@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
+import kotlin.math.abs
 
 /**
  * Full-featured task for driving to a specific distance, with fail safes in case configuration is not available.
@@ -22,7 +23,7 @@ class JerryPrecisionDriveTask(
     private val distance_mm: Double,
     private val direction: Directions,
     private var power: Double,
-    private val tolerance: Double = 3.0 // Optional tolerance can be specified if 2 degrees is inadequate
+    private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
 ) : Task(opMode, time), TaskImpl {
     // Track the operating mode of the task to account for any robot faults
     private var operatingMode: OperatingMode = OperatingMode.NORM
@@ -35,7 +36,7 @@ class JerryPrecisionDriveTask(
         }
         // Use absolute values of power to ensure that the robot moves correctly and is not fed with negative values
         // This is because the task will handle the power management and determine whether the value 
-        this.power = Math.abs(power)
+        this.power = abs(power)
     }
 
     enum class OperatingMode {

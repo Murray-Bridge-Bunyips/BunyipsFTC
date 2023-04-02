@@ -34,8 +34,7 @@ class JerryDrive(
     }
 
     init {
-        // Encoders are not controlled by JerryDrive, but by their own configuration as stated in the Deadwheel class.
-        // Ensure that the motors exist before continuing.
+        // Encoders are not controlled by JerryDrive, although two motors are wired to these motors
         try {
             assert(bl != null && br != null && fl != null && fr != null)
         } catch (e: AssertionError) {

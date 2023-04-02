@@ -18,7 +18,10 @@ class JerryArmTask(
     override fun init() {
         super.init()
         arm.liftSetPower(speed)
-        arm.liftSetPosition(targetposition)
+        val res = arm.liftSetPosition(targetposition)
+        if (!res) {
+            throw IllegalArgumentException("Invalid target position: $targetposition")
+        }
     }
 
     override fun run() {
