@@ -134,6 +134,7 @@ class JerryArm(
 
     /**
      * Lift arm motor up by one index of the LIFT_POSITIONS index
+     * Adding offset ensures that the offset is taken into account when adjusting position
      */
     fun liftUp() {
         liftIndex++
@@ -141,12 +142,13 @@ class JerryArm(
             liftIndex = LIFT_POSITIONS.size - 1
         }
         for (motor in motors) {
-            motor?.targetPosition = LIFT_POSITIONS[liftIndex]
+            motor?.targetPosition = LIFT_POSITIONS[liftIndex] + offset
         }
     }
 
     /**
      * Lift arm motor down by one index of the LIFT_POSITIONS index
+     * Adding offset ensures that the offset is taken into account when adjusting position
      */
     fun liftDown() {
         liftIndex--
@@ -154,7 +156,7 @@ class JerryArm(
             liftIndex = 0
         }
         for (motor in motors) {
-            motor?.targetPosition = LIFT_POSITIONS[liftIndex]
+            motor?.targetPosition = LIFT_POSITIONS[liftIndex] + offset
         }
     }
 
@@ -164,6 +166,7 @@ class JerryArm(
      */
     fun liftReset() {
         liftIndex = 0
+        offset = 0
         liftCalibrate()
     }
 
