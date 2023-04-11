@@ -23,6 +23,7 @@ class JerryIMURotationTask(
 ) : Task(opMode, time), TaskImpl {
     // Enum to find out which way we need to be turning
     var direction: Direction? = null
+    var capture: Double = 0.0
 
     enum class Direction {
         LEFT, RIGHT
@@ -52,12 +53,25 @@ class JerryIMURotationTask(
 
     // Stop turning when we reach the target angle
     override fun isFinished(): Boolean {
+        capture = imu?.heading!!
+        val delta = imu.heading!! - capture
         return super.isFinished() || if (direction == Direction.LEFT) {
             // Angle will be decreasing
-            imu?.heading!! <= angle // && imu.heading!! < angle + 10
+            if (delta > 350) {
+                // If the delta is negative, then we have wrapped around the 0 degree mark
+                // and we need to add 360 to the current angle to get the correct value
+                imu.heading!! + 360 <= angle
+            } else {
+                // Otherwise, we can just compare the current angle to the target angle
+                imu.heading!! <= angle
+            }
         } else {
             // Angle will be increasing
-            imu?.heading!! >= angle // && imu.heading!! > angle - 10
+            if (delta > 350) {
+                imu.heading!! + 360 >= angle
+            } else {
+                imu.heading!! >= angle
+            }
         }
     }
 

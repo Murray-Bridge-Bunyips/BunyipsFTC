@@ -47,7 +47,7 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
                     delta -= 360.0
                 }
             }
-            field = delta?.let { field?.plus(it) }
+            field = delta?.let { field?.plus(it) } ?: 0.0
 
             if (currentHeading != null) {
                 previousHeading = currentHeading
