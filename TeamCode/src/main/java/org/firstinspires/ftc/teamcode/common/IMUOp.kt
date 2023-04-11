@@ -29,36 +29,34 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
         }
 
     /**
-     * Get the current heading reading from the internal IMU, with support for 360 degree readings
-     * Instead of using Euler readings, this will return a number within 0 to 360
-     * @return Z value of Orientation axes in human-friendly reading range [0, 360]
+     * Get the current heading reading from the internal IMU, with support for absolute degree readings
+     * Instead of using Euler readings, this will return a number within -inf to +inf
+     * @return Z value of Orientation axes in human-friendly reading range [-inf, inf]
      */
-    var heading: Double? = 0.0
+    var heading: Double = 0.0
         get() {
-            val currentHeading = currentAngles?.thirdAngle?.toDouble()?.plus(offset)
-            var delta = currentHeading?.minus(previousHeading)
+            val currentHeading = currentAngles?.thirdAngle?.toDouble()?.plus(offset) ?: return field
+            var delta = currentHeading - previousHeading
 
             // Detects if there is a sudden 180 turn which means we have turned more than the 180
             // degree threshold. Adds 360 to additively inverse the value and give us a proper delta
-            if (delta != null) {
-                if (delta < -180) {
-                    delta += 360.0
-                } else if (delta >= 180) {
-                    delta -= 360.0
-                }
-            }
-            field = delta?.let { field?.plus(it) } ?: 0.0
-
-            if (currentHeading != null) {
-                previousHeading = currentHeading
+            if (delta < -180) {
+                delta += 360.0
+            } else if (delta >= 180) {
+                delta -= 360.0
             }
 
-            // Limit heading readings to only be in a (0, 360) index
-            if (field!! >= 360.0) {
-                field = field!! - 360.0
-            } else if (field!! < 0.0) {
-                field = field!! + 360.0
-            }
+            field += delta
+            previousHeading = currentHeading
+
+            // Switched to using [-inf, inf] bounding instead of [0, 360] due to tasks detecting
+            // positions based on greater than measurements, which would not work with 0-360
+//            if (field >= 360.0) {
+//                field -= 360.0
+//            } else if (field < 0.0) {
+//                field += 360.0
+//            }
+
             return field
         }
         private set

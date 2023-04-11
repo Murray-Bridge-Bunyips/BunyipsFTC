@@ -18,12 +18,11 @@ class JerryIMURotationTask(
     time: Double,
     private val imu: IMUOp?,
     private val drive: JerryDrive?,
-    private val angle: Double,
+    private var angle: Double,
     private val speed: Double
 ) : Task(opMode, time), TaskImpl {
     // Enum to find out which way we need to be turning
     var direction: Direction? = null
-    var capture: Double = 0.0
 
     enum class Direction {
         LEFT, RIGHT
@@ -34,11 +33,15 @@ class JerryIMURotationTask(
         imu?.tick()
 
         val currentAngle = imu?.heading
-        // If we can't get angle info, then terminate task as we can't do anything
+        // If we can't get angle info, then use right as default, relying on time to stop the task
         if (currentAngle == null) {
-            taskFinished = true
+            direction = Direction.RIGHT
             return
         }
+
+        // Add current angle of the IMU to the target angle to get the absolute angle
+        // This will ensure the task will always rotate the proper distance when given relative units
+        angle += currentAngle
 
         // Find out which way we need to turn based on the information provided
         direction = if (currentAngle < angle && angle <= 180) {
@@ -53,25 +56,12 @@ class JerryIMURotationTask(
 
     // Stop turning when we reach the target angle
     override fun isFinished(): Boolean {
-        capture = imu?.heading!!
-        val delta = imu.heading!! - capture
         return super.isFinished() || if (direction == Direction.LEFT) {
             // Angle will be decreasing
-            if (delta > 350) {
-                // If the delta is negative, then we have wrapped around the 0 degree mark
-                // and we need to add 360 to the current angle to get the correct value
-                imu.heading!! + 360 <= angle
-            } else {
-                // Otherwise, we can just compare the current angle to the target angle
-                imu.heading!! <= angle
-            }
+            imu?.heading!! <= angle
         } else {
             // Angle will be increasing
-            if (delta > 350) {
-                imu.heading!! + 360 >= angle
-            } else {
-                imu.heading!! >= angle
-            }
+            imu?.heading!! >= angle
         }
     }
 
