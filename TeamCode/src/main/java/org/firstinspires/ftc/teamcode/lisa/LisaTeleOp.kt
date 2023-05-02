@@ -24,10 +24,9 @@ class LisaTeleOp : BunyipsOpMode() {
     @Throws(InterruptedException::class)
     override fun activeLoop() {
         val left =
-            (gamepad1.left_trigger - gamepad1.right_trigger + gamepad1.left_stick_x).toDouble()
-        val right =
             (gamepad1.left_trigger - gamepad1.right_trigger - gamepad1.left_stick_x).toDouble()
-        // TODO: Check if this is the correct way to set motor power based on direction.
+        val right =
+            (gamepad1.left_trigger - gamepad1.right_trigger + gamepad1.left_stick_x).toDouble()
         drive?.setPower(left, right)
         drive?.update()
     }

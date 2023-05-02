@@ -17,6 +17,7 @@ class LisaConfig : RobotConfig() {
     var imu: BNO055IMU? = null
     override fun init(hardwareMap: HardwareMap?, telemetry: Telemetry) {
         setTelemetry(telemetry)
+        this.hardwareMap = hardwareMap
         left = getHardware("Left Motor", DcMotorEx::class.java) as DcMotorEx
         right = getHardware("Right Motor", DcMotorEx::class.java) as DcMotorEx
         right?.direction = Direction.REVERSE
