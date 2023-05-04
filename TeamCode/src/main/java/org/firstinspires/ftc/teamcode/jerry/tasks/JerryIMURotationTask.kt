@@ -18,6 +18,7 @@ class JerryIMURotationTask(
     time: Double,
     private val imu: IMUOp?,
     private val drive: JerryDrive?,
+    // Angle information should be a degree in the range of 0-360
     private var angle: Double,
     private val speed: Double
 ) : Task(opMode, time), TaskImpl {
@@ -32,6 +33,13 @@ class JerryIMURotationTask(
         super.init()
         imu?.tick()
 
+        // Translate if a negative angle is provided
+        if (angle < 0) angle += 360
+        angle = abs(angle)
+
+        // Ensure input angle is within 0-360 range
+        if (angle > 360) angle %= 360
+
         val currentAngle = imu?.heading
         // If we can't get angle info, then use right as default, relying on time to stop the task
         if (currentAngle == null) {
@@ -39,12 +47,8 @@ class JerryIMURotationTask(
             return
         }
 
-        // Add current angle of the IMU to the target angle to get the relative angle
-        // This will ensure the task will always rotate the proper distance when given relative units
-        angle += currentAngle
-
         // Find out which way we need to turn based on the information provided
-        direction = if (currentAngle < angle) {
+        direction = if (currentAngle < angle && abs(currentAngle - angle) < abs(currentAngle + 360 - angle)) {
             // Faster to turn right to get to the target. If the desired angle is equal distance both ways,
             // will also turn right (as it is equal, just mere preference)
             Direction.RIGHT
