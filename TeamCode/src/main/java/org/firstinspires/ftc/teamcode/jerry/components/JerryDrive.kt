@@ -5,11 +5,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import java.util.*
+import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.cos
 import kotlin.math.sin
 
+/**
+ * Jerry robot drivetrain operation module.
+ */
 class JerryDrive(
     opMode: BunyipsOpMode,
     private val bl: DcMotorEx?, private val br: DcMotorEx?,
@@ -31,8 +34,12 @@ class JerryDrive(
     }
 
     init {
-        // Encoders are not controlled by JerryDrive, but by their own configuration as stated in the Deadwheel class.
-        assert(bl != null && br != null && fl != null && fr != null)
+        // Encoders are not controlled by JerryDrive, although two motors are wired to these motors
+        try {
+            assert(bl != null && br != null && fl != null && fr != null)
+        } catch (e: AssertionError) {
+            opMode.telemetry.addLine("Failed to initialise Drive System, check config for motors.")
+        }
     }
 
     fun setToFloat() {

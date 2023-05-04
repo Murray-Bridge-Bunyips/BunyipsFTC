@@ -5,6 +5,10 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive
 
+/**
+ * Task to use encoder values to drive the robot. May not work as intended.
+ */
+@Deprecated("Use LisaPrecisionDriveTask instead")
 class LisaEncoderDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
@@ -20,10 +24,8 @@ class LisaEncoderDriveTask(
     private val rightPower: Double
 
     init {
-
         // UltraPlanetary HD Hex Motor specification
-
-        // TODO: Verify these formulas as they don't work as intended
+        // Verify these formulas as they don't work as intended
         val TICKS_PER_REVOLUTION = 28.0
         val WHEEL_DIAMETER_CM = 8.5
         leftDistance = leftCM * 10 * TICKS_PER_REVOLUTION / (WHEEL_DIAMETER_CM / 10 * Math.PI)

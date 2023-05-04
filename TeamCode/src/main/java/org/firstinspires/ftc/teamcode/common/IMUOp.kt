@@ -5,9 +5,13 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation
+import org.firstinspires.ftc.robotcore.external.navigation.Position
+import org.firstinspires.ftc.robotcore.external.navigation.Velocity
 
 /**
  * IMUOperation custom common class for internal BNO055IMUs
+ * This class is used to abstract the IMU reading and provide a more human-friendly reading,
+ * while allowing operation such as the PrecisionDrive system to be used.
  * @author Lucas Bubner - FTC 15215 Captain; Oct 2022 - Murray Bridge Bunyips
  */
 class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsComponent(opMode) {
@@ -25,36 +29,34 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
         }
 
     /**
-     * Get the current heading reading from the internal IMU, with support for 360 degree readings
-     * Instead of using Euler readings, this will return a number within 0 to 360
-     * @return Z value of Orientation axes in human-friendly reading range [0, 360]
+     * Get the current heading reading from the internal IMU, with support for absolute degree readings
+     * Instead of using Euler readings, this will return a number within -inf to +inf
+     * @return Z value of Orientation axes in human-friendly reading range [-inf, inf]
      */
-    var heading: Double? = null
+    var heading: Double = 0.0
         get() {
-            val currentHeading = currentAngles?.thirdAngle?.toDouble()?.plus(offset)
-            var delta = currentHeading?.minus(previousHeading)
+            val currentHeading = currentAngles?.thirdAngle?.toDouble()?.plus(offset) ?: return field
+            var delta = currentHeading - previousHeading
 
             // Detects if there is a sudden 180 turn which means we have turned more than the 180
             // degree threshold. Adds 360 to additively inverse the value and give us a proper delta
-            if (delta != null) {
-                if (delta < -180) {
-                    delta += 360.0
-                } else if (delta >= 180) {
-                    delta -= 360.0
-                }
-                field = field?.plus(delta)
-
-                if (currentHeading != null) {
-                    previousHeading = currentHeading
-                }
+            if (delta < -180) {
+                delta += 360.0
+            } else if (delta >= 180) {
+                delta -= 360.0
             }
 
-            // Limit heading readings to only be in a (0, 360) index
-            if (field!! >= 360.0) {
-                field = field!! - 360.0
-            } else if (field!! < 0.0) {
-                field = field!! + 360.0
-            }
+            field += delta
+            previousHeading = currentHeading
+
+            // Switched to using [-inf, inf] bounding instead of [0, 360] due to tasks detecting
+            // positions based on greater than measurements, which would not work with 0-360
+//            if (field >= 360.0) {
+//                field -= 360.0
+//            } else if (field < 0.0) {
+//                field += 360.0
+//            }
+
             return field
         }
         private set
@@ -63,7 +65,7 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
      * Update the latest state in the IMU to current data
      */
     fun tick() {
-        currentAngles = imu?.getAngularOrientation(
+        this.currentAngles = imu?.getAngularOrientation(
             AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES
         )
     }
@@ -73,21 +75,22 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
      * @return Y value of Orientation axes
      */
     val roll: Double?
-        get() = currentAngles?.secondAngle?.toDouble()
+        get() = this.currentAngles?.secondAngle?.toDouble()
 
     /**
      * Get the current pitch reading from the internal IMU
      * @return X value of Orientation axes
      */
     val pitch: Double?
-        get() = currentAngles?.firstAngle?.toDouble()
+        get() = this.currentAngles?.firstAngle?.toDouble()
 
     /**
      * Start PrecisionDrive IMU alignment algorithm and capture the original angle
      */
     fun startCapture() {
-        tick()
-        capture = heading
+        imu?.startAccelerationIntegration(Position(), Velocity(), 50)
+        this.tick()
+        this.capture = this.heading
     }
 
     /**
@@ -96,7 +99,7 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     fun selfTest(): Boolean {
         this.startCapture()
         this.tick()
-        return if (currentAngles == null || capture == null) {
+        return if (this.currentAngles == null || this.capture == null) {
             // Yikes
             false
         } else {
@@ -110,7 +113,8 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
      * Stop and reset PrecisionDrive IMU alignment algorithm
      */
     fun resetCapture() {
-        capture = null
+        imu?.stopAccelerationIntegration()
+        this.capture = null
     }
 
     /**
@@ -121,21 +125,21 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
      */
     fun getRPrecisionSpeed(original_speed: Double, tolerance: Int): Double {
         // If we're not capturing, return the original speed
-        if (capture == null) return original_speed
+        if (this.capture == null) return original_speed
 
         // If something goes wrong in getting current IMU data, try to tick the IMU first, as the user may not have
         // reached that hardware cycle yet or has not called tick() in the main loop
-        var current = heading
+        var current = this.heading
         if (current == null) {
-            tick()
+            this.tick()
             // If still nothing, bail out.
-            current = heading ?: return original_speed
+            current = this.heading ?: return original_speed
         }
 
         // If we're at the minimum tolerance, increase turn rate
-        if (current < capture!! - tolerance) return Math.abs(original_speed + 0.1)
+        if (current < this.capture!! - tolerance) return original_speed + 0.15
 
         // If we're at maximum tolerance, decrease turn rate
-        return if (current > capture!! + tolerance) Math.abs(original_speed - 0.1) else original_speed
+        return if (current > this.capture!! + tolerance) original_speed - 0.15 else original_speed
     }
 }

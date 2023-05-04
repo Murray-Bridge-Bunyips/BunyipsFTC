@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.jerry
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.IMUOp
@@ -15,7 +15,12 @@ import org.firstinspires.ftc.teamcode.jerry.tasks.JerryIMURotationTask
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
 
+/**
+ * Testing opmode for Jerry, used to test various components and tasks.
+ * @author Lachlan Paul, 2023
+ */
 @Autonomous(name = "<JERRY> Patriarch of the Bunyips Family")
+@Disabled
 class JerryAutoTest : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var drive: JerryDrive? = null

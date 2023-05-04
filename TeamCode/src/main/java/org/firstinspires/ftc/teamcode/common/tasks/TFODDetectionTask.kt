@@ -3,6 +3,9 @@ package org.firstinspires.ftc.teamcode.common.tasks
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 
+/**
+ * Task to detect the TensorFlow element defined in CameraOp.
+ */
 class TFODDetectionTask(opMode: BunyipsOpMode, time: Double, private val cam: CameraOp) :
     Task(opMode, time), TaskImpl {
     override fun init() {

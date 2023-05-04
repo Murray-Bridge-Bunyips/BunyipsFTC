@@ -10,6 +10,10 @@ import com.qualcomm.robotcore.hardware.TouchSensor
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 
+/**
+ * Arm controller for Jerry bot. Includes a claw and a lift.
+ * @author Lucas Bubner, Lachlan Paul, 2022-2023
+ */
 class JerryArm(
     opMode: BunyipsOpMode,
     var claw1: Servo?,
@@ -18,6 +22,7 @@ class JerryArm(
     var arm2: DcMotorEx?,
     var limit: TouchSensor?
 ) : BunyipsComponent(opMode) {
+    private var offset: Int = 0
     private var liftIndex = 0
     private var liftPower: Double
     private val motors = arrayOfNulls<DcMotorEx>(2)
@@ -28,7 +33,11 @@ class JerryArm(
         motors[0] = arm1
         motors[1] = arm2
         liftPower = 0.0
-        assert(claw1 != null && claw2 != null && arm1 != null && arm2 != null)
+        try {
+            assert(claw1 != null && claw2 != null && arm1 != null && arm2 != null)
+        } catch (e: AssertionError) {
+            opMode.telemetry.addLine("Failed to initialise Arm System, check config for all components.")
+        }
 
         // Set directions of motors so they move the correct way
         claw1?.direction = Servo.Direction.FORWARD
@@ -125,6 +134,7 @@ class JerryArm(
 
     /**
      * Lift arm motor up by one index of the LIFT_POSITIONS index
+     * Adding offset ensures that the offset is taken into account when adjusting position
      */
     fun liftUp() {
         liftIndex++
@@ -132,12 +142,13 @@ class JerryArm(
             liftIndex = LIFT_POSITIONS.size - 1
         }
         for (motor in motors) {
-            motor?.targetPosition = LIFT_POSITIONS[liftIndex]
+            motor?.targetPosition = LIFT_POSITIONS[liftIndex] + offset
         }
     }
 
     /**
      * Lift arm motor down by one index of the LIFT_POSITIONS index
+     * Adding offset ensures that the offset is taken into account when adjusting position
      */
     fun liftDown() {
         liftIndex--
@@ -145,7 +156,7 @@ class JerryArm(
             liftIndex = 0
         }
         for (motor in motors) {
-            motor?.targetPosition = LIFT_POSITIONS[liftIndex]
+            motor?.targetPosition = LIFT_POSITIONS[liftIndex] + offset
         }
     }
 
@@ -155,23 +166,16 @@ class JerryArm(
      */
     fun liftReset() {
         liftIndex = 0
+        offset = 0
         liftCalibrate()
     }
 
     /**
-     * Manually control arm speed by setting the position manually through variable input
-     * Try not to call this method, and instead use the Up/Down methods. Should only be used
-     * for manual debugging of the arm motors.
+     * Manually control arm speed by setting an 'offset' that will be reflected in the target position
+     * @param o Offset to add to the target position, multiplied by 100 to allow for faster control
      */
-    fun liftControl(o: Double) {
-        var offset = o
-        offset *= 100.0
-        val positions = (arm1?.currentPosition?.plus(arm2?.currentPosition!!))?.div(2)
-        for (motor in motors) {
-            if (positions != null) {
-                motor?.targetPosition = (positions - offset).toInt()
-            }
-        }
+    fun liftAdjustOffset(o: Double) {
+        offset += o.toInt() * 100
     }
 
     /**
@@ -179,17 +183,19 @@ class JerryArm(
      * @param power desired power
      */
     fun liftSetPower(power: Double) {
-        liftPower = power
+        // Cap powers at -1 to 1
+        liftPower = power.coerceIn(-1.0, 1.0)
     }
 
     /**
-     * Manually set arm position index
+     * Manually set arm position index. Returns a boolean indicating if the position was set or not.
      * @param pos Arm position index in LIFT_POSITIONS
      */
-    fun liftSetPosition(pos: Int) {
+    fun liftSetPosition(pos: Int): Boolean {
         // Avoid positions that are outside of the length of the array itself
-        if (pos < 0 || pos >= LIFT_POSITIONS.size) return
+        if (pos < 0 || pos >= LIFT_POSITIONS.size) return false
         liftIndex = pos
+        return true
     }
 
     /**
@@ -200,18 +206,22 @@ class JerryArm(
         // If the arm is in the process of calibration, don't interrupt it
         if (isCalibrating) return
 
-        // To make sure we don't accidentally get stuck in a loop of infinite calibration
-        // Also zeroes out the encoders if we hit the switch.
+        // Ensure we don't get stuck in a loop of calibration
         if (limit!!.isPressed && !alreadyCalibrated) liftCalibrate()
         if (!limit!!.isPressed) alreadyCalibrated = false
+
+        // TODO: Over-bounds detection algorithm for offset
+
         opMode!!.telemetry.addLine(
             String.format(
-                "Arms (pos1, pos2, index): %d, %d, %s",
+                "Arms (pos1, pos2, index, offset): %d, %d, %s, %s",
                 arm1?.currentPosition,
                 arm2?.currentPosition,
-                liftIndex
+                liftIndex,
+                offset
             )
         )
+
         for (motor in motors) {
             motor?.power = liftPower
             motor?.mode = RunMode.RUN_TO_POSITION
@@ -228,7 +238,7 @@ class JerryArm(
     */
     companion object {
         // These arm positions have been roughly calibrated, but are not fully accurate
-        private val LIFT_POSITIONS = intArrayOf(0, 20, 80, 130, 150, 175, 200, 230)
+        private val LIFT_POSITIONS = intArrayOf(0, 20, 30, 40, 80, 130, 150, 175, 200, 230)
         // i am contributing nothing to the project -lachlan
         // i am contributing a little bit to the project -lachlan
         // i am contributing a lot to the project -lachlan

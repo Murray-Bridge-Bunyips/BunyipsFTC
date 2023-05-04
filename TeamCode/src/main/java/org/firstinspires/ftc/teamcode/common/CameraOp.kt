@@ -46,10 +46,14 @@ class CameraOp(
      * CameraOperation custom common class for USB-connected webcams (TFOD Objects + Vuforia Field Pos or OpenCV mode)
      */
     init {
-        assert(webcam != null)
-        when (mode) {
-            CamMode.STANDARD -> stdinit()
-            CamMode.OPENCV -> OpenCVinit()
+        try {
+            assert(webcam != null)
+            when (mode) {
+                CamMode.STANDARD -> stdinit()
+                CamMode.OPENCV -> OpenCVinit()
+            }
+        } catch (e: Throwable) {
+            opmode!!.telemetry.addLine("Failed to initialise Camera Operation. Error message: ${e.message}")
         }
     }
 

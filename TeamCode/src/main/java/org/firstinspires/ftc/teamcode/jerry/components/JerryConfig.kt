@@ -9,9 +9,11 @@ import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
-import org.firstinspires.ftc.teamcode.common.Deadwheel
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 
+/**
+ * Jerry robot configuration and hardware declarations.
+ */
 class JerryConfig : RobotConfig() {
     // Add declarations here
     var webcam: WebcamName? = null
@@ -20,8 +22,6 @@ class JerryConfig : RobotConfig() {
     var br: DcMotorEx? = null
     var fl: DcMotorEx? = null
     var fr: DcMotorEx? = null
-    var x: Deadwheel? = null
-    var y: Deadwheel? = null
     var claw1: Servo? = null
     var claw2: Servo? = null
     var arm1: DcMotorEx? = null
@@ -38,8 +38,13 @@ class JerryConfig : RobotConfig() {
         )
         bl = getHardware("Back Left", DcMotorEx::class.java) as? DcMotorEx
         br = getHardware("Back Right", DcMotorEx::class.java) as? DcMotorEx
+
+        // Deadwheels attached as an encoder on the front two motors
+        // X encoder = port 3, Front Left
         fl = getHardware("Front Left", DcMotorEx::class.java) as? DcMotorEx
+        // Y encoder = port 4, Front Right
         fr = getHardware("Front Right", DcMotorEx::class.java) as? DcMotorEx
+
         arm1 = getHardware("Arm Motor 1", DcMotorEx::class.java) as? DcMotorEx
         arm2 = getHardware("Arm Motor 2", DcMotorEx::class.java) as? DcMotorEx
         claw1 = getHardware("Claw Servo 1", Servo::class.java) as? Servo
@@ -52,13 +57,6 @@ class JerryConfig : RobotConfig() {
         bl?.direction = Direction.FORWARD
         br?.direction = Direction.REVERSE
 
-        // Encoder configuration (Using modified DcMotor classes with built-in distance calculations)
-        // These encoders will mirror a DcMotor, but will be attached to their own port (for example,
-        // motor 0 and 1 on Expansion Hub, but without any power connection)
-        x = getHardware("X Encoder", Deadwheel::class.java) as? Deadwheel
-        y = getHardware("Y Encoder", Deadwheel::class.java) as? Deadwheel
-
-
         // Control Hub IMU configuration
         // This uses the legacy methods for IMU initialisation, this should be refactored and updated
         // at some point in time. (23 Nov 2022)
@@ -69,28 +67,8 @@ class JerryConfig : RobotConfig() {
         parameters.loggingTag = "IMU"
         parameters.accelerationIntegrationAlgorithm = JustLoggingAccelerationIntegrator()
         imu = getHardware("imu", BNO055IMU::class.java) as BNO055IMU
-        if (imu != null) imu?.initialize(parameters)
+        imu?.initialize(parameters)
         printHardwareErrors()
-    }
-
-    // Deadwheel specific functions
-    fun areDeadwheelsAvail(): Boolean {
-        return x != null && y != null
-    }
-
-    fun resetDeadwheels() {
-        x?.resetTracking()
-        y?.resetTracking()
-    }
-
-    fun startDeadwheels() {
-        x?.enableTracking()
-        y?.enableTracking()
-    }
-
-    fun stopDeadwheels() {
-        x?.disableTracking()
-        y?.disableTracking()
     }
 
     companion object {

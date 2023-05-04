@@ -6,6 +6,14 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
+/**
+ * Primary TeleOp for all of Jerry's functions. Uses gamepad1 for driving and gamepad2 for arm.
+ * Standard controls involve gamepad1 left stick for driving, gamepad1 right stick for turning,
+ * gamepad2 dpad up/down for lift, gamepad2 left bumper for recalibration, gamepad2 a/b for claw, use gamepad2 right bumper to cancel calibration.
+ * gamepad2 right bumper + gamepad2 left stick y to control arm offset
+ * @author Lucas Bubner - 2022
+ * @author Lachlan Paul - 2023
+ */
 @TeleOp(name = "<JERRY> POWERPLAY TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
     private var drive: JerryDrive? = null
@@ -39,12 +47,19 @@ class JerryTeleOp : BunyipsOpMode() {
         val x = gamepad1.left_stick_x.toDouble()
         val y = gamepad1.left_stick_y.toDouble()
         val r = gamepad1.right_stick_x.toDouble()
+        val v = gamepad2.left_stick_y.toDouble()
+
+        if (gamepad2.right_bumper) {
+            // Unlock the manual arm override when gp2 right bumper is pressed
+            arm?.liftAdjustOffset(v)
+        }
 
 //        telemetry.addLine(String.format(Locale.getDefault(),
 //            "Controller: X: %.2f, Y: %.2f, R: %.2f", x, y, r))
 
         // Set speeds of motors and interpret any data
         drive?.setSpeedXYR(x, y, r)
+
         if (up_pressed && !gamepad2.dpad_up) {
             arm?.liftUp()
         } else if (down_pressed && !gamepad2.dpad_down) {
@@ -53,12 +68,11 @@ class JerryTeleOp : BunyipsOpMode() {
             arm?.liftReset()
         }
 
-        // Update live movements of all motors
         if (gamepad2.a) {
             // "Green (un)for seen(consequences)"
             arm?.clawOpen()
         } else if (gamepad2.b) {
-            // "Red for dead 2"
+            // "Red 4 dead 2"
             arm?.clawClose()
         }
 
@@ -67,6 +81,7 @@ class JerryTeleOp : BunyipsOpMode() {
         down_pressed = gamepad2.dpad_down
         drop_pressed = gamepad2.left_bumper
 
+        // Update live movements of all motors
         drive?.update()
         arm?.update()
     }

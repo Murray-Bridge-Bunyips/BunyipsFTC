@@ -2,6 +2,10 @@ package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.hardware.Gamepad
 
+/**
+ * Enum control class for the different button controls on the gamepad.
+ * Used for adding additional abstraction to the current gamepad control system.
+ */
 enum class ButtonControl {
     DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT, A, B, X, Y, START, BACK, LEFT_BUMPER, RIGHT_BUMPER, LEFT_STICK_BUTTON, RIGHT_STICK_BUTTON, NONE;
 

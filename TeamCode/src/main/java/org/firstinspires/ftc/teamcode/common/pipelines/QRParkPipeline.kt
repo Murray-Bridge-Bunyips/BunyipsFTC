@@ -17,12 +17,10 @@ class QRParkPipeline : OpenCvPipeline() {
         private set
 
     // Using OpenCVs object detection for QR codes
-    var qr = QRCodeDetector()
+    val qr = QRCodeDetector()
     override fun processFrame(input: Mat): Mat {
-
         // Must use a curved decoder, as the cone is a curved surface
-        val result = qr.detectAndDecodeCurved(input)
-        when (result) {
+        when (qr.detectAndDecodeCurved(input)) {
             "MURRAY" -> position = GetQRSleeveTask.ParkingPosition.LEFT
             "BRIDGE" -> position = GetQRSleeveTask.ParkingPosition.CENTER
             "BUNYIPS" -> position = GetQRSleeveTask.ParkingPosition.RIGHT

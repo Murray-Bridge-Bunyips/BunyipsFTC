@@ -5,6 +5,9 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 
+/**
+ * Autonomous operation arm control task for Jerry robot.
+ */
 class JerryArmTask(
     opMode: BunyipsOpMode,
     time: Double,
@@ -15,7 +18,10 @@ class JerryArmTask(
     override fun init() {
         super.init()
         arm.liftSetPower(speed)
-        arm.liftSetPosition(targetposition)
+        val res = arm.liftSetPosition(targetposition)
+        if (!res) {
+            throw IllegalArgumentException("Invalid target position: $targetposition")
+        }
     }
 
     override fun run() {

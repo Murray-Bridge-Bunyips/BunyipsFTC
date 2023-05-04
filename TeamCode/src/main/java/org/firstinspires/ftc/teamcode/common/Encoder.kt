@@ -1,40 +1,62 @@
 package org.firstinspires.ftc.teamcode.common
 
-import com.qualcomm.robotcore.hardware.DcMotor
+/**
+ * Additional abstraction for DcMotors for use with X-Y encoders.
+ */
+interface Encoder {
+    /**
+     * Enum for the axis of the encoder
+     */
+    enum class Axis {
+        X, Y, BOTH
+    }
 
-interface Encoder : DcMotor {
     /**
      * Enable encoder and begin tracking location (Ensure to reset to zero unless intended)
      */
-    fun enableTracking()
+    fun enableTracking(encoder: Axis)
 
     /**
      * Disable encoder and keep last saved position
      */
-    fun disableTracking()
+    fun disableTracking(encoder: Axis)
 
     /**
      * Reset encoder position to zero
      */
-    fun resetTracking()
+    fun resetTracking(encoder: Axis)
+
+    /**
+     * Run a self test of the encoder by checking if currentPosition is accessible
+     */
+    fun selfTest(encoder: Axis): Boolean
 
     /**
      * Get the distance travelled by the encoder since the last reset and if tracking was enabled
      *
      * @return millimetres indicating how far the encoder has travelled
      */
-    val travelledMM: Double
+    fun travelledMM(encoder: Axis): Double
 
     /**
      * Get the reading from the encoder
      *
      * @return encoder value
      */
-    val encoderReading: Double
+    fun encoderReading(encoder: Axis): Double
+
+    /**
+     * Get the reading from both encoders in both encoder and MM format.
+     *
+     * @return Four values, X encoder value, Y encoder value, X MM value, Y MM value
+     */
+    fun allEncoderReadings(): DoubleArray
 
     /**
      * Return whether the encoders have reached a goal
-     * @return
+     *
+     * @param goal Goal in mm
+     * @return boolean expression whether the encoders read a goal has been completed
      */
-    fun targetReached(goal: Double): Boolean
+    fun targetReached(encoder: Axis, goal: Double): Boolean
 }

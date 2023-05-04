@@ -2,26 +2,24 @@ package org.firstinspires.ftc.teamcode.lisa.components
 
 import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator
-import com.qualcomm.robotcore.hardware.ColorSensor
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction
-import com.qualcomm.robotcore.hardware.DistanceSensor
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 
+/**
+ * Robot configuration for high-speed minibot Lisa.
+ */
 class LisaConfig : RobotConfig() {
     var left: DcMotorEx? = null
     var right: DcMotorEx? = null
-    var fws: DistanceSensor? = null
-    var dws: ColorSensor? = null
     var imu: BNO055IMU? = null
     override fun init(hardwareMap: HardwareMap?, telemetry: Telemetry) {
         setTelemetry(telemetry)
+        this.hardwareMap = hardwareMap
         left = getHardware("Left Motor", DcMotorEx::class.java) as DcMotorEx
         right = getHardware("Right Motor", DcMotorEx::class.java) as DcMotorEx
-        dws = getHardware("Downward Vision System", ColorSensor::class.java) as ColorSensor
-        fws = getHardware("Forward Vision System", DistanceSensor::class.java) as DistanceSensor
         right?.direction = Direction.REVERSE
 
         // Control Hub IMU configuration

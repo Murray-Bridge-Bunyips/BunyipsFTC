@@ -6,6 +6,11 @@ import org.firstinspires.ftc.teamcode.common.CameraOp.CamMode
 import org.firstinspires.ftc.teamcode.common.pipelines.QRParkPipeline
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 
+@Deprecated("Old system, use AprilTags instead")
+/**
+ * Detection task for QRParkPipeline.
+ * @author Lucas Bubner, 2022
+ */
 class GetQRSleeveTask(
     opMode: BunyipsOpMode,
     time: Double,

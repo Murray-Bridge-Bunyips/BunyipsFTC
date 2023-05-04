@@ -12,8 +12,12 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive
 
-// TODO: Check if negative values are needed for CW rotation, and change tolerance code
-class LisaIMUTask(
+/**
+ * Task to rotate Lisa robot using the IMU readings.
+ * @author Lucas Bubner, 2023
+ */
+// TODO: Rewrite to use common class directives
+class LisaIMURotationTask(
     opMode: BunyipsOpMode,
     time: Double,
     private val drive: LisaDrive,

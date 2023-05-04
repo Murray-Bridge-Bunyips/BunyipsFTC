@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.Deadwheel
+import org.firstinspires.ftc.teamcode.common.Deadwheels
+import org.firstinspires.ftc.teamcode.common.Encoder
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
+import kotlin.math.abs
 
 /**
  * Full-featured task for driving to a specific distance, with fail safes in case configuration is not available.
@@ -15,17 +17,27 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 class JerryPrecisionDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
-    private val drive: JerryDrive,
+    private val drive: JerryDrive?,
     private val imu: IMUOp?,
-    private val x: Deadwheel?,
-    private val y: Deadwheel?,
+    private val pos: Deadwheels?,
     private val distance_mm: Double,
     private val direction: Directions,
-    private val power: Double,
-    private val tolerance: Double = 2.0 // Optional tolerance can be specified if 2 degrees is inadequate
+    private var power: Double,
+    private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
 ) : Task(opMode, time), TaskImpl {
     // Track the operating mode of the task to account for any robot faults
     private var operatingMode: OperatingMode = OperatingMode.NORM
+
+    init {
+        try {
+            assert(drive != null)
+        } catch (e: AssertionError) {
+            opMode.telemetry.addLine("Failed to initialise a drive task as the drive system is unavailable.")
+        }
+        // Use absolute values of power to ensure that the robot moves correctly and is not fed with negative values
+        // This is because the task will handle the power management and determine whether the value 
+        this.power = abs(power)
+    }
 
     enum class OperatingMode {
         NORM, IMU_FAULT, DEADWHEEL_FAULT, CATASTROPHE
@@ -40,9 +52,9 @@ class JerryPrecisionDriveTask(
         // by the respective deadwheel. If the deadwheel is not available, then we cannot check if the target has been
         // reached, so we will just rely on the timeout.
         return super.isFinished() || if (direction == Directions.LEFT || direction == Directions.RIGHT) {
-            x?.targetReached(distance_mm) ?: false
+            pos?.targetReached(Encoder.Axis.X, distance_mm) ?: false
         } else {
-            y?.targetReached(distance_mm) ?: false
+            pos?.targetReached(Encoder.Axis.Y, distance_mm) ?: false
         }
     }
 
@@ -55,7 +67,7 @@ class JerryPrecisionDriveTask(
         }
 
         // Check if the deadwheels are online
-        if (x == null || y == null) {
+        if (pos?.selfTest(Encoder.Axis.BOTH) == false) {
             operatingMode =
                 if (operatingMode == OperatingMode.NORM) OperatingMode.DEADWHEEL_FAULT else OperatingMode.CATASTROPHE
         }
@@ -73,25 +85,24 @@ class JerryPrecisionDriveTask(
         imu?.startCapture()
         if (direction == Directions.LEFT || direction == Directions.RIGHT) {
             // If moving along the X axis enable the X deadwheel
-            x?.enableTracking()
+            pos?.enableTracking(Encoder.Axis.X)
         } else {
             // Otherwise we are moving along the Y axis, and we need to enable the Y deadwheel
-            y?.enableTracking()
+            pos?.enableTracking(Encoder.Axis.Y)
         }
     }
 
     override fun run() {
         if (isFinished()) {
-            drive.deinit()
-            x?.disableTracking()
-            y?.disableTracking()
+            drive!!.deinit()
+            pos?.resetTracking(Encoder.Axis.BOTH)
             return
         }
 
         when (operatingMode) {
             OperatingMode.NORM, OperatingMode.DEADWHEEL_FAULT -> {
                 // Normal operation, use everything we can to drive to the target
-                drive.setSpeedXYR(
+                drive!!.setSpeedXYR(
                     if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
                     if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
                     imu?.getRPrecisionSpeed(0.0, 2) ?: 0.0
@@ -100,7 +111,7 @@ class JerryPrecisionDriveTask(
 
             OperatingMode.CATASTROPHE, OperatingMode.IMU_FAULT -> {
                 // Everything is broken, please send help
-                drive.setSpeedXYR(
+                drive!!.setSpeedXYR(
                     if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
                     if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
                     0.0
@@ -114,7 +125,13 @@ class JerryPrecisionDriveTask(
 
         // Add telemetry of current operation
         opMode.telemetry.addLine("PrecisionDrive is active under operating mode: $operatingMode")
-        opMode.telemetry.addLine("Distance progress: ${if (direction == Directions.LEFT || direction == Directions.RIGHT) x?.travelledMM ?: "N/A" else y?.travelledMM ?: "N/A"}/$distance_mm")
+        opMode.telemetry.addLine(
+            "Distance progress: ${
+                if (direction == Directions.LEFT || direction == Directions.RIGHT) pos?.travelledMM(
+                    Encoder.Axis.X
+                ) ?: "N/A" else pos?.travelledMM(Encoder.Axis.Y) ?: "N/A"
+            }/$distance_mm"
+        )
         opMode.telemetry.addLine(
             "Axis correction: ${imu?.capture?.minus(tolerance) ?: "N/A"} <= ${imu?.heading ?: "N/A"} <= ${
                 imu?.capture?.plus(

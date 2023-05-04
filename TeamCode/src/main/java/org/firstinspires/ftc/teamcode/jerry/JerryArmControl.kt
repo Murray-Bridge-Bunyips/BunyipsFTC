@@ -5,6 +5,9 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
+/**
+ * Manual arm control used for calibration purposes, using gamepad2 left stick.
+ */
 @TeleOp(name = "<JERRY> Manual Arm Control")
 class JerryArmControl : BunyipsOpMode() {
     private var config: JerryConfig? = null
@@ -24,7 +27,7 @@ class JerryArmControl : BunyipsOpMode() {
     }
 
     override fun activeLoop() {
-        arm?.liftControl(gamepad2.left_stick_y.toDouble())
+        arm?.liftAdjustOffset(gamepad2.left_stick_y.toDouble())
         // Calculates the average position of the lift motors
         telemetry.addLine("Lift Position: ${(config?.arm1?.currentPosition!! + config?.arm2?.currentPosition!!) / 2}")
         arm?.update()

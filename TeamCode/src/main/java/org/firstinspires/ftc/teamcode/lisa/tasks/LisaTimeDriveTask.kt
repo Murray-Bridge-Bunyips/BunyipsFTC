@@ -5,6 +5,10 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive
 
+/**
+ * Base drive task to use left-right power on time to control motors.
+ */
+@Deprecated("Use LisaPrecisionDriveTask instead")
 class LisaTimeDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
