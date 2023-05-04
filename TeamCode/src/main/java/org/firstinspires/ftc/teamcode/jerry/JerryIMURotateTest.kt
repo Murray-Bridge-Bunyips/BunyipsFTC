@@ -26,7 +26,7 @@ class JerryIMURotateTest : BunyipsOpMode() {
         imu = IMUOp(this, config?.imu)
         drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
 
-        tasks.add(JerryIMURotationTask(this, 5.0, imu, drive, 90.0, 0.5))
+        tasks.add(JerryIMURotationTask(this, 5.0, imu, drive, 270.0, 0.5))
     }
 
     override fun activeLoop() {

@@ -5,9 +5,9 @@ import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
+import kotlin.math.abs
 
 // Rotate the robot to a specific degree angle. This cannot be done with deadwheel assistance due to configuration.
-// TODO: Faulty and does not work. Needs immediate debugging at earliest convenience
 /**
  * Autonomous operation IMU rotation task for Jerry robot.
  * Turns to a specific angle using the IMU.
@@ -39,12 +39,12 @@ class JerryIMURotationTask(
             return
         }
 
-        // Add current angle of the IMU to the target angle to get the absolute angle
+        // Add current angle of the IMU to the target angle to get the relative angle
         // This will ensure the task will always rotate the proper distance when given relative units
         angle += currentAngle
 
         // Find out which way we need to turn based on the information provided
-        direction = if (currentAngle < angle && angle <= 180) {
+        direction = if (currentAngle < angle) {
             // Faster to turn right to get to the target. If the desired angle is equal distance both ways,
             // will also turn right (as it is equal, just mere preference)
             Direction.RIGHT
@@ -71,9 +71,9 @@ class JerryIMURotationTask(
             return
         }
         if (direction == Direction.LEFT)
-            drive?.setSpeedXYR(0.0, 0.0, -speed)
-        else
             drive?.setSpeedXYR(0.0, 0.0, speed)
+        else
+            drive?.setSpeedXYR(0.0, 0.0, -speed)
 
         imu?.tick()
         drive?.update()
