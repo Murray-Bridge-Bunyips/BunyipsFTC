@@ -53,13 +53,17 @@ class JerryArm(
         liftCalibrate()
     }
 
+    private fun liftCalibrate() {
+        liftCalibrate(0.1)
+    }
+
     /**
      * Use the configured hard-limit switch to calibrate and zero out the encoders. Will also use
      * no-movement detection in the event the hard-limit switch isn't working correctly.
      * This will lockout the update method while it runs.
      */
     @SuppressLint("DefaultLocale")
-    fun liftCalibrate() {
+    fun liftCalibrate(power: Double) {
         // Lock down the instance to have full control over the arm
         isCalibrating = true
         alreadyCalibrated = true
@@ -69,7 +73,7 @@ class JerryArm(
 
             // Set the motor power to something low as we will be descending and don't want to damage
             // any gears or parts with excessive force. Gravity should do the heavy work.
-            motor.power = -0.1
+            motor.power = -power
         }
 
         // Now we wait for the limit switch to be hit, or if the movement of the arm stops for long enough,
@@ -210,7 +214,16 @@ class JerryArm(
         if (limit!!.isPressed && !alreadyCalibrated) liftCalibrate()
         if (!limit!!.isPressed) alreadyCalibrated = false
 
-        // TODO: Over-bounds detection algorithm for offset
+        // Over-bounds detection algorithm for offset
+        val target = LIFT_POSITIONS[liftIndex] + offset
+        val current = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2)
+        if (current + MOTOR_OFFSET_LIMIT < target || current - MOTOR_OFFSET_LIMIT > target) {
+            offset = 0
+        }
+        if (current + MOTOR_EMER_LIMIT < target || current - MOTOR_EMER_LIMIT > target) {
+            // Take manual control to correct an over-swung arm
+            liftCalibrate(0.5)
+        }
 
         opMode!!.telemetry.addLine(
             String.format(
@@ -237,12 +250,9 @@ class JerryArm(
         4: Pole position 3
     */
     companion object {
-        // These arm positions have been roughly calibrated, but are not fully accurate
+        // TODO: These arm positions need to be calibrated to pole positions
         private val LIFT_POSITIONS = intArrayOf(0, 20, 30, 40, 80, 130, 150, 175, 200, 230)
-        // i am contributing nothing to the project -lachlan
-        // i am contributing a little bit to the project -lachlan
-        // i am contributing a lot to the project -lachlan
-        // i am contributing everything to the project -lachlan
-        // i am contributing nothing to the project -lachlan
+        private const val MOTOR_OFFSET_LIMIT = 250
+        private const val MOTOR_EMER_LIMIT = MOTOR_OFFSET_LIMIT * 2
     }
 }
