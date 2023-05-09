@@ -11,6 +11,7 @@ import kotlin.math.abs
 /**
  * Autonomous operation IMU rotation task for Jerry robot.
  * Turns to a specific angle using the IMU.
+ * @param angle Positive = rotate left by x degrees (relative).
  * @author Lucas Bubner, 2023
  */
 class JerryIMURotationTask(
@@ -33,13 +34,6 @@ class JerryIMURotationTask(
         super.init()
         imu?.tick()
 
-        // Translate if a negative angle is provided
-        if (angle < 0) angle += 360
-        angle = abs(angle)
-
-        // Ensure input angle is within 0-360 range
-        if (angle > 360) angle %= 360
-
         val currentAngle = imu?.heading
         // If we can't get angle info, then use right as default, relying on time to stop the task
         if (currentAngle == null) {
@@ -48,13 +42,12 @@ class JerryIMURotationTask(
         }
 
         // Find out which way we need to turn based on the information provided
-        direction = if (currentAngle < angle && abs(currentAngle - angle) < abs(currentAngle + 360 - angle)) {
-            // Faster to turn right to get to the target. If the desired angle is equal distance both ways,
-            // will also turn right (as it is equal, just mere preference)
-            Direction.RIGHT
-        } else {
-            // Faster to turn left to get to the target
+        direction = if (angle < 0.0) {
+            // Turn left
             Direction.LEFT
+        } else {
+            // Turn right
+            Direction.RIGHT
         }
     }
 

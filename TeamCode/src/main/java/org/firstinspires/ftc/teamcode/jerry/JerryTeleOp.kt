@@ -47,7 +47,7 @@ class JerryTeleOp : BunyipsOpMode() {
         val x = gamepad1.left_stick_x.toDouble()
         val y = gamepad1.left_stick_y.toDouble()
         val r = gamepad1.right_stick_x.toDouble()
-        val v = gamepad2.left_stick_y.toDouble()
+        val v = -gamepad2.left_stick_y.toDouble()
 
         if (gamepad2.right_bumper) {
             // Unlock the manual arm override when gp2 right bumper is pressed

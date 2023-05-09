@@ -179,7 +179,8 @@ class JerryArm(
      * @param o Offset to add to the target position, multiplied by 100 to allow for faster control
      */
     fun liftAdjustOffset(o: Double) {
-        offset += o.toInt() * 100
+        offset += (o * 100).toInt()
+        update()
     }
 
     /**
@@ -243,15 +244,16 @@ class JerryArm(
 
     /*
         LIFT_POSITIONS index
-        0: Cone obtaining/neutral height
-        1: Above cone, allows for drive to position cone under arm
-        2: Pole position 1
-        3: Pole position 2
-        4: Pole position 3
+        0: Zero height
+        1: Cone obtaining/neutral height
+        2: Above cone, allows for drive to position cone under arm
+        3: Pole position 1
+        4: Pole position 2
+        5: Pole position 3
+        6: Maximum theoretical safe height
     */
     companion object {
-        // TODO: These arm positions need to be calibrated to pole positions
-        private val LIFT_POSITIONS = intArrayOf(0, 20, 30, 40, 80, 130, 150, 175, 200, 230)
+        private val LIFT_POSITIONS = intArrayOf(0, 25, 50, 85, 130, 200, 230)
         private const val MOTOR_OFFSET_LIMIT = 250
         private const val MOTOR_EMER_LIMIT = MOTOR_OFFSET_LIMIT * 2
     }
