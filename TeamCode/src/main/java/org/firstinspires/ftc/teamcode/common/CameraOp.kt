@@ -20,7 +20,10 @@ import org.openftc.easyopencv.OpenCvPipeline
  * @author Lucas Bubner - FTC 15215 Captain; Oct-Nov 2022 - Murray Bridge Bunyips
  */
 class CameraOp(
-    opmode: BunyipsOpMode?, private val webcam: WebcamName?, private val monitorID: Int, var mode: CamMode
+    opmode: BunyipsOpMode?,
+    private val webcam: WebcamName?,
+    private val monitorID: Int,
+    var mode: CamMode
 ) : BunyipsComponent(opmode) {
     private var vuforia: VuforiaLocalizer? = null
     private var tfod: TFObjectDetector? = null

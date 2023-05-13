@@ -8,14 +8,14 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 /**
  * Debug opmode for IMU readouts.
  */
-@TeleOp(name="<JERRY> IMU Debug")
-class JerryIMUDebug: BunyipsOpMode() {
+@TeleOp(name = "<JERRY> IMU Debug")
+class JerryIMUDebug : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var imu: IMUOp? = null
 
     override fun onInit() {
         config = JerryConfig.newConfig(hardwareMap, telemetry)
-        imu = IMUOp(this,config?.imu)
+        imu = IMUOp(this, config?.imu)
         imu?.startCapture()
     }
 

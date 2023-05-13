@@ -36,7 +36,13 @@ class JerryAutoTest : BunyipsOpMode() {
         drive?.setToBrake()
 
         imu = IMUOp(this, config?.imu)
-        tasks.add(MessageTask(this, 1.0, "well here we are again, it's always such a pleasure, remember when you tried to kill me twice"))
+        tasks.add(
+            MessageTask(
+                this,
+                1.0,
+                "well here we are again, it's always such a pleasure, remember when you tried to kill me twice"
+            )
+        )
 
         arm = JerryArm(
             this,
@@ -78,16 +84,31 @@ class JerryAutoTest : BunyipsOpMode() {
                 tasks.add(JerryTimeDriveTask(this, 3.0, drive!!, -0.5, 0.0, 0.0))
                 // i do not care about consistency
             }
+
             GetAprilTagTask.ParkingPosition.RIGHT -> {
                 // Spin 360 degrees right
                 tasks.add(JerryIMURotationTask(this, 10.0, imu!!, drive!!, 360.0, 0.5))
             }
+
             GetAprilTagTask.ParkingPosition.CENTER -> {
                 // Insult lucas in the console
-                tasks.add(MessageTask( this, 10.0, "lucas is unaware of the several criminals stalking his house at this moment"))
+                tasks.add(
+                    MessageTask(
+                        this,
+                        10.0,
+                        "lucas is unaware of the several criminals stalking his house at this moment"
+                    )
+                )
             }
+
             else -> {
-                tasks.add(MessageTask( this, 7.0,"well here we are again(I don't know where that is)"))
+                tasks.add(
+                    MessageTask(
+                        this,
+                        7.0,
+                        "well here we are again(I don't know where that is)"
+                    )
+                )
             }
         }
     }

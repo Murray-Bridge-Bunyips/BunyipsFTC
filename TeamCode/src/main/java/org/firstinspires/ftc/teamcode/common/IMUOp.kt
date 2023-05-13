@@ -133,7 +133,7 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
         if (current == null) {
             this.tick()
             // If still nothing, bail out.
-            current = this.heading ?: return original_speed
+            current = this.heading
         }
 
         // If we're at the minimum tolerance, increase turn rate

@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.jerry
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
+import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
 
 /**
  * Manual arm control used for calibration purposes, using gamepad2 left stick.
@@ -11,11 +11,11 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 @TeleOp(name = "<JERRY> Manual Arm Control")
 class JerryArmControl : BunyipsOpMode() {
     private var config: JerryConfig? = null
-    private var arm: JerryArm? = null
+    private var arm: JerryLift? = null
 
     override fun onInit() {
         config = JerryConfig.newConfig(hardwareMap, telemetry)
-        arm = JerryArm(
+        arm = JerryLift(
             this,
             config?.claw1,
             config?.claw2,
@@ -23,11 +23,10 @@ class JerryArmControl : BunyipsOpMode() {
             config?.arm2,
             config?.limit
         )
-        arm?.liftSetPower(0.2)
     }
 
     override fun activeLoop() {
-        arm?.liftAdjustOffset(gamepad2.left_stick_y.toDouble())
+        arm?.adjust(gamepad2.left_stick_y.toDouble())
         // Calculates the average position of the lift motors
         telemetry.addLine("Lift Position: ${(config?.arm1?.currentPosition!! + config?.arm2?.currentPosition!!) / 2}")
         arm?.update()

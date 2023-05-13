@@ -45,6 +45,7 @@ import java.util.ArrayList;
 public class AprilTagDetectionPipeline extends OpenCvPipeline {
     private final Object detectionsUpdateSync = new Object();
     private final Object decimationSync = new Object();
+    private final Mat grey = new Mat();
     Mat cameraMatrix;
     Scalar blue = new Scalar(7, 197, 235, 255);
     Scalar red = new Scalar(255, 0, 0, 255);
@@ -59,7 +60,6 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline {
     double tagsizeX;
     double tagsizeY;
     private long nativeApriltagPtr;
-    private final Mat grey = new Mat();
     private ArrayList<AprilTagDetection> detections = new ArrayList<>();
     private ArrayList<AprilTagDetection> detectionsUpdate = new ArrayList<>();
     private float decimation;

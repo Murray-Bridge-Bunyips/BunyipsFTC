@@ -73,9 +73,11 @@ class FieldPositioning(
             StartingDirections.BACKWARD ->
                 // Facing 180 degrees the wrong way, must flip 180 degrees for 0 to be towards the opponents
                 imu.offset = 180.0
+
             StartingDirections.LEFTWARD ->
                 // Facing 90 degrees towards the left
                 imu.offset = 270.0
+
             StartingDirections.RIGHTWARD ->
                 // Facing 90 degrees towards the right
                 imu.offset = 90.0
@@ -163,8 +165,8 @@ class FieldPositioning(
          * A 2D array of the standard FTC field, from the perspective of blue-left and red-right
          */
         private val Field = arrayOf(
-            intArrayOf(1,  2,  3,  4,  5,  6),
-            intArrayOf(7,  8,  9,  10, 11, 12),
+            intArrayOf(1, 2, 3, 4, 5, 6),
+            intArrayOf(7, 8, 9, 10, 11, 12),
             intArrayOf(13, 14, 15, 16, 17, 18),
             intArrayOf(19, 20, 21, 22, 23, 24),
             intArrayOf(25, 26, 27, 28, 29, 30),

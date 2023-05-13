@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
  * Arm controller for Jerry bot. Includes a claw and a lift.
  * @author Lucas Bubner, Lachlan Paul, 2022-2023
  */
+@Deprecated("Use JerryLift instead as the index-based system is not ideal for use.")
 class JerryArm(
     opMode: BunyipsOpMode,
     var claw1: Servo?,
