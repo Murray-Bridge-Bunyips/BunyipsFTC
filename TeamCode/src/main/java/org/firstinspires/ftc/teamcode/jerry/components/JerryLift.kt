@@ -25,7 +25,7 @@ class JerryLift(
             field = power.coerceIn(-1.0, 1.0)
         }
     private val motors = arrayOfNulls<DcMotorEx>(2)
-    private var targetPosition: Int
+    private var targetPosition: Double
     private var holdPosition: Int
     private var isResetting: Boolean = false
 
@@ -33,7 +33,7 @@ class JerryLift(
         motors[0] = arm1
         motors[1] = arm2
         holdPosition = 0
-        targetPosition = 0
+        targetPosition = 0.0
         try {
             assert(claw1 != null && claw2 != null && arm1 != null && arm2 != null)
         } catch (e: AssertionError) {
@@ -63,7 +63,7 @@ class JerryLift(
             motor?.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             // Allow gravity and light motor power to pull the arm down
             motor?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-            motor?.power = 0.1
+            motor?.power = -0.1
         }
 
         var e = 0
@@ -77,7 +77,7 @@ class JerryLift(
             )
             opMode.telemetry.update()
 
-            // Check if the delta is above 0 for 15 consecutive loops, if so, we have hit the limit
+            // Check if the delta is above 0 for 30 consecutive loops, if so, we have hit the limit
             val prev = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2)
             val delta = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2) - prev
             if (delta >= 0) {
@@ -86,7 +86,7 @@ class JerryLift(
                 e = 0
             }
 
-            if (e > 15) break
+            if (e > 30) break
         }
 
         for (motor in motors) {
@@ -97,6 +97,7 @@ class JerryLift(
         }
 
         isResetting = false
+        targetPosition = 0.0
     }
 
     /**
@@ -122,14 +123,14 @@ class JerryLift(
      * Primary function to move the arm during TeleOp, takes in a controller input delta and adjusts the arm position
      */
     fun adjust(delta: Double) {
-        targetPosition += (-delta * 50).toInt()
+        targetPosition += -delta * 0.5
     }
 
     /**
      * Autonomous method of adjusting the arm position, directly setting the target position
      */
     fun set(target: Int) {
-        targetPosition = target
+        targetPosition = target.toDouble()
     }
 
     fun update() {
@@ -148,7 +149,7 @@ class JerryLift(
         for (motor in motors) {
             motor?.power = power
             motor?.mode = DcMotor.RunMode.RUN_TO_POSITION
-            motor?.targetPosition = targetPosition
+            motor?.targetPosition = targetPosition.toInt()
         }
     }
 }

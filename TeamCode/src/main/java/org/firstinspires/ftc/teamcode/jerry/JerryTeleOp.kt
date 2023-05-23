@@ -33,6 +33,7 @@ class JerryTeleOp : BunyipsOpMode() {
             config?.arm2,
             config?.limit
         )
+        lift?.power = 0.4
     }
 
     @Throws(InterruptedException::class)
@@ -53,6 +54,10 @@ class JerryTeleOp : BunyipsOpMode() {
             lift?.open()
         } else if (gamepad2.b) {
             lift?.close()
+        }
+
+        if (gamepad2.left_bumper) {
+            lift?.reset()
         }
 
         // Update live movements of all motors
