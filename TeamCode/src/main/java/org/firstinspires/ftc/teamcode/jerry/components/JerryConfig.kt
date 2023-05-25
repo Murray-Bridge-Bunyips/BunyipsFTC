@@ -22,8 +22,7 @@ class JerryConfig : RobotConfig() {
     var br: DcMotorEx? = null
     var fl: DcMotorEx? = null
     var fr: DcMotorEx? = null
-    var claw1: Servo? = null
-    var claw2: Servo? = null
+    var claw: Servo? = null
     var arm1: DcMotorEx? = null
     var arm2: DcMotorEx? = null
     var imu: BNO055IMU? = null
@@ -47,8 +46,7 @@ class JerryConfig : RobotConfig() {
 
         arm1 = getHardware("Arm Motor 1", DcMotorEx::class.java) as? DcMotorEx
         arm2 = getHardware("Arm Motor 2", DcMotorEx::class.java) as? DcMotorEx
-        claw1 = getHardware("Claw Servo 1", Servo::class.java) as? Servo
-        claw2 = getHardware("Claw Servo 2", Servo::class.java) as? Servo
+        claw = getHardware("Claw Servo", Servo::class.java) as? Servo
         limit = getHardware("Arm Stop", TouchSensor::class.java) as? TouchSensor
 
         // Motor direction configuration

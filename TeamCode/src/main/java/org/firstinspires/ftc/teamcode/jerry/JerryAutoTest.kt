@@ -46,8 +46,7 @@ class JerryAutoTest : BunyipsOpMode() {
 
         arm = JerryArm(
             this,
-            config?.claw1,
-            config?.claw2,
+            config?.claw,
             config?.arm1,
             config?.arm2,
             config?.limit

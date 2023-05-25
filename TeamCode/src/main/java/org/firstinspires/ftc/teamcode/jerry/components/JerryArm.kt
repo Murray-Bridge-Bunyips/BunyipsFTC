@@ -17,8 +17,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 @Deprecated("Use JerryLift instead as the index-based system is not ideal for use.")
 class JerryArm(
     opMode: BunyipsOpMode,
-    var claw1: Servo?,
-    var claw2: Servo?,
+    var claw: Servo?,
     var arm1: DcMotorEx?,
     var arm2: DcMotorEx?,
     var limit: TouchSensor?
@@ -35,14 +34,13 @@ class JerryArm(
         motors[1] = arm2
         liftPower = 0.0
         try {
-            assert(claw1 != null && claw2 != null && arm1 != null && arm2 != null)
+            assert(claw != null && arm1 != null && arm2 != null)
         } catch (e: AssertionError) {
             opMode.telemetry.addLine("Failed to initialise Arm System, check config for all components.")
         }
 
         // Set directions of motors so they move the correct way
-        claw1?.direction = Servo.Direction.FORWARD
-        claw2?.direction = Servo.Direction.REVERSE
+        claw?.direction = Servo.Direction.FORWARD
         arm1?.direction = Direction.FORWARD
         arm2?.direction = Direction.REVERSE
         for (motor in motors) {
@@ -122,8 +120,7 @@ class JerryArm(
      * Call to open claw system and allow picking up of items (allow servos to swing to open)
      */
     fun clawOpen() {
-        claw1?.position = 0.0
-        claw2?.position = 1.0
+        claw?.position = 0.0
         opMode!!.telemetry.addLine("Claws are opening...")
     }
 
@@ -132,8 +129,7 @@ class JerryArm(
      * position. Using Servo mode as opposed to CRServo mode.
      */
     fun clawClose() {
-        claw1?.position = 0.0
-        claw2?.position = 0.0
+        claw?.position = 1.0
         opMode!!.telemetry.addLine("Claws are closing...")
     }
 
