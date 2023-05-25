@@ -33,7 +33,6 @@ class JerryTeleOp : BunyipsOpMode() {
             config?.arm2,
             config?.limit
         )
-        lift?.power = 0.4
     }
 
     @Throws(InterruptedException::class)

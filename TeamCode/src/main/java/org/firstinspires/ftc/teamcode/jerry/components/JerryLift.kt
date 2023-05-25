@@ -123,6 +123,9 @@ class JerryLift(
      * Primary function to move the arm during TeleOp, takes in a controller input delta and adjusts the arm position
      */
     fun adjust(delta: Double) {
+        if (targetPosition + delta > HARD_LIMIT) {
+            return
+        }
         targetPosition += -delta * 0.5
     }
 
@@ -130,6 +133,9 @@ class JerryLift(
      * Autonomous method of adjusting the arm position, directly setting the target position
      */
     fun set(target: Int) {
+        if (targetPosition > HARD_LIMIT) {
+            return
+        }
         targetPosition = target.toDouble()
     }
 
@@ -141,7 +147,7 @@ class JerryLift(
                 "Lift (pos1, pos2, target, capture): %d, %d, %s, %s",
                 arm1?.currentPosition,
                 arm2?.currentPosition,
-                targetPosition,
+                targetPosition.toInt(),
                 holdPosition
             )
         )
@@ -151,5 +157,14 @@ class JerryLift(
             motor?.mode = DcMotor.RunMode.RUN_TO_POSITION
             motor?.targetPosition = targetPosition.toInt()
         }
+
+        // Ensure the arm does not overswing
+        if ((arm1!!.currentPosition + arm2!!.currentPosition) / 2 > HARD_LIMIT) {
+            targetPosition = (HARD_LIMIT - (HARD_LIMIT / 6)).toDouble()
+        }
+    }
+
+    companion object {
+        private const val HARD_LIMIT = 250
     }
 }
