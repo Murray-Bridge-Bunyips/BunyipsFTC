@@ -12,49 +12,57 @@ class Deadwheels(
     opMode: BunyipsOpMode?,
     private var x: DcMotorEx,
     private var y: DcMotorEx // It is fine to declare motors as not nullable as we'd have bigger problems if they weren't initialised by now
-) : BunyipsComponent(opMode), Encoder {
+) : BunyipsComponent(opMode), XYEncoder {
     // Hold the encoder values for the X and Y axis
     @Volatile
-    var positions = mutableMapOf(Encoder.Axis.X to 0.0, Encoder.Axis.Y to 0.0)
+    var positions = mutableMapOf(XYEncoder.Axis.X to 0.0, XYEncoder.Axis.Y to 0.0)
         private set
 
-    override fun enableTracking(encoder: Encoder.Axis) {
+    override fun enableTracking(encoder: XYEncoder.Axis) {
+        if (positions[XYEncoder.Axis.X] == 0.0 && positions[XYEncoder.Axis.Y] == 0.0) {
+            x.mode = RunMode.STOP_AND_RESET_ENCODER
+            y.mode = RunMode.STOP_AND_RESET_ENCODER
+        }
         when (encoder) {
-            Encoder.Axis.X -> {
+            XYEncoder.Axis.X -> {
                 x.mode = RunMode.RUN_WITHOUT_ENCODER
             }
 
-            Encoder.Axis.Y -> {
+            XYEncoder.Axis.Y -> {
                 y.mode = RunMode.RUN_WITHOUT_ENCODER
             }
 
-            Encoder.Axis.BOTH -> {
+            XYEncoder.Axis.BOTH -> {
                 x.mode = RunMode.RUN_WITHOUT_ENCODER
                 y.mode = RunMode.RUN_WITHOUT_ENCODER
             }
         }
+    }
+
+    override fun enableTracking() {
+        enableTracking(XYEncoder.Axis.BOTH)
     }
 
     @Synchronized
-    override fun disableTracking(encoder: Encoder.Axis) {
+    override fun disableTracking(encoder: XYEncoder.Axis) {
         when (encoder) {
-            Encoder.Axis.X -> {
-                positions[Encoder.Axis.X] =
-                    positions[Encoder.Axis.X]!! + x.currentPosition.toDouble()
+            XYEncoder.Axis.X -> {
+                positions[XYEncoder.Axis.X] =
+                    positions[XYEncoder.Axis.X]!! + x.currentPosition.toDouble()
                 x.mode = RunMode.STOP_AND_RESET_ENCODER
             }
 
-            Encoder.Axis.Y -> {
-                positions[Encoder.Axis.Y] =
-                    positions[Encoder.Axis.Y]!! + y.currentPosition.toDouble()
+            XYEncoder.Axis.Y -> {
+                positions[XYEncoder.Axis.Y] =
+                    positions[XYEncoder.Axis.Y]!! + y.currentPosition.toDouble()
                 y.mode = RunMode.STOP_AND_RESET_ENCODER
             }
 
-            Encoder.Axis.BOTH -> {
-                positions[Encoder.Axis.X] =
-                    positions[Encoder.Axis.X]!! + x.currentPosition.toDouble()
-                positions[Encoder.Axis.Y] =
-                    positions[Encoder.Axis.Y]!! + y.currentPosition.toDouble()
+            XYEncoder.Axis.BOTH -> {
+                positions[XYEncoder.Axis.X] =
+                    positions[XYEncoder.Axis.X]!! + x.currentPosition.toDouble()
+                positions[XYEncoder.Axis.Y] =
+                    positions[XYEncoder.Axis.Y]!! + y.currentPosition.toDouble()
                 x.mode = RunMode.STOP_AND_RESET_ENCODER
                 y.mode = RunMode.STOP_AND_RESET_ENCODER
             }
@@ -63,36 +71,44 @@ class Deadwheels(
         y.mode = RunMode.RUN_WITHOUT_ENCODER
     }
 
-    override fun resetTracking(encoder: Encoder.Axis) {
+    override fun disableTracking() {
+        disableTracking(XYEncoder.Axis.BOTH)
+    }
+
+    override fun resetTracking(encoder: XYEncoder.Axis) {
         when (encoder) {
-            Encoder.Axis.X -> {
+            XYEncoder.Axis.X -> {
                 x.mode = RunMode.STOP_AND_RESET_ENCODER
                 y.mode = RunMode.STOP_AND_RESET_ENCODER
             }
 
-            Encoder.Axis.Y -> {
+            XYEncoder.Axis.Y -> {
                 y.mode = RunMode.STOP_AND_RESET_ENCODER
             }
 
-            Encoder.Axis.BOTH -> {
+            XYEncoder.Axis.BOTH -> {
                 x.mode = RunMode.STOP_AND_RESET_ENCODER
                 y.mode = RunMode.STOP_AND_RESET_ENCODER
             }
         }
         x.mode = RunMode.RUN_WITHOUT_ENCODER
         y.mode = RunMode.RUN_WITHOUT_ENCODER
-        positions = mutableMapOf(Encoder.Axis.X to 0.0, Encoder.Axis.Y to 0.0)
+        positions = mutableMapOf(XYEncoder.Axis.X to 0.0, XYEncoder.Axis.Y to 0.0)
         selfTestErrorCount = 0
     }
 
-    override fun selfTest(encoder: Encoder.Axis): Boolean {
+    override fun resetTracking() {
+        resetTracking(XYEncoder.Axis.BOTH)
+    }
+
+    override fun selfTest(encoder: XYEncoder.Axis): Boolean {
         var x = true
         var y = true
         var encoderRes = true
 
-        if (encoder == Encoder.Axis.BOTH) {
-            x = testEncoder(Encoder.Axis.X)
-            y = testEncoder(Encoder.Axis.Y)
+        if (encoder == XYEncoder.Axis.BOTH) {
+            x = testEncoder(XYEncoder.Axis.X)
+            y = testEncoder(XYEncoder.Axis.Y)
         } else {
             encoderRes = testEncoder(encoder)
         }
@@ -100,7 +116,7 @@ class Deadwheels(
         return x && y && encoderRes
     }
 
-    private fun testEncoder(encoder: Encoder.Axis): Boolean {
+    private fun testEncoder(encoder: XYEncoder.Axis): Boolean {
         // Cycle encoder tracking off and back on to ensure a value is currently in the positions array
         enableTracking(encoder)
         disableTracking(encoder)
@@ -116,29 +132,37 @@ class Deadwheels(
         return true
     }
 
-    override fun travelledMM(encoder: Encoder.Axis): Double {
-        // Equation: (2 * pi * r * (encoderReading + position)) / ticksPerRevolution
-        return Math.PI * WHEEL_DIAMETER_MM * ((encoderReading(encoder) + positions[encoder]!!) / TICKS_PER_REVOLUTION)
+    override fun travelledMM(encoder: XYEncoder.Axis): Double {
+        // Equation: circumference (2*pi*r) * (encoder ticks / ticksPerRevolution)
+        return Math.PI * WHEEL_DIAMETER_MM * (encoderReading(encoder) / TICKS_PER_REVOLUTION)
     }
 
-    override fun encoderReading(encoder: Encoder.Axis): Double {
+    override fun travelledMM(): Double {
+        return travelledMM(XYEncoder.Axis.BOTH)
+    }
+
+    override fun encoderReading(encoder: XYEncoder.Axis): Double {
         return when (encoder) {
-            Encoder.Axis.X -> x.currentPosition.toDouble() + positions[Encoder.Axis.X]!!
-            Encoder.Axis.Y -> y.currentPosition.toDouble() + positions[Encoder.Axis.Y]!!
-            Encoder.Axis.BOTH -> throw IllegalArgumentException("Cannot retrieve encoder value with BOTH axis. Use allEncoderReadings() or specify an axis other than BOTH.")
+            XYEncoder.Axis.X -> x.currentPosition.toDouble() + positions[XYEncoder.Axis.X]!!
+            XYEncoder.Axis.Y -> y.currentPosition.toDouble() + positions[XYEncoder.Axis.Y]!!
+            XYEncoder.Axis.BOTH -> throw IllegalArgumentException("Deadwheels: Cannot retrieve encoder value with BOTH axis. Use allEncoderReadings() or specify an axis other than BOTH.")
         }
+    }
+
+    override fun encoderReading(): Double {
+        return encoderReading(XYEncoder.Axis.BOTH)
     }
 
     override fun allEncoderReadings(): DoubleArray {
         return doubleArrayOf(
-            x.currentPosition.toDouble() + positions[Encoder.Axis.X]!!,
-            y.currentPosition.toDouble() + positions[Encoder.Axis.Y]!!,
-            travelledMM(Encoder.Axis.X),
-            travelledMM(Encoder.Axis.Y)
+            x.currentPosition.toDouble() + positions[XYEncoder.Axis.X]!!,
+            y.currentPosition.toDouble() + positions[XYEncoder.Axis.Y]!!,
+            travelledMM(XYEncoder.Axis.X),
+            travelledMM(XYEncoder.Axis.Y)
         )
     }
 
-    override fun targetReached(encoder: Encoder.Axis, goal: Double): Boolean {
+    override fun targetReached(encoder: XYEncoder.Axis, goal: Double): Boolean {
         return abs(travelledMM(encoder)) >= abs(goal)
     }
 

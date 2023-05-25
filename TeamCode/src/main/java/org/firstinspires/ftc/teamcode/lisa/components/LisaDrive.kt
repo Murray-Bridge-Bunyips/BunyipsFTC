@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.EncoderMotor
 
 /**
  * Drive control system for Lisa, controlling movement.
  */
-// TODO: Rewrite to have encoder usages rely on a common class schema similar to Jerry robot.
 class LisaDrive(
     opMode: BunyipsOpMode?,
     private val left: DcMotorEx?,
@@ -18,57 +18,50 @@ class LisaDrive(
 ) : BunyipsComponent(opMode) {
     private var leftPower = 0.0
     private var rightPower = 0.0
+
+    private val leftMotor = EncoderMotor(left!!, null, null)
+    private val rightMotor = EncoderMotor(right!!, null, null)
+    /*
+        These might be helpful for later, defined before in the original codebase
+
+        UltraPlanetary HD Hex Motor
+        val TICKS_PER_REVOLUTION = 28.0
+        val WHEEL_DIAMETER_CM = 8.5
+     */
+
     fun setPower(left: Double, right: Double) {
         leftPower = -left
         rightPower = -right
     }
 
     fun setToBrake() {
-        left?.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
-        right?.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
+        leftMotor.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
+        rightMotor.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
     }
 
     fun setToFloat() {
-        left?.zeroPowerBehavior = ZeroPowerBehavior.FLOAT
-        right?.zeroPowerBehavior = ZeroPowerBehavior.FLOAT
-    }
-
-    fun setEncoder(encoderState: Boolean) {
-        if (encoderState) {
-            left?.mode = RunMode.STOP_AND_RESET_ENCODER
-            right?.mode = RunMode.STOP_AND_RESET_ENCODER
-            left?.mode = RunMode.RUN_USING_ENCODER
-            right?.mode = RunMode.RUN_USING_ENCODER
-            return
-        }
-        left?.mode = RunMode.RUN_WITHOUT_ENCODER
-        right?.mode = RunMode.RUN_WITHOUT_ENCODER
+        leftMotor.zeroPowerBehavior = ZeroPowerBehavior.FLOAT
+        rightMotor.zeroPowerBehavior = ZeroPowerBehavior.FLOAT
     }
 
     @SuppressLint("DefaultLocale")
     fun update() {
-        left?.power = leftPower
-        right?.power = rightPower
-        opMode!!.telemetry.addLine(
-            String.format(
-                "Left Encoder: %d, Right Encoder: %d",
-                left?.currentPosition, right?.currentPosition
-            )
-        )
+        leftMotor.power = leftPower
+        rightMotor.power = rightPower
     }
 
     fun targetPositionReached(): Boolean {
-        return !(left!!.isBusy || right!!.isBusy)
+        return !(leftMotor.isBusy || rightMotor.isBusy)
     }
 
     fun setTargetPosition(leftDistance: Double, rightDistance: Double) {
-        val newLeftTarget =
-            left?.currentPosition?.plus(leftDistance.toInt()) ?: leftDistance.toInt()
-        val newRightTarget =
-            right?.currentPosition?.plus(rightDistance.toInt()) ?: rightDistance.toInt()
-        left?.targetPosition = newLeftTarget
-        right?.targetPosition = newRightTarget
-        left?.mode = RunMode.RUN_TO_POSITION
-        right?.mode = RunMode.RUN_TO_POSITION
+        val newLeftTarget = leftMotor.currentPosition + leftDistance.toInt()
+        val newRightTarget = rightMotor.currentPosition + rightDistance.toInt()
+
+        leftMotor.targetPosition = newLeftTarget
+        rightMotor.targetPosition = newRightTarget
+
+        leftMotor.mode = RunMode.RUN_TO_POSITION
+        rightMotor.mode = RunMode.RUN_TO_POSITION
     }
 }

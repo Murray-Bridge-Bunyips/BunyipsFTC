@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.Deadwheels
-import org.firstinspires.ftc.teamcode.common.Encoder
+import org.firstinspires.ftc.teamcode.common.XYEncoder
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
@@ -52,9 +52,9 @@ class JerryPrecisionDriveTask(
         // by the respective deadwheel. If the deadwheel is not available, then we cannot check if the target has been
         // reached, so we will just rely on the timeout.
         return super.isFinished() || if (direction == Directions.LEFT || direction == Directions.RIGHT) {
-            pos?.targetReached(Encoder.Axis.X, distance_mm) ?: false
+            pos?.targetReached(XYEncoder.Axis.X, distance_mm) ?: false
         } else {
-            pos?.targetReached(Encoder.Axis.Y, distance_mm) ?: false
+            pos?.targetReached(XYEncoder.Axis.Y, distance_mm) ?: false
         }
     }
 
@@ -67,7 +67,7 @@ class JerryPrecisionDriveTask(
         }
 
         // Check if the deadwheels are online
-        if (pos?.selfTest(Encoder.Axis.BOTH) == false) {
+        if (pos?.selfTest(XYEncoder.Axis.BOTH) == false) {
             operatingMode =
                 if (operatingMode == OperatingMode.NORM) OperatingMode.DEADWHEEL_FAULT else OperatingMode.CATASTROPHE
         }
@@ -85,17 +85,17 @@ class JerryPrecisionDriveTask(
         imu?.startCapture()
         if (direction == Directions.LEFT || direction == Directions.RIGHT) {
             // If moving along the X axis enable the X deadwheel
-            pos?.enableTracking(Encoder.Axis.X)
+            pos?.enableTracking(XYEncoder.Axis.X)
         } else {
             // Otherwise we are moving along the Y axis, and we need to enable the Y deadwheel
-            pos?.enableTracking(Encoder.Axis.Y)
+            pos?.enableTracking(XYEncoder.Axis.Y)
         }
     }
 
     override fun run() {
         if (isFinished()) {
             drive!!.deinit()
-            pos?.resetTracking(Encoder.Axis.BOTH)
+            pos?.resetTracking(XYEncoder.Axis.BOTH)
             return
         }
 
@@ -128,8 +128,8 @@ class JerryPrecisionDriveTask(
         opMode.telemetry.addLine(
             "Distance progress: ${
                 if (direction == Directions.LEFT || direction == Directions.RIGHT) pos?.travelledMM(
-                    Encoder.Axis.X
-                ) ?: "N/A" else pos?.travelledMM(Encoder.Axis.Y) ?: "N/A"
+                    XYEncoder.Axis.X
+                ) ?: "N/A" else pos?.travelledMM(XYEncoder.Axis.Y) ?: "N/A"
             }/$distance_mm"
         )
         opMode.telemetry.addLine(

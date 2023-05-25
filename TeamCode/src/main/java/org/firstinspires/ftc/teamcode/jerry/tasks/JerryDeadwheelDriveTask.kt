@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.Deadwheels
-import org.firstinspires.ftc.teamcode.common.Encoder
+import org.firstinspires.ftc.teamcode.common.XYEncoder
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
@@ -28,8 +28,8 @@ class JerryDeadwheelDriveTask(
     }
 
     override fun isFinished(): Boolean {
-        return super.isFinished() || pos.targetReached(Encoder.Axis.X, px_mm) && pos.targetReached(
-            Encoder.Axis.Y,
+        return super.isFinished() || pos.targetReached(XYEncoder.Axis.X, px_mm) && pos.targetReached(
+            XYEncoder.Axis.Y,
             py_mm
         )
     }
@@ -37,18 +37,18 @@ class JerryDeadwheelDriveTask(
     override fun run() {
         // Run x before y, moving until the goal is reached
         // Only start the encoder that needs to be tracked, to prevent false readings
-        pos.enableTracking(Encoder.Axis.X)
-        while (!pos.targetReached(Encoder.Axis.X, px_mm) && !isFinished()) {
+        pos.enableTracking(XYEncoder.Axis.X)
+        while (!pos.targetReached(XYEncoder.Axis.X, px_mm) && !isFinished()) {
             drive.setSpeedXYR(xspeed, 0.0, 0.0)
             drive.update()
         }
-        pos.disableTracking(Encoder.Axis.X)
-        pos.enableTracking(Encoder.Axis.Y)
-        while (!pos.targetReached(Encoder.Axis.Y, py_mm) && !isFinished()) {
+        pos.disableTracking(XYEncoder.Axis.X)
+        pos.enableTracking(XYEncoder.Axis.Y)
+        while (!pos.targetReached(XYEncoder.Axis.Y, py_mm) && !isFinished()) {
             drive.setSpeedXYR(0.0, yspeed, 0.0)
             drive.update()
         }
-        pos.disableTracking(Encoder.Axis.Y)
+        pos.disableTracking(XYEncoder.Axis.Y)
         if (isFinished()) {
             drive.deinit()
             return
