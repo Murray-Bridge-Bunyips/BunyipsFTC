@@ -44,6 +44,21 @@ class LisaDrive(
         rightMotor.zeroPowerBehavior = ZeroPowerBehavior.FLOAT
     }
 
+    fun setEncoders(state: Boolean) {
+        if (state) {
+            leftMotor.enableTracking()
+            rightMotor.enableTracking()
+        } else {
+            leftMotor.disableTracking()
+            rightMotor.disableTracking()
+        }
+    }
+
+    fun resetEncoders() {
+        leftMotor.resetTracking()
+        rightMotor.resetTracking()
+    }
+
     @SuppressLint("DefaultLocale")
     fun update() {
         leftMotor.power = leftPower

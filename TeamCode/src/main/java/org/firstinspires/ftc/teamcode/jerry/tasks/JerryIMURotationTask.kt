@@ -18,7 +18,7 @@ class JerryIMURotationTask(
     time: Double,
     private val imu: IMUOp?,
     private val drive: JerryDrive?,
-    // Angle information should be a degree in the range of 0-360
+    // Angle information should be a degree of rotation relative to current angle
     private var angle: Double,
     private val speed: Double
 ) : Task(opMode, time), TaskImpl {
@@ -48,6 +48,13 @@ class JerryIMURotationTask(
             // Turn right
             Direction.RIGHT
         }
+
+        if (direction == Direction.LEFT) {
+            drive?.setSpeedXYR(0.0, 0.0, speed)
+        } else {
+            drive?.setSpeedXYR(0.0, 0.0, -speed)
+        }
+        drive?.update()
     }
 
     // Stop turning when we reach the target angle
@@ -66,12 +73,6 @@ class JerryIMURotationTask(
             drive?.deinit()
             return
         }
-        if (direction == Direction.LEFT)
-            drive?.setSpeedXYR(0.0, 0.0, speed)
-        else
-            drive?.setSpeedXYR(0.0, 0.0, -speed)
-
         imu?.tick()
-        drive?.update()
     }
 }
