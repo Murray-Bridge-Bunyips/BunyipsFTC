@@ -29,7 +29,7 @@ class JerryIMUDriveTask(
             imu.resetCapture()
             return
         }
-        drive.setSpeedXYR(x, -y, imu.getRPrecisionSpeed(r, 3))
+        drive.setSpeedXYR(x, -y, imu.getRPrecisionSpeed(r, 3.0))
         drive.update()
         imu.tick()
     }

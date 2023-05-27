@@ -17,16 +17,16 @@ object ButtonHashmap {
 
         // Default button
         var selectedButton = ButtonControl.A
-        if (!A.isEmpty()) {
+        if (A.isNotEmpty()) {
             buttonMap[button1] = A
         }
-        if (!B.isEmpty()) {
+        if (B.isNotEmpty()) {
             buttonMap[button2] = B
         }
-        if (!Y.isEmpty()) {
+        if (Y.isNotEmpty()) {
             buttonMap[button3] = Y
         }
-        if (!X.isEmpty()) {
+        if (X.isNotEmpty()) {
             buttonMap[button4] = X
         }
         val autoClearState = opMode.telemetry.isAutoClear

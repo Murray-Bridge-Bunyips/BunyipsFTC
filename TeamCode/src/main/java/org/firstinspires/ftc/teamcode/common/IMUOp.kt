@@ -21,7 +21,7 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     var capture: Double? = null
         private set
 
-    // Offset used for Field-centric navigation, defined in FieldPositioning.kt
+    // Offset the IMU reading for field-centric navigation
     // May not be used, but is here for any potential use cases.
     var offset = 0.0
         set(value) {
@@ -123,7 +123,7 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
      * @param tolerance supply the tolerance in degrees for the IMU to be within to stop adjusting
      * @return queried speed based on parameters given, returns the unaltered speed if PrecisionDrive is not online
      */
-    fun getRPrecisionSpeed(original_speed: Double, tolerance: Int): Double {
+    fun getRPrecisionSpeed(original_speed: Double, tolerance: Double): Double {
         // If we're not capturing, return the original speed
         if (this.capture == null) return original_speed
 

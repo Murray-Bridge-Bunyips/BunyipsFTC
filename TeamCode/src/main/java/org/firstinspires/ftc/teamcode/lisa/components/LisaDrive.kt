@@ -1,20 +1,20 @@
 package org.firstinspires.ftc.teamcode.lisa.components
 
 import android.annotation.SuppressLint
-import com.qualcomm.robotcore.hardware.DcMotor.RunMode
 import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.EncoderMotor
+import kotlin.math.abs
 
 /**
  * Drive control system for Lisa, controlling movement.
  */
 class LisaDrive(
     opMode: BunyipsOpMode?,
-    private val left: DcMotorEx?,
-    private val right: DcMotorEx?
+    left: DcMotorEx?,
+    right: DcMotorEx?
 ) : BunyipsComponent(opMode) {
     private var leftPower = 0.0
     private var rightPower = 0.0
@@ -59,24 +59,21 @@ class LisaDrive(
         rightMotor.resetTracking()
     }
 
+    fun reachedGoal(goalMM: Double): Boolean {
+        return abs(leftMotor.travelledMM()) >= abs(goalMM) && abs(rightMotor.travelledMM()) >= abs(goalMM)
+    }
+
+    fun getTravelledDist(): Pair<Double, Double> {
+        return Pair(leftMotor.travelledMM(), rightMotor.travelledMM())
+    }
+
+    fun getEncoderValues(): Pair<Double, Double> {
+        return Pair(leftMotor.encoderReading(), rightMotor.encoderReading())
+    }
+
     @SuppressLint("DefaultLocale")
     fun update() {
         leftMotor.power = leftPower
         rightMotor.power = rightPower
-    }
-
-    fun targetPositionReached(): Boolean {
-        return !(leftMotor.isBusy || rightMotor.isBusy)
-    }
-
-    fun setTargetPosition(leftDistance: Double, rightDistance: Double) {
-        val newLeftTarget = leftMotor.currentPosition + leftDistance.toInt()
-        val newRightTarget = rightMotor.currentPosition + rightDistance.toInt()
-
-        leftMotor.targetPosition = newLeftTarget
-        rightMotor.targetPosition = newRightTarget
-
-        leftMotor.mode = RunMode.RUN_TO_POSITION
-        rightMotor.mode = RunMode.RUN_TO_POSITION
     }
 }

@@ -24,7 +24,7 @@ import java.util.ArrayDeque
 class JerryAutoTest : BunyipsOpMode() {
     private var config: JerryConfig? = null
     private var drive: JerryDrive? = null
-    private var Krankenhaus: GetAprilTagTask? = null
+    private var tagTask: GetAprilTagTask? = null
     private var arm: JerryArm? = null
     private var cam: CameraOp? = null
     private var imu: IMUOp? = null
@@ -57,20 +57,19 @@ class JerryAutoTest : BunyipsOpMode() {
             config?.webcam, config!!.monitorID, CameraOp.CamMode.OPENCV
         )
 
-        Krankenhaus = cam?.let { GetAprilTagTask(this, it) }
+        tagTask = cam?.let { GetAprilTagTask(this, it) }
     }
 
     override fun onInitLoop(): Boolean {
         // i have been informed I COULD change the name to something more convenient
         // but this
         // this is funnier
-        Krankenhaus?.run()
-        return Krankenhaus?.isFinished() ?: true
+        tagTask?.run()
+        return tagTask?.isFinished() ?: true
     }
 
     override fun onInitDone() {
-        val pos = Krankenhaus?.position
-        when (pos) {
+        when (tagTask?.position) {
             GetAprilTagTask.ParkingPosition.LEFT -> {
                 // Draw a square
                 // Forward

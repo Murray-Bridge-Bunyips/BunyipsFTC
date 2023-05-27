@@ -114,7 +114,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     /**
      * Clear data from the telemetry cache
      */
-    fun clearTelemetryData() {
+    private fun clearTelemetryData() {
         if (telemetry.isAutoClear) {
             telemetry.clear()
         } else {

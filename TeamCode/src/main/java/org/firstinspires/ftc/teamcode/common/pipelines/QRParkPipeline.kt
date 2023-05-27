@@ -17,7 +17,7 @@ class QRParkPipeline : OpenCvPipeline() {
         private set
 
     // Using OpenCVs object detection for QR codes
-    val qr = QRCodeDetector()
+    private val qr = QRCodeDetector()
     override fun processFrame(input: Mat): Mat {
         // Must use a curved decoder, as the cone is a curved surface
         when (qr.detectAndDecodeCurved(input)) {

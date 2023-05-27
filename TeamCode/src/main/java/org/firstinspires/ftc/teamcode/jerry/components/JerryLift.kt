@@ -14,10 +14,10 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
  */
 class JerryLift(
     opMode: BunyipsOpMode,
-    var claw: Servo?,
-    var arm1: DcMotorEx?,
-    var arm2: DcMotorEx?,
-    var limit: TouchSensor?
+    private var claw: Servo?,
+    private var arm1: DcMotorEx?,
+    private var arm2: DcMotorEx?,
+    private var limit: TouchSensor?
 ) : BunyipsComponent(opMode) {
     var power: Double = 0.2
         set(power) {

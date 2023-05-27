@@ -48,7 +48,7 @@ class JerryPrecisionDriveTask(
     }
 
     override fun isFinished(): Boolean {
-        // Check if the task is done by checking if it has timed out in the supercall or if the target has been reached
+        // Check if the task is done by checking if it has timed out in the super call or if the target has been reached
         // by the respective deadwheel. If the deadwheel is not available, then we cannot check if the target has been
         // reached, so we will just rely on the timeout.
         return super.isFinished() || if (direction == Directions.LEFT || direction == Directions.RIGHT) {
@@ -105,7 +105,7 @@ class JerryPrecisionDriveTask(
                 drive!!.setSpeedXYR(
                     if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
                     if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
-                    imu?.getRPrecisionSpeed(0.0, 2) ?: 0.0
+                    imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0
                 )
             }
 

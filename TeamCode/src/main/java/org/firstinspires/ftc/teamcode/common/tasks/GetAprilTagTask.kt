@@ -15,10 +15,10 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp) : Task(o
     private var noDetections = 0
 
     // Decimation thresholds, calibrate as needed
-    val DECIMATION_HIGH = 3f
-    val DECIMATION_LOW = 2f
-    val DECIMATION_HIGH_METERS_THRESHOLD = 1.0f
-    val DECIMATION_LOW_THRESHOLD = 4
+    private val decimationHigh = 3f
+    private val decimationLow = 2f
+    private val decimationHighMetersThreshold = 1.0f
+    private val decimationLowThreshold = 4
 
     /**
      * Get the saved position of where to park.
@@ -67,8 +67,8 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp) : Task(o
             if (detections.size > 0) {
                 // If we do, set parking position based on this information and end the task
                 // Will compare detected tags to the APRILTAG_ID array.
-                if (detections[0].pose.z < DECIMATION_HIGH_METERS_THRESHOLD) at?.setDecimation(
-                    DECIMATION_HIGH
+                if (detections[0].pose.z < decimationHighMetersThreshold) at?.setDecimation(
+                    decimationHigh
                 )
                 for (detection in detections) {
                     when (detection.id) {
@@ -96,7 +96,7 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: CameraOp) : Task(o
                 // Otherwise, count these frames since our last detection
                 // and change to low decimation if it's been long enough
                 noDetections++
-                if (noDetections >= DECIMATION_LOW_THRESHOLD) at?.setDecimation(DECIMATION_LOW)
+                if (noDetections >= decimationLowThreshold) at?.setDecimation(decimationLow)
             }
         }
     }

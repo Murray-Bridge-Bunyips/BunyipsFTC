@@ -59,7 +59,7 @@ class JerryDrive(
     /**
      * Call to update motor speeds through the selected drivemode.
      * Rotation Priority will calculate rotation speed before translation speed, while normalised
-     * will do the opposite, calculating translation before rotati
+     * will do the opposite, calculating translation before rotation
      */
     fun update() {
         if (driveMode == MecanumDriveMode.ROTATION_PRIORITY_NORMALIZED) rotationalPriority()

@@ -39,8 +39,8 @@ object DbgLog {
     /**
      * Tag used by logcat
      */
-    const val TAG = "FIRST"
-    const val ERROR_PREPEND = "### ERROR: "
+    private const val TAG = "FIRST"
+    private const val ERROR_PREPEND = "### ERROR: "
 
     /**
      * Log a debug message
