@@ -94,22 +94,6 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
     }
 
     /**
-     * Run a self-test of the heading capture system and return the result
-     */
-    fun selfTest(): Boolean {
-        this.startCapture()
-        this.tick()
-        return if (this.currentAngles == null || this.capture == null) {
-            // Yikes
-            false
-        } else {
-            this.resetCapture()
-            // Ready to go
-            true
-        }
-    }
-
-    /**
      * Stop and reset PrecisionDrive IMU alignment algorithm
      */
     fun resetCapture() {

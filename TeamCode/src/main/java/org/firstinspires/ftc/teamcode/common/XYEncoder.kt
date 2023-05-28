@@ -29,11 +29,6 @@ interface XYEncoder : Encoder {
     fun resetTracking(encoder: Axis)
 
     /**
-     * Run a self test of the encoder by checking if currentPosition is accessible
-     */
-    fun selfTest(encoder: Axis): Boolean
-
-    /**
      * Get the distance travelled by the encoder since the last reset and if tracking was enabled
      *
      * @return millimetres indicating how far the encoder has travelled

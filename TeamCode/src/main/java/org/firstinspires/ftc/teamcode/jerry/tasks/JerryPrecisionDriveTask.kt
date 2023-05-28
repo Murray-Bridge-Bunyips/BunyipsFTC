@@ -14,6 +14,7 @@ import kotlin.math.abs
  * This supports movement throughout the 2D plane, and can be used to move in any one direction
  * @author Lucas Bubner, 2023
  */
+// TODO: Does not work as intended, needs some debugging
 class JerryPrecisionDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
@@ -25,8 +26,6 @@ class JerryPrecisionDriveTask(
     private var power: Double,
     private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
 ) : Task(opMode, time), TaskImpl {
-    // Track the operating mode of the task to account for any robot faults
-    private var operatingMode: OperatingMode = OperatingMode.NORM
 
     init {
         try {
@@ -37,10 +36,6 @@ class JerryPrecisionDriveTask(
         // Use absolute values of power to ensure that the robot moves correctly and is not fed with negative values
         // This is because the task will handle the power management and determine whether the value 
         this.power = abs(power)
-    }
-
-    enum class OperatingMode {
-        NORM, IMU_FAULT, DEADWHEEL_FAULT, CATASTROPHE
     }
 
     enum class Directions {
@@ -60,26 +55,6 @@ class JerryPrecisionDriveTask(
 
     override fun init() {
         super.init()
-        // === BEGIN SELF TEST ===
-        // Check if the IMU is working
-        if (imu == null || !imu.selfTest()) {
-            operatingMode = OperatingMode.IMU_FAULT
-        }
-
-        // Check if the deadwheels are online
-        if (pos?.selfTest(XYEncoder.Axis.BOTH) == false) {
-            operatingMode =
-                if (operatingMode == OperatingMode.NORM) OperatingMode.DEADWHEEL_FAULT else OperatingMode.CATASTROPHE
-        }
-        // === END SELF TEST ===
-
-        // We now have the limitations of the task and what we can use to accomplish the task
-        /*
-            NORM: Deadwheels, IMU, and time     [can use all params]
-            IMU_FAULT: Deadwheels and time      [Z axis accuracy is limited]
-            DEADWHEEL_FAULT: IMU and time       [cannot travel a specific distance]
-            CATASTROPHE: Hellfire and brimstone [can only rely on time]
-         */
 
         // Safe call all components to start their tracking and capture vectors
         imu?.startCapture()
@@ -99,32 +74,19 @@ class JerryPrecisionDriveTask(
             return
         }
 
-        when (operatingMode) {
-            OperatingMode.NORM, OperatingMode.DEADWHEEL_FAULT -> {
-                // Normal operation, use everything we can to drive to the target
-                drive!!.setSpeedXYR(
-                    if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
-                    if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
-                    imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0
-                )
-            }
-
-            OperatingMode.CATASTROPHE, OperatingMode.IMU_FAULT -> {
-                // Everything is broken, please send help
-                drive!!.setSpeedXYR(
-                    if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
-                    if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
-                    0.0
-                )
-            }
-        }
-
-        // Update drive and tick IMU if possible. Deadwheels will continue to track if they are enabled.
-        drive.update()
         imu?.tick()
 
+        drive!!.setSpeedXYR(
+            if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
+            if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
+            imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0
+        )
+
+        // Deadwheels will continue to track if they are enabled.
+        drive.update()
+
         // Add telemetry of current operation
-        opMode.telemetry.addLine("PrecisionDrive is active under operating mode: $operatingMode")
+        opMode.telemetry.addLine("PrecisionDrive is active.")
         opMode.telemetry.addLine(
             "Distance progress: ${
                 if (direction == Directions.LEFT || direction == Directions.RIGHT) pos?.travelledMM(

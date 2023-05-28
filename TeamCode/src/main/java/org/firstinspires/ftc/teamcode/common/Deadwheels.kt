@@ -94,42 +94,10 @@ class Deadwheels(
         x.mode = RunMode.RUN_WITHOUT_ENCODER
         y.mode = RunMode.RUN_WITHOUT_ENCODER
         positions = mutableMapOf(XYEncoder.Axis.X to 0.0, XYEncoder.Axis.Y to 0.0)
-        selfTestErrorCount = 0
     }
 
     override fun resetTracking() {
         resetTracking(XYEncoder.Axis.BOTH)
-    }
-
-    override fun selfTest(encoder: XYEncoder.Axis): Boolean {
-        var x = true
-        var y = true
-        var encoderRes = true
-
-        if (encoder == XYEncoder.Axis.BOTH) {
-            x = testEncoder(XYEncoder.Axis.X)
-            y = testEncoder(XYEncoder.Axis.Y)
-        } else {
-            encoderRes = testEncoder(encoder)
-        }
-
-        return x && y && encoderRes
-    }
-
-    private fun testEncoder(encoder: XYEncoder.Axis): Boolean {
-        // Cycle encoder tracking off and back on to ensure a value is currently in the positions array
-        enableTracking(encoder)
-        disableTracking(encoder)
-
-        // Check if the encoder values are 0
-        if (encoderReading(encoder) == 0.0 && selfTestErrorCount < SELF_TEST_ERROR_THRESHOLD) {
-            // If they are, it may be a case that it is the first run, so we'll log this and wait for the next run
-            selfTestErrorCount++
-        } else if (encoderReading(encoder) == 0.0 && selfTestErrorCount >= SELF_TEST_ERROR_THRESHOLD) {
-            // If the encoder values are still 0 after multiple runs, then we can assume the encoder is not working
-            return false
-        }
-        return true
     }
 
     override fun travelledMM(encoder: XYEncoder.Axis): Double {

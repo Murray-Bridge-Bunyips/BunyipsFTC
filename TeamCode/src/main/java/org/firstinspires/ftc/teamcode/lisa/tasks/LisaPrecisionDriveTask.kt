@@ -28,11 +28,7 @@ class LisaPrecisionDriveTask(
 
     override fun init() {
         super.init()
-        if (imu == null || !imu.selfTest()) {
-            imuFault = true
-            return
-        }
-        imu.startCapture()
+        imu?.startCapture()
         drive?.resetEncoders()
         drive?.setEncoders(true)
     }

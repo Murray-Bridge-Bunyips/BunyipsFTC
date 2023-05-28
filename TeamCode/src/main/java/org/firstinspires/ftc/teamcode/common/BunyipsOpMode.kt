@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
  * including catch-all error handling and phased code execution.
  * Small modifications made by Lucas Bubner, FTC 15215
  */
+// TODO: Improve telemetry implementation, might have to make more methods
 abstract class BunyipsOpMode : LinearOpMode() {
     private var movingAverageTimer: MovingAverageTimer? = null
     private var loopCount: Long = 0
