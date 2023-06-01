@@ -1,17 +1,18 @@
 package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import org.firstinspires.ftc.robotcore.external.Telemetry.Item
 
 /**
  * OpMode Abstract class that offers additional abstraction for opMode developers
  * including catch-all error handling and phased code execution.
  * Small modifications made by Lucas Bubner, FTC 15215
  */
-// TODO: Improve telemetry implementation, might have to make more methods
 abstract class BunyipsOpMode : LinearOpMode() {
     private var movingAverageTimer: MovingAverageTimer? = null
     private var loopCount: Long = 0
     private var operationsCompleted = false
+    protected val stickyTelemetryObjects = mutableListOf<Pair<Int, Item>>()
 
     /**
      * Implement this method to define the code to run when the Init button is pressed on the Driver Station.
@@ -115,7 +116,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     /**
      * Clear data from the telemetry cache
      */
-    private fun clearTelemetryData() {
+    fun clearTelemetryData() {
         if (telemetry.isAutoClear) {
             telemetry.clear()
         } else {
@@ -124,6 +125,49 @@ abstract class BunyipsOpMode : LinearOpMode() {
         if (opModeIsActive()) {
             idle()
         }
+    }
+
+    /**
+     * Add data to the telemetry object
+     */
+    protected fun addTelemetry(value: String, retained: Boolean) {
+        val item = telemetry.addData(movingAverageTimer?.elapsedTime().toString(), value)
+        if (retained) {
+            item.setRetained(true)
+            stickyTelemetryObjects.add(Pair(stickyTelemetryObjects.size + 1, item))
+        }
+    }
+
+    /**
+     * Remove an entry from the telemetry object if it is sticky
+     */
+    protected fun removeTelemetry(index: Int) {
+        if (index > 0 && index <= stickyTelemetryObjects.size) {
+            telemetry.removeItem(stickyTelemetryObjects[index - 1].second)
+            stickyTelemetryObjects.removeAt(index - 1)
+        }
+    }
+
+    /**
+     * Reset telemetry data, including retention
+     */
+    protected fun resetTelemetry() {
+        telemetry.clearAll()
+        stickyTelemetryObjects.clear()
+    }
+
+    /**
+     * Clear telemetry on screen, not including retention
+     */
+    protected fun clearTelemetry() {
+        telemetry.clear()
+    }
+
+    /**
+     * Set telemetry auto clear status
+     */
+    protected fun setTelemetryAutoClear(autoClear: Boolean) {
+        telemetry.isAutoClear = autoClear
     }
 
     /**
