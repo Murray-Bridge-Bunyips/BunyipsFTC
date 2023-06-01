@@ -9,7 +9,7 @@ import kotlin.math.abs
  * @author Lucas Bubner, 2023
  */
 class Deadwheels(
-    opMode: BunyipsOpMode?,
+    opMode: BunyipsOpMode,
     private var x: DcMotorEx,
     private var y: DcMotorEx // It is fine to declare motors as not nullable as we'd have bigger problems if they weren't initialised by now
 ) : BunyipsComponent(opMode), XYEncoder {
@@ -139,10 +139,5 @@ class Deadwheels(
         // https://www.amazon.com.au/Signswise-Incremental-Encoder-Dc5-24v-Voltage/dp/B00UTIFCVA
         private const val TICKS_PER_REVOLUTION = 2400
         private const val WHEEL_DIAMETER_MM = 50
-
-        // Count any errors that occur in the self test. If the values of the encoders are not
-        // moving after a task multiple times, then we can assume the encoder is not working.
-        private const val SELF_TEST_ERROR_THRESHOLD = 4
-        var selfTestErrorCount = 0
     }
 }

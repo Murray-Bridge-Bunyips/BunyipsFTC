@@ -65,7 +65,7 @@ class JerryLift(
         }
 
         var e = 0
-        while (!limit!!.isPressed && !opMode!!.gamepad2.right_bumper) {
+        while (!limit!!.isPressed && !opMode.gamepad2.right_bumper) {
             opMode.telemetry.addLine(
                 String.format(
                     "ARM IS RESETTING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
@@ -103,7 +103,7 @@ class JerryLift(
      */
     fun open() {
         claw?.position = 0.0
-        opMode!!.telemetry.addLine("Claws are opening...")
+        opMode.telemetry.addLine("Claws are opening...")
     }
 
     /**
@@ -112,7 +112,7 @@ class JerryLift(
      */
     fun close() {
         claw?.position = 1.0
-        opMode!!.telemetry.addLine("Claws are closing...")
+        opMode.telemetry.addLine("Claws are closing...")
     }
 
     /**
@@ -138,7 +138,7 @@ class JerryLift(
     fun update() {
         if (isResetting) return
 
-        opMode!!.telemetry.addLine(
+        opMode.telemetry.addLine(
             String.format(
                 "Lift (pos1, pos2, target, capture): %d, %d, %s, %s",
                 arm1?.currentPosition,

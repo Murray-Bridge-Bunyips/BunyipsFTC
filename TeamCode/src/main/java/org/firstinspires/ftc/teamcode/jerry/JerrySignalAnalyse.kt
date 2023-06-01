@@ -16,7 +16,7 @@ class JerrySignalAnalyse : BunyipsOpMode() {
     private var task: GetAprilTagTask? = null
 
     override fun onInit() {
-        config = JerryConfig.newConfig(hardwareMap, telemetry)
+        config = JerryConfig.newConfig(hardwareMap)
         cam = CameraOp(this, config?.webcam, config!!.monitorID, CameraOp.CamMode.OPENCV)
         task = cam?.let { GetAprilTagTask(this, it) }
     }

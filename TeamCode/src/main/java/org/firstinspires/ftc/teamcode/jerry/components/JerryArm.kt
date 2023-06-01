@@ -81,7 +81,7 @@ class JerryArm(
         // switch breaks for some reason. Press right bumper to cancel the loop.
         // Using reversed operation as pressing results in the limit switch reporting false
         var e = 0
-        while (!limit!!.isPressed && !opMode!!.gamepad2.right_bumper) {
+        while (!limit!!.isPressed && !opMode.gamepad2.right_bumper) {
             opMode.telemetry.addLine(
                 String.format(
                     "ARM IS CALIBRATING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
@@ -113,7 +113,7 @@ class JerryArm(
         // then return arm control permission back to the instance.
         liftIndex = 0
         isCalibrating = false
-        opMode!!.telemetry.addLine("Arm has been calibrated.")
+        opMode.telemetry.addLine("Arm has been calibrated.")
     }
 
     /**
@@ -121,7 +121,7 @@ class JerryArm(
      */
     fun clawOpen() {
         claw?.position = 0.0
-        opMode!!.telemetry.addLine("Claws are opening...")
+        opMode.telemetry.addLine("Claws are opening...")
     }
 
     /**
@@ -130,7 +130,7 @@ class JerryArm(
      */
     fun clawClose() {
         claw?.position = 1.0
-        opMode!!.telemetry.addLine("Claws are closing...")
+        opMode.telemetry.addLine("Claws are closing...")
     }
 
     /**
@@ -223,7 +223,7 @@ class JerryArm(
             liftCalibrate(0.5)
         }
 
-        opMode!!.telemetry.addLine(
+        opMode.telemetry.addLine(
             String.format(
                 "Arms (pos1, pos2, index, offset): %d, %d, %s, %s",
                 arm1?.currentPosition,

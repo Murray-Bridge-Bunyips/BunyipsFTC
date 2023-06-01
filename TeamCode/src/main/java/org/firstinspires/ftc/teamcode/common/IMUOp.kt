@@ -14,7 +14,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Velocity
  * while allowing operation such as the PrecisionDrive system to be used.
  * @author Lucas Bubner - FTC 15215 Captain; Oct 2022 - Murray Bridge Bunyips
  */
-class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsComponent(opMode) {
+class IMUOp(opMode: BunyipsOpMode, private val imu: BNO055IMU?) : BunyipsComponent(opMode) {
     @Volatile
     var currentAngles: Orientation? = null
     private var previousHeading = 0.0
@@ -111,14 +111,8 @@ class IMUOp(opMode: BunyipsOpMode?, private val imu: BNO055IMU?) : BunyipsCompon
         // If we're not capturing, return the original speed
         if (this.capture == null) return original_speed
 
-        // If something goes wrong in getting current IMU data, try to tick the IMU first, as the user may not have
-        // reached that hardware cycle yet or has not called tick() in the main loop
-        var current = this.heading
-        if (current == null) {
-            this.tick()
-            // If still nothing, bail out.
-            current = this.heading
-        }
+        this.tick()
+        val current = this.heading
 
         // If we're at the minimum tolerance, increase turn rate
         if (current < this.capture!! - tolerance) return original_speed + 0.2

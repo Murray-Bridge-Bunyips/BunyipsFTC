@@ -27,7 +27,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
     private val tasks = ArrayDeque<TaskImpl>()
     override fun onInit() {
         // Configuration of camera and drive components
-        config = JerryConfig.newConfig(hardwareMap, telemetry)
+        config = JerryConfig.newConfig(hardwareMap)
         cam = CameraOp(this, config?.webcam, config!!.monitorID, CamMode.OPENCV)
         drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
         pos = Deadwheels(this, config?.fl!!, config?.fr!!)

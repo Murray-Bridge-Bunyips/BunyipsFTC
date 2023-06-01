@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
-import org.firstinspires.ftc.teamcode.jerry.tasks.JerryPrecisionDriveTask
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
 
@@ -29,7 +28,7 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
     private val tasks = ArrayDeque<TaskImpl>()
     override fun onInit() {
         // Configuration of camera and drive components
-        config = JerryConfig.newConfig(hardwareMap, telemetry)
+        config = JerryConfig.newConfig(hardwareMap)
         cam = CameraOp(this, config?.webcam, config!!.monitorID, CamMode.OPENCV)
         drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
         pos = Deadwheels(this, config?.fl!!, config?.fr!!)

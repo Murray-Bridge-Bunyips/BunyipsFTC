@@ -20,7 +20,7 @@ class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
     private var drive: JerryDrive? = null
     private val tasks = ArrayDeque<TaskImpl>()
     override fun onInit() {
-        config = JerryConfig.newConfig(hardwareMap, telemetry)
+        config = JerryConfig.newConfig(hardwareMap)
         try {
             drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
         } catch (e: Exception) {

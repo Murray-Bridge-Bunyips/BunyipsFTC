@@ -7,17 +7,16 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction
 import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
-import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 
 /**
  * Jerry robot configuration and hardware declarations.
  */
-class JerryConfig : RobotConfig() {
+class JerryConfig(override var hardwareMap: HardwareMap) : RobotConfig() {
     // Add declarations here
     var webcam: WebcamName? = null
-    var monitorID = 0
+    var monitorID: Int? = null
     var bl: DcMotorEx? = null
     var br: DcMotorEx? = null
     var fl: DcMotorEx? = null
@@ -28,11 +27,9 @@ class JerryConfig : RobotConfig() {
     var imu: BNO055IMU? = null
     var limit: TouchSensor? = null
 
-    override fun init(hardwareMap: HardwareMap?, telemetry: Telemetry) {
-        setTelemetry(telemetry)
-        this.hardwareMap = hardwareMap
+    override fun init() {
         webcam = getHardware("Webcam", WebcamName::class.java) as? WebcamName
-        monitorID = hardwareMap!!.appContext.resources.getIdentifier(
+        monitorID = hardwareMap.appContext.resources.getIdentifier(
             "cameraMonitorViewId", "id", hardwareMap.appContext.packageName
         )
         bl = getHardware("Back Left", DcMotorEx::class.java) as? DcMotorEx
@@ -66,13 +63,12 @@ class JerryConfig : RobotConfig() {
         parameters.accelerationIntegrationAlgorithm = JustLoggingAccelerationIntegrator()
         imu = getHardware("imu", BNO055IMU::class.java) as BNO055IMU
         imu?.initialize(parameters)
-        printHardwareErrors()
     }
 
     companion object {
-        fun newConfig(hardwareMap: HardwareMap?, telemetry: Telemetry): JerryConfig {
-            val config = JerryConfig()
-            config.init(hardwareMap, telemetry)
+        fun newConfig(hardwareMap: HardwareMap): JerryConfig {
+            val config = JerryConfig(hardwareMap)
+            config.init()
             return config
         }
     }

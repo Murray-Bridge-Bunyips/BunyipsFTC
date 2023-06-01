@@ -14,7 +14,7 @@ class LisaTeleOp : BunyipsOpMode() {
     private var config: LisaConfig? = null
     private var drive: LisaDrive? = null
     override fun onInit() {
-        config = LisaConfig.newConfig(hardwareMap, telemetry)
+        config = LisaConfig.newConfig(hardwareMap)
         drive = LisaDrive(
             this,
             config?.left, config?.right

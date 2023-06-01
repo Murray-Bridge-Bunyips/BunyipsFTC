@@ -31,7 +31,7 @@ class JerryAutoTest : BunyipsOpMode() {
     private val tasks = ArrayDeque<TaskImpl>()
 
     override fun onInit() {
-        config = JerryConfig.newConfig(hardwareMap, telemetry)
+        config = JerryConfig.newConfig(hardwareMap)
         drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
         drive?.setToBrake()
 
@@ -54,7 +54,7 @@ class JerryAutoTest : BunyipsOpMode() {
 
         cam = CameraOp(
             this,
-            config?.webcam, config!!.monitorID, CameraOp.CamMode.OPENCV
+            config?.webcam, config?.monitorID, CameraOp.CamMode.OPENCV
         )
 
         tagTask = cam?.let { GetAprilTagTask(this, it) }

@@ -91,7 +91,7 @@ class JerryDrive(
         bl?.power = backLeftPower
         br?.power = backRightPower
 
-        opMode!!.telemetry.addLine(
+        opMode.telemetry.addLine(
             String.format(
                 Locale.getDefault(),
                 "Mecanum Drive: X: %.2f, Y: %.2f, R: %.2f",

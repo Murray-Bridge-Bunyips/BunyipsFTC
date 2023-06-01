@@ -5,19 +5,16 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 
 /**
  * Robot configuration for high-speed minibot Lisa.
  */
-class LisaConfig : RobotConfig() {
+class LisaConfig(override var hardwareMap: HardwareMap) : RobotConfig() {
     var left: DcMotorEx? = null
     var right: DcMotorEx? = null
     var imu: BNO055IMU? = null
-    override fun init(hardwareMap: HardwareMap?, telemetry: Telemetry) {
-        setTelemetry(telemetry)
-        this.hardwareMap = hardwareMap
+    override fun init() {
         left = getHardware("Left Motor", DcMotorEx::class.java) as DcMotorEx
         right = getHardware("Right Motor", DcMotorEx::class.java) as DcMotorEx
         right?.direction = Direction.REVERSE
@@ -33,13 +30,12 @@ class LisaConfig : RobotConfig() {
         parameters.accelerationIntegrationAlgorithm = JustLoggingAccelerationIntegrator()
         imu = getHardware("imu", BNO055IMU::class.java) as BNO055IMU
         if (imu != null) imu?.initialize(parameters)
-        printHardwareErrors()
     }
 
     companion object {
-        fun newConfig(hardwareMap: HardwareMap?, telemetry: Telemetry): LisaConfig {
-            val config = LisaConfig()
-            config.init(hardwareMap, telemetry)
+        fun newConfig(hardwareMap: HardwareMap): LisaConfig {
+            val config = LisaConfig(hardwareMap)
+            config.init()
             return config
         }
     }

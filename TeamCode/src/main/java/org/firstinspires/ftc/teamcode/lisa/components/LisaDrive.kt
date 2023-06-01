@@ -12,7 +12,7 @@ import kotlin.math.abs
  * Drive control system for Lisa, controlling movement.
  */
 class LisaDrive(
-    opMode: BunyipsOpMode?,
+    opMode: BunyipsOpMode,
     left: DcMotorEx?,
     right: DcMotorEx?
 ) : BunyipsComponent(opMode) {

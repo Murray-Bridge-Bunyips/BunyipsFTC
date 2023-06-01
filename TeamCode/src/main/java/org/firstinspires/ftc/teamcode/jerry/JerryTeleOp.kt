@@ -22,7 +22,7 @@ class JerryTeleOp : BunyipsOpMode() {
 
     override fun onInit() {
         // Configure drive and lift subsystems
-        config = JerryConfig.newConfig(hardwareMap, telemetry)
+        config = JerryConfig.newConfig(hardwareMap)
         drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
         drive?.setToBrake()
         lift = JerryLift(

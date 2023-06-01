@@ -146,6 +146,10 @@ abstract class BunyipsOpMode : LinearOpMode() {
             telemetry.removeItem(stickyTelemetryObjects[index - 1].second)
             stickyTelemetryObjects.removeAt(index - 1)
         }
+        // Update indexes of sticky telemetry objects
+        for (i in stickyTelemetryObjects.indices) {
+            stickyTelemetryObjects[i] = Pair(i + 1, stickyTelemetryObjects[i].second)
+        }
     }
 
     /**

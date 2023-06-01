@@ -15,7 +15,7 @@ class JerryDeadwheelDebug : BunyipsOpMode() {
     private var pos: Deadwheels? = null
 
     override fun onInit() {
-        config = JerryConfig.newConfig(hardwareMap, telemetry)
+        config = JerryConfig.newConfig(hardwareMap)
         pos = Deadwheels(this, config?.fl!!, config?.fr!!)
         pos?.enableTracking(XYEncoder.Axis.BOTH)
     }

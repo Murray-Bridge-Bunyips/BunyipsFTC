@@ -21,9 +21,9 @@ import kotlin.math.abs
  * @author Lucas Bubner - FTC 15215 Captain; Oct-Nov 2022 - Murray Bridge Bunyips
  */
 class CameraOp(
-    opmode: BunyipsOpMode?,
+    opmode: BunyipsOpMode,
     private val webcam: WebcamName?,
-    private val monitorID: Int,
+    private val monitorID: Int?,
     var mode: CamMode
 ) : BunyipsComponent(opmode) {
     private var vuforia: VuforiaLocalizer? = null
@@ -60,11 +60,15 @@ class CameraOp(
                 CamMode.OPENCV -> openCVinit()
             }
         } catch (e: Throwable) {
-            opmode!!.telemetry.addLine("Failed to initialise Camera Operation. Error message: ${e.message}")
+            opmode.telemetry.addLine("Failed to initialise Camera Operation. Error message: ${e.message}")
         }
     }
 
     private fun stdinit() {
+        if (monitorID == null) {
+            opMode.telemetry.addLine("Failed to initialise Standard Camera Operation. No monitor ID provided.")
+            return
+        }
         // Vuforia localizer engine initialisation, Camera Stream will be Vuforia's
         val parameters = VuforiaLocalizer.Parameters(monitorID)
         parameters.vuforiaLicenseKey = VUFORIA_KEY
@@ -175,7 +179,10 @@ class CameraOp(
     }
 
     private fun openCVinit() {
-
+        if (monitorID == null) {
+            opMode.telemetry.addLine("Failed to initialise OpenCV Camera Operation. No monitor ID provided.")
+            return
+        }
         /*
          * Instead of using Vuforia and OpenCV on the same camera, we instead init the camera
          * using OpenCV's own camera instance. It is highly unlikely one camera would need to use
@@ -190,7 +197,7 @@ class CameraOp(
             }
 
             override fun onError(errorCode: Int) {
-                opMode!!.telemetry.addLine("An error occurred in initialising OpenCV. Standard mode will be activated. Error code: $errorCode")
+                opMode.telemetry.addLine("An error occurred in initialising OpenCV. Standard mode will be activated. Error code: $errorCode")
                 oCVcam = null
                 mode = CamMode.STANDARD
                 stdinit()
@@ -243,7 +250,7 @@ class CameraOp(
             val row = ((recognition.top + recognition.bottom) / 2).toDouble()
             val width = abs(recognition.right - recognition.left).toDouble()
             val height = abs(recognition.top - recognition.bottom).toDouble()
-            opMode!!.telemetry.addLine(
+            opMode.telemetry.addLine(
                 String.format(
                     "Image: %1\$s (%2$.0f %% Conf.)",
                     recognition.label,
@@ -310,7 +317,7 @@ class CameraOp(
                   * uncomment the lines below to get all interpreted data readings for debugging.
                   */
                 val translation = lastLocation!!.translation
-                opMode!!.telemetry.addLine(
+                opMode.telemetry.addLine(
                     String.format(
                         "Pos (mm): {X, Y, Z} = %.1f, %.1f, %.1f",
                         translation[0], translation[1], translation[2]
