@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.lisa
+package org.firstinspires.ftc.teamcode.lisa.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
@@ -11,14 +11,16 @@ import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive
  */
 @TeleOp(name = "<LISA> TeleOp")
 class LisaTeleOp : BunyipsOpMode() {
-    private var config: LisaConfig? = null
+    private lateinit var config: LisaConfig
     private var drive: LisaDrive? = null
     override fun onInit() {
         config = LisaConfig.newConfig(hardwareMap)
-        drive = LisaDrive(
-            this,
-            config?.left, config?.right
-        )
+        if (!config.hasHardwareErrors(config.motors)) {
+            drive = LisaDrive(
+                this,
+                config.left!!, config.right!!
+            )
+        }
     }
 
     @Throws(InterruptedException::class)

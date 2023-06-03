@@ -17,34 +17,25 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 @Deprecated("Use JerryLift instead as the index-based system is not ideal for use.")
 class JerryArm(
     opMode: BunyipsOpMode,
-    private var claw: Servo?,
-    private var arm1: DcMotorEx?,
-    private var arm2: DcMotorEx?,
-    private var limit: TouchSensor?
+    private var claw: Servo,
+    private var arm1: DcMotorEx,
+    private var arm2: DcMotorEx,
+    private var limit: TouchSensor
 ) : BunyipsComponent(opMode) {
     private var offset: Int = 0
     private var liftIndex = 0
-    private var liftPower: Double
-    private val motors = arrayOfNulls<DcMotorEx>(2)
+    private var liftPower: Double = 0.0
+    private val motors = arrayOf(arm1, arm2)
     private var isCalibrating = false
     private var alreadyCalibrated = false
 
     init {
-        motors[0] = arm1
-        motors[1] = arm2
-        liftPower = 0.0
-        try {
-            assert(claw != null && arm1 != null && arm2 != null)
-        } catch (e: AssertionError) {
-            opMode.telemetry.addLine("Failed to initialise Arm System, check config for all components.")
-        }
-
         // Set directions of motors so they move the correct way
-        claw?.direction = Servo.Direction.FORWARD
-        arm1?.direction = Direction.FORWARD
-        arm2?.direction = Direction.REVERSE
+        claw.direction = Servo.Direction.FORWARD
+        arm1.direction = Direction.FORWARD
+        arm2.direction = Direction.REVERSE
         for (motor in motors) {
-            motor?.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
+            motor.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
         }
 
         // When the arm is first initialised, calibrate it (as the arm may not already be zeroed)
@@ -68,7 +59,7 @@ class JerryArm(
         alreadyCalibrated = true
         for (motor in motors) {
             // Ensure motors are running in the correct mode
-            motor!!.mode = RunMode.RUN_USING_ENCODER
+            motor.mode = RunMode.RUN_USING_ENCODER
 
             // Set the motor power to something low as we will be descending and don't want to damage
             // any gears or parts with excessive force. Gravity should do the heavy work.
@@ -81,19 +72,19 @@ class JerryArm(
         // switch breaks for some reason. Press right bumper to cancel the loop.
         // Using reversed operation as pressing results in the limit switch reporting false
         var e = 0
-        while (!limit!!.isPressed && !opMode.gamepad2.right_bumper) {
-            opMode.telemetry.addLine(
+        while (!limit.isPressed && !opMode.gamepad2.right_bumper) {
+            opMode.addTelemetry(
                 String.format(
                     "ARM IS CALIBRATING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
-                    arm1?.currentPosition,
-                    arm2?.currentPosition
+                    arm1.currentPosition,
+                    arm2.currentPosition
                 )
             )
             opMode.telemetry.update()
 
             // Check if the delta is above 0 for 10 consecutive loops, if so, we have hit the limit
-            val prev = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2)
-            val delta = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2) - prev
+            val prev = ((motors[0].currentPosition + motors[1].currentPosition) / 2)
+            val delta = ((motors[0].currentPosition + motors[1].currentPosition) / 2) - prev
             if (delta >= 0) {
                 e++
             } else {
@@ -104,7 +95,7 @@ class JerryArm(
         }
         for (motor in motors) {
             // Finally, we reset the motors and we are now zeroed out again.
-            motor!!.power = 0.0
+            motor.power = 0.0
             motor.mode = RunMode.STOP_AND_RESET_ENCODER
             motor.targetPosition = 0
         }
@@ -113,15 +104,15 @@ class JerryArm(
         // then return arm control permission back to the instance.
         liftIndex = 0
         isCalibrating = false
-        opMode.telemetry.addLine("Arm has been calibrated.")
+        opMode.addTelemetry("Arm has been calibrated.")
     }
 
     /**
      * Call to open claw system and allow picking up of items (allow servos to swing to open)
      */
     fun clawOpen() {
-        claw?.position = 0.0
-        opMode.telemetry.addLine("Claws are opening...")
+        claw.position = 0.0
+        opMode.addTelemetry("Claws are opening...")
     }
 
     /**
@@ -129,8 +120,8 @@ class JerryArm(
      * position. Using Servo mode as opposed to CRServo mode.
      */
     fun clawClose() {
-        claw?.position = 1.0
-        opMode.telemetry.addLine("Claws are closing...")
+        claw.position = 1.0
+        opMode.addTelemetry("Claws are closing...")
     }
 
     /**
@@ -143,7 +134,7 @@ class JerryArm(
             liftIndex = LIFT_POSITIONS.size - 1
         }
         for (motor in motors) {
-            motor?.targetPosition = LIFT_POSITIONS[liftIndex] + offset
+            motor.targetPosition = LIFT_POSITIONS[liftIndex] + offset
         }
     }
 
@@ -157,7 +148,7 @@ class JerryArm(
             liftIndex = 0
         }
         for (motor in motors) {
-            motor?.targetPosition = LIFT_POSITIONS[liftIndex] + offset
+            motor.targetPosition = LIFT_POSITIONS[liftIndex] + offset
         }
     }
 
@@ -209,12 +200,12 @@ class JerryArm(
         if (isCalibrating) return
 
         // Ensure we don't get stuck in a loop of calibration
-        if (limit!!.isPressed && !alreadyCalibrated) liftCalibrate()
-        if (!limit!!.isPressed) alreadyCalibrated = false
+        if (limit.isPressed && !alreadyCalibrated) liftCalibrate()
+        if (!limit.isPressed) alreadyCalibrated = false
 
         // Over-bounds detection algorithm for offset
         val target = LIFT_POSITIONS[liftIndex] + offset
-        val current = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2)
+        val current = ((motors[0].currentPosition + motors[1].currentPosition) / 2)
         if (current + MOTOR_OFFSET_LIMIT < target || current - MOTOR_OFFSET_LIMIT > target) {
             offset = 0
         }
@@ -223,19 +214,19 @@ class JerryArm(
             liftCalibrate(0.5)
         }
 
-        opMode.telemetry.addLine(
+        opMode.addTelemetry(
             String.format(
                 "Arms (pos1, pos2, index, offset): %d, %d, %s, %s",
-                arm1?.currentPosition,
-                arm2?.currentPosition,
+                arm1.currentPosition,
+                arm2.currentPosition,
                 liftIndex,
                 offset
             )
         )
 
         for (motor in motors) {
-            motor?.power = liftPower
-            motor?.mode = RunMode.RUN_TO_POSITION
+            motor.power = liftPower
+            motor.mode = RunMode.RUN_TO_POSITION
         }
     }
 

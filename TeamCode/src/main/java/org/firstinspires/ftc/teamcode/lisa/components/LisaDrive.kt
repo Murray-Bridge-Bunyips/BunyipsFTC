@@ -13,14 +13,14 @@ import kotlin.math.abs
  */
 class LisaDrive(
     opMode: BunyipsOpMode,
-    left: DcMotorEx?,
-    right: DcMotorEx?
+    left: DcMotorEx,
+    right: DcMotorEx
 ) : BunyipsComponent(opMode) {
     private var leftPower = 0.0
     private var rightPower = 0.0
 
-    private val leftMotor = EncoderMotor(left!!, null, null)
-    private val rightMotor = EncoderMotor(right!!, null, null)
+    private val leftMotor = EncoderMotor(left, null, null)
+    private val rightMotor = EncoderMotor(right, null, null)
     /*
         These might be helpful for later, defined before in the original codebase
 
@@ -60,7 +60,9 @@ class LisaDrive(
     }
 
     fun reachedGoal(goalMM: Double): Boolean {
-        return abs(leftMotor.travelledMM()) >= abs(goalMM) && abs(rightMotor.travelledMM()) >= abs(goalMM)
+        return abs(leftMotor.travelledMM()) >= abs(goalMM) && abs(rightMotor.travelledMM()) >= abs(
+            goalMM
+        )
     }
 
     fun getTravelledDist(): Pair<Double, Double> {

@@ -1,22 +1,27 @@
 package org.firstinspires.ftc.teamcode.common
 
-import com.qualcomm.hardware.bosch.BNO055IMU
+import com.qualcomm.robotcore.hardware.IMU
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation
-import org.firstinspires.ftc.robotcore.external.navigation.Position
-import org.firstinspires.ftc.robotcore.external.navigation.Velocity
 
 /**
- * IMUOperation custom common class for internal BNO055IMUs
+ * IMUOperation custom common class for internal IMUs
  * This class is used to abstract the IMU reading and provide a more human-friendly reading,
  * while allowing operation such as the PrecisionDrive system to be used.
- * @author Lucas Bubner - FTC 15215 Captain; Oct 2022 - Murray Bridge Bunyips
+ *
+ * This code has been updated to use the new SDK v8.1 specification on 03/06/2023.
+ *
+ * @author Lucas Bubner, 2022-2023
  */
-class IMUOp(opMode: BunyipsOpMode, private val imu: BNO055IMU?) : BunyipsComponent(opMode) {
+class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMode) {
     @Volatile
     var currentAngles: Orientation? = null
+
+    @Volatile
+    var currentVelocity: AngularVelocity? = null
     private var previousHeading = 0.0
     var capture: Double? = null
         private set
@@ -62,33 +67,74 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: BNO055IMU?) : BunyipsCompone
         private set
 
     /**
+     * Get Z rotation rate (heading rate) from the internal IMU
+     */
+    var turnRate: Double = 0.0
+        get() {
+            field = currentVelocity?.zRotationRate?.toDouble() ?: field
+            return field
+        }
+
+    /**
+     * Reset all heading measurements to default 0.0
+     */
+    fun resetHeading() {
+        heading = 0.0
+        imu.resetYaw()
+    }
+
+    /**
      * Update the latest state in the IMU to current data
      */
     fun tick() {
-        this.currentAngles = imu?.getAngularOrientation(
+        this.currentAngles = imu.getRobotOrientation(
             AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES
         )
+        this.currentVelocity = imu.getRobotAngularVelocity(AngleUnit.DEGREES)
     }
 
     /**
      * Get the current roll reading from the internal IMU
-     * @return Y value of Orientation axes
+     * @return Y value of Orientation axes, returns 0.0 as default value
      */
-    val roll: Double?
-        get() = this.currentAngles?.secondAngle?.toDouble()
+    var roll: Double = 0.0
+        get() {
+            field = this.currentAngles?.secondAngle?.toDouble() ?: field
+            return field
+        }
+
+    /**
+     * Get Y rotation rate (roll rate) from the internal IMU
+     */
+    var rollRate: Double = 0.0
+        get() {
+            field = this.currentVelocity?.yRotationRate?.toDouble() ?: field
+            return field
+        }
 
     /**
      * Get the current pitch reading from the internal IMU
-     * @return X value of Orientation axes
+     * @return X value of Orientation axes, returns 0.0 as default value
      */
-    val pitch: Double?
-        get() = this.currentAngles?.firstAngle?.toDouble()
+    var pitch: Double = 0.0
+        get() {
+            field = this.currentAngles?.firstAngle?.toDouble() ?: field
+            return field
+        }
+
+    /**
+     * Get X rotation rate (pitch rate) from the internal IMU
+     */
+    var pitchRate: Double = 0.0
+        get() {
+            field = this.currentVelocity?.xRotationRate?.toDouble() ?: field
+            return field
+        }
 
     /**
      * Start PrecisionDrive IMU alignment algorithm and capture the original angle
      */
     fun startCapture() {
-        imu?.startAccelerationIntegration(Position(), Velocity(), 50)
         this.tick()
         this.capture = this.heading
     }
@@ -97,7 +143,6 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: BNO055IMU?) : BunyipsCompone
      * Stop and reset PrecisionDrive IMU alignment algorithm
      */
     fun resetCapture() {
-        imu?.stopAccelerationIntegration()
         this.capture = null
     }
 

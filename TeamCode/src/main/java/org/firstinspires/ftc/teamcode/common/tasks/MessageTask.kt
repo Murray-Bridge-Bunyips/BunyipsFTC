@@ -13,6 +13,6 @@ class MessageTask(opMode: BunyipsOpMode, time: Double, private val message: Stri
         if (isFinished()) {
             return
         }
-        opMode.telemetry.addLine(String.format("%s || %.2f", message, time))
+        opMode.addTelemetry(String.format("%s || %.2f", message, time))
     }
 }

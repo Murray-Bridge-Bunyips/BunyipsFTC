@@ -12,7 +12,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     private var movingAverageTimer: MovingAverageTimer? = null
     private var loopCount: Long = 0
     private var operationsCompleted = false
-    protected val stickyTelemetryObjects = mutableListOf<Pair<Int, Item>>()
+    private val stickyTelemetryObjects = mutableListOf<Pair<Int, Item>>()
 
     /**
      * Implement this method to define the code to run when the Init button is pressed on the Driver Station.
@@ -76,7 +76,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
                     if (onInitLoop()) break
                 }
                 onInitDone()
-                telemetry.addData("BunyipsOpMode Status", "INIT COMPLETE -- PLAY WHEN READY.")
+                telemetry.addData("BUNYIPSOPMODE", "INIT COMPLETE -- PLAY WHEN READY.")
                 telemetry.update()
             } catch (e: Throwable) {
                 ErrorUtil.handleCatchAllException(e, telemetry)
@@ -129,8 +129,10 @@ abstract class BunyipsOpMode : LinearOpMode() {
 
     /**
      * Add data to the telemetry object
+     * @param value A string to add to telemetry
+     * @param retained Optional parameter to retain the data on the screen
      */
-    protected fun addTelemetry(value: String, retained: Boolean) {
+    fun addTelemetry(value: String, retained: Boolean = false) {
         val item = telemetry.addData(movingAverageTimer?.elapsedTime().toString(), value)
         if (retained) {
             item.setRetained(true)
@@ -141,7 +143,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     /**
      * Remove an entry from the telemetry object if it is sticky
      */
-    protected fun removeTelemetry(index: Int) {
+    fun removeTelemetry(index: Int) {
         if (index > 0 && index <= stickyTelemetryObjects.size) {
             telemetry.removeItem(stickyTelemetryObjects[index - 1].second)
             stickyTelemetryObjects.removeAt(index - 1)
@@ -155,7 +157,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     /**
      * Reset telemetry data, including retention
      */
-    protected fun resetTelemetry() {
+    fun resetTelemetry() {
         telemetry.clearAll()
         stickyTelemetryObjects.clear()
     }
@@ -163,15 +165,35 @@ abstract class BunyipsOpMode : LinearOpMode() {
     /**
      * Clear telemetry on screen, not including retention
      */
-    protected fun clearTelemetry() {
+    fun clearTelemetry() {
         telemetry.clear()
     }
 
     /**
      * Set telemetry auto clear status
      */
-    protected fun setTelemetryAutoClear(autoClear: Boolean) {
+    fun setTelemetryAutoClear(autoClear: Boolean) {
         telemetry.isAutoClear = autoClear
+    }
+
+    /**
+     * Get auto-clear status of telemetry
+     */
+    fun getTelemetryAutoClear(): Boolean {
+        return telemetry.isAutoClear
+    }
+
+    /**
+     * Convenience method to add a hardware error to OpMode telemetry
+     */
+    fun logHardwareErrors(failures: ArrayList<String>) {
+        for (failure in failures) {
+            val item =
+                telemetry.addData("BUNYIPSOPMODE", "Failed to initialise device of name: $failure")
+            // Make the item sticky to keep the error on the screen
+            item.setRetained(true)
+            stickyTelemetryObjects.add(Pair(stickyTelemetryObjects.size + 1, item))
+        }
     }
 
     /**
@@ -179,6 +201,8 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     protected fun setOperationsCompleted() {
         operationsCompleted = true
-        telemetry.addData("BunyipsOpMode Status", "HALTED ACTIVELOOP. ALL OPERATIONS COMPLETED.")
+        clearTelemetryData()
+        telemetry.addData("BUNYIPSOPMODE", "ActiveLoop halted. All operations completed.")
+        telemetry.update()
     }
 }

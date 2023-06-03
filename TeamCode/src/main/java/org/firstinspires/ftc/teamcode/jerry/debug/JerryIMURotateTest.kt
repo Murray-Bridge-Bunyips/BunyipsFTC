@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.jerry
+package org.firstinspires.ftc.teamcode.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
@@ -15,17 +15,17 @@ import java.util.ArrayDeque
  */
 @Autonomous(name = "<JERRY> IMURotateTest")
 class JerryIMURotateTest : BunyipsOpMode() {
-    private var config: JerryConfig? = null
+    private lateinit var config: JerryConfig
     private var imu: IMUOp? = null
     private var drive: JerryDrive? = null
     private val tasks = ArrayDeque<TaskImpl>()
 
     override fun onInit() {
         config = JerryConfig.newConfig(hardwareMap)
-        imu = IMUOp(this, config?.imu)
-        drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
+        imu = IMUOp(this, config.imu!!)
+        drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        tasks.add(JerryIMURotationTask(this, 15.0, imu, drive, -360.0, 0.5))
+        tasks.add(JerryIMURotationTask(this, 15.0, imu!!, drive!!, -360.0, 0.5))
     }
 
     override fun activeLoop() {

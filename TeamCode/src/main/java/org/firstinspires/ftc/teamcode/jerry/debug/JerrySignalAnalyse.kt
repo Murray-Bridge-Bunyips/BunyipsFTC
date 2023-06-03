@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.jerry
+package org.firstinspires.ftc.teamcode.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
@@ -23,6 +23,6 @@ class JerrySignalAnalyse : BunyipsOpMode() {
 
     override fun activeLoop() {
         task?.run()
-        telemetry.addLine("Currently seeing position: ${task?.position ?: "NONE"}")
+        addTelemetry("Currently seeing position: ${task?.position ?: "NONE"}")
     }
 }

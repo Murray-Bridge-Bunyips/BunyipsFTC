@@ -23,7 +23,7 @@ class JerryIMURotationTask(
     private val speed: Double
 ) : Task(opMode, time), TaskImpl {
     // Enum to find out which way we need to be turning
-    var direction: Direction? = null
+    var direction: Direction = Direction.RIGHT
 
     enum class Direction {
         LEFT, RIGHT
@@ -34,11 +34,6 @@ class JerryIMURotationTask(
         imu?.tick()
 
         val currentAngle = imu?.heading
-        // If we can't get angle info, then use right as default, relying on time to stop the task
-        if (currentAngle == null) {
-            direction = Direction.RIGHT
-            return
-        }
 
         // Find out which way we need to turn based on the information provided
         direction = if (angle < 0.0) {
@@ -61,10 +56,10 @@ class JerryIMURotationTask(
     override fun isFinished(): Boolean {
         return super.isFinished() || if (direction == Direction.LEFT) {
             // Angle will be decreasing
-            imu?.heading!! <= angle
+            (imu?.heading ?: 0.0) <= angle
         } else {
             // Angle will be increasing
-            imu?.heading!! >= angle
+            (imu?.heading ?: 0.0) >= angle
         }
     }
 

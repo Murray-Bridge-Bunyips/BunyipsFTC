@@ -14,39 +14,28 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
  */
 class JerryLift(
     opMode: BunyipsOpMode,
-    private var claw: Servo?,
-    private var arm1: DcMotorEx?,
-    private var arm2: DcMotorEx?,
-    private var limit: TouchSensor?
+    private var claw: Servo,
+    private var arm1: DcMotorEx,
+    private var arm2: DcMotorEx,
+    private var limit: TouchSensor
 ) : BunyipsComponent(opMode) {
     var power: Double = 0.2
         set(power) {
             field = power.coerceIn(-1.0, 1.0)
         }
-    private val motors = arrayOfNulls<DcMotorEx>(2)
-    private var targetPosition: Double
-    private var holdPosition: Int
+    private val motors = arrayOf(arm1, arm2)
+    private var targetPosition: Double = 0.0
+    private var holdPosition: Int = 0
     private var isResetting: Boolean = false
 
     init {
-        motors[0] = arm1
-        motors[1] = arm2
-        holdPosition = 0
-        targetPosition = 0.0
-        try {
-            assert(claw != null && arm1 != null && arm2 != null)
-        } catch (e: AssertionError) {
-            opMode.telemetry.addLine("Failed to initialise Arm System, check config for all components.")
-        }
-
         // Set directions of motors so they move the correct way
-        claw?.direction = Servo.Direction.FORWARD
-        arm1?.direction = DcMotorSimple.Direction.FORWARD
-        arm2?.direction = DcMotorSimple.Direction.REVERSE
+        claw.direction = Servo.Direction.FORWARD
+        arm1.direction = DcMotorSimple.Direction.FORWARD
+        arm2.direction = DcMotorSimple.Direction.REVERSE
         for (motor in motors) {
-            motor?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         }
-
         // Run an initial calibration
         reset()
     }
@@ -58,26 +47,26 @@ class JerryLift(
     fun reset() {
         isResetting = true
         for (motor in motors) {
-            motor?.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             // Allow gravity and light motor power to pull the arm down
-            motor?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-            motor?.power = -0.1
+            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+            motor.power = -0.1
         }
 
         var e = 0
-        while (!limit!!.isPressed && !opMode.gamepad2.right_bumper) {
-            opMode.telemetry.addLine(
+        while (!limit.isPressed && !opMode.gamepad2.right_bumper) {
+            opMode.addTelemetry(
                 String.format(
                     "ARM IS RESETTING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
-                    arm1?.currentPosition,
-                    arm2?.currentPosition
+                    arm1.currentPosition,
+                    arm2.currentPosition
                 )
             )
             opMode.telemetry.update()
 
             // Check if the delta is above 0 for 30 consecutive loops, if so, we have hit the limit
-            val prev = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2)
-            val delta = ((motors[0]!!.currentPosition + motors[1]!!.currentPosition) / 2) - prev
+            val prev = ((motors[0].currentPosition + motors[1].currentPosition) / 2)
+            val delta = ((motors[0].currentPosition + motors[1].currentPosition) / 2) - prev
             if (delta >= 0) {
                 e++
             } else {
@@ -89,9 +78,9 @@ class JerryLift(
 
         for (motor in motors) {
             // Finally, we reset the motors and we are now zeroed out again.
-            motor?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            motor?.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-            motor?.targetPosition = 0
+            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+            motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+            motor.targetPosition = 0
         }
 
         isResetting = false
@@ -102,8 +91,8 @@ class JerryLift(
      * Call to open claw system and allow picking up of items (allow servos to swing to open)
      */
     fun open() {
-        claw?.position = 0.0
-        opMode.telemetry.addLine("Claws are opening...")
+        claw.position = 0.0
+        opMode.addTelemetry("Claws are opening...")
     }
 
     /**
@@ -111,8 +100,8 @@ class JerryLift(
      * position. Using Servo mode as opposed to CRServo mode.
      */
     fun close() {
-        claw?.position = 1.0
-        opMode.telemetry.addLine("Claws are closing...")
+        claw.position = 1.0
+        opMode.addTelemetry("Claws are closing...")
     }
 
     /**
@@ -138,24 +127,24 @@ class JerryLift(
     fun update() {
         if (isResetting) return
 
-        opMode.telemetry.addLine(
+        opMode.addTelemetry(
             String.format(
                 "Lift (pos1, pos2, target, capture): %d, %d, %s, %s",
-                arm1?.currentPosition,
-                arm2?.currentPosition,
+                arm1.currentPosition,
+                arm2.currentPosition,
                 targetPosition.toInt(),
                 holdPosition
             )
         )
 
         for (motor in motors) {
-            motor?.power = power
-            motor?.mode = DcMotor.RunMode.RUN_TO_POSITION
-            motor?.targetPosition = targetPosition.toInt()
+            motor.power = power
+            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+            motor.targetPosition = targetPosition.toInt()
         }
 
         // Ensure the arm does not overswing
-        if ((arm1!!.currentPosition + arm2!!.currentPosition) / 2 > HARD_LIMIT) {
+        if ((arm1.currentPosition + arm2.currentPosition) / 2 > HARD_LIMIT) {
             targetPosition = (HARD_LIMIT - (HARD_LIMIT / 6)).toDouble()
         }
     }

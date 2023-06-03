@@ -23,7 +23,7 @@ import kotlin.math.abs
 class CameraOp(
     opmode: BunyipsOpMode,
     private val webcam: WebcamName?,
-    private val monitorID: Int?,
+    private val monitorID: Int,
     var mode: CamMode
 ) : BunyipsComponent(opmode) {
     private var vuforia: VuforiaLocalizer? = null
@@ -54,21 +54,19 @@ class CameraOp(
      */
     init {
         try {
-            assert(webcam != null)
             when (mode) {
                 CamMode.STANDARD -> stdinit()
                 CamMode.OPENCV -> openCVinit()
             }
         } catch (e: Throwable) {
-            opmode.telemetry.addLine("Failed to initialise Camera Operation. Error message: ${e.message}")
+            opmode.addTelemetry(
+                "Failed to initialise Camera Operation. Error message: ${e.message}",
+                true
+            )
         }
     }
 
     private fun stdinit() {
-        if (monitorID == null) {
-            opMode.telemetry.addLine("Failed to initialise Standard Camera Operation. No monitor ID provided.")
-            return
-        }
         // Vuforia localizer engine initialisation, Camera Stream will be Vuforia's
         val parameters = VuforiaLocalizer.Parameters(monitorID)
         parameters.vuforiaLicenseKey = VUFORIA_KEY
@@ -179,10 +177,6 @@ class CameraOp(
     }
 
     private fun openCVinit() {
-        if (monitorID == null) {
-            opMode.telemetry.addLine("Failed to initialise OpenCV Camera Operation. No monitor ID provided.")
-            return
-        }
         /*
          * Instead of using Vuforia and OpenCV on the same camera, we instead init the camera
          * using OpenCV's own camera instance. It is highly unlikely one camera would need to use
@@ -197,7 +191,10 @@ class CameraOp(
             }
 
             override fun onError(errorCode: Int) {
-                opMode.telemetry.addLine("An error occurred in initialising OpenCV. Standard mode will be activated. Error code: $errorCode")
+                opMode.addTelemetry(
+                    "An error occurred in initialising OpenCV. Standard mode will be activated. Error code: $errorCode",
+                    true
+                )
                 oCVcam = null
                 mode = CamMode.STANDARD
                 stdinit()
@@ -250,21 +247,21 @@ class CameraOp(
             val row = ((recognition.top + recognition.bottom) / 2).toDouble()
             val width = abs(recognition.right - recognition.left).toDouble()
             val height = abs(recognition.top - recognition.bottom).toDouble()
-            opMode.telemetry.addLine(
+            opMode.addTelemetry(
                 String.format(
                     "Image: %1\$s (%2$.0f %% Conf.)",
                     recognition.label,
                     recognition.confidence * 100
                 )
             )
-            opMode.telemetry.addLine(
+            opMode.addTelemetry(
                 String.format(
                     "- Position (Row/Col): %1$.0f / %2$.0f",
                     row,
                     col
                 )
             )
-            opMode.telemetry.addLine(
+            opMode.addTelemetry(
                 String.format(
                     "- Size (Width/Height): %1$.0f / %2$.0f",
                     width,
@@ -286,25 +283,25 @@ class CameraOp(
         return null
     }
 
-    // Return the raw matrix detected if it is visible to the camera, otherwise return null
+    /*
+     * Fully pre-interpreted data
+     *     cam.getX(); Position X (mm)
+     *     cam.getY(); Position Y (mm)
+     *     cam.getZ(); Position Z (mm)
+     *     cam.getPitch(); Pitch (X) (degs)
+     *     cam.getRoll(); Roll (Y) (degs)
+     *     cam.getHeading(); Heading (Z) (degs)
+     *
+     * See: https://github.com/FIRST-Tech-Challenge/FtcRobotController/blob/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples/FTC_FieldCoordinateSystemDefinition.pdf
+     * for information regarding field positioning with these coordinates.
+     */
+
     /**
      * Returns the raw OpenGLMatrix info from the Vuforia engine for OpMode interpretation. See this method's definition for more information. Vuforia must be activated.
      * @return OpenGLMatrix from the current identified target identified by the Vuforia engine.
      * Returns null if no target is currently visible.
      * For the most part, this method shouldn't have to be called in an OpMode unless for debugging.
      */
-    /*
-         * Call these methods for fully pre-interpreted data
-         *     cam.getX(); Position X (mm)
-         *     cam.getY(); Position Y (mm)
-         *     cam.getZ(); Position Z (mm)
-         *     cam.getPitch(); Pitch (X) (degs)
-         *     cam.getRoll(); Roll (Y) (degs)
-         *     cam.getHeading(); Heading (Z) (degs)
-         *
-         * See: https://github.com/FIRST-Tech-Challenge/FtcRobotController/blob/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples/FTC_FieldCoordinateSystemDefinition.pdf
-         * for information regarding field positioning with these coordinates.
-         */
     @get:SuppressLint("DefaultLocale")
     val targetRawMatrix: OpenGLMatrix?
         get() {
@@ -317,7 +314,7 @@ class CameraOp(
                   * uncomment the lines below to get all interpreted data readings for debugging.
                   */
                 val translation = lastLocation!!.translation
-                opMode.telemetry.addLine(
+                opMode.addTelemetry(
                     String.format(
                         "Pos (mm): {X, Y, Z} = %.1f, %.1f, %.1f",
                         translation[0], translation[1], translation[2]
@@ -329,7 +326,7 @@ class CameraOp(
                     AxesOrder.XYZ,
                     AngleUnit.DEGREES
                 )
-                opMode.telemetry.addLine(
+                opMode.addTelemetry(
                     String.format(
                         "Rot (deg): {Roll, Pitch, Heading} = %.0f, %.0f, %.0f",
                         rotation.firstAngle,

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.jerry
+package org.firstinspires.ftc.teamcode.jerry.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
@@ -11,27 +11,30 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
  * Standard controls involve gamepad1 left stick for driving, gamepad1 right stick for turning,
  * gamepad2 dpad up/down for lift, gamepad2 left bumper for recalibration, gamepad2 a/b for claw, use gamepad2 right bumper to cancel calibration.
  * gamepad2 right bumper + gamepad2 left stick y to control arm offset
- * @author Lucas Bubner - 2022
- * @author Lachlan Paul - 2023
+ * @author Lucas Bubner, 2022-2023
  */
 @TeleOp(name = "<JERRY> POWERPLAY TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
+    private lateinit var config: JerryConfig
     private var drive: JerryDrive? = null
     private var lift: JerryLift? = null
-    private var config: JerryConfig? = null
 
     override fun onInit() {
         // Configure drive and lift subsystems
         config = JerryConfig.newConfig(hardwareMap)
-        drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
+        if (!config.hasHardwareErrors(config.driveMotors)) {
+            drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+        }
         drive?.setToBrake()
-        lift = JerryLift(
-            this,
-            config?.claw,
-            config?.arm1,
-            config?.arm2,
-            config?.limit
-        )
+        if (!config.hasHardwareErrors(config.armComponents)) {
+            lift = JerryLift(
+                this,
+                config.claw!!,
+                config.arm1!!,
+                config.arm2!!,
+                config.limit!!
+            )
+        }
     }
 
     @Throws(InterruptedException::class)
@@ -42,7 +45,7 @@ class JerryTeleOp : BunyipsOpMode() {
         val r = gamepad1.right_stick_x.toDouble()
         val v = gamepad2.left_stick_y.toDouble()
 
-//        telemetry.addLine(String.format(Locale.getDefault(),
+//        addTelemetry(String.format(Locale.getDefault(),
 //            "Controller: X: %.2f, Y: %.2f, R: %.2f", x, y, r))
 
         // Set speeds of motors and interpret any data

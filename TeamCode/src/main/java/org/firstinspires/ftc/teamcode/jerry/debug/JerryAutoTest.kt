@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.jerry
+package org.firstinspires.ftc.teamcode.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
@@ -22,7 +22,7 @@ import java.util.ArrayDeque
 @Autonomous(name = "<JERRY> Patriarch of the Bunyips Family")
 @Disabled
 class JerryAutoTest : BunyipsOpMode() {
-    private var config: JerryConfig? = null
+    private lateinit var config: JerryConfig
     private var drive: JerryDrive? = null
     private var tagTask: GetAprilTagTask? = null
     private var arm: JerryArm? = null
@@ -32,10 +32,15 @@ class JerryAutoTest : BunyipsOpMode() {
 
     override fun onInit() {
         config = JerryConfig.newConfig(hardwareMap)
-        drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
-        drive?.setToBrake()
+        logHardwareErrors(config.hardwareErrors)
+        if (!config.hasHardwareErrors(config.driveMotors)) {
+            drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+        }
 
-        imu = IMUOp(this, config?.imu)
+        drive?.setToBrake()
+        if (!config.hasHardwareErrors(config.imu)) {
+            imu = IMUOp(this, config.imu!!)
+        }
         tasks.add(
             MessageTask(
                 this,
@@ -43,18 +48,19 @@ class JerryAutoTest : BunyipsOpMode() {
                 "well here we are again, it's always such a pleasure, remember when you tried to kill me twice"
             )
         )
-
-        arm = JerryArm(
-            this,
-            config?.claw,
-            config?.arm1,
-            config?.arm2,
-            config?.limit
-        )
+        if (!config.hasHardwareErrors(config.armComponents)) {
+            arm = JerryArm(
+                this,
+                config.claw!!,
+                config.arm1!!,
+                config.arm2!!,
+                config.limit!!
+            )
+        }
 
         cam = CameraOp(
             this,
-            config?.webcam, config?.monitorID, CameraOp.CamMode.OPENCV
+            config.webcam, config.monitorID, CameraOp.CamMode.OPENCV
         )
 
         tagTask = cam?.let { GetAprilTagTask(this, it) }

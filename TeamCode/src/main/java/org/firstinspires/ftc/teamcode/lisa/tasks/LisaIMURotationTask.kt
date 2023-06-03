@@ -13,10 +13,10 @@ import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive
 class LisaIMURotationTask(
     opMode: BunyipsOpMode,
     time: Double,
-    private val drive: LisaDrive,
+    private val drive: LisaDrive?,
+    private val imu: IMUOp?,
     private val angle: Double,
-    private val speed: Double,
-    private val imu: IMUOp
+    private val speed: Double
 ) : Task(opMode, time), TaskImpl {
     var direction: Direction? = null
 
@@ -26,8 +26,8 @@ class LisaIMURotationTask(
 
     override fun init() {
         super.init()
-        imu.tick()
-        drive.setToBrake()
+        imu?.tick()
+        drive?.setToBrake()
 
         direction = if (angle < 0.0) {
             // Turn left
@@ -38,20 +38,20 @@ class LisaIMURotationTask(
         }
 
         if (direction == Direction.LEFT) {
-            drive.setPower(-speed, speed)
+            drive?.setPower(-speed, speed)
         } else {
-            drive.setPower(speed, -speed)
+            drive?.setPower(speed, -speed)
         }
 
-        drive.update()
+        drive?.update()
     }
 
     override fun run() {
         if (isFinished()) {
-            drive.setPower(0.0, 0.0)
-            drive.update()
+            drive?.setPower(0.0, 0.0)
+            drive?.update()
             return
         }
-        imu.tick()
+        imu?.tick()
     }
 }

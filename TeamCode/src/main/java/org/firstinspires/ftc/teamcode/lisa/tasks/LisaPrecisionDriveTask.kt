@@ -47,9 +47,13 @@ class LisaPrecisionDriveTask(
         drive?.update()
         imu?.tick()
 
-        opMode.telemetry.addLine("PrecisionDrive is active with IMU fault? $imuFault")
-        opMode.telemetry.addLine("Distance progress: ${drive?.getTravelledDist().toString()}/$distance_mm")
-        opMode.telemetry.addLine(
+        opMode.addTelemetry("PrecisionDrive is active with IMU fault? $imuFault")
+        opMode.addTelemetry(
+            "Distance progress: ${
+                drive?.getTravelledDist().toString()
+            }/$distance_mm"
+        )
+        opMode.addTelemetry(
             "Axis correction: ${imu?.capture?.minus(tolerance) ?: "N/A"} <= ${imu?.heading ?: "N/A"} <= ${
                 imu?.capture?.plus(
                     tolerance

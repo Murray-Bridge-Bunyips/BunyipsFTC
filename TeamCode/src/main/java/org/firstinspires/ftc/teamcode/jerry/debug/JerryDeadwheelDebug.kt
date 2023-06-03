@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.jerry
+package org.firstinspires.ftc.teamcode.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
@@ -11,19 +11,22 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
  */
 @TeleOp(name = "<JERRY> Deadwheel Debug Data")
 class JerryDeadwheelDebug : BunyipsOpMode() {
-    private var config: JerryConfig? = null
+    private lateinit var config: JerryConfig
     private var pos: Deadwheels? = null
 
     override fun onInit() {
         config = JerryConfig.newConfig(hardwareMap)
-        pos = Deadwheels(this, config?.fl!!, config?.fr!!)
+        logHardwareErrors(config.hardwareErrors)
+        if (!config.hasHardwareErrors(config.fl, config.fr)) {
+            pos = Deadwheels(this, config.fl!!, config.fr!!)
+        }
         pos?.enableTracking(XYEncoder.Axis.BOTH)
     }
 
     override fun activeLoop() {
-        telemetry.addLine("X Encoder: ${pos?.encoderReading(XYEncoder.Axis.X)}")
-        telemetry.addLine("Y Encoder: ${pos?.encoderReading(XYEncoder.Axis.Y)}")
-        telemetry.addLine("X MM: ${pos?.travelledMM(XYEncoder.Axis.X)}")
-        telemetry.addLine("Y MM: ${pos?.travelledMM(XYEncoder.Axis.Y)}")
+        addTelemetry("X Encoder: ${pos?.encoderReading(XYEncoder.Axis.X)}")
+        addTelemetry("Y Encoder: ${pos?.encoderReading(XYEncoder.Axis.Y)}")
+        addTelemetry("X MM: ${pos?.travelledMM(XYEncoder.Axis.X)}")
+        addTelemetry("Y MM: ${pos?.travelledMM(XYEncoder.Axis.Y)}")
     }
 }

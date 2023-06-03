@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.jerry
+package org.firstinspires.ftc.teamcode.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
@@ -16,16 +16,15 @@ import java.util.ArrayDeque
  */
 @Autonomous(name = "<JERRY> POWERPLAY Auto Left-Right Park")
 class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
-    private var config: JerryConfig? = null
+    private lateinit var config: JerryConfig
     private var drive: JerryDrive? = null
     private val tasks = ArrayDeque<TaskImpl>()
     override fun onInit() {
         config = JerryConfig.newConfig(hardwareMap)
-        try {
-            drive = JerryDrive(this, config?.bl, config?.br, config?.fl, config?.fr)
-        } catch (e: Exception) {
-            telemetry.addLine("Failed to initialise Drive System.")
-        }
+        logHardwareErrors(config.hardwareErrors)
+        if (!config.hasHardwareErrors(config.driveMotors))
+            drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+
         val selectedButton = ButtonHashmap.map(this, "Red Drive Left", "Blue Drive Right", "", "")
         when (selectedButton) {
             ButtonControl.A -> // Move left
@@ -36,7 +35,7 @@ class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
 
             else -> {}
         }
-        telemetry.addLine("Ready to go under config: $selectedButton")
+        addTelemetry("Ready to go under config: $selectedButton")
     }
 
     @Throws(InterruptedException::class)

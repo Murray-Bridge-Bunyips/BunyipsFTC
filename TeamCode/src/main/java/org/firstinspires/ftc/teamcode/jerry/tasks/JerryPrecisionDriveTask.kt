@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.Deadwheels
-import org.firstinspires.ftc.teamcode.common.XYEncoder
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.XYEncoder
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
@@ -31,7 +31,10 @@ class JerryPrecisionDriveTask(
         try {
             assert(drive != null)
         } catch (e: AssertionError) {
-            opMode.telemetry.addLine("Failed to initialise a drive task as the drive system is unavailable.")
+            opMode.addTelemetry(
+                "Failed to initialise a drive task as the drive system is unavailable.",
+                true
+            )
         }
         // Use absolute values of power to ensure that the robot moves correctly and is not fed with negative values
         // This is because the task will handle the power management and determine whether the value 
@@ -69,32 +72,32 @@ class JerryPrecisionDriveTask(
 
     override fun run() {
         if (isFinished()) {
-            drive!!.deinit()
+            drive?.deinit()
             pos?.resetTracking(XYEncoder.Axis.BOTH)
             return
         }
 
         imu?.tick()
 
-        drive!!.setSpeedXYR(
+        drive?.setSpeedXYR(
             if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
             if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
             imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0
         )
 
         // Deadwheels will continue to track if they are enabled.
-        drive.update()
+        drive?.update()
 
         // Add telemetry of current operation
-        opMode.telemetry.addLine("PrecisionDrive is active.")
-        opMode.telemetry.addLine(
+        opMode.addTelemetry("PrecisionDrive is active.")
+        opMode.addTelemetry(
             "Distance progress: ${
                 if (direction == Directions.LEFT || direction == Directions.RIGHT) pos?.travelledMM(
                     XYEncoder.Axis.X
                 ) ?: "N/A" else pos?.travelledMM(XYEncoder.Axis.Y) ?: "N/A"
             }/$distance_mm"
         )
-        opMode.telemetry.addLine(
+        opMode.addTelemetry(
             "Axis correction: ${imu?.capture?.minus(tolerance) ?: "N/A"} <= ${imu?.heading ?: "N/A"} <= ${
                 imu?.capture?.plus(
                     tolerance

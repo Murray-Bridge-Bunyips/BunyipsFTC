@@ -1,10 +1,11 @@
 package org.firstinspires.ftc.teamcode.lisa.components
 
-import com.qualcomm.hardware.bosch.BNO055IMU
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction
+import com.qualcomm.robotcore.hardware.HardwareDevice
 import com.qualcomm.robotcore.hardware.HardwareMap
+import com.qualcomm.robotcore.hardware.IMU
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 
 /**
@@ -13,23 +14,43 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig
 class LisaConfig(override var hardwareMap: HardwareMap) : RobotConfig() {
     var left: DcMotorEx? = null
     var right: DcMotorEx? = null
-    var imu: BNO055IMU? = null
+    var imu: IMU? = null
+
+    val motors: List<DcMotorEx?>
+        get() = listOf(left, right)
+
+    override val deviceMappings: HashMap<HardwareDevice?, String> = hashMapOf(
+        left to "Left Motor",
+        right to "Right Motor",
+        imu to "imu"
+    )
+
     override fun init() {
-        left = getHardware("Left Motor", DcMotorEx::class.java) as DcMotorEx
-        right = getHardware("Right Motor", DcMotorEx::class.java) as DcMotorEx
+        for ((device, deviceName) in deviceMappings) {
+            val hardwareDevice = getHardware(deviceName, device?.javaClass)
+
+            // Assign the hardware device to the corresponding variable
+            when (device) {
+                left -> left = hardwareDevice as? DcMotorEx
+                right -> right = hardwareDevice as? DcMotorEx
+                imu -> imu = hardwareDevice as? IMU
+            }
+
+            // Update mapping with the proper hardware device
+            deviceMappings.remove(device)
+            deviceMappings[hardwareDevice] = deviceName
+        }
+
         right?.direction = Direction.REVERSE
 
         // Control Hub IMU configuration
-        // This uses the legacy methods for IMU initialisation, this should be refactored and updated
-        // at some point in time. (23 Nov 2022)
-        val parameters = BNO055IMU.Parameters()
-        parameters.angleUnit = BNO055IMU.AngleUnit.DEGREES
-        parameters.accelUnit = BNO055IMU.AccelUnit.METERS_PERSEC_PERSEC
-        parameters.loggingEnabled = true
-        parameters.loggingTag = "IMU"
-        parameters.accelerationIntegrationAlgorithm = JustLoggingAccelerationIntegrator()
-        imu = getHardware("imu", BNO055IMU::class.java) as BNO055IMU
-        if (imu != null) imu?.initialize(parameters)
+        val parameters = IMU.Parameters(
+            RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+            )
+        )
+        imu?.initialize(parameters)
     }
 
     companion object {

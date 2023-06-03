@@ -11,17 +11,17 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
 class JerryArmTask(
     opMode: BunyipsOpMode,
     time: Double,
-    private val lift: JerryLift,
+    private val lift: JerryLift?,
     private val speed: Double,
     private val targetposition: Int
 ) : Task(opMode, time), TaskImpl {
     override fun init() {
         super.init()
-        lift.power = speed
-        lift.set(targetposition)
+        lift?.power = speed
+        lift?.set(targetposition)
     }
 
     override fun run() {
-        lift.update()
+        lift?.update()
     }
 }

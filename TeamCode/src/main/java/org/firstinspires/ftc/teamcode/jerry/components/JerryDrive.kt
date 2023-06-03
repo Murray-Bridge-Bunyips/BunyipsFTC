@@ -15,10 +15,9 @@ import kotlin.math.sin
  */
 class JerryDrive(
     opMode: BunyipsOpMode,
-    private val bl: DcMotorEx?, private val br: DcMotorEx?,
-    private val fl: DcMotorEx?, private val fr: DcMotorEx?
+    private val bl: DcMotorEx, private val br: DcMotorEx,
+    private val fl: DcMotorEx, private val fr: DcMotorEx
 ) : BunyipsComponent(opMode) {
-    private val opmode: BunyipsOpMode? = null
     private var speedX = 0.0
     private var speedY = 0.0
     private var speedR = 0.0
@@ -28,32 +27,20 @@ class JerryDrive(
         NORMALIZED, ROTATION_PRIORITY_NORMALIZED
     }
 
-    private var driveMode = MecanumDriveMode.NORMALIZED
-    fun setDriveMode(mode: MecanumDriveMode) {
-        driveMode = mode
-    }
-
-    init {
-        // Encoders are not controlled by JerryDrive, although two motors are wired to these motors
-        try {
-            assert(bl != null && br != null && fl != null && fr != null)
-        } catch (e: AssertionError) {
-            opMode.telemetry.addLine("Failed to initialise Drive System, check config for motors.")
-        }
-    }
+    var driveMode: MecanumDriveMode = MecanumDriveMode.NORMALIZED
 
     fun setToFloat() {
-        bl?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-        br?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-        fl?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-        fr?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        bl.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        br.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        fl.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
+        fr.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
     }
 
     fun setToBrake() {
-        bl?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        br?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        fl?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        fr?.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        bl.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        br.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        fl.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+        fr.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
     }
 
     /**
@@ -62,7 +49,10 @@ class JerryDrive(
      * will do the opposite, calculating translation before rotation
      */
     fun update() {
-        if (driveMode == MecanumDriveMode.ROTATION_PRIORITY_NORMALIZED) rotationalPriority()
+        if (driveMode == MecanumDriveMode.ROTATION_PRIORITY_NORMALIZED) {
+            rotationalPriority()
+            return
+        }
 
         // Calculate motor powers
         var frontLeftPower = speedX + speedY - speedR
@@ -86,12 +76,12 @@ class JerryDrive(
         }
 
         // Update motor powers with the calculated values
-        fl?.power = frontLeftPower
-        fr?.power = frontRightPower
-        bl?.power = backLeftPower
-        br?.power = backRightPower
+        fl.power = frontLeftPower
+        fr.power = frontRightPower
+        bl.power = backLeftPower
+        br.power = backRightPower
 
-        opMode.telemetry.addLine(
+        opMode.addTelemetry(
             String.format(
                 Locale.getDefault(),
                 "Mecanum Drive: X: %.2f, Y: %.2f, R: %.2f",
@@ -140,10 +130,10 @@ class JerryDrive(
         val frontRightPower = translationValues[1] * scaleFactor + rotationValues[1]
         val backLeftPower = translationValues[2] * scaleFactor + rotationValues[2]
         val backRightPower = translationValues[3] * scaleFactor + rotationValues[3]
-        fl?.power = frontLeftPower
-        fr?.power = frontRightPower
-        bl?.power = backLeftPower
-        br?.power = backRightPower
+        fl.power = frontLeftPower
+        fr.power = frontRightPower
+        bl.power = backLeftPower
+        br.power = backRightPower
     }
 
     /**
