@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.CameraOp.CamMode
 import org.firstinspires.ftc.teamcode.common.Deadwheels
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -27,16 +28,15 @@ class JerrySignalAutonomous : BunyipsOpMode() {
     private val tasks = ArrayDeque<TaskImpl>()
     override fun onInit() {
         // Configuration of camera and drive components
-        config = JerryConfig.newConfig(hardwareMap)
-        logHardwareErrors(config.hardwareErrors)
+        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
         cam = CameraOp(this, config.webcam, config.monitorID, CamMode.OPENCV)
-        if (!config.hasHardwareErrors(config.driveMotors))
+        if (config.assert(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        if (!config.hasHardwareErrors(config.fl, config.fr))
+        if (config.assert(config.fl, config.fr))
             pos = Deadwheels(this, config.fl!!, config.fr!!)
 
-        if (!config.hasHardwareErrors(config.imu))
+        if (config.assert(config.imu))
             imu = IMUOp(this, config.imu!!)
 
 

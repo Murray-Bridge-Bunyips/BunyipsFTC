@@ -141,6 +141,13 @@ abstract class BunyipsOpMode : LinearOpMode() {
     }
 
     /**
+     * Shorthand for addTelemetry(`value`, `retained`)
+     */
+    fun at(value: String, retained: Boolean) {
+        addTelemetry(value, retained)
+    }
+
+    /**
      * Remove an entry from the telemetry object if it is sticky
      */
     fun removeTelemetry(index: Int) {
@@ -181,19 +188,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun getTelemetryAutoClear(): Boolean {
         return telemetry.isAutoClear
-    }
-
-    /**
-     * Convenience method to add a hardware error to OpMode telemetry
-     */
-    fun logHardwareErrors(failures: ArrayList<String>) {
-        for (failure in failures) {
-            val item =
-                telemetry.addData("BUNYIPSOPMODE", "Failed to initialise device of name: $failure")
-            // Make the item sticky to keep the error on the screen
-            item.setRetained(true)
-            stickyTelemetryObjects.add(Pair(stickyTelemetryObjects.size + 1, item))
-        }
     }
 
     /**

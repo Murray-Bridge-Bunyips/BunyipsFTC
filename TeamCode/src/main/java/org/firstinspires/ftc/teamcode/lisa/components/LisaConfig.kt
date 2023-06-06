@@ -19,27 +19,10 @@ class LisaConfig(override var hardwareMap: HardwareMap) : RobotConfig() {
     val motors: List<DcMotorEx?>
         get() = listOf(left, right)
 
-    override val deviceMappings: HashMap<HardwareDevice?, String> = hashMapOf(
-        left to "Left Motor",
-        right to "Right Motor",
-        imu to "imu"
-    )
-
     override fun init() {
-        for ((device, deviceName) in deviceMappings) {
-            val hardwareDevice = getHardware(deviceName, device?.javaClass)
-
-            // Assign the hardware device to the corresponding variable
-            when (device) {
-                left -> left = hardwareDevice as? DcMotorEx
-                right -> right = hardwareDevice as? DcMotorEx
-                imu -> imu = hardwareDevice as? IMU
-            }
-
-            // Update mapping with the proper hardware device
-            deviceMappings.remove(device)
-            deviceMappings[hardwareDevice] = deviceName
-        }
+        left = getHardware("Left Motor", DcMotorEx::class.java) as DcMotorEx
+        right = getHardware("Right Motor", DcMotorEx::class.java) as DcMotorEx
+        imu = getHardware("imu", IMU::class.java) as IMU
 
         right?.direction = Direction.REVERSE
 

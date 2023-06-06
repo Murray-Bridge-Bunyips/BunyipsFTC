@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.jerry.debug
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
 /**
@@ -14,7 +15,7 @@ class JerryIMUDebug : BunyipsOpMode() {
     private var imu: IMUOp? = null
 
     override fun onInit() {
-        config = JerryConfig.newConfig(hardwareMap)
+        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
         imu = IMUOp(this, config.imu!!)
         imu?.startCapture()
     }

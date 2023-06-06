@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.jerry.debug
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.Deadwheels
+import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.XYEncoder
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
@@ -15,9 +16,8 @@ class JerryDeadwheelDebug : BunyipsOpMode() {
     private var pos: Deadwheels? = null
 
     override fun onInit() {
-        config = JerryConfig.newConfig(hardwareMap)
-        logHardwareErrors(config.hardwareErrors)
-        if (!config.hasHardwareErrors(config.fl, config.fr)) {
+        config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
+        if (config.assert(config.fl, config.fr)) {
             pos = Deadwheels(this, config.fl!!, config.fr!!)
         }
         pos?.enableTracking(XYEncoder.Axis.BOTH)

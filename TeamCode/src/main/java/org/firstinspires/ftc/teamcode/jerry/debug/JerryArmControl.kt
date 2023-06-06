@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
 
@@ -14,9 +15,8 @@ class JerryArmControl : BunyipsOpMode() {
     private var arm: JerryLift? = null
 
     override fun onInit() {
-        config = JerryConfig.newConfig(hardwareMap)
-        logHardwareErrors(config.hardwareErrors)
-        if (!config.hasHardwareErrors(config.armComponents)) {
+        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
+        if (config.assert(config.armComponents)) {
             arm = JerryLift(
                 this,
                 config.claw!!,

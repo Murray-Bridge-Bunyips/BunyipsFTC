@@ -34,41 +34,16 @@ class JerryConfig(override var hardwareMap: HardwareMap) : RobotConfig() {
     val armComponents: List<HardwareDevice?>
         get() = listOf(arm1, arm2, claw, limit)
 
-    override val deviceMappings: HashMap<HardwareDevice?, String> = hashMapOf(
-        webcam to "Webcam",
-        bl to "Back Left",
-        br to "Back Right",
-        fl to "Front Left",
-        fr to "Front Right",
-        arm1 to "Arm Motor 1",
-        arm2 to "Arm Motor 2",
-        claw to "Claw Servo",
-        limit to "Arm Stop",
-        imu to "ch_imu"
-    )
-
     override fun init() {
-        for ((device, deviceName) in deviceMappings) {
-            val hardwareDevice = getHardware(deviceName, device?.javaClass)
-
-            // Assign the hardware device to the corresponding variable
-            when (device) {
-                webcam -> webcam = hardwareDevice as? WebcamName
-                bl -> bl = hardwareDevice as? DcMotorEx
-                br -> br = hardwareDevice as? DcMotorEx
-                fl -> fl = hardwareDevice as? DcMotorEx
-                fr -> fr = hardwareDevice as? DcMotorEx
-                arm1 -> arm1 = hardwareDevice as? DcMotorEx
-                arm2 -> arm2 = hardwareDevice as? DcMotorEx
-                claw -> claw = hardwareDevice as? Servo
-                limit -> limit = hardwareDevice as? TouchSensor
-                imu -> imu = hardwareDevice as? IMU
-            }
-
-            // Update mapping with the proper hardware device
-            deviceMappings.remove(device)
-            deviceMappings[hardwareDevice] = deviceName
-        }
+        bl = getHardware("Back Left", DcMotorEx::class.java) as? DcMotorEx
+        br = getHardware("Back Right", DcMotorEx::class.java) as? DcMotorEx
+        fl = getHardware("Front Left", DcMotorEx::class.java) as? DcMotorEx
+        fr = getHardware("Front Right", DcMotorEx::class.java) as? DcMotorEx
+        arm1 = getHardware("Arm Motor 1", DcMotorEx::class.java) as? DcMotorEx
+        arm2 = getHardware("Arm Motor 2", DcMotorEx::class.java) as? DcMotorEx
+        claw = getHardware("Claw Servo", Servo::class.java) as? Servo
+        limit = getHardware("Arm Stop", TouchSensor::class.java) as? TouchSensor
+        imu = getHardware("ch_imu", IMU::class.java) as? IMU
 
         monitorID = hardwareMap.appContext.resources.getIdentifier(
             "cameraMonitorViewId", "id", hardwareMap.appContext.packageName
@@ -94,13 +69,5 @@ class JerryConfig(override var hardwareMap: HardwareMap) : RobotConfig() {
             )
         )
         imu?.initialize(parameters)
-    }
-
-    companion object {
-        fun newConfig(hardwareMap: HardwareMap): JerryConfig {
-            val config = JerryConfig(hardwareMap)
-            config.init()
-            return config
-        }
     }
 }

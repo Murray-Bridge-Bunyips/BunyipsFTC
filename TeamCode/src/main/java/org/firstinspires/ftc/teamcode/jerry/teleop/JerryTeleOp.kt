@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.jerry.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
@@ -21,12 +22,12 @@ class JerryTeleOp : BunyipsOpMode() {
 
     override fun onInit() {
         // Configure drive and lift subsystems
-        config = JerryConfig.newConfig(hardwareMap)
-        if (!config.hasHardwareErrors(config.driveMotors)) {
+        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
+        if (config.assert(config.driveMotors)) {
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
         }
         drive?.setToBrake()
-        if (!config.hasHardwareErrors(config.armComponents)) {
+        if (config.assert(config.armComponents)) {
             lift = JerryLift(
                 this,
                 config.claw!!,

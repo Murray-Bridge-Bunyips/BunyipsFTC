@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
@@ -31,14 +32,13 @@ class JerryAutoTest : BunyipsOpMode() {
     private val tasks = ArrayDeque<TaskImpl>()
 
     override fun onInit() {
-        config = JerryConfig.newConfig(hardwareMap)
-        logHardwareErrors(config.hardwareErrors)
-        if (!config.hasHardwareErrors(config.driveMotors)) {
+        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
+        if (config.assert(config.driveMotors)) {
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
         }
 
         drive?.setToBrake()
-        if (!config.hasHardwareErrors(config.imu)) {
+        if (config.assert(config.imu)) {
             imu = IMUOp(this, config.imu!!)
         }
         tasks.add(
@@ -48,7 +48,7 @@ class JerryAutoTest : BunyipsOpMode() {
                 "well here we are again, it's always such a pleasure, remember when you tried to kill me twice"
             )
         )
-        if (!config.hasHardwareErrors(config.armComponents)) {
+        if (config.assert(config.armComponents)) {
             arm = JerryArm(
                 this,
                 config.claw!!,
