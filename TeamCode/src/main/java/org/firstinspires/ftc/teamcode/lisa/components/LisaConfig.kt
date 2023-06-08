@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig
 /**
  * Robot configuration for high-speed minibot Lisa.
  */
-class LisaConfig(override var hardwareMap: HardwareMap) : RobotConfig() {
+class LisaConfig : RobotConfig() {
     var left: DcMotorEx? = null
     var right: DcMotorEx? = null
     var imu: IMU? = null
@@ -34,13 +34,5 @@ class LisaConfig(override var hardwareMap: HardwareMap) : RobotConfig() {
             )
         )
         imu?.initialize(parameters)
-    }
-
-    companion object {
-        fun newConfig(hardwareMap: HardwareMap): LisaConfig {
-            val config = LisaConfig(hardwareMap)
-            config.init()
-            return config
-        }
     }
 }

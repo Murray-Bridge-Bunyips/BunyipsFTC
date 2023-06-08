@@ -11,11 +11,11 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
  */
 @TeleOp(name = "<JERRY> Manual Arm Control")
 class JerryArmControl : BunyipsOpMode() {
-    private lateinit var config: JerryConfig
+    private var config = JerryConfig()
     private var arm: JerryLift? = null
 
     override fun onInit() {
-        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
+        config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
         if (config.assert(config.armComponents)) {
             arm = JerryLift(
                 this,

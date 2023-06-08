@@ -11,11 +11,11 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
  */
 @TeleOp(name = "<JERRY> IMU Debug")
 class JerryIMUDebug : BunyipsOpMode() {
-    private lateinit var config: JerryConfig
+    private var config = JerryConfig()
     private var imu: IMUOp? = null
 
     override fun onInit() {
-        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
+        config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
         imu = IMUOp(this, config.imu!!)
         imu?.startCapture()
     }

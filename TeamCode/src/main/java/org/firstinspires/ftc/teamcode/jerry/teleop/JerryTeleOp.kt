@@ -16,13 +16,13 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
  */
 @TeleOp(name = "<JERRY> POWERPLAY TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
-    private lateinit var config: JerryConfig
+    private var config = JerryConfig()
     private var drive: JerryDrive? = null
     private var lift: JerryLift? = null
 
     override fun onInit() {
         // Configure drive and lift subsystems
-        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
+        config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
         if (config.assert(config.driveMotors)) {
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
         }

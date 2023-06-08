@@ -16,13 +16,13 @@ import java.util.ArrayDeque
  */
 @Autonomous(name = "<JERRY> IMURotateTest")
 class JerryIMURotateTest : BunyipsOpMode() {
-    private lateinit var config: JerryConfig
+    private var config = JerryConfig()
     private var imu: IMUOp? = null
     private var drive: JerryDrive? = null
     private val tasks = ArrayDeque<TaskImpl>()
 
     override fun onInit() {
-        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
+        config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
         imu = IMUOp(this, config.imu!!)
         drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 

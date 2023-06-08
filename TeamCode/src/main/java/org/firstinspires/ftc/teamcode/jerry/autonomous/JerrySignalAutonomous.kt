@@ -19,7 +19,7 @@ import java.util.ArrayDeque
  */
 @Autonomous(name = "<JERRY> POWERPLAY Auto Signal Read & Park")
 class JerrySignalAutonomous : BunyipsOpMode() {
-    private lateinit var config: JerryConfig
+    private var config = JerryConfig()
     private var cam: CameraOp? = null
     private var drive: JerryDrive? = null
     private var imu: IMUOp? = null
@@ -28,7 +28,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
     private val tasks = ArrayDeque<TaskImpl>()
     override fun onInit() {
         // Configuration of camera and drive components
-        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
+        config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
         cam = CameraOp(this, config.webcam, config.monitorID, CamMode.OPENCV)
         if (config.assert(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)

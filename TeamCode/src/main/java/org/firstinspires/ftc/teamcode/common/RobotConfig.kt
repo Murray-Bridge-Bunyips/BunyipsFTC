@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap
  * Abstract class to use as parent to the class you will define to mirror a "saved configuration" on the Robot Controller
  */
 abstract class RobotConfig {
-    protected abstract var hardwareMap: HardwareMap
+    protected var hardwareMap: HardwareMap? = null
 
     /**
      * Initialise the hardwareMap and assign the class instance variables to the class they represent.
@@ -28,7 +28,7 @@ abstract class RobotConfig {
     protected fun getHardware(name: String, device: Class<*>?): HardwareDevice? {
         var hardwareDevice: HardwareDevice? = null
         try {
-            hardwareDevice = hardwareMap.get(device, name) as HardwareDevice
+            hardwareDevice = hardwareMap?.get(device, name) as HardwareDevice
         } catch (e: Throwable) {
             errors.add(name)
             e.localizedMessage?.let { DbgLog.msg(it) }

@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
  */
 @TeleOp(name = "<JERRY> Deadwheel Debug Data")
 class JerryDeadwheelDebug : BunyipsOpMode() {
-    private lateinit var config: JerryConfig
+    private var config = JerryConfig()
     private var pos: Deadwheels? = null
 
     override fun onInit() {

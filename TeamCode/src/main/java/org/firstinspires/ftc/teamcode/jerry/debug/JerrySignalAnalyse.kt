@@ -12,12 +12,12 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
  */
 @TeleOp(name = "<JERRY> POWERPLAY Signal Debug")
 class JerrySignalAnalyse : BunyipsOpMode() {
-    private lateinit var config: JerryConfig
+    private var config = JerryConfig()
     private var cam: CameraOp? = null
     private var task: GetAprilTagTask? = null
 
     override fun onInit() {
-        config = RobotConfig.new(config, hardwareMap, this::at) as JerryConfig
+        config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
         cam = CameraOp(this, config.webcam, config.monitorID, CameraOp.CamMode.OPENCV)
         task = cam?.let { GetAprilTagTask(this, it) }
     }

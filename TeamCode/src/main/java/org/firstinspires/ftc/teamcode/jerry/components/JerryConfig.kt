@@ -15,7 +15,7 @@ import kotlin.properties.Delegates
 /**
  * Jerry robot configuration and hardware declarations.
  */
-class JerryConfig(override var hardwareMap: HardwareMap) : RobotConfig() {
+class JerryConfig : RobotConfig() {
     var monitorID by Delegates.notNull<Int>()
     var webcam: WebcamName? = null
     var bl: DcMotorEx? = null
@@ -45,8 +45,8 @@ class JerryConfig(override var hardwareMap: HardwareMap) : RobotConfig() {
         limit = getHardware("Arm Stop", TouchSensor::class.java) as? TouchSensor
         imu = getHardware("ch_imu", IMU::class.java) as? IMU
 
-        monitorID = hardwareMap.appContext.resources.getIdentifier(
-            "cameraMonitorViewId", "id", hardwareMap.appContext.packageName
+        monitorID = hardwareMap!!.appContext.resources.getIdentifier(
+            "cameraMonitorViewId", "id", hardwareMap!!.appContext.packageName
         )
 
         /*
