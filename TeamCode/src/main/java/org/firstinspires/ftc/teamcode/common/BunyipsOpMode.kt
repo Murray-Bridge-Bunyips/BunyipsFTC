@@ -1,122 +1,154 @@
 package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
+import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.Telemetry.Item
+import kotlin.math.roundToInt
 
 /**
- * OpMode Abstract class that offers additional abstraction for opMode developers
- * including catch-all error handling and phased code execution.
- * Small modifications made by Lucas Bubner, FTC 15215
+ * Base class for all OpModes that provides a number of useful methods and utilities for development.
+ * Includes a lifecycle that is similar to an iterative lifecycle, but includes logging, error catching,
+ * and abstraction to provide phased code execution.
+ * @author Lucas Bubner, 2023
  */
 abstract class BunyipsOpMode : LinearOpMode() {
     private var movingAverageTimer: MovingAverageTimer? = null
     private var loopCount: Long = 0
     private var operationsCompleted = false
+    private var operationsPaused = false
     private val stickyTelemetryObjects = mutableListOf<Pair<Int, Item>>()
 
     /**
-     * Implement this method to define the code to run when the Init button is pressed on the Driver Station.
+     * One-time setup for operations that need to be done for the opMode
+     */
+    private fun setup() {
+        telemetry.setDisplayFormat(Telemetry.DisplayFormat.MONOSPACE)
+        telemetry.log().displayOrder = Telemetry.Log.DisplayOrder.OLDEST_FIRST
+        telemetry.log().capacity = 12
+        movingAverageTimer = MovingAverageTimer(100)
+    }
+
+    /**
+     * Runs upon the pressing of the INIT button on the Driver Station.
      */
     protected abstract fun onInit()
 
     /**
-     * Override to this method to allow code to run in a loop AFTER onInit has completed, until
+     * Run code to in a loop AFTER onInit has completed, until
      * start is pressed on the Driver Station or true is returned to this method.
      * If not implemented, the opMode will continue on as normal and wait for start.
      */
-    @Throws(InterruptedException::class)
     protected open fun onInitLoop(): Boolean {
         return true
     }
 
     /**
-     * Override to this method to allow code to execute once after all initialisation has finished.
-     * Note if a task is running in an onInitLoop and start is pressed, this code will still be executed.
+     * Allow code to execute once after all initialisation has finished.
+     * Note: this method is always called even if initialisation is cut short by the driver station.
      */
-    @Throws(InterruptedException::class)
     protected open fun onInitDone() {
     }
 
     /**
-     * Override to this method to perform one time operations after start is pressed.
+     * Perform one time operations after start is pressed.
      * Unlike onInitDone, this will only execute once play is hit and not when initialisation is done.
      */
-    @Throws(InterruptedException::class)
-    protected fun onStart() {
+    protected open fun onStart() {
     }
 
     /**
-     * Override to this method to perform one time operations after the activeLoop finishes
-     */
-    @Throws(InterruptedException::class)
-    protected fun onStop() {
-    }
-
-    /**
-     * Implement this method to define the code to run when the Start button is pressed on the Driver station.
+     * Code to run when the START button is pressed on the Driver Station.
      * This method will be called on each hardware cycle.
-     *
-     * @throws InterruptedException
      */
-    @Throws(InterruptedException::class)
     protected abstract fun activeLoop()
 
     /**
-     * Override this method only if you need to do something outside of onInit() and activeLoop()
-     *
+     * Perform one time clean-up operations after the OpMode finishes.
+     */
+    protected open fun onStop() {
+    }
+
+    /**
+     * Main method overridden from LinearOpMode that handles the opMode lifecycle.
      * @throws InterruptedException
      */
     @Throws(InterruptedException::class)
     override fun runOpMode() {
         try {
             try {
+                log("opmode status changed: from idle to setup")
+                // Run BunyipsOpMode setup
                 setup()
+                log("opmode status changed: from setup to static_init")
+                // Run user-defined setup
                 onInit()
+                log("opmode status changed: from static_init to dynamic_init")
+                // Run user-defined dynamic initialisation
                 while (opModeInInit()) {
-                    if (onInitLoop()) break
+                    try {
+                        // Run until onInitLoop returns true or the opMode is continued
+                        if (onInitLoop()) break
+                    } catch (e: Throwable) {
+                        ErrorUtil.handleCatchAllException(e, ::log)
+                    }
                 }
+                log("opmode status changed: from dynamic_init to finish_init")
+                // Run user-defined final initialisation
                 onInitDone()
                 telemetry.addData("BUNYIPSOPMODE", "INIT COMPLETE -- PLAY WHEN READY.")
                 telemetry.update()
             } catch (e: Throwable) {
-                ErrorUtil.handleCatchAllException(e, telemetry)
+                ErrorUtil.handleCatchAllException(e, ::log)
             }
+            log("opmode status changed: from finish_init to ready")
+            // Ready to go.
             waitForStart()
             clearTelemetryData()
             movingAverageTimer?.reset()
-            onStart()
+            log("opmode status changed: from ready to running")
+            try {
+                // Run user-defined start operations
+                onStart()
+            } catch (e: Throwable) {
+                ErrorUtil.handleCatchAllException(e, ::log)
+            }
             while (opModeIsActive() && !operationsCompleted) {
+                if (operationsPaused) {
+                    // If the opMode is paused, skip the loop and wait for the next hardware cycle
+                    idle()
+                    continue
+                }
                 try {
+                    // Run user-defined active loop
                     activeLoop()
                     loopCount++
                 } catch (ie: InterruptedException) {
+                    // Preemptively exit the OpMode if an interrupt is thrown
                     throw ie
                 } catch (e: Throwable) {
-                    ErrorUtil.handleCatchAllException(e, telemetry)
+                    // Otherwise, let the handler manage them
+                    ErrorUtil.handleCatchAllException(e, ::log)
                 }
+                // Update telemetry and timers
                 movingAverageTimer?.update()
                 telemetry.update()
                 idle()
             }
-
+            log("opmode status changed: from running to finished")
             // Wait for user to hit stop
             while (opModeIsActive()) {
                 idle()
             }
         } finally {
+            log("opmode status changed: from finished to cleanup")
             onStop()
         }
     }
 
-    // One-time setup for operations that need to be done for the opMode
-    private fun setup() {
-        movingAverageTimer = MovingAverageTimer(100)
-    }
-
     /**
-     * Clear data from the telemetry cache
+     * Clear data from the telemetry cache.
      */
-    fun clearTelemetryData() {
+    private fun clearTelemetryData() {
         if (telemetry.isAutoClear) {
             telemetry.clear()
         } else {
@@ -132,19 +164,32 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * @param value A string to add to telemetry
      * @param retained Optional parameter to retain the data on the screen
      */
-    fun addTelemetry(value: String, retained: Boolean = false) {
-        val item = telemetry.addData(movingAverageTimer?.elapsedTime().toString(), value)
+    fun addTelemetry(value: String, retained: Boolean = false, timed: Boolean = true) {
+        // Set the caption value separator to nothing if the data is timed
+        telemetry.captionValueSeparator = if (timed) { "" } else { " : " }
+        val prefix = if (timed) {  "T+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt().toString()}s" } else { "" }
+
+        // Add data to the telemetry object
+        val item = telemetry.addData(prefix, value)
         if (retained) {
+            // Set retained to true if the data is sticky
             item.setRetained(true)
             stickyTelemetryObjects.add(Pair(stickyTelemetryObjects.size + 1, item))
         }
     }
 
     /**
-     * Shorthand for addTelemetry(`value`, `retained`)
+     * Shorthand for addTelemetry(`value`, `retained`, `timed`)
      */
-    fun at(value: String, retained: Boolean) {
-        addTelemetry(value, retained)
+    fun at(value: String, retained: Boolean, timed: Boolean) {
+        addTelemetry(value, retained, timed)
+    }
+
+    /**
+     * Log a message to the telemetry log
+     */
+    fun log(message: String) {
+        telemetry.log().add("[t+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: "0"}s] $message")
     }
 
     /**
@@ -193,10 +238,33 @@ abstract class BunyipsOpMode : LinearOpMode() {
     /**
      * Call to prevent hardware loop from calling activeLoop(), indicating an OpMode that is finished.
      */
-    protected fun setOperationsCompleted() {
+    fun finish() {
         operationsCompleted = true
         clearTelemetryData()
-        telemetry.addData("BUNYIPSOPMODE", "ActiveLoop halted. All operations completed.")
+        log("opmode status changed: from running to finished")
+        telemetry.addData("BUNYIPSOPMODE", "activeLoop terminated. All operations completed.")
+        telemetry.update()
+    }
+
+    /**
+     * Call to temporarily halt the activeLoop from running.
+     */
+    fun halt() {
+        operationsPaused = true
+        clearTelemetryData()
+        log("opmode status changed: from running to halted")
+        telemetry.addData("BUNYIPSOPMODE", "activeLoop halted. Operations paused.")
+        telemetry.update()
+    }
+
+    /**
+     * Call to resume the activeLoop after a halt() call.
+     */
+    fun resume() {
+        operationsPaused = false
+        clearTelemetryData()
+        log("opmode status changed: from halted to running")
+        telemetry.addData("BUNYIPSOPMODE", "activeLoop resumed. Operations resumed.")
         telemetry.update()
     }
 }

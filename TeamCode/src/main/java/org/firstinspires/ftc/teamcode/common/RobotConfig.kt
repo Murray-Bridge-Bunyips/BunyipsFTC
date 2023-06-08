@@ -56,13 +56,16 @@ abstract class RobotConfig {
          */
         val errors = ArrayList<String>()
 
-        fun new(config: RobotConfig, hardwareMap: HardwareMap, addTelemetry: (msg: String, retained: Boolean) -> Unit): RobotConfig {
+        /**
+         * Factory method for creating a new instance of a configuration with a HardwareMap.
+         */
+        fun new(config: RobotConfig, hardwareMap: HardwareMap, addTelemetry: (msg: String, retained: Boolean, timed: Boolean) -> Unit): RobotConfig {
             config.hardwareMap = hardwareMap
             config.init()
-            addTelemetry("${config.javaClass.simpleName.uppercase()}: Configuration completed with ${errors.size} error(s).", false)
+            addTelemetry("${config.javaClass.simpleName.uppercase()}: Configuration completed with ${errors.size} error(s).", false, false)
             if (errors.isNotEmpty()) {
                 for (error in errors) {
-                    addTelemetry("! DEV_FAULT: $error", true)
+                    addTelemetry("! DEV_FAULT: $error", true, false)
                 }
             }
             return config

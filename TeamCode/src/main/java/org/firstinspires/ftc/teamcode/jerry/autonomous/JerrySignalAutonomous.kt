@@ -26,6 +26,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
     private var pos: Deadwheels? = null
     private var tagtask: GetAprilTagTask? = null
     private val tasks = ArrayDeque<TaskImpl>()
+
     override fun onInit() {
         // Configuration of camera and drive components
         config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
@@ -104,9 +105,12 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         }
     }
 
-    @Throws(InterruptedException::class)
     override fun activeLoop() {
-        val currentTask = tasks.peekFirst() ?: return
+        val currentTask = tasks.peekFirst()
+        if (currentTask == null) {
+            finish()
+            return
+        }
         currentTask.run()
         if (currentTask.isFinished()) {
             tasks.removeFirst()

@@ -20,6 +20,7 @@ class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: JerryDrive? = null
     private val tasks = ArrayDeque<TaskImpl>()
+
     override fun onInit() {
         config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
         if (config.assert(config.driveMotors))
@@ -38,9 +39,12 @@ class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
         addTelemetry("Ready to go under config: $selectedButton")
     }
 
-    @Throws(InterruptedException::class)
     override fun activeLoop() {
-        val currentTask = tasks.peekFirst() ?: return
+        val currentTask = tasks.peekFirst()
+        if (currentTask == null) {
+            finish()
+            return
+        }
         currentTask.run()
         if (currentTask.isFinished()) {
             tasks.removeFirst()

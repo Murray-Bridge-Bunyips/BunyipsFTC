@@ -11,7 +11,7 @@ import kotlin.math.abs
 class Deadwheels(
     opMode: BunyipsOpMode,
     private var x: DcMotorEx,
-    private var y: DcMotorEx // It is fine to declare motors as not nullable as we'd have bigger problems if they weren't initialised by now
+    private var y: DcMotorEx
 ) : BunyipsComponent(opMode), XYEncoder {
     // Hold the encoder values for the X and Y axis
     @Volatile

@@ -25,7 +25,6 @@ class LisaTeleOp : BunyipsOpMode() {
         }
     }
 
-    @Throws(InterruptedException::class)
     override fun activeLoop() {
         val left =
             (gamepad1.left_trigger - gamepad1.right_trigger - gamepad1.left_stick_x).toDouble()

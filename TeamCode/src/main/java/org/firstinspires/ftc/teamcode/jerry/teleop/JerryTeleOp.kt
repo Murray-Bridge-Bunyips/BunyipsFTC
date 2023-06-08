@@ -38,7 +38,6 @@ class JerryTeleOp : BunyipsOpMode() {
         }
     }
 
-    @Throws(InterruptedException::class)
     override fun activeLoop() {
         // Set changing variables and gather raw data
         val x = gamepad1.left_stick_x.toDouble()
