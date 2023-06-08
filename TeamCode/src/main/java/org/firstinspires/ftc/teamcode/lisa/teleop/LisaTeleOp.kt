@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive
  * Basic TeleOp to use controllers to operate the minibot.
  * gamepad1 triggers control acceleration, gamepad1 left stick controls turning.
  */
-@TeleOp(name = "<LISA> TeleOp")
+@TeleOp(name = "LISA: TeleOp", group = "LISA")
 class LisaTeleOp : BunyipsOpMode() {
     private var config = LisaConfig()
     private var drive: LisaDrive? = null

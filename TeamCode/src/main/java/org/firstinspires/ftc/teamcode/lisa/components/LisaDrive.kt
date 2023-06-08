@@ -21,6 +21,7 @@ class LisaDrive(
 
     private val leftMotor = EncoderMotor(left, null, null)
     private val rightMotor = EncoderMotor(right, null, null)
+    // TODO: Define these values
     /*
         These might be helpful for later, defined before in the original codebase
 
@@ -30,6 +31,7 @@ class LisaDrive(
      */
 
     fun setPower(left: Double, right: Double) {
+        // TODO: Consider using power curves to make the robot more controllable
         leftPower = -left
         rightPower = -right
     }
@@ -75,6 +77,7 @@ class LisaDrive(
 
     @SuppressLint("DefaultLocale")
     fun update() {
+        // TODO: Add telemetry
         leftMotor.power = leftPower
         rightMotor.power = rightPower
     }

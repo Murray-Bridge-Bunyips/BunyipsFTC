@@ -20,8 +20,9 @@ import java.util.ArrayDeque
  * Testing opmode for Jerry, used to test various components and tasks.
  * @author Lachlan Paul, 2023
  */
-@Autonomous(name = "<JERRY> Patriarch of the Bunyips Family")
+
 @Disabled
+@Autonomous(name = "JERRY: Patriarch of the Bunyips Family", group = "JERRY")
 class JerryAutoTest : BunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: JerryDrive? = null

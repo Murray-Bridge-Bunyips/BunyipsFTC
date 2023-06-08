@@ -18,13 +18,11 @@ import java.util.ArrayDeque
  * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
  * Uses TimeDrive (which is deprecated), but works.
  */
-@Autonomous(name = "<JERRY> POWERPLAY Auto Signal Read & Park (BASIC)")
+@Autonomous(name = "JERRY: PowerPlay Signal Read & Park w/ TIME DRIVE", group = "JERRY", preselectTeleOp = "JERRY: TeleOp")
 class JerrySignalAutonomousBasic : BunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: CameraOp? = null
     private var drive: JerryDrive? = null
-    private var imu: IMUOp? = null
-    private var pos: Deadwheels? = null
     private var tagtask: GetAprilTagTask? = null
     private val tasks = ArrayDeque<TaskImpl>()
 
@@ -34,12 +32,6 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         cam = CameraOp(this, config.webcam, config.monitorID, CamMode.OPENCV)
         if (config.assert(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
-
-        if (config.assert(config.fl, config.fr))
-            pos = Deadwheels(this, config.fl!!, config.fr!!)
-
-        if (config.assert(config.imu))
-            imu = IMUOp(this, config.imu!!)
 
         tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
 

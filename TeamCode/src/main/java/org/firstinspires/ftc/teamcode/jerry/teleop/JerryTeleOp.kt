@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
  * gamepad2 right bumper + gamepad2 left stick y to control arm offset
  * @author Lucas Bubner, 2022-2023
  */
-@TeleOp(name = "<JERRY> POWERPLAY TeleOp")
+@TeleOp(name = "JERRY: TeleOp", group = "JERRY")
 class JerryTeleOp : BunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: JerryDrive? = null

@@ -15,7 +15,7 @@ import java.util.ArrayDeque
  * Basic autonomous that guarantees the robot will park in a corner or centre.
  * Incredibly simple, uses only time drive.
  */
-@Autonomous(name = "<JERRY> POWERPLAY Auto Left-Right Park")
+@Autonomous(name = "JERRY: PowerPlay Left-Right Time Park", group = "JERRY", preselectTeleOp = "JERRY: TeleOp")
 class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: JerryDrive? = null
@@ -26,8 +26,7 @@ class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
         if (config.assert(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        val selectedButton = ButtonHashmap.map(this, "Red Drive Left", "Blue Drive Right", "", "")
-        when (selectedButton) {
+        when (ButtonHashmap.map(this, "Drive Left", "Drive Right", "", "")) {
             ButtonControl.A -> // Move left
                 tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
 
@@ -36,7 +35,6 @@ class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
 
             else -> {}
         }
-        addTelemetry("Ready to go under config: $selectedButton")
     }
 
     override fun activeLoop() {

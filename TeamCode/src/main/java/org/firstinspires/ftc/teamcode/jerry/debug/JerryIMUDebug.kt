@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 /**
  * Debug opmode for IMU readouts.
  */
-@TeleOp(name = "<JERRY> IMU Debug")
+@TeleOp(name = "JERRY: IMU Debug", group = "JERRY")
 class JerryIMUDebug : BunyipsOpMode() {
     private var config = JerryConfig()
     private var imu: IMUOp? = null

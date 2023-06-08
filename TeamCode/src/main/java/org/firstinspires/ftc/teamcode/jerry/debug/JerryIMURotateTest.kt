@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.RobotConfig
@@ -14,7 +15,9 @@ import java.util.ArrayDeque
  * A test & debugging OpMode for testing faulty IMU rotation.
  * @author Lachlan Paul, 2023
  */
-@Autonomous(name = "<JERRY> IMURotateTest")
+
+@Disabled
+@Autonomous(name = "JERRY: IMU Rotate Test", group = "JERRY")
 class JerryIMURotateTest : BunyipsOpMode() {
     private var config = JerryConfig()
     private var imu: IMUOp? = null

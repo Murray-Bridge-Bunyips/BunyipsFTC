@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 /**
  * Debug OpMode to continually output what AprilTag position the robot is currently seeing.
  */
-@TeleOp(name = "<JERRY> POWERPLAY Signal Debug")
+@TeleOp(name = "JERRY: PowerPlay Signal Debug", group = "JERRY")
 class JerrySignalAnalyse : BunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: CameraOp? = null

@@ -14,7 +14,6 @@ import kotlin.math.abs
  * This supports movement throughout the 2D plane, and can be used to move in any one direction
  * @author Lucas Bubner, 2023
  */
-// TODO: Does not work as intended, needs some debugging
 class JerryPrecisionDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
@@ -77,8 +76,7 @@ class JerryPrecisionDriveTask(
             return
         }
 
-        imu?.tick()
-
+        // FIXME: Something is broken with power management, as the robot is not moving correctly
         drive?.setSpeedXYR(
             if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
             if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
@@ -87,6 +85,7 @@ class JerryPrecisionDriveTask(
 
         // Deadwheels will continue to track if they are enabled.
         drive?.update()
+        imu?.tick()
 
         // Add telemetry of current operation
         opMode.addTelemetry("PrecisionDrive is active.")

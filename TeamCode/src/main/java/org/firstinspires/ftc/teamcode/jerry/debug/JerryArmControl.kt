@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
 /**
  * Manual arm control used for calibration purposes, using gamepad2 left stick.
  */
-@TeleOp(name = "<JERRY> Manual Arm Control")
+@TeleOp(name = "JERRY: Manual Arm Control", group = "JERRY")
 class JerryArmControl : BunyipsOpMode() {
     private var config = JerryConfig()
     private var arm: JerryLift? = null

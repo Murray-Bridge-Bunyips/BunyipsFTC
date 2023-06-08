@@ -125,6 +125,7 @@ class JerryLift(
     }
 
     fun update() {
+        // FIXME: Input latency within this lift system which is above tolerable levels
         if (isResetting) return
 
         opMode.addTelemetry(
