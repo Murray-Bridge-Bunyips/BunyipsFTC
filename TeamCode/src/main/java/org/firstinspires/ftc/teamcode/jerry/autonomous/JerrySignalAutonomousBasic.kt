@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.CameraOp.CamMode
-import org.firstinspires.ftc.teamcode.common.Deadwheels
-import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
@@ -18,7 +16,11 @@ import java.util.ArrayDeque
  * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
  * Uses TimeDrive (which is deprecated), but works.
  */
-@Autonomous(name = "JERRY: PowerPlay Signal Read & Park w/ TIME DRIVE", group = "JERRY", preselectTeleOp = "JERRY: TeleOp")
+@Autonomous(
+    name = "JERRY: PowerPlay Signal Read & Park w/ TIME DRIVE",
+    group = "JERRY",
+    preselectTeleOp = "JERRY: TeleOp"
+)
 class JerrySignalAutonomousBasic : BunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: CameraOp? = null

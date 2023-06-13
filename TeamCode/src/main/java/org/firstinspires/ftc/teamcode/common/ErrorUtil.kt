@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.common
 
-import org.firstinspires.ftc.robotcore.external.Telemetry
 import java.io.PrintWriter
 import java.io.StringWriter
 

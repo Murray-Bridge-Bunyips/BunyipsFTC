@@ -15,7 +15,11 @@ import java.util.ArrayDeque
  * Basic autonomous that guarantees the robot will park in a corner or centre.
  * Incredibly simple, uses only time drive.
  */
-@Autonomous(name = "JERRY: PowerPlay Left-Right Time Park", group = "JERRY", preselectTeleOp = "JERRY: TeleOp")
+@Autonomous(
+    name = "JERRY: PowerPlay Left-Right Time Park",
+    group = "JERRY",
+    preselectTeleOp = "JERRY: TeleOp"
+)
 class JerryBasicGuaranteeAutonomous : BunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: JerryDrive? = null

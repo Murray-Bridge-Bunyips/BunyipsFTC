@@ -22,7 +22,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * One-time setup for operations that need to be done for the opMode
      */
     private fun setup() {
-        telemetry.log().displayOrder = Telemetry.Log.DisplayOrder.OLDEST_FIRST
+        telemetry.log().displayOrder = Telemetry.Log.DisplayOrder.NEWEST_FIRST
         telemetry.captionValueSeparator = ""
         // Uncap the telemetry log limit to ensure we capture everything
         telemetry.log().capacity = 999

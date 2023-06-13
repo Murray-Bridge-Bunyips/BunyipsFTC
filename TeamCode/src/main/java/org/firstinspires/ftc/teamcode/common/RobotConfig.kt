@@ -59,11 +59,18 @@ abstract class RobotConfig {
         /**
          * Factory method for creating a new instance of a configuration with a HardwareMap.
          */
-        fun new(config: RobotConfig, hardwareMap: HardwareMap, addTelemetry: (msg: String, retained: Boolean) -> Unit): RobotConfig {
+        fun new(
+            config: RobotConfig,
+            hardwareMap: HardwareMap,
+            addTelemetry: (msg: String, retained: Boolean) -> Unit
+        ): RobotConfig {
             config.hardwareMap = hardwareMap
             errors.clear()
             config.init()
-            addTelemetry("${config.javaClass.simpleName.uppercase()}: Configuration completed with ${errors.size} error(s).", false)
+            addTelemetry(
+                "${config.javaClass.simpleName.uppercase()}: Configuration completed with ${errors.size} error(s).",
+                false
+            )
             if (errors.isNotEmpty()) {
                 for (error in errors) {
                     addTelemetry("! DEV_FAULT: $error", true)

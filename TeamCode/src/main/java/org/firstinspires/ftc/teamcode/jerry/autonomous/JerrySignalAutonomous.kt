@@ -17,7 +17,11 @@ import java.util.ArrayDeque
 /**
  * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
  */
-@Autonomous(name = "JERRY: PowerPlay Auto Signal Read & Park", group = "JERRY", preselectTeleOp = "JERRY: TeleOp")
+@Autonomous(
+    name = "JERRY: PowerPlay Auto Signal Read & Park",
+    group = "JERRY",
+    preselectTeleOp = "JERRY: TeleOp"
+)
 class JerrySignalAutonomous : BunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: CameraOp? = null

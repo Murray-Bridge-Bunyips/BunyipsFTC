@@ -3,8 +3,6 @@ package org.firstinspires.ftc.teamcode.lisa.components
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction
-import com.qualcomm.robotcore.hardware.HardwareDevice
-import com.qualcomm.robotcore.hardware.HardwareMap
 import com.qualcomm.robotcore.hardware.IMU
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 

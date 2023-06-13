@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.lisa.teleop
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.RobotConfig
-import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.lisa.components.LisaConfig
 import org.firstinspires.ftc.teamcode.lisa.components.LisaDrive
 
