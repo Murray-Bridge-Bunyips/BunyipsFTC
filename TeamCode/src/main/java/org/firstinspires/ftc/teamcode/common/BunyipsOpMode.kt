@@ -78,13 +78,13 @@ abstract class BunyipsOpMode : LinearOpMode() {
         try {
             try {
                 telemetry.log().add("")
-                log("status: from idle to setup")
+                log("status changed: from idle to setup")
                 // Run BunyipsOpMode setup
                 setup()
-                log("status: from setup to static_init")
+                log("status changed: from setup to static_init")
                 // Run user-defined setup
                 onInit()
-                log("status: from static_init to dynamic_init")
+                log("status changed: from static_init to dynamic_init")
                 // Run user-defined dynamic initialisation
                 while (opModeInInit()) {
                     try {
@@ -94,7 +94,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
                         ErrorUtil.handleCatchAllException(e, ::log)
                     }
                 }
-                log("status: from dynamic_init to finish_init")
+                log("status changed: from dynamic_init to finish_init")
                 // Run user-defined final initialisation
                 onInitDone()
                 telemetry.addData("BUNYIPSOPMODE", "INIT COMPLETE -- PLAY WHEN READY.")
@@ -102,12 +102,12 @@ abstract class BunyipsOpMode : LinearOpMode() {
             } catch (e: Throwable) {
                 ErrorUtil.handleCatchAllException(e, ::log)
             }
-            log("status: from finish_init to ready")
+            log("status changed: from finish_init to ready")
             // Ready to go.
             waitForStart()
             clearTelemetryData()
             movingAverageTimer?.reset()
-            log("status: from ready to running")
+            log("status changed: from ready to running")
             try {
                 // Run user-defined start operations
                 onStart()
@@ -136,13 +136,13 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 telemetry.update()
                 idle()
             }
-            log("status: from running to finished")
+            log("status changed: from running to finished")
             // Wait for user to hit stop
             while (opModeIsActive()) {
                 idle()
             }
         } finally {
-            log("status: from finished to cleanup")
+            log("status changed: from finished to cleanup")
             onStop()
         }
     }
@@ -244,7 +244,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     fun finish() {
         operationsCompleted = true
         clearTelemetryData()
-        log("status: from running to finished")
+        log("status changed: from running to finished")
         telemetry.addData("BUNYIPSOPMODE", "activeLoop terminated. All operations completed.")
         telemetry.update()
     }
@@ -266,7 +266,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     fun resume() {
         operationsPaused = false
         clearTelemetryData()
-        log("status: from halted to running")
+        log("status changed: from halted to running")
         telemetry.addData("BUNYIPSOPMODE", "activeLoop resumed. Operations resumed.")
         telemetry.update()
     }
