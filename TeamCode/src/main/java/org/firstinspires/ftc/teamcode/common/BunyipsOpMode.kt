@@ -22,9 +22,10 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * One-time setup for operations that need to be done for the opMode
      */
     private fun setup() {
-        telemetry.setDisplayFormat(Telemetry.DisplayFormat.MONOSPACE)
         telemetry.log().displayOrder = Telemetry.Log.DisplayOrder.OLDEST_FIRST
-        telemetry.log().capacity = 12
+        telemetry.captionValueSeparator = ""
+        // Uncap the telemetry log limit to ensure we capture everything
+        telemetry.log().capacity = 999
         movingAverageTimer = MovingAverageTimer(100)
     }
 
@@ -76,13 +77,14 @@ abstract class BunyipsOpMode : LinearOpMode() {
     override fun runOpMode() {
         try {
             try {
-                log("opmode status changed: from idle to setup")
+                telemetry.log().add("")
+                log("status: from idle to setup")
                 // Run BunyipsOpMode setup
                 setup()
-                log("opmode status changed: from setup to static_init")
+                log("status: from setup to static_init")
                 // Run user-defined setup
                 onInit()
-                log("opmode status changed: from static_init to dynamic_init")
+                log("status: from static_init to dynamic_init")
                 // Run user-defined dynamic initialisation
                 while (opModeInInit()) {
                     try {
@@ -92,7 +94,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
                         ErrorUtil.handleCatchAllException(e, ::log)
                     }
                 }
-                log("opmode status changed: from dynamic_init to finish_init")
+                log("status: from dynamic_init to finish_init")
                 // Run user-defined final initialisation
                 onInitDone()
                 telemetry.addData("BUNYIPSOPMODE", "INIT COMPLETE -- PLAY WHEN READY.")
@@ -100,12 +102,12 @@ abstract class BunyipsOpMode : LinearOpMode() {
             } catch (e: Throwable) {
                 ErrorUtil.handleCatchAllException(e, ::log)
             }
-            log("opmode status changed: from finish_init to ready")
+            log("status: from finish_init to ready")
             // Ready to go.
             waitForStart()
             clearTelemetryData()
             movingAverageTimer?.reset()
-            log("opmode status changed: from ready to running")
+            log("status: from ready to running")
             try {
                 // Run user-defined start operations
                 onStart()
@@ -134,13 +136,13 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 telemetry.update()
                 idle()
             }
-            log("opmode status changed: from running to finished")
+            log("status: from running to finished")
             // Wait for user to hit stop
             while (opModeIsActive()) {
                 idle()
             }
         } finally {
-            log("opmode status changed: from finished to cleanup")
+            log("status: from finished to cleanup")
             onStop()
         }
     }
@@ -164,13 +166,14 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * @param value A string to add to telemetry
      * @param retained Optional parameter to retain the data on the screen
      */
-    fun addTelemetry(value: String, retained: Boolean = false, timed: Boolean = true) {
-        // Set the caption value separator to nothing if the data is timed
-        telemetry.captionValueSeparator = if (timed) { "" } else { " : " }
-        val prefix = if (timed) {  "T+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt().toString()}s" } else { "" }
-
-        // Add data to the telemetry object
-        val item = telemetry.addData(prefix, value)
+    fun addTelemetry(value: String, retained: Boolean = false) {
+        // Add data to the telemetry object with runtime data
+        var prefix = "T+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: 0.0}s : "
+        if (prefix == "T+0s : ") {
+            // Don't bother making a prefix if the time is zero
+            prefix = ""
+        }
+        val item = telemetry.addData("", prefix + value)
         if (retained) {
             // Set retained to true if the data is sticky
             item.setRetained(true)
@@ -179,17 +182,17 @@ abstract class BunyipsOpMode : LinearOpMode() {
     }
 
     /**
-     * Shorthand for addTelemetry(`value`, `retained`, `timed`)
+     * Shorthand for addTelemetry(`value`, `retained`)
      */
-    fun at(value: String, retained: Boolean, timed: Boolean) {
-        addTelemetry(value, retained, timed)
+    fun at(value: String, retained: Boolean) {
+        addTelemetry(value, retained)
     }
 
     /**
      * Log a message to the telemetry log
      */
     fun log(message: String) {
-        telemetry.log().add("[t+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: "0"}s] $message")
+        telemetry.log().add(message)
     }
 
     /**
@@ -241,7 +244,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     fun finish() {
         operationsCompleted = true
         clearTelemetryData()
-        log("opmode status changed: from running to finished")
+        log("status: from running to finished")
         telemetry.addData("BUNYIPSOPMODE", "activeLoop terminated. All operations completed.")
         telemetry.update()
     }
@@ -252,7 +255,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     fun halt() {
         operationsPaused = true
         clearTelemetryData()
-        log("opmode status changed: from running to halted")
+        log("status: from running to halted")
         telemetry.addData("BUNYIPSOPMODE", "activeLoop halted. Operations paused.")
         telemetry.update()
     }
@@ -263,7 +266,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     fun resume() {
         operationsPaused = false
         clearTelemetryData()
-        log("opmode status changed: from halted to running")
+        log("status: from halted to running")
         telemetry.addData("BUNYIPSOPMODE", "activeLoop resumed. Operations resumed.")
         telemetry.update()
     }
