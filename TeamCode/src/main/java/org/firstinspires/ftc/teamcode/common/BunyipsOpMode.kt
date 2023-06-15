@@ -22,7 +22,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * One-time setup for operations that need to be done for the opMode
      */
     private fun setup() {
-        telemetry.log().displayOrder = Telemetry.Log.DisplayOrder.NEWEST_FIRST
+        telemetry.log().displayOrder = Telemetry.Log.DisplayOrder.OLDEST_FIRST
         telemetry.captionValueSeparator = ""
         // Uncap the telemetry log limit to ensure we capture everything
         telemetry.log().capacity = 999
@@ -85,11 +85,14 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 // Run user-defined setup
                 onInit()
                 log("status changed: from static_init to dynamic_init")
+                // Store telemetry objects raised by onInit() by turning off auto-clear
+                setTelemetryAutoClear(false)
                 // Run user-defined dynamic initialisation
                 while (opModeInInit()) {
                     try {
                         // Run until onInitLoop returns true or the opMode is continued
                         if (onInitLoop()) break
+                        telemetry.update()
                     } catch (e: Throwable) {
                         ErrorUtil.handleCatchAllException(e, ::log)
                     }
@@ -105,6 +108,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
             log("status changed: from finish_init to ready")
             // Ready to go.
             waitForStart()
+            setTelemetryAutoClear(true)
             clearTelemetryData()
             movingAverageTimer?.reset()
             log("status changed: from ready to running")
@@ -245,7 +249,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         operationsCompleted = true
         clearTelemetryData()
         log("status changed: from running to finished")
-        telemetry.addData("BUNYIPSOPMODE", "activeLoop terminated. All operations completed.")
+        telemetry.addData("BUNYIPSOPMODE : ", "activeLoop terminated. All operations completed.")
         telemetry.update()
     }
 
@@ -256,7 +260,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         operationsPaused = true
         clearTelemetryData()
         log("status: from running to halted")
-        telemetry.addData("BUNYIPSOPMODE", "activeLoop halted. Operations paused.")
+        telemetry.addData("BUNYIPSOPMODE : ", "activeLoop halted. Operations paused.")
         telemetry.update()
     }
 
@@ -267,7 +271,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         operationsPaused = false
         clearTelemetryData()
         log("status changed: from halted to running")
-        telemetry.addData("BUNYIPSOPMODE", "activeLoop resumed. Operations resumed.")
+        telemetry.addData("BUNYIPSOPMODE : ", "activeLoop resumed. Operations resumed.")
         telemetry.update()
     }
 }

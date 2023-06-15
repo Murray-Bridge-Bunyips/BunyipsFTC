@@ -43,6 +43,7 @@ class JerryConfig : RobotConfig() {
         claw = getHardware("Claw Servo", Servo::class.java) as? Servo
         limit = getHardware("Arm Stop", TouchSensor::class.java) as? TouchSensor
         imu = getHardware("ch_imu", IMU::class.java) as? IMU
+        webcam = getHardware("Webcam", WebcamName::class.java) as? WebcamName
 
         monitorID = hardwareMap!!.appContext.resources.getIdentifier(
             "cameraMonitorViewId", "id", hardwareMap!!.appContext.packageName
