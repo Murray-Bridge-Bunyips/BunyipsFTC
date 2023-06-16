@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.CameraOp
+import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -13,12 +13,12 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 @TeleOp(name = "JERRY: PowerPlay Signal Debug", group = "JERRY")
 class JerrySignalAnalyse : BunyipsOpMode() {
     private var config = JerryConfig()
-    private var cam: CameraOp? = null
+    private var cam: OpenCVCam? = null
     private var task: GetAprilTagTask? = null
 
     override fun onInit() {
         config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
-        cam = CameraOp(this, config.webcam, config.monitorID, CameraOp.CamMode.OPENCV)
+        cam = OpenCVCam(this, config.webcam, config.monitorID)
         task = cam?.let { GetAprilTagTask(this, it) }
     }
 

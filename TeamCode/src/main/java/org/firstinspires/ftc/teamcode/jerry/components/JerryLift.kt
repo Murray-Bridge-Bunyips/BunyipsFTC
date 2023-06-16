@@ -25,7 +25,7 @@ class JerryLift(
         }
     private val motors = arrayOf(arm1, arm2)
     private var targetPosition: Double = 0.0
-    private var holdPosition: Int = 0
+    private var holdPosition: Int? = null
     private var isResetting: Boolean = false
 
     init {
@@ -34,7 +34,10 @@ class JerryLift(
         arm1.direction = DcMotorSimple.Direction.FORWARD
         arm2.direction = DcMotorSimple.Direction.REVERSE
         for (motor in motors) {
+            motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
             motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+            motor.power = power
+            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
         }
         // Run an initial calibration
         reset()
@@ -124,6 +127,27 @@ class JerryLift(
         targetPosition = target.toDouble()
     }
 
+    /**
+     * Set a capture of the arm position
+     */
+    fun capture() {
+        holdPosition = targetPosition.toInt()
+        opMode.log("lift captured at $holdPosition")
+    }
+
+    /**
+     * Return the arm to the last captured position
+     */
+    fun release() {
+        if (holdPosition == null) {
+            opMode.log("lift released but no capture found")
+            return
+        }
+        targetPosition = holdPosition?.toDouble() ?: targetPosition
+        opMode.log("lift released to $targetPosition")
+        holdPosition = null
+    }
+
     fun update() {
         // FIXME: Input latency within this lift system which is above tolerable levels
         if (isResetting) return
@@ -139,8 +163,6 @@ class JerryLift(
         )
 
         for (motor in motors) {
-            motor.power = power
-            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
             motor.targetPosition = targetPosition.toInt()
         }
 

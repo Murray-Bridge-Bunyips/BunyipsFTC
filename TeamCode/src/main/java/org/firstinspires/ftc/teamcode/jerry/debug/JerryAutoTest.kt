@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.jerry.debug
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.CameraOp
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask
@@ -28,7 +28,7 @@ class JerryAutoTest : BunyipsOpMode() {
     private var drive: JerryDrive? = null
     private var tagTask: GetAprilTagTask? = null
     private var arm: JerryArm? = null
-    private var cam: CameraOp? = null
+    private var cam: OpenCVCam? = null
     private var imu: IMUOp? = null
     private val tasks = ArrayDeque<TaskImpl>()
 
@@ -59,9 +59,9 @@ class JerryAutoTest : BunyipsOpMode() {
             )
         }
 
-        cam = CameraOp(
+        cam = OpenCVCam(
             this,
-            config.webcam, config.monitorID, CameraOp.CamMode.OPENCV
+            config.webcam, config.monitorID
         )
 
         tagTask = cam?.let { GetAprilTagTask(this, it) }

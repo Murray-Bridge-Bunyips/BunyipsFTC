@@ -18,6 +18,9 @@ import kotlin.math.abs
 /**
  * Custom common class to operate all Vuforia, TensorFlow, and OpenCV operations through a single attached Webcam
  * Allows hot-swapping between two modes, STANDARD (VF + TFOD) and OPENCV, for respective operation.
+ *
+ * For just OpenCV operations, see OpenCVCam.kt
+ *
  * @author Lucas Bubner - FTC 15215 Captain; Oct-Nov 2022 - Murray Bridge Bunyips
  */
 class CameraOp(

@@ -2,10 +2,9 @@ package org.firstinspires.ftc.teamcode.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.CameraOp
-import org.firstinspires.ftc.teamcode.common.CameraOp.CamMode
 import org.firstinspires.ftc.teamcode.common.Deadwheels
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
@@ -24,7 +23,7 @@ import java.util.ArrayDeque
 )
 class JerrySignalAutonomous : BunyipsOpMode() {
     private var config = JerryConfig()
-    private var cam: CameraOp? = null
+    private var cam: OpenCVCam? = null
     private var drive: JerryDrive? = null
     private var imu: IMUOp? = null
     private var pos: Deadwheels? = null
@@ -34,7 +33,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
     override fun onInit() {
         // Configuration of camera and drive components
         config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
-        cam = CameraOp(this, config.webcam, config.monitorID, CamMode.OPENCV)
+        cam = OpenCVCam(this, config.webcam, config.monitorID)
         if (config.assert(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
@@ -66,7 +65,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
     }
 
     override fun onInitLoop(): Boolean {
-        // Using CameraOp OPENCV and AprilTags in order to detect the Signal sleeve
+        // Using OpenCV and AprilTags in order to detect the Signal sleeve
         tagtask?.run()
         return tagtask?.isFinished() ?: true
     }

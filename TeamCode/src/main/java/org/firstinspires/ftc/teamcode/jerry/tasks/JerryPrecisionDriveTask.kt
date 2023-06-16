@@ -91,17 +91,23 @@ class JerryPrecisionDriveTask(
         opMode.addTelemetry("PrecisionDrive is active.")
         opMode.addTelemetry(
             "Distance progress: ${
-                if (direction == Directions.LEFT || direction == Directions.RIGHT) pos?.travelledMM(
-                    XYEncoder.Axis.X
-                ) ?: "N/A" else pos?.travelledMM(XYEncoder.Axis.Y) ?: "N/A"
+                if (direction == Directions.LEFT || direction == Directions.RIGHT) {
+                    String.format("%.2f", pos?.travelledMM(XYEncoder.Axis.X))
+                } else {
+                    String.format("%.2f", pos?.travelledMM(XYEncoder.Axis.Y))
+                }
             }/$distance_mm"
         )
+
         opMode.addTelemetry(
-            "Axis correction: ${imu?.capture?.minus(tolerance) ?: "N/A"} <= ${imu?.heading ?: "N/A"} <= ${
-                imu?.capture?.plus(
-                    tolerance
-                ) ?: "N/A"
+            "Axis correction: ${
+                String.format("%.2f", imu?.capture?.minus(tolerance))
+            } <= ${
+                String.format("%.2f", imu?.heading)
+            } <= ${
+                String.format("%.2f", imu?.capture?.plus(tolerance))
             }"
         )
+
     }
 }

@@ -100,7 +100,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 log("status changed: from dynamic_init to finish_init")
                 // Run user-defined final initialisation
                 onInitDone()
-                telemetry.addData("BUNYIPSOPMODE", "INIT COMPLETE -- PLAY WHEN READY.")
+                telemetry.addData("BUNYIPSOPMODE : ", "INIT COMPLETE -- PLAY WHEN READY.")
                 telemetry.update()
             } catch (e: Throwable) {
                 ErrorUtil.handleCatchAllException(e, ::log)
@@ -187,6 +187,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
 
     /**
      * Shorthand for addTelemetry(`value`, `retained`)
+     * Useful when passing by reference using this::at
      */
     fun at(value: String, retained: Boolean) {
         addTelemetry(value, retained)
