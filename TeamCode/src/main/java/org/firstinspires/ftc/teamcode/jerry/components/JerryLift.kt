@@ -37,7 +37,6 @@ class JerryLift(
             motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
             motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
             motor.power = power
-            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
         }
         // Run an initial calibration
         reset()
@@ -158,12 +157,13 @@ class JerryLift(
                 arm1.currentPosition,
                 arm2.currentPosition,
                 targetPosition.toInt(),
-                holdPosition
+                holdPosition ?: "N/A"
             )
         )
 
         for (motor in motors) {
             motor.targetPosition = targetPosition.toInt()
+            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
         }
 
         // Ensure the arm does not overswing
