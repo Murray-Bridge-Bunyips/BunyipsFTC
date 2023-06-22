@@ -48,6 +48,7 @@ class JerryLift(
      */
     fun reset() {
         isResetting = true
+        close()
         for (motor in motors) {
             motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             // Allow gravity and light motor power to pull the arm down
@@ -112,6 +113,10 @@ class JerryLift(
     fun adjust(delta: Double) {
         if (targetPosition + delta > HARD_LIMIT) {
             return
+        }
+        if (delta < 0 && claw.position == 0.0) {
+            // Auto close claw when it is moving upwards
+            close()
         }
         targetPosition += -delta * 0.5
     }
