@@ -8,10 +8,15 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
 
 /**
- * Primary TeleOp for all of Jerry's functions. Uses gamepad1 for driving and gamepad2 for arm.
- * Standard controls involve gamepad1 left stick for driving, gamepad1 right stick for turning,
- * gamepad2 dpad up/down for lift, gamepad2 left bumper for recalibration, gamepad2 a/b for claw, use gamepad2 right bumper to cancel calibration.
- * gamepad2 right bumper + gamepad2 left stick y to control arm offset
+ * Primary TeleOp for all of Jerry's functions.
+ *
+ * Uses gamepad1 for drive control and gamepad2 for lift control.
+ * > gamepad1 left stick for driving
+ * > gamepad1 right stick for turning
+ * > gamepad2 left stick for lift movement
+ * > gamepad2 A to open claw
+ * > gamepad2 B to close claw
+ * 
  * @author Lucas Bubner, 2022-2023
  */
 @TeleOp(name = "JERRY: TeleOp", group = "JERRY")
