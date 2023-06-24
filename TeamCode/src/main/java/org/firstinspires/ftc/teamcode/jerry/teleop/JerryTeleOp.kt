@@ -30,6 +30,7 @@ class JerryTeleOp : BunyipsOpMode() {
         if (config.assert(config.armComponents)) {
             lift = JerryLift(
                 this,
+                JerryLift.ControlMode.MANUAL,
                 config.claw!!,
                 config.arm1!!,
                 config.arm2!!,
@@ -50,7 +51,7 @@ class JerryTeleOp : BunyipsOpMode() {
 
         // Set speeds of motors and interpret any data
         drive?.setSpeedXYR(x, y, r)
-        lift?.adjust(v)
+        lift?.delta(v)
         if (gamepad2.a) {
             lift?.open()
         } else if (gamepad2.b) {

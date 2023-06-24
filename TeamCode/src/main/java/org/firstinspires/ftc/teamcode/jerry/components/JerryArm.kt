@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 
 /**
  * Arm controller for Jerry bot. Includes a claw and a lift.
- * @author Lucas Bubner, Lachlan Paul, 2022-2023
+ * @author Lucas Bubner, 2022
  */
 @Deprecated("Use JerryLift instead as the index-based system is not ideal for use.")
 class JerryArm(
@@ -30,10 +30,6 @@ class JerryArm(
     private var alreadyCalibrated = false
 
     init {
-        // Set directions of motors so they move the correct way
-        claw.direction = Servo.Direction.FORWARD
-        arm1.direction = Direction.FORWARD
-        arm2.direction = Direction.REVERSE
         for (motor in motors) {
             motor.zeroPowerBehavior = ZeroPowerBehavior.BRAKE
         }

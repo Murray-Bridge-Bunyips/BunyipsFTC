@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.jerry.components
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.hardware.DcMotorEx
+import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction
 import com.qualcomm.robotcore.hardware.HardwareDevice
 import com.qualcomm.robotcore.hardware.IMU
@@ -60,6 +61,9 @@ class JerryConfig : RobotConfig() {
         fr?.direction = Direction.FORWARD
         bl?.direction = Direction.FORWARD
         br?.direction = Direction.REVERSE
+        claw?.direction = Servo.Direction.FORWARD
+        arm1?.direction = Direction.FORWARD
+        arm2?.direction = Direction.REVERSE
 
         // Control Hub IMU configuration
         val parameters = IMU.Parameters(

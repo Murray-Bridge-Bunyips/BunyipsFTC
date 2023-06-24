@@ -19,6 +19,7 @@ class JerryArmControl : BunyipsOpMode() {
         if (config.assert(config.armComponents)) {
             arm = JerryLift(
                 this,
+                JerryLift.ControlMode.MANUAL,
                 config.claw!!,
                 config.arm1!!,
                 config.arm2!!,
@@ -29,7 +30,7 @@ class JerryArmControl : BunyipsOpMode() {
     }
 
     override fun activeLoop() {
-        arm?.adjust(gamepad2.left_stick_y.toDouble())
+        arm?.delta(gamepad2.left_stick_y.toDouble())
         // Calculates the average position of the lift motors
         addTelemetry("Lift Position: ${(config.arm1?.currentPosition!! + config.arm2?.currentPosition!!) / 2}")
         arm?.update()

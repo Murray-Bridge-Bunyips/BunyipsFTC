@@ -14,31 +14,39 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
  */
 class JerryLift(
     opMode: BunyipsOpMode,
+    private var mode: ControlMode,
     private var claw: Servo,
     private var arm1: DcMotorEx,
     private var arm2: DcMotorEx,
     private var limit: TouchSensor
 ) : BunyipsComponent(opMode) {
-    var power: Double = 0.2
+    var power: Double = POSITIONAL_POWER
         set(power) {
             field = power.coerceIn(-1.0, 1.0)
         }
     private val motors = arrayOf(arm1, arm2)
     private var targetPosition: Double = 0.0
     private var holdPosition: Int? = null
-    private var isResetting: Boolean = false
+    private var lock: Boolean = false
+
+    // Handle both manual and positional control modes
+    enum class ControlMode {
+        MANUAL, POSITIONAL
+    }
 
     init {
-        // Set directions of motors so they move the correct way
-        claw.direction = Servo.Direction.FORWARD
-        arm1.direction = DcMotorSimple.Direction.FORWARD
-        arm2.direction = DcMotorSimple.Direction.REVERSE
         for (motor in motors) {
+            // Set initial parameters
             motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
             motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            motor.power = power
+            if (mode == ControlMode.POSITIONAL) {
+                motor.power = power
+            } else {
+                power = 0.0
+                motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            }
         }
-        // Run an initial calibration
+        // Run an initial calibration to zero out
         reset()
     }
 
@@ -47,7 +55,7 @@ class JerryLift(
      * This will ensure that a saved position is still accurate even after encoder drift.
      */
     fun reset() {
-        isResetting = true
+        lock = true
         close()
         for (motor in motors) {
             motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
@@ -60,7 +68,7 @@ class JerryLift(
         while (!limit.isPressed && !opMode.gamepad2.right_bumper) {
             opMode.addTelemetry(
                 String.format(
-                    "ARM IS RESETTING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
+                    "LIFT IS RESETTING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
                     arm1.currentPosition,
                     arm2.currentPosition
                 )
@@ -86,7 +94,7 @@ class JerryLift(
             motor.targetPosition = 0
         }
 
-        isResetting = false
+        lock = false
         targetPosition = 0.0
     }
 
@@ -110,32 +118,51 @@ class JerryLift(
     /**
      * Primary function to move the arm during TeleOp, takes in a controller input delta and adjusts the arm position
      */
-    fun adjust(delta: Double) {
-        if (targetPosition + delta > HARD_LIMIT) {
-            return
+    fun delta(dy: Double) {
+        if (mode != ControlMode.MANUAL) {
+            throw IllegalStateException("delta() method can only be used in manual mode")
         }
-        if (delta < 0 && claw.position == 0.0) {
-            // Auto close claw when it is moving upwards
+        if (dy < 0) {
+            // Arm is ascending, auto close claw
             close()
+            // Check if the arm has reached maximum limit
+            if ((arm1.currentPosition + arm2.currentPosition) / 2 >= HARD_LIMIT) {
+                // If so, stop the arm from moving further upwards
+                power = 0.0
+                return
+            }
         }
-        targetPosition += -delta * 0.5
+        power = dy / DAMPENER
     }
 
     /**
-     * Autonomous method of adjusting the arm position, directly setting the target position
+     * Autonomous method of adjusting the arm position, takes in a percentage and moves the arm to that position
+     * The maximum 100% position is represented by the internal HARD_LIMIT constant
+     * @param percent The percentage of the maximum position to move to
      */
-    fun set(target: Int) {
-        if (targetPosition > HARD_LIMIT) {
+    fun set(percent: Int) {
+        if (mode != ControlMode.POSITIONAL) {
+            throw IllegalStateException("set() method can only be used in positional mode")
+        }
+        if (percent !in 0..100) {
+            throw IllegalArgumentException("set() method must be between 0 and 100%")
+        }
+        if (percent == 0) {
+            reset()
             return
         }
-        targetPosition = target.toDouble()
+        targetPosition = (percent / 100.0) * HARD_LIMIT
     }
 
     /**
      * Set a capture of the arm position
      */
     fun capture() {
-        holdPosition = targetPosition.toInt()
+        if (mode != ControlMode.MANUAL) {
+            throw IllegalStateException("capture() method can only be used in manual mode")
+        }
+        val armPos = (arm1.currentPosition + arm2.currentPosition) / 2
+        holdPosition = minOf(armPos, HARD_LIMIT)
         opMode.log("lift captured at $holdPosition")
     }
 
@@ -143,18 +170,53 @@ class JerryLift(
      * Return the arm to the last captured position
      */
     fun release() {
+        if (mode != ControlMode.MANUAL) {
+            throw IllegalStateException("release() method can only be used in manual mode")
+        }
         if (holdPosition == null) {
-            opMode.log("lift released but no capture found")
+            opMode.log("lift released but no capture was found")
             return
         }
-        targetPosition = holdPosition?.toDouble() ?: targetPosition
-        opMode.log("lift released to $targetPosition")
+
+        opMode.log("lift releasing to $holdPosition...")
+
+        // Lock arm control
+        lock = true
+
+        // Configure motors for positional control
+        for (motor in motors) {
+            motor.targetPosition = holdPosition!!
+            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+            motor.power = POSITIONAL_POWER
+        }
+
+        // Release lock when motors have reached the target
+        while (arm1.isBusy && arm2.isBusy && !opMode.gamepad2.right_bumper) {
+            opMode.addTelemetry(
+                String.format(
+                    "LIFT IS RECALLING TO HOLD POSITION %d... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
+                    holdPosition,
+                    arm1.currentPosition,
+                    arm2.currentPosition
+                )
+            )
+            opMode.telemetry.update()
+        }
+
+        // Release lock
+        lock = false
+        for (motor in motors) {
+            motor.power = 0.0
+            motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+        }
+
+        opMode.log("lift released to $holdPosition")
         holdPosition = null
     }
 
     fun update() {
         // FIXME: Input latency within this lift system which is above tolerable levels
-        if (isResetting) return
+        if (lock) return
 
         opMode.addTelemetry(
             String.format(
@@ -166,18 +228,33 @@ class JerryLift(
             )
         )
 
-        for (motor in motors) {
-            motor.targetPosition = targetPosition.toInt()
-            motor.mode = DcMotor.RunMode.RUN_TO_POSITION
-        }
+        when (mode) {
+            ControlMode.POSITIONAL -> {
+                // Ensure the arm does not overswing
+                if (targetPosition > HARD_LIMIT) {
+                    targetPosition = HARD_LIMIT.toDouble()
+                }
 
-        // Ensure the arm does not overswing
-        if ((arm1.currentPosition + arm2.currentPosition) / 2 > HARD_LIMIT) {
-            targetPosition = (HARD_LIMIT - (HARD_LIMIT / 6)).toDouble()
+                // Apply changes to the arm system
+                for (motor in motors) {
+                    motor.targetPosition = targetPosition.toInt()
+                    motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+                }
+            }
+            ControlMode.MANUAL -> {
+                for (motor in motors) {
+                    motor.power = power
+                }
+            }
         }
     }
 
     companion object {
+        // Maximum encoder value of extension
         private const val HARD_LIMIT = 250
+        // Delta speed dampener for manual mode
+        private const val DAMPENER = 3.0
+        // Maximum speed of the arm in autonomous mode
+        private const val POSITIONAL_POWER = 0.2
     }
 }
