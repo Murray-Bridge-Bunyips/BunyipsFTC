@@ -99,6 +99,21 @@ class JerryLift(
     }
 
     /**
+     * Check if the lift is currently trying to move to a position
+     */
+    fun isBusy(): Boolean {
+        if (mode == ControlMode.MANUAL) {
+            return power != 0.0 || lock
+        }
+
+        return motors[0].isBusy ||
+               motors[1].isBusy ||
+               lock ||
+               targetPosition != motors[0].targetPosition.toDouble() ||
+               targetPosition != motors[1].targetPosition.toDouble()
+    }
+
+    /**
      * Call to open claw system and allow picking up of items (allow servos to swing to open)
      */
     fun open() {
