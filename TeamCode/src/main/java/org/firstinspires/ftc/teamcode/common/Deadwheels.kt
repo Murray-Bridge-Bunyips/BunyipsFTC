@@ -19,20 +19,22 @@ class Deadwheels(
         private set
 
     override fun enableTracking(encoder: XYEncoder.Axis) {
-        if (positions[XYEncoder.Axis.X] == 0.0 && positions[XYEncoder.Axis.Y] == 0.0) {
-            x.mode = RunMode.STOP_AND_RESET_ENCODER
-            y.mode = RunMode.STOP_AND_RESET_ENCODER
-        }
         when (encoder) {
             XYEncoder.Axis.X -> {
+                if (positions[XYEncoder.Axis.X] == 0.0)
+                    x.mode = RunMode.STOP_AND_RESET_ENCODER
                 x.mode = RunMode.RUN_WITHOUT_ENCODER
             }
 
             XYEncoder.Axis.Y -> {
+                if (positions[XYEncoder.Axis.Y] == 0.0)
+                    y.mode = RunMode.STOP_AND_RESET_ENCODER
                 y.mode = RunMode.RUN_WITHOUT_ENCODER
             }
 
-            XYEncoder.Axis.BOTH -> {
+            else -> {
+                x.mode = RunMode.STOP_AND_RESET_ENCODER
+                y.mode = RunMode.STOP_AND_RESET_ENCODER
                 x.mode = RunMode.RUN_WITHOUT_ENCODER
                 y.mode = RunMode.RUN_WITHOUT_ENCODER
             }

@@ -60,6 +60,7 @@ class JerryPrecisionDriveTask(
 
         // Safe call all components to start their tracking and capture vectors
         imu?.startCapture()
+        pos?.resetTracking()
         if (direction == Directions.LEFT || direction == Directions.RIGHT) {
             // If moving along the X axis enable the X deadwheel
             pos?.enableTracking(XYEncoder.Axis.X)
@@ -76,7 +77,6 @@ class JerryPrecisionDriveTask(
             return
         }
 
-        // FIXME: Something is broken with power management, as the robot is not moving correctly
         drive?.setSpeedXYR(
             if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
             if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,

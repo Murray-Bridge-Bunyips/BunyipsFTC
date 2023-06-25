@@ -34,8 +34,6 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         if (config.assert(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
-
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
         tagtask = cam?.let { GetAprilTagTask(this, it) }
@@ -61,6 +59,8 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
             // Drive backward if the position of the signal is RIGHT
             tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, -1.0, 0.0))
         }
+
+        tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
     }
 
     override fun activeLoop() {

@@ -139,7 +139,8 @@ class JerryLift(
         }
         if (dy < 0) {
             // Arm is ascending, auto close claw
-            close()
+            if (claw.position == 0.0)
+                close()
             // Check if the arm has reached maximum limit
             if ((arm1.currentPosition + arm2.currentPosition) / 2 >= HARD_LIMIT) {
                 // If so, stop the arm from moving further upwards
@@ -147,7 +148,7 @@ class JerryLift(
                 return
             }
         }
-        power = dy / DAMPENER
+        power = -dy / DAMPENER
     }
 
     /**
@@ -230,7 +231,6 @@ class JerryLift(
     }
 
     fun update() {
-        // FIXME: Input latency within this lift system which is above tolerable levels
         if (lock) return
 
         opMode.addTelemetry(
@@ -257,8 +257,19 @@ class JerryLift(
                 }
             }
             ControlMode.MANUAL -> {
-                for (motor in motors) {
-                    motor.power = power
+                // Lock motor if there is no input
+                if (power == 0.0) {
+                    for (motor in motors) {
+                        motor.targetPosition = (motors[0].currentPosition + motors[1].currentPosition) / 2
+                        motor.mode = DcMotor.RunMode.RUN_TO_POSITION
+                        motor.power = POSITIONAL_POWER
+                    }
+                } else {
+                    // Feed power into motor
+                    for (motor in motors) {
+                        motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+                        motor.power = power
+                    }
                 }
             }
         }
@@ -268,7 +279,7 @@ class JerryLift(
         // Maximum encoder value of extension
         private const val HARD_LIMIT = 250
         // Delta speed dampener for manual mode
-        private const val DAMPENER = 3.0
+        private const val DAMPENER = 1.5
         // Maximum speed of the arm in autonomous mode
         private const val POSITIONAL_POWER = 0.2
     }

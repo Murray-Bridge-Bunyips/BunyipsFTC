@@ -160,9 +160,9 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
         val current = this.heading
 
         // If we're at the minimum tolerance, increase turn rate
-        if (current < this.capture!! - tolerance) return original_speed + 0.2
+        if (current < this.capture!! - tolerance) return original_speed - 0.1
 
         // If we're at maximum tolerance, decrease turn rate
-        return if (current > this.capture!! + tolerance) original_speed - 0.2 else original_speed
+        return if (current > this.capture!! + tolerance) original_speed + 0.1 else original_speed
     }
 }

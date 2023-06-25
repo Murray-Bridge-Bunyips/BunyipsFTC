@@ -43,22 +43,6 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         if (config.assert(config.imu))
             imu = IMUOp(this, config.imu!!)
 
-
-        // Use PrecisionDrive to move rightwards for 1.5 seconds
-        // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
-        tasks.add(
-            JerryPrecisionDriveTask(
-                this,
-                4.0,
-                drive,
-                imu,
-                pos,
-                600.0,
-                JerryPrecisionDriveTask.Directions.RIGHT,
-                0.5
-            )
-        )
-
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
         tagtask = cam?.let { GetAprilTagTask(this, it) }
@@ -106,6 +90,20 @@ class JerrySignalAutonomous : BunyipsOpMode() {
                 )
             )
         }
+        // Use PrecisionDrive to move rightwards for 1.5 seconds
+        // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
+        tasks.add(
+            JerryPrecisionDriveTask(
+                this,
+                4.0,
+                drive,
+                imu,
+                pos,
+                600.0,
+                JerryPrecisionDriveTask.Directions.RIGHT,
+                0.5
+            )
+        )
     }
 
     override fun activeLoop() {
