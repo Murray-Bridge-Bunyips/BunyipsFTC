@@ -15,6 +15,7 @@ class LisaIMURotationTask(
     time: Double,
     private val drive: LisaDrive?,
     private val imu: IMUOp?,
+    // Angle is a degree of rotation relative to current angle where positive = cw
     private val angle: Double,
     private val speed: Double
 ) : Task(opMode, time), TaskImpl {
@@ -44,6 +45,17 @@ class LisaIMURotationTask(
         }
 
         drive?.update()
+    }
+
+    override fun isFinished(): Boolean {
+        val heading = imu?.heading
+        return super.isFinished() || if (direction == Direction.LEFT) {
+            // Angle will be decreasing
+            heading != null && heading <= angle
+        } else {
+            // Angle will be increasing
+            heading != null && heading >= angle
+        }
     }
 
     override fun run() {

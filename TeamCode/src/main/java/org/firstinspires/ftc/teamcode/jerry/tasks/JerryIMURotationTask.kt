@@ -18,7 +18,7 @@ class JerryIMURotationTask(
     time: Double,
     private val imu: IMUOp?,
     private val drive: JerryDrive?,
-    // Angle information should be a degree of rotation relative to current angle
+    // Angle information should be a degree of rotation relative to current angle where positive = cw
     private var angle: Double,
     private val speed: Double
 ) : Task(opMode, time), TaskImpl {
@@ -52,12 +52,13 @@ class JerryIMURotationTask(
 
     // Stop turning when we reach the target angle
     override fun isFinished(): Boolean {
+        val heading = imu?.heading
         return super.isFinished() || if (direction == Direction.LEFT) {
             // Angle will be decreasing
-            (imu?.heading ?: 0.0) <= angle
+            heading != null && heading <= angle
         } else {
             // Angle will be increasing
-            (imu?.heading ?: 0.0) >= angle
+            heading != null && heading >= angle
         }
     }
 
