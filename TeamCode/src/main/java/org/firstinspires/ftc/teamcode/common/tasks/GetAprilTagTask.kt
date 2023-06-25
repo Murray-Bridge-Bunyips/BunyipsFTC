@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.tasks
 
 import android.annotation.SuppressLint
+import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.pipelines.AprilTagDetectionPipeline
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.common.pipelines.AprilTagDetectionPipeline
  */
 class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: OpenCVCam) : Task(opMode), TaskImpl {
     private lateinit var at: AprilTagDetectionPipeline
+    private val lockTimer = ElapsedTime()
     private var noDetections = 0
 
     // Decimation thresholds, calibrate as needed
@@ -51,7 +53,11 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: OpenCVCam) : Task(
     }
 
     override fun isFinished(): Boolean {
-        return super.isFinished() || position != null
+        if (position == null) {
+            lockTimer.reset()
+        }
+        // Ensure the signal remains constant for 3 seconds before locking in
+        return super.isFinished() || lockTimer.seconds() >= 3.0
     }
 
     @SuppressLint("DefaultLocale")
@@ -59,6 +65,7 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: OpenCVCam) : Task(
         // Caution! ParkingPosition will be null if the camera does not pick up anything in it's task runtime.
         // Be sure to check if ParkingPosition is null before setting up your specific tasks, to handle a fallback value.
         if (isFinished()) return
+        var newPosition: ParkingPosition? = null
         val detections = at.detectionsUpdate
         // Check if there are new frames
         if (detections != null) {
@@ -72,18 +79,15 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: OpenCVCam) : Task(
                 for (detection in detections) {
                     when (detection.id) {
                         17 -> {
-                            position = ParkingPosition.LEFT
-                            return
+                            newPosition = ParkingPosition.LEFT
                         }
 
                         13 -> {
-                            position = ParkingPosition.CENTER
-                            return
+                            newPosition = ParkingPosition.CENTER
                         }
 
                         7 -> {
-                            position = ParkingPosition.RIGHT
-                            return
+                            newPosition = ParkingPosition.RIGHT
                         }
 
                         else -> {
@@ -97,6 +101,10 @@ class GetAprilTagTask(opMode: BunyipsOpMode, private val cam: OpenCVCam) : Task(
                 noDetections++
                 if (noDetections >= decimationLowThreshold) at.setDecimation(decimationLow)
             }
+            if (position != newPosition) {
+                lockTimer.reset()
+            }
+            position = newPosition
         }
     }
 }
