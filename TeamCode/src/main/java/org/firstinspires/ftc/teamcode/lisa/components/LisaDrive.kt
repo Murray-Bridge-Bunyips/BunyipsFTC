@@ -5,7 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotor.ZeroPowerBehavior
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.EncoderMotor
+import org.firstinspires.ftc.teamcode.common.Encoder
+import org.firstinspires.ftc.teamcode.common.Odometer
 import kotlin.math.abs
 
 /**
@@ -13,15 +14,15 @@ import kotlin.math.abs
  */
 class LisaDrive(
     opMode: BunyipsOpMode,
-    left: DcMotorEx,
-    right: DcMotorEx
+    private val leftMotor: DcMotorEx,
+    private val rightMotor: DcMotorEx
 ) : BunyipsComponent(opMode) {
     private var leftPower = 0.0
     private var rightPower = 0.0
 
-    private val leftMotor = EncoderMotor(left, null, null)
-    private val rightMotor = EncoderMotor(right, null, null)
     // TODO: Define these values
+    private val leftEncoder = Odometer(opMode, leftMotor, null, null)
+    private val rightEncoder = Odometer(opMode, rightMotor, null, null)
     /*
         These might be helpful for later, defined before in the original codebase
 
@@ -46,33 +47,32 @@ class LisaDrive(
         rightMotor.zeroPowerBehavior = ZeroPowerBehavior.FLOAT
     }
 
-    fun setEncoders(state: Boolean) {
-        if (state) {
-            leftMotor.enableTracking()
-            rightMotor.enableTracking()
-        } else {
-            leftMotor.disableTracking()
-            rightMotor.disableTracking()
-        }
+    fun setEncoders() {
+        leftEncoder.track()
+        rightEncoder.track()
     }
 
     fun resetEncoders() {
-        leftMotor.resetTracking()
-        rightMotor.resetTracking()
+        leftEncoder.reset()
+        rightEncoder.reset()
     }
 
-    fun reachedGoal(goalMM: Double): Boolean {
-        return abs(leftMotor.travelledMM()) >= abs(goalMM) && abs(rightMotor.travelledMM()) >= abs(
+    fun reachedGoal(goalMM: Double, scope: Encoder.Scope = Encoder.Scope.RELATIVE): Boolean {
+        return abs(leftEncoder.travelledMM(scope)) >= abs(goalMM) && abs(
+            rightEncoder.travelledMM(
+                scope
+            )
+        ) >= abs(
             goalMM
         )
     }
 
-    fun getTravelledDist(): Pair<Double, Double> {
-        return Pair(leftMotor.travelledMM(), rightMotor.travelledMM())
+    fun getTravelledDist(scope: Encoder.Scope = Encoder.Scope.RELATIVE): Pair<Double, Double> {
+        return Pair(leftEncoder.travelledMM(scope), rightEncoder.travelledMM(scope))
     }
 
-    fun getEncoderValues(): Pair<Double, Double> {
-        return Pair(leftMotor.encoderReading(), rightMotor.encoderReading())
+    fun getEncoderValues(scope: Encoder.Scope = Encoder.Scope.RELATIVE): Pair<Double, Double> {
+        return Pair(leftEncoder.position(scope), rightEncoder.position(scope))
     }
 
     @SuppressLint("DefaultLocale")

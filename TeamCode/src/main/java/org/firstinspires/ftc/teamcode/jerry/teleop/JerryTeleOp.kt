@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
  * > gamepad2 left stick for lift movement
  * > gamepad2 A to open claw
  * > gamepad2 B to close claw
- * 
+ *
  * @author Lucas Bubner, 2022-2023
  */
 @TeleOp(name = "JERRY: TeleOp", group = "JERRY")
@@ -27,7 +27,7 @@ class JerryTeleOp : BunyipsOpMode() {
 
     override fun onInit() {
         // Configure drive and lift subsystems
-        config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
+        config = RobotConfig.new(config, hardwareMap, ::telem) as JerryConfig
         if (config.assert(config.driveMotors)) {
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
         }

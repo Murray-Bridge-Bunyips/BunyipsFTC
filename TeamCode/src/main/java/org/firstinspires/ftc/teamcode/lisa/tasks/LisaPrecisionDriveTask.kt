@@ -20,8 +20,6 @@ class LisaPrecisionDriveTask(
     private var power: Double, // Power is used to determine direction
     private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
 ) : Task(opMode, time), TaskImpl {
-    private var imuFault = false
-
     override fun isFinished(): Boolean {
         return super.isFinished() || drive?.reachedGoal(distance_mm) == true
     }
@@ -30,7 +28,7 @@ class LisaPrecisionDriveTask(
         super.init()
         imu?.startCapture()
         drive?.resetEncoders()
-        drive?.setEncoders(true)
+        drive?.setEncoders()
     }
 
     override fun run() {
@@ -47,7 +45,6 @@ class LisaPrecisionDriveTask(
         drive?.update()
         imu?.tick()
 
-        opMode.addTelemetry("PrecisionDrive is active with IMU fault? $imuFault")
         opMode.addTelemetry(
             "Distance progress: ${
                 drive?.getTravelledDist().toString()

@@ -33,8 +33,6 @@ class JerryIMURotationTask(
         super.init()
         imu?.tick()
 
-        val currentAngle = imu?.heading
-
         // Find out which way we need to turn based on the information provided
         direction = if (angle < 0.0) {
             // Turn left

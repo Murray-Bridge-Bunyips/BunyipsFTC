@@ -15,7 +15,7 @@ class LisaTeleOp : BunyipsOpMode() {
     private var config = LisaConfig()
     private var drive: LisaDrive? = null
     override fun onInit() {
-        config = RobotConfig.new(config, hardwareMap, ::at) as LisaConfig
+        config = RobotConfig.new(config, hardwareMap, ::telem) as LisaConfig
         if (config.assert(config.motors)) {
             drive = LisaDrive(
                 this,

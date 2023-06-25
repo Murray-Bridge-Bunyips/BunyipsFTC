@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.Deadwheels
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.Odometer
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
@@ -26,19 +26,23 @@ class JerrySignalAutonomous : BunyipsOpMode() {
     private var cam: OpenCVCam? = null
     private var drive: JerryDrive? = null
     private var imu: IMUOp? = null
-    private var pos: Deadwheels? = null
+    private var x: Odometer? = null
+    private var y: Odometer? = null
     private var tagtask: GetAprilTagTask? = null
     private val tasks = ArrayDeque<TaskImpl>()
 
     override fun onInit() {
         // Configuration of camera and drive components
-        config = RobotConfig.new(config, hardwareMap, ::at) as JerryConfig
+        config = RobotConfig.new(config, hardwareMap, ::telem) as JerryConfig
         cam = OpenCVCam(this, config.webcam, config.monitorID)
         if (config.assert(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        if (config.assert(config.fl, config.fr))
-            pos = Deadwheels(this, config.fl!!, config.fr!!)
+        if (config.assert(config.fl))
+            x = Odometer(this, config.fl!!, config.xDiameter, config.xTicksPerRev)
+
+        if (config.assert(config.fr))
+            y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
         if (config.assert(config.imu))
             imu = IMUOp(this, config.imu!!)
@@ -69,7 +73,8 @@ class JerrySignalAutonomous : BunyipsOpMode() {
                     3.5,
                     drive,
                     imu,
-                    pos,
+                    x,
+                    y,
                     400.0,
                     JerryPrecisionDriveTask.Directions.FORWARD,
                     0.5
@@ -83,7 +88,8 @@ class JerrySignalAutonomous : BunyipsOpMode() {
                     3.5,
                     drive,
                     imu,
-                    pos,
+                    x,
+                    y,
                     400.0,
                     JerryPrecisionDriveTask.Directions.BACKWARD,
                     0.5
@@ -98,7 +104,8 @@ class JerrySignalAutonomous : BunyipsOpMode() {
                 4.0,
                 drive,
                 imu,
-                pos,
+                x,
+                y,
                 600.0,
                 JerryPrecisionDriveTask.Directions.RIGHT,
                 0.5

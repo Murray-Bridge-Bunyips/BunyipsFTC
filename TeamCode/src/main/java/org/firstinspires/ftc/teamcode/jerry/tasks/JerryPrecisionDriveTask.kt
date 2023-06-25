@@ -1,9 +1,8 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.Deadwheels
 import org.firstinspires.ftc.teamcode.common.IMUOp
-import org.firstinspires.ftc.teamcode.common.XYEncoder
+import org.firstinspires.ftc.teamcode.common.Odometer
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
@@ -19,7 +18,8 @@ class JerryPrecisionDriveTask(
     time: Double,
     private val drive: JerryDrive?,
     private val imu: IMUOp?,
-    private val pos: Deadwheels?,
+    private val x: Odometer?,
+    private val y: Odometer?,
     private val distance_mm: Double,
     private val direction: Directions,
     private var power: Double,
@@ -48,32 +48,25 @@ class JerryPrecisionDriveTask(
         // Check if the task is done by checking if it has timed out in the super call or if the target has been reached
         // by the respective deadwheel. If the deadwheel is not available, then we cannot check if the target has been
         // reached, so we will just rely on the timeout.
-        return super.isFinished() || if (direction == Directions.LEFT || direction == Directions.RIGHT) {
-            pos?.targetReached(XYEncoder.Axis.X, distance_mm) ?: false
+        val evaluating = if (direction == Directions.LEFT || direction == Directions.RIGHT) {
+            x?.travelledMM()
         } else {
-            pos?.targetReached(XYEncoder.Axis.Y, distance_mm) ?: false
+            y?.travelledMM()
         }
+        return super.isFinished() || (evaluating != null && evaluating >= distance_mm)
     }
 
     override fun init() {
         super.init()
-
-        // Safe call all components to start their tracking and capture vectors
+        // Capture vectors and start tracking
         imu?.startCapture()
-        pos?.resetTracking()
-        if (direction == Directions.LEFT || direction == Directions.RIGHT) {
-            // If moving along the X axis enable the X deadwheel
-            pos?.enableTracking(XYEncoder.Axis.X)
-        } else {
-            // Otherwise we are moving along the Y axis, and we need to enable the Y deadwheel
-            pos?.enableTracking(XYEncoder.Axis.Y)
-        }
+        x?.track()
+        y?.track()
     }
 
     override fun run() {
         if (isFinished()) {
             drive?.deinit()
-            pos?.resetTracking(XYEncoder.Axis.BOTH)
             return
         }
 
@@ -83,18 +76,17 @@ class JerryPrecisionDriveTask(
             imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0
         )
 
-        // Deadwheels will continue to track if they are enabled.
+        // Encoders will continue to track automatically
         drive?.update()
         imu?.tick()
 
         // Add telemetry of current operation
-        opMode.addTelemetry("PrecisionDrive is active.")
         opMode.addTelemetry(
             "Distance progress: ${
                 if (direction == Directions.LEFT || direction == Directions.RIGHT) {
-                    String.format("%.2f", pos?.travelledMM(XYEncoder.Axis.X))
+                    String.format("%.2f", x?.travelledMM())
                 } else {
-                    String.format("%.2f", pos?.travelledMM(XYEncoder.Axis.Y))
+                    String.format("%.2f", y?.travelledMM())
                 }
             }/$distance_mm"
         )

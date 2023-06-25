@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.jerry.components
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.hardware.DcMotorEx
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.DcMotorSimple.Direction
 import com.qualcomm.robotcore.hardware.HardwareDevice
 import com.qualcomm.robotcore.hardware.IMU
@@ -27,6 +26,14 @@ class JerryConfig : RobotConfig() {
     var arm2: DcMotorEx? = null
     var imu: IMU? = null
     var limit: TouchSensor? = null
+
+    // Encoder configuration
+    val xDiameter = 50.0
+    val xTicksPerRev = 2400.0
+
+    // The Y encoder is the same as the X encoder
+    val yDiameter = xDiameter
+    val yTicksPerRev = xTicksPerRev
 
     val driveMotors: List<DcMotorEx?>
         get() = listOf(bl, br, fl, fr)
@@ -54,6 +61,9 @@ class JerryConfig : RobotConfig() {
            Deadwheels attached as an encoder on the front two motors
            X encoder = port 3, Front Left
            Y encoder = port 4, Front Right
+
+           BQLZR 600P/R encoders
+           @ https://www.amazon.com.au/Signswise-Incremental-Encoder-Dc5-24v-Voltage/dp/B00UTIFCVA
          */
 
         // Motor direction configuration

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.jerry.components
 
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorEx
-import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
@@ -107,10 +106,10 @@ class JerryLift(
         }
 
         return motors[0].isBusy ||
-               motors[1].isBusy ||
-               lock ||
-               targetPosition != motors[0].targetPosition.toDouble() ||
-               targetPosition != motors[1].targetPosition.toDouble()
+                motors[1].isBusy ||
+                lock ||
+                targetPosition != motors[0].targetPosition.toDouble() ||
+                targetPosition != motors[1].targetPosition.toDouble()
     }
 
     /**
@@ -260,11 +259,13 @@ class JerryLift(
                     motor.mode = DcMotor.RunMode.RUN_TO_POSITION
                 }
             }
+
             ControlMode.MANUAL -> {
                 // Lock motor if there is no input
                 if (power == 0.0) {
                     for (motor in motors) {
-                        motor.targetPosition = (motors[0].currentPosition + motors[1].currentPosition) / 2
+                        motor.targetPosition =
+                            (motors[0].currentPosition + motors[1].currentPosition) / 2
                         motor.mode = DcMotor.RunMode.RUN_TO_POSITION
                         motor.power = POSITIONAL_POWER
                     }
@@ -282,8 +283,10 @@ class JerryLift(
     companion object {
         // Maximum encoder value of extension
         private const val HARD_LIMIT = 250
+
         // Delta speed dampener for manual mode
         private const val DAMPENER = 1.5
+
         // Maximum speed of the arm in autonomous mode
         private const val POSITIONAL_POWER = 0.2
     }
