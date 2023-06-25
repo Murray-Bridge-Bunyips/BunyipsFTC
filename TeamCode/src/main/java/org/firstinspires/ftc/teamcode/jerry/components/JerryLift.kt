@@ -148,6 +148,10 @@ class JerryLift(
                 return
             }
         }
+        if (dy > 0 && limit.isPressed) {
+            // If the arm is descending and the limit switch is pressed, don't change motor speed
+            return
+        }
         power = -dy / DAMPENER
     }
 
