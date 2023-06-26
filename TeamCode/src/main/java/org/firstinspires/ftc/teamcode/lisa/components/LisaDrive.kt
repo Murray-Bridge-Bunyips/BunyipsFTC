@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.Encoder
 import org.firstinspires.ftc.teamcode.common.Odometer
+import java.util.Locale
 import kotlin.math.abs
 
 /**
@@ -77,8 +78,15 @@ class LisaDrive(
 
     @SuppressLint("DefaultLocale")
     fun update() {
-        // TODO: Add telemetry
         leftMotor.power = leftPower
         rightMotor.power = rightPower
+        opMode.addTelemetry(
+            String.format(
+                Locale.getDefault(),
+                "Drive: L: %.2f, R: %.2f",
+                leftPower,
+                rightPower
+            )
+        )
     }
 }

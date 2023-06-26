@@ -13,16 +13,15 @@ import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
 
 /**
- * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
- * Uses TimeDrive (which is deprecated), but works.
+ * Signal read, movement of a preloaded cone, and park autonomous for the PowerPlay season.
+ * @author Lucas Bubner, 2023
  */
-@Disabled
 @Autonomous(
-    name = "JERRY: PowerPlay Signal Read & Park w/ TIME DRIVE",
+    name = "JERRY: PowerPlay Cone Placement & Signal Park",
     group = "JERRY",
     preselectTeleOp = "JERRY: TeleOp"
 )
-class JerrySignalAutonomousBasic : BunyipsOpMode() {
+class JerryConeParkAutonomous : BunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: OpenCVCam? = null
     private var drive: JerryDrive? = null
@@ -39,6 +38,8 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
         tagtask = cam?.let { GetAprilTagTask(this, it) }
+
+        // TODO: Add movement tasks that will run before Signal position movements
     }
 
     override fun onInitLoop(): Boolean {
@@ -53,16 +54,7 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         val position = tagtask?.position
         addTelemetry("ParkingPosition set to: $position")
 
-        // Add movement tasks based on the signal position
-        if (position == GetAprilTagTask.ParkingPosition.LEFT) {
-            // Drive forward if the position of the signal is LEFT
-            tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, 1.0, 0.0))
-        } else if (position == GetAprilTagTask.ParkingPosition.RIGHT) {
-            // Drive backward if the position of the signal is RIGHT
-            tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, -1.0, 0.0))
-        }
-
-        tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
+        // TODO: Add movement tasks based on the signal position
     }
 
     override fun activeLoop() {
