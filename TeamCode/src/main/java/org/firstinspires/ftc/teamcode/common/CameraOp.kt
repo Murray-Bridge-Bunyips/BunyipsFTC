@@ -346,7 +346,7 @@ class CameraOp(
 
     /**
      * Raw position matrices for custom OpMode interpretation of data. Vuforia must be enabled.
-     * @return translated position vector from Vuforia, returns null if there are no datapoints
+     * @return translated position vector from Vuforia, returns null if there are no data points
      */
     private val targetTranslation: VectorF?
         get() {
@@ -356,7 +356,7 @@ class CameraOp(
 
     /**
      * Raw orientation matrix for custom OpMode interpretation of Vuforia information. Vuforia must be enabled.
-     * @return translated orientation matrix from Vuforia, returns null if there are no datapoints
+     * @return translated orientation matrix from Vuforia, returns null if there are no data points
      */
     private val orientationTranslation: Orientation?
         get() {
@@ -388,7 +388,7 @@ class CameraOp(
     }
 
     /**
-     * Get positional Z coordiate from Vuforia
+     * Get positional Z coordinate from Vuforia
      * @return mm of interpreted position Z data
      */
     fun vuGetZ(): Double? {

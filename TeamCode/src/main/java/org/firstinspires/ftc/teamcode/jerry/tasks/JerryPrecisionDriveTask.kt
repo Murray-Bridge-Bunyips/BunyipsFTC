@@ -36,7 +36,8 @@ class JerryPrecisionDriveTask(
             )
         }
         // Use absolute values of power to ensure that the robot moves correctly and is not fed with negative values
-        // This is because the task will handle the power management and determine whether the value 
+        // This is because the task will handle the power management and determine whether the value
+        // to the motor should be negative or not
         this.power = abs(power)
     }
 
@@ -53,7 +54,7 @@ class JerryPrecisionDriveTask(
         } else {
             y?.travelledMM()
         }
-        return super.isFinished() || (evaluating != null && evaluating >= distance_mm)
+        return super.isFinished() || evaluating != null && evaluating >= distance_mm
     }
 
     override fun init() {

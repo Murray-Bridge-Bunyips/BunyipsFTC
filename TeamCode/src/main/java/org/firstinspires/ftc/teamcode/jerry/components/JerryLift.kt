@@ -21,6 +21,10 @@ class JerryLift(
 ) : BunyipsComponent(opMode) {
     var power: Double = POSITIONAL_POWER
         set(power) {
+            // Paranoia, ensure the arm doesn't go past the hard limit when taking power commands
+            // from various and untrusted sources
+            if (power > 0 && (arm1.currentPosition + arm2.currentPosition) / 2 >= HARD_LIMIT)
+                return
             field = power.coerceIn(-1.0, 1.0)
         }
     private val motors = arrayOf(arm1, arm2)
@@ -75,8 +79,8 @@ class JerryLift(
             opMode.telemetry.update()
 
             // Check if the delta is above 0 for 30 consecutive loops, if so, we have hit the limit
-            val prev = ((motors[0].currentPosition + motors[1].currentPosition) / 2)
-            val delta = ((motors[0].currentPosition + motors[1].currentPosition) / 2) - prev
+            val prev = (motors[0].currentPosition + motors[1].currentPosition) / 2
+            val delta = (motors[0].currentPosition + motors[1].currentPosition) / 2 - prev
             if (delta >= 0) {
                 e++
             } else {
@@ -170,7 +174,7 @@ class JerryLift(
             reset()
             return
         }
-        targetPosition = (percent / 100.0) * HARD_LIMIT
+        targetPosition = percent / 100.0 * HARD_LIMIT
     }
 
     /**

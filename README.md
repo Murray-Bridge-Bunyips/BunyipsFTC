@@ -16,7 +16,9 @@
 		FTC22407: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS
 		FTC15215-2: Two-wheel-drive PowerPlay robot for PowerPlay, serves as a backup to JERRY
 		GROOT: Two-wheel-drive minibot for versatility and education
-	
+
+[![CodeFactor](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc/badge)](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc)
+
 ## NOTICE
 
 This repository contains the public FTC SDK for the POWERPLAY (2022-2023) competition season.

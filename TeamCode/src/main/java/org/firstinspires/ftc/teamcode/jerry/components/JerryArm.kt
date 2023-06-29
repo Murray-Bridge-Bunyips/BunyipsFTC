@@ -78,8 +78,8 @@ class JerryArm(
             opMode.telemetry.update()
 
             // Check if the delta is above 0 for 10 consecutive loops, if so, we have hit the limit
-            val prev = ((motors[0].currentPosition + motors[1].currentPosition) / 2)
-            val delta = ((motors[0].currentPosition + motors[1].currentPosition) / 2) - prev
+            val prev = (motors[0].currentPosition + motors[1].currentPosition) / 2
+            val delta = (motors[0].currentPosition + motors[1].currentPosition) / 2 - prev
             if (delta >= 0) {
                 e++
             } else {
@@ -200,7 +200,7 @@ class JerryArm(
 
         // Over-bounds detection algorithm for offset
         val target = LIFT_POSITIONS[liftIndex] + offset
-        val current = ((motors[0].currentPosition + motors[1].currentPosition) / 2)
+        val current = (motors[0].currentPosition + motors[1].currentPosition) / 2
         if (current + MOTOR_OFFSET_LIMIT < target || current - MOTOR_OFFSET_LIMIT > target) {
             offset = 0
         }
