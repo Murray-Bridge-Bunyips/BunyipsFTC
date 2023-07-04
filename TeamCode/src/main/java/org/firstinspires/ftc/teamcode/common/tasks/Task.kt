@@ -30,7 +30,9 @@ abstract class Task : TaskImpl {
     /**
      * Define code to run once, upon when the task is started.
      */
-    override fun init() {}
+    override fun init() {
+        // Define global init code here, use with a super call if overriding
+    }
 
     /**
      * Override to this method to add custom criteria if a task should be considered finished.

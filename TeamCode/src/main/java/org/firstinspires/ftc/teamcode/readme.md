@@ -1,14 +1,18 @@
 ## TeamCode Module
 
 This is where all the Bunyips (FTC Team 15215) robot development code will reside!  
-This repository contains all code used for FTC robots constructed >2021 using Kotlin (Migration from Java 29/01/23)
+This repository contains all code used for FTC robots constructed >2021 using a mix of
+Kotlin (>29/01/23) & Java
 
-## Class prefix naming convention
+## Naming convention
 
-All OpModes use '<robot name(+ -I if independent class)> OpMode name' in their Driver Station name
+All OpModes use should include the robot name in their Driver Station name
 declaration to avoid confusion.  
-Classes are organised based on their package name and should only be run on their respective robot.
+OpModes are organised based on their package name and should only be run on their respective robot.
 
-'_independent' packages do not rely on custom common classes and objects and can be run without the
-need of external classes. These classes are only used for testing purposes now and proper OpModes
-should use the DRY principle common class objects.
+'_independent' packages do not rely on custom common classes and objects and can be run solely on
+the
+FIRST SDKs resources. These classes are now only used for learning purposes and
+proper OpModes should derive from Bunyips common classes.
+
+All non-active archived code is stored in [archived/](../../../../../archived/) and is not built.

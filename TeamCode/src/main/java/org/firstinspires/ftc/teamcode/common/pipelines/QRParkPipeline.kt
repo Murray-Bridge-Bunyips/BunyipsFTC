@@ -10,18 +10,17 @@ import org.openftc.easyopencv.OpenCvPipeline
  * Simple, effective, and intelligent. It may take a few seconds to detect a QR code.
  * @author Lucas Bubner - FTC 15215 Captain; Nov 2022
  */
+@Deprecated("Old system, use AprilTags instead")
 class QRParkPipeline : OpenCvPipeline() {
     @Volatile
     var position: GetQRSleeveTask.ParkingPosition? = null
         private set
 
     // Using OpenCVs object detection for QR codes
-    var qr = QRCodeDetector()
+    private val qr = QRCodeDetector()
     override fun processFrame(input: Mat): Mat {
-
         // Must use a curved decoder, as the cone is a curved surface
-        val result = qr.detectAndDecodeCurved(input)
-        when (result) {
+        when (qr.detectAndDecodeCurved(input)) {
             "MURRAY" -> position = GetQRSleeveTask.ParkingPosition.LEFT
             "BRIDGE" -> position = GetQRSleeveTask.ParkingPosition.CENTER
             "BUNYIPS" -> position = GetQRSleeveTask.ParkingPosition.RIGHT

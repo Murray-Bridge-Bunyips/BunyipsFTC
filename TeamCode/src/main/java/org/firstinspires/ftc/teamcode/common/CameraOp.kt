@@ -5,14 +5,7 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables
+import org.firstinspires.ftc.robotcore.external.navigation.*
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector
 import org.openftc.easyopencv.OpenCvCamera
@@ -20,14 +13,21 @@ import org.openftc.easyopencv.OpenCvCamera.AsyncCameraOpenListener
 import org.openftc.easyopencv.OpenCvCameraFactory
 import org.openftc.easyopencv.OpenCvCameraRotation
 import org.openftc.easyopencv.OpenCvPipeline
+import kotlin.math.abs
 
 /**
  * Custom common class to operate all Vuforia, TensorFlow, and OpenCV operations through a single attached Webcam
  * Allows hot-swapping between two modes, STANDARD (VF + TFOD) and OPENCV, for respective operation.
+ *
+ * For just OpenCV operations, see OpenCVCam.kt
+ *
  * @author Lucas Bubner - FTC 15215 Captain; Oct-Nov 2022 - Murray Bridge Bunyips
  */
 class CameraOp(
-    opmode: BunyipsOpMode?, private val webcam: WebcamName?, private val monitorID: Int, var mode: CamMode
+    opmode: BunyipsOpMode,
+    private val webcam: WebcamName?,
+    private val monitorID: Int,
+    var mode: CamMode
 ) : BunyipsComponent(opmode) {
     private var vuforia: VuforiaLocalizer? = null
     private var tfod: TFObjectDetector? = null
@@ -35,7 +35,7 @@ class CameraOp(
     private val allTrackables: MutableList<VuforiaTrackable> = ArrayList()
     private var lastLocation: OpenGLMatrix? = null
     private var targets: VuforiaTrackables? = null
-    protected var OCVcam: OpenCvCamera? = null
+    private var oCVcam: OpenCvCamera? = null
 
     // Running variable which stores the last seen TFOD element (used for cross-task application)
     @Volatile
@@ -46,17 +46,26 @@ class CameraOp(
     }
 
     var targetVisible = false
+        private set
     var vuforiaEnabled = false
+        private set
     var tfodEnabled = false
+        private set
 
     /**
      * CameraOperation custom common class for USB-connected webcams (TFOD Objects + Vuforia Field Pos or OpenCV mode)
      */
     init {
-        assert(webcam != null)
-        when (mode) {
-            CamMode.STANDARD -> stdinit()
-            CamMode.OPENCV -> OpenCVinit()
+        try {
+            when (mode) {
+                CamMode.STANDARD -> stdinit()
+                CamMode.OPENCV -> openCVinit()
+            }
+        } catch (e: Throwable) {
+            opmode.addTelemetry(
+                "Failed to initialise Camera Operation. Error message: ${e.message}",
+                true
+            )
         }
     }
 
@@ -126,17 +135,17 @@ class CameraOp(
         )
 
         // Create a transformation matrix to let the computer know where the camera is relative to the robot
-        val CAMERA_FORWARD_DISPLACEMENT =
+        val cameraForwardDisplacement =
             0.0f // Enter the forward distance from the center of the robot to the camera lens (mm)
-        val CAMERA_VERTICAL_DISPLACEMENT =
+        val cameraVerticalDisplacement =
             0.0f // Enter vertical height from the ground to the camera (mm)
-        val CAMERA_LEFT_DISPLACEMENT =
+        val cameraLeftDisplacement =
             0.0f // Enter the left distance from the center of the robot to the camera lens (mm)
         val cameraLocationOnRobot = OpenGLMatrix
             .translation(
-                CAMERA_FORWARD_DISPLACEMENT,
-                CAMERA_LEFT_DISPLACEMENT,
-                CAMERA_VERTICAL_DISPLACEMENT
+                cameraForwardDisplacement,
+                cameraLeftDisplacement,
+                cameraVerticalDisplacement
             )
             .multiplied(
                 Orientation.getRotationMatrix(
@@ -170,8 +179,7 @@ class CameraOp(
         // tfod.loadModelFromFile(TFOD_MODEL_FILE, LABELS);
     }
 
-    private fun OpenCVinit() {
-
+    private fun openCVinit() {
         /*
          * Instead of using Vuforia and OpenCV on the same camera, we instead init the camera
          * using OpenCV's own camera instance. It is highly unlikely one camera would need to use
@@ -179,15 +187,18 @@ class CameraOp(
          * Besides, a hardware camera should not have multiple instances of a camera object running
          * on it at the same time, so this provides a way to pick between the two.
          */
-        OCVcam = OpenCvCameraFactory.getInstance().createWebcam(webcam, monitorID)
-        OCVcam?.openCameraDeviceAsync(object : AsyncCameraOpenListener {
+        oCVcam = OpenCvCameraFactory.getInstance().createWebcam(webcam, monitorID)
+        oCVcam?.openCameraDeviceAsync(object : AsyncCameraOpenListener {
             override fun onOpened() {
-                OCVcam?.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT)
+                oCVcam?.startStreaming(1280, 720, OpenCvCameraRotation.UPRIGHT)
             }
 
             override fun onError(errorCode: Int) {
-                opMode!!.telemetry.addLine("An error occurred in initalising OpenCV. Standard mode will be activated. Error code: $errorCode")
-                OCVcam = null
+                opMode.addTelemetry(
+                    "An error occurred in initialising OpenCV. Standard mode will be activated. Error code: $errorCode",
+                    true
+                )
+                oCVcam = null
                 mode = CamMode.STANDARD
                 stdinit()
             }
@@ -204,13 +215,13 @@ class CameraOp(
                 stopTFOD()
                 tfod = null
                 vuforia = null
-                OpenCVinit()
+                openCVinit()
             }
 
             CamMode.OPENCV -> {
-                OCVcam?.stopStreaming()
-                OCVcam?.closeCameraDeviceAsync {}
-                OCVcam = null
+                oCVcam?.stopStreaming()
+                oCVcam?.closeCameraDeviceAsync {}
+                oCVcam = null
                 stdinit()
             }
         }
@@ -221,7 +232,7 @@ class CameraOp(
      * @param pipeline Supply an OpenCVPipeline to set the camera to
      */
     fun setPipeline(pipeline: OpenCvPipeline?) {
-        if (OCVcam != null) OCVcam?.setPipeline(pipeline)
+        if (oCVcam != null) oCVcam?.setPipeline(pipeline)
     }
 
     /**
@@ -237,23 +248,23 @@ class CameraOp(
             // Debugging telemetry, uncomment if required
             val col = ((recognition.left + recognition.right) / 2).toDouble()
             val row = ((recognition.top + recognition.bottom) / 2).toDouble()
-            val width = Math.abs(recognition.right - recognition.left).toDouble()
-            val height = Math.abs(recognition.top - recognition.bottom).toDouble()
-            opMode!!.telemetry.addLine(
+            val width = abs(recognition.right - recognition.left).toDouble()
+            val height = abs(recognition.top - recognition.bottom).toDouble()
+            opMode.addTelemetry(
                 String.format(
                     "Image: %1\$s (%2$.0f %% Conf.)",
                     recognition.label,
                     recognition.confidence * 100
                 )
             )
-            opMode.telemetry.addLine(
+            opMode.addTelemetry(
                 String.format(
                     "- Position (Row/Col): %1$.0f / %2$.0f",
                     row,
                     col
                 )
             )
-            opMode.telemetry.addLine(
+            opMode.addTelemetry(
                 String.format(
                     "- Size (Width/Height): %1$.0f / %2$.0f",
                     width,
@@ -274,32 +285,26 @@ class CameraOp(
         }
         return null
     }
+
     /*
-     * This method shouldn't be called unless a raw matrix is required or for debugging.
-     * Debugging telemetry from this method should be used from the calling OpMode + get methods (see above)
-     * However, if needed for testing, call getTargetRawMatrix to a junk variable and
-     * uncomment the lines below to get all interpreted data readings for debugging.
+     * Fully pre-interpreted data
+     *     cam.getX(); Position X (mm)
+     *     cam.getY(); Position Y (mm)
+     *     cam.getZ(); Position Z (mm)
+     *     cam.getPitch(); Pitch (X) (degs)
+     *     cam.getRoll(); Roll (Y) (degs)
+     *     cam.getHeading(); Heading (Z) (degs)
+     *
+     * See: https://github.com/FIRST-Tech-Challenge/FtcRobotController/blob/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples/FTC_FieldCoordinateSystemDefinition.pdf
+     * for information regarding field positioning with these coordinates.
      */
 
-    // Return the raw matrix detected if it is visible to the camera, otherwise return null
     /**
      * Returns the raw OpenGLMatrix info from the Vuforia engine for OpMode interpretation. See this method's definition for more information. Vuforia must be activated.
      * @return OpenGLMatrix from the current identified target identified by the Vuforia engine.
      * Returns null if no target is currently visible.
      * For the most part, this method shouldn't have to be called in an OpMode unless for debugging.
      */
-    /*
-         * Call these methods for fully pre-interpreted data
-         *     cam.getX(); Position X (mm)
-         *     cam.getY(); Position Y (mm)
-         *     cam.getZ(); Position Z (mm)
-         *     cam.getPitch(); Pitch (X) (degs)
-         *     cam.getRoll(); Roll (Y) (degs)
-         *     cam.getHeading(); Heading (Z) (degs)
-         *
-         * See: https://github.com/FIRST-Tech-Challenge/FtcRobotController/blob/master/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples/FTC_FieldCoordinateSystemDefinition.pdf
-         * for information regarding field positioning with these coordinates.
-         */
     @get:SuppressLint("DefaultLocale")
     val targetRawMatrix: OpenGLMatrix?
         get() {
@@ -312,7 +317,7 @@ class CameraOp(
                   * uncomment the lines below to get all interpreted data readings for debugging.
                   */
                 val translation = lastLocation!!.translation
-                opMode!!.telemetry.addLine(
+                opMode.addTelemetry(
                     String.format(
                         "Pos (mm): {X, Y, Z} = %.1f, %.1f, %.1f",
                         translation[0], translation[1], translation[2]
@@ -324,7 +329,7 @@ class CameraOp(
                     AxesOrder.XYZ,
                     AngleUnit.DEGREES
                 )
-                opMode.telemetry.addLine(
+                opMode.addTelemetry(
                     String.format(
                         "Rot (deg): {Roll, Pitch, Heading} = %.0f, %.0f, %.0f",
                         rotation.firstAngle,
@@ -340,23 +345,20 @@ class CameraOp(
         }
 
     /**
-     * Offers raw position matrices for custom OpMode interpretation of data, if something needs to be done
-     * outside of standard pre-interpreted data. Vuforia must be enabled.
-     * For the most part, you will not need to call this method and instead use the getX,Y,Z methods
-     * @return translated position vector from Vuforia, returns null if there are no datapoints
+     * Raw position matrices for custom OpMode interpretation of data. Vuforia must be enabled.
+     * @return translated position vector from Vuforia, returns null if there are no data points
      */
-    val targetTranslation: VectorF?
+    private val targetTranslation: VectorF?
         get() {
             val matrix = targetRawMatrix
             return matrix?.translation
         }
 
     /**
-     * Offers raw orientation matrix for custom OpMode interpretation of Vuforia information. Vuforia must be enabled.
-     * For the most part, you will not need to call this method and instead use the getRoll,Pitch,Heading methods
-     * @return translated orientation matrix from Vuforia, returns null if there are no datapoints
+     * Raw orientation matrix for custom OpMode interpretation of Vuforia information. Vuforia must be enabled.
+     * @return translated orientation matrix from Vuforia, returns null if there are no data points
      */
-    val orientationTranslation: Orientation?
+    private val orientationTranslation: Orientation?
         get() {
             val matrix = targetRawMatrix
             return Orientation.getOrientation(
@@ -386,7 +388,7 @@ class CameraOp(
     }
 
     /**
-     * Get positional Z coordiate from Vuforia
+     * Get positional Z coordinate from Vuforia
      * @return mm of interpreted position Z data
      */
     fun vuGetZ(): Double? {

@@ -75,13 +75,13 @@ class MovingAverageTimer @JvmOverloads constructor(
         val loopTime = now - previousTime
         previousTime = now
         if (loopCount > 0) {
-            minLoopTime = Math.min(minLoopTime, loopTime.toDouble())
-            maxLoopTime = Math.max(maxLoopTime, loopTime.toDouble())
+            minLoopTime = minLoopTime.coerceAtMost(loopTime.toDouble())
+            maxLoopTime = maxLoopTime.coerceAtLeast(loopTime.toDouble())
         }
 
         // Adjust the running total
         movingTotal = movingTotal - loopTimeRingBuffer[ringBufferIndex] + loopTime
-        runningTotal = runningTotal + loopTime
+        runningTotal += loopTime
 
         // Add the new value
         loopTimeRingBuffer[ringBufferIndex] = loopTime
@@ -96,8 +96,8 @@ class MovingAverageTimer @JvmOverloads constructor(
                 movingTotal.toDouble() / loopCount.toDouble() / resolution
             }
             // Temporarily fill the min/max movingAverage
-            minMovingAverage = Math.min(minMovingAverage, movingAverage)
-            maxMovingAverage = Math.max(maxMovingAverage, movingAverage)
+            minMovingAverage = minMovingAverage.coerceAtMost(movingAverage)
+            maxMovingAverage = maxMovingAverage.coerceAtLeast(movingAverage)
         } else {
             movingAverage = movingTotal.toDouble() / ringBufferSize.toDouble() / resolution
 
@@ -106,13 +106,13 @@ class MovingAverageTimer @JvmOverloads constructor(
                 minMovingAverage = movingAverage
                 maxMovingAverage = movingAverage
             } else {
-                minMovingAverage = Math.min(minMovingAverage, movingAverage)
-                maxMovingAverage = Math.max(maxMovingAverage, movingAverage)
+                minMovingAverage = minMovingAverage.coerceAtMost(movingAverage)
+                maxMovingAverage = maxMovingAverage.coerceAtLeast(movingAverage)
             }
         }
         average = runningTotal.toDouble() / loopCount / resolution
-        minAverage = Math.min(minAverage, average)
-        maxAverage = Math.max(maxAverage, average)
+        minAverage = minAverage.coerceAtMost(average)
+        maxAverage = maxAverage.coerceAtLeast(average)
     }
 
     fun count(): Long {

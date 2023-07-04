@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.common
 
-import org.firstinspires.ftc.robotcore.external.Telemetry
 import java.io.PrintWriter
 import java.io.StringWriter
 
@@ -9,10 +8,9 @@ import java.io.StringWriter
  */
 object ErrorUtil {
     @Throws(InterruptedException::class)
-    fun handleCatchAllException(e: Throwable, telemetry: Telemetry) {
-        telemetry.log().add("Opmode Exception:" + e.message)
-        val stckTrace = stackTraceAsString(e)
-        telemetry.log().add("Opmode Stacktrace: " + stckTrace.substring(0, 200))
+    fun handleCatchAllException(e: Throwable, log: (msg: String) -> Unit) {
+        log("encountered exception! <${e.message}>")
+        log("stacktrace: ${stackTraceAsString(e)}")
         if (e is InterruptedException) {
             throw e
         }
