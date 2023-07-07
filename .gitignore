@@ -58,6 +58,8 @@ captures/
 # any replit config
 .replit
 replit.nix
+# codespaces
+.devcontainer
 
 # Keystore files
 # Uncomment the following lines if you do not want to check your keystore files in.
