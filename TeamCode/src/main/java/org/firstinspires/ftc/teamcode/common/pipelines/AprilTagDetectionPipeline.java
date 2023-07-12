@@ -39,9 +39,10 @@ import java.util.ArrayList;
 
 /**
  * Pipeline to drive AprilTag detection.
- *
+ * @deprecated included with SDK v8.2, use built in AprilTagProcessor
  * @author OpenFTC, 2021
  */
+@Deprecated
 public class AprilTagDetectionPipeline extends OpenCvPipeline {
     private final Object detectionsUpdateSync = new Object();
     private final Object decimationSync = new Object();

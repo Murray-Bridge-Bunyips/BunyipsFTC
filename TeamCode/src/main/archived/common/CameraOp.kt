@@ -21,8 +21,12 @@ import kotlin.math.abs
  *
  * For just OpenCV operations, see OpenCVCam.kt
  *
+ * Archived 2023-07-21 in favour of SDK v8.2's removal of certain libraries. New Camera driver will
+ * be based on the new VisionPortal API.
+ *
  * @author Lucas Bubner - FTC 15215 Captain; Oct-Nov 2022 - Murray Bridge Bunyips
  */
+@Deprecated("Functionality deprecated by FIRST SDK v8.2, use VisionPortal instead.")
 class CameraOp(
     opmode: BunyipsOpMode,
     private val webcam: WebcamName?,
@@ -528,9 +532,8 @@ class CameraOp(
             "3 Panel"
         )
 
-        // Vuforia key: BUNYIPSFTC belonging to lkbubner@proton.me
-        private const val VUFORIA_KEY =
-            "AUAUEO7/////AAABmaBhSSJLMEMkmztY3FQ8jc8fX/wM6mSSQMqcLVW4LjbkWOU5wMH4tLQR7u90fyd93G/7JgfGU5nn2fHF41Q+oaUFe4zI58cr7KsONh689X8o8nr6+7BPN9gMrz08bOzj4+4JwxJ1m84iTPqCpImzYMHr60dtlKBSHN53sRL476JHa+HxZZB4kVq0BhpHlDo7WSGUb6wb5qdgGS3GGx62kiZVCfuWkGY0CZY+pdenCmkNXG2w0/gaeKC5gNw+8G4oGPmAKYiVtCkVJOvjKFncom2h82seL9QA9k96YKns4pQcJn5jdkCbbKNPULv3sqvuvWsjfFOpvzJ0Wh36MrcXlRCetR5oNWctERDjujSjf1o1"
+        // key revoked: 2023-07-12
+        private const val VUFORIA_KEY = null
 
         // Vuforia constants and conversions
         private const val mmPerInch = 25.4f

@@ -7,8 +7,15 @@ import org.openftc.easyopencv.OpenCvCameraRotation
 import org.openftc.easyopencv.OpenCvPipeline
 
 /**
- * Simplified version of CameraOp class to include only OpenCV operations, heavily reducing bloat
- * for OpModes that don't need to use Vuforia or TensorFlow.
+ * Wrapper for OpenFTC's EasyOpenCV library.
+ *
+ * This is a simplified version of CameraOp class to include only OpenCV operations,
+ * heavily reducing bloat for OpModes that don't need to use Vuforia or TensorFlow.
+ *
+ * If using AprilTags, use the Vision class instead, as it will use the SDKs libraries which
+ * are more reliable and have more interoperability. This wrapper should only be used if
+ * OpenCV pipelines are desired but they are not AprilTags.
+ *
  * @author Lucas Bubner, 2023
  */
 class OpenCVCam(
