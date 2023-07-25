@@ -27,7 +27,7 @@ class JerryTeleOp : BunyipsOpMode() {
 
     override fun onInit() {
         // Configure drive and lift subsystems
-        config = RobotConfig.new(config, hardwareMap, ::telem) as JerryConfig
+        config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         if (config.assert(config.driveMotors)) {
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
         }

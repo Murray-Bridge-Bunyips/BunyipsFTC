@@ -33,7 +33,7 @@ class JerryAutoTest : BunyipsOpMode() {
     private val tasks = ArrayDeque<TaskImpl>()
 
     override fun onInit() {
-        config = RobotConfig.new(config, hardwareMap, ::telem) as JerryConfig
+        config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         if (config.assert(config.driveMotors)) {
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
         }

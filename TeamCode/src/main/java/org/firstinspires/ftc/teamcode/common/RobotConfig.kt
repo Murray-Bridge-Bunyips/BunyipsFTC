@@ -59,21 +59,22 @@ abstract class RobotConfig {
         /**
          * Factory method for creating a new instance of a configuration with a HardwareMap.
          */
-        fun new(
+        @JvmStatic
+        fun newConfig(
+            opMode: BunyipsOpMode,
             config: RobotConfig,
-            hardwareMap: HardwareMap,
-            addTelemetry: (msg: String, retained: Boolean) -> Unit
+            hardwareMap: HardwareMap
         ): RobotConfig {
             config.hardwareMap = hardwareMap
             errors.clear()
             config.init()
-            addTelemetry(
+            opMode.addTelemetry(
                 "${config.javaClass.simpleName.uppercase()}: Configuration completed with ${errors.size} error(s).",
                 false
             )
             if (errors.isNotEmpty()) {
                 for (error in errors) {
-                    addTelemetry("! DEV_FAULT: $error", true)
+                    opMode.addTelemetry("! DEV_FAULT: $error", true)
                 }
             }
             return config

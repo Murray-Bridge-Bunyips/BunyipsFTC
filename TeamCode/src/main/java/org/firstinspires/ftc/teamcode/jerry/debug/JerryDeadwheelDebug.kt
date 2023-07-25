@@ -17,7 +17,7 @@ class JerryDeadwheelDebug : BunyipsOpMode() {
     private var y: Odometer? = null
 
     override fun onInit() {
-        config = RobotConfig.new(config, hardwareMap, ::telem) as JerryConfig
+        config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         if (config.assert(config.fl))
             x = Odometer(this, config.fl!!, config.xDiameter, config.xTicksPerRev)
 

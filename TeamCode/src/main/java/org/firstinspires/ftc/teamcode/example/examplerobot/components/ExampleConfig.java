@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.example.examplerobot.components;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
@@ -14,10 +16,10 @@ public class ExampleConfig extends RobotConfig {
     public DcMotor leftMotor;
     public DcMotor rightMotor;
     public DcMotor liftMotor;
+    public IMU imu;
     // Put any other motors, servos, etc. here.
     // e.g. public Servo leftServo;
     //      public CameraName webcam;
-    //      public IMU imu;
 
     // The init() function is required by RobotConfig to be implemented.
     // In the init function, you will initialise all your hardware with the handy getHardware()
@@ -41,12 +43,12 @@ public class ExampleConfig extends RobotConfig {
         // e.g leftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Example IMU configuration
-        // IMU.Parameters parameters = new IMU.Parameters(
-        //     new RevHubOrientationOnRobot(
-        //          RevHubOrientationOnRobot.LogoFacingDirection.UP,
-        //          RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
-        //     )
-        // );
-        // imu.initialize(parameters);
+         IMU.Parameters parameters = new IMU.Parameters(
+             new RevHubOrientationOnRobot(
+                  RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                  RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+             )
+         );
+         imu.initialize(parameters);
     }
 }

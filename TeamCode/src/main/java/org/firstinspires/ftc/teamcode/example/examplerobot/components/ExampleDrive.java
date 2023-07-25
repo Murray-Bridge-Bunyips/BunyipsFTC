@@ -44,7 +44,7 @@ public class ExampleDrive extends BunyipsComponent {
 
     // This example will cover a simple drive function, which will take in a power and set the
     // local variable to represent this power. (This is also called a setter)
-    public void drive(double power) {
+    public void run(double power) {
         // Set the power of the motors to the given power.
         this.motorPower = power;
     }
@@ -52,6 +52,10 @@ public class ExampleDrive extends BunyipsComponent {
     public void stop() {
         // Stop the motors by setting power to zero
         this.motorPower = 0;
+    }
+
+    public boolean isAtPosition(double target) {
+        return leftMotor.getCurrentPosition() > target;
     }
 
     // ALL components should strive to include an update() method, which will be called every
