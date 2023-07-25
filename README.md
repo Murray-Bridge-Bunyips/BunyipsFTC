@@ -6,12 +6,12 @@
 	
 	ACTIVE ROBOT CODE in this repository (under src/main/java/.../teamcode):
         	JERRY: Mecanum-drive PowerPlay robot for 2022-2023 season
-		    DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS
+		DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS
 
 	Archived robot code in this repository (under src/main/archived):
 		BERTIE: Mecanum-drive FreightFrenzy robot for 2021-2022 season
 		LISA-I: Old legacy code for Lisa minibot, dangerous territory.
-        LISA: Two-wheel-drive minibot for high-speed performance
+        	LISA: Two-wheel-drive minibot for high-speed performance
 	
 	Robot code not in this repository (written in Blocks by other members of the club):
 		GROOT: Two-wheel-drive PowerPlay robot for PowerPlay unofficial third team
