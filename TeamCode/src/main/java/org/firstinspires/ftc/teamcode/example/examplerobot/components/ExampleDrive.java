@@ -15,10 +15,10 @@ public class ExampleDrive extends BunyipsComponent {
     // You will need to store any hardware you wish to control in your component as another instance
     // (similar to the config class file)
     // For example, if you have a motor called `leftMotor`, you will need to declare it like this:
-    private DcMotor leftMotor;
+    private final DcMotor leftMotor;
     // ! Note that these variables are private and not public, as the component should handle full
     // control and access permissions to the hardware it is controlling.
-    private DcMotor rightMotor;
+    private final DcMotor rightMotor;
 
     // You will also declare any local variables that you wish to use in your component.
     private double motorPower;

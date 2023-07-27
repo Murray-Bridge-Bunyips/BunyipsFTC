@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 // See ExampleDrive before looking at this file.
 public class ExampleLift extends BunyipsComponent {
     // Run similar initialisation to ExampleDrive. This will be the same for all components.
-    private DcMotor liftMotor;
+    private final DcMotor liftMotor;
 
     // This example will look at making an index-based lift based on motor encoder position.
     // Array to hold lift position values, and a pointer to the current position.
