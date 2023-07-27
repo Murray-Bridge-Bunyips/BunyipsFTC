@@ -13,18 +13,22 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public class DinoDrive extends BunyipsComponent {
 
-    private DcMotor leftMotor;
-    private DcMotor rightMotor;
+    private DcMotor leftFront;
+    private DcMotor leftBack;
+    private DcMotor rightFront;
+    private DcMotor rightBack;
 
     private double motorPower;
 
-    public DinoDrive(@NonNull BunyipsOpMode opMode, DcMotor left, DcMotor right) {
+    public DinoDrive(@NonNull BunyipsOpMode opMode, DcMotor leftFront, DcMotor leftBack, DcMotor rightFront, DcMotor rightBack, DcMotor arm) {
         super(opMode);
 
-       // this.leftMotor will assign to a higher scope
+       // this.left_front will assign to a higher scope
        // Meaning we can access the motors in the component
-       this.leftMotor = left;
-       this.rightMotor = right;
+       this.leftFront = leftFront;
+       this.leftBack = leftBack;
+       this.rightFront = rightFront;
+       this.rightBack = rightBack;
     }
 
     public void run(double power) {
@@ -40,7 +44,7 @@ public class DinoDrive extends BunyipsComponent {
     // Not exactly sure how this works?
     // I assume it has something to do with autonomous
     public boolean isAtPosition(double target) {
-        return leftMotor.getCurrentPosition() > target;
+        return leftFront.getCurrentPosition() > target;
     }
 
     // How I assume the motors work
@@ -50,9 +54,11 @@ public class DinoDrive extends BunyipsComponent {
 
     // Updates the components every hardware loop
     public void update(){
-        leftMotor.setPower(motorPower);
+        leftFront.setPower(motorPower);
+        leftBack.setPower(motorPower);
         // Right needs to be set to -, because the motor power going in a negative direction is
         // the same as it going backwards, or Right. Right?
-        rightMotor.setPower(-motorPower);
+        rightFront.setPower(-motorPower);
+        rightBack.setPower(-motorPower);
     }
 }

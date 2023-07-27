@@ -11,15 +11,17 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  * DinoMighty lift class.
  */
 
-public class DinoLift extends BunyipsComponent{
-    
+public class DinoLift extends BunyipsComponent {
+
+    private DcMotor arm;
+
     // Index based lift system, with the lift values stored in an array
     private int[] liftPositions = {0, 100, 200, 300, 400, 500};
     private int liftPositionPointer;
 
-    public DinoLift(@NonNull BunyipsOpMode opMode, DcMotor liftMotor){
+    public DinoLift(@NonNull BunyipsOpMode opMode, DcMotor arm){
         super(opMode);
-        this.liftMotor = liftMotor;
+        this.arm = arm;
 
         this.liftPositionPointer = 0;
     }
@@ -48,9 +50,9 @@ public class DinoLift extends BunyipsComponent{
         int position = liftPositions[liftPositionPointer];
 
         // Set the motor to the inputted position
-        liftMotor.setTargetPosition(position);
+        arm.setTargetPosition(position);
         // Moves the lift to position(?)
-        liftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         
         // Can update telemetry functions too
         // The modified telemetry function takes in a value to show on the Driver Station, and

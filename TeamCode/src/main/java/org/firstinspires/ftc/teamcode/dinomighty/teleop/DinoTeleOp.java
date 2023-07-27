@@ -1,13 +1,14 @@
 package org.firstinspires.ftc.teamcode.dinomighty.teleop;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.dinomighty.components.DinoConfig;
+import org.firstinspires.ftc.teamcode.dinomighty.components.DinoDrive;
 
 /**
  * Primary TeleOp for all of DinoMighty's functions.
- *
  * Uses gamepad1 for drive control and gamepad2 for lift control.
  * > gamepad1 left stick for driving
  * > gamepad1 right stick for turning
@@ -18,7 +19,7 @@ import org.firstinspires.ftc.teamcode.dinomighty.components.DinoConfig;
  * @author Lachlan Paul, 2023
  */
 
-@Teleop(name="DinoMighty TeleOp")
+@TeleOp(name="DinoMighty TeleOp")
 public class DinoTeleOp extends BunyipsOpMode {
 
     private DinoConfig config;
@@ -29,10 +30,10 @@ public class DinoTeleOp extends BunyipsOpMode {
 
         // This line is required to initialise config and allow you to access all your instance
         // variables declared in the config class. This is required for all OpMode classes.
-        config = (ExampleConfig) RobotConfig.newConfig(this, config, hardwareMap);
+        config = (DinoConfig) RobotConfig.newConfig(this, config, hardwareMap);
 
         // Initialise all components
-        drive = new DinoDrive(this, config.leftMotor, config.rightMotor);
+        drive = new DinoDrive(this, config.leftFront, config.leftBack, config.rightFront, config.rightBack, config.arm);
     }
 
     // activeLoop runs every hardware cycle

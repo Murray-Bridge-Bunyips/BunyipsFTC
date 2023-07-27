@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.dinomighty.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
@@ -19,16 +20,26 @@ public class DinoConfig extends RobotConfig {
     //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
 
     // Declares all necessary motors
-    public DcMotor leftMotor;
-    public DcMotor rightMotor;
-    public DcMotor liftMotor;
+    public DcMotor leftFront;
+    public DcMotor leftBack;
+    public DcMotor rightFront;
+    public DcMotor rightBack;
+    public DcMotor arm;
+
+    public Servo frontServo;
+    public Servo gripper;
 
     @Override
     protected void init() {
 
-        leftMotor = (DcMotor) getHardware("leftMotor", DcMotor.class);
-        rightMotor = (DcMotor) getHardware("rightMotor", DcMotor.class);
-        liftMotor = (DcMotor) getHardware("liftMotor", DcMotor.class);
+        leftFront = (DcMotor) getHardware("leftFront", DcMotor.class);
+        leftBack = (DcMotor) getHardware("leftBack", DcMotor.class);
+        rightFront = (DcMotor) getHardware("rightFront", DcMotor.class);
+        rightBack = (DcMotor) getHardware("rightBack", DcMotor.class);
+        arm = (DcMotor) getHardware("arm", DcMotor.class);
+
+        frontServo = (Servo) getHardware("frontServo", Servo.class);
+        gripper = (Servo) getHardware("gripper", Servo.class);
     }
 
 }
