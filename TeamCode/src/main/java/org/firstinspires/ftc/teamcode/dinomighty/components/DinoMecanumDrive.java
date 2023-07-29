@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.example.examplerobot.components;
+package org.firstinspires.ftc.teamcode.dinomighty.components;
 
 import androidx.annotation.NonNull;
 
@@ -7,61 +7,54 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleMecanumDrive;
 
 import java.util.Locale;
 
 /**
- * Example code for a drive system using the BunyipsOpMode ecosystem.
+ * Mecanum drive for DinoMighty
  */
-// Extend the `BunyipsComponent` class when making a new component, as shown below.
-public class ExampleMecanumDrive extends BunyipsComponent {
 
-    // View ExampleDrive.java for more information on how to make a component.
+public class DinoMecanumDrive extends BunyipsComponent {
 
-    private final DcMotor frontLeft;
-    private final DcMotor frontRight;
-    private final DcMotor backLeft;
-    private final DcMotor backRight;
+    private DcMotor frontLeft;
+    private DcMotor backLeft;
+    private DcMotor frontRight;
+    private DcMotor backRight;
 
-    // Store the desired power of the motors in variables
-    private double speedX;
-    private double speedY;
-    private double speedR;
+    // Stores the motor power needed into variables
+    private Double speedX;
+    private Double speedY;
+    private Double speedR;
 
-    public ExampleMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
-        // Required to delegate the BunyipsOpMode instance to the superclass.
+    public DinoMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight) {
         super(opMode);
 
-        // Assign constructor parameters to the ExampleMecanumDrive instance
+        // Assign constructor parameters to the DinoMecanumDrive instance
         this.frontLeft = frontLeft;
-        this.frontRight = frontRight;
         this.backLeft = backLeft;
+        this.frontRight = frontRight;
         this.backRight = backRight;
     }
 
-    /**
-     * Prioritisation of the drive system.
-     * NORMALISED: The drive system calculate the motor powers with equal priority to each desired speed.
-     * ROTATIONAL: The drive system will calculate rotational speed first, and use remaining headway for translation.
-     */
-    public enum Priority {
+    enum Priority {
         NORMALISED, ROTATIONAL
     }
 
     // Store and declare prioritisation when given instruction to calculate motor powers
-    private Priority priority = Priority.NORMALISED;
+    private ExampleMecanumDrive.Priority priority = ExampleMecanumDrive.Priority.NORMALISED;
 
     // Setters for the prioritisation of the drive system
-    public void setPriority(Priority priority) {
+    public void setPriority(ExampleMecanumDrive.Priority priority) {
         this.priority = priority;
     }
 
     public void swapPriority() {
-        this.setPriority(priority == Priority.NORMALISED ? Priority.ROTATIONAL : Priority.NORMALISED);
+        this.setPriority(priority == ExampleMecanumDrive.Priority.NORMALISED ? ExampleMecanumDrive.Priority.ROTATIONAL : ExampleMecanumDrive.Priority.NORMALISED);
     }
 
     /**
-     * Set a speed at which the Mechanum drive assembly should move.
+     * Set a speed at which the Mecanum drive assembly should move.
      * @param x The speed at which the robot should move in the x direction.
      *          Positive is right, negative is left.
      *          Range: -1.0 to 1.0
@@ -78,7 +71,7 @@ public class ExampleMecanumDrive extends BunyipsComponent {
     }
 
     /**
-     * Set a polar speed at which the Mechanum drive assembly should move.
+     * Set a polar speed at which the Mecanum drive assembly should move.
      * @param speed speed at which the motors will operate
      * @param direction_degrees direction at which the motors will move toward
      * @param speedR rotation speed - positive: anti-clockwise
@@ -95,7 +88,7 @@ public class ExampleMecanumDrive extends BunyipsComponent {
      * calculate the motor powers based on these variables.
      */
     public void update() {
-        if (priority == Priority.ROTATIONAL) {
+        if (priority == ExampleMecanumDrive.Priority.ROTATIONAL) {
             rotationalUpdate();
         }
 
@@ -125,17 +118,17 @@ public class ExampleMecanumDrive extends BunyipsComponent {
     private void rotationalUpdate() {
         // Calculate translational speeds
         double[] translationValues = {
-            speedX + speedY,
-            speedX - speedY,
-            speedX - speedY,
-            speedX + speedY
+                speedX + speedY,
+                speedX - speedY,
+                speedX - speedY,
+                speedX + speedY
         };
 
         double[] rotationValues = {
-            -speedR,
-            speedR,
-            -speedR,
-            speedR
+                -speedR,
+                speedR,
+                -speedR,
+                speedR
         };
 
         double scaleFactor = 1.0;

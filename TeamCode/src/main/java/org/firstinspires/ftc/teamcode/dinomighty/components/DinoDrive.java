@@ -13,22 +13,22 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public class DinoDrive extends BunyipsComponent {
 
-    private DcMotor leftFront;
-    private DcMotor leftBack;
-    private DcMotor rightFront;
-    private DcMotor rightBack;
+    private DcMotor frontLeft;
+    private DcMotor backLeft;
+    private DcMotor frontRight;
+    private DcMotor backRight;
 
     private double motorPower;
 
-    public DinoDrive(@NonNull BunyipsOpMode opMode, DcMotor leftFront, DcMotor leftBack, DcMotor rightFront, DcMotor rightBack, DcMotor arm) {
+    public DinoDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, DcMotor arm) {
         super(opMode);
 
        // this.left_front will assign to a higher scope
        // Meaning we can access the motors in the component
-       this.leftFront = leftFront;
-       this.leftBack = leftBack;
-       this.rightFront = rightFront;
-       this.rightBack = rightBack;
+       this.frontLeft = frontLeft;
+       this.backLeft = backLeft;
+       this.frontRight = frontRight;
+       this.backRight = backRight;
     }
 
     public void run(double power) {
@@ -44,7 +44,7 @@ public class DinoDrive extends BunyipsComponent {
     // Not exactly sure how this works?
     // I assume it has something to do with autonomous
     public boolean isAtPosition(double target) {
-        return leftFront.getCurrentPosition() > target;
+        return frontLeft.getCurrentPosition() > target;
     }
 
     // How I assume the motors work
@@ -54,11 +54,11 @@ public class DinoDrive extends BunyipsComponent {
 
     // Updates the components every hardware loop
     public void update(){
-        leftFront.setPower(motorPower);
-        leftBack.setPower(motorPower);
+        frontLeft.setPower(motorPower);
+        backLeft.setPower(motorPower);
         // Right needs to be set to -, because the motor power going in a negative direction is
         // the same as it going backwards, or Right. Right?
-        rightFront.setPower(-motorPower);
-        rightBack.setPower(-motorPower);
+        frontRight.setPower(-motorPower);
+        backRight.setPower(-motorPower);
     }
 }

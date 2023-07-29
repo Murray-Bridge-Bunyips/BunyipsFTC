@@ -20,10 +20,10 @@ public class DinoConfig extends RobotConfig {
     //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
 
     // Declares all necessary motors
-    public DcMotor leftFront;
-    public DcMotor leftBack;
-    public DcMotor rightFront;
-    public DcMotor rightBack;
+    public DcMotor frontLeft;
+    public DcMotor backLeft;
+    public DcMotor frontRight;
+    public DcMotor backRight;
     public DcMotor arm;
 
     public Servo frontServo;
@@ -32,10 +32,10 @@ public class DinoConfig extends RobotConfig {
     @Override
     protected void init() {
 
-        leftFront = (DcMotor) getHardware("leftFront", DcMotor.class);
-        leftBack = (DcMotor) getHardware("leftBack", DcMotor.class);
-        rightFront = (DcMotor) getHardware("rightFront", DcMotor.class);
-        rightBack = (DcMotor) getHardware("rightBack", DcMotor.class);
+        frontLeft = (DcMotor) getHardware("frontLeft", DcMotor.class);
+        backLeft = (DcMotor) getHardware("backLeft", DcMotor.class);
+        frontRight = (DcMotor) getHardware("frontRight", DcMotor.class);
+        backRight = (DcMotor) getHardware("backRight", DcMotor.class);
         arm = (DcMotor) getHardware("arm", DcMotor.class);
 
         frontServo = (Servo) getHardware("frontServo", Servo.class);

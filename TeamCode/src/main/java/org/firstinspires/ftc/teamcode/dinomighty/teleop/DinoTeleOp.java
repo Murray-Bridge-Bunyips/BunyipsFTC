@@ -33,7 +33,7 @@ public class DinoTeleOp extends BunyipsOpMode {
         config = (DinoConfig) RobotConfig.newConfig(this, config, hardwareMap);
 
         // Initialise all components
-        drive = new DinoDrive(this, config.leftFront, config.leftBack, config.rightFront, config.rightBack, config.arm);
+        drive = new DinoDrive(this, config.frontLeft, config.backLeft, config.frontRight, config.backRight, config.arm);
     }
 
     // activeLoop runs every hardware cycle
