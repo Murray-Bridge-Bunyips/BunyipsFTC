@@ -38,7 +38,7 @@ public class DinoConfig extends RobotConfig {
         backRight = (DcMotor) getHardware("right_rear", DcMotor.class);
         arm = (DcMotor) getHardware("arm", DcMotor.class);
 
-        frontServo = (Servo) getHardware("frontServo", Servo.class);
+        frontServo = (Servo) getHardware("front_Servo", Servo.class);
         gripper = (Servo) getHardware("gripper", Servo.class);
     }
 

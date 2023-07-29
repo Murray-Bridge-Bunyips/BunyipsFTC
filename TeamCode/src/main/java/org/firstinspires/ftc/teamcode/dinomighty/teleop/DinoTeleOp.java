@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.dinomighty.components.DinoConfig;
+import org.firstinspires.ftc.teamcode.dinomighty.components.DinoLift;
 import org.firstinspires.ftc.teamcode.dinomighty.components.DinoMecanumDrive;
 
 /**
@@ -24,6 +25,7 @@ public class DinoTeleOp extends BunyipsOpMode {
 
     private DinoConfig config;
     private DinoMecanumDrive drive;
+    private DinoLift lift;
 
     @Override
     protected void onInit() {
@@ -34,6 +36,7 @@ public class DinoTeleOp extends BunyipsOpMode {
 
         // Initialise all components
         drive = new DinoMecanumDrive(this, config.frontLeft, config.backLeft, config.frontRight, config.backRight);
+        DinoLift lift = new DinoLift(this, config.arm);
     }
 
     // activeLoop runs every hardware cycle
@@ -41,6 +44,9 @@ public class DinoTeleOp extends BunyipsOpMode {
     protected void activeLoop() {
 
         drive.update();
+
+        // Lets DinoLift access gamepad2's left stick values
+        double gamepadPosition = gamepad2.left_stick_y;
 
         // Adds a message on the driver hub stating the status of the left stick's Y axis
         addTelemetry("Left Stick Y: " + gamepad1.left_stick_y, false);
