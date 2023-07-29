@@ -23,7 +23,6 @@ public class DinoLift extends BunyipsComponent {
 
 
     public void armLift(double gamepadPosition){
-        arm.setPower(gamepadPosition);
         liftPower = gamepadPosition;
     }
 
@@ -37,6 +36,6 @@ public class DinoLift extends BunyipsComponent {
         // Can update telemetry functions too
         // The modified telemetry function takes in a value to show on the Driver Station, and
         // whether or not to keep it on the screen upon the next activeLoop.
-        getOpMode().addTelemetry("Lift Position: " + "placeholder", false);
+        getOpMode().addTelemetry("Lift Position: " + arm.getCurrentPosition(), false);
     }
 }
