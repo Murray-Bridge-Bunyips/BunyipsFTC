@@ -44,7 +44,7 @@ public class ExampleMecanumDrive extends BunyipsComponent {
      * NORMALISED: The drive system calculate the motor powers with equal priority to each desired speed.
      * ROTATIONAL: The drive system will calculate rotational speed first, and use remaining headway for translation.
      */
-    public enum Priority {
+    enum Priority {
         NORMALISED, ROTATIONAL
     }
 

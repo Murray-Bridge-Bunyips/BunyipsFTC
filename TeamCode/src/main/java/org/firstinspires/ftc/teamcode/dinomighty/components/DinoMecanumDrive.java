@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleMecanumDrive;
 
 import java.util.Locale;
 
@@ -42,15 +41,15 @@ public class DinoMecanumDrive extends BunyipsComponent {
     }
 
     // Store and declare prioritisation when given instruction to calculate motor powers
-    private ExampleMecanumDrive.Priority priority = ExampleMecanumDrive.Priority.NORMALISED;
+    private DinoMecanumDrive.Priority priority = DinoMecanumDrive.Priority.NORMALISED;
 
     // Setters for the prioritisation of the drive system
-    public void setPriority(ExampleMecanumDrive.Priority priority) {
+    public void setPriority(DinoMecanumDrive.Priority priority) {
         this.priority = priority;
     }
 
     public void swapPriority() {
-        this.setPriority(priority == ExampleMecanumDrive.Priority.NORMALISED ? ExampleMecanumDrive.Priority.ROTATIONAL : ExampleMecanumDrive.Priority.NORMALISED);
+        this.setPriority(priority == DinoMecanumDrive.Priority.NORMALISED ? DinoMecanumDrive.Priority.ROTATIONAL : DinoMecanumDrive.Priority.NORMALISED);
     }
 
     /**
@@ -88,7 +87,7 @@ public class DinoMecanumDrive extends BunyipsComponent {
      * calculate the motor powers based on these variables.
      */
     public void update() {
-        if (priority == ExampleMecanumDrive.Priority.ROTATIONAL) {
+        if (priority == DinoMecanumDrive.Priority.ROTATIONAL) {
             rotationalUpdate();
         }
 

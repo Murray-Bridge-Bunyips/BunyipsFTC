@@ -32,10 +32,10 @@ public class DinoConfig extends RobotConfig {
     @Override
     protected void init() {
 
-        frontLeft = (DcMotor) getHardware("frontLeft", DcMotor.class);
-        backLeft = (DcMotor) getHardware("backLeft", DcMotor.class);
-        frontRight = (DcMotor) getHardware("frontRight", DcMotor.class);
-        backRight = (DcMotor) getHardware("backRight", DcMotor.class);
+        frontLeft = (DcMotor) getHardware("left_front", DcMotor.class);
+        backLeft = (DcMotor) getHardware("left_rear", DcMotor.class);
+        frontRight = (DcMotor) getHardware("right_front", DcMotor.class);
+        backRight = (DcMotor) getHardware("right_rear", DcMotor.class);
         arm = (DcMotor) getHardware("arm", DcMotor.class);
 
         frontServo = (Servo) getHardware("frontServo", Servo.class);

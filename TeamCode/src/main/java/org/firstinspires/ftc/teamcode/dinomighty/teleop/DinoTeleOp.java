@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.dinomighty.components.DinoConfig;
-import org.firstinspires.ftc.teamcode.dinomighty.components.DinoDrive;
+import org.firstinspires.ftc.teamcode.dinomighty.components.DinoMecanumDrive;
 
 /**
  * Primary TeleOp for all of DinoMighty's functions.
@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.dinomighty.components.DinoDrive;
 public class DinoTeleOp extends BunyipsOpMode {
 
     private DinoConfig config;
-    private DinoDrive drive;
+    private DinoMecanumDrive drive;
 
     @Override
     protected void onInit() {
@@ -33,14 +33,13 @@ public class DinoTeleOp extends BunyipsOpMode {
         config = (DinoConfig) RobotConfig.newConfig(this, config, hardwareMap);
 
         // Initialise all components
-        drive = new DinoDrive(this, config.frontLeft, config.backLeft, config.frontRight, config.backRight, config.arm);
+        drive = new DinoMecanumDrive(this, config.frontLeft, config.backLeft, config.frontRight, config.backRight);
     }
 
     // activeLoop runs every hardware cycle
     @Override
     protected void activeLoop() {
 
-        drive.run(gamepad1.left_stick_y);
         drive.update();
 
         // Adds a message on the driver hub stating the status of the left stick's Y axis
