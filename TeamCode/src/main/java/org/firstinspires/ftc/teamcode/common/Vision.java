@@ -66,6 +66,8 @@ public class Vision extends BunyipsComponent {
                     break;
                 case APRILTAG:
                     aprilTag = new AprilTagProcessor.Builder()
+                            // Logitech C920
+                            .setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
                             // Specify custom AprilTag settings here
                             .build();
                     initialisedProcessors.add(aprilTag);
