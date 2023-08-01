@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 /**
  * Test opmode for new vision wrappers
  */
-@Disabled
+//@Disabled
 @TeleOp(name = "JERRY: Test Vision Wrapper", group = "JERRY")
 class JerryNewVision : BunyipsOpMode() {
     private var config = JerryConfig()

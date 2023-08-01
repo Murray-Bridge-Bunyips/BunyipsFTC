@@ -40,6 +40,10 @@ public class DinoConfig extends RobotConfig {
 
         frontServo = (Servo) getHardware("front_servo", Servo.class);
         gripper = (Servo) getHardware("gripper", Servo.class);
+
+        arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+
     }
 
 }

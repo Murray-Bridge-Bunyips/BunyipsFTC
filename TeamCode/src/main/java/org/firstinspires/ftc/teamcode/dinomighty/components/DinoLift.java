@@ -30,9 +30,6 @@ public class DinoLift extends BunyipsComponent {
 
         arm.setPower(liftPower);
 
-        // Moves the lift to position(?)
-        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        
         // Can update telemetry functions too
         // The modified telemetry function takes in a value to show on the Driver Station, and
         // whether or not to keep it on the screen upon the next activeLoop.
