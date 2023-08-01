@@ -14,16 +14,31 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 public class DinoLift extends BunyipsComponent {
 
     private DcMotor arm;
+    private Servo servo;
     private double liftPower;
 
-    public DinoLift(@NonNull BunyipsOpMode opMode, DcMotor arm) {
+    public DinoLift(@NonNull BunyipsOpMode opMode, DcMotor arm, Servo servo) {
         super(opMode);
         this.arm = arm;
+        this.servo = servo;
     }
 
 
     public void armLift(double gamepadPosition){
         liftPower = gamepadPosition;
+    }
+
+    // Methods for the claw
+    public void clawOpen(){
+        frontServo.setPosition(1.0);
+        backServo.setPosition(1.0);
+        addTelemetry("Claw is Open");
+    }
+
+    public void clawClose(){
+        frontServo.setPosition(0.0);
+        backServo.setPosition(0.0);
+        addTelemetry("Claw is Closed");
     }
 
     public void update(){

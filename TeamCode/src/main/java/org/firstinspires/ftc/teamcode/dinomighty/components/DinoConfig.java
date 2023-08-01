@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
 public class DinoConfig extends RobotConfig {
 
     //    front_servo = hardwareMap.get(Servo.class, "front_servo");
+    //    back_servo = hardwareMap.get(Servo.class, "back_servo")
     //    gripper = hardwareMap.get(Servo.class, "gripper");
     //    right_front = hardwareMap.get(DcMotor.class, "right_front");
     //    right_rear = hardwareMap.get(DcMotor.class, "right_rear");
@@ -27,6 +28,7 @@ public class DinoConfig extends RobotConfig {
     public DcMotor arm;
 
     public Servo frontServo;
+    public Servo backServo;
     public Servo gripper;
 
     @Override
@@ -39,6 +41,7 @@ public class DinoConfig extends RobotConfig {
         arm = (DcMotor) getHardware("arm", DcMotor.class);
 
         frontServo = (Servo) getHardware("front_servo", Servo.class);
+        backServo = (Servo) getHardware("back_servo", Servo.class);
         gripper = (Servo) getHardware("gripper", Servo.class);
 
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

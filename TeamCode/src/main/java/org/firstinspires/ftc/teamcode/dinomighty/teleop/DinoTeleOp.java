@@ -43,12 +43,29 @@ public class DinoTeleOp extends BunyipsOpMode {
     @Override
     protected void activeLoop() {
 
-        lift.update();
-        drive.update();
+        // Sets controller bindings for the robot controllers
+        drive.setSpeedXYR(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
         lift.armLift(gamepad2.left_stick_y);
 
-        // Adds a message on the driver hub stating the status of the left stick's Y axis
-        addTelemetry("Left Stick Y: " + gamepad1.left_stick_y, false);
+        // If this wasn't set in if statements, the claw would open/close rapidly
+        // In other words, any button inputs must be set to if statements
+        // Stick inputs can be set as they are above
+        if(gamepad2.x){
+            lift.clawOpen();
+        } else if(gamepad2.y){
+            lift.clawClose();
+        }
+
+        // Adds a message on the driver hub stating the status of different controlelr inputs
+        addTelemetry("Left Stick Y: " + gamepad1.left_stick_y);
+        addTelemetry("Left Stick X: " + gamepad1.left_stick_x);
+        addTelemetry("Right Stick X: " + gamepad1.right_stick_x);
+    
+        // Updates the speeds of the motors
+        // While it doesn't matter where this is because activeLoop runs so fast
+        // It's still good practice to put update methods at the bottom
+        lift.update();
+        drive.update();
     }
 }
