@@ -13,7 +13,8 @@ import kotlin.math.roundToInt
  */
 abstract class BunyipsOpMode : LinearOpMode() {
     private var movingAverageTimer: MovingAverageTimer? = null
-    private var loopCount: Long = 0
+    var loopCount: Long = 0
+        private set
     private var operationsCompleted = false
     private var operationsPaused = false
     private val stickyTelemetryObjects = mutableListOf<Pair<Int, Item>>()

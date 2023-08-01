@@ -36,7 +36,7 @@ public class DinoTeleOp extends BunyipsOpMode {
 
         // Initialise all components
         drive = new DinoMecanumDrive(this, config.frontLeft, config.backLeft, config.frontRight, config.backRight);
-        lift = new DinoLift(this, config.arm);
+        lift = new DinoLift(this, config.arm, config.frontServo, config.backServo);
     }
 
     // activeLoop runs every hardware cycle
@@ -58,9 +58,9 @@ public class DinoTeleOp extends BunyipsOpMode {
         }
 
         // Adds a message on the driver hub stating the status of different controlelr inputs
-        addTelemetry("Left Stick Y: " + gamepad1.left_stick_y);
-        addTelemetry("Left Stick X: " + gamepad1.left_stick_x);
-        addTelemetry("Right Stick X: " + gamepad1.right_stick_x);
+        addTelemetry("Left Stick Y: " + gamepad1.left_stick_y, false);
+        addTelemetry("Left Stick X: " + gamepad1.left_stick_x, false);
+        addTelemetry("Right Stick X: " + gamepad1.right_stick_x, false);
     
         // Updates the speeds of the motors
         // While it doesn't matter where this is because activeLoop runs so fast

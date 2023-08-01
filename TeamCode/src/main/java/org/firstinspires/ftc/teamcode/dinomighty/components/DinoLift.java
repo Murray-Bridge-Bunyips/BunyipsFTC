@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.dinomighty.components;
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
@@ -14,13 +15,15 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 public class DinoLift extends BunyipsComponent {
 
     private DcMotor arm;
-    private Servo servo;
+    private Servo frontServo;
+    private Servo backServo;
     private double liftPower;
 
-    public DinoLift(@NonNull BunyipsOpMode opMode, DcMotor arm, Servo servo) {
+    public DinoLift(@NonNull BunyipsOpMode opMode, DcMotor arm, Servo frontServo, Servo backServo) {
         super(opMode);
         this.arm = arm;
-        this.servo = servo;
+        this.backServo = backServo;
+        this.frontServo = frontServo;
     }
 
 
@@ -32,13 +35,13 @@ public class DinoLift extends BunyipsComponent {
     public void clawOpen(){
         frontServo.setPosition(1.0);
         backServo.setPosition(1.0);
-        addTelemetry("Claw is Open");
+        getOpMode().addTelemetry("Claw is Open", false);
     }
 
     public void clawClose(){
         frontServo.setPosition(0.0);
         backServo.setPosition(0.0);
-        addTelemetry("Claw is Closed");
+        getOpMode().addTelemetry("Claw is Closed", false);
     }
 
     public void update(){

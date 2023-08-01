@@ -29,5 +29,10 @@ class JerryNewVision : BunyipsOpMode() {
         addTelemetry("Status: ${vision?.status}")
         addTelemetry("TFOD: ${vision?.tfodData}")
         addTelemetry("AprilTag: ${vision?.aprilTagData}")
+        addTelemetry("loopTick: $loopCount")
+    }
+
+    override fun onStop() {
+        vision?.terminate()
     }
 }

@@ -217,7 +217,7 @@ public class Vision extends BunyipsComponent {
     public void tick() {
         if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
             // Camera must be initialised and streaming before we can extract data
-            throw new RuntimeException("Unable to extract data, camera is not streaming!");
+            return;
         }
 
         // For every processor, check if it is enabled and extract data if it is
@@ -238,15 +238,18 @@ public class Vision extends BunyipsComponent {
     }
 
     private void interpretAprilTag() {
+        List<AprilTagDetection> detections = aprilTag.getFreshDetections();
+        if (detections == null) {
+            return;
+        }
         aprilTagData.clear();
-        List<AprilTagDetection> detections = aprilTag.getDetections();
         for (AprilTagDetection detection : detections) {
             aprilTagData.add(new AprilTagData(
                     detection.id,
                     detection.hamming,
                     detection.decisionMargin,
                     detection.center,
-                    Arrays.asList(detection.corners),
+                    detection.corners,
                     detection.metadata.name,
                     detection.metadata.tagsize,
                     detection.metadata.fieldPosition,
@@ -268,8 +271,11 @@ public class Vision extends BunyipsComponent {
     }
 
     private void interpretTfod() {
+        List<Recognition> recognitions = tfod.getFreshRecognitions();
+        if (recognitions == null) {
+            return;
+        }
         tfodData.clear();
-        List<Recognition> recognitions = tfod.getRecognitions();
         for (Recognition recognition : recognitions) {
             tfodData.add(new TfodData(
                     recognition.getLabel(),
