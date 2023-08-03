@@ -24,7 +24,7 @@ public class ExampleAuto extends BunyipsOpMode {
     // !! The major difference between autonomous and teleop is that autonomous uses tasks to run
     // code, whereas teleop uses activeLoop() to run code. View ExampleTimeDriveTask.java for more
     // information on tasks. Here we will make a queue, which will store tasks to run.
-    private ArrayDeque<Task> tasks = new ArrayDeque<>();
+    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
 
     @Override
     protected void onInit() {

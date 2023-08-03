@@ -43,12 +43,12 @@ public class ExampleConfig extends RobotConfig {
         // e.g leftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Example IMU configuration
-         IMU.Parameters parameters = new IMU.Parameters(
-             new RevHubOrientationOnRobot(
-                  RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                  RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
-             )
-         );
-         imu.initialize(parameters);
+        IMU.Parameters parameters = new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                )
+        );
+        imu.initialize(parameters);
     }
 }

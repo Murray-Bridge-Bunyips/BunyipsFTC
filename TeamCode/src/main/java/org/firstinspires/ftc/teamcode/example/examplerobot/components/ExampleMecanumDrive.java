@@ -27,6 +27,8 @@ public class ExampleMecanumDrive extends BunyipsComponent {
     private double speedX;
     private double speedY;
     private double speedR;
+    // Store and declare prioritisation when given instruction to calculate motor powers
+    private Priority priority = Priority.NORMALISED;
 
     public ExampleMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
         // Required to delegate the BunyipsOpMode instance to the superclass.
@@ -39,18 +41,6 @@ public class ExampleMecanumDrive extends BunyipsComponent {
         this.backRight = backRight;
     }
 
-    /**
-     * Prioritisation of the drive system.
-     * NORMALISED: The drive system calculate the motor powers with equal priority to each desired speed.
-     * ROTATIONAL: The drive system will calculate rotational speed first, and use remaining headway for translation.
-     */
-    enum Priority {
-        NORMALISED, ROTATIONAL
-    }
-
-    // Store and declare prioritisation when given instruction to calculate motor powers
-    private Priority priority = Priority.NORMALISED;
-
     // Setters for the prioritisation of the drive system
     public void setPriority(Priority priority) {
         this.priority = priority;
@@ -62,6 +52,7 @@ public class ExampleMecanumDrive extends BunyipsComponent {
 
     /**
      * Set a speed at which the Mecanum drive assembly should move.
+     *
      * @param x The speed at which the robot should move in the x direction.
      *          Positive is left, negative is right.
      *          Range: -1.0 to 1.0
@@ -82,9 +73,10 @@ public class ExampleMecanumDrive extends BunyipsComponent {
 
     /**
      * Set a polar speed at which the Mechanum drive assembly should move.
-     * @param speed speed at which the motors will operate
+     *
+     * @param speed             speed at which the motors will operate
      * @param direction_degrees direction at which the motors will move toward
-     * @param speedR rotation speed - positive: anti-clockwise
+     * @param speedR            rotation speed - positive: anti-clockwise
      */
     public void setSpeedPolarR(double speed, double direction_degrees, double speedR) {
         double radians = Math.toRadians(direction_degrees);
@@ -122,23 +114,23 @@ public class ExampleMecanumDrive extends BunyipsComponent {
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
 
-        getOpMode().addTelemetry(String.format(Locale.getDefault(),"Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR), false);
+        getOpMode().addTelemetry(String.format(Locale.getDefault(), "Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR), false);
     }
 
     private void rotationalUpdate() {
         // Calculate translational speeds
         double[] translationValues = {
-            speedX + speedY,
-            speedX - speedY,
-            speedX - speedY,
-            speedX + speedY
+                speedX + speedY,
+                speedX - speedY,
+                speedX - speedY,
+                speedX + speedY
         };
 
         double[] rotationValues = {
-            -speedR,
-            speedR,
-            -speedR,
-            speedR
+                -speedR,
+                speedR,
+                -speedR,
+                speedR
         };
 
         double scaleFactor = 1.0;
@@ -167,6 +159,15 @@ public class ExampleMecanumDrive extends BunyipsComponent {
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
+    }
+
+    /**
+     * Prioritisation of the drive system.
+     * NORMALISED: The drive system calculate the motor powers with equal priority to each desired speed.
+     * ROTATIONAL: The drive system will calculate rotational speed first, and use remaining headway for translation.
+     */
+    enum Priority {
+        NORMALISED, ROTATIONAL
     }
 
 }

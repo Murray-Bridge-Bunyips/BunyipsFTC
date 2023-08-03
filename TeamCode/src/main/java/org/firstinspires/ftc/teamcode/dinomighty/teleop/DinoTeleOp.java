@@ -20,7 +20,7 @@ import org.firstinspires.ftc.teamcode.dinomighty.components.DinoMecanumDrive;
  * @author Lachlan Paul, 2023
  */
 
-@TeleOp(name="DINOMIGHTY TeleOp", group="DINOMIGHTY")
+@TeleOp(name = "DINOMIGHTY TeleOp", group = "DINOMIGHTY")
 public class DinoTeleOp extends BunyipsOpMode {
 
     private DinoConfig config = new DinoConfig();
@@ -51,9 +51,9 @@ public class DinoTeleOp extends BunyipsOpMode {
         // If this wasn't set in if statements, the claw would open/close rapidly
         // In other words, any button inputs must be set to if statements
         // Stick inputs can be set as they are above
-        if(gamepad2.x){
+        if (gamepad2.x) {
             lift.clawOpen();
-        } else if(gamepad2.y){
+        } else if (gamepad2.y) {
             lift.clawClose();
         }
 
@@ -61,7 +61,7 @@ public class DinoTeleOp extends BunyipsOpMode {
         addTelemetry("Left Stick Y: " + gamepad1.left_stick_y, false);
         addTelemetry("Left Stick X: " + gamepad1.left_stick_x, false);
         addTelemetry("Right Stick X: " + gamepad1.right_stick_x, false);
-    
+
         // Updates the speeds of the motors
         // While it doesn't matter where this is because activeLoop runs so fast
         // It's still good practice to put update methods at the bottom

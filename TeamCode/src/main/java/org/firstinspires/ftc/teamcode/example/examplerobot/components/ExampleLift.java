@@ -14,7 +14,7 @@ public class ExampleLift extends BunyipsComponent {
 
     // This example will look at making an index-based lift based on motor encoder position.
     // Array to hold lift position values, and a pointer to the current position.
-    private int[] liftPositions = {0, 100, 200, 300, 400, 500};
+    private final int[] liftPositions = {0, 100, 200, 300, 400, 500};
     private int liftPositionPointer;
 
     public ExampleLift(@NonNull BunyipsOpMode opMode, DcMotor liftMotor) {

@@ -16,15 +16,17 @@ import java.util.Locale;
 
 public class DinoMecanumDrive extends BunyipsComponent {
 
-    private DcMotor frontLeft;
-    private DcMotor backLeft;
-    private DcMotor frontRight;
-    private DcMotor backRight;
+    private final DcMotor frontLeft;
+    private final DcMotor backLeft;
+    private final DcMotor frontRight;
+    private final DcMotor backRight;
 
     // Stores the motor power needed into variables
     private Double speedX;
     private Double speedY;
     private Double speedR;
+    // Store and declare prioritisation when given instruction to calculate motor powers
+    private DinoMecanumDrive.Priority priority = DinoMecanumDrive.Priority.NORMALISED;
 
     public DinoMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight) {
         super(opMode);
@@ -35,13 +37,6 @@ public class DinoMecanumDrive extends BunyipsComponent {
         this.frontRight = frontRight;
         this.backRight = backRight;
     }
-
-    enum Priority {
-        NORMALISED, ROTATIONAL
-    }
-
-    // Store and declare prioritisation when given instruction to calculate motor powers
-    private DinoMecanumDrive.Priority priority = DinoMecanumDrive.Priority.NORMALISED;
 
     // Setters for the prioritisation of the drive system
     public void setPriority(DinoMecanumDrive.Priority priority) {
@@ -54,6 +49,7 @@ public class DinoMecanumDrive extends BunyipsComponent {
 
     /**
      * Set a speed at which the Mecanum drive assembly should move.
+     *
      * @param x The speed at which the robot should move in the x direction.
      *          Positive is left, negative is right.
      *          Range: -1.0 to 1.0
@@ -74,9 +70,10 @@ public class DinoMecanumDrive extends BunyipsComponent {
 
     /**
      * Set a polar speed at which the Mecanum drive assembly should move.
-     * @param speed speed at which the motors will operate
+     *
+     * @param speed             speed at which the motors will operate
      * @param direction_degrees direction at which the motors will move toward
-     * @param speedR rotation speed - positive: anti-clockwise
+     * @param speedR            rotation speed - positive: anti-clockwise
      */
     public void setSpeedPolarR(double speed, double direction_degrees, double speedR) {
         double radians = Math.toRadians(direction_degrees);
@@ -114,7 +111,7 @@ public class DinoMecanumDrive extends BunyipsComponent {
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
 
-        getOpMode().addTelemetry(String.format(Locale.getDefault(),"Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR), false);
+        getOpMode().addTelemetry(String.format(Locale.getDefault(), "Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR), false);
     }
 
     private void rotationalUpdate() {
@@ -159,6 +156,10 @@ public class DinoMecanumDrive extends BunyipsComponent {
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
+    }
+
+    enum Priority {
+        NORMALISED, ROTATIONAL
     }
 
 }

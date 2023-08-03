@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.jerry.debug
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.RobotConfig

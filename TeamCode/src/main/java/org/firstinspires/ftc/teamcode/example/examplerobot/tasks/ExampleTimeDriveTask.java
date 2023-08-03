@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleDri
 // condition is met.
 public class ExampleTimeDriveTask extends Task implements TaskImpl {
     // You will need to store any COMPONENTS you wish to control in your task as a local instance
-    private ExampleDrive drive;
+    private final ExampleDrive drive;
 
     // If you extend task without `time`, your task will never call itself finished!
     public ExampleTimeDriveTask(@NonNull BunyipsOpMode opMode, double time, ExampleDrive drive) {

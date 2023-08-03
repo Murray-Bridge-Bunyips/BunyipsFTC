@@ -4,9 +4,6 @@ package org.firstinspires.ftc.teamcode.common;
 import android.util.Size;
 
 import androidx.annotation.NonNull;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -16,6 +13,9 @@ import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Latest wrapper to support the v8.2+ SDK's included libraries for Camera operation.
@@ -28,33 +28,23 @@ import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 // Using Java as opposed to Kotlin as null safety is not a major concern
 // due to the initialisation routine of the WebcamName device.
 public class Vision extends BunyipsComponent {
-    private WebcamName webcam;
-
-    private TfodProcessor tfod = null;
-    private AprilTagProcessor aprilTag = null;
-    private VisionPortal visionPortal = null;
-
     // Arrays to store the data from the processors
     private final List<AprilTagData> aprilTagData = new ArrayList<>();
     private final List<TfodData> tfodData = new ArrayList<>();
+    private final WebcamName webcam;
+    private TfodProcessor tfod = null;
+    private AprilTagProcessor aprilTag = null;
+    private VisionPortal visionPortal = null;
 
     public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam) {
         super(opMode);
         this.webcam = webcam;
     }
 
-    public enum Processors {
-        /**
-         * Caution! Using TFOD and using OpModes with high load may cause a watchdog timeout.
-         * Ensure to test for this, as system memory may deplete and cause unexpected behaviour.
-         */
-        TFOD,
-        APRILTAG
-    }
-
     /**
      * Initialises the Vision class with the specified processors.
      * This method should only be called once per OpMode.
+     *
      * @param processors TFOD and/or AprilTag
      */
     public void init(Processors... processors) {
@@ -105,6 +95,7 @@ public class Vision extends BunyipsComponent {
     /**
      * Start desired processors. This method must be called before trying to extract data from
      * the cameras, and must be already initialised with the init() method.
+     *
      * @param processors TFOD and/or AprilTag
      */
     public void start(Processors... processors) {
@@ -147,6 +138,7 @@ public class Vision extends BunyipsComponent {
      * the camera stream will automatically disable any running processors. Note this may
      * take some additional time to resume the stream if start() is called again. If you don't plan
      * on using the camera stream again, it is recommended to call terminate() instead.
+     *
      * @param stopPortal Whether to pause the Camera Stream (Level 3)
      * @param processors TFOD and/or AprilTag
      */
@@ -302,6 +294,7 @@ public class Vision extends BunyipsComponent {
 
     /**
      * Primary getter for all TFOD data.
+     *
      * @return List of all TFOD objects and their data
      */
     public List<TfodData> getTfodData() {
@@ -310,9 +303,19 @@ public class Vision extends BunyipsComponent {
 
     /**
      * Primary getter for all AprilTag data.
+     *
      * @return List of all AprilTag objects and their data
      */
     public List<AprilTagData> getAprilTagData() {
         return this.aprilTagData;
+    }
+
+    public enum Processors {
+        /**
+         * Caution! Using TFOD and using OpModes with high load may cause a watchdog timeout.
+         * Ensure to test for this, as system memory may deplete and cause unexpected behaviour.
+         */
+        TFOD,
+        APRILTAG
     }
 }
