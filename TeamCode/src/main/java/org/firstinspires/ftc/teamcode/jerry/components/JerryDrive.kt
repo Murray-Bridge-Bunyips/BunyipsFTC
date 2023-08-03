@@ -145,9 +145,16 @@ class JerryDrive(
     }
 
     /**
-     * @param speedX relative east-west speed - positive: east
-     * @param speedY relative north-south speed - positive: south
-     * @param speedR rotation speed - positive: clockwise
+     * Set a speed at which the Mecanum drive assembly should move.
+     * @param x The speed at which the robot should move in the x direction.
+     *          Positive is left, negative is right.
+     *          Range: -1.0 to 1.0
+     * @param y The speed at which the robot should move in the y direction.
+     *          Positive is backward, negative is forward.
+     *          Range: -1.0 to 1.0
+     * @param r The speed at which the robot will rotate.
+     *          Positive is clockwise, negative is anti-clockwise.
+     *          Range: -1.0 to 1.0
      */
     fun setSpeedXYR(speedX: Double, speedY: Double, speedR: Double) {
         // X and Y have been swapped, and X has been inverted

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.dinomighty.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
@@ -29,7 +30,6 @@ public class DinoConfig extends RobotConfig {
 
     public Servo frontServo;
     public Servo backServo;
-    public Servo gripper;
 
     @Override
     protected void init() {
@@ -42,11 +42,14 @@ public class DinoConfig extends RobotConfig {
 
         frontServo = (Servo) getHardware("front_servo", Servo.class);
         backServo = (Servo) getHardware("back_servo", Servo.class);
-        gripper = (Servo) getHardware("gripper", Servo.class);
 
         arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-
+        // Motor directions configured to work with current config
+        frontLeft.setDirection(DcMotor.Direction.FORWARD);
+        frontRight.setDirection(DcMotor.Direction.REVERSE);
+        backLeft.setDirection(DcMotor.Direction.FORWARD);
+        backRight.setDirection(DcMotor.Direction.REVERSE);
     }
 
 }

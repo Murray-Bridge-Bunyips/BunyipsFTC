@@ -44,6 +44,10 @@ public class Vision extends BunyipsComponent {
     }
 
     public enum Processors {
+        /**
+         * Caution! Using TFOD and using OpModes with high load may cause a watchdog timeout.
+         * Ensure to test for this, as system memory may deplete and cause unexpected behaviour.
+         */
         TFOD,
         APRILTAG
     }

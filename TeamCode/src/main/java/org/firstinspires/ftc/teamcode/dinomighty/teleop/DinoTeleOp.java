@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.dinomighty.components.DinoMecanumDrive;
 @TeleOp(name="DINOMIGHTY TeleOp", group="DINOMIGHTY")
 public class DinoTeleOp extends BunyipsOpMode {
 
-    private DinoConfig config;
+    private DinoConfig config = new DinoConfig();
     private DinoMecanumDrive drive;
     private DinoLift lift;
 

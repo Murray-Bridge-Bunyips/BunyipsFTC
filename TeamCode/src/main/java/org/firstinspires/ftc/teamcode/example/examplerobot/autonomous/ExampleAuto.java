@@ -19,7 +19,7 @@ public class ExampleAuto extends BunyipsOpMode {
 
     // Declare drive and config components
     private ExampleDrive drive;
-    private ExampleConfig config;
+    private ExampleConfig config = new ExampleConfig();
 
     // !! The major difference between autonomous and teleop is that autonomous uses tasks to run
     // code, whereas teleop uses activeLoop() to run code. View ExampleTimeDriveTask.java for more

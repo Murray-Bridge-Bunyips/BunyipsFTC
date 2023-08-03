@@ -33,14 +33,14 @@ public class DinoLift extends BunyipsComponent {
 
     // Methods for the claw
     public void clawOpen(){
-        frontServo.setPosition(1.0);
-        backServo.setPosition(1.0);
+        frontServo.setPosition(0.5);
+        backServo.setPosition(0.5);
         getOpMode().addTelemetry("Claw is Open", false);
     }
 
     public void clawClose(){
-        frontServo.setPosition(0.0);
-        backServo.setPosition(0.0);
+        frontServo.setPosition(1.0);
+        backServo.setPosition(0.5);
         getOpMode().addTelemetry("Claw is Closed", false);
     }
 

@@ -37,7 +37,7 @@ data class AprilTagData(
     /**
      * The physical size of the tag in the real world (measured black edge to black edge), if available.
      */
-    val tagsize: Double,
+    val tagsize: Double?,
     /**
      * A vector describing the tag's 3D translation on the field, if available.
      */

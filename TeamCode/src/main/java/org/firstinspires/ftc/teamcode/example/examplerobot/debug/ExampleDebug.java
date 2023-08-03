@@ -14,7 +14,7 @@ public class ExampleDebug extends BunyipsOpMode {
     // This file is an example test to ensure that the IMU is working correctly, by printing the
     // heading constantly to the Driver Station
 
-    private ExampleConfig config;
+    private ExampleConfig config = new ExampleConfig();
     private IMUOp imu;
 
     @Override

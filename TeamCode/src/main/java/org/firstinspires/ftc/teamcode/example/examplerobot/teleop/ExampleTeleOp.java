@@ -14,7 +14,10 @@ public class ExampleTeleOp extends BunyipsOpMode {
     // Instead of extending OpMode or LinearOpMode, we extend BunyipsOpMode.
     // Here is where you will declare any components that you wish to use in your OpMode.
     // A required one is the config, which is used to map hardware to the variables you declare.
-    private ExampleConfig config;
+
+    // You MUST make a new instance of ExampleConfig as a class member
+    // This is because the newConfig static method does not make an instance to work with
+    private ExampleConfig config = new ExampleConfig();
     private ExampleDrive drive;
 
     // onInit and activeLoop are the two functions that you will need to implement.
