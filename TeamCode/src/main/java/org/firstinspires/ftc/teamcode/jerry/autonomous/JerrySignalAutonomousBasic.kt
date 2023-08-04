@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
-import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
+import org.firstinspires.ftc.teamcode.common.tasks.GetParkingPositionTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
@@ -26,7 +26,7 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: OpenCVCam? = null
     private var drive: JerryDrive? = null
-    private var tagtask: GetAprilTagTask? = null
+    private var tagtask: GetParkingPositionTask? = null
     private val tasks = ArrayDeque<TaskImpl>()
 
     override fun onInit() {
@@ -38,7 +38,7 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
-        tagtask = cam?.let { GetAprilTagTask(this, it) }
+        tagtask = cam?.let { GetParkingPositionTask(this, it) }
     }
 
     override fun onInitLoop(): Boolean {
@@ -54,10 +54,10 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         addTelemetry("ParkingPosition set to: $position")
 
         // Add movement tasks based on the signal position
-        if (position == GetAprilTagTask.ParkingPosition.LEFT) {
+        if (position == GetParkingPositionTask.ParkingPosition.LEFT) {
             // Drive forward if the position of the signal is LEFT
             tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, 1.0, 0.0))
-        } else if (position == GetAprilTagTask.ParkingPosition.RIGHT) {
+        } else if (position == GetParkingPositionTask.ParkingPosition.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
             tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, -1.0, 0.0))
         }

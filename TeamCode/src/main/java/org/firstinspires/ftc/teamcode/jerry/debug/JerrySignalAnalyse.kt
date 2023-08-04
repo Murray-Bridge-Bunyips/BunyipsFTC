@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
-import org.firstinspires.ftc.teamcode.common.tasks.GetAprilTagTask
+import org.firstinspires.ftc.teamcode.common.tasks.GetParkingPositionTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
 /**
@@ -14,12 +14,12 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 class JerrySignalAnalyse : BunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: OpenCVCam? = null
-    private var task: GetAprilTagTask? = null
+    private var task: GetParkingPositionTask? = null
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         cam = OpenCVCam(this, config.webcam, config.monitorID)
-        task = cam?.let { GetAprilTagTask(this, it) }
+        task = cam?.let { GetParkingPositionTask(this, it) }
     }
 
     override fun activeLoop() {

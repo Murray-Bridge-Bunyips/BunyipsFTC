@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.common.ButtonControl
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.Odometer
+import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -44,8 +45,8 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
         if (config.assert(config.imu))
             imu = IMUOp(this, config.imu!!)
 
-        when (ButtonHashmap.map(this, "Drive Left", "Drive Right", "", "")) {
-            ButtonControl.A -> // Move left
+        when (ButtonHashmap.map(this, "Drive Left", "Drive Right")) {
+            "Drive Left" -> // Move left
                 tasks.add(
                     JerryPrecisionDriveTask(
                         this,
@@ -55,12 +56,12 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
                         x,
                         y,
                         600.0,
-                        JerryPrecisionDriveTask.Directions.LEFT,
+                        RelativeVector.LEFT,
                         1.0
                     )
                 )
 
-            ButtonControl.B -> // Move right
+            "Drive Right" -> // Move right
                 tasks.add(
                     JerryPrecisionDriveTask(
                         this,
@@ -70,7 +71,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
                         x,
                         y,
                         600.0,
-                        JerryPrecisionDriveTask.Directions.RIGHT,
+                        RelativeVector.RIGHT,
                         1.0
                     )
                 )

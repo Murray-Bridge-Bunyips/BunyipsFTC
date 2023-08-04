@@ -152,6 +152,7 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
      * @param tolerance supply the tolerance in degrees for the IMU to be within to stop adjusting
      * @return queried speed based on parameters given, returns the unaltered speed if PrecisionDrive is not online
      */
+    // TODO: Use vectors to calculate the speed instead of a simple tolerance
     fun getRPrecisionSpeed(original_speed: Double, tolerance: Double): Double {
         // If we're not capturing, return the original speed
         if (this.capture == null) return original_speed

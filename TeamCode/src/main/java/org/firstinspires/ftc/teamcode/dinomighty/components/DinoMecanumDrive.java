@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.RelativeVector;
+import org.firstinspires.ftc.teamcode.common.RobotVector;
 
 import java.util.Locale;
 
@@ -156,6 +158,19 @@ public class DinoMecanumDrive extends BunyipsComponent {
         frontRight.setPower(frontRightPower);
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
+    }
+
+    /**
+     * Set motor speeds based on a RobotVector or RelativeVector.
+     */
+    public <T> void setVector(T vector) {
+        if (vector instanceof RobotVector) {
+            RobotVector robotVector = (RobotVector) vector;
+            setSpeedXYR(robotVector.getX(), robotVector.getY(), robotVector.getR());
+        } else if (vector instanceof RelativeVector) {
+            RelativeVector relativeVector = (RelativeVector) vector;
+            setSpeedXYR(relativeVector.getVector().getX(), relativeVector.getVector().getY(), relativeVector.getVector().getR());
+        }
     }
 
     enum Priority {

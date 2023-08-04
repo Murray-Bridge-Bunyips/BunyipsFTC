@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.Odometer
+import org.firstinspires.ftc.teamcode.common.RelativeVector
+import org.firstinspires.ftc.teamcode.common.RobotVector
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
@@ -13,7 +15,7 @@ import kotlin.math.abs
  * This supports movement throughout the 2D plane, and can be used to move in any one direction
  * @author Lucas Bubner, 2023
  */
-class JerryPrecisionDriveTask(
+class JerryPrecisionDriveTask<T>(
     opMode: BunyipsOpMode,
     time: Double,
     private val drive: JerryDrive?,
@@ -21,7 +23,7 @@ class JerryPrecisionDriveTask(
     private val x: Odometer?,
     private val y: Odometer?,
     private val distance_mm: Double,
-    private val direction: Directions,
+    private val direction: T,
     private var power: Double,
     private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
 ) : Task(opMode, time), TaskImpl {
@@ -39,17 +41,19 @@ class JerryPrecisionDriveTask(
         // This is because the task will handle the power management and determine whether the value
         // to the motor should be negative or not
         this.power = abs(power)
-    }
 
-    enum class Directions {
-        LEFT, RIGHT, FORWARD, BACKWARD
+        if (direction !is RelativeVector) {
+            throw NotImplementedError("Currently not supported.")
+        }
+
+        // TODO: Normalise vectors with motor speed
     }
 
     override fun isFinished(): Boolean {
         // Check if the task is done by checking if it has timed out in the super call or if the target has been reached
         // by the respective deadwheel. If the deadwheel is not available, then we cannot check if the target has been
         // reached, so we will just rely on the timeout.
-        val evaluating = if (direction == Directions.LEFT || direction == Directions.RIGHT) {
+        val evaluating = if (direction == RelativeVector.LEFT || direction == RelativeVector.RIGHT) {
             x?.travelledMM()
         } else {
             y?.travelledMM()
@@ -71,9 +75,12 @@ class JerryPrecisionDriveTask(
             return
         }
 
+        // TODO: Use vectors instead of this
+        // I will do this after the scrimmage as this may be a breaking change
+        // This will also allow for more complex movement, such as 8-way movement
         drive?.setSpeedXYR(
-            if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
-            if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
+            if (direction == RelativeVector.LEFT) -power else if (direction == RelativeVector.RIGHT) power else 0.0,
+            if (direction == RelativeVector.FORWARD) -power else if (direction == RelativeVector.BACKWARD) power else 0.0,
             imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0
         )
 
@@ -84,7 +91,7 @@ class JerryPrecisionDriveTask(
         // Add telemetry of current operation
         opMode.addTelemetry(
             "Distance progress: ${
-                if (direction == Directions.LEFT || direction == Directions.RIGHT) {
+                if (direction == RelativeVector.LEFT || direction == RelativeVector.RIGHT) {
                     String.format("%.2f", x?.travelledMM())
                 } else {
                     String.format("%.2f", y?.travelledMM())

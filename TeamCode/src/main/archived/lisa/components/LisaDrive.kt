@@ -21,7 +21,7 @@ class LisaDrive(
     private var leftPower = 0.0
     private var rightPower = 0.0
 
-    // TODO: Define these values
+    // Define these values
     private val leftEncoder = Odometer(opMode, leftMotor, null, null)
     private val rightEncoder = Odometer(opMode, rightMotor, null, null)
     /*
@@ -33,7 +33,7 @@ class LisaDrive(
      */
 
     fun setPower(left: Double, right: Double) {
-        // TODO: Consider using power curves to make the robot more controllable
+        // Consider using power curves to make the robot more controllable
         leftPower = -left
         rightPower = -right
     }

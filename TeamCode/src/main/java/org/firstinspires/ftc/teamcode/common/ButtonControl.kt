@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Gamepad
  * Used for adding additional abstraction to the current gamepad control system.
  */
 enum class ButtonControl {
-    DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT, A, B, X, Y, START, BACK, LEFT_BUMPER, RIGHT_BUMPER, LEFT_STICK_BUTTON, RIGHT_STICK_BUTTON, NONE;
+    A, B, X, Y, START, BACK, DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT, LEFT_BUMPER, RIGHT_BUMPER, LEFT_STICK_BUTTON, RIGHT_STICK_BUTTON, NONE;
 
     companion object {
         fun isSelected(gamepad: Gamepad, buttonControl: ButtonControl?): Boolean {
@@ -44,6 +44,19 @@ enum class ButtonControl {
                 else -> {}
             }
             return buttonPressed
+        }
+
+        fun <T> mapArgs(args: Array<out T>): HashMap<T, ButtonControl> {
+            // Map strings of args to every controller enum in order
+            if (args.size >= values().size) {
+                throw IllegalArgumentException("Number of args exceeds number of possible gamepad buttons (14).")
+            }
+            val map = HashMap<T, ButtonControl>()
+            for (i in args.indices) {
+                // For every arg, map it to the corresponding enum
+                map[args[i]] = values()[i]
+            }
+            return map
         }
     }
 }

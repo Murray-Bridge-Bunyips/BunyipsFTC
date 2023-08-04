@@ -5,6 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.RobotVector
+import org.firstinspires.ftc.teamcode.common.RelativeVector
 import java.util.Locale
 import kotlin.math.abs
 import kotlin.math.cos
@@ -162,6 +164,17 @@ class JerryDrive(
         this.speedX = clipMotorPower(speedY)
         this.speedY = clipMotorPower(-speedX)
         this.speedR = clipMotorPower(speedR)
+    }
+
+    /**
+     * Set motor speeds to a robot vector.
+     */
+    fun <T> setVector(v: T) {
+        if (v is RobotVector) {
+            setSpeedXYR(v.x, v.y, v.r)
+        } else if (v is RelativeVector) {
+            setSpeedXYR(v.vector.x, v.vector.y, v.vector.r)
+        }
     }
 
     /**
