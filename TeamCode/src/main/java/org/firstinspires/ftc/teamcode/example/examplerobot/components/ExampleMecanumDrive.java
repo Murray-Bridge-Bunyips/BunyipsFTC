@@ -54,11 +54,10 @@ public class ExampleMecanumDrive extends BunyipsComponent {
 
     /**
      * Set a speed at which the Mecanum drive assembly should move.
-     *
      * @param x The speed at which the robot should move in the x direction.
-     *          Positive is left, negative is right.
+     *          Positive is right, negative is left.
      *          Range: -1.0 to 1.0
-     * @param y The speed at which the robot should move in the y direction.
+     * @param y The speed at which the robot should move in the -y direction.
      *          Positive is backward, negative is forward.
      *          Range: -1.0 to 1.0
      * @param r The speed at which the robot will rotate.
@@ -67,18 +66,18 @@ public class ExampleMecanumDrive extends BunyipsComponent {
      */
     public void setSpeedXYR(double x, double y, double r) {
         // X and Y have been swapped, and X has been inverted
-        // This is to calibrate the controller movement to the robot
+        // This rotates input vectors by 90 degrees clockwise and wil account for gamepad input.
         this.speedX = Range.clip(y, -1.0, 1.0);
         this.speedY = Range.clip(-x, -1.0, 1.0);
         this.speedR = Range.clip(r, -1.0, 1.0);
     }
 
     /**
-     * Set a polar speed at which the Mechanum drive assembly should move.
+     * Set a polar speed at which the Mecanum drive assembly should move.
      *
      * @param speed             speed at which the motors will operate
      * @param direction_degrees direction at which the motors will move toward
-     * @param speedR            rotation speed - positive: anti-clockwise
+     * @param speedR            rotation speed - positive: clockwise
      */
     public void setSpeedPolarR(double speed, double direction_degrees, double speedR) {
         double radians = Math.toRadians(direction_degrees);
@@ -169,10 +168,10 @@ public class ExampleMecanumDrive extends BunyipsComponent {
     public <T> void setVector(T vector) {
         if (vector instanceof RobotVector) {
             RobotVector robotVector = (RobotVector) vector;
-            setSpeedXYR(robotVector.getX(), robotVector.getY(), robotVector.getR());
+            setSpeedXYR(robotVector.getX(), -robotVector.getY(), robotVector.getR());
         } else if (vector instanceof RelativeVector) {
             RelativeVector relativeVector = (RelativeVector) vector;
-            setSpeedXYR(relativeVector.getVector().getX(), relativeVector.getVector().getY(), relativeVector.getVector().getR());
+            setSpeedXYR(relativeVector.getVector().getX(), -relativeVector.getVector().getY(), relativeVector.getVector().getR());
         }
     }
 

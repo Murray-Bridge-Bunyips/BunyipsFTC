@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -15,24 +17,35 @@ data class RobotVector(var x: Double, var y: Double, var r: Double) {
         get() = Math.toDegrees(atan2(y, x))
 
     /**
-     * Get the opposite vector of this vector.
+     * Add two vectors together.
      */
-    fun flip(): RobotVector {
-        return RobotVector(-x, -y, -r)
+    operator fun plus(other: RobotVector): RobotVector {
+        return RobotVector(x + other.x, y + other.y, r + other.r)
+    }
+
+    /**
+     * Flip the vector to be of opposite magnitude.
+     */
+    fun flip() {
+        x = -x
+        y = -y
+        r = -r
     }
 
     /**
      * Rotate the vector 90 degrees clockwise.
      */
-    fun right(): RobotVector {
-        return RobotVector(y, -x, r)
+    fun right() {
+        x = y
+        y = -x
     }
 
     /**
      * Rotate the vector 90 degrees anticlockwise.
      */
-    fun left(): RobotVector {
-        return RobotVector(-y, x, r)
+    fun left() {
+        x = -y
+        y = x
     }
 
     /**
@@ -47,15 +60,21 @@ data class RobotVector(var x: Double, var y: Double, var r: Double) {
     companion object {
         /**
          * Calculate the robot XY vector from an angle.
-         * @param angle Angle in degrees.
+         * @param angle Angle to calculate vector from.
+         * @param type Unit of angle.
          */
-        fun calcPolar(angle: Double): RobotVector {
-            val radians = Math.toRadians(angle)
+        fun calcPolar(angle: Double, type: AngleUnit): RobotVector {
+            var rad = angle
+            if (type == AngleUnit.DEGREES) {
+                rad = Math.toRadians(angle)
+            }
+
             // Calculated using unit circle trigonometry, this was originally implemented
             // alongside the drive systems but has been moved here for clarity and during transformation
             // to vector-based navigation.
-            val x = cos(radians)
-            val y = sin(radians)
+            val x = cos(rad)
+            val y = sin(rad)
+
             // View visualisation for polar to cartesian conversion:
             // https://www.desmos.com/calculator/py4u0xwrc8
             return RobotVector(x, y, 0.0)

@@ -46,7 +46,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
             imu = IMUOp(this, config.imu!!)
 
         when (ButtonHashmap.map(this, "Drive Left", "Drive Right")) {
-            "Drive Left" -> // Move left
+            "Drive Left" ->
                 tasks.add(
                     JerryPrecisionDriveTask(
                         this,
@@ -56,12 +56,12 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
                         x,
                         y,
                         600.0,
-                        RelativeVector.LEFT,
+                        JerryPrecisionDriveTask.Directions.LEFT,
                         1.0
                     )
                 )
 
-            "Drive Right" -> // Move right
+            "Drive Right" ->
                 tasks.add(
                     JerryPrecisionDriveTask(
                         this,
@@ -71,7 +71,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
                         x,
                         y,
                         600.0,
-                        RelativeVector.RIGHT,
+                        JerryPrecisionDriveTask.Directions.RIGHT,
                         1.0
                     )
                 )

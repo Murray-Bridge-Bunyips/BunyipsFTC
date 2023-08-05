@@ -152,7 +152,6 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
      * @param tolerance supply the tolerance in degrees for the IMU to be within to stop adjusting
      * @return queried speed based on parameters given, returns the unaltered speed if PrecisionDrive is not online
      */
-    // TODO: Use vectors to calculate the speed instead of a simple tolerance
     fun getRPrecisionSpeed(original_speed: Double, tolerance: Double): Double {
         // If we're not capturing, return the original speed
         if (this.capture == null) return original_speed
@@ -165,5 +164,23 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
 
         // If we're at maximum tolerance, decrease turn rate
         return if (current > this.capture!! + tolerance) original_speed + 0.1 else original_speed
+    }
+
+    /**
+     * Query vector alignment based on PrecisionDrive capture
+     * This does not use the tolerance parameter, as it is not needed for vector alignment
+     */
+    fun getCorrectedVector(vec: RobotVector): RobotVector {
+        // If we're not capturing, return the original vector
+        if (this.capture == null) return vec
+
+        this.tick()
+        val current = this.heading
+
+        val normalisedError = AngleUnit.normalizeDegrees(this.capture!! - current)
+        val correctionVector = RobotVector.calcPolar(normalisedError, AngleUnit.DEGREES)
+
+        // Add the correction vector to the original vector
+        return vec + correctionVector
     }
 }

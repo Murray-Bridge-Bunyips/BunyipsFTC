@@ -77,7 +77,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
                     x,
                     y,
                     400.0,
-                    RelativeVector.FORWARD,
+                    JerryPrecisionDriveTask.Directions.FORWARD,
                     0.5
                 )
             )
@@ -92,7 +92,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
                     x,
                     y,
                     400.0,
-                    RelativeVector.BACKWARD,
+                    JerryPrecisionDriveTask.Directions.BACKWARD,
                     0.5
                 )
             )
@@ -108,7 +108,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
                 x,
                 y,
                 600.0,
-                RelativeVector.RIGHT,
+                JerryPrecisionDriveTask.Directions.RIGHT,
                 0.5
             )
         )

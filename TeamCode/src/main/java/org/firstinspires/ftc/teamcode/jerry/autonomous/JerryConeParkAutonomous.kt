@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.GetParkingPositionTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
-import org.firstinspires.ftc.teamcode.jerry.tasks.JerryPrecisionDriveTask
+import org.firstinspires.ftc.teamcode.jerry.tasks.JerryVectorDriveTask
 import java.util.ArrayDeque
 
 /**
@@ -57,7 +57,7 @@ class JerryConeParkAutonomous : BunyipsOpMode() {
         // Queue tasks for moving the cone forward or backwards based on the start position
         originVector = ButtonHashmap.map(this, RelativeVector.FORWARD, RelativeVector.BACKWARD)
         tasks.add(
-            JerryPrecisionDriveTask(
+            JerryVectorDriveTask(
                 this,
                 3.5,
                 drive,
@@ -87,7 +87,7 @@ class JerryConeParkAutonomous : BunyipsOpMode() {
         addTelemetry("ParkingPosition set to: $position")
 
         // Determine route back to parking position based on the origin vector
-        val backToOrigin = originVector.vector.flip()
+        originVector.vector.flip()
         // If we're as far away from the parking spot, we need to move 2x as far
         val itsMarathonTime = position == GetParkingPositionTask.ParkingPosition.LEFT && originVector == RelativeVector.BACKWARD
                                 || position == GetParkingPositionTask.ParkingPosition.RIGHT && originVector == RelativeVector.FORWARD
@@ -95,7 +95,7 @@ class JerryConeParkAutonomous : BunyipsOpMode() {
         // Always move back to the origin if needed
         if (position == GetParkingPositionTask.ParkingPosition.CENTER || itsMarathonTime) {
             tasks.add(
-                JerryPrecisionDriveTask(
+                JerryVectorDriveTask(
                     this,
                     if (itsMarathonTime) 7.0 else 3.5,
                     drive,
@@ -103,7 +103,7 @@ class JerryConeParkAutonomous : BunyipsOpMode() {
                     x,
                     y,
                     if (itsMarathonTime) 800.0 else 400.0,
-                    backToOrigin,
+                    originVector,
                     if (itsMarathonTime) 0.75 else 0.5
                 )
             )
@@ -111,7 +111,7 @@ class JerryConeParkAutonomous : BunyipsOpMode() {
 
         // Move into the parking position
         tasks.add(
-            JerryPrecisionDriveTask(
+            JerryVectorDriveTask(
                 this,
                 3.5,
                 drive,

@@ -149,9 +149,9 @@ class JerryDrive(
     /**
      * Set a speed at which the Mecanum drive assembly should move.
      * @param x The speed at which the robot should move in the x direction.
-     *          Positive is left, negative is right.
+     *          Positive is right, negative is left.
      *          Range: -1.0 to 1.0
-     * @param y The speed at which the robot should move in the y direction.
+     * @param y The speed at which the robot should move in the -y direction.
      *          Positive is backward, negative is forward.
      *          Range: -1.0 to 1.0
      * @param r The speed at which the robot will rotate.
@@ -160,7 +160,7 @@ class JerryDrive(
      */
     fun setSpeedXYR(speedX: Double, speedY: Double, speedR: Double) {
         // X and Y have been swapped, and X has been inverted
-        // This is to calibrate the controller movement to the robot
+        // This rotates input vectors by 90 degrees clockwise and will account for gamepad input.
         this.speedX = clipMotorPower(speedY)
         this.speedY = clipMotorPower(-speedX)
         this.speedR = clipMotorPower(speedR)
@@ -171,16 +171,18 @@ class JerryDrive(
      */
     fun <T> setVector(v: T) {
         if (v is RobotVector) {
-            setSpeedXYR(v.x, v.y, v.r)
+            setSpeedXYR(v.x, -v.y, v.r)
         } else if (v is RelativeVector) {
-            setSpeedXYR(v.vector.x, v.vector.y, v.vector.r)
+            setSpeedXYR(v.vector.x, -v.vector.y, v.vector.r)
         }
     }
 
     /**
-     * @param speed speed at which the motors will operate
-     * @param directionDegrees direction at which the motors will move toward
-     * @param speedR rotation speed - positive: anti-clockwise
+     * Set a polar speed at which the Mecanum drive assembly should move.
+     *
+     * @param speed             speed at which the motors will operate
+     * @param direction_degrees direction at which the motors will move toward
+     * @param speedR            rotation speed - positive: clockwise
      */
     fun setSpeedPolarR(speed: Double, directionDegrees: Double, speedR: Double) {
         val radians = Math.toRadians(directionDegrees)
