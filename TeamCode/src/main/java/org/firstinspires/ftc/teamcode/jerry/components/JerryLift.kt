@@ -215,15 +215,17 @@ class JerryLift(
 
         // Release lock when motors have reached the target
         while (arm1.isBusy && arm2.isBusy && !opMode.gamepad2.right_bumper) {
-            opMode.addTelemetry(
-                String.format(
-                    "LIFT IS RECALLING TO HOLD POSITION %d... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
-                    holdPosition,
-                    arm1.currentPosition,
-                    arm2.currentPosition
-                )
-            )
-            opMode.telemetry.update()
+//            opMode.addTelemetry(
+//                String.format(
+//                    "LIFT IS RECALLING TO HOLD POSITION %d... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
+//                    holdPosition,
+//                    arm1.currentPosition,
+//                    arm2.currentPosition
+//                )
+//            )
+//            opMode.telemetry.update()
+            // Allow the thread to non-block while we wait
+            opMode.idle()
         }
 
         // Release lock
@@ -286,7 +288,7 @@ class JerryLift(
 
     companion object {
         // Maximum encoder value of extension
-        private const val HARD_LIMIT = 250
+        private const val HARD_LIMIT = 200
 
         // Delta speed dampener for manual mode
         private const val DAMPENER = 1.5

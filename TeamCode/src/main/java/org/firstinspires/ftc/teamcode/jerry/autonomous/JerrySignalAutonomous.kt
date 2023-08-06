@@ -86,7 +86,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
             tasks.add(
                 JerryPrecisionDriveTask(
                     this,
-                    3.5,
+                    3.0,
                     drive,
                     imu,
                     x,
