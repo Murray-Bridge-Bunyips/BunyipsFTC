@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.While
 
 /**
  * Improved and refactored arm control system for Jerry robot, using relative capture instead of index-based movement
@@ -25,12 +26,76 @@ class JerryLift(
             // from various and untrusted sources
             if (power > 0 && (arm1.currentPosition + arm2.currentPosition) / 2 >= HARD_LIMIT)
                 return
-            field = power.coerceIn(-1.0, 1.0)
+            // Gravity will help us out, do not allow negative power to exceed -0.15
+            field = power.coerceIn(-0.15, 1.0)
         }
     private val motors = arrayOf(arm1, arm2)
     private var targetPosition: Double = 0.0
     private var holdPosition: Int? = null
-    private var lock: Boolean = false
+
+    private var deltaTimeout = 0
+    private val resetLock = While (
+        condition = {
+            // Check if the delta is above 0 for 30 consecutive loops, if so, we have hit the limit
+            val prev = (motors[0].currentPosition + motors[1].currentPosition) / 2
+            val delta = (motors[0].currentPosition + motors[1].currentPosition) / 2 - prev
+            if (delta >= 0) {
+                deltaTimeout++
+            } else {
+                deltaTimeout = 0
+            }
+
+            // Reset lock when limit is pressed, delta is stagnant, or when manually interrupted
+            !limit.isPressed && !opMode.gamepad2.right_bumper && deltaTimeout > 30
+        },
+        run = {
+            opMode.addTelemetry(
+                String.format(
+                    "LIFT IS RESETTING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
+                    arm1.currentPosition,
+                    arm2.currentPosition
+                )
+            )
+        },
+        callback = {
+            for (motor in motors) {
+                // Finally, we reset the motors and we are now zeroed out again.
+                motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
+                motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
+                motor.targetPosition = 0
+            }
+
+            targetPosition = 0.0
+        },
+        timeoutSeconds = 5.0
+    )
+
+    private val releaseLock = While (
+        condition = {
+            // Release lock when motors have reached the target or manually interrupted
+            arm1.isBusy && arm2.isBusy && !opMode.gamepad2.right_bumper
+        },
+        run = {
+            opMode.addTelemetry(
+                String.format(
+                    "LIFT IS RECALLING TO HOLD POSITION %d... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
+                    holdPosition,
+                    arm1.currentPosition,
+                    arm2.currentPosition
+                )
+            )
+        },
+        callback = {
+            for (motor in motors) {
+                motor.power = 0.0
+                motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
+            }
+
+            opMode.log("lift released to $holdPosition")
+            holdPosition = null
+        },
+        timeoutSeconds = 5.0
+    )
 
     // Handle both manual and positional control modes
     enum class ControlMode {
@@ -58,7 +123,6 @@ class JerryLift(
      * This will ensure that a saved position is still accurate even after encoder drift.
      */
     fun reset() {
-        lock = true
         close()
         for (motor in motors) {
             motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
@@ -67,38 +131,7 @@ class JerryLift(
             motor.power = -0.1
         }
 
-        var e = 0
-        while (!limit.isPressed && !opMode.gamepad2.right_bumper) {
-            opMode.addTelemetry(
-                String.format(
-                    "LIFT IS RESETTING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
-                    arm1.currentPosition,
-                    arm2.currentPosition
-                )
-            )
-            opMode.telemetry.update()
-
-            // Check if the delta is above 0 for 30 consecutive loops, if so, we have hit the limit
-            val prev = (motors[0].currentPosition + motors[1].currentPosition) / 2
-            val delta = (motors[0].currentPosition + motors[1].currentPosition) / 2 - prev
-            if (delta >= 0) {
-                e++
-            } else {
-                e = 0
-            }
-
-            if (e > 30) break
-        }
-
-        for (motor in motors) {
-            // Finally, we reset the motors and we are now zeroed out again.
-            motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-            motor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
-            motor.targetPosition = 0
-        }
-
-        lock = false
-        targetPosition = 0.0
+        resetLock.engage()
     }
 
     /**
@@ -106,12 +139,12 @@ class JerryLift(
      */
     fun isBusy(): Boolean {
         if (mode == ControlMode.MANUAL) {
-            return power != 0.0 || lock
+            return power != 0.0 || resetLock.running() || releaseLock.running()
         }
 
         return motors[0].isBusy ||
                 motors[1].isBusy ||
-                lock ||
+                resetLock.running() ||
                 targetPosition != motors[0].targetPosition.toDouble() ||
                 targetPosition != motors[1].targetPosition.toDouble()
     }
@@ -203,9 +236,6 @@ class JerryLift(
 
         opMode.log("lift releasing to $holdPosition...")
 
-        // Lock arm control
-        lock = true
-
         // Configure motors for positional control
         for (motor in motors) {
             motor.targetPosition = holdPosition!!
@@ -213,34 +243,13 @@ class JerryLift(
             motor.power = POSITIONAL_POWER
         }
 
-        // Release lock when motors have reached the target
-        while (arm1.isBusy && arm2.isBusy && !opMode.gamepad2.right_bumper) {
-//            opMode.addTelemetry(
-//                String.format(
-//                    "LIFT IS RECALLING TO HOLD POSITION %d... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
-//                    holdPosition,
-//                    arm1.currentPosition,
-//                    arm2.currentPosition
-//                )
-//            )
-//            opMode.telemetry.update()
-            // Allow the thread to non-block while we wait
-            opMode.idle()
-        }
-
-        // Release lock
-        lock = false
-        for (motor in motors) {
-            motor.power = 0.0
-            motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
-        }
-
-        opMode.log("lift released to $holdPosition")
-        holdPosition = null
+        releaseLock.engage()
     }
 
     fun update() {
-        if (lock) return
+        // While a reset or release is in progress, do not allow any other operations
+        if (resetLock.run()) return
+        if (releaseLock.run()) return
 
         opMode.addTelemetry(
             String.format(

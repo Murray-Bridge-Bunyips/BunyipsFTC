@@ -67,6 +67,9 @@ class JerryArm(
         // switch breaks for some reason. Press right bumper to cancel the loop.
         // Using reversed operation as pressing results in the limit switch reporting false
         var e = 0
+
+        // ! Dangerous code, do not use unless you know what you are doing !
+        // The only reason this is still here is because JerryArm is deprecated and is not used.
         while (!limit.isPressed && !opMode.gamepad2.right_bumper) {
             opMode.addTelemetry(
                 String.format(
