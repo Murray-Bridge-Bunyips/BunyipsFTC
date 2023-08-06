@@ -16,6 +16,7 @@ data class RobotVector(var x: Double, var y: Double, var r: Double) {
     val angle: Double
         get() = Math.toDegrees(atan2(y, x))
 
+
     /**
      * Add two vectors together.
      */

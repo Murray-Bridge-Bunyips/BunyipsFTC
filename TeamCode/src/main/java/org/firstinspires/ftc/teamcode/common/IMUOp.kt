@@ -67,6 +67,13 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
         private set
 
     /**
+     * Get the current Euler yaw reading from the internal IMU
+     */
+    val rawHeading: Double
+        // TODO: check this offset to see if it is correct
+        get() = currentAngles?.thirdAngle?.toDouble()?.plus(offset) ?: 0.0
+
+    /**
      * Get Z rotation rate (heading rate) from the internal IMU
      */
     var turnRate: Double = 0.0

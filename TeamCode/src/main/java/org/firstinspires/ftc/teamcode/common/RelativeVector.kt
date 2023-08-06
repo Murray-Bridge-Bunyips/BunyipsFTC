@@ -20,6 +20,9 @@ enum class RelativeVector(val vector: RobotVector) {
     CLOCKWISE       (RobotVector(0.0, 0.0, 1.0)),
     ANTICLOCKWISE   (RobotVector(0.0, 0.0, -1.0));
 
+    val angle: Double
+        get() = vector.angle
+
     companion object {
         /**
          * Convert a robot vector to a relative vector.
