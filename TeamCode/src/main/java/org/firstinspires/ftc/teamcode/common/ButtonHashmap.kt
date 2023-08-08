@@ -42,7 +42,7 @@ object ButtonHashmap {
         opMode.telemetry.update()
 
         val timeout = ElapsedTime()
-        while (timeout.seconds() < 3.0 && !opMode.isStopRequested && selectedOpMode == null) {
+        while (timeout.seconds() < 3.0 && selectedOpMode == null && opMode.opModeInInit()) {
             for ((str, button) in buttons) {
                 if (ButtonControl.isSelected(opMode.gamepad1, button)) {
                     selectedButton = button
