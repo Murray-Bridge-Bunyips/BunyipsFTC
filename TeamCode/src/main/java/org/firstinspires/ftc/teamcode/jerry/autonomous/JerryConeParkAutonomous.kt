@@ -25,7 +25,7 @@ import java.util.ArrayDeque
     group = "JERRY",
     preselectTeleOp = "JERRY: TeleOp"
 )
-@Disabled
+//@Disabled
 class JerryConeParkAutonomous : BunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: OpenCVCam? = null

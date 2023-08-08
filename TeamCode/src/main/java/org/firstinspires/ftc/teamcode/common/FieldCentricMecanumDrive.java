@@ -22,15 +22,16 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
     // Override the setSpeedXYR method to include the IMU heading in the calculation
     @Override
     public void setSpeedXYR(double x, double y, double r) {
+        x = -x;
         imu.tick();
         double heading = imu.getRawHeading();
-        double sin = Math.sin(-Math.toRadians(heading));
-        double cos = Math.cos(-Math.toRadians(heading));
+        double sin = Math.sin(Math.toRadians(heading));
+        double cos = Math.cos(Math.toRadians(heading));
         // Transform the x and y values to be relative to the field
         // This is done by calculating the current heading to the field then rotating the x
         // and y vectors to be relative to the field, then updating the motor powers as normal
-        super.speedX = x * cos - y * sin;
-        super.speedY = x * sin + y * cos;
+        super.speedX = x * cos + y * sin;
+        super.speedY = x * sin - y * cos;
         super.speedR = r;
     }
 

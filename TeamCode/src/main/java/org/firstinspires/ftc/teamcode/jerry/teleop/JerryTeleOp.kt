@@ -2,10 +2,15 @@ package org.firstinspires.ftc.teamcode.jerry.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.ButtonHashmap
+import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.MecanumDrive
+import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
+import org.firstinspires.ftc.teamcode.jerry.components.JerryPolarDrive
 
 /**
  * Primary TeleOp for all of Jerry's functions.
@@ -22,14 +27,23 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
 @TeleOp(name = "JERRY: TeleOp", group = "JERRY")
 class JerryTeleOp : BunyipsOpMode() {
     private var config = JerryConfig()
-    private var drive: JerryDrive? = null
+    private var drive: MecanumDrive? = null
+    private var imu: IMUOp? = null
     private var lift: JerryLift? = null
 
     override fun onInit() {
         // Configure drive and lift subsystems
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
+        val mode = ButtonHashmap.map(this, "POV", "FIELD-CENTRIC")
+        if (config.assert(config.imu)) {
+            imu = IMUOp(this, config.imu!!)
+        }
         if (config.assert(config.driveMotors)) {
-            drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+            if (mode == "POV" || imu == null) {
+                drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+            } else {
+                drive = JerryPolarDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!, imu!!, RelativeVector.FORWARD)
+            }
         }
         drive?.setToBrake()
         if (config.assert(config.armComponents)) {

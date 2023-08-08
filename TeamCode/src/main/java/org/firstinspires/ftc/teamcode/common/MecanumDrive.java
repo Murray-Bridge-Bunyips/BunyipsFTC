@@ -124,6 +124,26 @@ public abstract class MecanumDrive extends BunyipsComponent {
         update();
     }
 
+    /**
+     * Set the drive system to brake.
+     */
+    public void setToBrake() {
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    /**
+     * Set the drive system to float.
+     */
+    public void setToFloat() {
+        backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+
     private void rotationalUpdate() {
         // Calculate translational speeds
         double[] translationValues = {

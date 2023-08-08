@@ -26,8 +26,8 @@ class JerryLift(
             // from various and untrusted sources
             if (power > 0 && (arm1.currentPosition + arm2.currentPosition) / 2 >= HARD_LIMIT)
                 return
-            // Gravity will help us out, do not allow negative power to exceed -0.15
-            field = power.coerceIn(-0.15, 1.0)
+            // Gravity will help us out, do not allow negative power to exceed -0.2
+            field = power.coerceIn(-0.2, 1.0)
         }
     private val motors = arrayOf(arm1, arm2)
     private var targetPosition: Double = 0.0
@@ -44,11 +44,10 @@ class JerryLift(
             } else {
                 deltaTimeout = 0
             }
-
             // Reset lock when limit is pressed, delta is stagnant, or when manually interrupted
-            !limit.isPressed && !opMode.gamepad2.right_bumper && deltaTimeout > 30
+            !limit.isPressed && !opMode.gamepad2.right_bumper && deltaTimeout < 30
         },
-        run = {
+        runThis = {
             opMode.addTelemetry(
                 String.format(
                     "LIFT IS RESETTING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
@@ -66,6 +65,7 @@ class JerryLift(
             }
 
             targetPosition = 0.0
+            deltaTimeout = 0
         },
         timeoutSeconds = 5.0
     )
@@ -75,7 +75,7 @@ class JerryLift(
             // Release lock when motors have reached the target or manually interrupted
             arm1.isBusy && arm2.isBusy && !opMode.gamepad2.right_bumper
         },
-        run = {
+        runThis = {
             opMode.addTelemetry(
                 String.format(
                     "LIFT IS RECALLING TO HOLD POSITION %d... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",

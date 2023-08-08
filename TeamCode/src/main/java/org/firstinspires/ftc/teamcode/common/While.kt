@@ -6,15 +6,16 @@ import com.qualcomm.robotcore.util.ElapsedTime
  * Perform non-blocking loops using an evaluator to run the loop.
  * This should be paired with an update() or activeLoop().
  * @param condition The condition or function to evaluate as an exit. Return false to exit the loop.
- * @param run The function to run on each loop iteration.
+ * @param runThis The function to run on each loop iteration.
  * @param callback The callback to run once [condition] is met.
  * @param timeoutSeconds Optional timeout in seconds. If the timeout is reached, the loop will exit.
  *
  * @author Lucas Bubner, 2023
  */
-class While(val condition: () -> Boolean, val run: () -> Unit = {}, val callback: () -> Unit = {}, val timeoutSeconds: Double = 0.0) {
+class While(val condition: () -> Boolean, val runThis: () -> Unit = {}, val callback: () -> Unit = {}, val timeoutSeconds: Double = 0.0) {
     private var timer: ElapsedTime? = null
     private var evalLatch = false
+//    private var lastRun = 0.0
 
     /**
      * Notify the loop that it should run.
@@ -41,8 +42,13 @@ class While(val condition: () -> Boolean, val run: () -> Unit = {}, val callback
         if (timer == null) {
             timer = ElapsedTime()
         }
+        // Optional safety: only run every 250ms
+//        if (timer!!.milliseconds() + 250 < lastRun) {
+//            return true
+//        }
+//        lastRun = timer!!.milliseconds()
         if (condition() && timer!!.seconds() < timeoutSeconds) {
-            run()
+            runThis()
             return true
         }
         evalLatch = false
