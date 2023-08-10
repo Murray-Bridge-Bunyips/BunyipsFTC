@@ -25,6 +25,13 @@ data class RobotVector(var x: Double, var y: Double, var r: Double) {
     }
 
     /**
+     * Subtract two vectors from each other.
+     */
+    operator fun minus(other: RobotVector): RobotVector {
+        return RobotVector(x - other.x, y - other.y, r - other.r)
+    }
+
+    /**
      * Flip the vector to be of opposite magnitude.
      */
     fun flip() {
@@ -56,6 +63,14 @@ data class RobotVector(var x: Double, var y: Double, var r: Double) {
         val magnitude = mag / sqrt(x * x + y * y)
         x *= magnitude
         y *= magnitude
+    }
+
+    /**
+     * Set a vector's XY magnitude manually.
+     */
+    fun setXY(toSet: Double) {
+        if (x != 0.0) x = toSet
+        if (y != 0.0) y = toSet
     }
 
     companion object {

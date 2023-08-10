@@ -49,13 +49,17 @@ class JerryVectorDriveTask<T>(
         }
 
         // Normalise vector by desired speed
-        normalisedVector.normalise(power)
+        normalisedVector.setXY(power)
 
         // Ensure that the robot moves correctly and is not fed with negative values
         power = abs(power)
 
         // Convert vector to relative vector
-        direction = RelativeVector.convert(normalisedVector)
+        direction = if (vector is RobotVector) {
+            RelativeVector.convert(normalisedVector)
+        } else {
+            vector as RelativeVector
+        }
     }
 
     override fun isFinished(): Boolean {
@@ -92,9 +96,9 @@ class JerryVectorDriveTask<T>(
             drive?.deinit()
             return
         }
-
-        val correctedVector = imu?.getCorrectedVector(normalisedVector) ?: normalisedVector
-        drive?.setVector(correctedVector)
+        opMode.log("$normalisedVector")
+//        val correctedVector = imu?.getCorrectedVector(normalisedVector) ?: normalisedVector
+        drive?.setVector(normalisedVector)
 
         // Encoders will continue to track automatically
         drive?.update()
@@ -123,24 +127,24 @@ class JerryVectorDriveTask<T>(
             }"
         )
 
-        opMode.addTelemetry(
-            "Running vector: ${
-                String.format("%.2f", correctedVector.x)
-            }, ${
-                String.format("%.2f", correctedVector.y)
-            }, ${
-                String.format("%.2f", correctedVector.r)
-            }"
-        )
-
-        opMode.addTelemetry(
-            "Vector correction: ${
-                String.format("%.2f", correctedVector.x - normalisedVector.x)
-            }, ${
-                String.format("%.2f", correctedVector.y - normalisedVector.y)
-            }, ${
-                String.format("%.2f", correctedVector.r - normalisedVector.r)
-            }"
-        )
+//        opMode.addTelemetry(
+//            "Running vector: ${
+//                String.format("%.2f", correctedVector.x)
+//            }, ${
+//                String.format("%.2f", correctedVector.y)
+//            }, ${
+//                String.format("%.2f", correctedVector.r)
+//            }"
+//        )
+//
+//        opMode.addTelemetry(
+//            "Vector correction: ${
+//                String.format("%.2f", correctedVector.x - normalisedVector.x)
+//            }, ${
+//                String.format("%.2f", correctedVector.y - normalisedVector.y)
+//            }, ${
+//                String.format("%.2f", correctedVector.r - normalisedVector.r)
+//            }"
+//        )
     }
 }
