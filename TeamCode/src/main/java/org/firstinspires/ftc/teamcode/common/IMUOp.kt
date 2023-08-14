@@ -184,10 +184,11 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
         this.tick()
         val current = this.heading
 
+        // FIXME: Buggy, may be due to vector drive not working to begin with
         val normalisedError = AngleUnit.normalizeDegrees(this.capture!! - current)
         val correctionVector = RobotVector.calcPolar(normalisedError, AngleUnit.DEGREES)
 
         // Add the correction vector to the original vector
-        return vec - correctionVector
+        return vec + correctionVector
     }
 }

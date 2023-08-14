@@ -29,6 +29,7 @@ class JerryVectorDriveTask<T>(
     private val distanceMM: Double,
     vector: T,
     private var power: Double,
+    private val tolerance: Double = 2.0 // Optional tolerance
 ) : Task(opMode, time), TaskImpl {
 
     private var normalisedVector: RobotVector = when (vector) {
@@ -48,11 +49,11 @@ class JerryVectorDriveTask<T>(
             )
         }
 
-        // Normalise vector by desired speed
-        normalisedVector.setXY(power)
-
         // Ensure that the robot moves correctly and is not fed with negative values
         power = abs(power)
+
+        // Normalise vector by desired speed
+        normalisedVector.setXY(power)
 
         // Convert vector to relative vector
         direction = if (vector is RobotVector) {
@@ -65,16 +66,16 @@ class JerryVectorDriveTask<T>(
     override fun isFinished(): Boolean {
         when (direction) {
             RelativeVector.LEFT -> {
-                return super.isFinished() || x != null && x.travelledMM() >= distanceMM
+                return super.isFinished() || (x != null && x.travelledMM() >= distanceMM)
             }
             RelativeVector.RIGHT -> {
-                return super.isFinished() || x != null && x.travelledMM() <= distanceMM
+                return super.isFinished() || (x != null && x.travelledMM() <= distanceMM)
             }
             RelativeVector.FORWARD -> {
-                return super.isFinished() || y != null && y.travelledMM() >= distanceMM
+                return super.isFinished() || (y != null && y.travelledMM() >= distanceMM)
             }
             RelativeVector.BACKWARD -> {
-                return super.isFinished() || y != null && y.travelledMM() <= distanceMM
+                return super.isFinished() || (y != null && y.travelledMM() <= distanceMM)
             }
             else -> {
                 // Cannot calculate if the dead wheels are not available or if the direction can't
@@ -96,7 +97,8 @@ class JerryVectorDriveTask<T>(
             drive?.deinit()
             return
         }
-        opMode.log("$normalisedVector")
+
+//        normalisedVector.r = imu?.getRPrecisionSpeed(0.0, 2.0) ?: 0.0
 //        val correctedVector = imu?.getCorrectedVector(normalisedVector) ?: normalisedVector
         drive?.setVector(normalisedVector)
 
@@ -126,25 +128,5 @@ class JerryVectorDriveTask<T>(
                 String.format("%.2f", normalisedVector.r)
             }"
         )
-
-//        opMode.addTelemetry(
-//            "Running vector: ${
-//                String.format("%.2f", correctedVector.x)
-//            }, ${
-//                String.format("%.2f", correctedVector.y)
-//            }, ${
-//                String.format("%.2f", correctedVector.r)
-//            }"
-//        )
-//
-//        opMode.addTelemetry(
-//            "Vector correction: ${
-//                String.format("%.2f", correctedVector.x - normalisedVector.x)
-//            }, ${
-//                String.format("%.2f", correctedVector.y - normalisedVector.y)
-//            }, ${
-//                String.format("%.2f", correctedVector.r - normalisedVector.r)
-//            }"
-//        )
     }
 }

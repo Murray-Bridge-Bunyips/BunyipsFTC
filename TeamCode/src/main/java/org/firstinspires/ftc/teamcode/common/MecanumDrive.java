@@ -194,10 +194,14 @@ public abstract class MecanumDrive extends BunyipsComponent {
     public <T> void setVector(T vector) {
         if (vector instanceof RobotVector) {
             RobotVector robotVector = (RobotVector) vector;
-            setSpeedXYR(robotVector.getX(), -robotVector.getY(), robotVector.getR());
+            this.speedX = robotVector.getX();
+            this.speedY = robotVector.getY();
+            this.speedR = robotVector.getR();
         } else if (vector instanceof RelativeVector) {
             RelativeVector relativeVector = (RelativeVector) vector;
-            setSpeedXYR(relativeVector.getVector().getX(), -relativeVector.getVector().getY(), relativeVector.getVector().getR());
+            this.speedX = relativeVector.getVector().getX();
+            this.speedY = relativeVector.getVector().getY();
+            this.speedR = relativeVector.getVector().getR();
         }
     }
 
