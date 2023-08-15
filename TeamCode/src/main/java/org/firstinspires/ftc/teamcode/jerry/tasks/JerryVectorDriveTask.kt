@@ -28,8 +28,7 @@ class JerryVectorDriveTask<T>(
     private val y: Odometer?,
     private val distanceMM: Double,
     vector: T,
-    private var power: Double,
-    private val tolerance: Double = 2.0 // Optional tolerance
+    private var power: Double
 ) : Task(opMode, time), TaskImpl {
 
     private var normalisedVector: RobotVector = when (vector) {
@@ -51,9 +50,7 @@ class JerryVectorDriveTask<T>(
 
         // Ensure that the robot moves correctly and is not fed with negative values
         power = abs(power)
-
-        // Normalise vector by desired speed
-        normalisedVector.setXY(power)
+        normalisedVector.normalise(power)
 
         // Convert vector to relative vector
         direction = if (vector is RobotVector) {
@@ -61,33 +58,40 @@ class JerryVectorDriveTask<T>(
         } else {
             vector as RelativeVector
         }
+
+        // Must rotate vectors 90 degrees to offset to the robot motor configuration
+        normalisedVector.right()
     }
 
     override fun isFinished(): Boolean {
+        val timeUp = super.isFinished()
+        var deadwheelsDone = false
         when (direction) {
             RelativeVector.LEFT -> {
-                return super.isFinished() || (x != null && x.travelledMM() >= distanceMM)
+                deadwheelsDone = x != null && x.travelledMM() >= distanceMM
             }
             RelativeVector.RIGHT -> {
-                return super.isFinished() || (x != null && x.travelledMM() <= distanceMM)
+                deadwheelsDone = x != null && x.travelledMM() <= distanceMM
             }
             RelativeVector.FORWARD -> {
-                return super.isFinished() || (y != null && y.travelledMM() >= distanceMM)
+                deadwheelsDone = y != null && y.travelledMM() >= distanceMM
             }
             RelativeVector.BACKWARD -> {
-                return super.isFinished() || (y != null && y.travelledMM() <= distanceMM)
+                deadwheelsDone = y != null && y.travelledMM() <= distanceMM
             }
             else -> {
                 // Cannot calculate if the dead wheels are not available or if the direction can't
                 // be tracked through the two dead wheels
-                return super.isFinished()
             }
         }
+        return timeUp || deadwheelsDone
     }
 
     override fun init() {
         super.init()
         imu?.startCapture()
+//        x?.reset()
+//        y?.reset()
         x?.track()
         y?.track()
     }
@@ -128,5 +132,25 @@ class JerryVectorDriveTask<T>(
                 String.format("%.2f", normalisedVector.r)
             }"
         )
+
+//        opMode.addTelemetry(
+//            "Running vector: ${
+//                String.format("%.2f", correctedVector.x)
+//            }, ${
+//                String.format("%.2f", correctedVector.y)
+//            }, ${
+//                String.format("%.2f", correctedVector.r)
+//            }"
+//        )
+//
+//        opMode.addTelemetry(
+//            "Vector correction: ${
+//                String.format("%.2f", correctedVector.x - normalisedVector.x)
+//            }, ${
+//                String.format("%.2f", correctedVector.y - normalisedVector.y)
+//            }, ${
+//                String.format("%.2f", correctedVector.r - normalisedVector.r)
+//            }"
+//        )
     }
 }

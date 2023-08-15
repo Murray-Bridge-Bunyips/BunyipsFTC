@@ -37,7 +37,9 @@ enum class RelativeVector(val vector: RobotVector) {
                 vector.x < -0.5 -> LEFT
                 vector.y > 0.5 -> FORWARD
                 vector.y < -0.5 -> BACKWARD
-                else -> throw IllegalArgumentException("Vector is not a valid relative vector.")
+                vector.r > 0 -> CLOCKWISE
+                vector.r < 0 -> ANTICLOCKWISE
+                else -> throw IllegalArgumentException("$vector cannot be converted to a RelativeVector.")
             }
         }
     }

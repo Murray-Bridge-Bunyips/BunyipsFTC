@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common
 
+import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import kotlin.math.atan2
@@ -21,14 +22,14 @@ data class RobotVector(var x: Double, var y: Double, var r: Double) {
      * Add two vectors together.
      */
     operator fun plus(other: RobotVector): RobotVector {
-        return RobotVector(x + other.x, y + other.y, r + other.r)
+        return RobotVector(Range.clip(x + other.x, -1.0, 1.0), Range.clip(y + other.y, -1.0, 1.0), Range.clip(r + other.r, -1.0, 1.0))
     }
 
     /**
      * Subtract two vectors from each other.
      */
     operator fun minus(other: RobotVector): RobotVector {
-        return RobotVector(x - other.x, y - other.y, r - other.r)
+        return RobotVector(Range.clip(x - other.x, -1.0, 1.0), Range.clip(y - other.y, -1.0, 1.0), Range.clip(r - other.r, -1.0, 1.0))
     }
 
     /**
@@ -44,33 +45,34 @@ data class RobotVector(var x: Double, var y: Double, var r: Double) {
      * Rotate the vector 90 degrees clockwise.
      */
     fun right() {
-        x = y
-        y = -x
+        val newX = y
+        val newY = -x
+        x = newX
+        y = newY
     }
 
     /**
      * Rotate the vector 90 degrees anticlockwise.
      */
     fun left() {
-        x = -y
-        y = x
+        val newX = -y
+        val newY = x
+        x = newX
+        y = newY
     }
 
     /**
      * Normalise the vector by a given magnitude.
      */
     fun normalise(mag: Double) {
+        if (mag == 0.0) {
+            x = 0.0
+            y = 0.0
+            return
+        }
         val magnitude = mag / sqrt(x * x + y * y)
         x *= magnitude
         y *= magnitude
-    }
-
-    /**
-     * Set a vector's XY magnitude manually.
-     */
-    fun setXY(toSet: Double) {
-        if (x != 0.0) x = toSet
-        if (y != 0.0) y = toSet
     }
 
     companion object {
