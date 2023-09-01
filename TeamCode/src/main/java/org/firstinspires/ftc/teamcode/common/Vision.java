@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.VisionPortalImpl;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -39,6 +40,21 @@ public class Vision extends BunyipsComponent {
     public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam) {
         super(opMode);
         this.webcam = webcam;
+    }
+
+    /**
+     * Builds the VisionPortal after the VisionPortal has been constructed.
+     * @param builder Processor-rich builder pattern for the VisionPortal
+     * @return VisionPortalImpl
+     */
+    private VisionPortal constructVisionPortal(VisionPortal.Builder builder) {
+        return builder
+            .setCamera(webcam)
+            .setCameraResolution(new Size(1280, 720))
+            .enableCameraMonitoring(true)
+            .setAutoStopLiveView(true)
+            // Set any additional VisionPortal settings here
+            .build();
     }
 
     /**
@@ -75,13 +91,7 @@ public class Vision extends BunyipsComponent {
             builder.addProcessor(processor);
         }
 
-        visionPortal = builder
-                .setCamera(webcam)
-                .setCameraResolution(new Size(1280, 720))
-                .enableCameraMonitoring(true)
-                .setAutoStopLiveView(true)
-                // Set any additional VisionPortal settings here
-                .build();
+        visionPortal = constructVisionPortal(builder);
 
         // Disable the vision processors by default. The OpMode must call start() to enable them.
         for (VisionProcessor processor : initialisedProcessors) {
@@ -90,6 +100,43 @@ public class Vision extends BunyipsComponent {
 
         // Disable live view by default
         visionPortal.stopLiveView();
+    }
+
+    /**
+     * Add a custom VisionProcessor that is not AprilTag or TFOD.
+     * This method should be called with the VisionPortal already initialised with init().
+     * !! This method may be expensive to call as it will reconstruct the VisionPortal.
+     */
+    public void addCustomProcessor(VisionProcessor processor) {
+        if (visionPortal == null) {
+            throw new IllegalStateException("VisionPortal is not initialised!");
+        }
+        if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
+            throw new IllegalArgumentException("Cannot add TFOD or AprilTag processors with this method!");
+        }
+        // Reconstruct the VisionPortal with the new processor
+        VisionPortal.Builder builder = new VisionPortal.Builder();
+        if (tfod != null) {
+            builder.addProcessor(tfod);
+        }
+        if (aprilTag != null) {
+            builder.addProcessor(aprilTag);
+        }
+        builder.addProcessor(processor);
+        visionPortal = constructVisionPortal(builder);
+    }
+
+    /**
+     * Start or stop a custom VisionProcessor that is not AprilTag or TFOD. (Level 2)
+     */
+    public void setCustomProcessorState(VisionProcessor processor, boolean state) {
+        if (visionPortal == null) {
+            throw new IllegalStateException("VisionPortal is not initialised!");
+        }
+        if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
+            throw new IllegalArgumentException("Cannot start TFOD or AprilTag processors with this method!");
+        }
+        visionPortal.setProcessorEnabled(processor, state);
     }
 
     /**
