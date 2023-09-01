@@ -1,20 +1,21 @@
 	=== MURRAY BRIDGE BUNYIPS CODE REPOSITORY ===
 	Contains SDK used for all Android Studio developed FTC robots
 	
-	South Australian FTC Team 15215, Murray Bridge High School
-	Close collaboration with RoboRoos, Paladins of St Paul's, Popups, and more!
+	South Australian FTC Teams 15215, 22407
+    Murray Bridge High School
 	
 	ACTIVE ROBOT CODE in this repository (under src/main/java/.../teamcode):
         	JERRY: Mecanum-drive PowerPlay robot for 2022-2023 season
-		DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS
+            * new robots coming with CenterStage... *
 
 	Archived robot code in this repository (under src/main/archived):
+            DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS
 		BERTIE: Mecanum-drive FreightFrenzy robot for 2021-2022 season
 		LISA-I: Old legacy code for Lisa minibot, dangerous territory.
         	LISA: Two-wheel-drive minibot for high-speed performance
 	
 	Robot code not in this repository (written in Blocks by other members of the club):
-		GROOT: Two-wheel-drive PowerPlay robot for PowerPlay unofficial third team
+		UNNAMED: Mecanum-drive starter-kit PowerPlay robot for our temporary MURRAY CODS team 
 
 [![CodeFactor](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc/badge)](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc)
 
