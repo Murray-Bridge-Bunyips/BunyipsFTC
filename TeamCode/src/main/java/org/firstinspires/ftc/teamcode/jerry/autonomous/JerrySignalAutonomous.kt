@@ -5,7 +5,6 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.Odometer
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
-import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.GetParkingPositionTask
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
@@ -36,16 +35,16 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         // Configuration of camera and drive components
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         cam = OpenCVCam(this, config.webcam, config.monitorID)
-        if (config.assert(config.driveMotors))
+        if (config.affirm(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        if (config.assert(config.fl))
+        if (config.affirm(config.fl))
             x = Odometer(this, config.fl!!, config.xDiameter, config.xTicksPerRev)
 
-        if (config.assert(config.fr))
+        if (config.affirm(config.fr))
             y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
-        if (config.assert(config.imu))
+        if (config.affirm(config.imu))
             imu = IMUOp(this, config.imu!!)
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our

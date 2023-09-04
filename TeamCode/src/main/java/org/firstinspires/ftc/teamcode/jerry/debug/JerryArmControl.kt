@@ -16,7 +16,7 @@ class JerryArmControl : BunyipsOpMode() {
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        if (config.assert(config.armComponents)) {
+        if (config.affirm(config.armComponents)) {
             arm = JerryLift(
                 this,
                 JerryLift.ControlMode.MANUAL,

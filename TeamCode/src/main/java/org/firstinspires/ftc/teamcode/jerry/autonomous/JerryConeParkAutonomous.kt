@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap
 import org.firstinspires.ftc.teamcode.common.IMUOp
@@ -42,16 +41,16 @@ class JerryConeParkAutonomous : BunyipsOpMode() {
         // Configuration of camera and drive components
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         cam = OpenCVCam(this, config.webcam, config.monitorID)
-        if (config.assert(config.driveMotors))
+        if (config.affirm(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        if (config.assert(config.fl))
+        if (config.affirm(config.fl))
             x = Odometer(this, config.fl!!, config.xDiameter, config.xTicksPerRev)
 
-        if (config.assert(config.fr))
+        if (config.affirm(config.fr))
             y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
-        if (config.assert(config.imu))
+        if (config.affirm(config.imu))
             imu = IMUOp(this, config.imu!!)
 
         // Queue tasks for moving the cone forward or backwards based on the start position

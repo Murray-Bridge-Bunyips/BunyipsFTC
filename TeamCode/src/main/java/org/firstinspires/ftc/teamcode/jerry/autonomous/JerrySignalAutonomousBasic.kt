@@ -33,7 +33,7 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         // Configuration of camera and drive components
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         cam = OpenCVCam(this, config.webcam, config.monitorID)
-        if (config.assert(config.driveMotors))
+        if (config.affirm(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our

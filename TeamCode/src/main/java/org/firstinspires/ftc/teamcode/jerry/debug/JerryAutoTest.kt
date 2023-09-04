@@ -34,12 +34,12 @@ class JerryAutoTest : BunyipsOpMode() {
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        if (config.assert(config.driveMotors)) {
+        if (config.affirm(config.driveMotors)) {
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
         }
 
         drive?.setToBrake()
-        if (config.assert(config.imu)) {
+        if (config.affirm(config.imu)) {
             imu = IMUOp(this, config.imu!!)
         }
         tasks.add(
@@ -49,7 +49,7 @@ class JerryAutoTest : BunyipsOpMode() {
                 "well here we are again, it's always such a pleasure, remember when you tried to kill me twice"
             )
         )
-        if (config.assert(config.armComponents)) {
+        if (config.affirm(config.armComponents)) {
             arm = JerryArm(
                 this,
                 config.claw!!,

@@ -6,6 +6,7 @@
 	
 	ACTIVE ROBOT CODE in this repository (under src/main/java/.../teamcode):
         	JERRY: Mecanum-drive PowerPlay robot for 2022-2023 season
+            MULYA: Basic skeletion of Mulywonks CenterStage robot for 2023-2024 season
             * new robots coming with CenterStage... *
 
 	Archived robot code in this repository (under src/main/archived):

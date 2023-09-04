@@ -35,10 +35,10 @@ class JerryTeleOp : BunyipsOpMode() {
         // Configure drive and lift subsystems
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         val mode = ButtonHashmap.map(this, "POV", "FIELD-CENTRIC")
-        if (config.assert(config.imu)) {
+        if (config.affirm(config.imu)) {
             imu = IMUOp(this, config.imu!!)
         }
-        if (config.assert(config.driveMotors)) {
+        if (config.affirm(config.driveMotors)) {
             if (mode == "POV" || imu == null) {
                 drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
             } else {
@@ -46,7 +46,7 @@ class JerryTeleOp : BunyipsOpMode() {
             }
         }
         drive?.setToBrake()
-        if (config.assert(config.armComponents)) {
+        if (config.affirm(config.armComponents)) {
             lift = JerryLift(
                 this,
                 JerryLift.ControlMode.MANUAL,

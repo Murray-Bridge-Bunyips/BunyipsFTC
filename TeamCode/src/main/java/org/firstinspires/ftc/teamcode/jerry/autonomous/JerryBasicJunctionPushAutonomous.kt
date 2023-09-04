@@ -2,11 +2,9 @@ package org.firstinspires.ftc.teamcode.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.ButtonControl
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.Odometer
-import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -33,16 +31,16 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        if (config.assert(config.driveMotors))
+        if (config.affirm(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        if (config.assert(config.fl))
+        if (config.affirm(config.fl))
             x = Odometer(this, config.fl!!, config.xDiameter, config.xTicksPerRev)
 
-        if (config.assert(config.fr))
+        if (config.affirm(config.fr))
             y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
-        if (config.assert(config.imu))
+        if (config.affirm(config.imu))
             imu = IMUOp(this, config.imu!!)
 
         when (ButtonHashmap.map(this, "Drive Left", "Drive Right")) {

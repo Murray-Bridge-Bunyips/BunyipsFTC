@@ -39,7 +39,7 @@ abstract class RobotConfig {
     /**
      * Check if hardware is available by checking if the instance is null.
      */
-    fun assert(vararg devices: HardwareDevice?): Boolean {
+    fun affirm(vararg devices: HardwareDevice?): Boolean {
         for (device in devices) {
             if (device == null) {
                 return false
@@ -48,7 +48,7 @@ abstract class RobotConfig {
         return true
     }
 
-    fun assert(devices: List<HardwareDevice?>) = assert(*devices.toTypedArray())
+    fun affirm(devices: List<HardwareDevice?>) = affirm(*devices.toTypedArray())
 
     companion object {
         /**
