@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfig;
  * Functionality is currently unknown...
  * @author Lucas Bubner, 2023
  */
-@TeleOp(name = "GLADOS: TeleOp", group = "GlADOS")
+@TeleOp(name = "GLADOS: TeleOp", group = "GLADOS")
 public class GLaDOSTeleOp extends BunyipsOpMode {
     private GLaDOSConfig config = new GLaDOSConfig();
     private Vision vision;
