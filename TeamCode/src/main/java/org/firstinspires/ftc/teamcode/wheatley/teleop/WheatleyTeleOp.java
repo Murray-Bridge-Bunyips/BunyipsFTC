@@ -1,13 +1,13 @@
-package org.firstinspires.ftc.teamcode.mulya.teleop;
+package org.firstinspires.ftc.teamcode.wheatley.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
-import org.firstinspires.ftc.teamcode.mulya.components.MulyaConfig;
+import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 
 /**
- * Primary TeleOp for all of Mulya's functions.
+ * Primary TeleOp for all of Wheatley's functions.
  * Uses gamepad1 for drive control (presumably) and gamepad2 for... something
  * > gamepad1 left stick for driving
  * > gamepad1 right stick for turning
@@ -15,15 +15,15 @@ import org.firstinspires.ftc.teamcode.mulya.components.MulyaConfig;
  * @author Lachlan Paul, 2023
  */
 
-@TeleOp(name = "MULYA: TeleOp", group = "MULYA")
-public class MulyaTeleOp extends BunyipsOpMode {
+@TeleOp(name = "WHEATLEY: TeleOp", group = "WHEATLEY")
+public class WheatleyTeleOp extends BunyipsOpMode {
 
-    private MulyaConfig config = new MulyaConfig();
+    private WheatleyConfig config = new WheatleyConfig();
 
     @Override
     protected void onInit() {
 
-        config = (MulyaConfig) RobotConfig.newConfig(this, config, hardwareMap);
+        config = (WheatleyConfig) RobotConfig.newConfig(this, config, hardwareMap);
 
     }
 

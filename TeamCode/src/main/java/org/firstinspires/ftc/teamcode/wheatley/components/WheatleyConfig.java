@@ -1,13 +1,12 @@
-package org.firstinspires.ftc.teamcode.mulya.components;
+package org.firstinspires.ftc.teamcode.wheatley.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
 /**
- * Mulya robot configuration and hardware declarations
+ * Wheatley robot configuration and hardware declarations
  *
  * NOTE: As of initial writing, we have nearly no idea what hardware specifications we will be using
  * This is almost all guessing and taking hints from new SDK features, mostly copied from DinoMighty
@@ -15,7 +14,7 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
  * @author Lachlan Paul, 2023
  */
 
-public class MulyaConfig extends RobotConfig {
+public class WheatleyConfig extends RobotConfig {
 
     //    front_servo = hardwareMap.get(Servo.class, "front_servo");
     //    back_servo = hardwareMap.get(Servo.class, "back_servo")
