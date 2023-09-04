@@ -60,7 +60,7 @@ public class Vision extends BunyipsComponent {
     /**
      * Initialises the Vision class with the specified processors.
      * This method should only be called once per OpMode.
-     *
+     * Processors will be STOPPED by default, you must call start() after initialising.
      * @param processors TFOD and/or AprilTag
      */
     public void init(Processors... processors) {

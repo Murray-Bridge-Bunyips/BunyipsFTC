@@ -186,12 +186,8 @@ abstract class BunyipsOpMode : LinearOpMode() {
         }
     }
 
-    /**
-     * Shorthand for addTelemetry(`value`, `retained`)
-     * Useful when passing by reference using ::telem
-     */
-    fun telem(value: String, retained: Boolean = false) {
-        addTelemetry(value, retained)
+    fun addTelemetry(value: String) {
+        addTelemetry(value, false)
     }
 
     /**

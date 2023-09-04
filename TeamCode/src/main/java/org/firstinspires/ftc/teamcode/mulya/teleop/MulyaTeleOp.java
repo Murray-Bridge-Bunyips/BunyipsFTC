@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.mulya.components.MulyaConfig;
  * @author Lachlan Paul, 2023
  */
 
-@TeleOp(name = "Mulya TeleOp")
+@TeleOp(name = "MULYA: TeleOp", group = "MULYA")
 public class MulyaTeleOp extends BunyipsOpMode {
 
     private MulyaConfig config = new MulyaConfig();
@@ -31,14 +31,14 @@ public class MulyaTeleOp extends BunyipsOpMode {
     protected void activeLoop() {
 
         // Adds a message on the driver hub stating the status of different controller inputs
-        addTelemetry("Left Stick Y: " + gamepad1.left_stick_y, false);
-        addTelemetry("Left Stick X: " + gamepad1.left_stick_x, false);
+        addTelemetry("Left Stick Y: " + gamepad1.left_stick_y);
+        addTelemetry("Left Stick X: " + gamepad1.left_stick_x);
 
         // Gives a different message based on whether or not the camera is connected
         if (config.affirm(config.webCam) == true) {
-            addTelemetry("Camera is connected", false);
+            addTelemetry("Camera is connected");
         } else {
-            addTelemetry("Camera is NOT connected", false);
+            addTelemetry("Camera is NOT connected");
         }
     }
 }
