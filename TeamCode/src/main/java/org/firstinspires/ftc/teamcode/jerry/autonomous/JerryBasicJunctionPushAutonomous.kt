@@ -28,7 +28,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
     private var x: Odometer? = null
     private var y: Odometer? = null
     private val tasks = ArrayDeque<AutoTask>()
-    private val selection = AutonomousSelector(this, "Drive Left", "Drive Right")
+    private val selection = AutonomousSelector(this, {},  "Drive Left", "Drive Right")
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig

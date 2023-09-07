@@ -30,7 +30,7 @@ class JerryTeleOp : BunyipsOpMode() {
     private var drive: MecanumDrive? = null
     private var imu: IMUOp? = null
     private var lift: JerryLift? = null
-    private val selector: AutonomousSelector<String> = AutonomousSelector(this, "POV", "FIELD-CENTRIC")
+    private val selector: AutonomousSelector<String> = AutonomousSelector(this, { initDrive() }, "POV", "FIELD-CENTRIC")
 
     override fun onInit() {
         // Configure drive and lift subsystems
@@ -71,17 +71,10 @@ class JerryTeleOp : BunyipsOpMode() {
     }
 
     override fun onInitLoop(): Boolean {
-        if (selector.result != null) {
-            initDrive()
+        if (!selector.isAlive) {
             return true
         }
         return false
-    }
-
-    override fun onStart() {
-        if (selector.result == null) {
-            initDrive()
-        }
     }
 
     override fun activeLoop() {

@@ -8,36 +8,21 @@ package org.firstinspires.ftc.teamcode.common
  *
  * Keep in mind this thread runs in the background so it is not guaranteed to be ready during any
  * specific phase of your init-cycle. It is recommended to start this thread at the start of your
- * cycle and non-null checking throughout your `onInitLoop()` with a final evaluation at `onStart()`,
- * as the user will need to have selected an option by then. In the event a user has not selected
- * an option, your thread.result will be `null`.
+ * cycle and checking for `thread.isAlive()` or `thread.result != null` in your `onInitLoop()`.
+ * This is not required but it does let BunyipsOpMode know that you are waiting for a result.
  *
+ * The result of this thread will be stored in the `result` property, which you can access yourself
+ * or you can attach a callback to the `callback` property to be run once the thread is complete.
+ * This callback will still be run if the OpMode moves to a running state without a selection. In
+ * the event a user does not make a selection, the callback result and `result` property will be
+ * null.
  *
  * ```
- *     val thread = AutonomousSelector(this, "Option 1", "Option 2")
+ *    private val selector: AutonomousSelector<String> = AutonomousSelector(this, { if (it == "POV") initPOVDrive() else initFCDrive() }, "POV", "FIELD-CENTRIC")
  *
- *     override fun onInit() {
- *         thread.start()
- *         // Your other init code
- *     }
- *
- *     override fun onInitLoop(): Boolean {
- *         if (thread.result != null) {
- *             // Do something with thread.result, knowing that the user has selected an option
- *             return true
- *         }
- *         return false
- *     }
- *
- *     override fun onStart() {
- *         if (thread.result == null) {
- *             // Use a default action as the user has not selected an option
- *         }
- *
- *         // You can also instead use your thread.result result here without busy-waiting, but
- *         // it will only be run on OpMode start and should not be initialising heavy components such
- *         // as a drive system or camera. It is ideal for tasks.
- *     }
+ *    override fun onInit() {
+ *      selector.start()
+ *    }
  * ```
  *
  * Updated to use dynamic button mapping and generics 04/08/23.
@@ -47,7 +32,7 @@ package org.firstinspires.ftc.teamcode.common
  * @param opmodes Modes to map to buttons. Will be casted to strings for display and return back in type `T`.
  * @author Lucas Bubner, 2023
  */
-class AutonomousSelector<T>(private val opMode: BunyipsOpMode, private vararg val opmodes: T) :
+class AutonomousSelector<T>(private val opMode: BunyipsOpMode, var callback: (res: T?) -> Unit, private vararg val opmodes: T) :
     Thread(), Runnable {
 
     @Volatile
@@ -112,5 +97,7 @@ class AutonomousSelector<T>(private val opMode: BunyipsOpMode, private vararg va
         }
         opMode.telemetry.update()
         opMode.setTelemetryAutoClear(autoClearState)
+
+        callback(selectedOpMode)
     }
 }
