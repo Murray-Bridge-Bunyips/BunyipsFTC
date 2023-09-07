@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
-import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
+import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // Rotate the robot to a specific degree angle. This cannot be done with deadwheel assistance due to configuration.

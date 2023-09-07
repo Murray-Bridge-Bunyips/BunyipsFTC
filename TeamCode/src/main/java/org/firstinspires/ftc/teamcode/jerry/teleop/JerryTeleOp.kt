@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.jerry.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.teamcode.common.AutonomousSelector
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.ButtonHashmap
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.MecanumDrive
 import org.firstinspires.ftc.teamcode.common.RelativeVector
@@ -30,28 +30,14 @@ class JerryTeleOp : BunyipsOpMode() {
     private var drive: MecanumDrive? = null
     private var imu: IMUOp? = null
     private var lift: JerryLift? = null
+    private val selector: AutonomousSelector<String> = AutonomousSelector(this, "POV", "FIELD-CENTRIC")
 
     override fun onInit() {
         // Configure drive and lift subsystems
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        val mode = ButtonHashmap.map(this, "POV", "FIELD-CENTRIC")
+        selector.start()
         if (config.affirm(config.imu)) {
             imu = IMUOp(this, config.imu!!)
-        }
-        if (config.affirm(config.driveMotors)) {
-            if (mode == "POV" || imu == null) {
-                drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
-            } else {
-                drive = JerryPolarDrive(
-                    this,
-                    config.bl!!,
-                    config.br!!,
-                    config.fl!!,
-                    config.fr!!,
-                    imu!!,
-                    RelativeVector.FORWARD
-                )
-            }
         }
         drive?.setToBrake()
         if (config.affirm(config.armComponents)) {
@@ -63,6 +49,38 @@ class JerryTeleOp : BunyipsOpMode() {
                 config.arm2!!,
                 config.limit!!
             )
+        }
+    }
+
+    private fun initDrive() {
+        if (config.affirm(config.driveMotors)) {
+            if (selector.result == "FIELD-CENTRIC" || imu == null) {
+                drive = JerryPolarDrive(
+                    this,
+                    config.bl!!,
+                    config.br!!,
+                    config.fl!!,
+                    config.fr!!,
+                    imu!!,
+                    RelativeVector.FORWARD
+                )
+            } else {
+                drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+            }
+        }
+    }
+
+    override fun onInitLoop(): Boolean {
+        if (selector.result != null) {
+            initDrive()
+            return true
+        }
+        return false
+    }
+
+    override fun onStart() {
+        if (selector.result == null) {
+            initDrive()
         }
     }
 

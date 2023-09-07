@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.example.examplerobot.tasks;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
+import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleDrive;
 
 // Tasks are used to run OpMode code in Autonomous sections. It works by giving each task a specific

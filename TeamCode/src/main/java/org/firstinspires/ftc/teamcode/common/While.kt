@@ -3,8 +3,19 @@ package org.firstinspires.ftc.teamcode.common
 import com.qualcomm.robotcore.util.ElapsedTime
 
 /**
- * Perform non-blocking loops using an evaluator to run the loop.
- * This should be paired with an update() or activeLoop().
+ * Perform non-blocking loops using an evaluator callback to run the loop.
+ * This should be paired with an update(), activeLoop() or onInitLoop(),
+ * and this runs synchronously with the main loop.
+ *
+ * ```
+ *   override fun activeLoop() {
+ *       whileLoop.run()
+ *       // Your other active loop code
+ *       // You can choose to block the entire loop until the while loop is done by using a guard clause
+ *       // as the run method will return a boolean indicating if the loop was run.
+ *   }
+ * ```
+ *
  * @param condition The condition or function to evaluate as an exit. Return false to exit the loop.
  * @param runThis The function to run on each loop iteration.
  * @param callback The callback to run once [condition] is met.
@@ -24,6 +35,7 @@ class While(
 
     /**
      * Notify the loop that it should run.
+     * This will be the method you call to start the loop.
      */
     fun engage() {
         evalLatch = true

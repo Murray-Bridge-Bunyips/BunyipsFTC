@@ -170,8 +170,9 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Add data to the telemetry object
      * @param value A string to add to telemetry
      * @param retained Optional parameter to retain the data on the screen
+     * @return Index of the telemetry object printed to the screen if retained, otherwise -1
      */
-    fun addTelemetry(value: String, retained: Boolean = false) {
+    fun addTelemetry(value: String, retained: Boolean = false): Int {
         // Add data to the telemetry object with runtime data
         var prefix = "T+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: 0.0}s : "
         if (prefix == "T+0s : ") {
@@ -179,11 +180,14 @@ abstract class BunyipsOpMode : LinearOpMode() {
             prefix = ""
         }
         val item = telemetry.addData("", prefix + value)
+        var idx = -1
         if (retained) {
             // Set retained to true if the data is sticky
             item.setRetained(true)
-            stickyTelemetryObjects.add(Pair(stickyTelemetryObjects.size + 1, item))
+            idx = stickyTelemetryObjects.size + 1
+            stickyTelemetryObjects.add(Pair(idx, item))
         }
+        return idx
     }
 
     fun addTelemetry(value: String) {
@@ -200,7 +204,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     /**
      * Remove an entry from the telemetry object if it is sticky
      */
-    fun removeTelemetry(index: Int) {
+    fun removeTelemetryIndex(index: Int) {
         if (index > 0 && index <= stickyTelemetryObjects.size) {
             telemetry.removeItem(stickyTelemetryObjects[index - 1].second)
             stickyTelemetryObjects.removeAt(index - 1)
