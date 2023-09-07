@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.bertie.components.BertieDrive;
 import org.firstinspires.ftc.teamcode.bertie.tasks.BertieTimeDriveTask;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.ButtonControl;
-import org.firstinspires.ftc.teamcode.common.AutonomousSelector;
+import org.firstinspires.ftc.teamcode.common.UserSelection;
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
 

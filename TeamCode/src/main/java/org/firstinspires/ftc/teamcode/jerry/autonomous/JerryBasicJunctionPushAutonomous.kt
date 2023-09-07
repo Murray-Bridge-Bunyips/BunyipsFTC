@@ -1,11 +1,11 @@
 package org.firstinspires.ftc.teamcode.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import org.firstinspires.ftc.teamcode.common.AutonomousSelector
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.Odometer
 import org.firstinspires.ftc.teamcode.common.RobotConfig
+import org.firstinspires.ftc.teamcode.common.UserSelection
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
@@ -28,7 +28,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
     private var x: Odometer? = null
     private var y: Odometer? = null
     private val tasks = ArrayDeque<AutoTask>()
-    private val selection = AutonomousSelector(this, {},  "Drive Left", "Drive Right")
+    private val selection = UserSelection(this, {}, "Drive Left", "Drive Right")
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig

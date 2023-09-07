@@ -1,12 +1,12 @@
 package org.firstinspires.ftc.teamcode.jerry.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
-import org.firstinspires.ftc.teamcode.common.AutonomousSelector
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.MecanumDrive
 import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.RobotConfig
+import org.firstinspires.ftc.teamcode.common.UserSelection
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
@@ -30,7 +30,8 @@ class JerryTeleOp : BunyipsOpMode() {
     private var drive: MecanumDrive? = null
     private var imu: IMUOp? = null
     private var lift: JerryLift? = null
-    private val selector: AutonomousSelector<String> = AutonomousSelector(this, { initDrive() }, "POV", "FIELD-CENTRIC")
+    private val selector: UserSelection<String> =
+        UserSelection(this, { initDrive() }, "POV", "FIELD-CENTRIC")
 
     override fun onInit() {
         // Configure drive and lift subsystems

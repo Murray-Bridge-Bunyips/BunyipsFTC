@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.common
 
 /**
  * Async thread to ask for user input from a controller in order to determine a pre-determined
- * set of instructions before Autonomous.
+ * set of instructions before an OpMode starts.
  *
  * You really should only be running one of these threads at a time.
  *
@@ -18,7 +18,7 @@ package org.firstinspires.ftc.teamcode.common
  * null.
  *
  * ```
- *    private val selector: AutonomousSelector<String> = AutonomousSelector(this, { if (it == "POV") initPOVDrive() else initFCDrive() }, "POV", "FIELD-CENTRIC")
+ *    private val selector: UserSelection<String> = UserSelection(this, { if (it == "POV") initPOVDrive() else initFCDrive() }, "POV", "FIELD-CENTRIC")
  *
  *    override fun onInit() {
  *      selector.start()
@@ -32,7 +32,11 @@ package org.firstinspires.ftc.teamcode.common
  * @param opmodes Modes to map to buttons. Will be casted to strings for display and return back in type `T`.
  * @author Lucas Bubner, 2023
  */
-class AutonomousSelector<T>(private val opMode: BunyipsOpMode, var callback: (res: T?) -> Unit, private vararg val opmodes: T) :
+class UserSelection<T>(
+    private val opMode: BunyipsOpMode,
+    var callback: (res: T?) -> Unit,
+    private vararg val opmodes: T
+) :
     Thread(), Runnable {
 
     @Volatile
@@ -89,7 +93,14 @@ class AutonomousSelector<T>(private val opMode: BunyipsOpMode, var callback: (re
         }
 
         result = selectedOpMode
-        opMode.addTelemetry("'${selectedButton?.name}' registered. Running OpMode: '$selectedOpMode'", true)
+        if (result == null) {
+            opMode.addTelemetry("No selection made. Result was handled by the OpMode.", true)
+        } else {
+            opMode.addTelemetry(
+                "'${selectedButton?.name}' registered. Running OpMode: '$selectedOpMode'",
+                true
+            )
+        }
 
         // Clean up telemetry and reset auto clear
         for (id in stickyObjects) {
