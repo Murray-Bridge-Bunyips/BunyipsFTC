@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.tasks.Task
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // Base drive task which will run XYR speed for a given time
@@ -15,7 +15,7 @@ class JerryTimeDriveTask(
     private val x: Double,
     private val y: Double,
     private val r: Double
-) : Task(opMode, time), TaskImpl {
+) : Task(opMode, time), AutoTask {
     override fun run() {
         drive?.setSpeedXYR(x, -y, r)
         drive?.update()

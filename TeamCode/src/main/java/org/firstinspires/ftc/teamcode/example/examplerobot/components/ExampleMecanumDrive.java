@@ -54,6 +54,7 @@ public class ExampleMecanumDrive extends BunyipsComponent {
 
     /**
      * Set a speed at which the Mecanum drive assembly should move.
+     *
      * @param x The speed at which the robot should move in the x direction.
      *          Positive is right, negative is left.
      *          Range: -1.0 to 1.0

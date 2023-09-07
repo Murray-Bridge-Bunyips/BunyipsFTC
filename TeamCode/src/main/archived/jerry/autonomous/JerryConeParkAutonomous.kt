@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap
 import org.firstinspires.ftc.teamcode.common.IMUOp
@@ -24,7 +25,9 @@ import java.util.ArrayDeque
     group = "JERRY",
     preselectTeleOp = "JERRY: TeleOp"
 )
-//@Disabled
+@Disabled
+// Experimental Vector autonomous. This code was scrapped as it served little advantage over setSpeedXYR.
+// It is also more buggy and overall less reliable.
 class JerryConeParkAutonomous : BunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: OpenCVCam? = null

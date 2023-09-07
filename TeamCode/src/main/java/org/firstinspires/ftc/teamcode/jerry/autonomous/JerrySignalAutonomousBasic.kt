@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.GetParkingPositionTask
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
@@ -27,7 +27,7 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
     private var cam: OpenCVCam? = null
     private var drive: JerryDrive? = null
     private var tagtask: GetParkingPositionTask? = null
-    private val tasks = ArrayDeque<TaskImpl>()
+    private val tasks = ArrayDeque<AutoTask>()
 
     override fun onInit() {
         // Configuration of camera and drive components

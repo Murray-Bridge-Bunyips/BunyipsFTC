@@ -10,6 +10,7 @@ import java.util.Locale;
 /**
  * Base class for a drive system that uses Mecanum wheels.
  * Includes all the common math done across all Mecanum drive systems.
+ *
  * @author Lucas Bubner, 2023
  */
 public abstract class MecanumDrive extends BunyipsComponent {
@@ -46,6 +47,7 @@ public abstract class MecanumDrive extends BunyipsComponent {
 
     /**
      * Set a speed at which the Mecanum drive assembly should move.
+     *
      * @param x The speed at which the robot should move in the x direction.
      *          Positive is right, negative is left.
      *          Range: -1.0 to 1.0

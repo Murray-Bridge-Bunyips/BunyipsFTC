@@ -42,7 +42,15 @@ class JerryTeleOp : BunyipsOpMode() {
             if (mode == "POV" || imu == null) {
                 drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
             } else {
-                drive = JerryPolarDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!, imu!!, RelativeVector.FORWARD)
+                drive = JerryPolarDrive(
+                    this,
+                    config.bl!!,
+                    config.br!!,
+                    config.fl!!,
+                    config.fr!!,
+                    imu!!,
+                    RelativeVector.FORWARD
+                )
             }
         }
         drive?.setToBrake()

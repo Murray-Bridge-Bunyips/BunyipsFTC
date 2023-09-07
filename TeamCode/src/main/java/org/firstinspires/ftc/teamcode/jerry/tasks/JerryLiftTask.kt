@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.tasks.Task
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
 
 /**
@@ -15,7 +15,7 @@ class JerryLiftTask(
     private val lift: JerryLift?,
     private val percent: Int,
     private val power: Double? = null,
-) : Task(opMode, time), TaskImpl {
+) : Task(opMode, time), AutoTask {
 
     override fun init() {
         super.init()

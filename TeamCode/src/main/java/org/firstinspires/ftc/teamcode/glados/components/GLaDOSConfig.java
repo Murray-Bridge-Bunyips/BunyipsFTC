@@ -5,6 +5,7 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
 /**
  * FTC 15215 CENTERSTAGE 2023-2024 robot configuration
+ *
  * @author Lucas Bubner, 2023
  */
 public class GLaDOSConfig extends RobotConfig {

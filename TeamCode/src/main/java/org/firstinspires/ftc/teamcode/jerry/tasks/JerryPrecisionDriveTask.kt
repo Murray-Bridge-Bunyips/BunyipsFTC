@@ -3,10 +3,8 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.Odometer
-import org.firstinspires.ftc.teamcode.common.RelativeVector
-import org.firstinspires.ftc.teamcode.common.RobotVector
 import org.firstinspires.ftc.teamcode.common.tasks.Task
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import kotlin.math.abs
 
@@ -30,7 +28,7 @@ class JerryPrecisionDriveTask(
     private val direction: Directions,
     private var power: Double,
     private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
-) : Task(opMode, time), TaskImpl {
+) : Task(opMode, time), AutoTask {
 
     init {
         try {

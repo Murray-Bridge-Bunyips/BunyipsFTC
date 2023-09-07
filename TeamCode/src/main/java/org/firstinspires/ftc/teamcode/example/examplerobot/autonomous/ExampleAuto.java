@@ -17,14 +17,13 @@ public class ExampleAuto extends BunyipsOpMode {
     // See TeleOp before autonomous.
     // This is an example autonomous that will drive forward for 5 seconds, then stop.
 
-    // Declare drive and config components
-    private ExampleDrive drive;
-    private ExampleConfig config = new ExampleConfig();
-
     // !! The major difference between autonomous and teleop is that autonomous uses tasks to run
     // code, whereas teleop uses activeLoop() to run code. View ExampleTimeDriveTask.java for more
     // information on tasks. Here we will make a queue, which will store tasks to run.
     private final ArrayDeque<Task> tasks = new ArrayDeque<>();
+    // Declare drive and config components
+    private ExampleDrive drive;
+    private ExampleConfig config = new ExampleConfig();
 
     @Override
     protected void onInit() {

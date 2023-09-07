@@ -12,7 +12,12 @@ import com.qualcomm.robotcore.util.ElapsedTime
  *
  * @author Lucas Bubner, 2023
  */
-class While(val condition: () -> Boolean, val runThis: () -> Unit = {}, val callback: () -> Unit = {}, val timeoutSeconds: Double = 0.0) {
+class While(
+    val condition: () -> Boolean,
+    val runThis: () -> Unit = {},
+    val callback: () -> Unit = {},
+    val timeoutSeconds: Double = 0.0
+) {
     private var timer: ElapsedTime? = null
     private var evalLatch = false
 //    private var lastRun = 0.0

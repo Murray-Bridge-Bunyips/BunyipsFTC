@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 /**
  * Task to wait for a specific amount of time.
  */
-class WaitTask(opMode: BunyipsOpMode, time: Double) : Task(opMode, time), TaskImpl {
+class WaitTask(opMode: BunyipsOpMode, time: Double) : Task(opMode, time), AutoTask {
     override fun run() {
         opMode.idle()
     }

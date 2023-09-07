@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.common.ButtonHashmap
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.Odometer
 import org.firstinspires.ftc.teamcode.common.RobotConfig
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryPrecisionDriveTask
@@ -27,7 +27,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
     private var imu: IMUOp? = null
     private var x: Odometer? = null
     private var y: Odometer? = null
-    private val tasks = ArrayDeque<TaskImpl>()
+    private val tasks = ArrayDeque<AutoTask>()
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig

@@ -9,7 +9,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.VisionPortalImpl;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -44,23 +43,25 @@ public class Vision extends BunyipsComponent {
 
     /**
      * Builds the VisionPortal after the VisionPortal has been constructed.
+     *
      * @param builder Processor-rich builder pattern for the VisionPortal
      * @return VisionPortalImpl
      */
     private VisionPortal constructVisionPortal(VisionPortal.Builder builder) {
         return builder
-            .setCamera(webcam)
-            .setCameraResolution(new Size(1280, 720))
-            .enableCameraMonitoring(true)
-            .setAutoStopLiveView(true)
-            // Set any additional VisionPortal settings here
-            .build();
+                .setCamera(webcam)
+                .setCameraResolution(new Size(1280, 720))
+                .enableCameraMonitoring(true)
+                .setAutoStopLiveView(true)
+                // Set any additional VisionPortal settings here
+                .build();
     }
 
     /**
      * Initialises the Vision class with the specified processors.
      * This method should only be called once per OpMode.
      * Processors will be STOPPED by default, you must call start() after initialising.
+     *
      * @param processors TFOD and/or AprilTag
      */
     public void init(Processors... processors) {

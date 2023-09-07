@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.ButtonControl;
 import org.firstinspires.ftc.teamcode.common.ButtonHashmap;
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
 
 import java.util.ArrayDeque;
 

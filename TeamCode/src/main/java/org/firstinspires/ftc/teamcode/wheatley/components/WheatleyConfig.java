@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
 /**
  * Wheatley robot configuration and hardware declarations
- *
+ * <p>
  * NOTE: As of initial writing, we have nearly no idea what hardware specifications we will be using
  * This is almost all guessing and taking hints from new SDK features, mostly copied from DinoMighty
  *

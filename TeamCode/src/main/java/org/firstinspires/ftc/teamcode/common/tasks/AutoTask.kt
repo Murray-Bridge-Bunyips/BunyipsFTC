@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.common.tasks
 
 /**
- * Implementation of task system, inherit when creating a task.
+ * Structure of an Autonomous Task to be used during the autonomous period.
  */
-interface TaskImpl {
+interface AutoTask {
     fun init()
     fun run()
     fun isFinished(): Boolean

@@ -19,6 +19,7 @@ import kotlin.math.abs
  * @param vector The vector to travel in.
  * @author Lucas Bubner, 2023
  */
+// Vector drive system scrapped as XYR is easier to work with for Jerry. Might reinstate with CenterStage.
 class JerryVectorDriveTask<T>(
     opMode: BunyipsOpMode,
     time: Double,

@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -22,14 +21,22 @@ data class RobotVector(var x: Double, var y: Double, var r: Double) {
      * Add two vectors together.
      */
     operator fun plus(other: RobotVector): RobotVector {
-        return RobotVector(Range.clip(x + other.x, -1.0, 1.0), Range.clip(y + other.y, -1.0, 1.0), Range.clip(r + other.r, -1.0, 1.0))
+        return RobotVector(
+            Range.clip(x + other.x, -1.0, 1.0),
+            Range.clip(y + other.y, -1.0, 1.0),
+            Range.clip(r + other.r, -1.0, 1.0)
+        )
     }
 
     /**
      * Subtract two vectors from each other.
      */
     operator fun minus(other: RobotVector): RobotVector {
-        return RobotVector(Range.clip(x - other.x, -1.0, 1.0), Range.clip(y - other.y, -1.0, 1.0), Range.clip(r - other.r, -1.0, 1.0))
+        return RobotVector(
+            Range.clip(x - other.x, -1.0, 1.0),
+            Range.clip(y - other.y, -1.0, 1.0),
+            Range.clip(r - other.r, -1.0, 1.0)
+        )
     }
 
     /**

@@ -4,14 +4,14 @@ import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
 import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleDrive;
 
 // Tasks are used to run OpMode code in Autonomous sections. It works by giving each task a specific
 // amount of time to run, where it has it's own loop to run code in. This is useful for running
 // specific tasks, such as moving the drive system for a certain amount of time, or until a certain
 // condition is met.
-public class ExampleTimeDriveTask extends Task implements TaskImpl {
+public class ExampleTimeDriveTask extends Task implements AutoTask {
     // You will need to store any COMPONENTS you wish to control in your task as a local instance
     private final ExampleDrive drive;
 

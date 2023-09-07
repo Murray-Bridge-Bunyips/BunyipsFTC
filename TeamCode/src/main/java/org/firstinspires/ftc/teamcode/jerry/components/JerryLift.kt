@@ -34,7 +34,7 @@ class JerryLift(
     private var holdPosition: Int? = null
 
     private var deltaTimeout = 0
-    private val resetLock = While (
+    private val resetLock = While(
         condition = {
             // Check if the delta is above 0 for 30 consecutive loops, if so, we have hit the limit
             val prev = (motors[0].currentPosition + motors[1].currentPosition) / 2
@@ -70,7 +70,7 @@ class JerryLift(
         timeoutSeconds = 5.0
     )
 
-    private val releaseLock = While (
+    private val releaseLock = While(
         condition = {
             // Release lock when motors have reached the target or manually interrupted
             arm1.isBusy && arm2.isBusy && !opMode.gamepad2.right_bumper

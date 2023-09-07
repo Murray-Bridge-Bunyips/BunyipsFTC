@@ -6,7 +6,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
  * Abstract implementation class to use custom ArrayDeque tasks in an
  * activeLoop, simulating multiple different looping operations in a linear sense.
  */
-abstract class Task : TaskImpl {
+abstract class Task : AutoTask {
     protected var time: Double
 
     @Volatile

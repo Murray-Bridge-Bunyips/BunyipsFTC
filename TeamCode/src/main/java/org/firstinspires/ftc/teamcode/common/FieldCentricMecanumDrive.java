@@ -6,11 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * Variant of the MecanumDrive that uses field centric control.
- * @see MecanumDrive
+ *
  * @author Lucas Bubner, 2023
+ * @see MecanumDrive
  */
 public abstract class FieldCentricMecanumDrive extends MecanumDrive {
-    private IMUOp imu;
+    private final IMUOp imu;
 
     public FieldCentricMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, RelativeVector startingDirection) {
         super(opMode, frontLeft, backLeft, frontRight, backRight);
