@@ -51,7 +51,7 @@ public class Vision extends BunyipsComponent {
         return builder
                 .setCamera(webcam)
                 .setCameraResolution(new Size(1280, 720))
-                .enableCameraMonitoring(true)
+                .enableLiveView(true)
                 .setAutoStopLiveView(true)
                 // Set any additional VisionPortal settings here
                 .build();
