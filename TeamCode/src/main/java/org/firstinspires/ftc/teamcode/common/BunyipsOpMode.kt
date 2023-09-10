@@ -94,6 +94,9 @@ abstract class BunyipsOpMode : LinearOpMode() {
                         // Run until onInitLoop returns true or the opMode is continued
                         if (onInitLoop()) break
                         telemetry.update()
+                    } catch (ie: InterruptedException) {
+                        // Don't swallow InterruptedExceptions, let the superclass handle them
+                        throw ie
                     } catch (e: Throwable) {
                         ErrorUtil.handleCatchAllException(e, ::log)
                     }
@@ -103,6 +106,8 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 onInitDone()
                 telemetry.addData("BUNYIPSOPMODE : ", "INIT COMPLETE -- PLAY WHEN READY.")
                 telemetry.update()
+            } catch (ie: InterruptedException) {
+                throw ie
             } catch (e: Throwable) {
                 ErrorUtil.handleCatchAllException(e, ::log)
             }
@@ -116,6 +121,8 @@ abstract class BunyipsOpMode : LinearOpMode() {
             try {
                 // Run user-defined start operations
                 onStart()
+            } catch (ie: InterruptedException) {
+                throw ie
             } catch (e: Throwable) {
                 ErrorUtil.handleCatchAllException(e, ::log)
             }
@@ -130,10 +137,9 @@ abstract class BunyipsOpMode : LinearOpMode() {
                     activeLoop()
                     loopCount++
                 } catch (ie: InterruptedException) {
-                    // Preemptively exit the OpMode if an interrupt is thrown
                     throw ie
                 } catch (e: Throwable) {
-                    // Otherwise, let the handler manage them
+                    // Let the error logger handle any other exceptions
                     ErrorUtil.handleCatchAllException(e, ::log)
                 }
                 // Update telemetry and timers
