@@ -6,9 +6,8 @@
 	
 	ACTIVE ROBOT CODE in this repository (under src/main/java/.../teamcode):
         	JERRY: Mecanum-drive PowerPlay robot for 2022-2023 season
-            GLADOS: Basic skeleton of Bunyips CenterStage robot for 2023-2024 season
-            WHEATLEY: Basic skeleton of Mulywonks CenterStage robot for 2023-2024 season
-            * new robots coming with CenterStage... *
+            GLADOS: Bunyips mecanum-drive CenterStage robot for 2023-2024 season
+            WHEATLEY: Mulywonks mecanum-drive CenterStage robot for 2023-2024 season
 
 	Archived robot code in this repository (under src/main/archived):
             DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, for the MURRAY BRIDGE MULYAWONKS

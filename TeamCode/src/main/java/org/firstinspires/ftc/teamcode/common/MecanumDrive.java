@@ -51,7 +51,7 @@ public abstract class MecanumDrive extends BunyipsComponent {
      * @param x The speed at which the robot should move in the x direction.
      *          Positive is right, negative is left.
      *          Range: -1.0 to 1.0
-     * @param y The speed at which the robot should move in the -y direction.
+     * @param y The speed at which the robot should move in the y direction.
      *          Positive is backward, negative is forward.
      *          Range: -1.0 to 1.0
      * @param r The speed at which the robot will rotate.
@@ -60,7 +60,7 @@ public abstract class MecanumDrive extends BunyipsComponent {
      */
     public void setSpeedXYR(double x, double y, double r) {
         // X and Y have been swapped, and X has been inverted
-        // This rotates input vectors by 90 degrees clockwise and wil account for gamepad input.
+        // This rotates input vectors by 90 degrees clockwise and will account for gamepad input.
         this.speedX = Range.clip(y, -1.0, 1.0);
         this.speedY = Range.clip(-x, -1.0, 1.0);
         this.speedR = Range.clip(r, -1.0, 1.0);
