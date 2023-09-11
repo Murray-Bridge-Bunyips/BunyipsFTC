@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.common.Odometer
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
-import org.firstinspires.ftc.teamcode.common.tasks.GetParkingPositionTask
+import org.firstinspires.ftc.teamcode.common.tasks.GetSignalTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryPrecisionDriveTask
@@ -28,7 +28,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
     private var imu: IMUOp? = null
     private var x: Odometer? = null
     private var y: Odometer? = null
-    private var tagtask: GetParkingPositionTask? = null
+    private var tagtask: GetSignalTask? = null
     private val tasks = ArrayDeque<AutoTask>()
 
     override fun onInit() {
@@ -49,7 +49,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
-        tagtask = cam?.let { GetParkingPositionTask(this, it) }
+        tagtask = cam?.let { GetSignalTask(this, it) }
     }
 
     override fun onInitLoop(): Boolean {
@@ -65,7 +65,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         addTelemetry("ParkingPosition set to: $position")
 
         // Add movement tasks based on the signal position
-        if (position == GetParkingPositionTask.ParkingPosition.LEFT) {
+        if (position == GetSignalTask.ParkingPosition.LEFT) {
             // Drive forward if the position of the signal is LEFT
             tasks.add(
                 JerryPrecisionDriveTask(
@@ -80,7 +80,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
                     0.5
                 )
             )
-        } else if (position == GetParkingPositionTask.ParkingPosition.RIGHT) {
+        } else if (position == GetSignalTask.ParkingPosition.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
             tasks.add(
                 JerryPrecisionDriveTask(

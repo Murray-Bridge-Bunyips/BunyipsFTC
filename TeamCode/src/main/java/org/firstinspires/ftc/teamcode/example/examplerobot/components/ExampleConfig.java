@@ -4,6 +4,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
 /**
@@ -16,10 +17,11 @@ public class ExampleConfig extends RobotConfig {
     public DcMotor leftMotor;
     public DcMotor rightMotor;
     public DcMotor liftMotor;
+    public WebcamName webcam;
     public IMU imu;
     // Put any other motors, servos, etc. here.
     // e.g. public Servo leftServo;
-    //      public CameraName webcam;
+    //      public WebcamName webcam;
 
     // The init() function is required by RobotConfig to be implemented.
     // In the init function, you will initialise all your hardware with the handy getHardware()
@@ -35,6 +37,7 @@ public class ExampleConfig extends RobotConfig {
         // Repeat for all other hardware
         rightMotor = (DcMotor) getHardware("right_motor", DcMotor.class);
         liftMotor = (DcMotor) getHardware("lift_motor", DcMotor.class);
+        webcam = (WebcamName) getHardware("webcam", WebcamName.class);
 
         // The reason we do it like this is that any errors will be caught and the program will not crash.
         // Additionally, telemetry will be sent to the Driver Station application to tell you what went wrong.

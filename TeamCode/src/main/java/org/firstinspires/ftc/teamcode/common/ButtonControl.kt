@@ -55,6 +55,9 @@ enum class ButtonControl {
             for (i in args.indices) {
                 // For every arg, map it to the corresponding enum
                 map[args[i]] = values()[i]
+                if (args[i] is OpModeSelection) {
+                    (args[i] as OpModeSelection).assignedButton = values()[i]
+                }
             }
             return map
         }

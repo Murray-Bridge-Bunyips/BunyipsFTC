@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.common.pipelines.AprilTagDetectionPipeline
  * Intermediate task for using the AprilTagDetectionPipeline to detect a Signal position during an initLoop.
  * @author Lucas Bubner, FTC 15215; Nov 2022
  */
-class GetParkingPositionTask(opMode: BunyipsOpMode, private val cam: OpenCVCam) : Task(opMode),
+class GetSignalTask(opMode: BunyipsOpMode, private val cam: OpenCVCam) : Task(opMode),
     AutoTask {
     private lateinit var at: AprilTagDetectionPipeline
     private val lockTimer = ElapsedTime()

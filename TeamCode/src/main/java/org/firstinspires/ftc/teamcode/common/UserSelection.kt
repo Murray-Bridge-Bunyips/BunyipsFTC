@@ -50,7 +50,7 @@ class UserSelection<T>(
      */
     override fun run() {
         if (opmodes.isEmpty()) {
-            throw IllegalArgumentException("Must provide at least one operation mode.")
+            callback(null)
         }
 
         val buttons: HashMap<T, ButtonControl> = ButtonControl.mapArgs(opmodes)

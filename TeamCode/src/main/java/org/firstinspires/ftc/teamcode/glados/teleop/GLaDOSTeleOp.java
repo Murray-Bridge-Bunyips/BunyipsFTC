@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
-import org.firstinspires.ftc.teamcode.common.Vision;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfig;
 
 /**
@@ -24,6 +23,6 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        
+
     }
 }

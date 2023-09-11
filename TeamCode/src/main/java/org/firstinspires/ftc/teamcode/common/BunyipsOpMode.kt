@@ -32,11 +32,12 @@ abstract class BunyipsOpMode : LinearOpMode() {
 
     /**
      * Runs upon the pressing of the INIT button on the Driver Station.
+     * This is where your hardware should be initialised.
      */
     protected abstract fun onInit()
 
     /**
-     * Run code to in a loop AFTER onInit has completed, until
+     * Run code in a loop AFTER onInit has completed, until
      * start is pressed on the Driver Station or true is returned to this method.
      * If not implemented, the opMode will continue on as normal and wait for start.
      */

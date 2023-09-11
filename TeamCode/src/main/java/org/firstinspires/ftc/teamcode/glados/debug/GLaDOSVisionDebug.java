@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfig;
 
 /**
  * Vision debugger for AprilTag detections, GLaDOS bot.
+ *
  * @author Lucas Bubner, 2023
  */
 @TeleOp(name = "GLADOS: AprilTag Vision Debug", group = "GLADOS")
