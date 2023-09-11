@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
-import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfig;
+import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
 /**
  * TeleOp for GLaDOS robot FTC 15215
@@ -14,11 +14,11 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfig;
  */
 @TeleOp(name = "GLADOS: TeleOp", group = "GLADOS")
 public class GLaDOSTeleOp extends BunyipsOpMode {
-    private GLaDOSConfig config = new GLaDOSConfig();
+    private GLaDOSConfigCore config = new GLaDOSConfigCore();
 
     @Override
     protected void onInit() {
-        config = (GLaDOSConfig) RobotConfig.newConfig(this, config, hardwareMap);
+        config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
     }
 
     @Override

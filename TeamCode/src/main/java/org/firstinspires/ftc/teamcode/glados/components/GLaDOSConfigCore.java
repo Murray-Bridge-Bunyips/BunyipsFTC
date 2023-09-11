@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
  *
  * @author Lucas Bubner, 2023
  */
-public class GLaDOSConfig extends RobotConfig {
+public class GLaDOSConfigCore extends RobotConfig {
 
     public WebcamName webcam;
 
