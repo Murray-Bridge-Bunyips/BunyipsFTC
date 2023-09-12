@@ -116,15 +116,6 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         tasks.add(newTask);
     }
 
-//    /**
-//     * Can be called to remove custom tasks from a robot's autonomous
-//     *
-//     * @param dyingTask task to be deleted from the run queue
-//     */
-//    public void removeTask(AutoTask dyingTask) {
-//        tasks.removeAt(dyingTask);
-//    }
-
     /**
      * Add a task to the run queue, but after onReady() has processed tasks. This is useful to call
      * when working with tasks that should be queued at the very end of the autonomous, while still
@@ -158,7 +149,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         int counter = 0;
 
         if (taskIndex < 0) {
-            throw new IllegalArgumentException("Cannot remove going from last index, this isn't Python");
+            throw new IllegalArgumentException("Cannot remove items starting from last index, this isn't Python");
         }
 
         /*
