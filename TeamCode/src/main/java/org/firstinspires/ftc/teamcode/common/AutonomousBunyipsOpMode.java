@@ -4,6 +4,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import kotlin.Unit;
@@ -115,6 +116,15 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         tasks.add(newTask);
     }
 
+//    /**
+//     * Can be called to remove custom tasks from a robot's autonomous
+//     *
+//     * @param dyingTask task to be deleted from the run queue
+//     */
+//    public void removeTask(AutoTask dyingTask) {
+//        tasks.removeAt(dyingTask);
+//    }
+
     /**
      * Add a task to the run queue, but after onReady() has processed tasks. This is useful to call
      * when working with tasks that should be queued at the very end of the autonomous, while still
@@ -137,6 +147,40 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
     public void addTaskFirst(AutoTask newTask) {
         tasks.addFirst(newTask);
     }
+
+    /**
+     * Removes whatever task is at the given array index
+     *
+     * @param taskIndex the array index to be removed (did I really need to tell you?)
+     */
+    public void removeTaskIndex(Integer taskIndex) {
+        Iterator iterator = tasks.iterator();
+        int counter = 0;
+
+        if (taskIndex < 0) {
+            throw new IllegalArgumentException("Cannot remove going from last index, this isn't Python");
+        }
+
+        /*
+        In the words of the great Lucas Bubner:
+            You've made an iterator for all those tasks
+            which is the goofinator car that can drive around your array
+            calling .next() on your car will move it one down the array
+            then if you call .remove() on your car it will remove the element wherever it is
+         */
+
+        while (iterator.hasNext()) {
+            if (counter == taskIndex) {
+                iterator.remove();
+                break;
+            }
+
+            iterator.next();
+            counter++;
+
+        }
+    }
+
 
     /**
      * Runs upon the pressing of the INIT button on the Driver Station.
