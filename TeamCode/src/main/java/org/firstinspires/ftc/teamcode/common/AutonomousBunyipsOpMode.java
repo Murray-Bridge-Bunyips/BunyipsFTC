@@ -6,6 +6,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import kotlin.Unit;
 
@@ -20,6 +21,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
 
     private final ArrayDeque<AutoTask> tasks = new ArrayDeque<>();
     private final ArrayDeque<AutoTask> queuedTasks = new ArrayDeque<>();
+    int taskLength = 0;
 
     /**
      * This list defines OpModes that should be selectable by the user. This will then
@@ -114,6 +116,9 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     public void addTask(AutoTask newTask) {
         tasks.add(newTask);
+
+        // Used to count task list size, specifically for activeLoop
+        taskLength++;
     }
 
     /**
@@ -152,6 +157,10 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
             throw new IllegalArgumentException("Cannot remove items starting from last index, this isn't Python");
         }
 
+        if (taskIndex > tasks.size()) {
+            throw new IllegalArgumentException("Given index exceeds array size");
+        }
+
         /*
         In the words of the great Lucas Bubner:
             You've made an iterator for all those tasks
@@ -170,6 +179,20 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
             counter++;
 
         }
+    }
+
+    /**
+     * Removes the last task in the task queue
+     */
+    public void removeTaskLast() {
+        tasks.removeLast();
+    }
+
+    /**
+     * Removes the first task in the task queue
+     */
+    public void removeTaskFirst() {
+        tasks.removeFirst();
     }
 
 
@@ -232,5 +255,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * Override to this method to add extra code to the activeLoop.
      */
     protected void onActiveLoop() {
+        // Why does it have to be like this
+        addTelemetry(String.format(Locale.getDefault(), "Current Task: %d", taskLength));
     }
 }
