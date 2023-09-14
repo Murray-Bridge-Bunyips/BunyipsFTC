@@ -21,7 +21,8 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
 
     private final ArrayDeque<AutoTask> tasks = new ArrayDeque<>();
     private final ArrayDeque<AutoTask> queuedTasks = new ArrayDeque<>();
-    int taskLength = 0;
+    private int currentTaskNumber = 1;
+    private int taskLength = 0;
 
     /**
      * This list defines OpModes that should be selectable by the user. This will then
@@ -81,13 +82,20 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         }
         // Run the queue of tasks
         AutoTask currentTask = tasks.peekFirst();
+
         if (currentTask == null) {
             finish();
             return;
         }
+
+        // Why does it have to be like this
+        addTelemetry(String.format(Locale.getDefault(), "Current Task(%d/%d): %s", currentTaskNumber, taskLength, currentTask.getClass().getSimpleName())); // His ass is NOT within line length conventions!
+
         currentTask.run();
         if (currentTask.isFinished()) {
             tasks.removeFirst();
+            log(String.format(Locale.getDefault(), "Task No. %d(%s) has finished", currentTaskNumber, currentTask.getClass().getSimpleName()));
+            currentTaskNumber++;
         }
     }
 
@@ -119,6 +127,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
 
         // Used to count task list size, specifically for activeLoop
         taskLength++;
+        log(String.format(Locale.getDefault(), "Task %s has been added as Task No. %d", newTask, taskLength));
     }
 
     /**
@@ -132,6 +141,8 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
             return;
         }
         tasks.addLast(newTask);
+        taskLength++;
+        log(String.format(Locale.getDefault(), "%s has been added to the end of the queue", newTask));
     }
 
 
@@ -142,6 +153,8 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     public void addTaskFirst(AutoTask newTask) {
         tasks.addFirst(newTask);
+        taskLength++;
+        log("A new task was added to the front of the queue");
     }
 
     /**
@@ -178,6 +191,9 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
             iterator.next();
             counter++;
 
+            taskLength--;
+            log(String.format(Locale.getDefault(), "A task has been removed from index %d", taskIndex));
+
         }
     }
 
@@ -186,6 +202,8 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     public void removeTaskLast() {
         tasks.removeLast();
+        taskLength--;
+        log("The task at the end of the queue was removed");
     }
 
     /**
@@ -193,6 +211,8 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     public void removeTaskFirst() {
         tasks.removeFirst();
+        taskLength--;
+        log("The task at the start of the queue was removed");
     }
 
 
@@ -255,7 +275,5 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * Override to this method to add extra code to the activeLoop.
      */
     protected void onActiveLoop() {
-        // Why does it have to be like this
-        addTelemetry(String.format(Locale.getDefault(), "Current Task: %d", taskLength));
     }
 }
