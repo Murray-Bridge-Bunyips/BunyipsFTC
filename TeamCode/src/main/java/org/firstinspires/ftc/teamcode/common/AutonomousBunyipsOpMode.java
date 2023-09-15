@@ -154,7 +154,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
     public void addTaskFirst(AutoTask newTask) {
         tasks.addFirst(newTask);
         taskLength++;
-        log("A new task was added to the front of the queue");
+        log(String.format(Locale.getDefault(), "%s has been added to the start of the queue", newTask));
     }
 
     /**
