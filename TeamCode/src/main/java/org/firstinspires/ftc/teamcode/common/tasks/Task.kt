@@ -20,8 +20,10 @@ abstract class Task : AutoTask {
     }
 
     // Overloading base Task to allow any tasks that may not want to use a time restriction,
-    // such as an init-loop task or some other always-active task. This will perform the same
-    // as a task also defined with a time of 0 seconds.
+    // such as an init-loop task. This will perform the same as a task also defined with a time of 0 seconds.
+    // It is not recommended to use this constructor for tasks that will be used in an activeLoop.
+    // If this is desired, you may be better off just using BunyipsOpMode standalone, as tasks
+    // are blocking and will not allow other tasks to run until they are finished.
     constructor(opMode: BunyipsOpMode) {
         this.opMode = opMode
         time = 0.0
@@ -47,7 +49,9 @@ abstract class Task : AutoTask {
             init()
             startTime = currentTime
         }
-        if (currentTime > startTime + time && time != 0.0 || opMode.isStopRequested) {
+        // Finish tasks that exceed a time limit, if the OpMode is stopped, or if the task is
+        // set to run indefinitely and the OpMode is not in init-phase.
+        if ((currentTime > startTime + time && time != 0.0) || opMode.isStopRequested || (time == 0.0 && !opMode.opModeInInit())) {
             taskFinished = true
         }
         return taskFinished

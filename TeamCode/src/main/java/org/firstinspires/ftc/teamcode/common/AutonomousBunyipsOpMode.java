@@ -20,9 +20,8 @@ import kotlin.Unit;
 abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
 
     private final ArrayDeque<AutoTask> tasks = new ArrayDeque<>();
-    private final ArrayDeque<AutoTask> queuedTasks = new ArrayDeque<>();
-    private int currentTaskNumber = 1;
-    private int taskLength = 0;
+    private final ArrayDeque<AutoTask> postQueue = new ArrayDeque<>();
+    private final ArrayDeque<AutoTask> preQueue = new ArrayDeque<>();
 
     /**
      * This list defines OpModes that should be selectable by the user. This will then
@@ -33,15 +32,20 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * @see #setOpModes()
      */
     protected ArrayList<OpModeSelection> opModes = new ArrayList<>();
+    private int currentTask = 1;
     private AutoTask initTask = null;
     private boolean hasGottenCallback = false;
 
     private Unit callback(OpModeSelection selectedOpMode) {
         hasGottenCallback = true;
+        log("auto: ready. running opmode " + selectedOpMode.getName());
         // Interface Unit to be void
         onQueueReady(selectedOpMode);
         // Add any queued tasks
-        tasks.addAll(queuedTasks);
+        tasks.addAll(postQueue);
+        for (AutoTask task : preQueue) {
+            tasks.addFirst(task);
+        }
         return Unit.INSTANCE;
     }
 
@@ -51,6 +55,9 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         onInitialisation();
         // Set user-defined initTask
         initTask = setInitTask();
+        if (initTask == null) {
+            log("auto: initTask is null, skipping dynamic_init phase");
+        }
         List<OpModeSelection> userSelections = setOpModes();
         if (userSelections != null) {
             // User defined OpModeSelections
@@ -59,12 +66,14 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         // Convert user defined OpModeSelections to varargs
         OpModeSelection[] varargs = this.opModes.toArray(new OpModeSelection[0]);
         if (varargs.length == 0) {
+            log("auto: no OpModeSelections defined, skipping selection phase");
             opModes.add(new OpModeSelection("DEFAULT"));
         }
         if (varargs.length > 1) {
             // Run task allocation if OpModeSelections are defined
             // This will run asynchronously, and the callback will be called
             // when the user has selected an OpMode
+            log("auto: waiting for user input...");
             new UserSelection<>(this, this::callback, varargs).start();
         } else {
             // There are no OpMode selections, so just run the callback with the default OpMode
@@ -84,18 +93,19 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         AutoTask currentTask = tasks.peekFirst();
 
         if (currentTask == null) {
+            log("auto: all tasks done, finishing...");
             finish();
             return;
         }
 
         // Why does it have to be like this
-        addTelemetry(String.format(Locale.getDefault(), "Current Task(%d/%d): %s", currentTaskNumber, taskLength, currentTask.getClass().getSimpleName())); // His ass is NOT within line length conventions!
+        addTelemetry(String.format(Locale.getDefault(), "Running task (%d/%d): %s", this.currentTask, tasks.size(), currentTask.getClass().getSimpleName())); // His ass is NOT within line length conventions!
 
         currentTask.run();
         if (currentTask.isFinished()) {
             tasks.removeFirst();
-            log(String.format(Locale.getDefault(), "Task No. %d(%s) has finished", currentTaskNumber, currentTask.getClass().getSimpleName()));
-            currentTaskNumber++;
+            log(String.format(Locale.getDefault(), "auto: task %d/%d (%s) finished", this.currentTask, tasks.size(), currentTask.getClass().getSimpleName()));
+            this.currentTask++;
         }
     }
 
@@ -124,10 +134,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     public void addTask(AutoTask newTask) {
         tasks.add(newTask);
-
-        // Used to count task list size, specifically for activeLoop
-        taskLength++;
-        log(String.format(Locale.getDefault(), "Task %s has been added as Task No. %d", newTask, taskLength));
+        log(String.format(Locale.getDefault(), "auto: %s has been added as task %d/%d", newTask.getClass().getSimpleName(), tasks.size(), tasks.size()));
     }
 
     /**
@@ -137,12 +144,12 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     public void addTaskLast(AutoTask newTask) {
         if (!hasGottenCallback) {
-            queuedTasks.addLast(newTask);
+            postQueue.add(newTask);
+            log(String.format(Locale.getDefault(), "auto: %s has been queued as end-init task %d/%d", newTask.getClass().getSimpleName(), postQueue.size(), postQueue.size()));
             return;
         }
         tasks.addLast(newTask);
-        taskLength++;
-        log(String.format(Locale.getDefault(), "%s has been added to the end of the queue", newTask));
+        log(String.format(Locale.getDefault(), "auto: %s has been added as task %d/%d", newTask.getClass().getSimpleName(), tasks.size(), tasks.size()));
     }
 
 
@@ -152,9 +159,13 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * asynchronously with user input in onReady().
      */
     public void addTaskFirst(AutoTask newTask) {
+        if (!hasGottenCallback) {
+            preQueue.add(newTask);
+            log(String.format(Locale.getDefault(), "auto: %s has been queued as end-init task 1/%d", newTask.getClass().getSimpleName(), preQueue.size()));
+            return;
+        }
         tasks.addFirst(newTask);
-        taskLength++;
-        log(String.format(Locale.getDefault(), "%s has been added to the start of the queue", newTask));
+        log(String.format(Locale.getDefault(), "auto: %s has been added as task 1/%d", newTask.getClass().getSimpleName(), tasks.size()));
     }
 
     /**
@@ -162,10 +173,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      *
      * @param taskIndex the array index to be removed (did I really need to tell you?)
      */
-    public void removeTaskIndex(Integer taskIndex) {
-        Iterator iterator = tasks.iterator();
-        int counter = 0;
-
+    public void removeTaskIndex(int taskIndex) {
         if (taskIndex < 0) {
             throw new IllegalArgumentException("Cannot remove items starting from last index, this isn't Python");
         }
@@ -175,25 +183,24 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         }
 
         /*
-        In the words of the great Lucas Bubner:
-            You've made an iterator for all those tasks
-            which is the goofinator car that can drive around your array
-            calling .next() on your car will move it one down the array
-            then if you call .remove() on your car it will remove the element wherever it is
+         * In the words of the great Lucas Bubner:
+         *      You've made an iterator for all those tasks
+         *      which is the goofinator car that can drive around your array
+         *      calling .next() on your car will move it one down the array
+         *      then if you call .remove() on your car it will remove the element wherever it is
          */
+        Iterator<AutoTask> iterator = tasks.iterator();
 
+        int counter = 0;
         while (iterator.hasNext()) {
             if (counter == taskIndex) {
                 iterator.remove();
+                log(String.format(Locale.getDefault(), "auto: task at index %d was removed", taskIndex));
                 break;
             }
 
             iterator.next();
             counter++;
-
-            taskLength--;
-            log(String.format(Locale.getDefault(), "A task has been removed from index %d", taskIndex));
-
         }
     }
 
@@ -202,8 +209,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     public void removeTaskLast() {
         tasks.removeLast();
-        taskLength--;
-        log("The task at the end of the queue was removed");
+        log(String.format(Locale.getDefault(), "auto: task at index %d was removed", tasks.size() + 1));
     }
 
     /**
@@ -211,8 +217,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     public void removeTaskFirst() {
         tasks.removeFirst();
-        taskLength--;
-        log("The task at the start of the queue was removed");
+        log("auto: task at index 0 was removed");
     }
 
 
