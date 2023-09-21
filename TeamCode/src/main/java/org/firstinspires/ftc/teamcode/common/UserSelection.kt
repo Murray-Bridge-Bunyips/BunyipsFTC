@@ -72,7 +72,7 @@ class UserSelection<T>(
             )
         )
         for ((name, button) in buttons) {
-            stickyObjects.add(opMode.addTelemetry(String.format("%s: %s", button.name, name), true))
+            stickyObjects.add(opMode.addTelemetry(String.format("%s: %s", button.name, if (name is OpModeSelection) name.name else name), true))
         }
         stickyObjects.add(opMode.addTelemetry("---------!!!--------", true))
 
@@ -97,7 +97,7 @@ class UserSelection<T>(
             opMode.addTelemetry("No selection made. Result was handled by the OpMode.", true)
         } else {
             opMode.addTelemetry(
-                "'${selectedButton?.name}' registered. Running OpMode: '$selectedOpMode'",
+                "'${selectedButton?.name}' registered. Running OpMode: '${if (selectedOpMode is OpModeSelection) selectedOpMode.name else selectedOpMode.toString()}'",
                 true
             )
         }

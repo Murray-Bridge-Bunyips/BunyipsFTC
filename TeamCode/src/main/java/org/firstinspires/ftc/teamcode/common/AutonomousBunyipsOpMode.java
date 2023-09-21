@@ -236,7 +236,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * be prompted for a selection, and the OpMode will move to task-ready state immediately.
      * <pre><code>
      *     protected List<OpModeSelection> setOpModes() {
-     *         return List.of(
+     *         return Arrays.asList(
      *                 new OpModeSelection("LEFT_BLUE"),
      *                 new OpModeSelection("RIGHT_BLUE"),
      *                 new OpModeSelection("LEFT_RED"),
