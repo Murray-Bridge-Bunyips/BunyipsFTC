@@ -131,9 +131,9 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
     protected boolean onInitLoop() {
         if (initTask != null) {
             initTask.run();
-            return initTask.isFinished() && !userSelection.isAlive();
+            return initTask.isFinished() && (userSelection == null || !userSelection.isAlive());
         }
-        return !userSelection.isAlive();
+        return userSelection == null || !userSelection.isAlive();
     }
 
     /**
