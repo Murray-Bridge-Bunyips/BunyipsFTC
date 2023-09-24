@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common;
 
+import androidx.annotation.Nullable;
+
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
 
 import java.util.ArrayDeque;
@@ -22,6 +24,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
     private final ArrayDeque<AutoTask> tasks = new ArrayDeque<>();
     private final ArrayDeque<AutoTask> postQueue = new ArrayDeque<>();
     private final ArrayDeque<AutoTask> preQueue = new ArrayDeque<>();
+    private UserSelection<OpModeSelection> userSelection;
 
     /**
      * This list defines OpModes that should be selectable by the user. This will then
@@ -36,9 +39,13 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
     private AutoTask initTask = null;
     private boolean hasGottenCallback = false;
 
-    private Unit callback(OpModeSelection selectedOpMode) {
+    private Unit callback(@Nullable OpModeSelection selectedOpMode) {
         hasGottenCallback = true;
-        log("auto: ready. running opmode " + selectedOpMode.getName());
+        if (selectedOpMode != null) {
+            log("auto: ready. running opmode " + selectedOpMode.getName());
+        } else {
+            log("auto: ready. running default opmode");
+        }
         // Interface Unit to be void
         onQueueReady(selectedOpMode);
         // Add any queued tasks
@@ -74,7 +81,8 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
             // This will run asynchronously, and the callback will be called
             // when the user has selected an OpMode
             log("auto: waiting for user input...");
-            new UserSelection<>(this, this::callback, varargs).start();
+            userSelection = new UserSelection<>(this, this::callback, varargs);
+            userSelection.start();
         } else {
             // There are no OpMode selections, so just run the callback with the default OpMode
             callback(opModes.get(0));
@@ -114,7 +122,8 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * start is pressed on the Driver Station or the {@link #setInitTask initTask} is done.
      * If not implemented, the opMode will try to run your initTask, and if that is null,
      * the dynamic_init phase will be skipped.
-     * You may also override this method if you want to do something else in the dynamic_init phase.
+     * Overriding this method will fully detach your UserSelection from alerting BYO of its runtime,
+     * so override with caution.
      *
      * @see #setInitTask
      */
@@ -122,9 +131,9 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
     protected boolean onInitLoop() {
         if (initTask != null) {
             initTask.run();
-            return initTask.isFinished();
+            return initTask.isFinished() && !userSelection.isAlive();
         }
-        return true;
+        return !userSelection.isAlive();
     }
 
     /**
@@ -274,7 +283,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      *                       NULL if the user did not select an OpMode.
      * @see #addTask(AutoTask)
      */
-    protected abstract void onQueueReady(OpModeSelection selectedOpMode);
+    protected abstract void onQueueReady(@Nullable OpModeSelection selectedOpMode);
 
     /**
      * Override to this method to add extra code to the activeLoop.

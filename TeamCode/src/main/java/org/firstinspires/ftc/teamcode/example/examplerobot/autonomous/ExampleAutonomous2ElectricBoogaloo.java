@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.example.examplerobot.autonomous;
 
+import androidx.annotation.Nullable;
+
 import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
@@ -31,7 +33,7 @@ public class ExampleAutonomous2ElectricBoogaloo extends AutonomousBunyipsOpMode 
     }
 
     @Override
-    protected void onQueueReady(OpModeSelection selectedOpMode) {
+    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
         addTask(new ExampleTimeDriveTask(this, 5.0, drive));
     }
 }

@@ -25,6 +25,8 @@ package org.firstinspires.ftc.teamcode.common
  *    }
  * ```
  *
+ * res will be null if the user did not make a selection.
+ *
  * Updated to use dynamic button mapping and generics 04/08/23.
  * Updated to be async and removed time restriction 07/09/23.
  *
