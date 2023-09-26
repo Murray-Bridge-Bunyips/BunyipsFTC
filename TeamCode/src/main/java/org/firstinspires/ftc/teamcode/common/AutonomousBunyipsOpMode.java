@@ -63,7 +63,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         // Set user-defined initTask
         initTask = setInitTask();
         if (initTask == null) {
-            log("auto: initTask is null, skipping dynamic_init phase");
+            log("auto: initTask is null, skipping.");
         }
         List<OpModeSelection> userSelections = setOpModes();
         if (userSelections != null) {
@@ -142,6 +142,9 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * @param newTask task to add to the run queue
      */
     public void addTask(AutoTask newTask) {
+        if (!hasGottenCallback) {
+            log("auto: caution! a task was added manually before the onReady callback");
+        }
         tasks.add(newTask);
         log(String.format(Locale.getDefault(), "auto: %s has been added as task %d/%d", newTask.getClass().getSimpleName(), tasks.size(), tasks.size()));
     }

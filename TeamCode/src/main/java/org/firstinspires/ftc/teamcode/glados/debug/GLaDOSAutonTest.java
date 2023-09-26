@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.glados.debug;
 
+import androidx.annotation.Nullable;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
+import org.firstinspires.ftc.teamcode.common.tasks.WaitTask;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,11 +26,10 @@ public class GLaDOSAutonTest extends AutonomousBunyipsOpMode {
 
     @Override
     protected AutoTask setInitTask() {
-        return null;
+        return new WaitTask(this, 5.0);
     }
 
     @Override
-    protected void onQueueReady(OpModeSelection selectedOpMode) {
-        log(selectedOpMode.getName());
+    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
     }
 }

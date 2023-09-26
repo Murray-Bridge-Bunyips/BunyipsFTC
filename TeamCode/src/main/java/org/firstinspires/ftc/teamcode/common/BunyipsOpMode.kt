@@ -17,7 +17,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         private set
     private var operationsCompleted = false
     private var operationsPaused = false
-    private val stickyTelemetryObjects = mutableListOf<Pair<Int, Item>>()
+    private val stickyTelemetryObjects = mutableListOf<Item>()
 
     /**
      * One-time setup for operations that need to be done for the opMode
@@ -177,7 +177,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Add data to the telemetry object
      * @param value A string to add to telemetry
      * @param retained Optional parameter to retain the data on the screen
-     * @return Index of the telemetry object printed to the screen if retained, otherwise -1
+     * @return Index to use in removeTelemetryIndex, otherwise -1
      */
     fun addTelemetry(value: String, retained: Boolean = false): Int {
         // Add data to the telemetry object with runtime data
@@ -191,8 +191,8 @@ abstract class BunyipsOpMode : LinearOpMode() {
         if (retained) {
             // Set retained to true if the data is sticky
             item.setRetained(true)
-            idx = stickyTelemetryObjects.size + 1
-            stickyTelemetryObjects.add(Pair(idx, item))
+            idx = stickyTelemetryObjects.size
+            stickyTelemetryObjects.add(item)
         }
         return idx
     }
@@ -212,14 +212,14 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Remove an entry from the telemetry object if it is sticky
      */
     fun removeTelemetryIndex(index: Int) {
-        if (index > 0 && index <= stickyTelemetryObjects.size) {
-            telemetry.removeItem(stickyTelemetryObjects[index - 1].second)
-            stickyTelemetryObjects.removeAt(index - 1)
+        // TODO: use vararg as list is mutable
+        if (index < 0) {
+            throw IllegalArgumentException("Telemetry index cannot be less than zero")
         }
-        // Update indexes of sticky telemetry objects
-        for (i in stickyTelemetryObjects.indices) {
-            stickyTelemetryObjects[i] = Pair(i + 1, stickyTelemetryObjects[i].second)
+        if (index > stickyTelemetryObjects.size) {
+            throw IllegalArgumentException("Telemetry index cannot be greater than the number of sticky telemetry objects")
         }
+        telemetry.removeItem(stickyTelemetryObjects[index])
     }
 
     /**

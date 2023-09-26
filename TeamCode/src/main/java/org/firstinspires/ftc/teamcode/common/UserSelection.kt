@@ -90,7 +90,6 @@ class UserSelection<T>(
                     break
                 }
             }
-            sleep(10)
             opMode.idle()
         }
 
