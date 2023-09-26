@@ -104,6 +104,9 @@ class UserSelection<T>(
             )
         }
 
+        //This is code from lucas bubner. He is sad cause hes not important and dosent recieve capital letters. He is lonely except for LACHLAN PAUL  his coding buddy. Now i need to go but always keep this message in mind!!!
+        // - Sorayya, hijacker of laptops
+
         // Clean up telemetry and reset auto clear
         for (id in stickyObjects) {
             opMode.removeTelemetryIndex(id)
