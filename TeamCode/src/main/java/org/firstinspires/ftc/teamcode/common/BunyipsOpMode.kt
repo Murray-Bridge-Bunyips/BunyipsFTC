@@ -17,7 +17,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         private set
     private var operationsCompleted = false
     private var operationsPaused = false
-    private val stickyTelemetryObjects = mutableListOf<Item>()
+    private val retainedTelemetryObjects = mutableListOf<Item>()
 
     /**
      * One-time setup for operations that need to be done for the opMode
@@ -76,7 +76,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * @throws InterruptedException
      */
     @Throws(InterruptedException::class)
-    override fun runOpMode() {
+    final override fun runOpMode() {
         try {
             try {
                 telemetry.log().add("")
@@ -146,7 +146,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 // Update telemetry and timers
                 movingAverageTimer?.update()
                 telemetry.update()
-                idle()
             }
             log("status changed: from running to finished")
             // Wait for user to hit stop
@@ -177,9 +176,9 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Add data to the telemetry object
      * @param value A string to add to telemetry
      * @param retained Optional parameter to retain the data on the screen
-     * @return Index to use in removeTelemetryIndex, otherwise -1
+     * @return The telemetry item added to the Driver Station
      */
-    fun addTelemetry(value: String, retained: Boolean = false): Int {
+    fun addTelemetry(value: String, retained: Boolean = false): Item {
         // Add data to the telemetry object with runtime data
         var prefix = "T+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: 0.0}s : "
         if (prefix == "T+0s : ") {
@@ -187,39 +186,40 @@ abstract class BunyipsOpMode : LinearOpMode() {
             prefix = ""
         }
         val item = telemetry.addData("", prefix + value)
-        var idx = -1
-        if (retained) {
-            // Set retained to true if the data is sticky
-            item.setRetained(true)
-            idx = stickyTelemetryObjects.size
-            stickyTelemetryObjects.add(item)
-        }
-        return idx
+        item.setRetained(retained)
+        return item
     }
 
-    fun addTelemetry(value: String) {
-        addTelemetry(value, false)
+    fun addTelemetry(value: String): Item {
+        return addTelemetry(value, false)
     }
 
     /**
      * Log a message to the telemetry log
+     * @param message The message to log
      */
     fun log(message: String) {
         telemetry.log().add(message)
     }
 
     /**
-     * Remove an entry from the telemetry object if it is sticky
+     * Remove an entry from the telemetry object. Useful for removing retained data without clearing.
+     * This method should be combined with the return value of addTelemetry.
+     * Note this method is not needed if you are using unretained data, as it will be cleared automatically
+     * if auto-clear is enabled, which it is by default.
+     * @param items The telemetry items to remove
      */
-    fun removeTelemetryIndex(index: Int) {
-        // TODO: use vararg as list is mutable
-        if (index < 0) {
-            throw IllegalArgumentException("Telemetry index cannot be less than zero")
+    fun removeTelemetryItems(vararg items: Item) {
+        for (item in items) {
+            val res = telemetry.removeItem(item)
+            if (!res) {
+                log("failed to remove telemetry item: $item")
+            }
         }
-        if (index > stickyTelemetryObjects.size) {
-            throw IllegalArgumentException("Telemetry index cannot be greater than the number of sticky telemetry objects")
-        }
-        telemetry.removeItem(stickyTelemetryObjects[index])
+    }
+
+    fun removeTelemetryItems(items: List<Item>) {
+        removeTelemetryItems(*items.toTypedArray())
     }
 
     /**
@@ -227,7 +227,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun resetTelemetry() {
         telemetry.clearAll()
-        stickyTelemetryObjects.clear()
+        retainedTelemetryObjects.clear()
     }
 
     /**

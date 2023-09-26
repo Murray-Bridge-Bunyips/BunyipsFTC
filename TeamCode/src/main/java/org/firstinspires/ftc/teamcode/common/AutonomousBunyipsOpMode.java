@@ -89,12 +89,32 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         }
     }
 
+    /**
+     * Perform one time operations after start is pressed.
+     * Unlike onInitDone, this will only execute once play is hit and not when initialisation is done.
+     * <p>
+     * If overriding this method, it is strongly recommended to call `super.onStart()` in your method to
+     * ensure that the asynchronous task allocation has been notified to stop immediately. This is
+     * not required if setOpModes() returns null.
+     */
+    @Override
+    protected void onStart() {
+        if (userSelection != null) {
+            // UserSelection will internally check opMode.isInInit() to see if it should terminate itself
+            // automatically, but this is to ensure that the thread receives the message immediately
+            // upon start as user input is now impossible to retrieve and we need a callback ASAP
+            userSelection.interrupt();
+        }
+    }
+
     @Override
     protected final void activeLoop() {
         // Run any code defined by the user
         onActiveLoop();
         if (!hasGottenCallback) {
-            // Not ready to run tasks yet
+            // Not ready to run tasks yet, tell the user selection to terminate if it hasn't
+            if (!userSelection.isInterrupted())
+                userSelection.interrupt();
             return;
         }
         // Run the queue of tasks
@@ -107,7 +127,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
         }
 
         // Why does it have to be like this
-        addTelemetry(String.format(Locale.getDefault(), "Running task (%d/%d): %s", this.currentTask, tasks.size(), currentTask.getClass().getSimpleName())); // His ass is NOT within line length conventions!
+        addTelemetry(Text.format("Running task (%d/%d): %s", this.currentTask, tasks.size(), currentTask.getClass().getSimpleName())); // His ass is NOT within line length conventions!
 
         currentTask.run();
         if (currentTask.isFinished()) {

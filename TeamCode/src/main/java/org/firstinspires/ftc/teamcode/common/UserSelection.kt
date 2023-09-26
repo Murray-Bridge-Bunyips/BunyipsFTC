@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common
 
+import org.firstinspires.ftc.robotcore.external.Telemetry.Item
+
 /**
  * Async thread to ask for user input from a controller in order to determine a pre-determined
  * set of instructions before an OpMode starts.
@@ -65,24 +67,24 @@ class UserSelection<T>(
         val autoClearState = opMode.getTelemetryAutoClear()
         opMode.setTelemetryAutoClear(false)
 
-        val stickyObjects = mutableListOf<Int>()
-        stickyObjects.add(opMode.addTelemetry("---------!!!--------", true))
-        stickyObjects.add(
+        val retainedObjects = mutableListOf<Item>()
+        retainedObjects.add(opMode.addTelemetry("---------!!!--------", true))
+        retainedObjects.add(
             opMode.addTelemetry(
                 "ACTION REQUIRED: INIT YOUR OPMODE USING GAMEPAD1",
                 true
             )
         )
         for ((name, button) in buttons) {
-            stickyObjects.add(opMode.addTelemetry(String.format("%s: %s", button.name, if (name is OpModeSelection) name.name else name), true))
+            retainedObjects.add(opMode.addTelemetry(String.format("%s: %s", button.name, if (name is OpModeSelection) name.name else name), true))
         }
-        stickyObjects.add(opMode.addTelemetry("---------!!!--------", true))
+        retainedObjects.add(opMode.addTelemetry("---------!!!--------", true))
 
         // Must manually call telemetry push as the BYO may not be handling them
         // This will not clear out any other telemetry as auto clear is disabled
         opMode.telemetry.update()
 
-        while (selectedOpMode == null && opMode.opModeInInit()) {
+        while (selectedOpMode == null && opMode.opModeInInit() && !isInterrupted) {
             for ((str, button) in buttons) {
                 if (ButtonControl.isSelected(opMode.gamepad1, button)) {
                     selectedButton = button
@@ -90,7 +92,7 @@ class UserSelection<T>(
                     break
                 }
             }
-            opMode.idle()
+            yield()
         }
 
         result = selectedOpMode
@@ -107,9 +109,7 @@ class UserSelection<T>(
         // - Sorayya, hijacker of laptops
 
         // Clean up telemetry and reset auto clear
-        for (id in stickyObjects) {
-            opMode.removeTelemetryIndex(id)
-        }
+        opMode.removeTelemetryItems(retainedObjects)
         opMode.telemetry.update()
         opMode.setTelemetryAutoClear(autoClearState)
 
