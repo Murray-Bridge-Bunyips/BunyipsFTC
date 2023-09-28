@@ -116,7 +116,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
             // Ready to go.
             waitForStart()
             setTelemetryAutoClear(true)
-            clearTelemetryData()
+            clearTelemetry()
             movingAverageTimer?.reset()
             log("status changed: from ready to running")
             try {
@@ -155,20 +155,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
         } finally {
             log("status changed: from finished to cleanup")
             onStop()
-        }
-    }
-
-    /**
-     * Clear data from the telemetry cache.
-     */
-    private fun clearTelemetryData() {
-        if (telemetry.isAutoClear) {
-            telemetry.clear()
-        } else {
-            telemetry.clearAll()
-        }
-        if (opModeIsActive()) {
-            idle()
         }
     }
 
@@ -227,7 +213,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun resetTelemetry() {
         telemetry.clearAll()
-        retainedTelemetryObjects.clear()
     }
 
     /**
@@ -256,7 +241,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun finish() {
         operationsCompleted = true
-        clearTelemetryData()
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop terminated. All operations completed.")
         telemetry.update()
     }
@@ -266,7 +250,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun halt() {
         operationsPaused = true
-        clearTelemetryData()
         log("status: from running to halted")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop halted. Operations paused.")
         telemetry.update()
@@ -277,7 +260,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun resume() {
         operationsPaused = false
-        clearTelemetryData()
         log("status changed: from halted to running")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop resumed. Operations resumed.")
         telemetry.update()
