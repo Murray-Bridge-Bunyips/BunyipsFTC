@@ -257,7 +257,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
     fun finish() {
         operationsCompleted = true
         clearTelemetryData()
-        log("status changed: from running to finished")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop terminated. All operations completed.")
         telemetry.update()
     }
