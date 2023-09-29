@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.glados.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
+import org.firstinspires.ftc.teamcode.glados.components.GLaDOSDriveCore;
 
 /**
  * TeleOp for GLaDOS robot FTC 15215
@@ -15,14 +17,20 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 @TeleOp(name = "GLADOS: TeleOp", group = "GLADOS")
 public class GLaDOSTeleOp extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private MecanumDrive drive;
 
     @Override
     protected void onInit() {
         config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
+        drive = new GLaDOSDriveCore(this, config.fl, config.bl, config.fr, config.br);
     }
 
     @Override
     protected void activeLoop() {
-
+        double x = gamepad1.left_stick_x;
+        double y = gamepad1.left_stick_y;
+        double r = gamepad1.right_stick_x;
+        drive.setSpeedXYR(x, y, r);
+        drive.update();
     }
 }
