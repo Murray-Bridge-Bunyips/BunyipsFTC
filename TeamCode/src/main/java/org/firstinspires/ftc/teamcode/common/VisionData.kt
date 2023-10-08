@@ -5,6 +5,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseRaw
 import org.opencv.core.Point
+import kotlin.math.atan2
+import kotlin.math.tan
 
 /**
  * Utility data structure for AprilTag Detections.
@@ -168,5 +170,18 @@ data class TfodData(
      * Estimation of the horizontal angle to the detected object in radians.
      */
     val horizontalAngleRad: Double
-)
+) {
+    /**
+     * Calculate the 0-1 range of which the object is horizontally translated in the image.
+     */
+    fun getHorizontalTranslation(): Float {
+        return (left + right) / 2 / imageWidth
+    }
 
+    /**
+     * Calculate the 0-1 range of which the object is vertically translated in the image.
+     */
+    fun getVerticalTranslation(): Float {
+        return (top + bottom) / 2 / imageHeight
+    }
+}

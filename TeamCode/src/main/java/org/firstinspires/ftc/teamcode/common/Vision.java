@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.common.cameras.CameraType;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -32,13 +33,15 @@ public class Vision extends BunyipsComponent {
     private final List<AprilTagData> aprilTagData = new ArrayList<>();
     private final List<TfodData> tfodData = new ArrayList<>();
     private final WebcamName webcam;
+    private final CameraType cameraInfo;
     private TfodProcessor tfod = null;
     private AprilTagProcessor aprilTag = null;
     private VisionPortal visionPortal = null;
 
-    public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam) {
+    public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam, CameraType cameraType) {
         super(opMode);
         this.webcam = webcam;
+        this.cameraInfo = cameraType;
     }
 
     /**
@@ -72,13 +75,13 @@ public class Vision extends BunyipsComponent {
                 case TFOD:
                     tfod = new TfodProcessor.Builder()
                             // Specify custom TFOD settings here
+                            // By default this will load the current season assets
                             .build();
                     initialisedProcessors.add(tfod);
                     break;
                 case APRILTAG:
                     aprilTag = new AprilTagProcessor.Builder()
-                            // Logitech C920
-                            .setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
+                            .setLensIntrinsics(cameraInfo.getFx(), cameraInfo.getFy(), cameraInfo.getCx(), cameraInfo.getCy())
                             // Specify custom AprilTag settings here
                             .build();
                     initialisedProcessors.add(aprilTag);
@@ -182,20 +185,14 @@ public class Vision extends BunyipsComponent {
      * Note: The VisionPortal is automatically closed at the end of the OpMode's run time, calling
      * stop() or terminate() is not required at the end of an OpMode.
      * <p>
-     * Additionally passing stopPortal as true will pause the Camera Stream (Level 3). Pausing
+     * Passing no arguments will pause the Camera Stream (Level 3). Pausing
      * the camera stream will automatically disable any running processors. Note this may
-     * take some additional time to resume the stream if start() is called again. If you don't plan
+     * take some very small time to resume the stream if start() is called again. If you don't plan
      * on using the camera stream again, it is recommended to call terminate() instead.
      *
-     * @param stopPortal Whether to pause the Camera Stream (Level 3)
      * @param processors TFOD and/or AprilTag
      */
-    public void stop(boolean stopPortal, Processors... processors) {
-        if (stopPortal) {
-            // Pause the processor, this will also auto-close any VisionProcessors
-            visionPortal.stopStreaming();
-            return;
-        }
+    public void stop(Processors... processors) {
         // Disable processors without pausing the stream
         for (Processors processor : processors) {
             switch (processor) {
@@ -213,6 +210,14 @@ public class Vision extends BunyipsComponent {
                     break;
             }
         }
+    }
+
+    /**
+     * Stop all processors and pause the camera stream (Level 3).
+     */
+    public void stop() {
+        // Pause the processor, this will also auto-close any VisionProcessors
+        visionPortal.stopStreaming();
     }
 
     /**

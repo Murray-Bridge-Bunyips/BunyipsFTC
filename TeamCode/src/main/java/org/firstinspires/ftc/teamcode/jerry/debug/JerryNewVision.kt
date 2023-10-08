@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.Vision
+import org.firstinspires.ftc.teamcode.common.cameras.C920
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
 /**
@@ -17,7 +18,7 @@ class JerryNewVision : BunyipsOpMode() {
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        vision = Vision(this, config.webcam!!)
+        vision = Vision(this, config.webcam!!, C920())
         vision?.init(Vision.Processors.APRILTAG)
         vision?.start(Vision.Processors.APRILTAG)
     }

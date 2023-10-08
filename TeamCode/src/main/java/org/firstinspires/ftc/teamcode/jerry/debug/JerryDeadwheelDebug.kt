@@ -18,10 +18,10 @@ class JerryDeadwheelDebug : BunyipsOpMode() {
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        if (config.affirm(config.fl))
+        if (config.assertDevices(config.fl))
             x = Odometer(this, config.fl!!, config.xDiameter, config.xTicksPerRev)
 
-        if (config.affirm(config.fr))
+        if (config.assertDevices(config.fr))
             y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
         x?.track()

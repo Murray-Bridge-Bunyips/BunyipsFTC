@@ -41,7 +41,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         addTelemetry("Left Stick X: " + gamepad1.left_stick_x);
 
         // Gives a different message based on whether or not the camera is connected
-        if (config.affirm(config.webCam)) {
+        if (config.assertDevices(config.webCam)) {
             addTelemetry("Camera is connected");
         } else {
             addTelemetry("Camera is NOT connected");

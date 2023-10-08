@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.Vision;
+import org.firstinspires.ftc.teamcode.common.cameras.C920;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
 /**
@@ -20,7 +21,7 @@ public class GLaDOSVisionDebug extends BunyipsOpMode {
     @Override
     protected void onInit() {
         config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
-        vision = new Vision(this, config.webcam);
+        vision = new Vision(this, config.webcam, new C920());
         // Start AprilTag vision processing
         vision.init(Vision.Processors.APRILTAG);
         vision.start(Vision.Processors.APRILTAG);

@@ -37,11 +37,11 @@ class JerryTeleOp : BunyipsOpMode() {
         // Configure drive and lift subsystems
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         selector.start()
-        if (config.affirm(config.imu)) {
+        if (config.assertDevices(config.imu)) {
             imu = IMUOp(this, config.imu!!)
         }
         drive?.setToBrake()
-        if (config.affirm(config.armComponents)) {
+        if (config.assertDevices(config.armComponents)) {
             lift = JerryLift(
                 this,
                 JerryLift.ControlMode.MANUAL,
@@ -54,7 +54,7 @@ class JerryTeleOp : BunyipsOpMode() {
     }
 
     private fun initDrive() {
-        if (config.affirm(config.driveMotors)) {
+        if (config.assertDevices(config.driveMotors)) {
             if (selector.result == "FIELD-CENTRIC" || imu == null) {
                 drive = JerryPolarDrive(
                     this,

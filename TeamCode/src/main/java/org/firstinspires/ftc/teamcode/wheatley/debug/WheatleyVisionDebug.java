@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.Vision;
+import org.firstinspires.ftc.teamcode.common.cameras.C920;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 
 /**
@@ -24,7 +25,7 @@ public class WheatleyVisionDebug extends BunyipsOpMode {
 
         config = (WheatleyConfig) RobotConfig.newConfig(this, config, hardwareMap);
 
-        vision = new Vision(this, config.webCam);
+        vision = new Vision(this, config.webCam, new C920());
         vision.init(Vision.Processors.APRILTAG);
         vision.start(Vision.Processors.APRILTAG);
     }
@@ -34,7 +35,7 @@ public class WheatleyVisionDebug extends BunyipsOpMode {
 
         // Gives a different message based on whether or not the camera is connected
         // This is to ensure there are no connection issues
-        if (config.affirm(config.webCam)) {
+        if (config.assertDevices(config.webCam)) {
             addTelemetry("Camera is connected");
         } else {
             addTelemetry("Camera is NOT connected");
