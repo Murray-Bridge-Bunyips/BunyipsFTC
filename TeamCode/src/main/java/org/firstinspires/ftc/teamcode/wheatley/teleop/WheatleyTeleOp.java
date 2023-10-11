@@ -9,9 +9,15 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
 
 /**
  * Primary TeleOp for all of Wheatley's functions.
- * Uses gamepad1 for drive control (presumably) and gamepad2 for... something
+ * Uses gamepad1 for drive control (presumably) and gamepad2 for both arms/claws
  * > gamepad1 left stick for driving
  * > gamepad1 right stick for turning
+ * > gamepad2 left stick for Pixel Claw arm
+ * > gamepad2 right stick for rigging arm rotation (this probably doesn't make sense without context)
+ * > gamepad2 x opens the pixel claw
+ * > gamepad2 y closes the pixel claw
+ * > gamepad2 a extends rigging arm up
+ * > gamepad2 b extends rigging arm down (i don't think this makes sense as a sentence)
  *
  * @author Lachlan Paul, 2023
  */
