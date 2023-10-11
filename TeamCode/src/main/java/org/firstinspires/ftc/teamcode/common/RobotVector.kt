@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
+import kotlin.math.abs
 import kotlin.math.atan2
 import kotlin.math.cos
 import kotlin.math.sin
@@ -12,9 +13,16 @@ import kotlin.math.sqrt
  * We don't have to define (z) as 3D space is irrelevant in this context.
  */
 data class RobotVector(var x: Double, var y: Double, var r: Double) {
-    // Convert vectors to angles for use in IMU by calculating tan^-1(y/x)
+    // Use inverse trig to find a polar angle from a Cartesian quantity
     val angle: Double
-        get() = Math.toDegrees(atan2(y, x))
+        get() {
+            val quantity = Math.toDegrees(atan2(y, x)) - 270
+            if (quantity == -360.0) {
+                // Special case where the tangent is only calculated by doing a full revolution
+                return 0.0
+            }
+            return abs(quantity)
+        }
 
 
     /**

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.common;
 
+import static java.lang.Math.abs;
+
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,8 +18,13 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
     public FieldCentricMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, RelativeVector startingDirection) {
         super(opMode, frontLeft, backLeft, frontRight, backRight);
         this.imu = imu;
+        if (startingDirection == RelativeVector.CLOCKWISE || startingDirection == RelativeVector.ANTICLOCKWISE) {
+            throw new IllegalArgumentException("Cannot use rotational quantities as a starting direction");
+        }
         // Current vector will be the robot's starting vector, must offset the IMU to align straight
+        // Since the controls are the same for driving on each two quadrants, we can use absolute values
         imu.setOffset(startingDirection.getAngle());
+        imu.setOffset(abs(imu.getOffset()));
     }
 
     // Override the setSpeedXYR method to include the IMU heading in the calculation
@@ -25,7 +32,7 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
     public void setSpeedXYR(double x, double y, double r) {
         x = -x;
         imu.tick();
-        double heading = imu.getRawHeading();
+        double heading = imu.getRawHeading() + 90;
         double sin = Math.sin(Math.toRadians(heading));
         double cos = Math.cos(Math.toRadians(heading));
         // Transform the x and y values to be relative to the field
@@ -34,9 +41,5 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
         super.speedX = x * cos + y * sin;
         super.speedY = x * sin - y * cos;
         super.speedR = r;
-    }
-
-    public void resetHeading() {
-        imu.resetHeading();
     }
 }

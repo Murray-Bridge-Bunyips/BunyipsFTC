@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.glados.components;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
@@ -21,6 +24,7 @@ public class GLaDOSConfigCore extends RobotConfig {
     public DcMotorEx br;
     // Expansion 3: Back Left "bl"
     public DcMotorEx bl;
+    public IMU imu;
 
     @Override
     protected void init() {
@@ -29,5 +33,27 @@ public class GLaDOSConfigCore extends RobotConfig {
         fr = (DcMotorEx) getHardware("fr", DcMotorEx.class);
         br = (DcMotorEx) getHardware("br", DcMotorEx.class);
         bl = (DcMotorEx) getHardware("bl", DcMotorEx.class);
+        imu = (IMU) getHardware("imu", IMU.class);
+
+        // The forward left wheel goes the wrong way without us changing
+        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        // Explicitly set all other motors for easy debugging
+        fr.setDirection(DcMotorSimple.Direction.FORWARD);
+        br.setDirection(DcMotorSimple.Direction.FORWARD);
+        bl.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        if (imu == null) {
+            return;
+        }
+
+        imu.initialize(
+            new IMU.Parameters(
+                new RevHubOrientationOnRobot(
+                    RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                    RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                )
+            )
+        );
     }
 }

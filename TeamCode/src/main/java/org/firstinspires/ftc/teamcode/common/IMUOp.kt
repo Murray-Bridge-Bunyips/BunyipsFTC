@@ -27,10 +27,14 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
         private set
 
     // Offset the IMU reading for field-centric navigation
-    // May not be used, but is here for any potential use cases.
+    // Must be an polar angle: v E [0, 360], will be converted to a Euler angle
     var offset = 0.0
         set(value) {
-            if (value >= 0 && value < 360) field = value
+            if (value > 180) {
+                field = value - 360
+                return
+            }
+            field = value
         }
 
     /**
@@ -70,7 +74,6 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
      * Get the current Euler yaw reading from the internal IMU
      */
     val rawHeading: Double
-        // TODO: check this offset to see if it is correct
         get() = currentAngles?.thirdAngle?.toDouble()?.plus(offset) ?: 0.0
 
     /**
@@ -83,10 +86,11 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
         }
 
     /**
-     * Reset all heading measurements to default 0.0
+     * Reset all heading measurements, offsets, and internal measurements to default 0.0
      */
     fun resetHeading() {
         heading = 0.0
+        offset = 0.0
         imu.resetYaw()
     }
 
