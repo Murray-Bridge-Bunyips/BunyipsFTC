@@ -8,7 +8,7 @@ package org.firstinspires.ftc.teamcode.common;
 public class OpModeSelection {
     private final String name;
     private final Object obj;
-    private ButtonControl assignedButton;
+    private Controller assignedButton;
 
     public OpModeSelection(Object obj) {
         if (obj instanceof Enum) {
@@ -19,11 +19,11 @@ public class OpModeSelection {
         this.obj = obj;
     }
 
-    public ButtonControl getAssignedButton() {
+    public Controller getAssignedButton() {
         return assignedButton;
     }
 
-    public void setAssignedButton(ButtonControl assignedButton) {
+    public void setAssignedButton(Controller assignedButton) {
         this.assignedButton = assignedButton;
     }
 

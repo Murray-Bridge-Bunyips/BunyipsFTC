@@ -42,8 +42,7 @@ public class GetSpikeMarkTask extends Task implements AutoTask {
         super.init();
         // As this is the init-task, we can assume that the vision portal is not open yet
         // This task will also leave the portal OPEN for further usages of the vision system
-        vision.init(Vision.Processors.TFOD);
-        vision.start(Vision.Processors.TFOD);
+        // TODO: Initialise vision system with decided processor
     }
 
     @Override
@@ -69,22 +68,22 @@ public class GetSpikeMarkTask extends Task implements AutoTask {
             return;
         }
         vision.tick();
-        List<TfodData> tfodData = vision.getTfodData();
-        if (tfodData.size() == 0) {
-            return;
-        }
-        for (TfodData data : tfodData) {
-            if (data.getLabel().equals("Spike")) {
-                double x = data.getHorizontalTranslation();
-                if (x < 0.33) {
-                    position = SpikePosition.LEFT;
-                } else if (x > 0.66) {
-                    position = SpikePosition.RIGHT;
-                } else {
-                    position = SpikePosition.CENTER;
-                }
-                return;
-            }
-        }
+//        List<TfodData> tfodData = vision.getTfodData();
+//        if (tfodData.size() == 0) {
+//            return;
+//        }
+//        for (TfodData data : tfodData) {
+//            if (data.getLabel().equals("Spike")) {
+//                double x = data.getHorizontalTranslation();
+//                if (x < 0.33) {
+//                    position = SpikePosition.LEFT;
+//                } else if (x > 0.66) {
+//                    position = SpikePosition.RIGHT;
+//                } else {
+//                    position = SpikePosition.CENTER;
+//                }
+//                return;
+//            }
+//        }
     }
 }

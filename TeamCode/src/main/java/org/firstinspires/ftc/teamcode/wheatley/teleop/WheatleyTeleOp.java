@@ -40,7 +40,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     @Override
     protected void activeLoop() {
 
-        drive.setSpeedXYR(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
 
         // Adds a message on the driver hub stating the status of different controller inputs
         addTelemetry("Left Stick Y: " + gamepad1.left_stick_y);

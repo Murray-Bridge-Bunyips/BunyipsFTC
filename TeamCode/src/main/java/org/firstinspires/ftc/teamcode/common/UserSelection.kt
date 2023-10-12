@@ -57,10 +57,10 @@ class UserSelection<T>(
             callback(null)
         }
 
-        val buttons: HashMap<T, ButtonControl> = ButtonControl.mapArgs(opmodes)
+        val buttons: HashMap<T, Controller> = Controller.mapArgs(opmodes)
 
         // Default options for button selection and operation mode
-        var selectedButton: ButtonControl? = null
+        var selectedButton: Controller? = null
         var selectedOpMode: T? = null
 
         // Disable auto clear if it is enabled, we might accidentally clear out static telemetry
@@ -86,7 +86,7 @@ class UserSelection<T>(
 
         while (selectedOpMode == null && opMode.opModeInInit() && !isInterrupted) {
             for ((str, button) in buttons) {
-                if (ButtonControl.isSelected(opMode.gamepad1, button)) {
+                if (Controller.isSelected(opMode.gamepad1, button)) {
                     selectedButton = button
                     selectedOpMode = str
                     break

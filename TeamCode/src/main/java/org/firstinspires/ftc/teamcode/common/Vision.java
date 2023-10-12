@@ -19,10 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Latest wrapper to support the v8.2+ SDK's included libraries for Camera operation.
- * Allows TFOD and AprilTag processors to be used in OpModes.
- * Vuforia is not supported, as we don't have any effective uses for it, and this feature is
- * getting phased out by the SDK.
+ * Component wrapper to support the v8.2+ SDK's included libraries for Camera operation.
+ * Allows TFOD and AprilTag processors to be used in OpModes. Optionally allows custom processors.
  *
  * @author Lucas Bubner, 2023
  */
@@ -107,16 +105,16 @@ public class Vision extends BunyipsComponent {
     }
 
     /**
-     * Add a custom VisionProcessor that is not AprilTag or TFOD.
-     * This method should be called with the VisionPortal already initialised with init().
-     * !! This method may be expensive to call as it will reconstruct the VisionPortal.
+     * Add a custom VisionProcessor that is not defined by the enum system.
+     * This method may be expensive to call as it will reconstruct the VisionPortal!
+     * All onboard processors will be enabled by default, you must call management methods to disable them.
+     * If possible, try to avoid this but instead append functionality to this file to have it
+     * interop with the existing enum-based system. If you choose to not do this, you will have
+     * to fully manage your own VisionProcessor as Vision will not have instance management over it.
      */
     public void addCustomProcessor(VisionProcessor processor) {
-        if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised!");
-        }
         if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
-            throw new IllegalArgumentException("Cannot add TFOD or AprilTag processors with this method!");
+            throw new IllegalArgumentException("Use init() method instead to initialise AT or TFOD!");
         }
         // Reconstruct the VisionPortal with the new processor
         VisionPortal.Builder builder = new VisionPortal.Builder();
@@ -128,6 +126,7 @@ public class Vision extends BunyipsComponent {
         }
         builder.addProcessor(processor);
         visionPortal = constructVisionPortal(builder);
+        visionPortal.stopLiveView();
     }
 
     /**
@@ -138,7 +137,7 @@ public class Vision extends BunyipsComponent {
             throw new IllegalStateException("VisionPortal is not initialised!");
         }
         if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
-            throw new IllegalArgumentException("Cannot start TFOD or AprilTag processors with this method!");
+            throw new IllegalArgumentException("Use stop() or start() methods instead to control AT or TFOD!");
         }
         visionPortal.setProcessorEnabled(processor, state);
     }
@@ -264,6 +263,8 @@ public class Vision extends BunyipsComponent {
     /**
      * Tick the camera stream and extract data from the processors.
      * This data is stored in the instance and can be accessed with the getters.
+     * Processors must be initialised and started before calling this method, custom processors
+     * will be unaffected by this method as data interpreting is up to the overarching OpMode.
      */
     public void tick() {
         if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {

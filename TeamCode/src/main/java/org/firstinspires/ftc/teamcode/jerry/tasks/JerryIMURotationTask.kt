@@ -43,9 +43,9 @@ class JerryIMURotationTask(
         }
 
         if (direction == Direction.LEFT) {
-            drive?.setSpeedXYR(0.0, 0.0, speed)
+            drive?.setSpeedUsingController(0.0, 0.0, speed)
         } else {
-            drive?.setSpeedXYR(0.0, 0.0, -speed)
+            drive?.setSpeedUsingController(0.0, 0.0, -speed)
         }
         drive?.update()
     }
@@ -64,7 +64,7 @@ class JerryIMURotationTask(
 
     override fun run() {
         if (isFinished()) {
-            drive?.deinit()
+            drive?.stop()
             return
         }
         imu?.tick()

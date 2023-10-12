@@ -71,11 +71,11 @@ class JerryPrecisionDriveTask(
 
     override fun run() {
         if (isFinished()) {
-            drive?.deinit()
+            drive?.stop()
             return
         }
 
-        drive?.setSpeedXYR(
+        drive?.setSpeedUsingController(
             if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
             if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
             imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0

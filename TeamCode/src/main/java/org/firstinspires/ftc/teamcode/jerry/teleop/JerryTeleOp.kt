@@ -89,7 +89,7 @@ class JerryTeleOp : BunyipsOpMode() {
 //            "Controller: X: %.2f, Y: %.2f, R: %.2f", x, y, r))
 
         // Set speeds of motors and interpret any data
-        drive?.setSpeedXYR(x, y, r)
+        drive?.setSpeedUsingController(x, y, r)
         lift?.delta(v)
         if (gamepad2.a) {
             lift?.open()

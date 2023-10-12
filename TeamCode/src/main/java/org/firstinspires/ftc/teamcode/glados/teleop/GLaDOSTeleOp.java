@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.glados.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.IMUOp;
@@ -14,7 +13,8 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSDriveCore;
 
 /**
  * TeleOp for GLaDOS robot FTC 15215
- * Functionality is currently unknown...
+ * > gamepad1.left_stick for planar translation
+ * > gamepad1.right_stick for in-place rotation
  *
  * @author Lucas Bubner, 2023
  */
@@ -37,7 +37,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         double x = gamepad1.left_stick_x;
         double y = gamepad1.left_stick_y;
         double r = gamepad1.right_stick_x;
-        drive.setSpeedXYR(x, y, r);
+        drive.setSpeedUsingController(x, y, r);
         drive.update();
 
         if (gamepad1.y) {

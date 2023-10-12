@@ -21,9 +21,9 @@ public abstract class MecanumDrive extends BunyipsComponent {
     private final DcMotor backRight;
 
     // Axial translation speeds
-    Double speedX;
-    Double speedY;
-    Double speedR;
+    double speedX;
+    double speedY;
+    double speedR;
 
     // Store and declare prioritisation when given instruction to calculate motor powers
     private Priority priority = Priority.NORMALISED;
@@ -46,23 +46,36 @@ public abstract class MecanumDrive extends BunyipsComponent {
     }
 
     /**
+     * Set a speed at which the Mecanum drive assembly should move using controller input.
+     * The difference is that the vectors will be rotated by 90 degrees clockwise to account for
+     * the strange non-Cartesian coordinate system of the gamepad.
+     * @see org.firstinspires.ftc.teamcode.common.Controller#Companion
+     * @param left_stick_x X value of the controller
+     * @param left_stick_y Y value of the controller
+     * @param right_stick_x R value of the controller
+     */
+    public void setSpeedUsingController(double left_stick_x, double left_stick_y, double right_stick_x) {
+        this.speedX = Range.clip(left_stick_x, -1.0, 1.0);
+        this.speedY = Range.clip(-left_stick_y, -1.0, 1.0);
+        this.speedR = Range.clip(right_stick_x, -1.0, 1.0);
+    }
+
+    /**
      * Set a speed at which the Mecanum drive assembly should move.
      *
      * @param x The speed at which the robot should move in the x direction.
      *          Positive is right, negative is left.
      *          Range: -1.0 to 1.0
      * @param y The speed at which the robot should move in the y direction.
-     *          Positive is backward, negative is forward.
+     *          Positive is forward, negative is backward.
      *          Range: -1.0 to 1.0
      * @param r The speed at which the robot will rotate.
      *          Positive is clockwise, negative is anti-clockwise.
      *          Range: -1.0 to 1.0
      */
     public void setSpeedXYR(double x, double y, double r) {
-        // X and Y have been swapped, and X has been inverted
-        // This rotates input vectors by 90 degrees clockwise and will account for gamepad input.
-        this.speedX = Range.clip(y, -1.0, 1.0);
-        this.speedY = Range.clip(-x, -1.0, 1.0);
+        this.speedX = Range.clip(x, -1.0, 1.0);
+        this.speedY = Range.clip(y, -1.0, 1.0);
         this.speedR = Range.clip(r, -1.0, 1.0);
     }
 
@@ -87,6 +100,8 @@ public abstract class MecanumDrive extends BunyipsComponent {
     public void update() {
         if (priority == Priority.ROTATIONAL) {
             rotationalUpdate();
+            getOpMode().addTelemetry(String.format(Locale.getDefault(), "Rotation-priority Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR), false);
+            return;
         }
 
         // Calculate motor powers
@@ -115,7 +130,7 @@ public abstract class MecanumDrive extends BunyipsComponent {
     /**
      * Immediately stop the drive system.
      */
-    public void deinit() {
+    public void stop() {
         this.speedX = 0.0;
         this.speedY = 0.0;
         this.speedR = 0.0;
@@ -192,6 +207,8 @@ public abstract class MecanumDrive extends BunyipsComponent {
 
     /**
      * Set motor speeds based on a RobotVector or RelativeVector.
+     * @see org.firstinspires.ftc.teamcode.common.RobotVector#RobotVector(double, double, double)
+     * @see org.firstinspires.ftc.teamcode.common.RelativeVector
      */
     public <T> void setVector(T vector) {
         if (vector instanceof RobotVector) {
@@ -204,6 +221,8 @@ public abstract class MecanumDrive extends BunyipsComponent {
             this.speedX = relativeVector.getVector().getX();
             this.speedY = relativeVector.getVector().getY();
             this.speedR = relativeVector.getVector().getR();
+        } else {
+            throw new IllegalArgumentException("Vector must be of type RobotVector or RelativeVector");
         }
     }
 

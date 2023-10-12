@@ -14,7 +14,10 @@ import org.openftc.easyopencv.OpenCvPipeline
  *
  * If using AprilTags, use the Vision class instead, as it will use the SDKs libraries which
  * are more reliable and have more interoperability. This wrapper should only be used if
- * OpenCV pipelines are desired but they are not AprilTags.
+ * absolutely necessary (e.g. if you need to use OpenCVs built-in pipeline methods).
+ *
+ * Note that making a class that extends VisionProcessor will give you access to OpenCV pipeline methods,
+ * and these can be attached to the VisionPortal in Vision. This is the recommended way to use OpenCV.
  *
  * @author Lucas Bubner, 2023
  */

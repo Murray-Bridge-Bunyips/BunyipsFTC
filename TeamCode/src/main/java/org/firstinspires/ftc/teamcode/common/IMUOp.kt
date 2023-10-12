@@ -182,13 +182,15 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
      * This does not use the tolerance parameter, as it is not needed for vector alignment
      */
     fun getCorrectedVector(vec: RobotVector): RobotVector {
+        throw NotImplementedError("Vector drive system is not being maintained")
+
         // If we're not capturing, return the original vector
         if (this.capture == null) return vec
 
         this.tick()
         val current = this.heading
 
-        // FIXME: Buggy, may be due to vector drive not working to begin with
+        // Buggy, may be due to vector drive not working to begin with
         val normalisedError = AngleUnit.normalizeDegrees(this.capture!! - current)
         val correctionVector = RobotVector.calcPolar(normalisedError, AngleUnit.DEGREES)
 

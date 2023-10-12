@@ -44,7 +44,7 @@ public class GLaDOSArmCore extends BunyipsComponent {
     }
 
     public void update() {
-        // TODO
+        // TODO: Implement once we get a physical arm to work with
     }
 
 

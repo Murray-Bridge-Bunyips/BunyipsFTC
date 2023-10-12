@@ -39,7 +39,7 @@ class JerryIMURotateTest : BunyipsOpMode() {
             tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive?.deinit()
+            drive?.stop()
         }
     }
 }

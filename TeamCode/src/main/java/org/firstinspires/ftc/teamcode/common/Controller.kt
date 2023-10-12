@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.hardware.Gamepad
  * Enum control class for the different button controls on the gamepad.
  * Used for adding additional abstraction to the current gamepad control system.
  */
-enum class ButtonControl {
+enum class Controller {
     A, B, X, Y, START, BACK, DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT, LEFT_BUMPER, RIGHT_BUMPER, LEFT_STICK_BUTTON, RIGHT_STICK_BUTTON, NONE;
 
     companion object {
-        fun isSelected(gamepad: Gamepad, buttonControl: ButtonControl?): Boolean {
+        fun isSelected(gamepad: Gamepad, buttonControl: Controller?): Boolean {
             var buttonPressed = false
             when (buttonControl) {
                 DPAD_UP -> buttonPressed = gamepad.dpad_up
@@ -46,12 +46,15 @@ enum class ButtonControl {
             return buttonPressed
         }
 
-        fun <T> mapArgs(args: Array<out T>): HashMap<T, ButtonControl> {
+        /**
+         * Map an array of arguments to controller buttons.
+         */
+        fun <T> mapArgs(args: Array<out T>): HashMap<T, Controller> {
             // Map strings of args to every controller enum in order
             if (args.size >= values().size) {
                 throw IllegalArgumentException("Number of args exceeds number of possible gamepad buttons (14).")
             }
-            val map = HashMap<T, ButtonControl>()
+            val map = HashMap<T, Controller>()
             for (i in args.indices) {
                 // For every arg, map it to the corresponding enum
                 map[args[i]] = values()[i]
@@ -60,6 +63,14 @@ enum class ButtonControl {
                 }
             }
             return map
+        }
+
+        /**
+         * Convert the gamepad movement values to a Cartesian robot vector.
+         * This is done by un-rotating (90 deg) the vectors provided by the controller.
+         */
+        fun makeVector(x: Double, y: Double, r: Double): RobotVector {
+            return RobotVector(y, -x, r)
         }
     }
 }

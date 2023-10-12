@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
-import org.firstinspires.ftc.teamcode.common.pipelines.AprilTagDetectionPipeline
+import org.firstinspires.ftc.teamcode.common.vision.AprilTagDetectionPipeline
 
 /**
  * Intermediate task for using the AprilTagDetectionPipeline to detect a Signal position during an initLoop.

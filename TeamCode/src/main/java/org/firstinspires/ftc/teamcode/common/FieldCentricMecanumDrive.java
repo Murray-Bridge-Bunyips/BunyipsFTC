@@ -27,9 +27,12 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
         imu.setOffset(abs(imu.getOffset()));
     }
 
-    // Override the setSpeedXYR method to include the IMU heading in the calculation
+    // Override the setSpeedUsingController method to include the IMU heading in the calculation
+    // Field-centric should never have to deal with setSpeedXYR itself since autonomous won't need
+    // to use it, so it's safe to only implement half of the methods.
     @Override
-    public void setSpeedXYR(double x, double y, double r) {
+    public void setSpeedUsingController(double x, double y, double r) {
+        // TODO: Validate as vectors have changed
         x = -x;
         imu.tick();
         double heading = imu.getRawHeading() + 90;
