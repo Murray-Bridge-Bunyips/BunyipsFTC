@@ -15,16 +15,7 @@ import kotlin.math.sqrt
 data class RobotVector(var x: Double, var y: Double, var r: Double) {
     // Use inverse trig to find a polar angle from a Cartesian quantity
     val angle: Double
-        get() {
-            // TODO: Confirm this works since vectors are now properly defined
-            val quantity = Math.toDegrees(atan2(y, x)) - 270
-            if (quantity == -360.0) {
-                // Special case where the tangent is only calculated by doing a full revolution
-                return 0.0
-            }
-            return abs(quantity)
-        }
-
+        get() = Math.toDegrees(atan2(y, x)) - 90.0
 
     /**
      * Add two vectors together.

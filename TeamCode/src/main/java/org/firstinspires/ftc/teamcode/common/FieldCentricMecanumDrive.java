@@ -24,7 +24,6 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
         // Current vector will be the robot's starting vector, must offset the IMU to align straight
         // Since the controls are the same for driving on each two quadrants, we can use absolute values
         imu.setOffset(startingDirection.getAngle());
-        imu.setOffset(abs(imu.getOffset()));
     }
 
     // Override the setSpeedUsingController method to include the IMU heading in the calculation
