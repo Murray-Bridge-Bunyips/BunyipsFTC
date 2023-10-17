@@ -4,8 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
+import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyArmBase;
+import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyClaw;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
+import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
+import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyRigArm;
 
 /**
  * Primary TeleOp for all of Wheatley's functions.
@@ -26,7 +30,10 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
 public class WheatleyTeleOp extends BunyipsOpMode {
 
     private WheatleyConfig config = new WheatleyConfig();
+    private WheatleyClaw claw;
+    private WheatleyLift lift;
     private WheatleyMecanumDrive drive;
+    private WheatleyRigArm rigArm;
 
     @Override
     protected void onInit() {
@@ -41,6 +48,25 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     protected void activeLoop() {
 
         drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+
+        lift.armLift(gamepad2.left_stick_y);
+
+        // Because of the way the rigging arm will actually use the stick,
+        // this might need to be done differently.
+        // This is because unlike the claw arm, the rigging arm will do a kind of rotation.
+        // Basically like Genos rocketing himself up from the ground in One Punch Man.
+        // (https://tenor.com/view/genos-one-punch-man-standing-gif-14470948)
+        rigArm.armLift(gamepad2.right_stick_y);
+
+//        if (gamepad2.a) {
+//
+//        }
+
+        if (gamepad2.x) {
+            claw.clawOpen();
+        } else if (gamepad2.y) {
+            claw.clawClose();
+        }
 
         // Adds a message on the driver hub stating the status of different controller inputs
         addTelemetry("Left Stick Y: " + gamepad1.left_stick_y);

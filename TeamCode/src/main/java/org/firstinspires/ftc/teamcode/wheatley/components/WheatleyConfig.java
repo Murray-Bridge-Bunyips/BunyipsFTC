@@ -16,8 +16,9 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
 public class WheatleyConfig extends RobotConfig {
 
+    // I'm not sure if this comment actually makes sense here but I'm keeping it here anyway
     //    front_servo = hardwareMap.get(Servo.class, "front_servo");
-    //    back_servo = hardwareMap.get(Servo.class, "back_servo")
+    //    back_servo = hardwareMap.get(Servo.class, "back_servo");
     //    gripper = hardwareMap.get(Servo.class, "gripper");
     //    right_front = hardwareMap.get(DcMotor.class, "right_front");
     //    right_rear = hardwareMap.get(DcMotor.class, "right_rear");
@@ -30,6 +31,9 @@ public class WheatleyConfig extends RobotConfig {
     public DcMotor backLeft;
     public DcMotor frontRight;
     public DcMotor backRight;
+
+    public DcMotor frontServo;
+    public DcMotor backServo;
     public WebcamName webCam;
 
     @Override
@@ -40,6 +44,8 @@ public class WheatleyConfig extends RobotConfig {
         backLeft = (DcMotor) getHardware("left_rear", DcMotor.class);
         frontRight = (DcMotor) getHardware("right_front", DcMotor.class);
         backRight = (DcMotor) getHardware("right_rear", DcMotor.class);
+        frontServo = (DcMotor) getHardware("front_servo", DcMotor.class);
+        backServo = (DcMotor) getHardware("back_servo", DcMotor.class);
         webCam = (WebcamName) getHardware("web_cam", WebcamName.class);
     }
 }
