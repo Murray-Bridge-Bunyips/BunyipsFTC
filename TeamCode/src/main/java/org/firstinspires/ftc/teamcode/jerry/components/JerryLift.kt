@@ -35,7 +35,7 @@ class JerryLift(
 
     private var deltaTimeout = 0
     private val resetLock = While(
-        condition = {
+        {
             // Check if the delta is above 0 for 30 consecutive loops, if so, we have hit the limit
             val prev = (motors[0].currentPosition + motors[1].currentPosition) / 2
             val delta = (motors[0].currentPosition + motors[1].currentPosition) / 2 - prev
@@ -47,7 +47,7 @@ class JerryLift(
             // Reset lock when limit is pressed, delta is stagnant, or when manually interrupted
             !limit.isPressed && !opMode.gamepad2.right_bumper && deltaTimeout < 30
         },
-        runThis = {
+        {
             opMode.addTelemetry(
                 String.format(
                     "LIFT IS RESETTING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
@@ -56,7 +56,7 @@ class JerryLift(
                 )
             )
         },
-        callback = {
+        {
             for (motor in motors) {
                 // Finally, we reset the motors and we are now zeroed out again.
                 motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
@@ -67,15 +67,15 @@ class JerryLift(
             targetPosition = 0.0
             deltaTimeout = 0
         },
-        timeoutSeconds = 5.0
+        5.0
     )
 
     private val releaseLock = While(
-        condition = {
+        {
             // Release lock when motors have reached the target or manually interrupted
             arm1.isBusy && arm2.isBusy && !opMode.gamepad2.right_bumper
         },
-        runThis = {
+        {
             opMode.addTelemetry(
                 String.format(
                     "LIFT IS RECALLING TO HOLD POSITION %d... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
@@ -85,7 +85,7 @@ class JerryLift(
                 )
             )
         },
-        callback = {
+        {
             for (motor in motors) {
                 motor.power = 0.0
                 motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
@@ -94,7 +94,7 @@ class JerryLift(
             opMode.log("lift released to $holdPosition")
             holdPosition = null
         },
-        timeoutSeconds = 5.0
+        5.0
     )
 
     // Handle both manual and positional control modes

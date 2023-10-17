@@ -2,14 +2,15 @@ package org.firstinspires.ftc.teamcode.glados.components;
 
 import androidx.annotation.NonNull;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
+/**
+ * Theoretical alignment routine for GLaDOS lift mechanism, to automatically align the end effector
+ * to be in the correct position for the backdrop.
+ */
 public class GLaDOSAlignmentCore extends BunyipsComponent {
-    private GLaDOSArmCore arm;
+    private GLaDOSPixelCore arm;
 
     /**
      * Threshold in degrees for the pivot to be considered in the backdrop position.
@@ -26,7 +27,7 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
      */
     private static final double END_EFFECTOR_OFFSET = 30.0;
 
-    public GLaDOSAlignmentCore(@NonNull BunyipsOpMode opMode, GLaDOSArmCore arm) {
+    public GLaDOSAlignmentCore(@NonNull BunyipsOpMode opMode, GLaDOSPixelCore arm) {
         super(opMode);
         this.arm = arm;
     }

@@ -22,7 +22,6 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
             throw new IllegalArgumentException("Cannot use rotational quantities as a starting direction");
         }
         // Current vector will be the robot's starting vector, must offset the IMU to align straight
-        // Since the controls are the same for driving on each two quadrants, we can use absolute values
         imu.setOffset(startingDirection.getAngle());
     }
 
@@ -31,12 +30,15 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
     // to use it, so it's safe to only implement half of the methods.
     @Override
     public void setSpeedUsingController(double x, double y, double r) {
-        // TODO: Validate as vectors have changed
-        x = -x;
         imu.tick();
+
+        // Account for the rotated vector of the gamepad
         double heading = imu.getRawHeading() + 90;
+        x = -x;
+
         double sin = Math.sin(Math.toRadians(heading));
         double cos = Math.cos(Math.toRadians(heading));
+
         // Transform the x and y values to be relative to the field
         // This is done by calculating the current heading to the field then rotating the x
         // and y vectors to be relative to the field, then updating the motor powers as normal

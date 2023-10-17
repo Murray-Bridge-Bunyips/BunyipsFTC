@@ -15,6 +15,7 @@ import kotlin.math.sqrt
 data class RobotVector(var x: Double, var y: Double, var r: Double) {
     // Use inverse trig to find a polar angle from a Cartesian quantity
     val angle: Double
+        // Robot vector of 0 deg forward is 90 degrees on the unit circle, hence we correct it here
         get() = Math.toDegrees(atan2(y, x)) - 90.0
 
     /**

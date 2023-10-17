@@ -39,8 +39,8 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
 
     /**
      * Get the current heading reading from the internal IMU, with support for absolute degree readings
-     * Instead of using Euler readings, this will return a number within -inf to +inf
-     * @return Z value of Orientation axes in human-friendly reading range [-inf, inf]
+     * Instead of using Euler readings, this will return a degree within -inf to +inf
+     * @return Z degree value of Orientation axes in human-friendly reading range [-inf, inf]
      */
     var heading: Double = 0.0
         get() {
@@ -182,19 +182,19 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
      * This does not use the tolerance parameter, as it is not needed for vector alignment
      */
     fun getCorrectedVector(vec: RobotVector): RobotVector {
-        throw NotImplementedError("Vector drive system is not being maintained")
+        throw NotImplementedError("Vector IMU correction system is not being maintained")
 
-        // If we're not capturing, return the original vector
-        if (this.capture == null) return vec
-
-        this.tick()
-        val current = this.heading
-
-        // Buggy, may be due to vector drive not working to begin with
-        val normalisedError = AngleUnit.normalizeDegrees(this.capture!! - current)
-        val correctionVector = RobotVector.calcPolar(normalisedError, AngleUnit.DEGREES)
-
-        // Add the correction vector to the original vector
-        return vec + correctionVector
+//        // If we're not capturing, return the original vector
+//        if (this.capture == null) return vec
+//
+//        this.tick()
+//        val current = this.heading
+//
+//        // Buggy, may be due to vector drive not working to begin with
+//        val normalisedError = AngleUnit.normalizeDegrees(this.capture!! - current)
+//        val correctionVector = RobotVector.calcPolar(normalisedError, AngleUnit.DEGREES)
+//
+//        // Add the correction vector to the original vector
+//        return vec + correctionVector
     }
 }

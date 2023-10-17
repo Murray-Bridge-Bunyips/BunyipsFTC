@@ -9,19 +9,31 @@ import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Encoder;
 import org.firstinspires.ftc.teamcode.common.Pivot;
+import org.firstinspires.ftc.teamcode.common.While;
 
-public class GLaDOSArmCore extends BunyipsComponent {
+import kotlin.Unit;
+
+/**
+ * Pixel Movement arm mechanism
+ */
+public class GLaDOSPixelCore extends BunyipsComponent {
     private DcMotor motor;
     private Pivot pivot;
     private Servo endEffector;
+    private While resetLoop = new While(
+        () -> motor.getCurrentPosition() > 0,
+        () -> motor.setPower(-0.5),
+        () -> motor.setPower(0.0),
+        4
+    );
 
-    public GLaDOSArmCore(@NonNull BunyipsOpMode opMode, DcMotor motor, Servo endEffector) {
+    public GLaDOSPixelCore(@NonNull BunyipsOpMode opMode, DcMotor motor, Servo endEffector) {
         super(opMode);
         this.motor = motor;
         this.pivot = new Pivot(opMode, motor, 0);
         this.endEffector = endEffector;
 
-        // TODO: Reset physical arm to 0.0 degrees
+        reset();
 
         pivot.reset();
         pivot.track();
@@ -41,6 +53,10 @@ public class GLaDOSArmCore extends BunyipsComponent {
 
     public void setEndEffectorPosition(double position) {
         endEffector.setPosition(position);
+    }
+
+    public void reset() {
+
     }
 
     public void update() {

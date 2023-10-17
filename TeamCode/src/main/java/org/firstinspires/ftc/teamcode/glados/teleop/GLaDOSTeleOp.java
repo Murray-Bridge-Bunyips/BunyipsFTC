@@ -28,8 +28,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
     protected void onInit() {
         config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
         imu = new IMUOp(this, config.imu);
-        // FIXME: Forward left is forward right, confirm back left and right do work. Forward left untested
-        drive = new GLaDOSDriveCore(this, config.fl, config.bl, config.fr, config.br, imu, RelativeVector.FORWARD_LEFT);
+        drive = new GLaDOSDriveCore(this, config.fl, config.bl, config.fr, config.br, imu, RelativeVector.FORWARD);
     }
 
     @Override
