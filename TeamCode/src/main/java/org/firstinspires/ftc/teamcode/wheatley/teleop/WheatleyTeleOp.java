@@ -17,8 +17,8 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyRigArm;
  * > gamepad1 right stick for turning
  * > gamepad2 left stick for Pixel Claw arm
  * > gamepad2 right stick for rigging arm rotation (this probably doesn't make sense without context)
- * > gamepad2 x opens the pixel claw
- * > gamepad2 y closes the pixel claw
+ * > gamepad2 x operates the left pixel claw
+ * > gamepad2 y coperates the right pixel claw
  * > gamepad2 a extends rigging arm up
  * > gamepad2 b extends rigging arm down (i don't think this makes sense as a sentence)
  *
@@ -62,9 +62,9 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 //        }
 
         if (gamepad2.x) {
-            claw.clawOpen();
+            claw.leftClaw();
         } else if (gamepad2.y) {
-            claw.clawClose();
+            claw.rightClaw();
         }
 
         // Adds a message on the driver hub stating the status of different controller inputs
