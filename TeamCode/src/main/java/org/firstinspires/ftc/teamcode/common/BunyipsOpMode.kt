@@ -17,7 +17,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
         private set
     private var operationsCompleted = false
     private var operationsPaused = false
-    private val retainedTelemetryObjects = mutableListOf<Item>()
 
     /**
      * One-time setup for operations that need to be done for the opMode

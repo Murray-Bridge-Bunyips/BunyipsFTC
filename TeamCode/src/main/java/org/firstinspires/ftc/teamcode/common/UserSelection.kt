@@ -10,7 +10,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry.Item
  *
  * Keep in mind this thread runs in the background so it is not guaranteed to be ready during any
  * specific phase of your init-cycle. It is recommended to start this thread at the start of your
- * cycle and checking for `thread.isAlive()` or `thread.result != null` in your `onInitLoop()`.
+ * cycle and checking for `thread.isAlive()` or `thread.result == null` in your `onInitLoop()`.
  * This is not required but it does let BunyipsOpMode know that you are waiting for a result.
  *
  * The result of this thread will be stored in the `result` property, which you can access yourself
@@ -49,7 +49,6 @@ class UserSelection<T>(
 
     /**
      * Maps a set of operation modes to a set of buttons.
-     * @param opmodes The operation modes to map to buttons.
      * @return A HashMap of operation modes to buttons.
      */
     override fun run() {

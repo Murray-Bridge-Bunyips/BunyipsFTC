@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
  * Variant of the MecanumDrive that uses field centric control.
+ * Should be extended instead of implemented directly to allow for additional methods that may be
+ * needed as the drive system is developed for a robot.
  *
  * @author Lucas Bubner, 2023
  * @see MecanumDrive

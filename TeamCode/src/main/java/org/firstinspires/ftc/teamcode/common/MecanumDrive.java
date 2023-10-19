@@ -10,6 +10,8 @@ import java.util.Locale;
 /**
  * Base class for a drive system that uses Mecanum wheels.
  * Includes all the common math done across all Mecanum drive systems.
+ * Should be extended instead of implemented directly to allow for additional methods that may be
+ * needed as the drive system is developed for a robot.
  *
  * @author Lucas Bubner, 2023
  */

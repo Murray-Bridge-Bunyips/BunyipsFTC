@@ -142,7 +142,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * If not implemented, the opMode will try to run your initTask, and if that is null,
      * the dynamic_init phase will be skipped.
      * Overriding this method will fully detach your UserSelection from alerting BYO of its runtime,
-     * so override with caution.
+     * so override with caution or ensure to use a super call.
      *
      * @see #setInitTask
      */
@@ -182,7 +182,6 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
         tasks.addLast(newTask);
         log(String.format(Locale.getDefault(), "auto: %s has been added as task %d/%d", newTask.getClass().getSimpleName(), tasks.size(), tasks.size()));
     }
-
 
     /**
      * Add a task to the very start of the queue. This is useful to call when working with tasks that

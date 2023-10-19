@@ -14,16 +14,23 @@ abstract class Task : AutoTask {
     protected var startTime = 0.0
     protected var opMode: BunyipsOpMode
 
+    /**
+     * @param time Maximum timeout (sec) of the task. If set to zero this will serve as an indefinite init-task.
+     */
     constructor(opMode: BunyipsOpMode, time: Double) {
         this.time = time
         this.opMode = opMode
     }
 
-    // Overloading base Task to allow any tasks that may not want to use a time restriction,
-    // such as an init-loop task. This will perform the same as a task also defined with a time of 0 seconds.
-    // It is not recommended to use this constructor for tasks that will be used in an activeLoop.
-    // If this is desired, you may be better off just using BunyipsOpMode standalone, as tasks
-    // are blocking and will not allow other tasks to run until they are finished.
+    /**
+     * Overloading base Task allows any tasks that may not want to use a time restriction,
+     * such as an init-loop task. This will perform the same as a task also defined with a time of 0 seconds.
+     * Note that tasks with no time restriction can only be used in the INIT phase.
+     *
+     * It is not recommended to use this constructor for tasks that will be used in an activeLoop.
+     * If this is desired, you may be better off using BunyipsOpMode standalone, as tasks
+     * are blocking and will not allow other tasks to run until they are finished.
+     */
     constructor(opMode: BunyipsOpMode) {
         this.opMode = opMode
         time = 0.0
@@ -35,6 +42,12 @@ abstract class Task : AutoTask {
     override fun init() {
         // Define global init code here, use with a super call if overriding
     }
+
+    /**
+     * To run as an activeLoop during this task's duration.
+     * You must call a check to `isFinished()` at some point in this method to prevent an infinite loop.
+     */
+    abstract override fun run()
 
     /**
      * Override to this method to add custom criteria if a task should be considered finished.
@@ -51,6 +64,7 @@ abstract class Task : AutoTask {
         }
         // Finish tasks that exceed a time limit, if the OpMode is stopped, or if the task is
         // set to run indefinitely and the OpMode is not in init-phase.
+        // In order to prevent an infinite running task we prohibit indefinite tasks outside of init
         if ((currentTime > startTime + time && time != 0.0) || opMode.isStopRequested || (time == 0.0 && !opMode.opModeInInit())) {
             taskFinished = true
         }
