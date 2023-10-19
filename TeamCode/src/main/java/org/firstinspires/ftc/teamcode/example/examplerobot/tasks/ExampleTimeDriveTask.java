@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.example.examplerobot.tasks;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleDrive;
 
@@ -11,7 +10,7 @@ import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleDri
 // amount of time to run, where it has it's own loop to run code in. This is useful for running
 // specific tasks, such as moving the drive system for a certain amount of time, or until a certain
 // condition is met.
-public class ExampleTimeDriveTask extends Task implements AutoTask {
+public class ExampleTimeDriveTask extends Task {
     // You will need to store any COMPONENTS you wish to control in your task as a local instance
     private final ExampleDrive drive;
 

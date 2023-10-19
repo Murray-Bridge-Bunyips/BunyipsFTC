@@ -19,13 +19,11 @@ import kotlin.Unit;
  * @author Lachlan Paul, 2023
  */
 
-abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
+public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
 
     private final ArrayDeque<AutoTask> tasks = new ArrayDeque<>();
     private final ArrayDeque<AutoTask> postQueue = new ArrayDeque<>();
     private final ArrayDeque<AutoTask> preQueue = new ArrayDeque<>();
-    private UserSelection<OpModeSelection> userSelection;
-
     /**
      * This list defines OpModes that should be selectable by the user. This will then
      * be used to determine your tasks in {@link #onQueueReady(OpModeSelection)}.
@@ -35,9 +33,10 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * @see #setOpModes()
      */
     protected ArrayList<OpModeSelection> opModes = new ArrayList<>();
+    private UserSelection<OpModeSelection> userSelection;
     private int currentTask = 1;
-    private AutoTask initTask = null;
-    private boolean hasGottenCallback = false;
+    private AutoTask initTask;
+    private boolean hasGottenCallback;
 
     private Unit callback(@Nullable OpModeSelection selectedOpMode) {
         hasGottenCallback = true;
@@ -71,7 +70,7 @@ abstract public class AutonomousBunyipsOpMode extends BunyipsOpMode {
             opModes.addAll(userSelections);
         }
         // Convert user defined OpModeSelections to varargs
-        OpModeSelection[] varargs = this.opModes.toArray(new OpModeSelection[0]);
+        OpModeSelection[] varargs = opModes.toArray(new OpModeSelection[0]);
         if (varargs.length == 0) {
             log("auto: no OpModeSelections defined, skipping selection phase");
             opModes.add(new OpModeSelection("DEFAULT"));

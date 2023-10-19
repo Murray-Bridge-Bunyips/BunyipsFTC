@@ -49,7 +49,7 @@ public class ExampleMecanumDrive extends BunyipsComponent {
     }
 
     public void swapPriority() {
-        this.setPriority(priority == Priority.NORMALISED ? Priority.ROTATIONAL : Priority.NORMALISED);
+        priority = priority == Priority.NORMALISED ? Priority.ROTATIONAL : Priority.NORMALISED;
     }
 
     /**
@@ -68,9 +68,9 @@ public class ExampleMecanumDrive extends BunyipsComponent {
     public void setSpeedXYR(double x, double y, double r) {
         // X and Y have been swapped, and X has been inverted
         // This rotates input vectors by 90 degrees clockwise and wil account for gamepad input.
-        this.speedX = Range.clip(y, -1.0, 1.0);
-        this.speedY = Range.clip(-x, -1.0, 1.0);
-        this.speedR = Range.clip(r, -1.0, 1.0);
+        speedX = Range.clip(y, -1.0, 1.0);
+        speedY = Range.clip(-x, -1.0, 1.0);
+        speedR = Range.clip(r, -1.0, 1.0);
     }
 
     /**
@@ -82,8 +82,8 @@ public class ExampleMecanumDrive extends BunyipsComponent {
      */
     public void setSpeedPolarR(double speed, double direction_degrees, double speedR) {
         double radians = Math.toRadians(direction_degrees);
-        this.speedX = Range.clip(speed * Math.cos(radians), -1.0, 1.0);
-        this.speedY = Range.clip(speed * Math.sin(radians), -1.0, 1.0);
+        speedX = Range.clip(speed * Math.cos(radians), -1.0, 1.0);
+        speedY = Range.clip(speed * Math.sin(radians), -1.0, 1.0);
         this.speedR = Range.clip(speedR, -1.0, 1.0);
     }
 

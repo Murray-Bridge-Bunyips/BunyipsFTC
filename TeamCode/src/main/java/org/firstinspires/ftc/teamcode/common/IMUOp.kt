@@ -27,7 +27,7 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
         private set
 
     // Offset the IMU reading for field-centric navigation
-    // Must be an polar angle: v E [0, 360], will be converted to a Euler angle
+    // Must be an polar angle: v E [0, 360], will be converted to a signed [-180, 180] angle
     var offset = 0.0
         set(value) {
             if (value > 180) {
@@ -39,7 +39,7 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
 
     /**
      * Get the current heading reading from the internal IMU, with support for absolute degree readings
-     * Instead of using Euler readings, this will return a degree within -inf to +inf
+     * Instead of using signed [-180, 180] readings, this will return a degree within -inf to +inf
      * @return Z degree value of Orientation axes in human-friendly reading range [-inf, inf]
      */
     var heading: Double = 0.0
@@ -71,7 +71,7 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
         private set
 
     /**
-     * Get the current Euler yaw reading from the internal IMU
+     * Get the current signed [-180, 180] yaw reading from the internal IMU
      */
     val rawHeading: Double
         get() = currentAngles?.thirdAngle?.toDouble()?.plus(offset) ?: 0.0

@@ -69,8 +69,8 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline {
 
     public AprilTagDetectionPipeline(double tagsize, double fx, double fy, double cx, double cy) {
         this.tagsize = tagsize;
-        this.tagsizeX = tagsize;
-        this.tagsizeY = tagsize;
+        tagsizeX = tagsize;
+        tagsizeY = tagsize;
         this.fx = fx;
         this.fy = fy;
         this.cx = cx;

@@ -11,29 +11,20 @@ import java.util.List;
 /**
  * Init-task runner for obtaining the White Pixel randomisation mark for the autonomous period.
  * FTC 2023-2024 CENTERSTAGE
+ *
  * @author Lucas Bubner, 2023
  */
-public class GetWhitePixelTask extends Task implements AutoTask {
-    private Vision vision;
+public class GetWhitePixelTask extends Task {
+    private final Vision vision;
     private SpikePosition position = SpikePosition.UNKNOWN;
-
-    enum SpikePosition {
-        LEFT,
-        RIGHT,
-        CENTER,
-        // Camera has not attempted to detect the spike
-        UNKNOWN,
-        // Camera has attempted to detect the spike but has not found it
-        UNDETECTED
-    }
-
-    public SpikePosition getSpikePosition() {
-        return position;
-    }
 
     public GetWhitePixelTask(@NonNull BunyipsOpMode opMode, Vision vision) {
         super(opMode);
         this.vision = vision;
+    }
+
+    public SpikePosition getSpikePosition() {
+        return position;
     }
 
     @Override
@@ -86,5 +77,15 @@ public class GetWhitePixelTask extends Task implements AutoTask {
                 position = SpikePosition.CENTER;
             }
         }
+    }
+
+    enum SpikePosition {
+        LEFT,
+        RIGHT,
+        CENTER,
+        // Camera has not attempted to detect the spike
+        UNKNOWN,
+        // Camera has attempted to detect the spike but has not found it
+        UNDETECTED
     }
 }

@@ -34,8 +34,8 @@ public class ExampleDrive extends BunyipsComponent {
         // constructor, such as motors for a drive system, as shown above and below.
         // Assigns constructor instances to the private variables declared above, allowing us to
         // use them in the component.
-        this.leftMotor = left;
-        this.rightMotor = right;
+        leftMotor = left;
+        rightMotor = right;
     }
 
     // This covers all required functions that need to be implemented from the BunyipsComponent,
@@ -46,12 +46,12 @@ public class ExampleDrive extends BunyipsComponent {
     // local variable to represent this power. (This is also called a setter)
     public void run(double power) {
         // Set the power of the motors to the given power.
-        this.motorPower = power;
+        motorPower = power;
     }
 
     public void stop() {
         // Stop the motors by setting power to zero
-        this.motorPower = 0;
+        motorPower = 0;
     }
 
     public boolean isAtPosition(double target) {

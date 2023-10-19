@@ -28,7 +28,7 @@ public abstract class MecanumDrive extends BunyipsComponent {
     // Store and declare prioritisation when given instruction to calculate motor powers
     private Priority priority = Priority.NORMALISED;
 
-    public MecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight) {
+    protected MecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight) {
         super(opMode);
         this.frontLeft = frontLeft;
         this.backLeft = backLeft;
@@ -42,22 +42,23 @@ public abstract class MecanumDrive extends BunyipsComponent {
     }
 
     public void swapPriority() {
-        this.setPriority(priority == Priority.NORMALISED ? Priority.ROTATIONAL : Priority.NORMALISED);
+        priority = priority == Priority.NORMALISED ? Priority.ROTATIONAL : Priority.NORMALISED;
     }
 
     /**
      * Set a speed at which the Mecanum drive assembly should move using controller input.
      * The difference is that the vectors will be rotated by 90 degrees clockwise to account for
      * the strange non-Cartesian coordinate system of the gamepad.
-     * @see org.firstinspires.ftc.teamcode.common.Controller#Companion
-     * @param left_stick_x X value of the controller
-     * @param left_stick_y Y value of the controller
+     *
+     * @param left_stick_x  X value of the controller
+     * @param left_stick_y  Y value of the controller
      * @param right_stick_x R value of the controller
+     * @see org.firstinspires.ftc.teamcode.common.Controller#Companion
      */
     public void setSpeedUsingController(double left_stick_x, double left_stick_y, double right_stick_x) {
-        this.speedX = Range.clip(left_stick_x, -1.0, 1.0);
-        this.speedY = Range.clip(-left_stick_y, -1.0, 1.0);
-        this.speedR = Range.clip(right_stick_x, -1.0, 1.0);
+        speedX = Range.clip(left_stick_x, -1.0, 1.0);
+        speedY = Range.clip(-left_stick_y, -1.0, 1.0);
+        speedR = Range.clip(right_stick_x, -1.0, 1.0);
     }
 
     /**
@@ -74,9 +75,9 @@ public abstract class MecanumDrive extends BunyipsComponent {
      *          Range: -1.0 to 1.0
      */
     public void setSpeedXYR(double x, double y, double r) {
-        this.speedX = Range.clip(x, -1.0, 1.0);
-        this.speedY = Range.clip(y, -1.0, 1.0);
-        this.speedR = Range.clip(r, -1.0, 1.0);
+        speedX = Range.clip(x, -1.0, 1.0);
+        speedY = Range.clip(y, -1.0, 1.0);
+        speedR = Range.clip(r, -1.0, 1.0);
     }
 
     /**
@@ -88,8 +89,8 @@ public abstract class MecanumDrive extends BunyipsComponent {
      */
     public void setSpeedPolarR(double speed, double direction_degrees, double speedR) {
         double radians = Math.toRadians(direction_degrees);
-        this.speedX = Range.clip(speed * Math.cos(radians), -1.0, 1.0);
-        this.speedY = Range.clip(speed * Math.sin(radians), -1.0, 1.0);
+        speedX = Range.clip(speed * Math.cos(radians), -1.0, 1.0);
+        speedY = Range.clip(speed * Math.sin(radians), -1.0, 1.0);
         this.speedR = Range.clip(speedR, -1.0, 1.0);
     }
 
@@ -131,9 +132,9 @@ public abstract class MecanumDrive extends BunyipsComponent {
      * Immediately stop the drive system.
      */
     public void stop() {
-        this.speedX = 0.0;
-        this.speedY = 0.0;
-        this.speedR = 0.0;
+        speedX = 0.0;
+        speedY = 0.0;
+        speedR = 0.0;
         frontLeft.setPower(0.0);
         frontRight.setPower(0.0);
         backLeft.setPower(0.0);
@@ -207,20 +208,21 @@ public abstract class MecanumDrive extends BunyipsComponent {
 
     /**
      * Set motor speeds based on a RobotVector or RelativeVector.
+     *
      * @see org.firstinspires.ftc.teamcode.common.RobotVector#RobotVector(double, double, double)
      * @see org.firstinspires.ftc.teamcode.common.RelativeVector
      */
     public <T> void setVector(T vector) {
         if (vector instanceof RobotVector) {
             RobotVector robotVector = (RobotVector) vector;
-            this.speedX = robotVector.getX();
-            this.speedY = robotVector.getY();
-            this.speedR = robotVector.getR();
+            speedX = robotVector.getX();
+            speedY = robotVector.getY();
+            speedR = robotVector.getR();
         } else if (vector instanceof RelativeVector) {
             RelativeVector relativeVector = (RelativeVector) vector;
-            this.speedX = relativeVector.getVector().getX();
-            this.speedY = relativeVector.getVector().getY();
-            this.speedR = relativeVector.getVector().getR();
+            speedX = relativeVector.getVector().getX();
+            speedY = relativeVector.getVector().getY();
+            speedR = relativeVector.getVector().getR();
         } else {
             throw new IllegalArgumentException("Vector must be of type RobotVector or RelativeVector");
         }

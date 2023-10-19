@@ -34,7 +34,7 @@ public class GLaDOSConfigCore extends RobotConfig {
         br = (DcMotorEx) getHardware("br", DcMotorEx.class);
         bl = (DcMotorEx) getHardware("bl", DcMotorEx.class);
         imu = (IMU) getHardware("imu", IMU.class);
-        
+
         if (fl != null) {
             // The forward left wheel goes the wrong way without us changing
             fl.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -58,12 +58,12 @@ public class GLaDOSConfigCore extends RobotConfig {
         }
 
         imu.initialize(
-            new IMU.Parameters(
-                new RevHubOrientationOnRobot(
-                    RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                    RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                        )
                 )
-            )
         );
     }
 }

@@ -32,14 +32,14 @@ public class Vision extends BunyipsComponent {
     private final List<TfodData> tfodData = new ArrayList<>();
     private final WebcamName webcam;
     private final CameraType cameraInfo;
-    private TfodProcessor tfod = null;
-    private AprilTagProcessor aprilTag = null;
-    private VisionPortal visionPortal = null;
+    private TfodProcessor tfod;
+    private AprilTagProcessor aprilTag;
+    private VisionPortal visionPortal;
 
     public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam, CameraType cameraType) {
         super(opMode);
         this.webcam = webcam;
-        this.cameraInfo = cameraType;
+        cameraInfo = cameraType;
     }
 
     /**
@@ -352,7 +352,7 @@ public class Vision extends BunyipsComponent {
      * @return List of all TFOD objects and their data
      */
     public List<TfodData> getTfodData() {
-        return this.tfodData;
+        return tfodData;
     }
 
     /**
@@ -361,7 +361,7 @@ public class Vision extends BunyipsComponent {
      * @return List of all AprilTag objects and their data
      */
     public List<AprilTagData> getAprilTagData() {
-        return this.aprilTagData;
+        return aprilTagData;
     }
 
     public enum Processors {

@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
-import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyArmBase;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyClaw;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;

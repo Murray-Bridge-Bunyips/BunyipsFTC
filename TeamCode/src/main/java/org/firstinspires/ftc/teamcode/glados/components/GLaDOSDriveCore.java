@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.FieldCentricMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.IMUOp;
-import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.RelativeVector;
 
 public class GLaDOSDriveCore extends FieldCentricMecanumDrive {

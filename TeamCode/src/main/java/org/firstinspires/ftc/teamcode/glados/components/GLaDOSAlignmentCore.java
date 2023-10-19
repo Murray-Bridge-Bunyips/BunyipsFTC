@@ -10,22 +10,19 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  * to be in the correct position for the backdrop.
  */
 public class GLaDOSAlignmentCore extends BunyipsComponent {
-    private GLaDOSPixelCore arm;
-
     /**
      * Threshold in degrees for the pivot to be considered in the backdrop position.
      */
     private static final double BACKDROP_THRESHOLD = 10.0;
-
     /**
      * Maximum arm pivot angle in degrees.
      */
     private static final double MAX_PIVOT_ANGLE = 150.0;
-
     /**
      * Target angle for the end effector to be aligned to.
      */
     private static final double END_EFFECTOR_OFFSET = 30.0;
+    private final GLaDOSPixelCore arm;
 
     public GLaDOSAlignmentCore(@NonNull BunyipsOpMode opMode, GLaDOSPixelCore arm) {
         super(opMode);
@@ -40,7 +37,7 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
 
     public void update() {
         // Assuming the arm encoder is set 0-180 deg for limits
-        if (arm.getPivotPosition() > BACKDROP_THRESHOLD) {
+        if (arm.getPivotPosition() > GLaDOSAlignmentCore.BACKDROP_THRESHOLD) {
             arm.setEndEffectorPosition(calculateEndEffectorOffset());
         } else {
             arm.setEndEffectorPosition(0.0);

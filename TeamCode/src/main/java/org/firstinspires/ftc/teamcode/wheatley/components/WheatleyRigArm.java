@@ -2,8 +2,6 @@ package org.firstinspires.ftc.teamcode.wheatley.components;
 
 import androidx.annotation.NonNull;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
-
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 /**

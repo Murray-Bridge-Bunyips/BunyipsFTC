@@ -23,7 +23,7 @@ public class ExampleLift extends BunyipsComponent {
 
         // In the constructor you are also able to set any other variables that you wish to use in
         // your component, such as the lift position pointer.
-        this.liftPositionPointer = 0;
+        liftPositionPointer = 0;
     }
 
     public void liftUp() {

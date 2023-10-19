@@ -76,7 +76,15 @@ class UserSelection<T>(
             )
         )
         for ((name, button) in buttons) {
-            retainedObjects.add(opMode.addTelemetry(String.format("%s: %s", button.name, if (name is OpModeSelection) name.name else name), true))
+            retainedObjects.add(
+                opMode.addTelemetry(
+                    String.format(
+                        "%s: %s",
+                        button.name,
+                        if (name is OpModeSelection) name.name else name
+                    ), true
+                )
+            )
         }
         retainedObjects.add(opMode.addTelemetry("---------!!!--------", true))
 

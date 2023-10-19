@@ -5,8 +5,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit
 import org.firstinspires.ftc.robotcore.external.navigation.Quaternion
 import org.firstinspires.ftc.vision.apriltag.AprilTagPoseRaw
 import org.opencv.core.Point
-import kotlin.math.atan2
-import kotlin.math.tan
 
 /**
  * Utility data structure for AprilTag Detections.
