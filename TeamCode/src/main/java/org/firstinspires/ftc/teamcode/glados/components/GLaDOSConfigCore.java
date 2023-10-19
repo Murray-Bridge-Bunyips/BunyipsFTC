@@ -34,14 +34,24 @@ public class GLaDOSConfigCore extends RobotConfig {
         br = (DcMotorEx) getHardware("br", DcMotorEx.class);
         bl = (DcMotorEx) getHardware("bl", DcMotorEx.class);
         imu = (IMU) getHardware("imu", IMU.class);
-
-        // The forward left wheel goes the wrong way without us changing
-        fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        
+        if (fl != null) {
+            // The forward left wheel goes the wrong way without us changing
+            fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
 
         // Explicitly set all other motors for easy debugging
-        fr.setDirection(DcMotorSimple.Direction.FORWARD);
-        br.setDirection(DcMotorSimple.Direction.FORWARD);
-        bl.setDirection(DcMotorSimple.Direction.FORWARD);
+        if (fr != null) {
+            fr.setDirection(DcMotorSimple.Direction.FORWARD);
+        }
+
+        if (br != null) {
+            br.setDirection(DcMotorSimple.Direction.FORWARD);
+        }
+
+        if (bl != null) {
+            bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
 
         if (imu == null) {
             return;
