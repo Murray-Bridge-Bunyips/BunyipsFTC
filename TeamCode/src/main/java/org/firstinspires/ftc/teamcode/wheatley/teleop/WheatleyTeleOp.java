@@ -18,7 +18,7 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyRigArm;
  * > gamepad2 left stick for Pixel Claw arm
  * > gamepad2 right stick for rigging arm rotation (this probably doesn't make sense without context)
  * > gamepad2 x operates the left pixel claw
- * > gamepad2 y coperates the right pixel claw
+ * > gamepad2 y operates the right pixel claw
  * > gamepad2 a extends rigging arm up
  * > gamepad2 b extends rigging arm down (i don't think this makes sense as a sentence)
  *
