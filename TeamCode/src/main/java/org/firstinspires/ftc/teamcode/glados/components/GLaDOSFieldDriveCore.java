@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.common.IMUOp;
 import org.firstinspires.ftc.teamcode.common.RelativeVector;
 
 public class GLaDOSFieldDriveCore extends FieldCentricMecanumDrive {
-    public GLaDOSFieldDriveCore(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, RelativeVector startingDirection) {
-        super(opMode, frontLeft, backLeft, frontRight, backRight, imu, startingDirection);
+    public GLaDOSFieldDriveCore(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativeVector startingDirection) {
+        super(opMode, frontLeft, backLeft, frontRight, backRight, imu, invalidatePreviousHeading, startingDirection);
     }
 }

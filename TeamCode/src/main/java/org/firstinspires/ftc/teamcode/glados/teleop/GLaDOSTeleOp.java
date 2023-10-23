@@ -33,10 +33,11 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
         imu = new IMUOp(this, config.imu);
         startingPositionDeterminant = new UserSelection<>(this, this::callback, RelativeVector.FORWARD, RelativeVector.LEFT, RelativeVector.RIGHT, RelativeVector.BACKWARD);
+        startingPositionDeterminant.start();
     }
 
     private Unit callback(RelativeVector selection) {
-        drive = new GLaDOSFieldDriveCore(this, config.fl, config.bl, config.fr, config.br, imu, selection != null ? selection : RelativeVector.FORWARD);
+        drive = new GLaDOSFieldDriveCore(this, config.fl, config.bl, config.fr, config.br, imu, true, selection != null ? selection : RelativeVector.FORWARD);
         return Unit.INSTANCE;
     }
 
@@ -47,6 +48,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
+        if (drive == null) return;
         double x = gamepad1.left_stick_x;
         double y = gamepad1.left_stick_y;
         double r = gamepad1.right_stick_x;

@@ -83,11 +83,12 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 // Run BunyipsOpMode setup
                 setup()
                 log("status changed: from setup to static_init")
-                // Run user-defined setup
-                onInit()
-                log("status changed: from static_init to dynamic_init")
                 // Store telemetry objects raised by onInit() by turning off auto-clear
                 setTelemetryAutoClear(false)
+                // Run user-defined setup
+                onInit()
+                telemetry.update()
+                log("status changed: from static_init to dynamic_init")
                 // Run user-defined dynamic initialisation
                 while (opModeInInit()) {
                     try {

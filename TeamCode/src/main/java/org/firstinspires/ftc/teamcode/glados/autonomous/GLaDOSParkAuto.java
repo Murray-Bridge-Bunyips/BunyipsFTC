@@ -2,10 +2,13 @@ package org.firstinspires.ftc.teamcode.glados.autonomous;
 
 import androidx.annotation.Nullable;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
+import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
 import org.firstinspires.ftc.teamcode.glados.tasks.GLaDOSTimeDriveTask;
@@ -16,6 +19,7 @@ import java.util.List;
 /**
  * Drive to the parking zone immediately.
  */
+@Autonomous(name = "GLADOS: Park", group = "GLADOS")
 public class GLaDOSParkAuto extends AutonomousBunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSPOVDriveCore drive;

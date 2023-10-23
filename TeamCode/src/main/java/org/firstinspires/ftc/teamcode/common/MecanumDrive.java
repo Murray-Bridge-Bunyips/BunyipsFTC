@@ -58,8 +58,8 @@ public abstract class MecanumDrive extends BunyipsComponent {
      * @see org.firstinspires.ftc.teamcode.common.Controller#Companion
      */
     public void setSpeedUsingController(double left_stick_x, double left_stick_y, double right_stick_x) {
-        speedX = Range.clip(left_stick_x, -1.0, 1.0);
-        speedY = Range.clip(-left_stick_y, -1.0, 1.0);
+        speedX = Range.clip(left_stick_y, -1.0, 1.0);
+        speedY = Range.clip(-left_stick_x, -1.0, 1.0);
         speedR = Range.clip(right_stick_x, -1.0, 1.0);
     }
 
@@ -77,8 +77,8 @@ public abstract class MecanumDrive extends BunyipsComponent {
      *          Range: -1.0 to 1.0
      */
     public void setSpeedXYR(double x, double y, double r) {
-        speedX = Range.clip(x, -1.0, 1.0);
-        speedY = Range.clip(y, -1.0, 1.0);
+        speedX = Range.clip(-y, -1.0, 1.0);
+        speedY = Range.clip(-x, -1.0, 1.0);
         speedR = Range.clip(r, -1.0, 1.0);
     }
 

@@ -11,4 +11,4 @@ class JerryPolarDrive(
     bl: DcMotorEx, br: DcMotorEx,
     fl: DcMotorEx, fr: DcMotorEx,
     imu: IMUOp, startingDirection: RelativeVector
-) : FieldCentricMecanumDrive(opMode, fl, bl, fr, br, imu, startingDirection)
+) : FieldCentricMecanumDrive(opMode, fl, bl, fr, br, imu, true, startingDirection)

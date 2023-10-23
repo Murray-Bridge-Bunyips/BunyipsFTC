@@ -41,9 +41,9 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
     private Unit callback(@Nullable OpModeSelection selectedOpMode) {
         hasGottenCallback = true;
         if (selectedOpMode != null) {
-            log("auto: ready. running opmode " + selectedOpMode.getName());
+            log("auto: mode selected. running opmode " + selectedOpMode.getName());
         } else {
-            log("auto: ready. running default opmode");
+            log("auto: mode selected. running default opmode");
         }
         // Interface Unit to be void
         onQueueReady(selectedOpMode);
@@ -129,9 +129,11 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
         addTelemetry(Text.format("Running task (%d/%d): %s", this.currentTask, tasks.size(), currentTask.getClass().getSimpleName())); // His ass is NOT within line length conventions!
 
         currentTask.run();
+        // FIXME: Finish logic may not run if the evaluation is performed here instead of the task
+        // Can be resolved if we use a dedicated stop() method
         if (currentTask.isFinished()) {
             tasks.removeFirst();
-            log(String.format(Locale.getDefault(), "auto: task %d/%d (%s) finished", this.currentTask, tasks.size(), currentTask.getClass().getSimpleName()));
+            log(String.format(Locale.getDefault(), "auto: task %d/%d (%s) finished", this.currentTask, tasks.size() + 1, currentTask.getClass().getSimpleName()));
             this.currentTask++;
         }
     }

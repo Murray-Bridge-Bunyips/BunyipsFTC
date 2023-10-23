@@ -50,7 +50,7 @@ public class GLaDOSConfigCore extends RobotConfig {
         }
 
         if (bl != null) {
-            bl.setDirection(DcMotorSimple.Direction.REVERSE);
+            bl.setDirection(DcMotorSimple.Direction.FORWARD);
         }
 
         if (imu == null) {

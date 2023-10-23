@@ -15,12 +15,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public abstract class FieldCentricMecanumDrive extends MecanumDrive {
     private final IMUOp imu;
 
-    protected FieldCentricMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, RelativeVector startingDirection) {
+    protected FieldCentricMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativeVector startingDirection) {
         super(opMode, frontLeft, backLeft, frontRight, backRight);
         this.imu = imu;
         if (startingDirection == RelativeVector.CLOCKWISE || startingDirection == RelativeVector.ANTICLOCKWISE) {
             throw new IllegalArgumentException("Cannot use rotational quantities as a starting direction");
         }
+
+        // Invalidate any previous readings
+        if (invalidatePreviousHeading)
+            imu.resetHeading();
+
         // Current vector will be the robot's starting vector, must offset the IMU to align straight
         imu.setOffset(startingDirection.getAngle());
     }
@@ -33,7 +38,7 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
         imu.tick();
 
         // Account for the rotated vector of the gamepad
-        double heading = imu.getRawHeading() + 90;
+        double heading = imu.getRawHeading() - 90;
         x = -x;
 
         double sin = Math.sin(Math.toRadians(heading));
@@ -42,8 +47,8 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
         // Transform the x and y values to be relative to the field
         // This is done by calculating the current heading to the field then rotating the x
         // and y vectors to be relative to the field, then updating the motor powers as normal
-        speedX = x * cos + y * sin;
-        speedY = x * sin - y * cos;
+        speedX = -(x * cos + y * sin);
+        speedY = -(x * sin - y * cos);
         speedR = r;
     }
 }

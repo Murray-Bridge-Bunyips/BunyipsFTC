@@ -14,5 +14,6 @@ class MessageTask(opMode: BunyipsOpMode, time: Double, private val message: Stri
             return
         }
         opMode.addTelemetry(String.format("%s || %.2f", message, time))
+        opMode.telemetry.update()
     }
 }
