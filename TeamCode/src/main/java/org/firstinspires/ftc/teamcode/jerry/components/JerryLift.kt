@@ -175,8 +175,9 @@ class JerryLift(
         }
         if (dy < 0) {
             // Arm is ascending, auto close claw
-            if (claw.position == 0.0)
-                close()
+            // Auto-close removed 24/10/23 as it is now invasive
+//            if (claw.position == 0.0)
+//                close()
             // Check if the arm has reached maximum limit
             if ((arm1.currentPosition + arm2.currentPosition) / 2 >= HARD_LIMIT) {
                 // If so, stop the arm from moving further upwards
