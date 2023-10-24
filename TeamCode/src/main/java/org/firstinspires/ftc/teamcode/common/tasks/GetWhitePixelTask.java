@@ -50,15 +50,6 @@ public class GetWhitePixelTask extends Task {
 
     @Override
     public void run() {
-        if (isFinished()) {
-            // After detection we may have a long while to wait before we need to use the vision system again
-            // Therefore we will pause all vision processing until we need it again
-            vision.stop();
-            if (position == SpikePosition.UNKNOWN) {
-                position = SpikePosition.UNDETECTED;
-            }
-            return;
-        }
         vision.tick();
         List<TfodData> tfodData = vision.getTfodData();
         if (tfodData.size() == 0) {
@@ -76,6 +67,16 @@ public class GetWhitePixelTask extends Task {
             } else {
                 position = SpikePosition.CENTER;
             }
+        }
+    }
+
+    @Override
+    public void onFinish() {
+        // After detection we may have a long while to wait before we need to use the vision system again
+        // Therefore we will pause all vision processing until we need it again
+        vision.stop();
+        if (position == SpikePosition.UNKNOWN) {
+            position = SpikePosition.UNDETECTED;
         }
     }
 

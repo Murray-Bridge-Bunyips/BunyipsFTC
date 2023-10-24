@@ -8,11 +8,14 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
  */
 abstract class Task : AutoTask {
     protected var time: Double
+    private var startTime = 0.0
+
+    protected var opMode: BunyipsOpMode
 
     @Volatile
     var taskFinished = false
-    protected var startTime = 0.0
-    protected var opMode: BunyipsOpMode
+
+    private var finisherFired = false
 
     /**
      * @param time Maximum timeout (sec) of the task. If set to zero this will serve as an indefinite init-task.
@@ -45,17 +48,28 @@ abstract class Task : AutoTask {
 
     /**
      * To run as an activeLoop during this task's duration.
-     * You must call a check to `isFinished()` at some point in this method to prevent an infinite loop.
+     * Somewhere in your polling loop you must call isFinished() to determine when the task is finished.
+     * (AutonomousBunyipsOpMode will handle this automatically and checking isFinished() is not required)
+     * @see onFinish()
      */
     abstract override fun run()
 
     /**
+     * Finalising function to run once the task is finished.
+     */
+    abstract override fun onFinish()
+
+    /**
      * Override to this method to add custom criteria if a task should be considered finished.
-     * Recommended to override with a super call even if not using a time restriction.
+     * You **must** call `super.isFinished()` if you override this method, otherwise you need to handle
+     * the safety timeout and `onFinish()` yourself.
      * @return bool expression indicating whether the task is finished or not
      */
     override fun isFinished(): Boolean {
         if (taskFinished) {
+            if (!finisherFired)
+                onFinish()
+            finisherFired = true
             return taskFinished
         }
         if (startTime == 0.0) {
@@ -66,6 +80,9 @@ abstract class Task : AutoTask {
         // set to run indefinitely and the OpMode is not in init-phase.
         // In order to prevent an infinite running task we prohibit indefinite tasks outside of init
         if ((currentTime > startTime + time && time != 0.0) || opMode.isStopRequested || (time == 0.0 && !opMode.opModeInInit())) {
+            if (!finisherFired)
+                onFinish()
+            finisherFired = true
             taskFinished = true
         }
         return taskFinished

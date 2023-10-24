@@ -24,13 +24,13 @@ class JerryIMUDriveTask(
     }
 
     override fun run() {
-        if (isFinished()) {
-            drive?.stop()
-            imu?.resetCapture()
-            return
-        }
         drive?.setSpeedUsingController(x, -y, imu?.getRPrecisionSpeed(r, 3.0) ?: 0.0)
         drive?.update()
         imu?.tick()
+    }
+
+    override fun onFinish() {
+        drive?.stop()
+        imu?.resetCapture()
     }
 }

@@ -10,10 +10,11 @@ class MessageTask(opMode: BunyipsOpMode, time: Double, private val message: Stri
     Task(opMode, time), AutoTask {
     @SuppressLint("DefaultLocale")
     override fun run() {
-        if (isFinished()) {
-            return
-        }
         opMode.addTelemetry(String.format("%s || %.2f", message, time))
         opMode.telemetry.update()
+    }
+
+    override fun onFinish() {
+        return
     }
 }

@@ -9,4 +9,8 @@ class WaitTask(opMode: BunyipsOpMode, time: Double) : Task(opMode, time), AutoTa
     override fun run() {
         opMode.idle()
     }
+
+    override fun onFinish() {
+        return
+    }
 }

@@ -129,8 +129,8 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
         addTelemetry(Text.format("Running task (%d/%d): %s", this.currentTask, tasks.size(), currentTask.getClass().getSimpleName())); // His ass is NOT within line length conventions!
 
         currentTask.run();
-        // FIXME: Finish logic may not run if the evaluation is performed here instead of the task
-        // Can be resolved if we use a dedicated stop() method
+
+        // AutonomousBunyipsOpMode is handling all task completion checks, manual checks not required
         if (currentTask.isFinished()) {
             tasks.removeFirst();
             log(String.format(Locale.getDefault(), "auto: task %d/%d (%s) finished", this.currentTask, tasks.size() + 1, currentTask.getClass().getSimpleName()));

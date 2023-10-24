@@ -30,7 +30,10 @@ class JerryLiftTask(
     }
 
     override fun run() {
-        if (isFinished()) return
         lift?.update()
+    }
+
+    override fun onFinish() {
+        return
     }
 }

@@ -63,10 +63,10 @@ class JerryIMURotationTask(
     }
 
     override fun run() {
-        if (isFinished()) {
-            drive?.stop()
-            return
-        }
         imu?.tick()
+    }
+
+    override fun onFinish() {
+        drive?.stop()
     }
 }

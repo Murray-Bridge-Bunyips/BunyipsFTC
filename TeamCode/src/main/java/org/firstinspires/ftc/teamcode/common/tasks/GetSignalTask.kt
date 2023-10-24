@@ -61,11 +61,14 @@ class GetSignalTask(opMode: BunyipsOpMode, private val cam: OpenCVCam) : Task(op
         return super.isFinished() || lockTimer.seconds() >= 3.0
     }
 
+    override fun onFinish() {
+        return
+    }
+
     @SuppressLint("DefaultLocale")
     override fun run() {
         // Caution! ParkingPosition will be null if the camera does not pick up anything in it's task runtime.
         // Be sure to check if ParkingPosition is null before setting up your specific tasks, to handle a fallback value.
-        if (isFinished()) return
         var newPosition: ParkingPosition? = null
         val detections = at.detectionsUpdate
         // Check if there are new frames

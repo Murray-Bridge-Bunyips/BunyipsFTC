@@ -22,11 +22,12 @@ public class GLaDOSTimeDriveTask extends Task {
 
     @Override
     public void run() {
-        if (isFinished()) {
-            drive.stop();
-            return;
-        }
         drive.setSpeedXYR(x, y, r);
         drive.update();
+    }
+
+    @Override
+    public void onFinish() {
+        drive.stop();
     }
 }

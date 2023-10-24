@@ -36,12 +36,6 @@ public class ExampleTimeDriveTask extends Task {
     // The run() method will run until the task timer runs out, or the finished state is set to true.
     @Override
     public void run() {
-        // Runs as soon as the task is deemed 'finished'
-        if (isFinished()) {
-            // Run de-initialisation code here
-            drive.run(0.0);
-            return;
-        }
         drive.run(0.5);
         drive.update();
     }
@@ -53,5 +47,11 @@ public class ExampleTimeDriveTask extends Task {
     public boolean isFinished() {
         // You should call super.isFinished() in an or statement as the superclass is controlling the timeout.
         return super.isFinished() || drive.isAtPosition(1000.0);
+    }
+
+    @Override
+    public void onFinish() {
+        // Runs as soon as the task is deemed 'finished'
+        drive.run(0.0);
     }
 }

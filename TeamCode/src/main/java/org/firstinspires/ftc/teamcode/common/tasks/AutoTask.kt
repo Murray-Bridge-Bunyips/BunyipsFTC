@@ -7,4 +7,5 @@ interface AutoTask {
     fun init()
     fun run()
     fun isFinished(): Boolean
+    fun onFinish()
 }

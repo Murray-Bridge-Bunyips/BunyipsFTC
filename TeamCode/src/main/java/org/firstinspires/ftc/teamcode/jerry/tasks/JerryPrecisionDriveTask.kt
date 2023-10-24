@@ -70,11 +70,6 @@ class JerryPrecisionDriveTask(
     }
 
     override fun run() {
-        if (isFinished()) {
-            drive?.stop()
-            return
-        }
-
         drive?.setSpeedUsingController(
             if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
             if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
@@ -106,5 +101,9 @@ class JerryPrecisionDriveTask(
             }"
         )
 
+    }
+
+    override fun onFinish() {
+        drive?.stop()
     }
 }

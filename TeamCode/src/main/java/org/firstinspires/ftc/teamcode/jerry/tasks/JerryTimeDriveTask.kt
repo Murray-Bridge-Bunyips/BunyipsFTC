@@ -19,9 +19,9 @@ class JerryTimeDriveTask(
     override fun run() {
         drive?.setSpeedUsingController(x, -y, r)
         drive?.update()
-        if (isFinished()) {
-            drive?.stop()
-            return
-        }
+    }
+
+    override fun onFinish() {
+        drive?.stop()
     }
 }
