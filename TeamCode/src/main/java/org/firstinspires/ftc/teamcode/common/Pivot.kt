@@ -2,6 +2,16 @@ package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.hardware.DcMotor
 
+/**
+ * Handles degrees of motor rotation
+ *
+ * Want a more descriptive javadoc? Ask the guy who actually wrote it
+ *
+ * (or is it a kotlindoc?)
+ *
+ * @author Lucas Bubner, 2023
+ */
+
 class Pivot(
     opMode: BunyipsOpMode,
     private var pivot: DcMotor,
