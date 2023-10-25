@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor
  *
  * (or is it a kotlindoc?)
  *
+ * From the guy who actually wrote it: This class is an extension of the Encoder system which provides
+ * the getDegrees() method to track the rotation of a motor, useful for rotating mechanisms.
+ *
  * @author Lucas Bubner, 2023
  */
 
