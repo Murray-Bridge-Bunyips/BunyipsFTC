@@ -159,42 +159,21 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
 
     /**
      * Query motor alignment speed for ROTATIONAL speed through PrecisionDrive
-     * @param original_speed supply the intended speed for the R SPEED value
+     * @param originalSpeed supply the intended speed for the R SPEED value
      * @param tolerance supply the tolerance in degrees for the IMU to be within to stop adjusting
      * @return queried speed based on parameters given, returns the unaltered speed if PrecisionDrive is not online
      */
-    fun getRPrecisionSpeed(original_speed: Double, tolerance: Double): Double {
+    fun getRPrecisionSpeed(originalSpeed: Double, tolerance: Double): Double {
         // If we're not capturing, return the original speed
-        if (this.capture == null) return original_speed
+        if (this.capture == null) return originalSpeed
 
         this.tick()
         val current = this.heading
 
         // If we're at the minimum tolerance, increase turn rate
-        if (current < this.capture!! - tolerance) return original_speed - 0.1
+        if (current < this.capture!! - tolerance) return originalSpeed - 0.1
 
         // If we're at maximum tolerance, decrease turn rate
-        return if (current > this.capture!! + tolerance) original_speed + 0.1 else original_speed
-    }
-
-    /**
-     * Query vector alignment based on PrecisionDrive capture
-     * This does not use the tolerance parameter, as it is not needed for vector alignment
-     */
-    fun getCorrectedVector(vec: RobotVector): RobotVector {
-        throw NotImplementedError("Vector IMU correction system is not being maintained")
-
-//        // If we're not capturing, return the original vector
-//        if (this.capture == null) return vec
-//
-//        this.tick()
-//        val current = this.heading
-//
-//        // Buggy, may be due to vector drive not working to begin with
-//        val normalisedError = AngleUnit.normalizeDegrees(this.capture!! - current)
-//        val correctionVector = RobotVector.calcPolar(normalisedError, AngleUnit.DEGREES)
-//
-//        // Add the correction vector to the original vector
-//        return vec + correctionVector
+        return if (current > this.capture!! + tolerance) originalSpeed + 0.1 else originalSpeed
     }
 }
