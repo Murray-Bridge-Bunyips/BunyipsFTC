@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
  * @author Lucas Bubner, 2023
  */
 @TeleOp(name = "GLADOS: AprilTag Vision Debug", group = "GLADOS")
-public class GLaDOSVisionDebug extends BunyipsOpMode {
+public class GLaDOSAprilTagDebug extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private Vision vision;
 

@@ -25,14 +25,25 @@ public class Suspender extends BunyipsComponent {
         this.extension = extension;
     }
 
+    /**
+     * Return the current status of the Suspender, which is determined by the position of the arm
+     * @return The status of the Suspender mechanism
+     */
     public Status getStatus() {
         return status;
     }
 
+    /**
+     * Determine if the arm is currently stowed
+     * @return a boolean representing whether the arm is moving or not
+     */
     public boolean isMoving() {
         return status == Status.CLOSING || status == Status.OPENING || status == Status.RETRACTING || status == Status.EXTENDING;
     }
 
+    /**
+     * Represents all possible states the Suspender mechanism can be in
+     */
     enum Status {
         STOWED,
         CLOSING,

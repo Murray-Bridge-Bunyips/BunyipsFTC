@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.glados.debug;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
@@ -13,6 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Autonomous(name = "GLADOS: AutonTest", group = "GLADOS")
+@Disabled
 public class GLaDOSAutonTest extends AutonomousBunyipsOpMode {
     @Override
     protected void onInitialisation() {

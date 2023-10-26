@@ -352,6 +352,9 @@ public class Vision extends BunyipsComponent {
      * @return List of all TFOD objects and their data
      */
     public List<TfodData> getTfodData() {
+        if (tfod == null) {
+            throw new IllegalStateException("TFOD processor was never initialised with init()");
+        }
         return tfodData;
     }
 
@@ -361,6 +364,9 @@ public class Vision extends BunyipsComponent {
      * @return List of all AprilTag objects and their data
      */
     public List<AprilTagData> getAprilTagData() {
+        if (aprilTag == null) {
+            throw new IllegalStateException("AprilTag processor was never initialised with init()");
+        }
         return aprilTagData;
     }
 
