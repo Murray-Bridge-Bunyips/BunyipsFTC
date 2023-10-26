@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
+import org.firstinspires.ftc.teamcode.common.Suspender;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyClaw;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
@@ -57,7 +58,10 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         // (https://tenor.com/view/genos-one-punch-man-standing-gif-14470948)
         rigArm.armLift(gamepad2.right_stick_y);
 
-//        if (gamepad2.a) {
+        // TODO: Set safety measures that stops certain things from happening when the arm and
+        // rotation are in certain states
+        // Just need to find out why it doesn't get rotationStatus from Suspender properly
+//        if (gamepad2.a || rotationStatus == Suspender.RotationStates.NOTSTOWED) {
 //
 //        }
 
