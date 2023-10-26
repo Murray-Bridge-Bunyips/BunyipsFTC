@@ -9,22 +9,34 @@ import org.firstinspires.ftc.teamcode.common.Vision;
 import java.util.List;
 
 /**
- * Init-task runner for obtaining the White Pixel randomisation mark for the autonomous period.
+ * Task for obtaining the White Pixel randomisation mark for the autonomous period.
+ * This task is to be run when the camera is facing the randomisation mark, and can be used
+ * to determine if there is a Pixel in front of the camera or not. Paired with the result of the
+ * task, the OpMode can map where the Pixel will be.
  * FTC 2023-2024 CENTERSTAGE
  *
  * @author Lucas Bubner, 2023
  */
 public class GetWhitePixelTask extends Task {
     private final Vision vision;
-    private SpikePosition position = SpikePosition.UNKNOWN;
+    private final Aggression aggression;
 
-    public GetWhitePixelTask(@NonNull BunyipsOpMode opMode, Vision vision) {
+    private int spikeFrames;
+    private double confidence;
+
+    /**
+     * Updated by the task to indicate if a spike has been found
+     */
+    private volatile boolean foundSpike;
+
+    public GetWhitePixelTask(@NonNull BunyipsOpMode opMode, Vision vision, Aggression aggression) {
         super(opMode);
         this.vision = vision;
+        this.aggression = aggression;
     }
 
-    public SpikePosition getSpikePosition() {
-        return position;
+    public boolean hasFoundSpike() {
+        return foundSpike;
     }
 
     @Override
@@ -39,13 +51,20 @@ public class GetWhitePixelTask extends Task {
 
     @Override
     public boolean isFinished() {
-        // Unsure whether to let this task finish if the spike is detected; there may be a need to
-        // keep the vision system going as the human operator may not have adjusted the spike position
-        // and init-phase is required before randomisation. This may cause incorrect locking of the spike.
-        // This is similar to PowerPlay and the signal, however, you could rotate the Signal to
-        // an angle where the camera cannot see it, whereas the spike is always visible
-        return super.isFinished();
-//        return super.isFinished() || position != SpikePosition.UNKNOWN;
+        switch (aggression) {
+            case INSTANT:
+                return super.isFinished() || foundSpike;
+            case CAPTURE:
+                if (foundSpike) {
+                    spikeFrames++;
+                } else {
+                    spikeFrames = 0;
+                }
+                return super.isFinished() || (spikeFrames >= GetWhitePixelTask.SPIKE_FRAME_THRESHOLD && confidence >= GetWhitePixelTask.SPIKE_CONFIDENCE_THRESHOLD);
+            case TIMEOUT:
+            default:
+                return super.isFinished();
+        }
     }
 
     @Override
@@ -53,40 +72,40 @@ public class GetWhitePixelTask extends Task {
         vision.tick();
         List<TfodData> tfodData = vision.getTfodData();
         if (tfodData.size() == 0) {
+            foundSpike = false;
             return;
         }
         for (TfodData data : tfodData) {
             if (!data.getLabel().equals("Spike")) {
                 return;
             }
-            double x = data.getHorizontalTranslation();
-            if (x < 0.33) {
-                position = SpikePosition.LEFT;
-            } else if (x > 0.66) {
-                position = SpikePosition.RIGHT;
-            } else {
-                position = SpikePosition.CENTER;
-            }
+            foundSpike = true;
+            confidence = data.getConfidence();
         }
     }
 
     @Override
     public void onFinish() {
-        // After detection we may have a long while to wait before we need to use the vision system again
-        // Therefore we will pause all vision processing until we need it again
-        vision.stop();
-        if (position == SpikePosition.UNKNOWN) {
-            position = SpikePosition.UNDETECTED;
-        }
+        // We will not need TFOD anymore
+        vision.stop(Vision.Processors.TFOD);
     }
 
-    enum SpikePosition {
-        LEFT,
-        RIGHT,
-        CENTER,
-        // Camera has not attempted to detect the spike
-        UNKNOWN,
-        // Camera has attempted to detect the spike but has not found it
-        UNDETECTED
+    enum Aggression {
+        // Immediately report as finished if a spike is detected for one frame
+        INSTANT,
+        // Report as finished if a spike is detected under a set of criteria (confidence, frames)
+        CAPTURE,
+        // Never report as finished until the timeout, result will be determined at the end of the timeout
+        TIMEOUT
     }
+
+    /**
+     * For use in CAPTURE mode, lock in the spike detection if it is detected for this many frames
+     */
+    public static int SPIKE_FRAME_THRESHOLD = 5;
+
+    /**
+     * For use in CAPTURE mode, lock in the spike detection if it is detected with this confidence
+     */
+    public static double SPIKE_CONFIDENCE_THRESHOLD = 0.95;
 }
