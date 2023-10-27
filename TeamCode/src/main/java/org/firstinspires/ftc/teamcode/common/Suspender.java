@@ -16,13 +16,55 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class Suspender extends BunyipsComponent {
 
     private Status status;
-    private final DcMotor rotation;
-    private final DcMotor extension;
+    private PivotMotor rotation;
+    private DcMotor extension;
 
-    public Suspender(@NonNull BunyipsOpMode opMode, DcMotor rotation, DcMotor extension) {
+    private final While rotationLock = new While(
+            this::isMoving,
+            () -> {
+                if (status == Status.CLOSING) {
+                    rotation.setPower(1);
+                } else if (status == Status.OPENING) {
+                    rotation.setPower(-1);
+                }
+            },
+            () -> {
+                rotation.setPower(0);
+                status = Status.STOWED;
+            },
+            3
+    );
+
+    private final While extensionLock = new While(
+            this::isMoving,
+            () -> {
+                if (status == Status.EXTENDING) {
+                    extension.setPower(1);
+                } else if (status == Status.RETRACTING) {
+                    extension.setPower(-1);
+                }
+            },
+            () -> {
+                extension.setPower(0);
+                status = Status.RETRACTED;
+            },
+            3
+    );
+
+    public Suspender(@NonNull BunyipsOpMode opMode, PivotMotor rotation, DcMotor extension) {
         super(opMode);
         this.rotation = rotation;
         this.extension = extension;
+
+        // TODO: Might need to set up a limit switch to determine if the arm is downlocked
+        // We will assume that the arm is downlocked for now
+        status = Status.STOWED;
+
+        rotation.reset();
+        rotation.track();
+
+        rotation.setDegrees(0.0);
+        rotation.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     /**
@@ -39,6 +81,65 @@ public class Suspender extends BunyipsComponent {
      */
     public boolean isMoving() {
         return status == Status.CLOSING || status == Status.OPENING || status == Status.RETRACTING || status == Status.EXTENDING;
+    }
+
+    /**
+     * Set Suspender from STOWED to RETRACTED
+     */
+    public void open() {
+
+    }
+
+    /**
+     * Set Suspender from RETRACTED to STOWED. Cannot be called if the arm is extended.
+     * @see #retract()
+     */
+    public void close() {
+
+    }
+
+    /**
+     * Set Suspender from RETRACTED to EXTENDED. Cannot be called if the arm is stowed.
+     * @see #open()
+     */
+    public void extend() {
+
+    }
+
+    /**
+     * Set Suspender from EXTENDED to RETRACTED. Cannot be called if the arm is stowed.
+     * @see #open()
+     */
+    public void retract() {
+
+    }
+
+    /**
+     * Reset the Suspender to STOWED
+     */
+    public void reset() {
+
+    }
+
+    /**
+     * Perform all motor updates queued for the Suspender system
+     */
+    public void update() {
+
+    }
+
+    /**
+     * Emergency stop the Suspender system, cancelling all queued motor updates
+     */
+    public void interrupt() {
+
+    }
+
+    /**
+     * Resume Suspender system motor updates after an emergency stop
+     */
+    public void resume() {
+
     }
 
     /**

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
+import org.firstinspires.ftc.teamcode.common.Text;
 import org.firstinspires.ftc.teamcode.common.TfodData;
 import org.firstinspires.ftc.teamcode.common.Vision;
 import org.firstinspires.ftc.teamcode.common.cameras.C920;
@@ -36,8 +37,8 @@ public class GLaDOSTFODDebug extends BunyipsOpMode {
         List<TfodData> data = vision.getTfodData();
         for (int i = 0; i < data.size(); i++) {
             addTelemetry(String.valueOf(data.get(i)));
-            addTelemetry(String.valueOf(data.get(i).getVerticalTranslation()));
-            // TODO: Finish this
+            addTelemetry(Text.format("Horizontal translation: %s", data.get(i).getHorizontalTranslation()));
+            addTelemetry(Text.format("Vertical translation: %s", data.get(i).getVerticalTranslation()));
         }
     }
 }

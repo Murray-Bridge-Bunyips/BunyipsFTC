@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.common.PivotMotor;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
 /**
@@ -24,7 +25,14 @@ public class GLaDOSConfigCore extends RobotConfig {
     public DcMotorEx br;
     // Expansion 3: Back Left "bl"
     public DcMotorEx bl;
+    // Control 0: Suspender Actuator "sa"
+    public DcMotorEx sa;
+    // Control 1: Suspender Rotation "sr"
+    public PivotMotor sr;
+
     public IMU imu;
+
+    protected static final double SR_TICKS_PER_REV = 537.6;
 
     @Override
     protected void init() {
@@ -33,6 +41,11 @@ public class GLaDOSConfigCore extends RobotConfig {
         fr = (DcMotorEx) getHardware("fr", DcMotorEx.class);
         br = (DcMotorEx) getHardware("br", DcMotorEx.class);
         bl = (DcMotorEx) getHardware("bl", DcMotorEx.class);
+        DcMotorEx SRmotor = (DcMotorEx) getHardware("sr", DcMotorEx.class);
+        if (SRmotor != null) {
+            sr = new PivotMotor(SRmotor, SR_TICKS_PER_REV);
+        }
+        sa = (DcMotorEx) getHardware("sa", DcMotorEx.class);
         imu = (IMU) getHardware("imu", IMU.class);
 
         if (fl != null) {
