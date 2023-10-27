@@ -16,37 +16,32 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public class Suspender extends BunyipsComponent {
 
     private Status status;
+    private Action action;
     private PivotMotor rotation;
     private DcMotor extension;
 
     private final While rotationLock = new While(
-            this::isMoving,
             () -> {
-                if (status == Status.CLOSING) {
-                    rotation.setPower(1);
-                } else if (status == Status.OPENING) {
-                    rotation.setPower(-1);
-                }
+                return false;
             },
             () -> {
-                rotation.setPower(0);
-                status = Status.STOWED;
+
+            },
+            () -> {
+
             },
             3
     );
 
     private final While extensionLock = new While(
-            this::isMoving,
             () -> {
-                if (status == Status.EXTENDING) {
-                    extension.setPower(1);
-                } else if (status == Status.RETRACTING) {
-                    extension.setPower(-1);
-                }
+                return false;
             },
             () -> {
-                extension.setPower(0);
-                status = Status.RETRACTED;
+
+            },
+            () -> {
+
             },
             3
     );
@@ -80,7 +75,7 @@ public class Suspender extends BunyipsComponent {
      * @return a boolean representing whether the arm is moving or not
      */
     public boolean isMoving() {
-        return status == Status.CLOSING || status == Status.OPENING || status == Status.RETRACTING || status == Status.EXTENDING;
+        return false;
     }
 
     /**
@@ -147,14 +142,20 @@ public class Suspender extends BunyipsComponent {
      */
     enum Status {
         STOWED,
-        CLOSING,
-        OPENING,
         RETRACTED,
-        RETRACTING,
         EXTENDED,
-        EXTENDING,
         // Manual user intervention
         ERROR
+    }
+
+    /**
+     * Represents all the actions the Suspender mechanism can perform.
+     */
+    enum Action {
+        CLOSING,
+        OPENING,
+        RETRACTING,
+        EXTENDING
     }
 
     // Basic mockup of what this might look like
