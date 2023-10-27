@@ -54,6 +54,7 @@ public class Suspender extends BunyipsComponent {
         // TODO: Might need to set up a limit switch to determine if the arm is downlocked
         // We will assume that the arm is downlocked for now
         status = Status.STOWED;
+        action = Action.STOPPED;
 
         rotation.reset();
         rotation.track();
@@ -75,14 +76,17 @@ public class Suspender extends BunyipsComponent {
      * @return a boolean representing whether the arm is moving or not
      */
     public boolean isMoving() {
-        return false;
+        return (action != Action.STOPPED);
     }
 
     /**
      * Set Suspender from STOWED to RETRACTED
      */
     public void open() {
-
+        // open salami
+        if (status == Status.STOWED) {
+            action = Action.OPENING;
+        }
     }
 
     /**
@@ -90,7 +94,9 @@ public class Suspender extends BunyipsComponent {
      * @see #retract()
      */
     public void close() {
-
+        if (status != Status.EXTENDED) {
+            action = Action.CLOSING;
+        }
     }
 
     /**
@@ -98,7 +104,9 @@ public class Suspender extends BunyipsComponent {
      * @see #open()
      */
     public void extend() {
-
+        if (status != Status.STOWED){
+            action = Action.EXTENDING;
+        }
     }
 
     /**
@@ -106,10 +114,12 @@ public class Suspender extends BunyipsComponent {
      * @see #open()
      */
     public void retract() {
-
+        if (status != Status.STOWED) {
+            action = Action.RETRACTING;
+        }
     }
 
-    /**
+    /*
      * Reset the Suspender to STOWED
      */
     public void reset() {
@@ -120,7 +130,20 @@ public class Suspender extends BunyipsComponent {
      * Perform all motor updates queued for the Suspender system
      */
     public void update() {
+        // TODO: Figure out what I'm actually meant to put in these
+        // I could do this by myself, it's just I forgot to ask Lucas what these were actually meant
+        // to do.
+        if (action == Action.CLOSING) {
 
+        } else if (action == Action.OPENING){
+
+        } else if (action == Action.RETRACTING) {
+
+        } else if (action == Action.EXTENDING) {
+
+        } else if (action == Action.STOPPED) {
+
+        }
     }
 
     /**
@@ -155,7 +178,8 @@ public class Suspender extends BunyipsComponent {
         CLOSING,
         OPENING,
         RETRACTING,
-        EXTENDING
+        EXTENDING,
+        STOPPED
     }
 
     // Basic mockup of what this might look like
