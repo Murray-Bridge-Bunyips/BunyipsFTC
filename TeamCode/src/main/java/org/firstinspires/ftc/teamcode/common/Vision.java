@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.common.cameras.CameraType;
+import org.firstinspires.ftc.teamcode.common.vision.TeamPropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -20,7 +21,8 @@ import java.util.List;
 
 /**
  * Component wrapper to support the v8.2+ SDK's included libraries for Camera operation.
- * Allows TFOD and AprilTag processors to be used in OpModes. Optionally allows custom processors.
+ * Allows TFOD and AprilTag processors to be used in OpModes. Optionally is expansible to add
+ * custom processors through the enum system.
  *
  * @author Lucas Bubner, 2023
  */
@@ -34,6 +36,7 @@ public class Vision extends BunyipsComponent {
     private final CameraType cameraInfo;
     private TfodProcessor tfod;
     private AprilTagProcessor aprilTag;
+    private TeamPropProcessor teamProp;
     private VisionPortal visionPortal;
 
     public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam, CameraType cameraType) {
@@ -84,6 +87,10 @@ public class Vision extends BunyipsComponent {
                             .build();
                     initialisedProcessors.add(aprilTag);
                     break;
+                case TEAM_PROP:
+                    teamProp = new TeamPropProcessor();
+                    initialisedProcessors.add(teamProp);
+                    break;
             }
         }
 
@@ -102,44 +109,6 @@ public class Vision extends BunyipsComponent {
 
         // Disable live view by default
         visionPortal.stopLiveView();
-    }
-
-    /**
-     * Add a custom VisionProcessor that is not defined by the enum system.
-     * This method may be expensive to call as it will reconstruct the VisionPortal!
-     * All onboard processors will be enabled by default, you must call management methods to disable them.
-     * If possible, try to avoid this but instead append functionality to this file to have it
-     * interop with the existing enum-based system. If you choose to not do this, you will have
-     * to fully manage your own VisionProcessor as Vision will not have instance management over it.
-     */
-    public void addCustomProcessor(VisionProcessor processor) {
-        if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
-            throw new IllegalArgumentException("Use init() method instead to initialise AT or TFOD!");
-        }
-        // Reconstruct the VisionPortal with the new processor
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-        if (tfod != null) {
-            builder.addProcessor(tfod);
-        }
-        if (aprilTag != null) {
-            builder.addProcessor(aprilTag);
-        }
-        builder.addProcessor(processor);
-        visionPortal = constructVisionPortal(builder);
-        visionPortal.stopLiveView();
-    }
-
-    /**
-     * Start or stop a custom VisionProcessor that is not AprilTag or TFOD. (Level 2)
-     */
-    public void setCustomProcessorState(VisionProcessor processor, boolean state) {
-        if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised!");
-        }
-        if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
-            throw new IllegalArgumentException("Use stop() or start() methods instead to control AT or TFOD!");
-        }
-        visionPortal.setProcessorEnabled(processor, state);
     }
 
     /**
@@ -169,6 +138,12 @@ public class Vision extends BunyipsComponent {
                         throw new IllegalStateException("AprilTag processor is not initialised!");
                     }
                     visionPortal.setProcessorEnabled(aprilTag, true);
+                    break;
+                case TEAM_PROP:
+                    if (teamProp == null) {
+                        throw new IllegalStateException("TeamProp processor is not initialised!");
+                    }
+                    visionPortal.setProcessorEnabled(teamProp, true);
                     break;
             }
         }
@@ -206,6 +181,12 @@ public class Vision extends BunyipsComponent {
                         throw new IllegalStateException("AprilTag processor is not initialised!");
                     }
                     visionPortal.setProcessorEnabled(aprilTag, false);
+                    break;
+                case TEAM_PROP:
+                    if (teamProp == null) {
+                        throw new IllegalStateException("TeamProp processor is not initialised!");
+                    }
+                    visionPortal.setProcessorEnabled(teamProp, false);
                     break;
             }
         }
@@ -263,8 +244,6 @@ public class Vision extends BunyipsComponent {
     /**
      * Tick the camera stream and extract data from the processors.
      * This data is stored in the instance and can be accessed with the getters.
-     * Processors must be initialised and started before calling this method, custom processors
-     * will be unaffected by this method as data interpreting is up to the overarching OpMode.
      */
     public void tick() {
         if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
@@ -376,6 +355,8 @@ public class Vision extends BunyipsComponent {
          * Ensure to test for this, as system memory may deplete and cause unexpected behaviour.
          */
         TFOD,
-        APRILTAG
+        APRILTAG,
+        // Custom processors
+        TEAM_PROP
     }
 }

@@ -19,10 +19,8 @@ import org.openftc.easyopencv.OpenCvPipeline
  * Note that making a class that extends VisionProcessor will give you access to OpenCV pipeline methods,
  * and these can be attached to the VisionPortal in Vision. This is the recommended way to use OpenCV.
  *
- * @deprecated Use Vision class instead
  * @author Lucas Bubner, 2023
  */
-@Deprecated("Use Vision class instead")
 class OpenCVCam(
     opmode: BunyipsOpMode,
     webcam: WebcamName?,
