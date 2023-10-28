@@ -19,6 +19,14 @@ public class Suspender extends BunyipsComponent {
     private Action action;
     private PivotMotor rotation;
     private DcMotor extension;
+    private boolean userStopped = false;
+
+    private static int EXTENDED_POSITION;
+    private static int RETRACTED_POSITION;
+    private static double EXTENSION_POWER;
+    private static double ROTATION_POWER;
+    private static double STOWED_DEGREES;
+    private static double OPEN_DEGREES;
 
     private final While rotationLock = new While(
             () -> {
@@ -46,10 +54,18 @@ public class Suspender extends BunyipsComponent {
             3
     );
 
-    public Suspender(@NonNull BunyipsOpMode opMode, PivotMotor rotation, DcMotor extension) {
+    public Suspender(@NonNull BunyipsOpMode opMode, PivotMotor rotation, DcMotor extension, int extendedPosition, int retractedPosition, double extensionPower, double rotationPower, double stowedDegrees, double openDegrees) {
         super(opMode);
         this.rotation = rotation;
         this.extension = extension;
+
+        // Have fun constructing Suspender
+        EXTENDED_POSITION = extendedPosition;
+        RETRACTED_POSITION = retractedPosition;
+        EXTENSION_POWER = extensionPower;
+        ROTATION_POWER = rotationPower;
+        STOWED_DEGREES = stowedDegrees;
+        OPEN_DEGREES = openDegrees;
 
         // TODO: Might need to set up a limit switch to determine if the arm is downlocked
         // We will assume that the arm is downlocked for now
@@ -59,8 +75,12 @@ public class Suspender extends BunyipsComponent {
         rotation.reset();
         rotation.track();
 
-        rotation.setDegrees(0.0);
+        // Sets initial values
+        extension.setPower(EXTENSION_POWER);
+
+        rotation.setDegrees(STOWED_DEGREES);
         rotation.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rotation.setPower(ROTATION_POWER);
     }
 
     /**
@@ -119,30 +139,46 @@ public class Suspender extends BunyipsComponent {
         }
     }
 
-    /*
+    /**
      * Reset the Suspender to STOWED
      */
     public void reset() {
-
+        action = Action.CLOSING;
     }
 
     /**
      * Perform all motor updates queued for the Suspender system
      */
     public void update() {
-        // TODO: Figure out what I'm actually meant to put in these
-        // I could do this by myself, it's just I forgot to ask Lucas what these were actually meant
-        // to do.
-        if (action == Action.CLOSING) {
+        if (userStopped) return;
 
-        } else if (action == Action.OPENING){
-
-        } else if (action == Action.RETRACTING) {
-
-        } else if (action == Action.EXTENDING) {
-
-        } else if (action == Action.STOPPED) {
-
+        switch (action) {
+            case CLOSING:
+                rotation.setDegrees(STOWED_DEGREES);
+                break;
+            case OPENING:
+                rotation.setDegrees(OPEN_DEGREES);
+                break;
+            case STOPPED:
+                rotation.setPower(0.0);
+                break;
+            case EXTENDING:
+                extension.setTargetPosition(EXTENDED_POSITION);
+                break;
+            case RETRACTING:
+                extension.setTargetPosition(RETRACTED_POSITION);
+                break;
+        }
+        if (!rotation.isBusy() && !extension.isBusy()) {
+            switch (action) {
+                case CLOSING:
+                case EXTENDING:
+                    status = Status.EXTENDED;
+                case OPENING:
+                case RETRACTING:
+                    status = Status.RETRACTED;
+            }
+            action = Action.STOPPED;
         }
     }
 
@@ -150,14 +186,18 @@ public class Suspender extends BunyipsComponent {
      * Emergency stop the Suspender system, cancelling all queued motor updates
      */
     public void interrupt() {
-
+        userStopped = true;
+        extension.setPower(0.0);
+        rotation.setPower(0.0);
     }
 
     /**
      * Resume Suspender system motor updates after an emergency stop
      */
     public void resume() {
-
+        userStopped = false;
+        extension.setPower(EXTENSION_POWER);
+        rotation.setPower(ROTATION_POWER);
     }
 
     /**
@@ -181,23 +221,4 @@ public class Suspender extends BunyipsComponent {
         EXTENDING,
         STOPPED
     }
-
-    // Basic mockup of what this might look like
-    // Basically, whenever the arm is stowed, do not allow arm extension, don't allow the arm to
-    // move when extended, etc.
-
-    // Maybe it's because it can't read the motor degrees by itself?
-    // Or maybe it's because this is a mockup so nothing is set up right just yet
-//    if (rotation == 90) {
-//        rotationStatus = RotationStates.NOTSTOWED;
-//    } else {
-//        rotationStatus = RotationStates.STOWED;
-//    }
-//
-//    if (extension > 1) {
-//        extensionStatus = ExtensionStates.EXTENDED;
-//    } else {
-//        extensionStatus = ExtensionStates.RETRACTED;
-//    }
-
 }
