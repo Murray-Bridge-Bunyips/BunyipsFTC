@@ -349,6 +349,50 @@ public class Vision extends BunyipsComponent {
         return aprilTagData;
     }
 
+    /**
+     * EXPERIMENTAL METHOD: USE WITH CAUTION
+     * <p>
+     * Add a custom VisionProcessor that is not defined by the enum system.
+     * This method may is expensive to call as it will reconstruct the VisionPortal!
+     * If using purely non-enum processors, you should not call init() prior to this method.
+     * </p>
+     * All onboard processors will be enabled by default, you must call management methods to disable them.
+     * If possible, try to avoid this but instead append functionality to this file to have it
+     * interop with the existing enum-based system. If you choose to not do this, you will have
+     * to fully manage your own VisionProcessor as Vision will not have instance management over it.
+     */
+    public void experimentallyUseCustomProcessor(VisionProcessor processor) {
+        visionPortal.close();
+        if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
+            throw new IllegalArgumentException("Use init() method instead to initialise AT or TFOD!");
+        }
+        // Reconstruct the VisionPortal with the new processor
+        VisionPortal.Builder builder = new VisionPortal.Builder();
+        if (tfod != null) {
+            builder.addProcessor(tfod);
+        }
+        if (aprilTag != null) {
+            builder.addProcessor(aprilTag);
+        }
+        builder.addProcessor(processor);
+        visionPortal = constructVisionPortal(builder);
+        visionPortal.stopLiveView();
+    }
+
+    /**
+     * Start or stop a custom VisionProcessor that is not AprilTag or TFOD. (Level 2)
+     */
+    public void setCustomProcessorState(VisionProcessor processor, boolean state) {
+        if (visionPortal == null) {
+            throw new IllegalStateException("VisionPortal is not initialised!");
+        }
+        if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
+            throw new IllegalArgumentException("Use stop() or start() methods instead to control AT or TFOD!");
+        }
+        // Will throw an exception if the processor is not registered, handled by BYO
+        visionPortal.setProcessorEnabled(processor, state);
+    }
+
     public enum Processors {
         /**
          * Caution! Using TFOD and using OpModes with high load may cause a watchdog timeout.
