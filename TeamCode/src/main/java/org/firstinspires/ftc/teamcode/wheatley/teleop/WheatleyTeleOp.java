@@ -4,12 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
-import org.firstinspires.ftc.teamcode.common.Suspender;
-import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyClaw;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
-import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyRigArm;
 
 /**
  * Primary TeleOp for all of Wheatley's functions.
@@ -30,10 +27,8 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyRigArm;
 public class WheatleyTeleOp extends BunyipsOpMode {
 
     private WheatleyConfig config = new WheatleyConfig();
-    private WheatleyClaw claw;
     private WheatleyLift lift;
     private WheatleyMecanumDrive drive;
-    private WheatleyRigArm rigArm;
 
     @Override
     protected void onInit() {
@@ -51,24 +46,13 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
         lift.armLift(gamepad2.left_stick_y);
 
-        // Because of the way the rigging arm will actually use the stick,
-        // this might need to be done differently.
-        // This is because unlike the claw arm, the rigging arm will do a kind of rotation.
         // Basically like Genos rocketing himself up from the ground in One Punch Man.
         // (https://tenor.com/view/genos-one-punch-man-standing-gif-14470948)
-        rigArm.armLift(gamepad2.right_stick_y);
-
-        // TODO: Set safety measures that stops certain things from happening when the arm and
-        // rotation are in certain states
-        // Just need to find out why it doesn't get rotationStatus from Suspender properly
-//        if (gamepad2.a || rotationStatus == Suspender.RotationStates.NOTSTOWED) {
-//
-//        }
 
         if (gamepad2.x) {
-            claw.leftClaw();
+            lift.leftClaw();
         } else if (gamepad2.y) {
-            claw.rightClaw();
+            lift.rightClaw();
         }
 
         // Adds a message on the driver hub stating the status of different controller inputs
