@@ -46,9 +46,6 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
         lift.armLift(gamepad2.left_stick_y);
 
-        // Basically like Genos rocketing himself up from the ground in One Punch Man.
-        // (https://tenor.com/view/genos-one-punch-man-standing-gif-14470948)
-
         if (gamepad2.x) {
             lift.leftClaw();
         } else if (gamepad2.y) {
