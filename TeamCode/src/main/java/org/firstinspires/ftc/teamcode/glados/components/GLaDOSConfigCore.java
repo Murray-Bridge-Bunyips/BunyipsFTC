@@ -29,10 +29,12 @@ public class GLaDOSConfigCore extends RobotConfig {
     public DcMotorEx sa;
     // Control 1: Suspender Rotation "sr"
     public PivotMotor sr;
+    // Control 2: Suspender Rotation 2 "sr2"
+    public PivotMotor sr2;
 
     public IMU imu;
 
-    protected static final double SR_TICKS_PER_REV = 537.6;
+    protected static final double CORE_HEX_TICKS_PER_REVOLUTION = 288;
 
     @Override
     protected void init() {
@@ -43,7 +45,11 @@ public class GLaDOSConfigCore extends RobotConfig {
         bl = (DcMotorEx) getHardware("bl", DcMotorEx.class);
         DcMotorEx SRmotor = (DcMotorEx) getHardware("sr", DcMotorEx.class);
         if (SRmotor != null) {
-            sr = new PivotMotor(SRmotor, SR_TICKS_PER_REV);
+            sr = new PivotMotor(SRmotor, CORE_HEX_TICKS_PER_REVOLUTION);
+        }
+        DcMotorEx SR2motor = (DcMotorEx) getHardware("sr2", DcMotorEx.class);
+        if (SR2motor != null) {
+            sr2 = new PivotMotor(SR2motor, CORE_HEX_TICKS_PER_REVOLUTION);
         }
         sa = (DcMotorEx) getHardware("sa", DcMotorEx.class);
         imu = (IMU) getHardware("imu", IMU.class);
@@ -64,6 +70,10 @@ public class GLaDOSConfigCore extends RobotConfig {
 
         if (bl != null) {
             bl.setDirection(DcMotorSimple.Direction.FORWARD);
+        }
+
+        if (sr2 != null) {
+            sr2.setDirection(DcMotorSimple.Direction.REVERSE);
         }
 
         if (imu == null) {

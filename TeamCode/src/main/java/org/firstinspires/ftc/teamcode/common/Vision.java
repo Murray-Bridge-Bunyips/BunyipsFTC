@@ -69,6 +69,8 @@ public class Vision extends BunyipsComponent {
      * @param processors TFOD and/or AprilTag
      */
     public void init(Processors... processors) {
+        if (processors.length == 0)
+            throw new IllegalArgumentException("Must initialise at least one integrated processor!");
         List<VisionProcessor> initialisedProcessors = new ArrayList<>();
 
         for (Processors processor : processors) {
@@ -362,7 +364,8 @@ public class Vision extends BunyipsComponent {
      * to fully manage your own VisionProcessor as Vision will not have instance management over it.
      */
     public void experimentallyUseCustomProcessor(VisionProcessor processor) {
-        visionPortal.close();
+        if (visionPortal != null)
+            visionPortal.close();
         if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
             throw new IllegalArgumentException("Use init() method instead to initialise AT or TFOD!");
         }

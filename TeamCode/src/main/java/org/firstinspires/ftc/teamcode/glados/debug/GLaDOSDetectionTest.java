@@ -25,8 +25,9 @@ public class GLaDOSDetectionTest extends BunyipsOpMode {
         config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
         cam = new Vision(this, config.webcam, new C920());
         proc = new TeamPropProcessor();
-        cam.init(Vision.Processors.TEAM_PROP);
-        cam.start(Vision.Processors.TEAM_PROP);
+//        cam.init(Vision.Processors.TEAM_PROP);
+//        cam.start(Vision.Processors.TEAM_PROP);
+        cam.experimentallyUseCustomProcessor(proc);
 
     }
 
