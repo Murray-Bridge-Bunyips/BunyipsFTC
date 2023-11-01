@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.Text;
-import org.firstinspires.ftc.teamcode.common.TfodData;
+import org.firstinspires.ftc.teamcode.common.vision.data.TfodData;
 import org.firstinspires.ftc.teamcode.common.Vision;
 import org.firstinspires.ftc.teamcode.common.cameras.C920;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;

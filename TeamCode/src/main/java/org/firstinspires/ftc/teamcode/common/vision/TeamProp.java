@@ -8,14 +8,12 @@ import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
-import org.opencv.imgproc.Imgproc;
-import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.Arrays;
 import java.util.List;
 
 
-public class TeamPropProcessor implements VisionProcessor {
+public class TeamProp implements VisionProcessor {
 
     int CAMERA_WIDTH = 800/*800*/;
     int CAMERA_HEIGHT = 448/*448*/;

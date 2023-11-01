@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.common.tasks;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.TfodData;
+import org.firstinspires.ftc.teamcode.common.vision.data.TfodData;
 import org.firstinspires.ftc.teamcode.common.Vision;
 
 import java.util.List;

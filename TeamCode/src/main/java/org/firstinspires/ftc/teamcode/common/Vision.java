@@ -9,7 +9,9 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.teamcode.common.cameras.CameraType;
-import org.firstinspires.ftc.teamcode.common.vision.TeamPropProcessor;
+import org.firstinspires.ftc.teamcode.common.vision.TeamProp;
+import org.firstinspires.ftc.teamcode.common.vision.data.AprilTagData;
+import org.firstinspires.ftc.teamcode.common.vision.data.TfodData;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -26,8 +28,7 @@ import java.util.List;
  *
  * @author Lucas Bubner, 2023
  */
-// Using Java as opposed to Kotlin as null safety is not a major concern
-// due to the initialisation routine of the WebcamName device.
+// TODO: Implement new Vision components instead of hardcoded processing methods
 public class Vision extends BunyipsComponent {
     // Arrays to store the data from the processors
     private final List<AprilTagData> aprilTagData = new ArrayList<>();
@@ -36,7 +37,7 @@ public class Vision extends BunyipsComponent {
     private final CameraType cameraInfo;
     private TfodProcessor tfod;
     private AprilTagProcessor aprilTag;
-    private TeamPropProcessor teamProp;
+    private TeamProp teamProp;
     private VisionPortal visionPortal;
 
     public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam, CameraType cameraType) {
@@ -90,7 +91,7 @@ public class Vision extends BunyipsComponent {
                     initialisedProcessors.add(aprilTag);
                     break;
                 case TEAM_PROP:
-                    teamProp = new TeamPropProcessor();
+                    teamProp = new TeamProp();
                     initialisedProcessors.add(teamProp);
                     break;
             }
