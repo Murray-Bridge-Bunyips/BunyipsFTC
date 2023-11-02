@@ -35,7 +35,7 @@ class JerryVectorDriveTask<T>(
     private var normalisedVector: RobotVector = when (vector) {
         is RelativeVector -> vector.vector
         is RobotVector -> vector
-        else -> throw IllegalArgumentException("Vector must be a subclass of RobotVector")
+        else -> throw IllegalArgumentException("JerryVectorDriveTask: Vector must be a subclass of RobotVector")
     }
     private var direction: RelativeVector
 

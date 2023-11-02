@@ -6,6 +6,11 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
 
+/**
+ * Utilise time control to drive GLaDOS.
+ *
+ * @author Lucas Bubner, 2023
+ */
 public class GLaDOSTimeDriveTask extends Task {
     private final GLaDOSPOVDriveCore drive;
     private final double x;

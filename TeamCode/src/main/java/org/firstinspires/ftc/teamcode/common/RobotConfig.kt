@@ -67,7 +67,7 @@ abstract class RobotConfig {
         ): RobotConfig {
             // Check to make sure RobotConfig was instantiated, as this is a common error
             if (config == null) {
-                throw RuntimeException("OpMode member 'config' is not instantiated, make sure to initialise your config with 'private YourConfig config = new YourConfig();' (Java) or 'private var config = YourConfig()' (Kotlin) in your OpMode class members.")
+                throw RuntimeException("RobotConfig: OpMode member 'config' is not instantiated, make sure to initialise your config with 'private YourConfig config = new YourConfig();' (Java) or 'private var config = YourConfig()' (Kotlin) in your OpMode class members.")
             }
             config.hardwareMap = hardwareMap
             errors.clear()

@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 
 /**
  * Interface abstraction for encoder motors, for functionality such as enabling/disabling tracking.
+ * @author Lucas Bubner, 2023
  */
 interface Encoder {
     enum class Scope {
@@ -49,6 +50,20 @@ interface Encoder {
         } else {
             motor.currentPosition.toDouble()
         }
+    }
+
+    /**
+     * Get the number of revolutions the encoder has travelled since the last track()
+     * Can use an optional parameter to use since reset() position instead of track()
+     * @return revolutions indicating how far the encoder has travelled
+     */
+    fun travelledRevolutions(scope: Scope = Scope.RELATIVE): Double {
+        // Equation: encoder ticks / ticksPerRevolution
+        if (ticksPerRevolution == null) {
+            throw IllegalStateException("Odometer: ticksPerRevolution must be set to use travelledRevolutions()")
+        }
+        // Return travelled revolutions depending on selected accuracy
+        return position(scope) / ticksPerRevolution!!
     }
 
     /**

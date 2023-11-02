@@ -16,7 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Drive to the parking zone immediately.
+ * Drive GLaDOS to the parking zone immediately.
+ *
+ * @author Lucas Bubner, 2023
  */
 @Autonomous(name = "GLaDOS: Park", group = "GLaDOS")
 public class GLaDOSParkAuto extends AutonomousBunyipsOpMode {

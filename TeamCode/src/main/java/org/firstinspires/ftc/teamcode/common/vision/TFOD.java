@@ -28,10 +28,16 @@ public class TFOD extends Processor<TfodData> {
 
     /**
      * Get the TFOD instance
+     *
      * @return direct TFODProcessor instance
      */
     public TfodProcessor getInstance() {
         return instance;
+    }
+
+    @Override
+    public String getName() {
+        return "tfod";
     }
 
     public void tick() {

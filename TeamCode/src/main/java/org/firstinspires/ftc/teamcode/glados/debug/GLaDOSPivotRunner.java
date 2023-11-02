@@ -8,6 +8,11 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.Text;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
+/**
+ * Test pivot motor tracking and control using direct input
+ *
+ * @author Lucas Bubner, 2023
+ */
 @TeleOp(name = "GLaDOS: Pivot Motor Debug", group = "GLaDOS")
 @Disabled
 public class GLaDOSPivotRunner extends BunyipsOpMode {

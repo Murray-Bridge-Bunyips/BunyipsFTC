@@ -13,14 +13,23 @@ import java.util.List;
 public abstract class Processor<T extends VisionData> implements VisionProcessor {
 
     /**
-     * Verify that parameterized type T is a subclass extension of VisionData
-     * @param type [yourTVisionDataClass].class
+     * Vision Processor Wrapper
+     * Parameterized type T must be a subclass extension of VisionData and getName must return a non-null value
+     * Super-call: {@code super([yourVisionDataClass].class)}
      */
     protected Processor(Class<T> type) {
         if (type == VisionData.class || !VisionData.class.isAssignableFrom(type)) {
-            throw new IllegalArgumentException("T must extend VisionData");
+            throw new IllegalArgumentException("Processor: T must extend VisionData");
+        }
+        if (getName() == null) {
+            throw new IllegalArgumentException("Processor: Processor name cannot be null");
         }
     }
+
+    /**
+     * Unique identifier for the processor
+     */
+    public abstract String getName();
 
     /**
      * List of all vision data detected since the last stateful update
@@ -29,6 +38,7 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
 
     /**
      * Get the list of vision data
+     *
      * @return list of all vision data detected since the last stateful update
      */
     public List<T> getData() {

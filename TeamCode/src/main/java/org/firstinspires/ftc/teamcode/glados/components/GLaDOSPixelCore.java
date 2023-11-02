@@ -11,6 +11,8 @@ import org.firstinspires.ftc.teamcode.common.While;
 
 /**
  * Pixel Movement arm mechanism
+ *
+ * @author Lucas Bubner, 2023
  */
 public class GLaDOSPixelCore extends BunyipsComponent {
     private final Servo endEffector;

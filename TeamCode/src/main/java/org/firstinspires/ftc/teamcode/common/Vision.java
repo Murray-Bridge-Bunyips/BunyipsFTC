@@ -12,6 +12,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -25,6 +26,9 @@ public class Vision extends BunyipsComponent {
     private final List<Processor> processors = new ArrayList<>();
     private final WebcamName webcam;
     private VisionPortal visionPortal;
+
+    public static int CAMERA_WIDTH = 1280;
+    public static int CAMERA_HEIGHT = 720;
 
     public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam) {
         super(opMode);
@@ -40,11 +44,19 @@ public class Vision extends BunyipsComponent {
     private VisionPortal constructVisionPortal(VisionPortal.Builder builder) {
         return builder
                 .setCamera(webcam)
-                .setCameraResolution(new Size(1280, 720))
+                .setCameraResolution(new Size(CAMERA_WIDTH, CAMERA_HEIGHT))
                 .enableLiveView(true)
                 .setAutoStopLiveView(true)
                 // Set any additional VisionPortal settings here
                 .build();
+    }
+
+    /**
+     * Get all VisionProcessors attached to the VisionPortal.
+     */
+    @SuppressWarnings("rawtypes")
+    public List<Processor> getAttachedProcessors() {
+        return processors;
     }
 
     /**
@@ -64,7 +76,7 @@ public class Vision extends BunyipsComponent {
         }
 
         if (processors.length == 0) {
-            throw new IllegalArgumentException("Must initialise at least one integrated processor!");
+            throw new IllegalArgumentException("Vision: Must initialise at least one integrated processor!");
         }
 
         // Hand over instance control to the VisionPortal
@@ -74,7 +86,15 @@ public class Vision extends BunyipsComponent {
         VisionPortal.Builder builder = new VisionPortal.Builder();
         for (Processor processor : processors) {
             if (processor == null) {
-                throw new IllegalStateException("Processor is not instantiated!");
+                throw new IllegalStateException("Vision: Processor is not instantiated!");
+            }
+            if (processor.getName() == null) {
+                throw new IllegalStateException("Vision: Processor name cannot be null!");
+            }
+            for (Processor otherProcessor : this.processors) {
+                if (otherProcessor != processor && otherProcessor.getName().equals(processor.getName())) {
+                    throw new IllegalStateException("Vision: Processor name must be unique!");
+                }
             }
             builder.addProcessor(processor);
         }
@@ -99,7 +119,7 @@ public class Vision extends BunyipsComponent {
     @SuppressWarnings("rawtypes")
     public void start(Processor... processors) {
         if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
         }
 
         // Resume the stream if it was previously stopped or is not running
@@ -112,10 +132,10 @@ public class Vision extends BunyipsComponent {
 
         for (Processor processor : processors) {
             if (processor == null) {
-                throw new IllegalStateException("Processor is not instantiated!");
+                throw new IllegalStateException("Vision: Processor is not instantiated!");
             }
             if (!this.processors.contains(processor)) {
-                throw new IllegalStateException("Tried to start a processor that was not initialised!");
+                throw new IllegalStateException("Vision: Tried to start a processor that was not initialised!");
             }
             visionPortal.setProcessorEnabled(processor, true);
         }
@@ -141,16 +161,16 @@ public class Vision extends BunyipsComponent {
     @SuppressWarnings("rawtypes")
     public void stop(Processor... processors) {
         if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
         }
 
         // Disable processors without pausing the stream
         for (Processor processor : processors) {
             if (processor == null) {
-                throw new IllegalStateException("Processor is not instantiated!");
+                throw new IllegalStateException("Vision: Processor is not instantiated!");
             }
             if (!this.processors.contains(processor)) {
-                throw new IllegalStateException("Tried to stop a processor that was not initialised!");
+                throw new IllegalStateException("Vision: Tried to stop a processor that was not initialised!");
             }
             visionPortal.setProcessorEnabled(processor, false);
         }
@@ -161,7 +181,7 @@ public class Vision extends BunyipsComponent {
      */
     public void stop() {
         if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
         }
         // Pause the processor, this will also auto-close any VisionProcessors
         visionPortal.stopStreaming();
@@ -180,15 +200,17 @@ public class Vision extends BunyipsComponent {
     }
 
     /**
-     * Get data from all processors.
+     * Get data from all processors after being ticked.
      * This can optionally can be done per processor by calling processor.getData().
      * This data is stored in the processor instance and can be accessed with getters.
+     *
+     * @return HashMap of all processor data from every attached processor
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
-    public List<List<VisionData>> getAllData() {
-        List<List<VisionData>> data = new ArrayList<>();
+    public HashMap<String, List<VisionData>> getAllData() {
+        HashMap<String, List<VisionData>> data = new HashMap<>();
         for (Processor processor : processors) {
-            data.add(processor.getData());
+            data.put(processor.getName(), processor.getData());
         }
         return data;
     }
@@ -207,7 +229,7 @@ public class Vision extends BunyipsComponent {
      */
     public void terminate() {
         if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
         }
         visionPortal.close();
         visionPortal = null;
@@ -218,7 +240,7 @@ public class Vision extends BunyipsComponent {
      */
     public VisionPortal.CameraState getStatus() {
         if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
         }
         return visionPortal.getCameraState();
     }
@@ -228,7 +250,7 @@ public class Vision extends BunyipsComponent {
      */
     public double getFps() {
         if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
         }
         return visionPortal.getFps();
     }
@@ -239,7 +261,7 @@ public class Vision extends BunyipsComponent {
      */
     public void setLiveView(boolean enabled) {
         if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
         }
         if (enabled) {
             visionPortal.resumeLiveView();

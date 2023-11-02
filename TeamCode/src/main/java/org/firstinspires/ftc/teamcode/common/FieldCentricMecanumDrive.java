@@ -19,7 +19,7 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
         super(opMode, frontLeft, backLeft, frontRight, backRight);
         this.imu = imu;
         if (startingDirection == RelativeVector.CLOCKWISE || startingDirection == RelativeVector.ANTICLOCKWISE) {
-            throw new IllegalArgumentException("Cannot use rotational quantities as a starting direction");
+            throw new IllegalArgumentException("FCMD: Cannot use rotational quantities as a starting direction");
         }
 
         // Invalidate any previous readings

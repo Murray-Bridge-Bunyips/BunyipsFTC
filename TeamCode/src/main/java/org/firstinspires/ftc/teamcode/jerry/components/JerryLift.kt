@@ -171,7 +171,7 @@ class JerryLift(
      */
     fun delta(dy: Double) {
         if (mode != ControlMode.MANUAL) {
-            throw IllegalStateException("delta() method can only be used in manual mode")
+            throw IllegalStateException("JerryLift: delta() method can only be used in manual mode")
         }
         if (dy < 0) {
             // Arm is ascending, auto close claw
@@ -199,10 +199,10 @@ class JerryLift(
      */
     fun set(percent: Int) {
         if (mode != ControlMode.POSITIONAL) {
-            throw IllegalStateException("set() method can only be used in positional mode")
+            throw IllegalStateException("JerryLift: set() method can only be used in positional mode")
         }
         if (percent !in 0..100) {
-            throw IllegalArgumentException("set() method must be between 0 and 100%")
+            throw IllegalArgumentException("JerryLift: set() method must be between 0 and 100%")
         }
         if (percent == 0) {
             reset()
@@ -216,7 +216,7 @@ class JerryLift(
      */
     fun capture() {
         if (mode != ControlMode.MANUAL) {
-            throw IllegalStateException("capture() method can only be used in manual mode")
+            throw IllegalStateException("JerryLift: capture() method can only be used in manual mode")
         }
         val armPos = (arm1.currentPosition + arm2.currentPosition) / 2
         holdPosition = minOf(armPos, HARD_LIMIT)
@@ -228,7 +228,7 @@ class JerryLift(
      */
     fun release() {
         if (mode != ControlMode.MANUAL) {
-            throw IllegalStateException("release() method can only be used in manual mode")
+            throw IllegalStateException("JerryLift: release() method can only be used in manual mode")
         }
         if (holdPosition == null) {
             opMode.log("lift released but no capture was found")

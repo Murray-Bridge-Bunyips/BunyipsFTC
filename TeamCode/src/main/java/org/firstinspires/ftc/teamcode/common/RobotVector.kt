@@ -10,6 +10,7 @@ import kotlin.math.sqrt
 /**
  * Definitions of directional vectors in the format (x, y, r).
  * We don't have to define (z) as 3D space is irrelevant in this context.
+ * @author Lucas Bubner, 2023
  */
 data class RobotVector(var x: Double, var y: Double, var r: Double) {
     // Use inverse trig to find a polar angle from a Cartesian quantity

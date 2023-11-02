@@ -6,6 +6,7 @@ package org.firstinspires.ftc.teamcode.common
  * Left -1.0 <= x <= Right 1.0
  * Backward -1.0 <= y <= Forward 1.0
  * Anticlockwise -1.0 <= r <= Clockwise 1.0
+ * @author Lucas Bubner, 2023
  */
 enum class RelativeVector(val vector: RobotVector) {
     // 2D translational vectors
@@ -43,7 +44,7 @@ enum class RelativeVector(val vector: RobotVector) {
                 vector.y < -0.5 -> BACKWARD
                 vector.r > 0 -> CLOCKWISE
                 vector.r < 0 -> ANTICLOCKWISE
-                else -> throw IllegalArgumentException("(${vector.x},${vector.y},${vector.r}) cannot be converted to a RelativeVector.")
+                else -> throw IllegalArgumentException("RelativeVector: (${vector.x},${vector.y},${vector.r}) cannot be converted to a RelativeVector.")
             }
         }
     }

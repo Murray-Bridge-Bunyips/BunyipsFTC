@@ -226,7 +226,7 @@ public abstract class MecanumDrive extends BunyipsComponent {
             speedY = relativeVector.getVector().getY();
             speedR = relativeVector.getVector().getR();
         } else {
-            throw new IllegalArgumentException("Vector must be of type RobotVector or RelativeVector");
+            throw new IllegalArgumentException("MecanumDrive: Vector must be of type RobotVector or RelativeVector");
         }
     }
 

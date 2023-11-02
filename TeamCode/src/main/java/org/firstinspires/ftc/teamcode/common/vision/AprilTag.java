@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.common.vision;
 import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.teamcode.common.vision.data.AprilTagData;
 import org.firstinspires.ftc.teamcode.common.cameras.CameraType;
+import org.firstinspires.ftc.teamcode.common.vision.data.AprilTagData;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.opencv.core.Mat;
@@ -29,10 +29,16 @@ public class AprilTag extends Processor<AprilTagData> {
 
     /**
      * Get the AprilTag instance
+     *
      * @return direct AprilTagProcessor instance
      */
     public AprilTagProcessor getInstance() {
         return instance;
+    }
+
+    @Override
+    public String getName() {
+        return "apriltag";
     }
 
     @Override

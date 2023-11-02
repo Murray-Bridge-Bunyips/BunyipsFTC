@@ -60,3 +60,5 @@ See the example robot and file structure in this directory, and copy what you ne
 
 All examples are written in Java, but Kotlin examples exist if you look at the 'Jerry' robot
 either in the archived folder or in the robot package.
+
+###### Examples written by Lucas Bubner, 2023
