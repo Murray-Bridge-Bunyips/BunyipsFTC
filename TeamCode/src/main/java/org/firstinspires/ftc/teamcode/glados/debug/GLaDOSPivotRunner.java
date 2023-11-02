@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.Text;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
-@TeleOp(name = "GLaDOS: Pivot Motor Debug", group = "GLADOS")
+@TeleOp(name = "GLaDOS: Pivot Motor Debug", group = "GLaDOS")
 @Disabled
 public class GLaDOSPivotRunner extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();

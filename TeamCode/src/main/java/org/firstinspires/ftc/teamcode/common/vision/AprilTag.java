@@ -16,11 +16,11 @@ import java.util.List;
  * Extension wrapper for AprilTag to interop with the Vision system
  * @author Lucas Bubner, 2023
  */
-public class AprilTag extends Processor<VisionData> {
+public class AprilTag extends Processor<AprilTagData> {
     private final AprilTagProcessor instance;
 
     public AprilTag(CameraType camInfo) {
-        super(VisionData.class);
+        super(AprilTagData.class);
         instance = new AprilTagProcessor.Builder()
                 .setLensIntrinsics(camInfo.getFx(), camInfo.getFy(), camInfo.getCx(), camInfo.getCy())
                 // Specify custom AprilTag settings here

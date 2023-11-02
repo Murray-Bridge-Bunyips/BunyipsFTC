@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.WaitTask;
 import java.util.Arrays;
 import java.util.List;
 
-@Autonomous(name = "GLADOS: AutonTest", group = "GLADOS")
+@Autonomous(name = "GLaDOS: AutonTest", group = "GLaDOS")
 @Disabled
 public class GLaDOSAutonTest extends AutonomousBunyipsOpMode {
     @Override

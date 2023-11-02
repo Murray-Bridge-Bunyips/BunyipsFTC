@@ -21,7 +21,7 @@ import kotlin.Unit;
  *
  * @author Lucas Bubner, 2023
  */
-@TeleOp(name = "GLADOS: TeleOp", group = "GLADOS")
+@TeleOp(name = "GLaDOS: TeleOp", group = "GLaDOS")
 public class GLaDOSTeleOp extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSFieldDriveCore drive;

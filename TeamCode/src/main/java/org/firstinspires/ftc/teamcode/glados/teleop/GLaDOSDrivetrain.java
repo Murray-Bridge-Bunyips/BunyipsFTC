@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
  * POV drivetrain only for GLaDOS.
  * @author Lucas Bubner, 2023
  */
-@TeleOp(name = "GLADOS: Drivetrain", group = "GLADOS")
+@TeleOp(name = "GLaDOS: Drivetrain", group = "GLaDOS")
 public class GLaDOSDrivetrain extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSPOVDriveCore drive;

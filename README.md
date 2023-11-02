@@ -5,7 +5,7 @@
     Murray Bridge High School
 	
 	MAINTAINED ROBOT CODE in this repository (under src/main/java/.../teamcode):
-            ⭐ GLADOS: Mecanum-drive CenterStage robot, 2023-2024, MURRAY BRIDGE BUNYIPS
+            ⭐ GLaDOS: Mecanum-drive CenterStage robot, 2023-2024, MURRAY BRIDGE BUNYIPS
             ⭐ WHEATLEY: Mecanum-drive CenterStage robot, 2023-2024, MURRAY BRIDGE MULYAWONKS
 	     	JERRY: Mecanum-drive PowerPlay robot, 2022-2023, MURRAY BRIDGE BUNYIPS
 

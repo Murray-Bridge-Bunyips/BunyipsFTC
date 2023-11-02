@@ -45,8 +45,6 @@ public class GetWhitePixelTask extends Task {
         // As this is the init-task, we can assume that the vision portal is not open yet
         // This task will also leave the portal OPEN for further usages of the vision system
         // For this we are using the default settings of TFOD for white spike detection
-        vision.init(Vision.Processors.TFOD);
-        vision.start(Vision.Processors.TFOD);
     }
 
     @Override
@@ -69,25 +67,25 @@ public class GetWhitePixelTask extends Task {
 
     @Override
     public void run() {
-        vision.tick();
-        List<TfodData> tfodData = vision.getTfodData();
-        if (tfodData.size() == 0) {
-            foundSpike = false;
-            return;
-        }
-        for (TfodData data : tfodData) {
-            if (!data.getLabel().equals("Spike")) {
-                return;
-            }
-            foundSpike = true;
-            confidence = data.getConfidence();
-        }
+//        vision.tick();
+//        List<TfodData> tfodData = vision.getTfodData();
+//        if (tfodData.size() == 0) {
+//            foundSpike = false;
+//            return;
+//        }
+//        for (TfodData data : tfodData) {
+//            if (!data.getLabel().equals("Spike")) {
+//                return;
+//            }
+//            foundSpike = true;
+//            confidence = data.getConfidence();
+//        }
     }
 
     @Override
     public void onFinish() {
         // We will not need TFOD anymore
-        vision.stop(Vision.Processors.TFOD);
+//        vision.stop(Vision.Processors.TFOD);
     }
 
     enum Aggression {

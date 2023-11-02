@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.Text;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
-@TeleOp(name = "GLaDOS: Extrusion Motor Runner", group = "GLADOS")
+@TeleOp(name = "GLaDOS: Extrusion Motor Runner", group = "GLaDOS")
 public class GLaDOSExtensionRunner extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
 

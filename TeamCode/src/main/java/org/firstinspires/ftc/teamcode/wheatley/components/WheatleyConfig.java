@@ -31,21 +31,23 @@ public class WheatleyConfig extends RobotConfig {
     public DcMotor backLeft;
     public DcMotor frontRight;
     public DcMotor backRight;
+    public DcMotor rotator;
 
-    public DcMotor frontServo;
-    public DcMotor backServo;
-    public WebcamName webCam;
+    public DcMotor leftServo;
+    public DcMotor rightServo;
+    public WebcamName webcam;
 
     @Override
     protected void init() {
 
         // Motor directions configured to work with current config
-        frontLeft = (DcMotor) getHardware("left_front", DcMotor.class);
-        backLeft = (DcMotor) getHardware("left_rear", DcMotor.class);
-        frontRight = (DcMotor) getHardware("right_front", DcMotor.class);
-        backRight = (DcMotor) getHardware("right_rear", DcMotor.class);
-        frontServo = (DcMotor) getHardware("front_servo", DcMotor.class);
-        backServo = (DcMotor) getHardware("back_servo", DcMotor.class);
-        webCam = (WebcamName) getHardware("web_cam", WebcamName.class);
+        frontLeft = (DcMotor) getHardware("fl", DcMotor.class);
+        backLeft = (DcMotor) getHardware("bl", DcMotor.class);
+        frontRight = (DcMotor) getHardware("fr", DcMotor.class);
+        backRight = (DcMotor) getHardware("br", DcMotor.class);
+        leftServo = (DcMotor) getHardware("ls", DcMotor.class);
+        rightServo = (DcMotor) getHardware("rs", DcMotor.class);
+        webcam = (WebcamName) getHardware("webcam", WebcamName.class);
+        rotator = (DcMotor) getHardware("ra", DcMotor.class);
     }
 }

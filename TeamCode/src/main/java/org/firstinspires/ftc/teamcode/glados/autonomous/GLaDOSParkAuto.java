@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Drive to the parking zone immediately.
  */
-@Autonomous(name = "GLADOS: Park", group = "GLADOS")
+@Autonomous(name = "GLaDOS: Park", group = "GLaDOS")
 public class GLaDOSParkAuto extends AutonomousBunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSPOVDriveCore drive;
