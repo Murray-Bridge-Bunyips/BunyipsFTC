@@ -14,6 +14,7 @@ import java.util.List;
 public class ExampleSignalAutonomous extends AutonomousBunyipsOpMode {
     private GetSignalTask initTask;
     private ExampleConfig config = new ExampleConfig();
+    @SuppressWarnings("FieldCanBeLocal")
     private OpenCVCam cam;
 
     @Override

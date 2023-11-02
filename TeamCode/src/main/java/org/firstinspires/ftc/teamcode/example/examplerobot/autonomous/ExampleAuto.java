@@ -1,56 +1,39 @@
 package org.firstinspires.ftc.teamcode.example.examplerobot.autonomous;
 
-import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import androidx.annotation.Nullable;
+
+import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
-import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
-import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
 import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleConfig;
 import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleDrive;
 import org.firstinspires.ftc.teamcode.example.examplerobot.tasks.ExampleTimeDriveTask;
 
-import java.util.ArrayDeque;
+import java.util.List;
 
-/**
- * Example autonomous using Task system.
- */
-public class ExampleAuto extends BunyipsOpMode {
-    // See TeleOp before autonomous.
-    // This is an example autonomous that will drive forward for 5 seconds, then stop.
-
-    // !! The major difference between autonomous and teleop is that autonomous uses tasks to run
-    // code, whereas teleop uses activeLoop() to run code. View ExampleTimeDriveTask.java for more
-    // information on tasks. Here we will make a queue, which will store tasks to run.
-    private final ArrayDeque<Task> tasks = new ArrayDeque<>();
-    // Declare drive and config components
+public class ExampleAuto extends AutonomousBunyipsOpMode {
     private ExampleDrive drive;
     private ExampleConfig config = new ExampleConfig();
 
     @Override
-    protected void onInit() {
-        // Initialise config and components
+    protected void onInitialisation() {
         config = (ExampleConfig) RobotConfig.newConfig(this, config, hardwareMap);
         drive = new ExampleDrive(this, config.leftMotor, config.rightMotor);
-
-        // Add tasks to the queue
-        // MessageTask is a common task that will print a message to the Driver Station
-        tasks.add(new MessageTask(this, 2.0, "This is a test!"));
-        // ExampleTimeDriveTask is a custom task that we have written, where we pass the
-        // drive component to.
-        tasks.add(new ExampleTimeDriveTask(this, 5.0, drive));
     }
 
     @Override
-    protected void activeLoop() {
-        // This code is required in every autonomous OpMode, as it will run the tasks in the queue.
-        // This will run a task until it is done, then move to the next one.
-        Task currentTask = tasks.peekFirst();
-        if (currentTask == null) {
-            finish();
-            return;
-        }
-        currentTask.run();
-        if (currentTask.isFinished()) {
-            tasks.removeFirst();
-        }
+    protected List<OpModeSelection> setOpModes() {
+        return null;
+    }
+
+    @Override
+    protected AutoTask setInitTask() {
+        return null;
+    }
+
+    @Override
+    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+        addTask(new ExampleTimeDriveTask(this, 5.0, drive));
     }
 }

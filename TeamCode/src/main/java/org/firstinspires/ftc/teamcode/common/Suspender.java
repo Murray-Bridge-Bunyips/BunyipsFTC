@@ -17,16 +17,16 @@ public class Suspender extends BunyipsComponent {
 
     private Status status;
     private Action action;
-    private PivotMotor rotation;
-    private DcMotor extension;
-    private boolean userStopped = false;
+    private final PivotMotor rotation;
+    private final DcMotor extension;
+    private boolean userStopped;
 
-    private static int EXTENDED_POSITION;
-    private static int RETRACTED_POSITION;
-    private static double EXTENSION_POWER;
-    private static double ROTATION_POWER;
-    private static double STOWED_DEGREES;
-    private static double OPEN_DEGREES;
+    private final int EXTENDED_POSITION;
+    private final int RETRACTED_POSITION;
+    private final double EXTENSION_POWER;
+    private final double ROTATION_POWER;
+    private final double STOWED_DEGREES;
+    private final double OPEN_DEGREES;
 
     private final While rotationLock = new While(
             () -> {
@@ -67,8 +67,8 @@ public class Suspender extends BunyipsComponent {
         STOWED_DEGREES = stowedDegrees;
         OPEN_DEGREES = openDegrees;
 
-        // TODO: Might need to set up a limit switch to determine if the arm is downlocked
-        // We will assume that the arm is downlocked for now
+        // TODO: Might need to set up a limit switch to determine if the arm is down-locked
+        // We will assume that the arm is down-locked for now
         status = Status.STOWED;
         action = Action.STOPPED;
 
@@ -96,7 +96,7 @@ public class Suspender extends BunyipsComponent {
      * @return a boolean representing whether the arm is moving or not
      */
     public boolean isMoving() {
-        return (action != Action.STOPPED);
+        return action != Action.STOPPED;
     }
 
     /**
@@ -143,7 +143,7 @@ public class Suspender extends BunyipsComponent {
      * Reset the Suspender to STOWED
      */
     public void reset() {
-        action = Action.CLOSING;
+
     }
 
     /**
@@ -174,9 +174,11 @@ public class Suspender extends BunyipsComponent {
                 case CLOSING:
                 case EXTENDING:
                     status = Status.EXTENDED;
+                    break;
                 case OPENING:
                 case RETRACTING:
                     status = Status.RETRACTED;
+                    break;
             }
             action = Action.STOPPED;
         }

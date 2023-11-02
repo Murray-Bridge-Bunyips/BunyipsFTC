@@ -32,7 +32,9 @@ public class GLaDOSVisionTest extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        vision.updateAll();
+        // vision.updateAll();
+        at.tick();
+        tf.tick();
         addTelemetry(String.valueOf(vision.getAllData()));
     }
 }

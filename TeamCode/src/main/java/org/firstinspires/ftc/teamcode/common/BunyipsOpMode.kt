@@ -12,9 +12,9 @@ import kotlin.math.roundToInt
  * @author Lucas Bubner, 2023
  */
 abstract class BunyipsOpMode : LinearOpMode() {
-    private var movingAverageTimer: MovingAverageTimer? = null
-    var loopCount: Long = 0
+    var movingAverageTimer: MovingAverageTimer? = null
         private set
+
     private var operationsCompleted = false
     private var operationsPaused = false
 
@@ -136,7 +136,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 try {
                     // Run user-defined active loop
                     activeLoop()
-                    loopCount++
                 } catch (ie: InterruptedException) {
                     throw ie
                 } catch (e: Throwable) {

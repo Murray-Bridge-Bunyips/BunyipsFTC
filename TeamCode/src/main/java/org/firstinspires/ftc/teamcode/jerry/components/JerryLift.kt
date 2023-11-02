@@ -264,7 +264,7 @@ class JerryLift(
 
         when (mode) {
             ControlMode.POSITIONAL -> {
-                // Ensure the arm does not overswing
+                // Ensure the arm does not over swing
                 if (targetPosition > HARD_LIMIT) {
                     targetPosition = HARD_LIMIT.toDouble()
                 }

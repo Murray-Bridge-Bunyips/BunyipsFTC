@@ -61,8 +61,5 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
 
         // IMU debugging
         addTelemetry(Text.format("Heading (deg): %s", imu.getHeading() % 360));
-//        addTelemetry(Text.format("Heading (deg, degraw): %s %s", String.valueOf(imu.getHeading()), String.valueOf(imu.getRawHeading())));
-//        addTelemetry(Text.format("Heading (f,l,r,b): %s %s %s %s", String.valueOf(RelativeVector.FORWARD.getAngle()), String.valueOf(RelativeVector.LEFT.getAngle()), String.valueOf(RelativeVector.RIGHT.getAngle()), String.valueOf(RelativeVector.BACKWARD.getAngle())));
-//        addTelemetry(Text.format("Heading (fl,fr,bl,br): %s %s %s %s", String.valueOf(RelativeVector.FORWARD_LEFT.getAngle()), String.valueOf(RelativeVector.FORWARD_RIGHT.getAngle()), String.valueOf(RelativeVector.BACKWARD_LEFT.getAngle()), String.valueOf(RelativeVector.BACKWARD_RIGHT.getAngle())));
     }
 }

@@ -42,6 +42,7 @@ import java.util.ArrayList;
  *
  * @author OpenFTC, 2021
  * @deprecated included with SDK v8.2, use built in AprilTag with Vision & VisionPortal instead
+ * @noinspection CanBeFinal, SameParameterValue, InnerClassMayBeStatic
  */
 @Deprecated
 public class AprilTagDetectionPipeline extends OpenCvPipeline {

@@ -9,6 +9,6 @@ import org.firstinspires.ftc.teamcode.common.MecanumDrive
  */
 class JerryDrive(
     opMode: BunyipsOpMode,
-    private val bl: DcMotorEx, private val br: DcMotorEx,
-    private val fl: DcMotorEx, private val fr: DcMotorEx
+    bl: DcMotorEx, br: DcMotorEx,
+    fl: DcMotorEx, fr: DcMotorEx
 ) : MecanumDrive(opMode, fl, bl, fr, br)

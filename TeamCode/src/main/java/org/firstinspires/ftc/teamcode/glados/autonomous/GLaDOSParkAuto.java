@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
-import org.firstinspires.ftc.teamcode.common.tasks.MessageTask;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
 import org.firstinspires.ftc.teamcode.glados.tasks.GLaDOSTimeDriveTask;
@@ -43,7 +42,7 @@ public class GLaDOSParkAuto extends AutonomousBunyipsOpMode {
     @Override
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
         if (selectedOpMode == null) {
-            // Will bail out if the user does not select an OpMode, this is incase the robot
+            // Will bail out if the user does not select an OpMode, this is in case the robot
             // is started and cannot perform any useful action without disrupting the alliance.
             return;
         }

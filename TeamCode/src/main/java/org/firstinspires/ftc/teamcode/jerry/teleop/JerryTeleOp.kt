@@ -55,8 +55,8 @@ class JerryTeleOp : BunyipsOpMode() {
 
     private fun initDrive() {
         if (config.assertDevices(config.driveMotors)) {
-            if (selector.result == "FIELD-CENTRIC" || imu == null) {
-                drive = JerryPolarDrive(
+            drive = if (selector.result == "FIELD-CENTRIC" || imu == null) {
+                JerryPolarDrive(
                     this,
                     config.bl!!,
                     config.br!!,
@@ -66,7 +66,7 @@ class JerryTeleOp : BunyipsOpMode() {
                     RelativeVector.FORWARD
                 )
             } else {
-                drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+                JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
             }
         }
     }

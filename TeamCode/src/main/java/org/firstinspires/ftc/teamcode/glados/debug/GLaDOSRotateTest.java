@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 @TeleOp(name="GLaDOS: Rotator Test", group="GLaDOS")
 public class GLaDOSRotateTest extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
-    double target = 0.0;
+    double target;
 
     @Override
     protected void onInit() {

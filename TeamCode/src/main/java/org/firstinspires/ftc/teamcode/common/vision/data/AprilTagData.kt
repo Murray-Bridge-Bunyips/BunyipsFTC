@@ -29,6 +29,7 @@ data class AprilTagData(
     /**
      * The image pixel coordinates of the corners of the tag.
      */
+    @Suppress("ArrayInDataClass")
     val corners: Array<Point>?,
     /**
      * Text name for this tag, if available.
@@ -78,7 +79,7 @@ data class AprilTagData(
     /**
      * Rotation of AprilTag around the Y axis. Right-Hand-Rule defines positive Roll rotation as the
      * Tag Image rotating Clockwise when viewed from the camera. A roll value of zero implies that
-     * the Tag image is alligned squarely and upright, when viewed in the camera image frame.
+     * the Tag image is aligned squarely and upright, when viewed in the camera image frame.
      */
     val roll: Double?,
     /**

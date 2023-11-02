@@ -14,7 +14,7 @@ import java.util.List;
 
 
 public class TeamProp implements VisionProcessor {
-
+    // TODO: Integrate to Processor
     int CAMERA_WIDTH = 800/*800*/;
     int CAMERA_HEIGHT = 448/*448*/;
 

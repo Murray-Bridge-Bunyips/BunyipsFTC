@@ -63,7 +63,7 @@ class JerryArm(
 
         // Now we wait for the limit switch to be hit, or if the movement of the arm stops for long enough,
         // which means either the button failed or the motors had already triggered
-        // the bounds detection. Either way works and it won't hurt to use both, incase the limit
+        // the bounds detection. Either way works and it won't hurt to use both, in case the limit
         // switch breaks for some reason. Press right bumper to cancel the loop.
         // Using reversed operation as pressing results in the limit switch reporting false
         var e = 0

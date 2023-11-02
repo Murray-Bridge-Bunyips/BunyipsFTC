@@ -60,6 +60,7 @@ public class While {
      *
      * @return True if the loop was run, false if it was not.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean run() {
         if (!evalLatch) {
             return false;
@@ -83,6 +84,7 @@ public class While {
     /**
      * Get the last status of the evaluator without running it.
      */
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public boolean running() {
         return evalLatch;
     }

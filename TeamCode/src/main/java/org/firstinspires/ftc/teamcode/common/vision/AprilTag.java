@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.teamcode.common.vision.data.AprilTagData;
-import org.firstinspires.ftc.teamcode.common.vision.data.VisionData;
 import org.firstinspires.ftc.teamcode.common.cameras.CameraType;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -37,7 +36,7 @@ public class AprilTag extends Processor<AprilTagData> {
     }
 
     @Override
-    public void update() {
+    public void tick() {
         List<AprilTagDetection> detections = instance.getFreshDetections();
         if (detections == null) {
             return;

@@ -19,7 +19,7 @@ public class WheatleyLift extends BunyipsComponent {
 
     private final DcMotor clawArm;
     private double armPower;
-    private double clawPower;
+    private final double clawPower;
 
     private final Servo leftServo;
     private final Servo rightServo;

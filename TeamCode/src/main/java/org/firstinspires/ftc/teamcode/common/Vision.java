@@ -6,19 +6,9 @@ import android.util.Size;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.teamcode.common.cameras.CameraType;
 import org.firstinspires.ftc.teamcode.common.vision.Processor;
-import org.firstinspires.ftc.teamcode.common.vision.TeamProp;
-import org.firstinspires.ftc.teamcode.common.vision.data.AprilTagData;
-import org.firstinspires.ftc.teamcode.common.vision.data.TfodData;
 import org.firstinspires.ftc.teamcode.common.vision.data.VisionData;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.VisionProcessor;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +21,7 @@ import java.util.List;
  * @author Lucas Bubner, 2023
  */
 public class Vision extends BunyipsComponent {
+    @SuppressWarnings("rawtypes")
     private final List<Processor> processors = new ArrayList<>();
     private final WebcamName webcam;
     private VisionPortal visionPortal;
@@ -58,21 +49,30 @@ public class Vision extends BunyipsComponent {
 
     /**
      * Initialises the Vision class with the specified processors.
-     * This method should only be called once per OpMode. Call {@code terminate()} if you plan to
-     * reinitialise with changed processors, but note this is extremely expensive.
+     * This method should only be called once per OpMode. Additional calls will internally
+     * terminate the VisionPortal and reinitialise it with the new processors (this is a highly expensive operation).
      * Processors will be STOPPED by default, you must call {@code start()} after initialising.
      *
      * @param processors TFOD and/or AprilTag
      */
+    @SuppressWarnings("rawtypes")
     public void init(Processor... processors) {
-        if (processors.length == 0)
-            throw new IllegalArgumentException("Must initialise at least one integrated processor!");
+        if (visionPortal != null) {
+            getOpMode().log("WARNING: Vision already initialised! Tearing down...");
+            visionPortal.close();
+            visionPortal = null;
+        }
 
+        if (processors.length == 0) {
+            throw new IllegalArgumentException("Must initialise at least one integrated processor!");
+        }
+
+        // Hand over instance control to the VisionPortal
         this.processors.addAll(Arrays.asList(processors));
 
         // Initialise the VisionPortal with our newly created processors
         VisionPortal.Builder builder = new VisionPortal.Builder();
-        for (VisionProcessor processor : processors) {
+        for (Processor processor : processors) {
             if (processor == null) {
                 throw new IllegalStateException("Processor is not instantiated!");
             }
@@ -82,7 +82,7 @@ public class Vision extends BunyipsComponent {
         visionPortal = constructVisionPortal(builder);
 
         // Disable the vision processors by default. The OpMode must call start() to enable them.
-        for (VisionProcessor processor : this.processors) {
+        for (Processor processor : this.processors) {
             visionPortal.setProcessorEnabled(processor, false);
         }
 
@@ -96,7 +96,12 @@ public class Vision extends BunyipsComponent {
      *
      * @param processors TFOD and/or AprilTag
      */
+    @SuppressWarnings("rawtypes")
     public void start(Processor... processors) {
+        if (visionPortal == null) {
+            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+        }
+
         // Resume the stream if it was previously stopped or is not running
         if (visionPortal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_READY ||
                 visionPortal.getCameraState() == VisionPortal.CameraState.STOPPING_STREAM) {
@@ -104,6 +109,7 @@ public class Vision extends BunyipsComponent {
             // stream is resumed. This is a documented operation in the SDK.
             visionPortal.resumeStreaming();
         }
+
         for (Processor processor : processors) {
             if (processor == null) {
                 throw new IllegalStateException("Processor is not instantiated!");
@@ -132,7 +138,12 @@ public class Vision extends BunyipsComponent {
      *
      * @param processors TFOD and/or AprilTag
      */
+    @SuppressWarnings("rawtypes")
     public void stop(Processor... processors) {
+        if (visionPortal == null) {
+            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+        }
+
         // Disable processors without pausing the stream
         for (Processor processor : processors) {
             if (processor == null) {
@@ -149,6 +160,9 @@ public class Vision extends BunyipsComponent {
      * Stop all processors and pause the camera stream (Level 3).
      */
     public void stop() {
+        if (visionPortal == null) {
+            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+        }
         // Pause the processor, this will also auto-close any VisionProcessors
         visionPortal.stopStreaming();
     }
@@ -156,11 +170,12 @@ public class Vision extends BunyipsComponent {
     /**
      * Tick all processor camera streams and extract data from the processors.
      * This can optionally be done per processor by calling processor.update()
-     * This data is stored in the processorinstance and can be accessed with the getters.
+     * This data is stored in the processor instance and can be accessed with the getters.
      */
-    public void updateAll() {
+    @SuppressWarnings("rawtypes")
+    public void tickAll() {
         for (Processor processor : processors) {
-            processor.update();
+            processor.tick();
         }
     }
 
@@ -169,6 +184,7 @@ public class Vision extends BunyipsComponent {
      * This can optionally can be done per processor by calling processor.getData().
      * This data is stored in the processor instance and can be accessed with getters.
      */
+    @SuppressWarnings({"rawtypes", "unchecked"})
     public List<List<VisionData>> getAllData() {
         List<List<VisionData>> data = new ArrayList<>();
         for (Processor processor : processors) {
@@ -186,16 +202,24 @@ public class Vision extends BunyipsComponent {
      * <p>
      * It is strongly discouraged to reinitialise the VisionPortal in the same OpMode, as this
      * takes significant time and may cause the OpMode to hang or become unresponsive. Instead,
-     * use the start() and stop() methods to enable/disable the VisionPortal.
+     * use the {@code start()} and {@code stop()} methods to enable/disable the VisionPortal.
+     * Repeated calls to {@code init()} will also cause a termination of the VisionPortal.
      */
     public void terminate() {
+        if (visionPortal == null) {
+            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+        }
         visionPortal.close();
+        visionPortal = null;
     }
 
     /**
      * Get the current status of the camera attached to the VisionPortal.
      */
     public VisionPortal.CameraState getStatus() {
+        if (visionPortal == null) {
+            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+        }
         return visionPortal.getCameraState();
     }
 
@@ -203,6 +227,9 @@ public class Vision extends BunyipsComponent {
      * Get the current Frames Per Second of the VisionPortal.
      */
     public double getFps() {
+        if (visionPortal == null) {
+            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+        }
         return visionPortal.getFps();
     }
 
@@ -211,6 +238,9 @@ public class Vision extends BunyipsComponent {
      * When initialised, live view is disabled by default.
      */
     public void setLiveView(boolean enabled) {
+        if (visionPortal == null) {
+            throw new IllegalStateException("VisionPortal is not initialised from init()!");
+        }
         if (enabled) {
             visionPortal.resumeLiveView();
         } else {

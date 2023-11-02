@@ -32,7 +32,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      *
      * @see #setOpModes()
      */
-    protected ArrayList<OpModeSelection> opModes = new ArrayList<>();
+    protected final ArrayList<OpModeSelection> opModes = new ArrayList<>();
     private UserSelection<OpModeSelection> userSelection;
     private int currentTask = 1;
     private AutoTask initTask;

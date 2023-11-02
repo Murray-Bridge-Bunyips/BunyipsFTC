@@ -12,9 +12,6 @@ import kotlin.math.abs
  * Full-featured task for driving to a specific distance, with fail safes in case configuration is not available.
  * This supports movement throughout the 2D plane, and can be used to move in any one direction
  *
- * This system is being replaced by the new vector system in [JerryVectorDriveTask], which will allow for more complex movement,
- * but this is still maintained due to it's rigorous testing and reliability.
- *
  * @author Lucas Bubner, 2023
  */
 class JerryPrecisionDriveTask(
@@ -24,7 +21,7 @@ class JerryPrecisionDriveTask(
     private val imu: IMUOp?,
     private val x: Odometer?,
     private val y: Odometer?,
-    private val distance_mm: Double,
+    private val distanceMM: Double,
     private val direction: Directions,
     private var power: Double,
     private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
@@ -58,7 +55,7 @@ class JerryPrecisionDriveTask(
         } else {
             y?.travelledMM()
         }
-        return super.isFinished() || evaluating != null && evaluating >= distance_mm
+        return super.isFinished() || evaluating != null && evaluating >= distanceMM
     }
 
     override fun init() {
@@ -88,7 +85,7 @@ class JerryPrecisionDriveTask(
                 } else {
                     String.format("%.2f", y?.travelledMM())
                 }
-            }/$distance_mm"
+            }/$distanceMM"
         )
 
         opMode.addTelemetry(
