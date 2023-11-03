@@ -17,10 +17,8 @@ import org.firstinspires.ftc.teamcode.common.Text;
 
 public class WheatleyLift extends BunyipsComponent {
 
-    private final DcMotor clawArm;
-    private double armPower;
-    private final double clawPower;
-
+    private final DcMotor arm;
+    private double armPower = 0.0;
     private final Servo leftServo;
     private final Servo rightServo;
 
@@ -30,11 +28,9 @@ public class WheatleyLift extends BunyipsComponent {
     private Boolean leftClawState = false;
     private Boolean rightClawState = false;
 
-    public WheatleyLift(@NonNull BunyipsOpMode opMode, Double armPower, DcMotor clawArm, double clawPower, Servo leftServo, Servo rightServo) {
+    public WheatleyLift(@NonNull BunyipsOpMode opMode, DcMotor arm, Servo leftServo, Servo rightServo) {
         super(opMode);
-        this.clawArm = clawArm;
-        this.clawPower = clawPower;
-        this.armPower = armPower;
+        this.arm = arm;
         this.leftServo = leftServo;
         this.rightServo = rightServo;
 
@@ -72,11 +68,11 @@ public class WheatleyLift extends BunyipsComponent {
 
     public void update() {
 
-        clawArm.setPower(clawPower);
+        arm.setPower(armPower);
 
         // Can update telemetry functions too
         // The modified telemetry function takes in a value to show on the Driver Station, and
         // whether or not to keep it on the screen upon the next activeLoop.
-        getOpMode().addTelemetry("Lift Arm Position: " + clawArm.getCurrentPosition(), false);
+        getOpMode().addTelemetry("Lift Arm Position: " + arm.getCurrentPosition(), false);
     }
 }

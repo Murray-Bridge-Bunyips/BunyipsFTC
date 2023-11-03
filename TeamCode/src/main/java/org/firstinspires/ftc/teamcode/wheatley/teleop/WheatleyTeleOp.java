@@ -43,8 +43,10 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     protected void activeLoop() {
 
         drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        drive.update();
 
         lift.armLift(gamepad2.left_stick_y);
+        lift.update();
 
         if (gamepad2.x) {
             lift.leftClaw();

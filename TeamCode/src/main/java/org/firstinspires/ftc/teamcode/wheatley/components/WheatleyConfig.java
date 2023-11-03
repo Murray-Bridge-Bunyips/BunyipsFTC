@@ -7,9 +7,6 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
 /**
  * Wheatley robot configuration and hardware declarations
- * <p>
- * NOTE: As of initial writing, we have nearly no idea what hardware specifications we will be using
- * This is almost all guessing and taking hints from new SDK features, mostly copied from DinoMighty
  *
  * @author Lachlan Paul, 2023
  */
@@ -27,14 +24,30 @@ public class WheatleyConfig extends RobotConfig {
     //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
 
     // Declares all necessary motors
+
+    // Expansion 1: fl
     public DcMotor frontLeft;
+
+    // Expansion 0: bl
     public DcMotor backLeft;
+
+    // Expansion 2: fr
     public DcMotor frontRight;
+
+    // Expansion 3: br
     public DcMotor backRight;
+
+    // Control 0: ra
     public DcMotor rotator;
 
+    // Control Servo 0: ls
+
     public DcMotor leftServo;
+
+    // Control Servo 1: rs
     public DcMotor rightServo;
+
+    // USB device "webcam"
     public WebcamName webcam;
 
     @Override
