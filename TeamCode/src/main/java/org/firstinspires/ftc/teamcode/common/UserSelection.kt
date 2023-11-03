@@ -53,7 +53,11 @@ class UserSelection<T>(
      */
     override fun run() {
         if (opmodes.isEmpty()) {
-            callback(null)
+            try {
+                callback(null)
+            } catch (e: Exception) {
+                ErrorUtil.handleCatchAllException(e, opMode::log)
+            }
         }
 
         val buttons: HashMap<T, Controller> = Controller.mapArgs(opmodes)
@@ -119,6 +123,10 @@ class UserSelection<T>(
         opMode.telemetry.update()
         opMode.setTelemetryAutoClear(true)
 
-        callback(selectedOpMode)
+        try {
+            callback(selectedOpMode)
+        } catch (e: Exception) {
+            ErrorUtil.handleCatchAllException(e, opMode::log)
+        }
     }
 }

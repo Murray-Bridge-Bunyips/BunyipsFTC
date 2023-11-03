@@ -7,7 +7,7 @@ import java.io.StringWriter
  * Util to prevent unhandled exceptions from crashing the app
  */
 object ErrorUtil {
-    private const val MAX_STACKTRACE_CHARS = 150
+    private const val MAX_STACKTRACE_CHARS = 200
 
     @Throws(InterruptedException::class)
     fun handleCatchAllException(e: Throwable, log: (msg: String) -> Unit) {

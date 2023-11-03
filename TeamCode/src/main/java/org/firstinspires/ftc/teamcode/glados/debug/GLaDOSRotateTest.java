@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
+import org.firstinspires.ftc.teamcode.common.Text;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
 /**
@@ -12,27 +13,25 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
  *
  * @author Lucas Bubner, 2023
  */
-@TeleOp(name="GLaDOS: Rotator Test", group="GLaDOS")
+@TeleOp(name="GLaDOS: Rotator Motor Degrees Runner", group="GLaDOS")
 public class GLaDOSRotateTest extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
-    double target;
+    double target = 0.0;
 
     @Override
     protected void onInit() {
         config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
+        config.sr.reset();
         config.sr.track();
         config.sr.setTargetPosition(0);
         config.sr.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        config.sr.setPower(0.3);
+        config.sr.setPower(1);
     }
 
     @Override
     protected void activeLoop() {
-        target += gamepad1.left_stick_y * 2;
-        if (gamepad1.a) {
-            target = 0.0;
-        }
-        addTelemetry(String.valueOf(config.sr.getDegrees()));
+        target -= gamepad1.left_stick_y / 2;
+        addTelemetry("Degrees: %d", config.sr.getDegrees());
         config.sr.setDegrees(target);
     }
 }

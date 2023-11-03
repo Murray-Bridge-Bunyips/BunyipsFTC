@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.common
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.Telemetry.Item
+import java.util.Locale
 import kotlin.math.roundToInt
 
 /**
@@ -177,6 +178,11 @@ abstract class BunyipsOpMode : LinearOpMode() {
 
     fun addTelemetry(value: String): Item {
         return addTelemetry(value, false)
+    }
+
+    fun addTelemetry(formatString: String, vararg objs: Any): Item {
+        // FIXME: Broken! May have to do with Java interop
+        return addTelemetry(String.format(Locale.getDefault(), formatString, objs))
     }
 
     /**

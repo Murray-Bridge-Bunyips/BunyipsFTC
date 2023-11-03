@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.glados.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.UserSelection;
@@ -22,17 +23,17 @@ import kotlin.Unit;
  *
  * @author Lucas Bubner, 2023
  */
-@TeleOp(name = "GLaDOS: New Vision Test", group = "GLaDOS")
+@TeleOp(name = "GLaDOS: Vision Test", group = "GLaDOS")
 public class GLaDOSVisionTest extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
 
     private final UserSelection<Procs> proc = new UserSelection<>(this, this::callback, Procs.values());
     private Vision vision;
+    private Telemetry.Item i;
 
     @SuppressWarnings("rawtypes")
     private Unit callback(Procs selection) {
         if (selection == null) {
-            vision.terminate();
             return Unit.INSTANCE;
         }
         ArrayList<Processor> processors = new ArrayList<>();
@@ -60,7 +61,13 @@ public class GLaDOSVisionTest extends BunyipsOpMode {
         }
         vision.init(processors.toArray(new Processor[0]));
         vision.start(processors.toArray(new Processor[0]));
+        i = addTelemetry("Camera Stream available.", true);
         return Unit.INSTANCE;
+    }
+
+    @Override
+    protected boolean onInitLoop() {
+        return !proc.isAlive();
     }
 
     @Override
@@ -71,10 +78,16 @@ public class GLaDOSVisionTest extends BunyipsOpMode {
     }
 
     @Override
+    protected void onStart() {
+        removeTelemetryItems(i);
+    }
+
+    @Override
     protected void activeLoop() {
         if (vision == null) return;
         vision.tickAll();
-        addTelemetry(String.valueOf(vision.getAllData()));
+//        addTelemetry(String.valueOf(vision.getAllData()));
+        addTelemetry(String.valueOf(vision.getAttachedProcessors().get(0).getData()));
     }
 
     private enum Procs {

@@ -13,8 +13,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
  *
  * @author Lucas Bubner, 2023
  */
-@TeleOp(name = "GLaDOS: Pivot Motor Debug", group = "GLaDOS")
-@Disabled
+@TeleOp(name = "GLaDOS: Rotator Motor Runner", group = "GLaDOS")
 public class GLaDOSPivotRunner extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
 

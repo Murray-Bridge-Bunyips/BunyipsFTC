@@ -35,11 +35,11 @@ class GearedPivotMotor(
     }
 
     fun setDegrees(degrees: Double) {
-        motor.targetPosition = ((degrees / 360) * ticksPerRevolution).toInt()
+        motor.targetPosition = ((degrees / 360) * ticksPerRevolution / gearRatio).toInt()
     }
 
     fun setRadians(radians: Double) {
-        motor.targetPosition = ((radians / (2 * Math.PI)) * ticksPerRevolution).toInt()
+        motor.targetPosition = ((radians / (2 * Math.PI)) * ticksPerRevolution / gearRatio).toInt()
     }
 
 }

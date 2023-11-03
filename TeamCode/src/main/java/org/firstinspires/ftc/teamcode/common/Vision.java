@@ -36,22 +36,6 @@ public class Vision extends BunyipsComponent {
     }
 
     /**
-     * Builds the VisionPortal after the VisionPortal has been constructed.
-     *
-     * @param builder Processor-rich builder pattern for the VisionPortal
-     * @return VisionPortalImpl
-     */
-    private VisionPortal constructVisionPortal(VisionPortal.Builder builder) {
-        return builder
-                .setCamera(webcam)
-                .setCameraResolution(new Size(CAMERA_WIDTH, CAMERA_HEIGHT))
-                .enableLiveView(true)
-                .setAutoStopLiveView(true)
-                // Set any additional VisionPortal settings here
-                .build();
-    }
-
-    /**
      * Get all VisionProcessors attached to the VisionPortal.
      */
     @SuppressWarnings("rawtypes")
@@ -99,7 +83,13 @@ public class Vision extends BunyipsComponent {
             builder.addProcessor(processor);
         }
 
-        visionPortal = constructVisionPortal(builder);
+        visionPortal = builder
+                            .setCamera(webcam)
+                            .setCameraResolution(new Size(CAMERA_WIDTH, CAMERA_HEIGHT))
+                            .enableLiveView(true)
+                            .setAutoStopLiveView(true)
+                            // Set any additional VisionPortal settings here
+                            .build();
 
         // Disable the vision processors by default. The OpMode must call start() to enable them.
         for (Processor processor : this.processors) {

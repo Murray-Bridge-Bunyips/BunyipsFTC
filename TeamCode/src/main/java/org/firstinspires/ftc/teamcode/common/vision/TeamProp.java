@@ -17,7 +17,7 @@ import java.util.List;
  * Detection for a custom team prop based on colour ranges,
  * refactored to work with our vision system
  *
- * @author FTC 14133, <a href="https://github.com/FTC14133/FTC14133-2023-2024/blob/Detection-TeamElement/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Subsystems/TeamElementDetection/TeamElementSubsystem.java">...</a>
+ * @author FTC 14133, <a href="https://github.com/FTC14133/FTC14133-2023-2024/blob/Detection-TeamElement/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Subsystems/TeamElementDetection/Pipeline/SplitAveragePipeline.java">...</a>
  */
 public class TeamProp extends Processor<TeamPropData> {
     private final List<Integer> ELEMENT_COLOR;
@@ -60,16 +60,17 @@ public class TeamProp extends Processor<TeamPropData> {
         zone2.setTo(avgColor2);
         zone3.setTo(avgColor3);
 
-        double distance1 = color_distance(avgColor1, ELEMENT_COLOR);
-        double distance2 = color_distance(avgColor2, ELEMENT_COLOR);
-        double distance3 = color_distance(avgColor3, ELEMENT_COLOR);
-        double max_distance = Math.min(distance3, Math.min(distance1, distance2));
+        distance1 = color_distance(avgColor1, ELEMENT_COLOR);
+        distance2 = color_distance(avgColor2, ELEMENT_COLOR);
+        distance3 = color_distance(avgColor3, ELEMENT_COLOR);
+        max_distance = Math.min(distance3, Math.min(distance1, distance2));
 
         return frame;
     }
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
+        // noop
     }
 
     @SuppressWarnings("rawtypes")
@@ -88,6 +89,7 @@ public class TeamProp extends Processor<TeamPropData> {
 
     @Override
     public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+        // noop
     }
 
     @Override
@@ -97,12 +99,13 @@ public class TeamProp extends Processor<TeamPropData> {
 
     @Override
     public void tick() {
+        data.clear();
         if (max_distance == distance1) {
-            data.add(new TeamPropData(Positions.LEFT));
+            data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));
         } else if (max_distance == distance2) {
-            data.add(new TeamPropData(Positions.CENTER));
+            data.add(new TeamPropData(Positions.CENTER, distance1, distance2, distance3, max_distance));
         } else {
-            data.add(new TeamPropData(Positions.RIGHT));
+            data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
         }
     }
 
