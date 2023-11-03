@@ -103,7 +103,7 @@ public abstract class MecanumDrive extends BunyipsComponent {
     public void update() {
         if (priority == Priority.ROTATIONAL) {
             rotationalUpdate();
-            getOpMode().addTelemetry(String.format(Locale.getDefault(), "Rotation-priority Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR), false);
+            getOpMode().addTelemetry(String.format(Locale.getDefault(), "Rotation-priority Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR));
             return;
         }
 
@@ -127,7 +127,7 @@ public abstract class MecanumDrive extends BunyipsComponent {
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
 
-        getOpMode().addTelemetry(String.format(Locale.getDefault(), "Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR), false);
+        getOpMode().addTelemetry(String.format(Locale.getDefault(), "Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR));
     }
 
     /**

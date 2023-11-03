@@ -52,81 +52,86 @@ class UserSelection<T>(
      * @return A HashMap of operation modes to buttons.
      */
     override fun run() {
-        if (opmodes.isEmpty()) {
+        DbgLog.msg("UserSelection thread: starting...")
+        try {
+            if (opmodes.isEmpty()) {
+                try {
+                    callback(null)
+                } catch (e: Exception) {
+                    ErrorUtil.handleCatchAllException(e, opMode::log)
+                }
+            }
+
+            val buttons: HashMap<T, Controller> = Controller.mapArgs(opmodes)
+
+            // Default options for button selection and operation mode
+            var selectedButton: Controller? = null
+            var selectedOpMode: T? = null
+
+            // Disable auto clear if it is enabled, we might accidentally clear out static telemetry
+            opMode.setTelemetryAutoClear(false)
+
+            val retainedObjects = mutableListOf<Item>()
+            retainedObjects.add(opMode.addTelemetry("---------!!!--------", true))
+            retainedObjects.add(
+                opMode.addTelemetry(
+                    "ACTION REQUIRED: INIT YOUR OPMODE USING GAMEPAD1",
+                    true
+                )
+            )
+            for ((name, button) in buttons) {
+                retainedObjects.add(
+                    opMode.addTelemetry(
+                        String.format(
+                            "%s: %s",
+                            button.name,
+                            if (name is OpModeSelection) name.name else name
+                        ), true
+                    )
+                )
+            }
+            retainedObjects.add(opMode.addTelemetry("---------!!!--------", true))
+
+            // Must manually call telemetry push as the BYO may not be handling them
+            // This will not clear out any other telemetry as auto clear is disabled
+            opMode.telemetry.update()
+
+            while (selectedOpMode == null && opMode.opModeInInit() && !isInterrupted) {
+                for ((str, button) in buttons) {
+                    if (Controller.isSelected(opMode.gamepad1, button)) {
+                        selectedButton = button
+                        selectedOpMode = str
+                        break
+                    }
+                }
+                yield()
+            }
+
+            result = selectedOpMode
+            if (result == null) {
+                opMode.addTelemetry("No selection made. Result was handled by the OpMode.", true)
+            } else {
+                opMode.addTelemetry(
+                    "'${selectedButton?.name}' registered. Running OpMode: '${if (selectedOpMode is OpModeSelection) selectedOpMode.name else selectedOpMode.toString()}'",
+                    true
+                )
+            }
+
+            //This is code from lucas bubner. He is sad cause hes not important and dosent recieve capital letters. He is lonely except for LACHLAN PAUL  his coding buddy. Now i need to go but always keep this message in mind!!!
+            // - Sorayya, hijacker of laptops
+
+            // Clean up telemetry and reset auto clear
+            opMode.removeTelemetryItems(retainedObjects)
+            opMode.telemetry.update()
+            opMode.setTelemetryAutoClear(true)
+
             try {
-                callback(null)
+                callback(selectedOpMode)
             } catch (e: Exception) {
                 ErrorUtil.handleCatchAllException(e, opMode::log)
             }
-        }
-
-        val buttons: HashMap<T, Controller> = Controller.mapArgs(opmodes)
-
-        // Default options for button selection and operation mode
-        var selectedButton: Controller? = null
-        var selectedOpMode: T? = null
-
-        // Disable auto clear if it is enabled, we might accidentally clear out static telemetry
-        opMode.setTelemetryAutoClear(false)
-
-        val retainedObjects = mutableListOf<Item>()
-        retainedObjects.add(opMode.addTelemetry("---------!!!--------", true))
-        retainedObjects.add(
-            opMode.addTelemetry(
-                "ACTION REQUIRED: INIT YOUR OPMODE USING GAMEPAD1",
-                true
-            )
-        )
-        for ((name, button) in buttons) {
-            retainedObjects.add(
-                opMode.addTelemetry(
-                    String.format(
-                        "%s: %s",
-                        button.name,
-                        if (name is OpModeSelection) name.name else name
-                    ), true
-                )
-            )
-        }
-        retainedObjects.add(opMode.addTelemetry("---------!!!--------", true))
-
-        // Must manually call telemetry push as the BYO may not be handling them
-        // This will not clear out any other telemetry as auto clear is disabled
-        opMode.telemetry.update()
-
-        while (selectedOpMode == null && opMode.opModeInInit() && !isInterrupted) {
-            for ((str, button) in buttons) {
-                if (Controller.isSelected(opMode.gamepad1, button)) {
-                    selectedButton = button
-                    selectedOpMode = str
-                    break
-                }
-            }
-            yield()
-        }
-
-        result = selectedOpMode
-        if (result == null) {
-            opMode.addTelemetry("No selection made. Result was handled by the OpMode.", true)
-        } else {
-            opMode.addTelemetry(
-                "'${selectedButton?.name}' registered. Running OpMode: '${if (selectedOpMode is OpModeSelection) selectedOpMode.name else selectedOpMode.toString()}'",
-                true
-            )
-        }
-
-        //This is code from lucas bubner. He is sad cause hes not important and dosent recieve capital letters. He is lonely except for LACHLAN PAUL  his coding buddy. Now i need to go but always keep this message in mind!!!
-        // - Sorayya, hijacker of laptops
-
-        // Clean up telemetry and reset auto clear
-        opMode.removeTelemetryItems(retainedObjects)
-        opMode.telemetry.update()
-        opMode.setTelemetryAutoClear(true)
-
-        try {
-            callback(selectedOpMode)
-        } catch (e: Exception) {
-            ErrorUtil.handleCatchAllException(e, opMode::log)
+        } finally {
+            DbgLog.msg("UserSelection thread: ending...")
         }
     }
 }

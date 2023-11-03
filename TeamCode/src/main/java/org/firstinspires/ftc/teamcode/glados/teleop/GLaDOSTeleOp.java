@@ -6,7 +6,6 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.IMUOp;
 import org.firstinspires.ftc.teamcode.common.RelativeVector;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
-import org.firstinspires.ftc.teamcode.common.Text;
 import org.firstinspires.ftc.teamcode.common.UserSelection;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSFieldDriveCore;
@@ -60,6 +59,6 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         }
 
         // IMU debugging
-        addTelemetry(Text.format("Heading (deg): %s", imu.getHeading() % 360));
+        addTelemetry("Heading (deg): %s", imu.getHeading() % 360);
     }
 }

@@ -60,6 +60,6 @@ public class ExampleLift extends BunyipsComponent {
         // Can update telemetry functions too
         // The modified telemetry function takes in a value to show on the Driver Station, and
         // whether or not to keep it on the screen upon the next activeLoop.
-        getOpMode().addTelemetry("Lift Position: " + position, false);
+        getOpMode().addTelemetry("Lift Position: " + position);
     }
 }

@@ -71,7 +71,7 @@ object DbgLog {
         error(String.format(format!!, *args))
     }
 
-    fun logStacktrace(e: Exception) {
+    fun logStacktrace(e: Throwable) {
         msg(e.toString())
         for (el in e.stackTrace) {
             msg(el.toString())

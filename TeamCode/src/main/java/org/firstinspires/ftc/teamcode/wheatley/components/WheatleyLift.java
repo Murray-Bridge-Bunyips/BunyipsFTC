@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.Text;
 
 /**
  * Component for the arm used for lifting pixels
@@ -18,15 +17,15 @@ import org.firstinspires.ftc.teamcode.common.Text;
 public class WheatleyLift extends BunyipsComponent {
 
     private final DcMotor arm;
-    private double armPower = 0.0;
+    private double armPower;
     private final Servo leftServo;
     private final Servo rightServo;
 
     // True = Open
     // False = Shut
     // Both claws are set to predetermined positions on init to avoid problems
-    private Boolean leftClawState = false;
-    private Boolean rightClawState = false;
+    private boolean leftClawState;
+    private boolean rightClawState;
 
     public WheatleyLift(@NonNull BunyipsOpMode opMode, DcMotor arm, Servo leftServo, Servo rightServo) {
         super(opMode);
@@ -52,7 +51,7 @@ public class WheatleyLift extends BunyipsComponent {
             leftServo.setPosition(1.0);
             leftClawState = true;
         }
-        getOpMode().addTelemetry(Text.format("Left Claw is Open: %b", leftClawState));
+        getOpMode().addTelemetry("Left Claw is Open: %b", leftClawState);
     }
 
     public void rightClaw() {
@@ -63,7 +62,7 @@ public class WheatleyLift extends BunyipsComponent {
             rightServo.setPosition(1.0);
             rightClawState = true;
         }
-        getOpMode().addTelemetry(Text.format("Right Claw is Open: %b", rightClawState));
+        getOpMode().addTelemetry("Right Claw is Open: %b", rightClawState);
     }
 
     public void update() {
@@ -73,6 +72,6 @@ public class WheatleyLift extends BunyipsComponent {
         // Can update telemetry functions too
         // The modified telemetry function takes in a value to show on the Driver Station, and
         // whether or not to keep it on the screen upon the next activeLoop.
-        getOpMode().addTelemetry("Lift Arm Position: " + arm.getCurrentPosition(), false);
+        getOpMode().addTelemetry("Lift Arm Position: " + arm.getCurrentPosition());
     }
 }

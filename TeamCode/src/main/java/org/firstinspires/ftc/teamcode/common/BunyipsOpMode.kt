@@ -79,17 +79,21 @@ abstract class BunyipsOpMode : LinearOpMode() {
     final override fun runOpMode() {
         try {
             try {
+                DbgLog.msg("===== BUNYIPSOPMODE =====")
                 telemetry.log().add("")
                 log("status changed: from idle to setup")
+                DbgLog.msg("BunyipsOpMode: setting up...")
                 // Run BunyipsOpMode setup
                 setup()
                 log("status changed: from setup to static_init")
+                DbgLog.msg("BunyipsOpMode: firing onInit()...")
                 // Store telemetry objects raised by onInit() by turning off auto-clear
                 setTelemetryAutoClear(false)
                 // Run user-defined setup
                 onInit()
                 telemetry.update()
                 log("status changed: from static_init to dynamic_init")
+                DbgLog.msg("BunyipsOpMode: starting onInitLoop()...")
                 // Run user-defined dynamic initialisation
                 while (opModeInInit()) {
                     try {
@@ -104,6 +108,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
                     }
                 }
                 log("status changed: from dynamic_init to finish_init")
+                DbgLog.msg("BunyipsOpMode: firing onInitDone()...")
                 // Run user-defined final initialisation
                 onInitDone()
                 telemetry.addData("BUNYIPSOPMODE : ", "INIT COMPLETE -- PLAY WHEN READY.")
@@ -114,12 +119,14 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 ErrorUtil.handleCatchAllException(e, ::log)
             }
             log("status changed: from finish_init to ready")
+            DbgLog.msg("BunyipsOpMode: ready.")
             // Ready to go.
             waitForStart()
             setTelemetryAutoClear(true)
             clearTelemetry()
             movingAverageTimer?.reset()
             log("status changed: from ready to running")
+            DbgLog.msg("BunyipsOpMode: starting activeLoop()...")
             try {
                 // Run user-defined start operations
                 onStart()
@@ -148,11 +155,16 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 telemetry.update()
             }
             log("status changed: from running to finished")
+            DbgLog.msg("BunyipsOpMode: finished.")
             // Wait for user to hit stop
             while (opModeIsActive()) {
                 idle()
             }
+        } catch (t: Throwable) {
+            DbgLog.error("BunyipsOpMode: unhandled throwable! <${t.message}>")
+            DbgLog.logStacktrace(t)
         } finally {
+            DbgLog.msg("BunyipsOpMode: cleaning up...")
             log("status changed: from finished to cleanup")
             onStop()
         }
@@ -176,13 +188,19 @@ abstract class BunyipsOpMode : LinearOpMode() {
         return item
     }
 
+    // Java interop
     fun addTelemetry(value: String): Item {
         return addTelemetry(value, false)
     }
 
-    fun addTelemetry(formatString: String, vararg objs: Any): Item {
-        // FIXME: Broken! May have to do with Java interop
-        return addTelemetry(String.format(Locale.getDefault(), formatString, objs))
+    /**
+     * Add data to the telemetry object using a format string
+     * @param fstring A format string to add to telemetry
+     * @param objs The objects to format into the string
+     * @return The telemetry item added to the Driver Station
+     */
+    fun addTelemetry(fstring: String, vararg objs: Any): Item {
+        return addTelemetry(String.format(Locale.getDefault(), fstring, objs))
     }
 
     /**
@@ -191,6 +209,15 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun log(message: String) {
         telemetry.log().add(message)
+    }
+
+    /**
+     * Log a message to the telemetry log using a format string
+     * @param fstring A format string to add to telemetry
+     * @param objs The objects to format into the string
+     */
+    fun log(fstring: String, vararg objs: Any) {
+        log(String.format(Locale.getDefault(), fstring, objs))
     }
 
     /**
@@ -245,17 +272,27 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Call to prevent hardware loop from calling activeLoop(), indicating an OpMode that is finished.
      */
     fun finish() {
+        if (operationsCompleted) {
+            return
+        }
         operationsCompleted = true
+        DbgLog.msg("BunyipsOpMode: activeLoop() terminated by finish().")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop terminated. All operations completed.")
         telemetry.update()
     }
 
     /**
-     * Call to temporarily halt the activeLoop from running.
+     * Call to temporarily halt all activeLoop-related updates from running.
+     * Note this will pause all MovingAverageTimer and telemetry updates. These events
+     * must be handled manually if needed, which include any conditional calls to resume().
      */
     fun halt() {
+        if (operationsPaused) {
+            return
+        }
         operationsPaused = true
         log("status: from running to halted")
+        DbgLog.msg("BunyipsOpMode: activeLoop() halted.")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop halted. Operations paused.")
         telemetry.update()
     }
@@ -264,8 +301,12 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Call to resume the activeLoop after a halt() call.
      */
     fun resume() {
+        if (!operationsPaused) {
+            return
+        }
         operationsPaused = false
         log("status changed: from halted to running")
+        DbgLog.msg("BunyipsOpMode: activeLoop() resumed.")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop resumed. Operations resumed.")
         telemetry.update()
     }

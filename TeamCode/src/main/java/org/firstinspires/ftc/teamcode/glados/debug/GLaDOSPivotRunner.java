@@ -1,11 +1,9 @@
 package org.firstinspires.ftc.teamcode.glados.debug;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
-import org.firstinspires.ftc.teamcode.common.Text;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
 /**
@@ -26,8 +24,8 @@ public class GLaDOSPivotRunner extends BunyipsOpMode {
     protected void activeLoop() {
         if (config.sr != null) {
             config.sr.setPower(gamepad1.left_stick_y);
-            addTelemetry(Text.format("Pivot Motor Position: %s", config.sr.getCurrentPosition()));
-            addTelemetry(Text.format("Pivot Motor Power: %s", config.sr.getPower()));
+            addTelemetry("Pivot Motor Position: %s", config.sr.getCurrentPosition());
+            addTelemetry("Pivot Motor Power: %s", config.sr.getPower());
         }
     }
 }
