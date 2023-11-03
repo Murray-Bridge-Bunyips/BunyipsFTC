@@ -84,12 +84,12 @@ public class Vision extends BunyipsComponent {
         }
 
         visionPortal = builder
-                            .setCamera(webcam)
-                            .setCameraResolution(new Size(CAMERA_WIDTH, CAMERA_HEIGHT))
-                            .enableLiveView(true)
-                            .setAutoStopLiveView(true)
-                            // Set any additional VisionPortal settings here
-                            .build();
+                .setCamera(webcam)
+                .setCameraResolution(new Size(CAMERA_WIDTH, CAMERA_HEIGHT))
+                .enableLiveView(true)
+                .setAutoStopLiveView(true)
+                // Set any additional VisionPortal settings here
+                .build();
 
         // Disable the vision processors by default. The OpMode must call start() to enable them.
         for (Processor processor : this.processors) {

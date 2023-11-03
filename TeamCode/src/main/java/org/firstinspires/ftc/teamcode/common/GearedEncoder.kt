@@ -13,8 +13,4 @@ interface GearedEncoder : Encoder {
     override fun position(scope: Encoder.Scope): Double {
         return super.position(scope) * gearRatio
     }
-
-    override fun travelledMM(scope: Encoder.Scope): Double {
-        return super.travelledMM(scope) * gearRatio
-    }
 }

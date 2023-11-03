@@ -263,7 +263,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
 
     /**
      * Implement to define your OpModeSelections, if you list any, then the user will be prompted to select
-     * an OpMode before the OpMode begins. If you do not define any OpModeSelections, then the user will not
+     * an OpMode before the OpMode begins. If you return null, then the user will not
      * be prompted for a selection, and the OpMode will move to task-ready state immediately.
      * <pre><code>
      *     protected List<OpModeSelection> setOpModes() {
@@ -281,13 +281,14 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
     /**
      * Return a task that will run as an init-task. This will run
      * after your onInitialisation() has completed, allowing you to initialise hardware first.
+     * This is an optional method.
      * <p>
      * You should store any running variables inside the task itself, and keep the instance of the task
      * defined as a field in your OpMode. You can then use this value in your onInitDone() to do
-     * what you need to after the init-task has finished.
+     * what you need to after the init-task has finished. This method should be paired with {@link #onInitDone()}
+     * to do anything after the initTask has finished.
      * </p>
-     * Note that if you do not define an initTask, then the dynamic_init phase will be skipped.
-     * This method should be paired with {@link #onInitDone()} to do anything after the initTask has finished.
+     * If you do not define an initTask by returning null, then the init-task (dynamic_init) phase will be skipped.
      *
      * @see #onInitDone()
      * @see #addTaskFirst(AutoTask)
@@ -297,7 +298,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
 
     /**
      * Called when the OpMode is ready to process tasks.
-     * This will happen when the user has selected an OpMode, or if no OpModeSelections were defined,
+     * This will happen when the user has selected an OpMode, or if setOpModes() returned null,
      * in which case it will run immediately after onInitialisation() has completed.
      * This is where you should add your tasks to the run queue.
      *

@@ -20,7 +20,7 @@ object ErrorUtil {
             stack = stack.substring(0, MAX_STACKTRACE_CHARS - 4)
             stack += " ..."
         }
-        log("stacktrace (max@$MAX_STACKTRACE_CHARS): $stack")
+        log("stacktrace (max->$MAX_STACKTRACE_CHARS): $stack")
         DbgLog.logStacktrace(e)
         if (e is InterruptedException) {
             // FTC SDK must handle this
@@ -28,7 +28,7 @@ object ErrorUtil {
         }
     }
 
-    fun stackTraceAsString(e: Throwable): String {
+    private fun stackTraceAsString(e: Throwable): String {
         val sw = StringWriter()
         val pw = PrintWriter(sw)
         e.printStackTrace(pw)
