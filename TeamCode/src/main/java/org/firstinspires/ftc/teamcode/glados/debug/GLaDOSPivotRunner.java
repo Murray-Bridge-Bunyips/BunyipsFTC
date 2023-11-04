@@ -24,8 +24,8 @@ public class GLaDOSPivotRunner extends BunyipsOpMode {
     protected void activeLoop() {
         if (config.sr != null) {
             config.sr.setPower(gamepad1.left_stick_y);
-            addTelemetry("Pivot Motor Position: %s", config.sr.getCurrentPosition());
-            addTelemetry("Pivot Motor Power: %s", config.sr.getPower());
+            addTelemetry("Pivot Motor Position: %", config.sr.getCurrentPosition());
+            addTelemetry("Pivot Motor Power: %", config.sr.getPower());
         }
     }
 }

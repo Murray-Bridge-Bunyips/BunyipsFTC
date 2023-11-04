@@ -51,7 +51,7 @@ public class WheatleyLift extends BunyipsComponent {
             leftServo.setPosition(1.0);
             leftClawState = true;
         }
-        getOpMode().addTelemetry("Left Claw is Open: %b", leftClawState);
+        getOpMode().addTelemetry("Left Claw is Open: %", leftClawState);
     }
 
     public void rightClaw() {
@@ -62,7 +62,7 @@ public class WheatleyLift extends BunyipsComponent {
             rightServo.setPosition(1.0);
             rightClawState = true;
         }
-        getOpMode().addTelemetry("Right Claw is Open: %b", rightClawState);
+        getOpMode().addTelemetry("Right Claw is Open: %", rightClawState);
     }
 
     public void update() {

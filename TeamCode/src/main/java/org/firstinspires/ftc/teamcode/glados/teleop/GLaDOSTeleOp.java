@@ -59,6 +59,6 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         }
 
         // IMU debugging
-        addTelemetry("Heading (deg): %s", imu.getHeading() % 360);
+        addTelemetry("Heading (deg): %", imu.getHeading() % 360);
     }
 }

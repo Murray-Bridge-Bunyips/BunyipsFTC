@@ -3,6 +3,11 @@ package org.firstinspires.ftc.teamcode.common
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.Telemetry.Item
+import java.lang.IndexOutOfBoundsException
+import java.util.Arrays
+import java.util.IllegalFormatConversionException
+import java.util.IllegalFormatException
+import java.util.IllegalFormatFlagsException
 import java.util.Locale
 import kotlin.math.roundToInt
 
@@ -26,7 +31,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         telemetry.log().displayOrder = Telemetry.Log.DisplayOrder.OLDEST_FIRST
         telemetry.captionValueSeparator = ""
         // Uncap the telemetry log limit to ensure we capture everything
-        telemetry.log().capacity = 999
+        telemetry.log().capacity = 999999
         movingAverageTimer = MovingAverageTimer(100)
     }
 
@@ -194,13 +199,40 @@ abstract class BunyipsOpMode : LinearOpMode() {
     }
 
     /**
-     * Add data to the telemetry object using a format string
+     * Add data to the telemetry object using a custom format string
      * @param fstring A format string to add to telemetry
      * @param objs The objects to format into the string
      * @return The telemetry item added to the Driver Station
      */
     fun addTelemetry(fstring: String, vararg objs: Any): Item {
-        return addTelemetry(String.format(Locale.getDefault(), fstring, objs))
+        if (objs.isEmpty()) {
+            return addTelemetry(fstring, false)
+        }
+        return addTelemetry(formatString(fstring, objs.asList()), false)
+    }
+
+    /**
+     * Format a string using only '%' placeholders.
+     * Differs from String.format() as type can be omitted.
+     */
+    fun formatString(fstring: String, objects: List<Any>): String {
+        // Replace all % with the strings in order
+        var occurrences = 0
+        var newString = ""
+        for (char in fstring) {
+            if (char == '%') {
+                // Remove character and insert new string
+                try {
+                    newString += objects[occurrences]
+                } catch (e: IndexOutOfBoundsException) {
+                    throw IllegalFormatFlagsException("Missing '%' placeholders!")
+                }
+                occurrences++
+                continue
+            }
+            newString += char
+        }
+        return newString
     }
 
     /**
@@ -217,7 +249,10 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * @param objs The objects to format into the string
      */
     fun log(fstring: String, vararg objs: Any) {
-        log(String.format(Locale.getDefault(), fstring, objs))
+        if (objs.isEmpty()) {
+            return log(fstring)
+        }
+        return log(formatString(fstring, objs.asList()))
     }
 
     /**

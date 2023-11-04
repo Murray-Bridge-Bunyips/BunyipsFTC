@@ -21,6 +21,7 @@ object ErrorUtil {
             stack += " ..."
         }
         log("stacktrace (max->$MAX_STACKTRACE_CHARS): $stack")
+        DbgLog.error("Exception caught! Stacktrace:")
         DbgLog.logStacktrace(e)
         if (e is InterruptedException) {
             // FTC SDK must handle this

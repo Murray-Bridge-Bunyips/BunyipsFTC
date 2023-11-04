@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
+import org.firstinspires.ftc.teamcode.common.tasks.WaitTask;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
 import org.firstinspires.ftc.teamcode.glados.tasks.GLaDOSTimeDriveTask;

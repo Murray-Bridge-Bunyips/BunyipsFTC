@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
  */
 class WaitTask(opMode: BunyipsOpMode, time: Double) : Task(opMode, time), AutoTask {
     override fun run() {
+        opMode.addTelemetry("Waiting % seconds...", time)
         opMode.idle()
     }
 

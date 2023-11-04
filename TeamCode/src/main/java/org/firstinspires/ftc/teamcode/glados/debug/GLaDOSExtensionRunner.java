@@ -24,8 +24,8 @@ public class GLaDOSExtensionRunner extends BunyipsOpMode {
     protected void activeLoop() {
         if (config.sa != null) {
             config.sa.setPower(gamepad1.left_stick_y);
-            addTelemetry("Extrusion Motor Position: %s", config.sa.getCurrentPosition());
-            addTelemetry("Extrusion Motor Power: %s", config.sa.getPower());
+            addTelemetry("Extrusion Motor Position: %", config.sa.getCurrentPosition());
+            addTelemetry("Extrusion Motor Power: %", config.sa.getPower());
         }
     }
 }

@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
+import java.util.Locale;
+
 /**
  * Test arm rotation tracking and control
  *
@@ -30,7 +32,7 @@ public class GLaDOSRotateTest extends BunyipsOpMode {
     @Override
     protected void activeLoop() {
         target -= gamepad1.left_stick_y / 2;
-        addTelemetry("Degrees: %s", config.sr.getDegrees());
+        addTelemetry("Degrees: %", String.format(Locale.getDefault(), "%.2f", config.sr.getDegrees()));
         config.sr.setDegrees(target);
     }
 }

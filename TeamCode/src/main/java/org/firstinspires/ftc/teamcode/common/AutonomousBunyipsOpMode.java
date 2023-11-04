@@ -125,14 +125,14 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
         }
 
         // Why does it have to be like this
-        addTelemetry("Running task (%d/%d): %s", this.currentTask, tasks.size(), currentTask.getClass().getSimpleName());
+        addTelemetry("Running task (%/%): %", this.currentTask, tasks.size(), currentTask.getClass().getSimpleName());
 
         currentTask.run();
 
         // AutonomousBunyipsOpMode is handling all task completion checks, manual checks not required
         if (currentTask.isFinished()) {
             tasks.removeFirst();
-            log("auto: task %d/%d (%s) finished", this.currentTask, tasks.size() + 1, currentTask.getClass().getSimpleName());
+            log("auto: task %/% (%) finished", this.currentTask, tasks.size() + 1, currentTask.getClass().getSimpleName());
             this.currentTask++;
         }
     }
@@ -166,7 +166,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
             log("auto: caution! a task was added manually before the onReady callback");
         }
         tasks.add(newTask);
-        log("auto: %s has been added as task %d/%d", newTask.getClass().getSimpleName(), tasks.size(), tasks.size());
+        log("auto: % has been added as task %/%", newTask.getClass().getSimpleName(), tasks.size(), tasks.size());
     }
 
     /**
@@ -177,11 +177,11 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
     public void addTaskLast(AutoTask newTask) {
         if (!hasGottenCallback) {
             postQueue.add(newTask);
-            log("auto: %s has been queued as end-init task %d/%d", newTask.getClass().getSimpleName(), postQueue.size(), postQueue.size());
+            log("auto: % has been queued as end-init task %/%", newTask.getClass().getSimpleName(), postQueue.size(), postQueue.size());
             return;
         }
         tasks.addLast(newTask);
-        log("auto: %s has been added as task %d/%d", newTask.getClass().getSimpleName(), tasks.size(), tasks.size());
+        log("auto: % has been added as task %/%", newTask.getClass().getSimpleName(), tasks.size(), tasks.size());
     }
 
     /**
@@ -192,11 +192,11 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
     public void addTaskFirst(AutoTask newTask) {
         if (!hasGottenCallback) {
             preQueue.add(newTask);
-            log("auto: %s has been queued as end-init task 1/%d", newTask.getClass().getSimpleName(), preQueue.size());
+            log("auto: % has been queued as end-init task 1/%", newTask.getClass().getSimpleName(), preQueue.size());
             return;
         }
         tasks.addFirst(newTask);
-        log("auto: %s has been added as task 1/%d", newTask.getClass().getSimpleName(), tasks.size());
+        log("auto: % has been added as task 1/%", newTask.getClass().getSimpleName(), tasks.size());
     }
 
     /**
@@ -226,7 +226,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
         while (iterator.hasNext()) {
             if (counter == taskIndex) {
                 iterator.remove();
-                log("auto: task at index %d was removed", taskIndex);
+                log("auto: task at index % was removed", taskIndex);
                 break;
             }
 
@@ -240,7 +240,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     public void removeTaskLast() {
         tasks.removeLast();
-        log("auto: task at index %d was removed", tasks.size() + 1);
+        log("auto: task at index % was removed", tasks.size() + 1);
     }
 
     /**
