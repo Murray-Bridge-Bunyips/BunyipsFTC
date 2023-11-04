@@ -20,10 +20,27 @@ import org.firstinspires.ftc.robotcore.external.Telemetry.Item
  * null.
  *
  * ```
+ *    // In Kotlin using a lambda function, String can be replaced with any type
  *    private val selector: UserSelection<String> = UserSelection(this, { if (it == "POV") initPOVDrive() else initFCDrive() }, "POV", "FIELD-CENTRIC")
  *
  *    override fun onInit() {
  *      selector.start()
+ *    }
+ * ```
+ *
+ * ```
+ *    // In Java using a callback, String can be replaced with any type
+ *    private UserSelection<String> selector = new UserSelection<>(this, this::callback, "POV", "FIELD-CENTRIC");
+ *
+ *    @Override
+ *    protected void onInit() {
+ *      selector.start();
+ *    }
+ *
+ *    private Unit callback(@Nullable String res) {
+ *      // Do something with res
+ *      // Unit.INSTANCE is due to Kotlin not having void, it is required
+ *      return Unit.INSTANCE;
  *    }
  * ```
  *
