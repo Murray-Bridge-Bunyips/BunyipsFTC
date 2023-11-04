@@ -17,6 +17,6 @@ public class WheatleyRotationTest extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        config.rotator.setPower(gamepad1.left_stick_y);
+        config.ra.setPower(gamepad1.left_stick_y);
     }
 }

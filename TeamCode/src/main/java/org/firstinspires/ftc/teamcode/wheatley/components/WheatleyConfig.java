@@ -26,26 +26,26 @@ public class WheatleyConfig extends RobotConfig {
     // Declares all necessary motors
 
     // Expansion 1: fl
-    public DcMotor frontLeft;
+    public DcMotor fl;
 
     // Expansion 0: bl
-    public DcMotor backLeft;
+    public DcMotor bl;
 
     // Expansion 2: fr
-    public DcMotor frontRight;
+    public DcMotor /*Are you*/ fr /*Or jk*/;
 
     // Expansion 3: br
-    public DcMotor backRight;
+    public DcMotor br;
 
     // Control 0: ra
-    public DcMotor rotator;
+    public DcMotor ra;
 
     // Control Servo 0: ls
 
-    public DcMotor leftServo;
+    public DcMotor ls;
 
     // Control Servo 1: rs
-    public DcMotor rightServo;
+    public DcMotor rs;
 
     // USB device "webcam"
     public WebcamName webcam;
@@ -54,13 +54,13 @@ public class WheatleyConfig extends RobotConfig {
     protected void init() {
 
         // Motor directions configured to work with current config
-        frontLeft = (DcMotor) getHardware("fl", DcMotor.class);
-        backLeft = (DcMotor) getHardware("bl", DcMotor.class);
-        frontRight = (DcMotor) getHardware("fr", DcMotor.class);
-        backRight = (DcMotor) getHardware("br", DcMotor.class);
-        leftServo = (DcMotor) getHardware("ls", DcMotor.class);
-        rightServo = (DcMotor) getHardware("rs", DcMotor.class);
+        fl = (DcMotor) getHardware("fl", DcMotor.class);
+        bl = (DcMotor) getHardware("bl", DcMotor.class);
+        fr = (DcMotor) getHardware("fr", DcMotor.class);
+        br = (DcMotor) getHardware("br", DcMotor.class);
+        ls = (DcMotor) getHardware("ls", DcMotor.class);
+        rs = (DcMotor) getHardware("rs", DcMotor.class);
         webcam = (WebcamName) getHardware("webcam", WebcamName.class);
-        rotator = (DcMotor) getHardware("ra", DcMotor.class);
+        ra = (DcMotor) getHardware("ra", DcMotor.class);
     }
 }

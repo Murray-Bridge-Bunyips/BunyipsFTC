@@ -35,7 +35,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
         config = (WheatleyConfig) RobotConfig.newConfig(this, config, hardwareMap);
 
-        drive = new WheatleyMecanumDrive(this, config.frontLeft, config.backLeft, config.frontRight, config.backRight);
+        drive = new WheatleyMecanumDrive(this, config.fl, config.bl, config.fr, config.br);
 
     }
 
