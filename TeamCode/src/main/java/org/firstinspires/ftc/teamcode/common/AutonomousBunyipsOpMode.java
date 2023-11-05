@@ -20,9 +20,6 @@ import kotlin.Unit;
 
 public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
 
-    private final ArrayDeque<AutoTask> tasks = new ArrayDeque<>();
-    private final ArrayDeque<AutoTask> postQueue = new ArrayDeque<>();
-    private final ArrayDeque<AutoTask> preQueue = new ArrayDeque<>();
     /**
      * This list defines OpModes that should be selectable by the user. This will then
      * be used to determine your tasks in {@link #onQueueReady(OpModeSelection)}.
@@ -32,6 +29,9 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * @see #setOpModes()
      */
     protected final ArrayList<OpModeSelection> opModes = new ArrayList<>();
+    private final ArrayDeque<AutoTask> tasks = new ArrayDeque<>();
+    private final ArrayDeque<AutoTask> postQueue = new ArrayDeque<>();
+    private final ArrayDeque<AutoTask> preQueue = new ArrayDeque<>();
     private UserSelection<OpModeSelection> userSelection;
     private int currentTask = 1;
     private AutoTask initTask;

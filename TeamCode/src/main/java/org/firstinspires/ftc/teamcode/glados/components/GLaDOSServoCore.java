@@ -9,19 +9,18 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 /**
  * Controller for the Pixel Intake servo mechanism for GLaDOS.
+ *
  * @author Lucas Bubner, 2023
  */
 public class GLaDOSServoCore extends BunyipsComponent {
-    private final Servo leftServo;
-    private final Servo rightServo;
-
-    private double leftServoPosition;
     private static final double LEFT_SERVO_CLOSED_POSITION = 0.0;
     private static final double LEFT_SERVO_OPEN_POSITION = 1.0;
-
-    private double rightServoPosition;
     private static final double RIGHT_SERVO_CLOSED_POSITION = 0.0;
     private static final double RIGHT_SERVO_OPEN_POSITION = 1.0;
+    private final Servo leftServo;
+    private final Servo rightServo;
+    private double leftServoPosition;
+    private double rightServoPosition;
 
     public GLaDOSServoCore(@NonNull BunyipsOpMode opMode, Servo leftServo, Servo rightServo) {
         super(opMode);

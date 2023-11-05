@@ -15,12 +15,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 public class Suspender extends BunyipsComponent {
 
-    private Status status;
-    private Action action;
     private final PivotMotor rotation;
     private final DcMotor extension;
-    private boolean userStopped;
-
     private final int EXTENDED_POSITION;
     private final int RETRACTED_POSITION;
     private final double EXTENSION_POWER;
@@ -28,31 +24,9 @@ public class Suspender extends BunyipsComponent {
     private final double STOWED_DEGREES;
     private final double OPEN_DEGREES;
 
-    private final While rotationLock = new While(
-            () -> {
-                return false;
-            },
-            () -> {
-
-            },
-            () -> {
-
-            },
-            3
-    );
-
-    private final While extensionLock = new While(
-            () -> {
-                return false;
-            },
-            () -> {
-
-            },
-            () -> {
-
-            },
-            3
-    );
+    private Status status;
+    private Action action;
+    private boolean userStopped;
 
     public Suspender(@NonNull BunyipsOpMode opMode, PivotMotor rotation, DcMotor extension, int extendedPosition, int retractedPosition, double extensionPower, double rotationPower, double stowedDegrees, double openDegrees) {
         super(opMode);
@@ -85,6 +59,7 @@ public class Suspender extends BunyipsComponent {
 
     /**
      * Return the current status of the Suspender, which is determined by the position of the arm
+     *
      * @return The status of the Suspender mechanism
      */
     public Status getStatus() {
@@ -93,6 +68,7 @@ public class Suspender extends BunyipsComponent {
 
     /**
      * Determine if the arm is currently stowed
+     *
      * @return a boolean representing whether the arm is moving or not
      */
     public boolean isMoving() {
@@ -111,6 +87,7 @@ public class Suspender extends BunyipsComponent {
 
     /**
      * Set Suspender from RETRACTED to STOWED. Cannot be called if the arm is extended.
+     *
      * @see #retract()
      */
     public void close() {
@@ -121,16 +98,18 @@ public class Suspender extends BunyipsComponent {
 
     /**
      * Set Suspender from RETRACTED to EXTENDED. Cannot be called if the arm is stowed.
+     *
      * @see #open()
      */
     public void extend() {
-        if (status != Status.STOWED){
+        if (status != Status.STOWED) {
             action = Action.EXTENDING;
         }
     }
 
     /**
      * Set Suspender from EXTENDED to RETRACTED. Cannot be called if the arm is stowed.
+     *
      * @see #open()
      */
     public void retract() {

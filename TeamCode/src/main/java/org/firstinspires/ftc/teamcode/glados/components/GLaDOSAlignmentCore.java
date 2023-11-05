@@ -9,6 +9,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 /**
  * Controller for the self-aligning servo mechanism for GLaDOS.
+ *
  * @author Lucas Bubner, 2023
  */
 public class GLaDOSAlignmentCore extends BunyipsComponent {
@@ -32,24 +33,25 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
         this.downLockThresholdAngle = downLockThresholdAngle;
     }
 
-    public void setTargetAngle(double targetAngle) {
-        this.targetAngle = targetAngle;
-    }
-
     public double getTargetAngle() {
         return targetAngle;
     }
 
-    public void setDownLockThresholdAngle(double downLockThresholdAngle) {
-        this.downLockThresholdAngle = downLockThresholdAngle;
+    public void setTargetAngle(double targetAngle) {
+        this.targetAngle = targetAngle;
     }
 
     public double getDownLockThresholdAngle() {
         return downLockThresholdAngle;
     }
 
+    public void setDownLockThresholdAngle(double downLockThresholdAngle) {
+        this.downLockThresholdAngle = downLockThresholdAngle;
+    }
+
     /**
      * Updates the alignment servo in response to the current angle of the arm.
+     *
      * @param theta degrees of the arm
      */
     public void update(double theta) {

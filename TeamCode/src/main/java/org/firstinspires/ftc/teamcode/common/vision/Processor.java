@@ -8,9 +8,15 @@ import java.util.List;
 
 /**
  * Base class for all vision processors using the Vision system
+ *
  * @author Lucas Bubner, 2023
  */
 public abstract class Processor<T extends VisionData> implements VisionProcessor {
+
+    /**
+     * List of all vision data detected since the last stateful update
+     */
+    protected final List<T> data = new ArrayList<>();
 
     /**
      * Vision Processor Wrapper
@@ -30,11 +36,6 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
      * Unique identifier for the processor
      */
     public abstract String getName();
-
-    /**
-     * List of all vision data detected since the last stateful update
-     */
-    protected final List<T> data = new ArrayList<>();
 
     /**
      * Get the list of vision data

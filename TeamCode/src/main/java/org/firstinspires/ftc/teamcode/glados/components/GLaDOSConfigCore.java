@@ -17,32 +17,24 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
  */
 public class GLaDOSConfigCore extends RobotConfig {
 
-    // USB: Webcam "webcam"
-    public WebcamName webcam;
-
-    // Expansion 0: Front Left "fl"
-    public DcMotorEx fl;
-
-    // Expansion 1: Front Right "fr"
-    public DcMotorEx fr;
-
-    // Expansion 2: Back Right "br"
-    public DcMotorEx br;
-
-    // Expansion 3: Back Left "bl"
-    public DcMotorEx bl;
-
-    // Control 0: Suspender Actuator "sa"
-    public DcMotorEx sa;
-
-    // Control 1: Suspender Rotation "sr", 45T->90T
-    public GearedPivotMotor sr;
-
-    // Internally mounted on I2C C0 "imu"
-    public IMU imu;
-
     protected static final double CORE_HEX_TICKS_PER_REVOLUTION = 288;
     protected static final double SR_GEAR_RATIO = 45.0 / 90.0;
+    // USB: Webcam "webcam"
+    public WebcamName webcam;
+    // Expansion 0: Front Left "fl"
+    public DcMotorEx fl;
+    // Expansion 1: Front Right "fr"
+    public DcMotorEx fr;
+    // Expansion 2: Back Right "br"
+    public DcMotorEx br;
+    // Expansion 3: Back Left "bl"
+    public DcMotorEx bl;
+    // Control 0: Suspender Actuator "sa"
+    public DcMotorEx sa;
+    // Control 1: Suspender Rotation "sr", 45T->90T
+    public GearedPivotMotor sr;
+    // Internally mounted on I2C C0 "imu"
+    public IMU imu;
 
     @Override
     protected void init() {

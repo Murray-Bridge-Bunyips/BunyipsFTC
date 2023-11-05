@@ -12,14 +12,15 @@ class GearedPivotMotor(
     override val ticksPerRevolution: Double,
     override val gearRatio: Double,
 ) : PivotMotor(motor, ticksPerRevolution), GearedEncoder {
-    override val wheelDiameterMM = null
     override var snapshot: Double = 0.0
 
     override fun setDegrees(degrees: Double) {
-        motor.targetPosition = ((degrees / 360) * ticksPerRevolution / gearRatio).toInt()
+        motor.targetPosition =
+            ((degrees / 360) * ticksPerRevolution / gearRatio).toInt() - snapshot.toInt()
     }
 
     override fun setRadians(radians: Double) {
-        motor.targetPosition = ((radians / (2 * Math.PI)) * ticksPerRevolution / gearRatio).toInt()
+        motor.targetPosition =
+            ((radians / (2 * Math.PI)) * ticksPerRevolution / gearRatio).toInt() - snapshot.toInt()
     }
 }

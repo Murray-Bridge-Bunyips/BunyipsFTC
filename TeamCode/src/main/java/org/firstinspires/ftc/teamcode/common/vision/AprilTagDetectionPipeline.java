@@ -41,8 +41,8 @@ import java.util.ArrayList;
  * Pipeline to drive AprilTag detection.
  *
  * @author OpenFTC, 2021
- * @deprecated included with SDK v8.2, use built in AprilTag with Vision & VisionPortal instead
  * @noinspection CanBeFinal, SameParameterValue, InnerClassMayBeStatic
+ * @deprecated included with SDK v8.2, use built in AprilTag with Vision & VisionPortal instead
  */
 @Deprecated
 public class AprilTagDetectionPipeline extends OpenCvPipeline {

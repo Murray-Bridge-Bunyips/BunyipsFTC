@@ -13,7 +13,7 @@ open class PivotMotor(
     override val motor: DcMotorEx,
     override val ticksPerRevolution: Double,
 ) : DcMotorImpl(motor.controller, motor.portNumber), Encoder {
-    override val wheelDiameterMM = null
+    final override val wheelDiameterMM = null
     override var snapshot: Double = 0.0
 
     override fun travelledMM(scope: Encoder.Scope): Double {
@@ -21,7 +21,7 @@ open class PivotMotor(
     }
 
     /**
-     * Setup the motor for tracking the position of a target degree.
+     * Setup the motor for tracking the position of a target position.
      */
     fun setup() {
         motor.targetPosition = motor.currentPosition
@@ -48,10 +48,11 @@ open class PivotMotor(
     }
 
     open fun setDegrees(degrees: Double) {
-        motor.targetPosition = ((degrees / 360) * ticksPerRevolution).toInt()
+        motor.targetPosition = ((degrees / 360) * ticksPerRevolution).toInt() - snapshot.toInt()
     }
 
     open fun setRadians(radians: Double) {
-        motor.targetPosition = ((radians / (2 * Math.PI)) * ticksPerRevolution).toInt()
+        motor.targetPosition =
+            ((radians / (2 * Math.PI)) * ticksPerRevolution).toInt() - snapshot.toInt()
     }
 }

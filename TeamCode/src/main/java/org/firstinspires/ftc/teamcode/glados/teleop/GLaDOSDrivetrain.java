@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
 
 /**
  * POV drivetrain only for GLaDOS.
+ *
  * @author Lucas Bubner, 2023
  */
 @TeleOp(name = "GLaDOS: Drivetrain", group = "GLaDOS")

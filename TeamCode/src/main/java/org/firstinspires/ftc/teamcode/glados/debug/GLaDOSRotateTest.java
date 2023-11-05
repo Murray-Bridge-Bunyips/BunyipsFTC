@@ -14,10 +14,10 @@ import java.util.Locale;
  *
  * @author Lucas Bubner, 2023
  */
-@TeleOp(name="GLaDOS: Rotator Motor Degrees Runner", group="GLaDOS")
+@TeleOp(name = "GLaDOS: Rotator Motor Degrees Runner", group = "GLaDOS")
 public class GLaDOSRotateTest extends BunyipsOpMode {
-    private GLaDOSConfigCore config = new GLaDOSConfigCore();
     double target;
+    private GLaDOSConfigCore config = new GLaDOSConfigCore();
 
     @Override
     protected void onInit() {

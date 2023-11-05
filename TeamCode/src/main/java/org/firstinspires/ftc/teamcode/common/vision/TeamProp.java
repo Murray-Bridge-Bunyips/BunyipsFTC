@@ -74,7 +74,7 @@ public class TeamProp extends Processor<TeamPropData> {
     }
 
     @SuppressWarnings("rawtypes")
-    public double color_distance(Scalar color1, List color2){
+    public double color_distance(Scalar color1, List color2) {
         double r1 = color1.val[0];
         double g1 = color1.val[1];
         double b1 = color1.val[2];

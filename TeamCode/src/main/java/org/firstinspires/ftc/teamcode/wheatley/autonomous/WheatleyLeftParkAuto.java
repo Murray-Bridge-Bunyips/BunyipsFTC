@@ -30,6 +30,7 @@ import java.util.List;
 public class WheatleyLeftParkAuto extends AutonomousBunyipsOpMode {
     private WheatleyConfig config = new WheatleyConfig();
     private WheatleyMecanumDrive drive;
+
     @Override
     protected void onInitialisation() {
         config = new WheatleyConfig();
@@ -39,10 +40,10 @@ public class WheatleyLeftParkAuto extends AutonomousBunyipsOpMode {
     @Override
     protected List<OpModeSelection> setOpModes() {
         return Arrays.asList(
-            new OpModeSelection("SHORT_BLUE"),
-            new OpModeSelection("LONG_BLUE"),
-            new OpModeSelection("SHORT_RED"),
-            new OpModeSelection("LONG_RED")
+                new OpModeSelection("SHORT_BLUE"),
+                new OpModeSelection("LONG_BLUE"),
+                new OpModeSelection("SHORT_RED"),
+                new OpModeSelection("LONG_RED")
         );
     }
 

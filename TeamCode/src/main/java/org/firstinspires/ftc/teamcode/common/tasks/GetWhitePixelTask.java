@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.common.tasks;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.vision.TFOD;
 import org.firstinspires.ftc.teamcode.common.Vision;
+import org.firstinspires.ftc.teamcode.common.vision.TFOD;
 import org.firstinspires.ftc.teamcode.common.vision.data.TfodData;
 
 import java.util.List;
@@ -19,13 +19,19 @@ import java.util.List;
  * @author Lucas Bubner, 2023
  */
 public class GetWhitePixelTask extends Task {
+    /**
+     * For use in CAPTURE mode, lock in the spike detection if it is detected for this many frames
+     */
+    public static final int SPIKE_FRAME_THRESHOLD = 5;
+    /**
+     * For use in CAPTURE mode, lock in the spike detection if it is detected with this confidence
+     */
+    public static final double SPIKE_CONFIDENCE_THRESHOLD = 0.95;
     private final Vision vision;
     private final TFOD tfod;
     private final Aggression aggression;
-
     private int spikeFrames;
     private double confidence;
-
     /**
      * Updated by the task to indicate if a spike has been found
      */
@@ -33,9 +39,10 @@ public class GetWhitePixelTask extends Task {
 
     /**
      * Assumes tfod has already been initialised with vision.init(tfod) in the OpMode
-     * @param opMode this
-     * @param vision Vision management class instance
-     * @param tfod VisionProcessor instance for TFOD
+     *
+     * @param opMode     this
+     * @param vision     Vision management class instance
+     * @param tfod       VisionProcessor instance for TFOD
      * @param aggression How decisive the task should be in determining if a spike has been found
      */
     public GetWhitePixelTask(@NonNull BunyipsOpMode opMode, Vision vision, TFOD tfod, Aggression aggression) {
@@ -75,7 +82,7 @@ public class GetWhitePixelTask extends Task {
                 } else {
                     spikeFrames = 0;
                 }
-                return super.isFinished() || (spikeFrames >= GetWhitePixelTask.SPIKE_FRAME_THRESHOLD && confidence >= GetWhitePixelTask.SPIKE_CONFIDENCE_THRESHOLD);
+                return super.isFinished() || (spikeFrames >= SPIKE_FRAME_THRESHOLD && confidence >= SPIKE_CONFIDENCE_THRESHOLD);
             case TIMEOUT:
             default:
                 return super.isFinished();
@@ -113,14 +120,4 @@ public class GetWhitePixelTask extends Task {
         // Never report as finished until the timeout, result will be determined at the end of the timeout
         TIMEOUT
     }
-
-    /**
-     * For use in CAPTURE mode, lock in the spike detection if it is detected for this many frames
-     */
-    public static final int SPIKE_FRAME_THRESHOLD = 5;
-
-    /**
-     * For use in CAPTURE mode, lock in the spike detection if it is detected with this confidence
-     */
-    public static final double SPIKE_CONFIDENCE_THRESHOLD = 0.95;
 }

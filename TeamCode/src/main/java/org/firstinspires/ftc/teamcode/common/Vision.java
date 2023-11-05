@@ -22,13 +22,12 @@ import java.util.List;
  * @author Lucas Bubner, 2023
  */
 public class Vision extends BunyipsComponent {
+    public static int CAMERA_WIDTH = 1280;
+    public static int CAMERA_HEIGHT = 720;
     @SuppressWarnings("rawtypes")
     private final List<Processor> processors = new ArrayList<>();
     private final WebcamName webcam;
     private VisionPortal visionPortal;
-
-    public static int CAMERA_WIDTH = 1280;
-    public static int CAMERA_HEIGHT = 720;
 
     public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam) {
         super(opMode);

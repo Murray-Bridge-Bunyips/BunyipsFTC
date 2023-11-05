@@ -26,10 +26,9 @@ import kotlin.Unit;
 @TeleOp(name = "GLaDOS: Vision Test", group = "GLaDOS")
 public class GLaDOSVisionTest extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
-
-    private final UserSelection<Procs> proc = new UserSelection<>(this, this::callback, Procs.values());
     private Vision vision;
     private Telemetry.Item i;
+    private final UserSelection<Procs> proc = new UserSelection<>(this, this::callback, Procs.values());
 
     @SuppressWarnings("rawtypes")
     private Unit callback(Procs selection) {

@@ -17,10 +17,9 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 public class WheatleyLift extends BunyipsComponent {
 
     private final DcMotor arm;
-    private double armPower;
     private final Servo leftServo;
     private final Servo rightServo;
-
+    private double armPower;
     // True = Open
     // False = Shut
     // Both claws are set to predetermined positions on init to avoid problems

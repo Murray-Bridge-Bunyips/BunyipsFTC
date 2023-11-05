@@ -3,12 +3,7 @@ package org.firstinspires.ftc.teamcode.common
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.Telemetry.Item
-import java.lang.IndexOutOfBoundsException
-import java.util.Arrays
-import java.util.IllegalFormatConversionException
-import java.util.IllegalFormatException
 import java.util.IllegalFormatFlagsException
-import java.util.Locale
 import kotlin.math.roundToInt
 
 /**
