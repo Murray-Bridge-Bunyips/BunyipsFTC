@@ -206,11 +206,11 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     public void removeTaskIndex(int taskIndex) {
         if (taskIndex < 0) {
-            throw new IllegalArgumentException("ABYO: Cannot remove items starting from last index, this isn't Python");
+            throw new IllegalArgumentException("Auto: Cannot remove items starting from last index, this isn't Python");
         }
 
         if (taskIndex > tasks.size()) {
-            throw new IllegalArgumentException("ABYO: Given index exceeds array size");
+            throw new IllegalArgumentException("Auto: Given index exceeds array size");
         }
 
         /*

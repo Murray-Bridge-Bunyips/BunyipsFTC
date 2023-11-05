@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
+import org.firstinspires.ftc.teamcode.common.StartingPositions;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
-import org.firstinspires.ftc.teamcode.common.tasks.WaitTask;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
 import org.firstinspires.ftc.teamcode.glados.tasks.GLaDOSTimeDriveTask;
@@ -17,12 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Drive GLaDOS to the parking zone immediately.
+ * Drive GLaDOS to the right side of the backstage parking zone immediately.
  *
  * @author Lucas Bubner, 2023
  */
-@Autonomous(name = "GLaDOS: Park", group = "GLaDOS")
-public class GLaDOSParkAuto extends AutonomousBunyipsOpMode {
+@Autonomous(name = "GLaDOS: Backstage RIGHT Park", group = "GLaDOS")
+public class GLaDOSParkRightBackstageAuto extends AutonomousBunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSPOVDriveCore drive;
 
@@ -34,7 +34,7 @@ public class GLaDOSParkAuto extends AutonomousBunyipsOpMode {
 
     @Override
     protected List<OpModeSelection> setOpModes() {
-        return Arrays.asList(new OpModeSelection("RED_LEFT"), new OpModeSelection("RED_RIGHT"), new OpModeSelection("BLUE_LEFT"), new OpModeSelection("BLUE_RIGHT"));
+        return Arrays.asList(new OpModeSelection(StartingPositions.RED_LEFT), new OpModeSelection(StartingPositions.RED_RIGHT), new OpModeSelection(StartingPositions.BLUE_LEFT), new OpModeSelection(StartingPositions.BLUE_RIGHT));
     }
 
     @Override
@@ -49,18 +49,21 @@ public class GLaDOSParkAuto extends AutonomousBunyipsOpMode {
             // is started and cannot perform any useful action without disrupting the alliance.
             return;
         }
-        switch (selectedOpMode.getName()) {
-            case "RED_LEFT":
-                // TODO: Robot is away from backstage, cannot park easily
+        StartingPositions selected = (StartingPositions) selectedOpMode.getObj();
+        switch (selected) {
+            case RED_LEFT:
+                addTask(new GLaDOSTimeDriveTask(this, 4, drive, 0.75, 0, 0));
                 break;
-            case "RED_RIGHT":
+            case RED_RIGHT:
                 addTask(new GLaDOSTimeDriveTask(this, 2, drive, 0.75, 0, 0));
                 break;
-            case "BLUE_LEFT":
+            case BLUE_LEFT:
+                addTask(new GLaDOSTimeDriveTask(this, 2, drive, 0, 0.75, 0));
                 addTask(new GLaDOSTimeDriveTask(this, 2, drive, -0.75, 0, 0));
                 break;
-            case "BLUE_RIGHT":
-                // TODO: Robot is away from backstage, cannot park easily
+            case BLUE_RIGHT:
+                addTask(new GLaDOSTimeDriveTask(this, 2, drive, 0, 0.75, 0));
+                addTask(new GLaDOSTimeDriveTask(this, 4, drive, -0.75, 0, 0));
                 break;
         }
     }
