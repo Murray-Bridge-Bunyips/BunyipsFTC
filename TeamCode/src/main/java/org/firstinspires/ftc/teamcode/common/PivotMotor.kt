@@ -9,11 +9,12 @@ import com.qualcomm.robotcore.hardware.DcMotorImpl
  * @author Lucas Bubner, 2023
  */
 
-open class PivotMotor(
+class PivotMotor(
     override val motor: DcMotorEx,
     override val ticksPerRevolution: Double,
+    override var reduction: Double = 1.0,
 ) : DcMotorImpl(motor.controller, motor.portNumber), Encoder {
-    final override val wheelDiameterMM = null
+    override val wheelDiameterMM = null
     override var snapshot: Double = 0.0
 
     override fun travelledMM(scope: Encoder.Scope): Double {
@@ -47,11 +48,11 @@ open class PivotMotor(
         return getRadians(Encoder.Scope.RELATIVE)
     }
 
-    open fun setDegrees(degrees: Double) {
+    fun setDegrees(degrees: Double) {
         motor.targetPosition = ((degrees / 360) * ticksPerRevolution).toInt() - snapshot.toInt()
     }
 
-    open fun setRadians(radians: Double) {
+    fun setRadians(radians: Double) {
         motor.targetPosition =
             ((radians / (2 * Math.PI)) * ticksPerRevolution).toInt() - snapshot.toInt()
     }

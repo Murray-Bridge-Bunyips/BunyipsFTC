@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.GearedPivotMotor;
+import org.firstinspires.ftc.teamcode.common.PivotMotor;
 
 /**
  * Pixel Movement & Suspension arm mechanism
@@ -29,7 +29,7 @@ public class GLaDOSArmCore extends BunyipsComponent {
     private final GLaDOSServoCore servoController;
     private final GLaDOSLinearSliderCore sliderController;
 
-    public GLaDOSArmCore(@NonNull BunyipsOpMode opMode, GearedPivotMotor rotator, DcMotor extensionRunner, Servo alignment, Servo left, Servo right) {
+    public GLaDOSArmCore(@NonNull BunyipsOpMode opMode, PivotMotor rotator, DcMotor extensionRunner, Servo alignment, Servo left, Servo right) {
         super(opMode);
         sliderController = new GLaDOSLinearSliderCore(opMode, rotator, extensionRunner);
         alignmentController = new GLaDOSAlignmentCore(opMode, alignment, SERVO_ON_ELEVATION_TARGET_ANGLE, SERVO_ON_ELEVATION_DOWN_LOCK_THRESHOLD_ANGLE);

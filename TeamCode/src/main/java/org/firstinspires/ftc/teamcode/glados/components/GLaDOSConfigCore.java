@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.common.GearedPivotMotor;
+import org.firstinspires.ftc.teamcode.common.PivotMotor;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 
 /**
@@ -32,7 +32,7 @@ public class GLaDOSConfigCore extends RobotConfig {
     // Control 0: Suspender Actuator "sa"
     public DcMotorEx sa;
     // Control 1: Suspender Rotation "sr", 45T->90T
-    public GearedPivotMotor sr;
+    public PivotMotor sr;
     // Internally mounted on I2C C0 "imu"
     public IMU imu;
 
@@ -45,7 +45,7 @@ public class GLaDOSConfigCore extends RobotConfig {
         bl = (DcMotorEx) getHardware("bl", DcMotorEx.class);
         DcMotorEx SRmotor = (DcMotorEx) getHardware("sr", DcMotorEx.class);
         if (SRmotor != null) {
-            sr = new GearedPivotMotor(SRmotor, CORE_HEX_TICKS_PER_REVOLUTION, SR_GEAR_RATIO);
+            sr = new PivotMotor(SRmotor, CORE_HEX_TICKS_PER_REVOLUTION, SR_GEAR_RATIO);
             sr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         sa = (DcMotorEx) getHardware("sa", DcMotorEx.class);

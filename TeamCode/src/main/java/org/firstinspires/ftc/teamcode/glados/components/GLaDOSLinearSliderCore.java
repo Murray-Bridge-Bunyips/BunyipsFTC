@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.GearedPivotMotor;
+import org.firstinspires.ftc.teamcode.common.PivotMotor;
 
 /**
  * Controller for the linear slider and rotation mechanism for GLaDOS.
@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.common.GearedPivotMotor;
 public class GLaDOSLinearSliderCore extends BunyipsComponent {
     private static final double RUNNER_POWER = 1.0;
     private static final int RUNNER_MAX_LENGTH = 1000;
-    private final GearedPivotMotor rotator;
+    private final PivotMotor rotator;
     private final DcMotor runner;
 
     private Mode mode = Mode.TRACKING;
@@ -28,7 +28,7 @@ public class GLaDOSLinearSliderCore extends BunyipsComponent {
     // For use in locking mode, extrusion length
     private int targetLength;
 
-    public GLaDOSLinearSliderCore(@NonNull BunyipsOpMode opMode, GearedPivotMotor rotator, DcMotor runner) {
+    public GLaDOSLinearSliderCore(@NonNull BunyipsOpMode opMode, PivotMotor rotator, DcMotor runner) {
         super(opMode);
         this.rotator = rotator;
         this.runner = runner;

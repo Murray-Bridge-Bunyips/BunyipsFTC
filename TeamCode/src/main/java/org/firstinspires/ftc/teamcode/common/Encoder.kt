@@ -17,6 +17,11 @@ interface Encoder {
     val motor: DcMotorEx
 
     /**
+     * Reduction factor of the motor, used in gearing calculations.
+     */
+    var reduction: Double
+
+    /**
      * Store a snapshot of encoder position when tracking is started.
      */
     var snapshot: Double
@@ -46,9 +51,9 @@ interface Encoder {
      */
     fun position(scope: Scope = Scope.RELATIVE): Double {
         return if (scope == Scope.RELATIVE) {
-            motor.currentPosition.toDouble() - snapshot
+            (motor.currentPosition.toDouble() - snapshot) * reduction
         } else {
-            motor.currentPosition.toDouble()
+            motor.currentPosition.toDouble() * reduction
         }
     }
 
