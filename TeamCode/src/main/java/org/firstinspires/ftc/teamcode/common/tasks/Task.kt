@@ -62,7 +62,7 @@ abstract class Task : AutoTask {
     /**
      * Override to this method to add custom criteria if a task should be considered finished.
      * You **must** call `super.isFinished()` if you override this method, otherwise you need to handle
-     * the safety timeout and `onFinish()` yourself.
+     * safety timeout, `init()` and `onFinish()` yourself.
      * @return bool expression indicating whether the task is finished or not
      */
     override fun isFinished(): Boolean {
@@ -88,8 +88,11 @@ abstract class Task : AutoTask {
         return taskFinished
     }
 
-    private val currentTime: Double
+    protected val currentTime: Double
         get() = System.nanoTime() / NANOS_IN_SECONDS
+
+    protected val deltaTime: Double
+        get() = currentTime - startTime
 
     companion object {
         const val NANOS_IN_SECONDS = 1000000000.0

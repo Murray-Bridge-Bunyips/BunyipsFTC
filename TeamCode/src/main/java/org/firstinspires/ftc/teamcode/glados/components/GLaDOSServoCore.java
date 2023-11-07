@@ -74,7 +74,7 @@ public class GLaDOSServoCore extends BunyipsComponent {
         rightServo.setPosition(rightServoPosition);
     }
 
-    protected enum ServoSide {
+    public enum ServoSide {
         LEFT,
         RIGHT
     }

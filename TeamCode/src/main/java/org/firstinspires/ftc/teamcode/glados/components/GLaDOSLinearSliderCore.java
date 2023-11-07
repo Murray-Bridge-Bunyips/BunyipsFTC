@@ -142,7 +142,7 @@ public class GLaDOSLinearSliderCore extends BunyipsComponent {
     /**
      * Set linear slider length to maximum.
      */
-    public void maxExtrusionLength() {
+    public void setToMaxExtrusionLength() {
         setExtrusionLength(RUNNER_MAX_LENGTH);
     }
 

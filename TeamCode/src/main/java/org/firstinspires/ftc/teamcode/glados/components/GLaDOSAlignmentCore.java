@@ -13,6 +13,9 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  * @author Lucas Bubner, 2023
  */
 public class GLaDOSAlignmentCore extends BunyipsComponent {
+    /**
+     * Assumes the alignment servo has range 0-1 where 0 == to floor and 1 == 180 degrees CCW.
+     */
     private final Servo alignment;
 
     /**
@@ -55,6 +58,19 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
      * @param theta degrees of the arm
      */
     public void update(double theta) {
-        // TODO
+        if (theta < downLockThresholdAngle) {
+            alignment.setPosition(convertDegreesToServoPosition(targetAngle));
+            return;
+        }
+        alignment.setPosition(0.0);
+    }
+
+    /**
+     * Converts degrees to a servo position.
+     * @param degrees degrees to convert
+     * @return 0-1 servo position
+     */
+    private double convertDegreesToServoPosition(double degrees) {
+        return degrees / 180.0;
     }
 }

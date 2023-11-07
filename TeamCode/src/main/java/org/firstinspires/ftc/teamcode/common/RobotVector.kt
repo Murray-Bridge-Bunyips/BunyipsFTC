@@ -41,6 +41,13 @@ data class RobotVector(var x: Double, var y: Double, var r: Double) {
     }
 
     /**
+     * Determine if a vector is moving in a diagonal direction.
+     */
+    fun isDiagonal(): Boolean {
+        return x != 0.0 && y != 0.0
+    }
+
+    /**
      * Flip the vector to be of opposite magnitude.
      */
     fun flip() {

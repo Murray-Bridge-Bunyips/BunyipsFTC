@@ -6,11 +6,10 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.IMUOp;
 import org.firstinspires.ftc.teamcode.common.RelativeVector;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
-import org.firstinspires.ftc.teamcode.common.UserSelection;
+import org.firstinspires.ftc.teamcode.glados.components.GLaDOSArmCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSFieldDriveCore;
-
-import kotlin.Unit;
+import org.firstinspires.ftc.teamcode.glados.components.GLaDOSServoCore;
 
 /**
  * TeleOp for GLaDOS robot FTC 15215
@@ -24,41 +23,39 @@ import kotlin.Unit;
 public class GLaDOSTeleOp extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSFieldDriveCore drive;
+    private GLaDOSArmCore arm;
     private IMUOp imu;
-    private UserSelection<RelativeVector> startingPositionDeterminant;
 
     @Override
     protected void onInit() {
         config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
+        drive = new GLaDOSFieldDriveCore(this, config.fl, config.bl, config.fr, config.br, imu, false, RelativeVector.FORWARD);
+        arm = new GLaDOSArmCore(this, config.sr, config.sa, config.al, config.ls, config.rs);
         imu = new IMUOp(this, config.imu);
-        startingPositionDeterminant = new UserSelection<>(this, this::callback, RelativeVector.FORWARD, RelativeVector.LEFT, RelativeVector.RIGHT, RelativeVector.BACKWARD);
-        startingPositionDeterminant.start();
-    }
-
-    private Unit callback(RelativeVector selection) {
-        drive = new GLaDOSFieldDriveCore(this, config.fl, config.bl, config.fr, config.br, imu, true, selection != null ? selection : RelativeVector.FORWARD);
-        return Unit.INSTANCE;
-    }
-
-    @Override
-    protected boolean onInitLoop() {
-        return !startingPositionDeterminant.isAlive();
     }
 
     @Override
     protected void activeLoop() {
-        if (drive == null) return;
         double x = gamepad1.left_stick_x;
         double y = gamepad1.left_stick_y;
         double r = gamepad1.right_stick_x;
-        drive.setSpeedUsingController(x, y, r);
-        drive.update();
+        drive.setSpeedUsingController(x, y, r / 2);
+
+        arm.getSliderController().setTargetAngleUsingController(gamepad2.left_stick_y);
+
+        if (gamepad2.x) {
+            arm.getServoController().toggleServo(GLaDOSServoCore.ServoSide.LEFT);
+        }
+
+        if (gamepad2.b) {
+            arm.getServoController().toggleServo(GLaDOSServoCore.ServoSide.RIGHT);
+        }
 
         if (gamepad1.y) {
             imu.resetHeading();
         }
 
-        // IMU debugging
-        addTelemetry("Heading (deg): %", imu.getHeading() % 360);
+        drive.update();
+        arm.update();
     }
 }

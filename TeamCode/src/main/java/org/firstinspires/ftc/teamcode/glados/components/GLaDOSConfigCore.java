@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.PivotMotor;
@@ -33,6 +34,12 @@ public class GLaDOSConfigCore extends RobotConfig {
     public DcMotorEx sa;
     // Control 1: Suspender Rotation "sr", 45T->90T
     public PivotMotor sr;
+    // Control Servo 0: Alignment Servo "al"
+    public Servo al;
+    // Control Servo 1: Left Servo "ls"
+    public Servo ls;
+    // Control Servo 2: Right Servo "rs"
+    public Servo rs;
     // Internally mounted on I2C C0 "imu"
     public IMU imu;
 
@@ -49,28 +56,31 @@ public class GLaDOSConfigCore extends RobotConfig {
             sr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
         sa = (DcMotorEx) getHardware("sa", DcMotorEx.class);
+        al = (Servo) getHardware("al", Servo.class);
+        ls = (Servo) getHardware("ls", Servo.class);
+        rs = (Servo) getHardware("rs", Servo.class);
         imu = (IMU) getHardware("imu", IMU.class);
 
         if (fl != null) {
             // The forward left wheel goes the wrong way without us changing
             fl.setDirection(DcMotorSimple.Direction.REVERSE);
-            fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
 
         // Explicitly set all other motors for easy debugging
         if (fr != null) {
             fr.setDirection(DcMotorSimple.Direction.FORWARD);
-            fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
 
         if (br != null) {
             br.setDirection(DcMotorSimple.Direction.FORWARD);
-            br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
 
         if (bl != null) {
             bl.setDirection(DcMotorSimple.Direction.FORWARD);
-            bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
 
         if (sa != null) {
