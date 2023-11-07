@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.wheatley.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.Cannon;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
@@ -29,6 +30,14 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     private WheatleyConfig config = new WheatleyConfig();
     private WheatleyLift lift;
     private WheatleyMecanumDrive drive;
+    private Cannon cannon;
+
+    // I'm just putting this in because AS told me to
+    // I should really learn more FTC Java :(
+    public WheatleyTeleOp(WheatleyLift lift, Cannon cannon) {
+        this.lift = lift;
+        this.cannon = cannon;
+    }
 
     @Override
     protected void onInit() {
@@ -47,6 +56,12 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
         lift.armLift(gamepad2.left_stick_y);
         lift.update();
+
+        // The triggers are pressure sensitive, apparently.
+        // Set to 1 to avoid any slight touches launching a nuke.
+        if (gamepad1.right_trigger == 1) {
+            cannon.fire();
+        }
 
         if (gamepad2.x) {
             lift.leftClaw();
