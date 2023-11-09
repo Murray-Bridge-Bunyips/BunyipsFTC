@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.jerry.autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.Odometer
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.UserSelection
@@ -32,16 +33,16 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        if (config.assertDevices(config.driveMotors))
+        if (NullSafety.assertNotNull(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        if (config.assertDevices(config.fl))
+        if (NullSafety.assertNotNull(config.fl))
             x = Odometer(this, config.fl!!, config.xDiameter, config.xTicksPerRev)
 
-        if (config.assertDevices(config.fr))
+        if (NullSafety.assertNotNull(config.fr))
             y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
-        if (config.assertDevices(config.imu))
+        if (NullSafety.assertNotNull(config.imu))
             imu = IMUOp(this, config.imu!!)
 
         selection.start()

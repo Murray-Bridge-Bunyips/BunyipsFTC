@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.MecanumDrive
+import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.UserSelection
@@ -37,11 +38,11 @@ class JerryTeleOp : BunyipsOpMode() {
         // Configure drive and lift subsystems
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         selector.start()
-        if (config.assertDevices(config.imu)) {
+        if (NullSafety.assertNotNull(config.imu)) {
             imu = IMUOp(this, config.imu!!)
         }
         drive?.setToBrake()
-        if (config.assertDevices(config.armComponents)) {
+        if (NullSafety.assertNotNull(config.armComponents)) {
             lift = JerryLift(
                 this,
                 JerryLift.ControlMode.MANUAL,
@@ -54,7 +55,7 @@ class JerryTeleOp : BunyipsOpMode() {
     }
 
     private fun initDrive() {
-        if (config.assertDevices(config.driveMotors)) {
+        if (NullSafety.assertNotNull(config.driveMotors)) {
             drive = if (selector.result == "FIELD-CENTRIC" || imu == null) {
                 JerryPolarDrive(
                     this,

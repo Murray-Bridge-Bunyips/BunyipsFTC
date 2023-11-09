@@ -11,6 +11,12 @@ object ErrorUtil {
 
     @Throws(InterruptedException::class)
     fun handleCatchAllException(e: Throwable, log: (msg: String) -> Unit) {
+        if (e.stackTrace[0].className in NullSafety.unusableComponents && e is NullPointerException) {
+            // This error is caused by a null component, which is handled by NullSafety
+            // As such, we can swallow it from appearing on the Driver Station
+            DbgLog.msg("Attempted to utilise null-aware unusable object: ${e.stackTrace[0].className}")
+            return
+        }
         log("encountered exception! <${e.message}>")
         if (e.cause != null) {
             log("caused by: ${e.cause}")

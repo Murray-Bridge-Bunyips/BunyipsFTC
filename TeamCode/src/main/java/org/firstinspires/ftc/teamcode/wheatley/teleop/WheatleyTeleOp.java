@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Cannon;
+import org.firstinspires.ftc.teamcode.common.NullSafety;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
@@ -64,7 +65,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         addTelemetry("Left Stick X: " + gamepad1.left_stick_x);
 
         // Gives a different message based on whether or not the camera is connected
-        if (config.assertDevices(config.webcam)) {
+        if (NullSafety.assertNotNull(config.webcam)) {
             addTelemetry("Camera is connected");
         } else {
             addTelemetry("Camera is NOT connected");

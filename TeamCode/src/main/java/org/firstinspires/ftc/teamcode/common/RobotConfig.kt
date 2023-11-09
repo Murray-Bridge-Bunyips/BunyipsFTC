@@ -36,20 +36,6 @@ abstract class RobotConfig {
         return hardwareDevice
     }
 
-    /**
-     * Check if hardware is available by checking if the instance is null.
-     */
-    fun assertDevices(vararg devices: HardwareDevice?): Boolean {
-        for (device in devices) {
-            if (device == null) {
-                return false
-            }
-        }
-        return true
-    }
-
-    fun assertDevices(devices: List<HardwareDevice?>) = assertDevices(*devices.toTypedArray())
-
     companion object {
         /**
          * Static array of hardware errors stored via hardware name.

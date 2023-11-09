@@ -36,7 +36,8 @@ public abstract class MecanumDrive extends BunyipsComponent {
         this.backLeft = backLeft;
         this.frontRight = frontRight;
         this.backRight = backRight;
-        assert(frontLeft != null && backLeft != null && frontRight != null && backRight != null);
+        // Critical component, cannot be ignored if null
+        assert frontLeft != null && backLeft != null && frontRight != null && backRight != null;
     }
 
     // Setters for the prioritisation of the drive system

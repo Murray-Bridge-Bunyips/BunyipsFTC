@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common;
 
+import java.util.Arrays;
 import java.util.IllegalFormatFlagsException;
 import java.util.List;
 import java.util.Locale;
@@ -30,6 +31,10 @@ public class Text {
             throw new IllegalFormatFlagsException("Missing args for '%' placeholders!");
         }
         return newString.toString();
+    }
+
+    public static String formatString(String fstring, Object... objs) {
+        return formatString(fstring, Arrays.asList(objs));
     }
 
     /**

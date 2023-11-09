@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
@@ -34,12 +35,12 @@ class JerryAutoTest : BunyipsOpMode() {
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        if (config.assertDevices(config.driveMotors)) {
+        if (NullSafety.assertNotNull(config.driveMotors)) {
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
         }
 
         drive?.setToBrake()
-        if (config.assertDevices(config.imu)) {
+        if (NullSafety.assertNotNull(config.imu)) {
             imu = IMUOp(this, config.imu!!)
         }
         tasks.add(
@@ -49,7 +50,7 @@ class JerryAutoTest : BunyipsOpMode() {
                 "well here we are again, it's always such a pleasure, remember when you tried to kill me twice"
             )
         )
-        if (config.assertDevices(config.armComponents)) {
+        if (NullSafety.assertNotNull(config.armComponents)) {
             arm = JerryArm(
                 this,
                 config.claw!!,

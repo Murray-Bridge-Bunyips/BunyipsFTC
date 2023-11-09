@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.NullSafety;
 import org.firstinspires.ftc.teamcode.common.PivotMotor;
 
 /**
@@ -31,21 +32,14 @@ public class GLaDOSArmCore extends BunyipsComponent {
 
     public GLaDOSArmCore(@NonNull BunyipsOpMode opMode, PivotMotor rotator, DcMotor extensionRunner, Servo alignment, Servo left, Servo right, GLaDOSAlignmentCore.Mode alignmentMode) {
         super(opMode);
-        if (rotator != null && extensionRunner != null) {
+        if (NullSafety.assertComponentArgs(opMode, GLaDOSLinearSliderCore.class, rotator, extensionRunner))
             sliderController = new GLaDOSLinearSliderCore(opMode, rotator, extensionRunner);
-        } else {
-            getOpMode().addTelemetry("! COM_FAULT: LinearSlider failed to instantiate due to missing hardware", true);
-        }
-        if (alignment != null) {
+
+        if (NullSafety.assertComponentArgs(opMode, GLaDOSAlignmentCore.class, alignment))
             alignmentController = new GLaDOSAlignmentCore(opMode, alignment, alignmentMode, SERVO_ON_ELEVATION_TARGET_ANGLE, SERVO_ON_ELEVATION_DOWN_LOCK_THRESHOLD_ANGLE);
-        } else {
-            getOpMode().addTelemetry("! COM_FAULT: AlignmentCore failed to instantiate due to missing hardware", true);
-        }
-        if (left != null && right != null) {
+
+        if (NullSafety.assertComponentArgs(opMode, GLaDOSServoCore.class, left, right))
             servoController = new GLaDOSServoCore(opMode, left, right);
-        } else {
-            getOpMode().addTelemetry("! COM_FAULT: Servos failed to instantiate due to missing hardware", true);
-        }
     }
 
     public GLaDOSServoCore getServoController() {
@@ -62,15 +56,10 @@ public class GLaDOSArmCore extends BunyipsComponent {
 
     public void update() {
         // Push stateful changes from any changes to these controllers
-        if (servoController != null)
-            servoController.update();
+        servoController.update();
+        sliderController.update();
 
-        if (sliderController != null) {
-            sliderController.update();
-            // Alignment servo is fully handled automatically by the alignment controller
-            if (alignmentController != null) {
-                alignmentController.update(sliderController.getAngle());
-            }
-        }
+        // Alignment servo is fully handled automatically by the alignment controller
+        alignmentController.update(sliderController.getAngle());
     }
 }

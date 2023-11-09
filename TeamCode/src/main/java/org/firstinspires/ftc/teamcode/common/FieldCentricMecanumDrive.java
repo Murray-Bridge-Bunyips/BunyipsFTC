@@ -22,6 +22,9 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
             throw new IllegalArgumentException("FCMD: Cannot use rotational quantities as a starting direction");
         }
 
+        // Critical component, cannot be ignored if null
+        assert imu != null;
+
         // Invalidate any previous readings
         if (invalidatePreviousHeading)
             imu.resetHeading();

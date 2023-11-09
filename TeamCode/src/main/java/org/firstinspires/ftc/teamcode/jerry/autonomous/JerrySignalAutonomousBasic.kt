@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.jerry.autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
@@ -33,7 +34,7 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         // Configuration of camera and drive components
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         cam = OpenCVCam(this, config.webcam, config.monitorID)
-        if (config.assertDevices(config.driveMotors))
+        if (NullSafety.assertNotNull(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
