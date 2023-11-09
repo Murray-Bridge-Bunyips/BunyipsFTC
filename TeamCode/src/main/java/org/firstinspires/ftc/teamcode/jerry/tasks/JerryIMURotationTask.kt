@@ -30,7 +30,6 @@ class JerryIMURotationTask(
     }
 
     override fun init() {
-        super.init()
         imu?.tick()
 
         // Find out which way we need to turn based on the information provided
@@ -51,9 +50,9 @@ class JerryIMURotationTask(
     }
 
     // Stop turning when we reach the target angle
-    override fun isFinished(): Boolean {
+    override fun isTaskFinished(): Boolean {
         val heading = imu?.heading
-        return super.isFinished() || if (direction == Direction.LEFT) {
+        return if (direction == Direction.LEFT) {
             // Angle will be decreasing
             heading != null && heading <= angle
         } else {

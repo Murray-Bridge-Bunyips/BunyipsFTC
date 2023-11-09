@@ -23,9 +23,9 @@ public abstract class MecanumDrive extends BunyipsComponent {
     private final DcMotor backRight;
 
     // Axial translation speeds
-    double speedX;
-    double speedY;
-    double speedR;
+    public double speedX;
+    public double speedY;
+    public double speedR;
 
     // Store and declare prioritisation when given instruction to calculate motor powers
     private Priority priority = Priority.NORMALISED;
@@ -36,6 +36,7 @@ public abstract class MecanumDrive extends BunyipsComponent {
         this.backLeft = backLeft;
         this.frontRight = frontRight;
         this.backRight = backRight;
+        assert(frontLeft != null && backLeft != null && frontRight != null && backRight != null);
     }
 
     // Setters for the prioritisation of the drive system
@@ -49,8 +50,7 @@ public abstract class MecanumDrive extends BunyipsComponent {
 
     /**
      * Set a speed at which the Mecanum drive assembly should move using controller input.
-     * The difference is that the vectors will be rotated by 90 degrees clockwise to account for
-     * the strange non-Cartesian coordinate system of the gamepad.
+     * The difference is that the vectors will be negated properly for the gamepad.
      *
      * @param left_stick_x  X value of the controller
      * @param left_stick_y  Y value of the controller
@@ -58,8 +58,8 @@ public abstract class MecanumDrive extends BunyipsComponent {
      * @see org.firstinspires.ftc.teamcode.common.Controller#Companion
      */
     public void setSpeedUsingController(double left_stick_x, double left_stick_y, double right_stick_x) {
-        speedX = Range.clip(left_stick_y, -1.0, 1.0);
-        speedY = Range.clip(-left_stick_x, -1.0, 1.0);
+        speedX = Range.clip(left_stick_x, -1.0, 1.0);
+        speedY = Range.clip(-left_stick_y, -1.0, 1.0);
         speedR = Range.clip(right_stick_x, -1.0, 1.0);
     }
 
@@ -77,8 +77,8 @@ public abstract class MecanumDrive extends BunyipsComponent {
      *          Range: -1.0 to 1.0
      */
     public void setSpeedXYR(double x, double y, double r) {
-        speedX = Range.clip(-y, -1.0, 1.0);
-        speedY = Range.clip(-x, -1.0, 1.0);
+        speedX = Range.clip(x, -1.0, 1.0);
+        speedY = Range.clip(y, -1.0, 1.0);
         speedR = Range.clip(r, -1.0, 1.0);
     }
 
@@ -108,10 +108,10 @@ public abstract class MecanumDrive extends BunyipsComponent {
         }
 
         // Calculate motor powers
-        double frontLeftPower = speedX + speedY - speedR;
-        double frontRightPower = speedX - speedY + speedR;
-        double backLeftPower = speedX - speedY - speedR;
-        double backRightPower = speedX + speedY + speedR;
+        double frontLeftPower = speedY + speedX + speedR;
+        double frontRightPower = speedY - speedX - speedR;
+        double backLeftPower = speedY - speedX + speedR;
+        double backRightPower = speedY + speedX - speedR;
 
         double maxPower = Math.max(Math.abs(frontLeftPower), Math.max(Math.abs(frontRightPower), Math.max(Math.abs(backLeftPower), Math.abs(backRightPower))));
         // If the maximum number is greater than 1.0, then normalise by that number
@@ -122,12 +122,13 @@ public abstract class MecanumDrive extends BunyipsComponent {
             backRightPower = backRightPower / maxPower;
         }
 
-        frontLeft.setPower(frontLeftPower);
-        frontRight.setPower(frontRightPower);
-        backLeft.setPower(backLeftPower);
-        backRight.setPower(backRightPower);
+        // All powers are reversed when sent to the motors
+        frontLeft.setPower(-frontLeftPower);
+        frontRight.setPower(-frontRightPower);
+        backLeft.setPower(-backLeftPower);
+        backRight.setPower(-backRightPower);
 
-        getOpMode().addTelemetry(String.format(Locale.getDefault(), "Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR));
+        getOpMode().addTelemetry(String.format(Locale.getDefault(), "Mecanum Drive: X: %.2f, Y: %.2f, R: %.2f", speedX, speedY, speedR));
     }
 
     /**
@@ -167,10 +168,10 @@ public abstract class MecanumDrive extends BunyipsComponent {
     private void rotationalUpdate() {
         // Calculate translational speeds
         double[] translationValues = {
-                speedX + speedY,
-                speedX - speedY,
-                speedX - speedY,
-                speedX + speedY
+                speedY + speedX,
+                speedY - speedX,
+                speedY - speedX,
+                speedY + speedX
         };
 
         double[] rotationValues = {

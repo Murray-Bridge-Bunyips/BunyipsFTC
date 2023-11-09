@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.common
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.Telemetry.Item
-import java.util.IllegalFormatFlagsException
+import org.firstinspires.ftc.teamcode.common.Text.formatString
 import kotlin.math.roundToInt
 
 /**
@@ -91,6 +91,9 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 setTelemetryAutoClear(false)
                 // Run user-defined setup
                 onInit()
+                if (!gamepad1.atRest() || !gamepad2.atRest()) {
+                    log("warning! a gamepad was not zeroed during init. please ensure controllers zero out correctly.")
+                }
                 telemetry.update()
                 log("status changed: from static_init to dynamic_init")
                 DbgLog.msg("BunyipsOpMode: starting onInitLoop()...")
@@ -204,30 +207,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
             return addTelemetry(fstring, false)
         }
         return addTelemetry(formatString(fstring, objs.asList()), false)
-    }
-
-    /**
-     * Format a string using only '%' placeholders.
-     * Differs from String.format() as type can be omitted.
-     */
-    fun formatString(fstring: String, objects: List<Any>): String {
-        // Replace all % with the strings in order
-        var occurrences = 0
-        var newString = ""
-        for (char in fstring) {
-            if (char == '%') {
-                // Remove character and insert new string
-                try {
-                    newString += objects[occurrences]
-                } catch (e: IndexOutOfBoundsException) {
-                    throw IllegalFormatFlagsException("Missing '%' placeholders!")
-                }
-                occurrences++
-                continue
-            }
-            newString += char
-        }
-        return newString
     }
 
     /**

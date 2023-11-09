@@ -29,7 +29,7 @@ public class GLaDOSDrivetrain extends BunyipsOpMode {
         double x = gamepad1.left_stick_x;
         double y = gamepad1.left_stick_y;
         double r = gamepad1.right_stick_x;
-        drive.setSpeedUsingController(x, y, r);
+        drive.setSpeedUsingController(x, y, r / 2);
         drive.update();
     }
 }

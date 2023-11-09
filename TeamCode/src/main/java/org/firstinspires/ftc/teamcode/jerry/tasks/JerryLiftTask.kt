@@ -18,15 +18,14 @@ class JerryLiftTask(
 ) : Task(opMode, time), AutoTask {
 
     override fun init() {
-        super.init()
         if (power != null) {
             lift?.power = power
         }
         lift?.set(percent)
     }
 
-    override fun isFinished(): Boolean {
-        return super.isFinished() || lift?.isBusy() == false
+    override fun isTaskFinished(): Boolean {
+        return lift?.isBusy() == false
     }
 
     override fun run() {

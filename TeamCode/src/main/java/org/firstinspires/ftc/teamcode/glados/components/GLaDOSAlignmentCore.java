@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode.glados.components;
 
+import static org.firstinspires.ftc.teamcode.common.Text.round;
+
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
@@ -14,7 +17,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  */
 public class GLaDOSAlignmentCore extends BunyipsComponent {
     /**
-     * Assumes the alignment servo has range 0-1 where 0 == to floor and 1 == 180 degrees CCW.
+     * Assumes the alignment servo has range 0-1 where 0 == as far back as the arm lets and 1 == bottom is facing forward.
      */
     private final Servo alignment;
 
@@ -29,11 +32,19 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
      */
     private double downLockThresholdAngle;
 
-    public GLaDOSAlignmentCore(@NonNull BunyipsOpMode opMode, Servo alignment, double targetAngle, double downLockThresholdAngle) {
+    /**
+     * Manual mode angle
+     */
+    private double userPosition;
+
+    private Mode mode;
+
+    public GLaDOSAlignmentCore(@NonNull BunyipsOpMode opMode, Servo alignment, Mode mode, double targetAngle, double downLockThresholdAngle) {
         super(opMode);
         this.alignment = alignment;
         this.targetAngle = targetAngle;
         this.downLockThresholdAngle = downLockThresholdAngle;
+        this.mode = mode;
     }
 
     public double getTargetAngle() {
@@ -53,16 +64,51 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
     }
 
     /**
+     * Manual mode, use controller dpad to adjust alignment servo position.
+     * @param up gamepad2.dpad_up
+     * @param down gamepad2.dpad_down
+     */
+    public void setPositionUsingDpad(boolean up, boolean down) {
+        if (up) {
+            userPosition += 0.01;
+        }
+        if (down) {
+            userPosition -= 0.01;
+        }
+        userPosition = Range.clip(userPosition, -1, 1);
+    }
+
+    /**
      * Updates the alignment servo in response to the current angle of the arm.
+     * Usable in AUTO mode.
      *
      * @param theta degrees of the arm
      */
     public void update(double theta) {
+        if (mode != Mode.AUTO) {
+            // Silently reject theta and use manual update
+            update();
+            return;
+        }
         if (theta < downLockThresholdAngle) {
             alignment.setPosition(convertDegreesToServoPosition(targetAngle));
             return;
         }
         alignment.setPosition(0.0);
+        getOpMode().addTelemetry("Alignment (AUTO): % target", round(alignment.getPosition(), 2));
+    }
+
+    /**
+     * Update the alignment servo based on user input.
+     * Usable in MANUAL mode.
+     */
+    public void update() {
+        if (mode != Mode.MANUAL) {
+            // noop, we need theta to use automatic mode
+            return;
+        }
+        alignment.setPosition(userPosition);
+        getOpMode().addTelemetry("Alignment (MAN): % target", round(alignment.getPosition(), 2));
     }
 
     /**
@@ -72,5 +118,18 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
      */
     private double convertDegreesToServoPosition(double degrees) {
         return degrees / 180.0;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public void setMode(Mode mode) {
+        this.mode = mode;
+    }
+
+    public enum Mode {
+        AUTO,
+        MANUAL
     }
 }

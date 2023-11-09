@@ -57,8 +57,8 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
         // Transform the x and y values to be relative to the field
         // This is done by calculating the current heading to the field then rotating the x
         // and y vectors to be relative to the field, then updating the motor powers as normal
-        speedX = -(left_stick_x * cos + left_stick_y * sin);
-        speedY = -(left_stick_x * sin - left_stick_y * cos);
+        speedX = left_stick_x * sin - left_stick_y * cos;
+        speedY = left_stick_x * cos + left_stick_y * sin;
         speedR = right_stick_x;
     }
 

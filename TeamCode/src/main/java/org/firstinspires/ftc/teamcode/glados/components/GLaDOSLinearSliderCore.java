@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.glados.components;
 
+import static org.firstinspires.ftc.teamcode.common.Text.round;
+
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -8,6 +10,7 @@ import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.PivotMotor;
+import org.firstinspires.ftc.teamcode.common.While;
 
 /**
  * Controller for the linear slider and rotation mechanism for GLaDOS.
@@ -16,78 +19,45 @@ import org.firstinspires.ftc.teamcode.common.PivotMotor;
  */
 public class GLaDOSLinearSliderCore extends BunyipsComponent {
     private static final double RUNNER_POWER = 1.0;
-    private static final int RUNNER_MAX_LENGTH = 1000;
-    private final PivotMotor rotator;
-    private final DcMotor runner;
+    private static final int RUNNER_FULLY_EXTENDED_POSITION = 1000;
+    private static final double ROTATOR_POWER = 1.0;
 
-    private Mode mode = Mode.TRACKING;
-    // Use in both modes, rotator angle
-    private double targetAngle;
-    // For use in tracking mode, extrusion power
-    private double targetPower;
-    // For use in locking mode, extrusion length
-    private int targetLength;
+    private final PivotMotor rotator;
+    private DcMotor runner;
+
+    private double rotatorTargetAngle;
+    private double extruderTargetPower;
+    private double extruderTargetPercentage;
+
+    private final While autoAlignment = new While(
+            () -> runner.isBusy(),
+            () -> {
+                // Happening within an update-safe context
+                runner.setTargetPosition((int) (extruderTargetPercentage * RUNNER_FULLY_EXTENDED_POSITION));
+                runner.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                runner.setPower(RUNNER_POWER);
+                getOpMode().addTelemetry("Aligning linear slider to % percent extension...", runner.getTargetPosition() / RUNNER_FULLY_EXTENDED_POSITION);
+            },
+            () -> {
+                runner.setPower(0);
+                runner.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            },
+            5 // Will be changed dynamically
+    );
 
     public GLaDOSLinearSliderCore(@NonNull BunyipsOpMode opMode, PivotMotor rotator, DcMotor runner) {
         super(opMode);
         this.rotator = rotator;
         this.runner = runner;
-        rotator.setup();
+        
         rotator.reset();
-        rotator.track();
-        rotator.setPower(RUNNER_POWER);
-
-        // Assumes arm is resting on the Control Hub, runner will be at 10 degrees
-        rotator.setSnapshot(10.0);
+        rotator.setup();
+        rotator.setPower(ROTATOR_POWER);
 
         // Default mode is set to run on tracking
         // Assumes encoder position is 0 when the arm is fully retracted
         runner.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-    }
-
-    /**
-     * Send all stateful changes to the hardware.
-     */
-    public void update() {
-        rotator.setDegrees(targetAngle);
-        if (mode == Mode.LOCKING) {
-            runner.setTargetPosition(targetLength);
-            return;
-        }
-        runner.setPower(targetPower);
-    }
-
-    public Mode getMode() {
-        return mode;
-    }
-
-    public void setMode(Mode mode) {
-        this.mode = mode;
-        // Adjust modes of the hardware
-        switch (mode) {
-            case TRACKING:
-                runner.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                if (runner.getPower() == RUNNER_POWER) {
-                    // Safety to ensure the runner doesn't keep running
-                    runner.setPower(0);
-                }
-                break;
-            case LOCKING:
-                runner.setTargetPosition(runner.getCurrentPosition());
-                targetLength = runner.getCurrentPosition();
-                runner.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                runner.setPower(RUNNER_POWER);
-                break;
-        }
-    }
-
-    /**
-     * Delta the target angle of the rotator.
-     *
-     * @param gamepad_y gamepad2_left_stick_y or similar
-     */
-    public void setTargetAngleUsingController(double gamepad_y) {
-        targetAngle -= gamepad_y / 2;
+        runner.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
     /**
@@ -96,31 +66,26 @@ public class GLaDOSLinearSliderCore extends BunyipsComponent {
      * @return degrees
      */
     public double getTargetAngle() {
-        return targetAngle;
+        return rotatorTargetAngle;
     }
 
     /**
      * Sets the target angle of the rotator.
      *
-     * @param targetAngle degrees
+     * @param rotatorTargetAngle degrees
      */
-    public void setTargetAngle(double targetAngle) {
-        this.targetAngle = targetAngle;
+    public void setTargetAngle(double rotatorTargetAngle) {
+        this.rotatorTargetAngle = rotatorTargetAngle;
     }
 
+
     /**
-     * Set the power of the linear slider.
-     * Must be in TRACKING mode to use.
+     * Delta the target angle of the rotator.
      *
-     * @param power power for the runner
-     * @see #setExtrusionLength(int)
+     * @param gamepad_y gamepad2_left_stick_y or similar
      */
-    public void setExtrusionPower(double power) {
-        if (mode != Mode.TRACKING) {
-            // Noop if not in tracking mode
-            return;
-        }
-        targetPower = Range.clip(power, -1, 1);
+    public void setTargetAngleUsingController(double gamepad_y) {
+        rotatorTargetAngle -= gamepad_y;
     }
 
     /**
@@ -133,42 +98,42 @@ public class GLaDOSLinearSliderCore extends BunyipsComponent {
     }
 
     /**
-     * Set linear slider length to 0.
-     */
-    public void resetExtrusionLength() {
-        setExtrusionLength(0);
-    }
-
-    /**
-     * Set linear slider length to maximum.
-     */
-    public void setToMaxExtrusionLength() {
-        setExtrusionLength(RUNNER_MAX_LENGTH);
-    }
-
-    /**
-     * Set the length of the linear slider.
-     * Must be in LOCKING mode to use.
+     * Set the power of the linear slider.
      *
-     * @param length encoder ticks for the runner
-     * @see #setExtrusionPower(double)
+     * @param power power for the runner
      */
-    public void setExtrusionLength(int length) {
-        if (mode != Mode.LOCKING) {
-            // Noop if not in locking mode
-            return;
-        }
-        if (length > RUNNER_MAX_LENGTH) {
-            length = RUNNER_MAX_LENGTH;
-        }
-        if (length < 0) {
-            length = 0;
-        }
-        targetLength = length;
+    public void setExtrusionPower(double power) {
+        extruderTargetPower = Range.clip(power, -1, 1);
     }
 
-    private enum Mode {
-        TRACKING,
-        LOCKING
+    /**
+     * Set the power of the linear slider using a controller.
+     * @param gamepad_y gamepad2_right_stick_y or similar
+     */
+    public void setExtrusionPowerUsingController(double gamepad_y) {
+        extruderTargetPower = Range.clip(-gamepad_y, -1, 1);
+    }
+
+    /**
+     * Autonomously adjust the power of the linear slider to reach a target position.
+     * ** This will disable all manual control of the linear slider until the target position is reached. **
+     * @param extruderTargetPercentage target position in percentage of full extension
+     */
+    public void setExtrusionLength(double extruderTargetPercentage, double timeout) {
+        this.extruderTargetPercentage = extruderTargetPercentage;
+        autoAlignment.setTimeout(timeout);
+        autoAlignment.engage();
+    }
+
+    /**
+     * Send all stateful changes to the hardware.
+     */
+    public void update() {
+        getOpMode().addTelemetry("Linear Slider Rotator: % target deg, % real deg", round(rotatorTargetAngle, 2), round(rotator.getDegrees(), 2));
+        getOpMode().addTelemetry("Linear Slider Extruder: % ticks, % power", round(runner.getCurrentPosition(), 2), round(runner.getPower(), 2));
+        rotator.setDegrees(rotatorTargetAngle);
+        // Control autonomously if the target position is set
+        if (autoAlignment.run()) return;
+        runner.setPower(extruderTargetPower);
     }
 }

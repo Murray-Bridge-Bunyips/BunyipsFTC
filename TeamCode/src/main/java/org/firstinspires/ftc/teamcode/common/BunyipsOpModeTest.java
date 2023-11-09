@@ -17,6 +17,8 @@ public class BunyipsOpModeTest extends BunyipsOpMode {
     @Override
     protected void activeLoop() {
         assert getMovingAverageTimer() != null;
-        telemetry.addLine(getMovingAverageTimer().toString());
+        addTelemetry(getMovingAverageTimer().toString());
+        addTelemetry("GP1: %", gamepad1.toString());
+        addTelemetry("GP2: %", gamepad2.toString());
     }
 }

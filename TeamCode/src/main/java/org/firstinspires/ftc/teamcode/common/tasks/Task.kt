@@ -40,11 +40,9 @@ abstract class Task : AutoTask {
     }
 
     /**
-     * Define code to run once, upon when the task is started.
+     * Define code to run once, when the task is started.
      */
-    override fun init() {
-        // Define global init code here, use with a super call if overriding
-    }
+    abstract override fun init()
 
     /**
      * To run as an activeLoop during this task's duration.
@@ -60,17 +58,17 @@ abstract class Task : AutoTask {
     abstract override fun onFinish()
 
     /**
-     * Override to this method to add custom criteria if a task should be considered finished.
-     * You **must** call `super.isFinished()` if you override this method, otherwise you need to handle
-     * safety timeout, `init()` and `onFinish()` yourself.
-     * @return bool expression indicating whether the task is finished or not
+     * Return a boolean to this method to add custom criteria if a task should be considered finished.
+     * @return bool expression indicating whether the task is finished or not, timeout and OpMode state are handled automatically.
      */
-    override fun isFinished(): Boolean {
+    abstract fun isTaskFinished(): Boolean
+
+    final override fun isFinished(): Boolean {
         if (taskFinished) {
             if (!finisherFired)
                 onFinish()
             finisherFired = true
-            return taskFinished
+            return true
         }
         if (startTime == 0.0) {
             init()
@@ -85,7 +83,7 @@ abstract class Task : AutoTask {
             finisherFired = true
             taskFinished = true
         }
-        return taskFinished
+        return taskFinished || isTaskFinished()
     }
 
     protected val currentTime: Double

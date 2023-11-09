@@ -25,15 +25,27 @@ public class GLaDOSArmCore extends BunyipsComponent {
      * lock to 0.0.
      */
     protected static final double SERVO_ON_ELEVATION_DOWN_LOCK_THRESHOLD_ANGLE = 10.0;
-    private final GLaDOSAlignmentCore alignmentController;
-    private final GLaDOSServoCore servoController;
-    private final GLaDOSLinearSliderCore sliderController;
+    private GLaDOSAlignmentCore alignmentController;
+    private GLaDOSServoCore servoController;
+    private GLaDOSLinearSliderCore sliderController;
 
-    public GLaDOSArmCore(@NonNull BunyipsOpMode opMode, PivotMotor rotator, DcMotor extensionRunner, Servo alignment, Servo left, Servo right) {
+    public GLaDOSArmCore(@NonNull BunyipsOpMode opMode, PivotMotor rotator, DcMotor extensionRunner, Servo alignment, Servo left, Servo right, GLaDOSAlignmentCore.Mode alignmentMode) {
         super(opMode);
-        sliderController = new GLaDOSLinearSliderCore(opMode, rotator, extensionRunner);
-        alignmentController = new GLaDOSAlignmentCore(opMode, alignment, SERVO_ON_ELEVATION_TARGET_ANGLE, SERVO_ON_ELEVATION_DOWN_LOCK_THRESHOLD_ANGLE);
-        servoController = new GLaDOSServoCore(opMode, left, right);
+        if (rotator != null && extensionRunner != null) {
+            sliderController = new GLaDOSLinearSliderCore(opMode, rotator, extensionRunner);
+        } else {
+            getOpMode().addTelemetry("! COM_FAULT: LinearSlider failed to instantiate due to missing hardware", true);
+        }
+        if (alignment != null) {
+            alignmentController = new GLaDOSAlignmentCore(opMode, alignment, alignmentMode, SERVO_ON_ELEVATION_TARGET_ANGLE, SERVO_ON_ELEVATION_DOWN_LOCK_THRESHOLD_ANGLE);
+        } else {
+            getOpMode().addTelemetry("! COM_FAULT: AlignmentCore failed to instantiate due to missing hardware", true);
+        }
+        if (left != null && right != null) {
+            servoController = new GLaDOSServoCore(opMode, left, right);
+        } else {
+            getOpMode().addTelemetry("! COM_FAULT: Servos failed to instantiate due to missing hardware", true);
+        }
     }
 
     public GLaDOSServoCore getServoController() {
@@ -44,12 +56,21 @@ public class GLaDOSArmCore extends BunyipsComponent {
         return sliderController;
     }
 
+    public GLaDOSAlignmentCore getAlignmentController() {
+        return alignmentController;
+    }
+
     public void update() {
         // Push stateful changes from any changes to these controllers
-        servoController.update();
-        sliderController.update();
+        if (servoController != null)
+            servoController.update();
 
-        // Alignment servo is fully handled automatically by the alignment controller
-        alignmentController.update(sliderController.getAngle());
+        if (sliderController != null) {
+            sliderController.update();
+            // Alignment servo is fully handled automatically by the alignment controller
+            if (alignmentController != null) {
+                alignmentController.update(sliderController.getAngle());
+            }
+        }
     }
 }

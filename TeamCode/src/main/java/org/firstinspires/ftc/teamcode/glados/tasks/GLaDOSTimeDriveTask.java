@@ -26,9 +26,19 @@ public class GLaDOSTimeDriveTask extends Task {
     }
 
     @Override
+    public void init() {
+        // noop
+    }
+
+    @Override
     public void run() {
         drive.setSpeedXYR(x, y, r);
         drive.update();
+    }
+
+    @Override
+    public boolean isTaskFinished() {
+        return false;
     }
 
     @Override

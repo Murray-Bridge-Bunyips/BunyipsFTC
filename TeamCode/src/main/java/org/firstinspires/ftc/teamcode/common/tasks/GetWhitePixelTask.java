@@ -58,7 +58,6 @@ public class GetWhitePixelTask extends Task {
 
     @Override
     public void init() {
-        super.init();
         // We are using the default settings of TFOD for white spike detection
         // We assume that the OpMode has opened a new VisionPortal for us with .init()
         try {
@@ -72,20 +71,20 @@ public class GetWhitePixelTask extends Task {
     }
 
     @Override
-    public boolean isFinished() {
+    public boolean isTaskFinished() {
         switch (aggression) {
             case INSTANT:
-                return super.isFinished() || foundSpike;
+                return foundSpike;
             case CAPTURE:
                 if (foundSpike) {
                     spikeFrames++;
                 } else {
                     spikeFrames = 0;
                 }
-                return super.isFinished() || (spikeFrames >= SPIKE_FRAME_THRESHOLD && confidence >= SPIKE_CONFIDENCE_THRESHOLD);
+                return (spikeFrames >= SPIKE_FRAME_THRESHOLD && confidence >= SPIKE_CONFIDENCE_THRESHOLD);
             case TIMEOUT:
             default:
-                return super.isFinished();
+                return false;
         }
     }
 

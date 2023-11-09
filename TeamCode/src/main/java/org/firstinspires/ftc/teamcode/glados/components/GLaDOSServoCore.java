@@ -13,10 +13,10 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  * @author Lucas Bubner, 2023
  */
 public class GLaDOSServoCore extends BunyipsComponent {
-    private static final double LEFT_SERVO_CLOSED_POSITION = 0.0;
-    private static final double LEFT_SERVO_OPEN_POSITION = 1.0;
+    private static final double LEFT_SERVO_CLOSED_POSITION = 1.0;
+    private static final double LEFT_SERVO_OPEN_POSITION = 0.5;
     private static final double RIGHT_SERVO_CLOSED_POSITION = 0.0;
-    private static final double RIGHT_SERVO_OPEN_POSITION = 1.0;
+    private static final double RIGHT_SERVO_OPEN_POSITION = 0.5;
     private final Servo leftServo;
     private final Servo rightServo;
     private double leftServoPosition;
@@ -72,6 +72,7 @@ public class GLaDOSServoCore extends BunyipsComponent {
     public void update() {
         leftServo.setPosition(leftServoPosition);
         rightServo.setPosition(rightServoPosition);
+        getOpMode().addTelemetry("Servos: %L %R", leftServo.getPosition(), rightServo.getPosition());
     }
 
     public enum ServoSide {

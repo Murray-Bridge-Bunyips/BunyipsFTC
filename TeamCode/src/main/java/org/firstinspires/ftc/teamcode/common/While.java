@@ -21,9 +21,10 @@ public class While {
     private final Condition condition;
     private final Runnable runThis;
     private final Runnable callback;
-    private final double timeoutSeconds;
+    private double timeoutSeconds;
     private ElapsedTime timer;
-    private boolean evalLatch;
+
+    private volatile boolean evalLatch;
 
     /**
      * @param condition      The condition or function to evaluate as an exit. Return false to exit the loop.
@@ -38,6 +39,13 @@ public class While {
         this.timeoutSeconds = timeoutSeconds;
         timer = null;
         evalLatch = false;
+    }
+
+    /**
+     * Set a new timeout for the loop dynamically.
+     */
+    public void setTimeout(double timeoutSeconds) {
+        this.timeoutSeconds = timeoutSeconds;
     }
 
     /**

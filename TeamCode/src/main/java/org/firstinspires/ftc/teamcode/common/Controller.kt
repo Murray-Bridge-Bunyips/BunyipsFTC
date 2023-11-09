@@ -72,7 +72,7 @@ enum class Controller {
          * @author Lucas Bubner, 2023
          */
         fun makeVector(x: Double, y: Double, r: Double): RobotVector {
-            return RobotVector(y, -x, r)
+            return RobotVector(x, -y, r)
         }
     }
 }

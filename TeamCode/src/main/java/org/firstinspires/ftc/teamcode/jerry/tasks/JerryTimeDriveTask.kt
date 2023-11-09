@@ -16,9 +16,17 @@ class JerryTimeDriveTask(
     private val y: Double,
     private val r: Double
 ) : Task(opMode, time), AutoTask {
+    override fun init() {
+        return
+    }
+
     override fun run() {
         drive?.setSpeedUsingController(x, -y, r)
         drive?.update()
+    }
+
+    override fun isTaskFinished(): Boolean {
+        return false
     }
 
     override fun onFinish() {

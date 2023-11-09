@@ -35,8 +35,6 @@ class GetSignalTask(opMode: BunyipsOpMode, private val cam: OpenCVCam) : Task(op
     }
 
     override fun init() {
-        super.init()
-
 //        if (cam.mode != CamMode.OPENCV) cam.swapModes()
 
         // Tag size in metres
@@ -53,12 +51,12 @@ class GetSignalTask(opMode: BunyipsOpMode, private val cam: OpenCVCam) : Task(op
         cam.setPipeline(at)
     }
 
-    override fun isFinished(): Boolean {
+    override fun isTaskFinished(): Boolean {
         if (position == null) {
             lockTimer.reset()
         }
         // Ensure the signal remains constant for 3 seconds before locking in
-        return super.isFinished() || lockTimer.seconds() >= 3.0
+        return lockTimer.seconds() >= 3.0
     }
 
     override fun onFinish() {

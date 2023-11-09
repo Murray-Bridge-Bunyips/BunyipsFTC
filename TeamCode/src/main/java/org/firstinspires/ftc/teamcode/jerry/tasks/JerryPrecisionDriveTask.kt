@@ -46,7 +46,7 @@ class JerryPrecisionDriveTask(
         LEFT, RIGHT, FORWARD, BACKWARD
     }
 
-    override fun isFinished(): Boolean {
+    override fun isTaskFinished(): Boolean {
         // Check if the task is done by checking if it has timed out in the super call or if the target has been reached
         // by the respective deadwheel. If the deadwheel is not available, then we cannot check if the target has been
         // reached, so we will just rely on the timeout.
@@ -55,11 +55,10 @@ class JerryPrecisionDriveTask(
         } else {
             y?.travelledMM()
         }
-        return super.isFinished() || evaluating != null && evaluating >= distanceMM
+        return evaluating != null && evaluating >= distanceMM
     }
 
     override fun init() {
-        super.init()
         // Capture vectors and start tracking
         imu?.startCapture()
         x?.track()

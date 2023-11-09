@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.common.RobotConfig;
 public class GLaDOSConfigCore extends RobotConfig {
 
     protected static final double CORE_HEX_TICKS_PER_REVOLUTION = 288;
-    protected static final double SR_GEAR_RATIO = 45.0 / 90.0;
+    protected static final double SR_GEAR_RATIO = (30.0 / 90.0) * (60.0 / 125.0);
     // USB: Webcam "webcam"
     public WebcamName webcam;
     // Expansion 0: Front Left "fl"
@@ -32,7 +32,7 @@ public class GLaDOSConfigCore extends RobotConfig {
     public DcMotorEx bl;
     // Control 0: Suspender Actuator "sa"
     public DcMotorEx sa;
-    // Control 1: Suspender Rotation "sr", 45T->90T
+    // Control 1: Suspender Rotation "sr", 30T->90T->60T->125T
     public PivotMotor sr;
     // Control Servo 0: Alignment Servo "al"
     public Servo al;

@@ -34,8 +34,13 @@ public class GLaDOSSquareDriveTask extends Task {
     }
 
     @Override
-    public boolean isFinished() {
-        return super.isFinished() || (direction.getVector().isDiagonal() ? getDeltaTime() >= squares * SECONDS_TO_TRAVEL_ONE_SQUARE_AT_FULL_POWER_DIAGONALLY : getDeltaTime() >= squares * SECONDS_TO_TRAVEL_ONE_SQUARE_AT_FULL_POWER);
+    public boolean isTaskFinished() {
+        return direction.getVector().isDiagonal() ? getDeltaTime() >= squares * SECONDS_TO_TRAVEL_ONE_SQUARE_AT_FULL_POWER_DIAGONALLY : getDeltaTime() >= squares * SECONDS_TO_TRAVEL_ONE_SQUARE_AT_FULL_POWER;
+    }
+
+    @Override
+    public void init() {
+        // noop
     }
 
     @Override

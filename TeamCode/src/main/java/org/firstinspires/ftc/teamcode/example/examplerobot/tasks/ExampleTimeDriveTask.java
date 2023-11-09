@@ -23,14 +23,11 @@ public class ExampleTimeDriveTask extends Task {
         this.drive = drive;
     }
 
-    // Tasks have an optional init() method you can override, which will run code once upon starting
+    // Tasks have an init() method, which will run code once upon starting
     // the task. This is useful for resetting variables, or setting motors to run to position.
     @Override
     public void init() {
-        // Recommended to call super.init() to ensure any global initialisation is done.
-        super.init();
-
-        // Other init stuff here...
+        // Init stuff here
     }
 
     // The run() method will run until the task timer runs out, or the finished state is set to true.
@@ -40,13 +37,16 @@ public class ExampleTimeDriveTask extends Task {
         drive.update();
     }
 
-    // Tasks have an optional isFinished() method you can override, which will be the condition
+    // Tasks have an optional isTaskFinished() method you can override, which will be the condition
     // that the task will stop running. This is useful for running a task until a certain condition
     // is met, such as a motor reaching a certain position.
     @Override
-    public boolean isFinished() {
-        // You should call super.isFinished() in an or statement as the superclass is controlling the timeout.
-        return super.isFinished() || drive.isAtPosition(1000.0);
+    public boolean isTaskFinished() {
+        // Timeout will automatically be checked by the superclass, so you don't need to worry about
+        // it. If you wish to check it yourself, your overhead caller should be checking isFinished(),
+        // which internally checks isTaskFinished() and the timeout.
+        // AutonomousBunyipsOpMode handles this automatically.
+        return drive.isAtPosition(1000.0);
     }
 
     @Override
