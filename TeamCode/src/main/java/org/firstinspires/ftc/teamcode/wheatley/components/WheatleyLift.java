@@ -15,10 +15,10 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  */
 
 public class WheatleyLift extends BunyipsComponent {
-
     private final DcMotor arm;
     private final Servo leftServo;
     private final Servo rightServo;
+    private int armPosition;
     private double armPower;
     // True = Open
     // False = Shut
@@ -38,7 +38,21 @@ public class WheatleyLift extends BunyipsComponent {
         rightServo.setPosition(0.0);
     }
 
-    public void armLift(double gamepadPosition) {
+    /**
+     * Used to set arm to specific position. Made for Autonomous
+     *
+     * @param position specific position to set the arm to
+     */
+    public void armLift(int position) {
+        armPosition = position;
+    }
+
+    /**
+     * Used to set arm position when using a gamepad
+     *
+     * @param gamepadPosition the gamepad stick position to set the arm to
+     */
+    public void armLiftController(double gamepadPosition) {
         armPower = gamepadPosition;
     }
 
@@ -65,6 +79,12 @@ public class WheatleyLift extends BunyipsComponent {
     }
 
     public void update() {
+        if (armPosition != 0) {
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            arm.setTargetPosition(armPosition);
+            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armPosition = 0;
+        }
 
         arm.setPower(armPower);
 

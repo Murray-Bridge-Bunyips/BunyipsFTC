@@ -13,11 +13,16 @@ import com.qualcomm.robotcore.hardware.Servo;
  * @author Lachlan Paul, 2023
  */
 public class Cannon extends BunyipsComponent {
-    private Servo prolong;
-    private boolean fired;
+    private final Servo prolong;
+
+    // True for when it's ready to launch, false when it has been fired
+    private boolean primed;
     public Cannon(@NonNull BunyipsOpMode opMode, Servo prolong) {
         super(opMode);
         this.prolong = prolong;
+
+        // We assume there will always be a paper plane in the cannon at the start of a match
+        prolong.setPosition(90.0);
     }
 
     /**
@@ -25,12 +30,22 @@ public class Cannon extends BunyipsComponent {
      */
     public void fire() {
         prolong.setPosition(0.0);
-        fired = true;
+        primed = false;
+    }
+
+    /**
+     * This feels unnecessary, but options are nice, I guess.
+     * <p></p>
+     * Put a cannonball in the hole! (???)
+     */
+    public void reload() {
+        prolong.setPosition(90.0);
+        primed = true;
     }
 
     public void update() {
         // This is pretty much pointless because the cannon is always fired in the endgame.
         // But.
-        getOpMode().addTelemetry("Cannon has been fired: " + fired);
+        getOpMode().addTelemetry("Cannon has been fired: " + !primed);
     }
 }

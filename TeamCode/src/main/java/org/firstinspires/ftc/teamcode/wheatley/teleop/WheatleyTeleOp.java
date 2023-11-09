@@ -32,29 +32,19 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     private WheatleyMecanumDrive drive;
     private Cannon cannon;
 
-    // I'm just putting this in because AS told me to
-    // I should really learn more FTC Java :(
-    public WheatleyTeleOp(WheatleyLift lift, Cannon cannon) {
-        this.lift = lift;
-        this.cannon = cannon;
-    }
-
     @Override
     protected void onInit() {
-
         config = (WheatleyConfig) RobotConfig.newConfig(this, config, hardwareMap);
-
         drive = new WheatleyMecanumDrive(this, config.fl, config.bl, config.fr, config.br);
-
+        lift = new WheatleyLift(this, config.ra, config.ls, config.rs);
     }
 
     @Override
     protected void activeLoop() {
-
         drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         drive.update();
 
-        lift.armLift(gamepad2.left_stick_y);
+        lift.armLiftController(gamepad2.left_stick_y);
         lift.update();
 
         // The triggers are pressure sensitive, apparently.

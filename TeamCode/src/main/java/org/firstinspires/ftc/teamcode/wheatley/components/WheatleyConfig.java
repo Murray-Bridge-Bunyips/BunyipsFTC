@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.wheatley.components;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
@@ -42,10 +44,10 @@ public class WheatleyConfig extends RobotConfig {
 
     // Control Servo 0: ls
 
-    public DcMotor ls;
+    public Servo ls;
 
     // Control Servo 1: rs
-    public DcMotor rs;
+    public Servo rs;
 
     // USB device "webcam"
     public WebcamName webcam;
@@ -58,9 +60,13 @@ public class WheatleyConfig extends RobotConfig {
         bl = (DcMotor) getHardware("bl", DcMotor.class);
         fr = (DcMotor) getHardware("fr", DcMotor.class);
         br = (DcMotor) getHardware("br", DcMotor.class);
-        ls = (DcMotor) getHardware("ls", DcMotor.class);
-        rs = (DcMotor) getHardware("rs", DcMotor.class);
+        ls = (Servo) getHardware("ls", Servo.class);
+        rs = (Servo) getHardware("rs", Servo.class);
         webcam = (WebcamName) getHardware("webcam", WebcamName.class);
         ra = (DcMotor) getHardware("ra", DcMotor.class);
+
+        // This is because the fr motor was going the wrong way
+        if (fr != null)
+            fr.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 }
