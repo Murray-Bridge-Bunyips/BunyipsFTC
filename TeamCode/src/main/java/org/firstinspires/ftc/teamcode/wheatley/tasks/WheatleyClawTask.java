@@ -19,12 +19,23 @@ public class WheatleyClawTask extends Task {
     }
 
     @Override
+    public void init() {
+        // noop
+    }
+
+    @Override
     public void run() {
 //        lift.armLift();
     }
 
     @Override
     public void onFinish() {
+        // noop
+    }
 
+    @Override
+    public boolean isTaskFinished() {
+        // Time control
+        return false;
     }
 }
