@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * Common component to manage arm used in CENTERSTAGE to suspend the robot during the endgame
  * This extends and rotates the arm, while ensuring the arm can only be extended if the arm is at a
  * certain position, and that it can only be retracted once it has returned to that position.
+ * <p></p>
+ * NOTE: This isn't actually being used, which kind of sucks.
+ * We assume it's buggy, so be careful.
  *
  * @author Lucas Bubner, 2023
  * @author Lachlan Paul, 2023

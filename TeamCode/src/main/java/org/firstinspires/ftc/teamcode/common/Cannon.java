@@ -27,20 +27,16 @@ public class Cannon extends BunyipsComponent {
 
     /**
      * Fire in the hole!
+     * Or cannonball in the hole, I suppose.
      */
     public void fire() {
-        prolong.setPosition(0.0);
-        primed = false;
-    }
-
-    /**
-     * This feels unnecessary, but options are nice, I guess.
-     * <p></p>
-     * Put a cannonball in the hole! (???)
-     */
-    public void reload() {
-        prolong.setPosition(90.0);
-        primed = true;
+        if (prolong.getPosition() == 90) {
+            prolong.setPosition(0.0);
+            primed = false;
+        } else {
+            prolong.setPosition(90.0);
+            primed = true;
+        }
     }
 
     public void update() {

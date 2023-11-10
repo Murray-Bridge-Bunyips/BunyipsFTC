@@ -40,14 +40,26 @@ public class WheatleyConfig extends RobotConfig {
     public DcMotor br;
 
     // Control 0: ra
+    // Rotation Arm: Arm's rotation motor
     public DcMotor ra;
 
-    // Control Servo 0: ls
+    // TODO: Comment in Control Hub config
+    // se
+    // Suspender Extension: Suspender extension motor
+    public DcMotor se;
 
+    // Control Servo 0: ls
+    // Left Servo: Left Claw
     public Servo ls;
 
     // Control Servo 1: rs
+    // Right Servo: Right Claw
     public Servo rs;
+
+    // TODO: Comment in Control Hub Config
+    // pl
+    // Prolong: The thingo that launches the paper plane
+    public Servo pl;
 
     // USB device "webcam"
     public WebcamName webcam;

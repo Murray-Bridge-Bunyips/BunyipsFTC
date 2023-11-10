@@ -7,13 +7,14 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
 
 /**
- * Claw task for Autonomous
+ * Lift task for Autonomous
  *
  * @author Lachlan Paul, 2023
  */
-public class WheatleyClawTask extends Task {
+public class WheatleyLiftTask extends Task {
     private final WheatleyLift lift;
-    public WheatleyClawTask(@NonNull BunyipsOpMode opMode, double time, WheatleyLift lift) {
+    private int move;
+    public WheatleyLiftTask(@NonNull BunyipsOpMode opMode, double time, WheatleyLift lift, int move) {
         super(opMode, time);
         this.lift = lift;
     }
@@ -25,7 +26,8 @@ public class WheatleyClawTask extends Task {
 
     @Override
     public void run() {
-//        lift.armLift();
+        // TODO: Set proper values
+        lift.armLift(move);
     }
 
     @Override
