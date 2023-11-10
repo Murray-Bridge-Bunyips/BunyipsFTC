@@ -35,46 +35,59 @@ import android.util.Log
 /**
  * Provide utility methods for debug logging
  */
-object DbgLog {
+object Dbg {
     /**
      * Tag used by logcat
      */
     private const val TAG = "BELLOWER"
-    private const val ERROR_PREPEND = "### ERROR: "
-
-    /**
-     * Log a debug message
-     *
-     * @param message
-     */
-    fun msg(message: String) {
-        Log.i(TAG, message)
-    }
-
-    fun msg(format: String?, vararg args: Any?) {
-        msg(String.format(format!!, *args))
-    }
+    private const val ERR_PREPEND = "!! "
+    private const val WRN_PREPEND = "! "
 
     /**
      * Log an error message
-     *
-     *
      * Messages will be prepended with the ERROR_PREPEND string
-     *
-     * @param message
+     * @param message message to error
      */
     fun error(message: String) {
-        Log.e(TAG, ERROR_PREPEND + message)
+        Log.e(TAG, ERR_PREPEND + message)
     }
 
-    fun error(format: String?, vararg args: Any?) {
-        error(String.format(format!!, *args))
+    fun error(format: String, vararg args: Any?) {
+        error(String.format(format, *args))
     }
 
-    fun logStacktrace(e: Throwable) {
-        msg(e.toString())
+    /**
+     * Report out a stacktrace
+     * @param e throwable
+     */
+    fun sendStacktrace(e: Throwable) {
+        Log.e(TAG, e.toString())
         for (el in e.stackTrace) {
-            msg(el.toString())
+            Log.e(TAG, el.toString())
         }
+    }
+
+    /**
+     * Log a warning message
+     * @param message message to warn
+     */
+    fun warn(message: String) {
+        Log.w(TAG, WRN_PREPEND + message)
+    }
+
+    fun warn(format: String, vararg args: Any?) {
+        warn(String.format(format, *args))
+    }
+
+    /**
+     * Log a debug message
+     * @param message message to log
+     */
+    fun log(message: String) {
+        Log.d(TAG, message)
+    }
+
+    fun log(format: String, vararg args: Any?) {
+        log(String.format(format, *args))
     }
 }

@@ -20,7 +20,8 @@ abstract class BunyipsOpMode : LinearOpMode() {
     private var operationsPaused = false
 
     /**
-     * One-time setup for operations that need to be done for the opMode
+     * One-time setup for operations that need to be done for every OpMode
+     * This method is not exception protected!
      */
     private fun setup() {
         telemetry.log().displayOrder = Telemetry.Log.DisplayOrder.OLDEST_FIRST
@@ -67,6 +68,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
 
     /**
      * Perform one time clean-up operations after the OpMode finishes.
+     * This method is not exception protected!
      */
     protected open fun onStop() {
     }
@@ -79,24 +81,31 @@ abstract class BunyipsOpMode : LinearOpMode() {
     final override fun runOpMode() {
         try {
             try {
-                DbgLog.msg("===== BUNYIPSOPMODE =====")
+                Dbg.log("===== BUNYIPSOPMODE =====")
                 telemetry.log().add("")
                 log("status changed: from idle to setup")
-                DbgLog.msg("BunyipsOpMode: setting up...")
+                Dbg.log("BunyipsOpMode: setting up...")
                 // Run BunyipsOpMode setup
                 setup()
                 log("status changed: from setup to static_init")
-                DbgLog.msg("BunyipsOpMode: firing onInit()...")
+                Dbg.log("BunyipsOpMode: firing onInit()...")
                 // Store telemetry objects raised by onInit() by turning off auto-clear
                 setTelemetryAutoClear(false)
+                addTelemetry("===== BUNYIPSOPMODE =====")
                 // Run user-defined setup
-                onInit()
+                try {
+                    onInit()
+                } catch (ie: InterruptedException) {
+                    throw ie
+                } catch (e: Throwable) {
+                    ErrorUtil.handleCatchAllException(e, ::log)
+                }
                 if (!gamepad1.atRest() || !gamepad2.atRest()) {
-                    log("warning! a gamepad was not zeroed during init. please ensure controllers zero out correctly.")
+                    log("warning: a gamepad was not zeroed during init. please ensure controllers zero out correctly.")
                 }
                 telemetry.update()
                 log("status changed: from static_init to dynamic_init")
-                DbgLog.msg("BunyipsOpMode: starting onInitLoop()...")
+                Dbg.log("BunyipsOpMode: starting onInitLoop()...")
                 // Run user-defined dynamic initialisation
                 while (opModeInInit()) {
                     try {
@@ -111,7 +120,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
                     }
                 }
                 log("status changed: from dynamic_init to finish_init")
-                DbgLog.msg("BunyipsOpMode: firing onInitDone()...")
+                Dbg.log("BunyipsOpMode: firing onInitDone()...")
                 // Run user-defined final initialisation
                 onInitDone()
                 telemetry.addData("BUNYIPSOPMODE : ", "INIT COMPLETE -- PLAY WHEN READY.")
@@ -122,14 +131,14 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 ErrorUtil.handleCatchAllException(e, ::log)
             }
             log("status changed: from finish_init to ready")
-            DbgLog.msg("BunyipsOpMode: ready.")
+            Dbg.log("BunyipsOpMode: ready.")
             // Ready to go.
             waitForStart()
             setTelemetryAutoClear(true)
             clearTelemetry()
             movingAverageTimer?.reset()
             log("status changed: from ready to running")
-            DbgLog.msg("BunyipsOpMode: starting activeLoop()...")
+            Dbg.log("BunyipsOpMode: starting activeLoop()...")
             try {
                 // Run user-defined start operations
                 onStart()
@@ -158,18 +167,19 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 telemetry.update()
             }
             log("status changed: from running to finished")
-            DbgLog.msg("BunyipsOpMode: finished.")
+            Dbg.log("BunyipsOpMode: finished.")
             // Wait for user to hit stop
             while (opModeIsActive()) {
                 idle()
             }
         } catch (t: Throwable) {
-            DbgLog.error("BunyipsOpMode: unhandled throwable! <${t.message}>")
-            DbgLog.logStacktrace(t)
+            Dbg.error("BunyipsOpMode: unhandled throwable! <${t.message}>")
+            Dbg.sendStacktrace(t)
         } finally {
-            DbgLog.msg("BunyipsOpMode: cleaning up...")
+            Dbg.log("BunyipsOpMode: cleaning up...")
             log("status changed: from finished to cleanup")
             onStop()
+            Dbg.log("BunyipsOpMode: exiting...")
         }
     }
 
@@ -285,7 +295,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
             return
         }
         operationsCompleted = true
-        DbgLog.msg("BunyipsOpMode: activeLoop() terminated by finish().")
+        Dbg.log("BunyipsOpMode: activeLoop() terminated by finish().")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop terminated. All operations completed.")
         telemetry.update()
     }
@@ -301,7 +311,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         }
         operationsPaused = true
         log("status: from running to halted")
-        DbgLog.msg("BunyipsOpMode: activeLoop() halted.")
+        Dbg.log("BunyipsOpMode: activeLoop() halted.")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop halted. Operations paused.")
         telemetry.update()
     }
@@ -315,7 +325,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         }
         operationsPaused = false
         log("status changed: from halted to running")
-        DbgLog.msg("BunyipsOpMode: activeLoop() resumed.")
+        Dbg.log("BunyipsOpMode: activeLoop() resumed.")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop resumed. Operations resumed.")
         telemetry.update()
     }

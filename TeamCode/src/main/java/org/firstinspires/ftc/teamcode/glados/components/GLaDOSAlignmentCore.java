@@ -45,6 +45,10 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
         this.targetAngle = targetAngle;
         this.downLockThresholdAngle = downLockThresholdAngle;
         this.mode = mode;
+
+        // Align to down position
+        alignment.setPosition(1.0);
+        userPosition = 1.0;
     }
 
     public double getTargetAngle() {
@@ -70,12 +74,12 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
      */
     public void setPositionUsingDpad(boolean up, boolean down) {
         if (up) {
-            userPosition += 0.01;
-        }
-        if (down) {
             userPosition -= 0.01;
         }
-        userPosition = Range.clip(userPosition, -1, 1);
+        if (down) {
+            userPosition += 0.01;
+        }
+        userPosition = Range.clip(userPosition, 0, 1);
     }
 
     /**

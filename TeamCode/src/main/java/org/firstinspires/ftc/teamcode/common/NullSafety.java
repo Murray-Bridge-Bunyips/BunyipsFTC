@@ -20,7 +20,7 @@ public class NullSafety {
     public static boolean assertNotNull(Object... objs) {
         for (Object o : objs) {
             if (o == null) {
-                DbgLog.INSTANCE.error("Assertion by NullSafety.assertNotNull() failed.");
+                Dbg.INSTANCE.error("Assertion by NullSafety.assertNotNull() failed.");
                 return false;
             }
         }
@@ -43,9 +43,9 @@ public class NullSafety {
         boolean safe = true;
         for (Object o : objs) {
             if (o == null) {
-                opMode.addTelemetry(formatString("! COM_FAULT: % failed to instantiate due to null objects", T), true);
-                opMode.log("% is null. additional errors from this component are being ignored.", T.getSimpleName().toUpperCase());
-                DbgLog.INSTANCE.error(formatString("% is null, adding to unusable components...", T.getSimpleName().toUpperCase()));
+                opMode.addTelemetry(formatString("! COM_FAULT: % failed to instantiate due to null constructor arguments", T.getSimpleName()), true);
+                opMode.log("error: % is null. additional errors from this component are being ignored.", T.getSimpleName());
+                Dbg.INSTANCE.error(formatString("% is null, adding to unusable components...", T.getSimpleName()));
                 unusableComponents.add(T.getSimpleName());
                 safe = false;
             }

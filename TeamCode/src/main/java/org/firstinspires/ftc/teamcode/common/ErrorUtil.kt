@@ -11,11 +11,15 @@ object ErrorUtil {
 
     @Throws(InterruptedException::class)
     fun handleCatchAllException(e: Throwable, log: (msg: String) -> Unit) {
-        if (e.stackTrace[0].className in NullSafety.unusableComponents && e is NullPointerException) {
-            // This error is caused by a null component, which is handled by NullSafety
-            // As such, we can swallow it from appearing on the Driver Station
-            DbgLog.msg("Attempted to utilise null-aware unusable object: ${e.stackTrace[0].className}")
-            return
+        if (e is NullPointerException) {
+            for (component in NullSafety.unusableComponents) {
+                if (e.message?.contains(component) == true) {
+                    // This error is caused by a null component, which is handled by NullSafety
+                    // As such, we can swallow it from appearing on the Driver Station
+                    Dbg.warn("Attempted to utilise null-aware unusable object: $component")
+                    return
+                }
+            }
         }
         log("encountered exception! <${e.message}>")
         if (e.cause != null) {
@@ -27,8 +31,8 @@ object ErrorUtil {
             stack += " ..."
         }
         log("stacktrace (max->$MAX_STACKTRACE_CHARS): $stack")
-        DbgLog.error("Exception caught! Stacktrace:")
-        DbgLog.logStacktrace(e)
+        Dbg.error("Exception caught! Stacktrace:")
+        Dbg.sendStacktrace(e)
         if (e is InterruptedException) {
             // FTC SDK must handle this
             throw e

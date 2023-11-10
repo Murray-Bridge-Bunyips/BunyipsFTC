@@ -69,7 +69,7 @@ class UserSelection<T>(
      * @return A HashMap of operation modes to buttons.
      */
     override fun run() {
-        DbgLog.msg("UserSelection thread: starting...")
+        Dbg.log("UserSelection thread: starting...")
         try {
             if (opmodes.isEmpty()) {
                 try {
@@ -148,7 +148,7 @@ class UserSelection<T>(
                 ErrorUtil.handleCatchAllException(e, opMode::log)
             }
         } finally {
-            DbgLog.msg("UserSelection thread: ending...")
+            Dbg.log("UserSelection thread: ending...")
         }
     }
 }

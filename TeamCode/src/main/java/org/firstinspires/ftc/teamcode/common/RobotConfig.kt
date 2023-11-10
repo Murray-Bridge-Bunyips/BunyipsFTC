@@ -31,7 +31,7 @@ abstract class RobotConfig {
             hardwareDevice = hardwareMap?.get(device, name) as HardwareDevice
         } catch (e: Throwable) {
             errors.add(name)
-            e.localizedMessage?.let { DbgLog.msg(it) }
+            e.localizedMessage?.let { Dbg.log(it) }
         }
         return hardwareDevice
     }
