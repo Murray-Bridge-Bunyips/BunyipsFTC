@@ -22,19 +22,21 @@ public class Cannon extends BunyipsComponent {
         this.prolong = prolong;
 
         // We assume there will always be a paper plane in the cannon at the start of a match
-        prolong.setPosition(90.0);
+        prolong.setPosition(1.0);
     }
 
     /**
      * Fire in the hole!
-     * Or cannonball in the hole, I suppose.
      */
     public void fire() {
-        if (prolong.getPosition() == 90) {
+        // NOTE: Servos go from 1 to 0, 1 being right as set on the servo programmer and vice versa.
+        if (prolong.getPosition() == 1.0) {
+            // Fires
             prolong.setPosition(0.0);
             primed = false;
         } else {
-            prolong.setPosition(90.0);
+            // Resets to initial position
+            prolong.setPosition(1.0);
             primed = true;
         }
     }
