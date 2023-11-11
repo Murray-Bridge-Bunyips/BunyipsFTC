@@ -64,7 +64,7 @@ public class WheatleyLift extends BunyipsComponent {
             leftServo.setPosition(0.0);
             leftClawState = true;
         }
-        //FIXME: lucas bubner
+        // FIXME: lucas bubner
         //  getOpMode().addTelemetry("Left Claw is Open: %", leftClawState);
     }
 
@@ -85,6 +85,16 @@ public class WheatleyLift extends BunyipsComponent {
             arm.setTargetPosition(armPosition);
             arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             armPosition = 0;
+        }
+
+        // This is an attempt at preventing the arm falling from it's own weight when it's at
+        // certain angles.
+        // Comment out if broken
+        if (armPower == 0) {
+            arm.setTargetPosition(arm.getCurrentPosition());
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else {
+            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
         arm.setPower(armPower);
