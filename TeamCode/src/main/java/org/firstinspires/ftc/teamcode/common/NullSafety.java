@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Null safety utilities for robot components.
+ *
  * @author Lucas Bubner, 2023
  */
 public class NullSafety {
@@ -14,6 +15,7 @@ public class NullSafety {
 
     /**
      * Ensure that all objects are not null.
+     *
      * @param objs Objects to check for null
      * @return Whether all objects are not null
      */
@@ -35,8 +37,9 @@ public class NullSafety {
      * Ensure a component is safe to instantiate by checking for null objects.
      * Errors caused by null objects are logged and the component is added to the unusable components list.
      * Components in the unusable components list will not have their errors logged.
+     *
      * @param opMode BunyipsOpMode overhead instance
-     * @param objs Objects to check for null
+     * @param objs   Objects to check for null
      * @return Whether the component is safe to instantiate
      */
     public static boolean assertComponentArgs(BunyipsOpMode opMode, Class<?> T, Object... objs) {

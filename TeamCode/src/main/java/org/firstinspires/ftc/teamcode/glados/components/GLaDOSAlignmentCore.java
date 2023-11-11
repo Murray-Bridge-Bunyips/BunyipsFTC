@@ -69,7 +69,8 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
 
     /**
      * Manual mode, use controller dpad to adjust alignment servo position.
-     * @param up gamepad2.dpad_up
+     *
+     * @param up   gamepad2.dpad_up
      * @param down gamepad2.dpad_down
      */
     public void setPositionUsingDpad(boolean up, boolean down) {
@@ -117,6 +118,7 @@ public class GLaDOSAlignmentCore extends BunyipsComponent {
 
     /**
      * Converts degrees to a servo position.
+     *
      * @param degrees degrees to convert
      * @return 0-1 servo position
      */

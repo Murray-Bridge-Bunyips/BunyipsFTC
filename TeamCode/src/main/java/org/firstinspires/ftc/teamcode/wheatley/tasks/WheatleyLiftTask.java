@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
 public class WheatleyLiftTask extends Task {
     private final WheatleyLift lift;
     private int move;
+
     public WheatleyLiftTask(@NonNull BunyipsOpMode opMode, double time, WheatleyLift lift, int move) {
         super(opMode, time);
         this.lift = lift;

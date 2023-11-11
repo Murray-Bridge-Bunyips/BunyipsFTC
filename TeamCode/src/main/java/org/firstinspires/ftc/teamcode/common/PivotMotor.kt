@@ -49,7 +49,8 @@ class PivotMotor(
     }
 
     fun setDegrees(degrees: Double) {
-        motor.targetPosition = ((degrees / 360) * ticksPerRevolution / reduction).toInt() - snapshot.toInt()
+        motor.targetPosition =
+            ((degrees / 360) * ticksPerRevolution / reduction).toInt() - snapshot.toInt()
     }
 
     fun setRadians(radians: Double) {

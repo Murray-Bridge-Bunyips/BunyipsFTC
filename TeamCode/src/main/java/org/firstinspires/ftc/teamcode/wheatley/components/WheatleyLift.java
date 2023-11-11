@@ -65,7 +65,7 @@ public class WheatleyLift extends BunyipsComponent {
             leftClawState = true;
         }
         //FIXME: lucas bubner
-      //  getOpMode().addTelemetry("Left Claw is Open: %", leftClawState);
+        //  getOpMode().addTelemetry("Left Claw is Open: %", leftClawState);
     }
 
     public void rightClaw() {

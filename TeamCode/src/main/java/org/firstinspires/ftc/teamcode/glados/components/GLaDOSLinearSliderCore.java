@@ -49,7 +49,7 @@ public class GLaDOSLinearSliderCore extends BunyipsComponent {
         super(opMode);
         this.rotator = rotator;
         this.runner = runner;
-        
+
         rotator.reset();
         rotator.setup();
         rotator.setPower(ROTATOR_POWER);
@@ -108,6 +108,7 @@ public class GLaDOSLinearSliderCore extends BunyipsComponent {
 
     /**
      * Set the power of the linear slider using a controller.
+     *
      * @param gamepad_y gamepad2_right_stick_y or similar
      */
     public void setExtrusionPowerUsingController(double gamepad_y) {
@@ -117,6 +118,7 @@ public class GLaDOSLinearSliderCore extends BunyipsComponent {
     /**
      * Autonomously adjust the power of the linear slider to reach a target position.
      * ** This will disable all manual control of the linear slider until the target position is reached. **
+     *
      * @param extruderTargetPercentage target position in percentage of full extension
      */
     public void setExtrusionLength(double extruderTargetPercentage, double timeout) {

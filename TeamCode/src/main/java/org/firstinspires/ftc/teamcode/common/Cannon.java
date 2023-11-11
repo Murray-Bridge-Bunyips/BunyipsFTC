@@ -17,6 +17,7 @@ public class Cannon extends BunyipsComponent {
 
     // True for when it's ready to launch, false when it has been fired
     private boolean primed;
+
     public Cannon(@NonNull BunyipsOpMode opMode, Servo prolong) {
         super(opMode);
         this.prolong = prolong;

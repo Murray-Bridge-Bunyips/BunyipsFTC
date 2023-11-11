@@ -11,7 +11,8 @@ public abstract class RunOnceTask extends Task {
     }
 
     @Override
-    final public void init() {}
+    final public void init() {
+    }
 
     @Override
     final public void run() {
@@ -25,7 +26,8 @@ public abstract class RunOnceTask extends Task {
     }
 
     @Override
-    final public void onFinish() {}
+    final public void onFinish() {
+    }
 
     public abstract void runOnce();
 }

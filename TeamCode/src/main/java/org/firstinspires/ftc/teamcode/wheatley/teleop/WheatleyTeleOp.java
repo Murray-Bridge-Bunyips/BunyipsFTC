@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.common.NullSafety;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
-import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyManagementRail;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
 
 /**
@@ -32,7 +31,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     private WheatleyConfig config = new WheatleyConfig();
     private WheatleyMecanumDrive drive;
     private WheatleyLift lift;
-//    private WheatleyManagementRail suspender; // no way it's the wheatley management rail:tm:
+    //    private WheatleyManagementRail suspender; // no way it's the wheatley management rail:tm:
     private Cannon cannon;
 
     private boolean xPressed;
@@ -85,8 +84,8 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
         /*
          * TODO: Pick out some good Wheatley voice lines for telemetry
-             * Different lines will be displayed depending on different values
-             * They should overwrite each other and NOT stack
+         * Different lines will be displayed depending on different values
+         * They should overwrite each other and NOT stack
          */
     }
 }

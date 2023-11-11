@@ -23,13 +23,13 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  */
 public class WheatleyManagementRail extends BunyipsComponent {
     private final DcMotor extension;
+    // Frustration, is getting bigger,
+    // bang, bang, bang,
+    private final Servo /*pull my devil*/ trigger;
     private int suspenderPos;
     private double suspenderPower;
     private Boolean stowed = true;
 
-    // Frustration, is getting bigger,
-    // bang, bang, bang,
-    private final Servo /*pull my devil*/ trigger;
     public WheatleyManagementRail(@NonNull BunyipsOpMode opMode, DcMotor extension, Servo trigger) {
         super(opMode);
         this.extension = extension;
