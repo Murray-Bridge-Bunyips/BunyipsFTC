@@ -60,7 +60,7 @@ public class GLaDOSVisionTest extends BunyipsOpMode {
         }
         vision.init(processors.toArray(new Processor[0]));
         vision.start(processors.toArray(new Processor[0]));
-        i = addTelemetry("Camera Stream available.", true);
+        i = addRetainedTelemetry("Camera Stream available.");
         return Unit.INSTANCE;
     }
 

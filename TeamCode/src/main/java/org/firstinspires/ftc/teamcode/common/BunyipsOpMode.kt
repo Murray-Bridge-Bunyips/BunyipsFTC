@@ -183,27 +183,23 @@ abstract class BunyipsOpMode : LinearOpMode() {
         }
     }
 
-    /**
-     * Add data to the telemetry object
-     * @param value A string to add to telemetry
-     * @param retained Optional parameter to retain the data on the screen
-     * @return The telemetry item added to the Driver Station
-     */
-    fun addTelemetry(value: String, retained: Boolean = false): Item {
+    private fun makeTelemetryObject(value: String): Item {
         // Add data to the telemetry object with runtime data
         var prefix = "T+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: 0.0}s : "
         if (prefix == "T+0s : ") {
             // Don't bother making a prefix if the time is zero
             prefix = ""
         }
-        val item = telemetry.addData("", prefix + value)
-        item.setRetained(retained)
-        return item
+        return telemetry.addData("", prefix + value)
     }
 
-    // Java interop
+    /**
+     * Add data to the telemetry object
+     * @param value A string to add to telemetry
+     * @return The telemetry item added to the Driver Station
+     */
     fun addTelemetry(value: String): Item {
-        return addTelemetry(value, false)
+        return makeTelemetryObject(value)
     }
 
     /**
@@ -214,9 +210,31 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun addTelemetry(fstring: String, vararg objs: Any): Item {
         if (objs.isEmpty()) {
-            return addTelemetry(fstring, false)
+            return addTelemetry(fstring)
         }
-        return addTelemetry(formatString(fstring, objs.asList()), false)
+        return addTelemetry(formatString(fstring, objs.asList()))
+    }
+
+    /**
+     * Add retained non-auto-clearing data to the telemetry object
+     * @param value A string to add to telemetry
+     * @return The telemetry item added to the Driver Station
+     */
+    fun addRetainedTelemetry(value: String): Item {
+        return makeTelemetryObject(value).setRetained(true)
+    }
+
+    /**
+     * Add a data to the telemetry object using a custom format string
+     * @param fstring A format string to add to telemetry
+     * @param objs The objects to format into the string
+     * @return The telemetry item added to the Driver Station
+     */
+    fun addRetainedTelemetry(fstring: String, vararg objs: Any): Item {
+        if (objs.isEmpty()) {
+            return addRetainedTelemetry(fstring)
+        }
+        return addRetainedTelemetry(formatString(fstring, objs.asList()))
     }
 
     /**

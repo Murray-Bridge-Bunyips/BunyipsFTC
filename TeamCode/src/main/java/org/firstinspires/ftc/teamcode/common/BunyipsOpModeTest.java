@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class BunyipsOpModeTest extends BunyipsOpMode {
     @Override
     protected void onInit() {
-        addTelemetry("======= BunyipsOpMode =======", true);
+        addRetainedTelemetry("======= BunyipsOpMode =======");
     }
 
     @Override

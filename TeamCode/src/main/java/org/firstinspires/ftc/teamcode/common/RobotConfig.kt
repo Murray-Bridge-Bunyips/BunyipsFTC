@@ -60,11 +60,10 @@ abstract class RobotConfig {
             config.init()
             opMode.addTelemetry(
                 "${config.javaClass.simpleName.uppercase()}: Configuration completed with ${errors.size} error(s).",
-                false
             )
             if (errors.isNotEmpty()) {
                 for (error in errors) {
-                    opMode.addTelemetry("! DEV_FAULT: $error", true)
+                    opMode.addRetainedTelemetry("! DEV_FAULT: $error")
                 }
             }
             return config

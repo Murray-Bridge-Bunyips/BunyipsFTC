@@ -89,25 +89,24 @@ class UserSelection<T>(
             opMode.setTelemetryAutoClear(false)
 
             val retainedObjects = mutableListOf<Item>()
-            retainedObjects.add(opMode.addTelemetry("---------!!!--------", true))
+            retainedObjects.add(opMode.addRetainedTelemetry("---------!!!--------"))
             retainedObjects.add(
-                opMode.addTelemetry(
-                    "ACTION REQUIRED: INIT YOUR OPMODE USING GAMEPAD1",
-                    true
+                opMode.addRetainedTelemetry(
+                    "ACTION REQUIRED: INIT YOUR OPMODE USING GAMEPAD1"
                 )
             )
             for ((name, button) in buttons) {
                 retainedObjects.add(
-                    opMode.addTelemetry(
+                    opMode.addRetainedTelemetry(
                         String.format(
                             "%s: %s",
                             button.name,
                             if (name is OpModeSelection) name.name else name
-                        ), true
+                        )
                     )
                 )
             }
-            retainedObjects.add(opMode.addTelemetry("---------!!!--------", true))
+            retainedObjects.add(opMode.addRetainedTelemetry("---------!!!--------"))
 
             // Must manually call telemetry push as the BYO may not be handling them
             // This will not clear out any other telemetry as auto clear is disabled
@@ -126,11 +125,10 @@ class UserSelection<T>(
 
             result = selectedOpMode
             if (result == null) {
-                opMode.addTelemetry("No selection made. Result was handled by the OpMode.", true)
+                opMode.addRetainedTelemetry("No selection made. Result was handled by the OpMode.")
             } else {
-                opMode.addTelemetry(
+                opMode.addRetainedTelemetry(
                     "'${selectedButton?.name}' registered. Running OpMode: '${if (selectedOpMode is OpModeSelection) selectedOpMode.name else selectedOpMode.toString()}'",
-                    true
                 )
             }
 

@@ -27,9 +27,10 @@ public class Text {
             }
             newString.append(fstring.charAt(i));
         }
-        if (occurrences != objs.size()) {
-            throw new IllegalFormatFlagsException("Missing args for '%' placeholders!");
-        }
+        // Ignoring this corner case as it is not critical and can crash the robot
+//        if (occurrences != objs.size()) {
+//            throw new IllegalFormatFlagsException("Missing args for '%' placeholders!");
+//        }
         return newString.toString();
     }
 
