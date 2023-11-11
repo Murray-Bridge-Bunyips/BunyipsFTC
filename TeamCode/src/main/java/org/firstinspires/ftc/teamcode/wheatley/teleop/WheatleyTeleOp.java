@@ -32,16 +32,20 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     private WheatleyConfig config = new WheatleyConfig();
     private WheatleyMecanumDrive drive;
     private WheatleyLift lift;
-    private WheatleyManagementRail suspender; // no way it's the wheatley management rail:tm:
+//    private WheatleyManagementRail suspender; // no way it's the wheatley management rail:tm:
     private Cannon cannon;
+
+    private boolean xPressed;
+    private boolean yPressed;
 
     @Override
     protected void onInit() {
         config = (WheatleyConfig) RobotConfig.newConfig(this, config, hardwareMap);
         drive = new WheatleyMecanumDrive(this, config.fl, config.bl, config.fr, config.br);
         lift = new WheatleyLift(this, config.ra, config.ls, config.rs);
-        suspender = new WheatleyManagementRail(this, config.se, config.pl);
-        cannon = new Cannon(this, config.pl);
+//        suspender = new WheatleyManagementRail(this, config.susMotor, config.pl);
+        if (NullSafety.assertComponentArgs(this, Cannon.class, config.pl))
+            cannon = new Cannon(this, config.pl);
     }
 
     @Override
@@ -49,10 +53,10 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         drive.update();
 
-        lift.armLiftController(gamepad2.left_stick_y);
+        lift.armLiftController(gamepad2.left_stick_y / 2.5);
         lift.update();
 
-        suspender.hookArm(gamepad2.right_stick_y);
+//        suspender.hookArm(gamepad2.right_stick_y);
 
         // Launches the paper plane
         // The triggers are pressure sensitive, apparently.
@@ -62,13 +66,13 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         }
 
         if (gamepad2.dpad_up) {
-            suspender.release();
+//            suspender.release();
         }
 
         // Claw controls
-        if (gamepad2.x) {
+        if (gamepad2.x && !xPressed) {
             lift.leftClaw();
-        } else if (gamepad2.y) {
+        } else if (gamepad2.y && !yPressed) {
             lift.rightClaw();
         }
 
@@ -76,12 +80,8 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         addTelemetry("Left Stick Y: " + gamepad1.left_stick_y);
         addTelemetry("Left Stick X: " + gamepad1.left_stick_x);
 
-        // Gives a different message based on whether or not the camera is connected
-        if (NullSafety.assertNotNull(config.webcam)) {
-            addTelemetry("Camera is connected");
-        } else {
-            addTelemetry("Camera is NOT connected");
-        }
+        xPressed = gamepad2.x;
+        yPressed = gamepad2.y;
 
         /*
          * TODO: Pick out some good Wheatley voice lines for telemetry

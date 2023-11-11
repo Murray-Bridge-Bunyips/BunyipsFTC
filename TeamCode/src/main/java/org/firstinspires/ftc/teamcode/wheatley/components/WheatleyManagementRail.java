@@ -47,7 +47,7 @@ public class WheatleyManagementRail extends BunyipsComponent {
         stowed = false;
     }
 
-    public void hookArm(double gamepadPosition) {
+    public void hookArm(float gamepadPosition) {
         if (!stowed) {
             suspenderPower = gamepadPosition;
         }

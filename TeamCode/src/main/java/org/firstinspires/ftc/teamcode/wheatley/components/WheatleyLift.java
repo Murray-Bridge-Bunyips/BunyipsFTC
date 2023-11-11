@@ -33,9 +33,9 @@ public class WheatleyLift extends BunyipsComponent {
         this.rightServo = rightServo;
 
         // Shuts the claws on init to avoid problems with their associated Boolean variables
-        // TODO: Set proper claw values
+        // For some reason they're like this and I don't feel like fixing it rn
         leftServo.setPosition(0.0);
-        rightServo.setPosition(0.0);
+        rightServo.setPosition(1.0);
     }
 
     /**
@@ -58,13 +58,14 @@ public class WheatleyLift extends BunyipsComponent {
 
     public void leftClaw() {
         if (leftClawState) {
-            leftServo.setPosition(0.0);
+            leftServo.setPosition(1.0);
             leftClawState = false;
         } else {
-            leftServo.setPosition(1.0);
+            leftServo.setPosition(0.0);
             leftClawState = true;
         }
-        getOpMode().addTelemetry("Left Claw is Open: %", leftClawState);
+        //FIXME: lucas bubner
+      //  getOpMode().addTelemetry("Left Claw is Open: %", leftClawState);
     }
 
     public void rightClaw() {
@@ -75,7 +76,7 @@ public class WheatleyLift extends BunyipsComponent {
             rightServo.setPosition(1.0);
             rightClawState = true;
         }
-        getOpMode().addTelemetry("Right Claw is Open: %", rightClawState);
+//        getOpMode().addTelemetry("Right Claw is Open: %", rightClawState);
     }
 
     public void update() {
@@ -91,6 +92,6 @@ public class WheatleyLift extends BunyipsComponent {
         // Can update telemetry functions too
         // The modified telemetry function takes in a value to show on the Driver Station, and
         // whether or not to keep it on the screen upon the next activeLoop.
-        getOpMode().addTelemetry("Lift Arm Position: " + arm.getCurrentPosition());
+//        getOpMode().addTelemetry("Lift Arm Position: " + arm.getCurrentPosition());
     }
 }

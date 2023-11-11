@@ -156,15 +156,15 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 try {
                     // Run user-defined active loop
                     activeLoop()
+                    // Update telemetry and timers
+                    movingAverageTimer?.update()
+                    telemetry.update()
                 } catch (ie: InterruptedException) {
                     throw ie
                 } catch (e: Throwable) {
                     // Let the error logger handle any other exceptions
                     ErrorUtil.handleCatchAllException(e, ::log)
                 }
-                // Update telemetry and timers
-                movingAverageTimer?.update()
-                telemetry.update()
             }
             log("status changed: from running to finished")
             Dbg.log("BunyipsOpMode: finished.")

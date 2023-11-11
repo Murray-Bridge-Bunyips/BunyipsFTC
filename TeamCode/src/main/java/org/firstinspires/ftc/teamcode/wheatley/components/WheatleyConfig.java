@@ -43,10 +43,9 @@ public class WheatleyConfig extends RobotConfig {
     // Rotation Arm: Arm's rotation motor
     public DcMotor ra;
 
-    // TODO: Comment in Control Hub config
-    // se
+    // Control 1: susMotor
     // Suspender Extension: Suspender extension motor
-    public DcMotor se;
+    public DcMotor susMotor;
 
     // Control Servo 0: ls
     // Left Servo: Left Claw
@@ -55,6 +54,10 @@ public class WheatleyConfig extends RobotConfig {
     // Control Servo 1: rs
     // Right Servo: Right Claw
     public Servo rs;
+
+    // Control Servo 2: sus (why did they name it this)
+    // Suspension Trigger
+    public Servo susServo;
 
     // TODO: Comment in Control Hub Config
     // pl
@@ -76,6 +79,8 @@ public class WheatleyConfig extends RobotConfig {
         rs = (Servo) getHardware("rs", Servo.class);
         webcam = (WebcamName) getHardware("webcam", WebcamName.class);
         ra = (DcMotor) getHardware("ra", DcMotor.class);
+        susMotor = (DcMotor) getHardware("susMotor", DcMotor.class);
+        susServo = (Servo) getHardware("susServo", DcMotor.class);
 
         // This is because the fr motor was going the wrong way
         if (fr != null)
