@@ -40,6 +40,8 @@ public class GLaDOSConfigCore extends RobotConfig {
     public Servo ls;
     // Control Servo 2: Right Servo "rs"
     public Servo rs;
+    // Control Servo 3: Plane Launcher "pl"
+    public Servo pl;
     // Internally mounted on I2C C0 "imu"
     public IMU imu;
 
@@ -59,6 +61,7 @@ public class GLaDOSConfigCore extends RobotConfig {
         al = (Servo) getHardware("al", Servo.class);
         ls = (Servo) getHardware("ls", Servo.class);
         rs = (Servo) getHardware("rs", Servo.class);
+        pl = (Servo) getHardware("pl", Servo.class);
         imu = (IMU) getHardware("imu", IMU.class);
 
         if (fl != null) {

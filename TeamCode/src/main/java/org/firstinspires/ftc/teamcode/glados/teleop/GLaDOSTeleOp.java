@@ -3,8 +3,10 @@ package org.firstinspires.ftc.teamcode.glados.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.IMUOp;
+import org.firstinspires.ftc.teamcode.common.Cannon;
+import org.firstinspires.ftc.teamcode.common.NullSafety;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
+import org.firstinspires.ftc.teamcode.common.TriSpeed;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSAlignmentCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSArmCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
@@ -15,7 +17,16 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSServoCore;
  * TeleOp for GLaDOS robot FTC 15215
  * > gamepad1.left_stick for planar translation
  * > gamepad1.right_stick for in-place rotation
- * > gamepad1.y to reset field relative heading to current heading
+ * > gamepad1.left_bumper to decrement mecanum speed
+ * > gamepad1.right_bumper to increment mecanum speed
+ * > gamepad2.left_stick_y for linear slide rotation
+ * > gamepad2.right_stick_y for linear slide extension
+ * > gamepad2.dpad_up to align linear slide upwards
+ * > gamepad2.dpad_down to align linear slide downwards
+ * > gamepad2.x to toggle left claw
+ * > gamepad2.b to toggle right claw
+ * > gamepad2.right_trigger to full to fire cannon
+ * > gamepad2.back to reset cannon
  *
  * @author Lucas Bubner, 2023
  */
@@ -24,78 +35,64 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSPOVDriveCore drive;
     private GLaDOSArmCore arm;
-    private IMUOp imu;
+    private Cannon cannon;
 
     private boolean x_pressed;
     private boolean b_pressed;
     private boolean inc_pressed;
     private boolean dec_pressed;
 
-    private Speed speed = Speed.NORMAL;
+    private final TriSpeed speed = new TriSpeed(TriSpeed.Speed.NORMAL);
 
     @Override
     protected void onInit() {
         config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
-        imu = new IMUOp(this, config.imu);
         drive = new GLaDOSPOVDriveCore(this, config.fl, config.bl, config.fr, config.br);
         arm = new GLaDOSArmCore(this, config.sr, config.sa, config.al, config.ls, config.rs, GLaDOSAlignmentCore.Mode.MANUAL);
+        if (NullSafety.assertComponentArgs(this, Cannon.class, config.pl))
+            cannon = new Cannon(this, config.pl);
         arm.getServoController().update();
     }
 
     @Override
     protected void activeLoop() {
+        // Mecanum drive
         double x = gamepad1.left_stick_x;
         double y = gamepad1.left_stick_y;
         double r = gamepad1.right_stick_x;
 
-        double xPower, yPower, rPower;
-
         if (gamepad1.right_bumper && !inc_pressed) {
-            // Increment speed
-            if (speed == Speed.SLOW) {
-                speed = Speed.NORMAL;
-            } else if (speed == Speed.NORMAL) {
-                speed = Speed.FAST;
-            }
+            speed.increment();
         } else if (gamepad1.left_bumper && !dec_pressed) {
-            // Decrement speed
-            if (speed == Speed.FAST) {
-                speed = Speed.NORMAL;
-            } else if (speed == Speed.NORMAL) {
-                speed = Speed.SLOW;
-            }
+            speed.decrement();
         }
+        addTelemetry("TriSpeed: Running at % speed", speed);
 
-        if (speed == Speed.FAST) {
-            xPower = x;
-            yPower = y;
-            rPower = r;
-        } else if (speed == Speed.SLOW) {
-            xPower = x / 4;
-            yPower = y / 4;
-            rPower = r / 4;
-        } else {
-            xPower = x / 2;
-            yPower = y / 2;
-            rPower = r / 2;
-        }
+        drive.setSpeedUsingController(x * speed.getMultiplier(), y * speed.getMultiplier(), r * speed.getMultiplier());
 
-        drive.setSpeedUsingController(xPower, yPower, rPower);
-
+        // Linear slider rotator
         arm.getSliderController().setTargetAngleUsingController(gamepad2.left_stick_y);
+        // Linear slider extender
         arm.getSliderController().setExtrusionPowerUsingController(gamepad2.right_stick_y);
+        // Linear slider alignment servo
         arm.getAlignmentController().setPositionUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);
 
+        // Left claw servo
         if (gamepad2.x && !x_pressed) {
             arm.getServoController().toggleServo(GLaDOSServoCore.ServoSide.LEFT);
         }
 
+        // Right claw servo
         if (gamepad2.b && !b_pressed) {
             arm.getServoController().toggleServo(GLaDOSServoCore.ServoSide.RIGHT);
         }
 
-        if (gamepad1.y) {
-            imu.resetHeading();
+        // Airplane launcher
+        if (gamepad2.right_trigger == 1.0) {
+            cannon.fire();
+        }
+        if (gamepad2.back) {
+            cannon.reset();
         }
 
         // Ensure that the buttons are only registered once per press
@@ -104,15 +101,9 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         inc_pressed = gamepad1.right_bumper;
         dec_pressed = gamepad1.left_bumper;
 
-        addTelemetry("Drive: Running at % speed", speed);
-
+        // Dispatch stateful changes
         drive.update();
         arm.update();
-    }
-
-    private enum Speed {
-        SLOW,
-        NORMAL,
-        FAST
+        cannon.update();
     }
 }
