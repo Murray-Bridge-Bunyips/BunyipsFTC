@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
@@ -26,37 +27,56 @@ public class WheatleyManagementRail extends BunyipsComponent {
     // Frustration, is getting bigger,
     // bang, bang, bang,
     private final Servo /*pull my devil*/ trigger;
-    private int suspenderPos;
-    private double suspenderPower;
-    private Boolean stowed = true;
+    private int suspenderTarget;
+    private double triggerTarget;
+
+    private static final int MAX_TICKS = 1000;
+    private static final double PWR = 1.0;
+
+    private static final double ARMED = 0.0;
+    private static final double OPEN = 1.0;
 
     public WheatleyManagementRail(@NonNull BunyipsOpMode opMode, DcMotor extension, Servo trigger) {
         super(opMode);
         this.extension = extension;
         this.trigger = trigger;
 
-        // Default position when holding Suspender
-        trigger.setPosition(90.0);
+        triggerTarget = ARMED;
+        update();
+
+        // Assumes extension arm is set at zero
+        extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        extension.setTargetPosition(0);
+        extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        // will not dispatch a motor update as it is in RUN_TO_POSITION
+        extension.setPower(PWR);
     }
 
     /**
      * Release the Suspender
      */
     public void release() {
-        trigger.setPosition(0.0);
-        stowed = false;
+        triggerTarget = OPEN;
     }
 
-    public void hookArm(float gamepadPosition) {
-        if (!stowed) {
-            suspenderPower = gamepadPosition;
+    /**
+     * Return trigger to stowed
+     */
+    public void reset() {
+        triggerTarget = ARMED;
+    }
+
+    public void hookArm(double gamepadPosition) {
+        if (trigger.getPosition() == OPEN) {
+            suspenderTarget -= gamepadPosition * 10;
         }
+        suspenderTarget = Range.clip(suspenderTarget, 0, MAX_TICKS);
     }
 
     public void update() {
-        extension.setPower(suspenderPower);
-
-        getOpMode().addTelemetry("Suspender Arm is stowed:" + stowed);
-        getOpMode().addTelemetry("Suspender Arm Position:" + extension.getCurrentPosition());
+        extension.setTargetPosition(suspenderTarget);
+        trigger.setPosition(triggerTarget);
+        getOpMode().addTelemetry("Suspender: %, % ticks", trigger.getPosition() == OPEN ? "OPEN" : "ARMED", extension.getCurrentPosition());
     }
 }

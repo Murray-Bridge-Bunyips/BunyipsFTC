@@ -59,8 +59,7 @@ public class WheatleyConfig extends RobotConfig {
     // Suspension Trigger
     public Servo susServo;
 
-    // TODO: Comment in Control Hub Config
-    // pl
+    // Control Servo 3: pl
     // Prolong: The thingo that launches the paper plane
     public Servo pl;
 
@@ -80,7 +79,8 @@ public class WheatleyConfig extends RobotConfig {
         webcam = (WebcamName) getHardware("webcam", WebcamName.class);
         ra = (DcMotor) getHardware("ra", DcMotor.class);
         susMotor = (DcMotor) getHardware("susMotor", DcMotor.class);
-        susServo = (Servo) getHardware("susServo", DcMotor.class);
+        susServo = (Servo) getHardware("susServo", Servo.class);
+        pl = (Servo) getHardware("pl", Servo.class);
 
         // This is because the fr motor was going the wrong way
         if (fr != null)

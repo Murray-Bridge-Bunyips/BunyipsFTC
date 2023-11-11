@@ -20,11 +20,14 @@ public class WheatleyLift extends BunyipsComponent {
     private final Servo rightServo;
     private int armPosition;
     private double armPower;
-    // True = Open
-    // False = Shut
-    // Both claws are set to predetermined positions on init to avoid problems
-    private boolean leftClawState;
-    private boolean rightClawState;
+
+    private double leftClawTarget;
+    private double rightClawTarget;
+
+    private static final double LS_OPEN = 1.0;
+    private static final double LS_CLOSED = 0.0;
+    private static final double RS_OPEN = 0.0;
+    private static final double RS_CLOSED = 1.0;
 
     public WheatleyLift(@NonNull BunyipsOpMode opMode, DcMotor arm, Servo leftServo, Servo rightServo) {
         super(opMode);
@@ -34,8 +37,9 @@ public class WheatleyLift extends BunyipsComponent {
 
         // Shuts the claws on init to avoid problems with their associated Boolean variables
         // For some reason they're like this and I don't feel like fixing it rn
-        leftServo.setPosition(0.0);
-        rightServo.setPosition(1.0);
+        leftClawTarget = LS_CLOSED;
+        rightClawTarget = RS_CLOSED;
+        update();
     }
 
     /**
@@ -52,39 +56,35 @@ public class WheatleyLift extends BunyipsComponent {
      *
      * @param gamepadPosition the gamepad stick position to set the arm to
      */
-    public void armLiftController(double gamepadPosition) {
-        armPower = gamepadPosition;
+    public void armLiftUsingController(double gamepadPosition) {
+        armPower = gamepadPosition / 2.5;
     }
 
     public void leftClaw() {
-        if (leftClawState) {
-            leftServo.setPosition(1.0);
-            leftClawState = false;
+        if (leftServo.getPosition() == LS_OPEN) {
+            leftClawTarget = LS_CLOSED;
         } else {
-            leftServo.setPosition(0.0);
-            leftClawState = true;
+            leftClawTarget = LS_OPEN;
         }
-        // FIXME: lucas bubner
-        //  getOpMode().addTelemetry("Left Claw is Open: %", leftClawState);
     }
 
     public void rightClaw() {
-        if (rightClawState) {
-            rightServo.setPosition(0.0);
-            rightClawState = false;
+        if (rightServo.getPosition() == RS_OPEN) {
+            rightClawTarget = RS_CLOSED;
         } else {
-            rightServo.setPosition(1.0);
-            rightClawState = true;
+            rightClawTarget = RS_OPEN;
         }
-//        getOpMode().addTelemetry("Right Claw is Open: %", rightClawState);
     }
 
     public void update() {
         if (armPosition != 0) {
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             arm.setTargetPosition(armPosition);
-            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if (arm.isBusy()) {
+                return;
+            }
             armPosition = 0;
+            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
         // This is an attempt at preventing the arm falling from it's own weight when it's at
@@ -93,15 +93,17 @@ public class WheatleyLift extends BunyipsComponent {
         if (armPower == 0) {
             arm.setTargetPosition(arm.getCurrentPosition());
             arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            // Will try to hold the arm in place with 25% power
+            arm.setPower(0.25);
         } else {
             arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            arm.setPower(armPower);
         }
 
-        arm.setPower(armPower);
+        leftServo.setPosition(leftClawTarget);
+        rightServo.setPosition(rightClawTarget);
 
-        // Can update telemetry functions too
-        // The modified telemetry function takes in a value to show on the Driver Station, and
-        // whether or not to keep it on the screen upon the next activeLoop.
-//        getOpMode().addTelemetry("Lift Arm Position: " + arm.getCurrentPosition());
+        getOpMode().addTelemetry("Left Claw: %", leftClawTarget == LS_OPEN ? "OPEN" : "CLOSED");
+        getOpMode().addTelemetry("Right Claw: %", rightClawTarget == RS_OPEN ? "OPEN" : "CLOSED");
     }
 }

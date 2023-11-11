@@ -18,8 +18,8 @@ public class Cannon extends BunyipsComponent {
     private double target;
 
     // NOTE: Servos go from 1 to 0, 1 being right as set on the servo programmer and vice versa.
-    private static final double FIRED = 0.0;
-    private static final double RESET = 1.0;
+    private static final double FIRED = 1.0;
+    private static final double RESET = 0.0;
 
     public Cannon(@NonNull BunyipsOpMode opMode, Servo prolong) {
         super(opMode);
