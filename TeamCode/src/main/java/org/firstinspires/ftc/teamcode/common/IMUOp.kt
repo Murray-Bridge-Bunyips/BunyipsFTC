@@ -27,16 +27,20 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
         private set
 
     // Offset the IMU reading for field-centric navigation
-    // May not be used, but is here for any potential use cases.
+    // Must be an polar angle: v E [0, 360], will be converted to a signed [-180, 180] angle
     var offset = 0.0
         set(value) {
-            if (value >= 0 && value < 360) field = value
+            if (value > 180) {
+                field = value - 360
+                return
+            }
+            field = value
         }
 
     /**
      * Get the current heading reading from the internal IMU, with support for absolute degree readings
-     * Instead of using Euler readings, this will return a number within -inf to +inf
-     * @return Z value of Orientation axes in human-friendly reading range [-inf, inf]
+     * Instead of using signed [-180, 180] readings, this will return a degree within -inf to +inf
+     * @return Z degree value of Orientation axes in human-friendly reading range [-inf, inf]
      */
     var heading: Double = 0.0
         get() {
@@ -67,10 +71,9 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
         private set
 
     /**
-     * Get the current Euler yaw reading from the internal IMU
+     * Get the current signed [-180, 180] yaw reading from the internal IMU
      */
     val rawHeading: Double
-        // TODO: check this offset to see if it is correct
         get() = currentAngles?.thirdAngle?.toDouble()?.plus(offset) ?: 0.0
 
     /**
@@ -83,10 +86,11 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
         }
 
     /**
-     * Reset all heading measurements to default 0.0
+     * Reset all heading measurements, offsets, and internal measurements to default 0.0
      */
     fun resetHeading() {
         heading = 0.0
+        offset = 0.0
         imu.resetYaw()
     }
 
@@ -155,40 +159,21 @@ class IMUOp(opMode: BunyipsOpMode, private val imu: IMU) : BunyipsComponent(opMo
 
     /**
      * Query motor alignment speed for ROTATIONAL speed through PrecisionDrive
-     * @param original_speed supply the intended speed for the R SPEED value
+     * @param originalSpeed supply the intended speed for the R SPEED value
      * @param tolerance supply the tolerance in degrees for the IMU to be within to stop adjusting
      * @return queried speed based on parameters given, returns the unaltered speed if PrecisionDrive is not online
      */
-    fun getRPrecisionSpeed(original_speed: Double, tolerance: Double): Double {
+    fun getRPrecisionSpeed(originalSpeed: Double, tolerance: Double): Double {
         // If we're not capturing, return the original speed
-        if (this.capture == null) return original_speed
+        if (this.capture == null) return originalSpeed
 
         this.tick()
         val current = this.heading
 
         // If we're at the minimum tolerance, increase turn rate
-        if (current < this.capture!! - tolerance) return original_speed - 0.1
+        if (current < this.capture!! - tolerance) return originalSpeed - 0.1
 
         // If we're at maximum tolerance, decrease turn rate
-        return if (current > this.capture!! + tolerance) original_speed + 0.1 else original_speed
-    }
-
-    /**
-     * Query vector alignment based on PrecisionDrive capture
-     * This does not use the tolerance parameter, as it is not needed for vector alignment
-     */
-    fun getCorrectedVector(vec: RobotVector): RobotVector {
-        // If we're not capturing, return the original vector
-        if (this.capture == null) return vec
-
-        this.tick()
-        val current = this.heading
-
-        // FIXME: Buggy, may be due to vector drive not working to begin with
-        val normalisedError = AngleUnit.normalizeDegrees(this.capture!! - current)
-        val correctionVector = RobotVector.calcPolar(normalisedError, AngleUnit.DEGREES)
-
-        // Add the correction vector to the original vector
-        return vec + correctionVector
+        return if (current > this.capture!! + tolerance) originalSpeed + 0.1 else originalSpeed
     }
 }

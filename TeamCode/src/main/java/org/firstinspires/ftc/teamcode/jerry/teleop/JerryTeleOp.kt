@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.jerry.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.ButtonHashmap
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.MecanumDrive
+import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.RobotConfig
+import org.firstinspires.ftc.teamcode.common.UserSelection
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
@@ -30,23 +31,18 @@ class JerryTeleOp : BunyipsOpMode() {
     private var drive: MecanumDrive? = null
     private var imu: IMUOp? = null
     private var lift: JerryLift? = null
+    private val selector: UserSelection<String> =
+        UserSelection(this, { initDrive() }, "POV", "FIELD-CENTRIC")
 
     override fun onInit() {
         // Configure drive and lift subsystems
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        val mode = ButtonHashmap.map(this, "POV", "FIELD-CENTRIC")
-        if (config.assert(config.imu)) {
+        selector.start()
+        if (NullSafety.assertNotNull(config.imu)) {
             imu = IMUOp(this, config.imu!!)
         }
-        if (config.assert(config.driveMotors)) {
-            if (mode == "POV" || imu == null) {
-                drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
-            } else {
-                drive = JerryPolarDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!, imu!!, RelativeVector.FORWARD)
-            }
-        }
         drive?.setToBrake()
-        if (config.assert(config.armComponents)) {
+        if (NullSafety.assertNotNull(config.armComponents)) {
             lift = JerryLift(
                 this,
                 JerryLift.ControlMode.MANUAL,
@@ -56,6 +52,31 @@ class JerryTeleOp : BunyipsOpMode() {
                 config.limit!!
             )
         }
+    }
+
+    private fun initDrive() {
+        if (NullSafety.assertNotNull(config.driveMotors)) {
+            drive = if (selector.result == "FIELD-CENTRIC" || imu == null) {
+                JerryPolarDrive(
+                    this,
+                    config.bl!!,
+                    config.br!!,
+                    config.fl!!,
+                    config.fr!!,
+                    imu!!,
+                    RelativeVector.FORWARD
+                )
+            } else {
+                JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+            }
+        }
+    }
+
+    override fun onInitLoop(): Boolean {
+        if (!selector.isAlive) {
+            return true
+        }
+        return false
     }
 
     override fun activeLoop() {
@@ -69,7 +90,7 @@ class JerryTeleOp : BunyipsOpMode() {
 //            "Controller: X: %.2f, Y: %.2f, R: %.2f", x, y, r))
 
         // Set speeds of motors and interpret any data
-        drive?.setSpeedXYR(x, y, r)
+        drive?.setSpeedUsingController(x, y, r)
         lift?.delta(v)
         if (gamepad2.a) {
             lift?.open()

@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.Task
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // This tasks only uses the IMU and time in order to drive, to see the implementation of both deadwheel and IMU
@@ -17,20 +17,23 @@ class JerryIMUDriveTask(
     private val x: Double,
     private val y: Double,
     private val r: Double
-) : Task(opMode, time), TaskImpl {
+) : Task(opMode, time), AutoTask {
     override fun init() {
-        super.init()
         imu?.startCapture()
     }
 
     override fun run() {
-        if (isFinished()) {
-            drive?.deinit()
-            imu?.resetCapture()
-            return
-        }
-        drive?.setSpeedXYR(x, -y, imu?.getRPrecisionSpeed(r, 3.0) ?: 0.0)
+        drive?.setSpeedUsingController(x, -y, imu?.getRPrecisionSpeed(r, 3.0) ?: 0.0)
         drive?.update()
         imu?.tick()
+    }
+
+    override fun isTaskFinished(): Boolean {
+        return false
+    }
+
+    override fun onFinish() {
+        drive?.stop()
+        imu?.resetCapture()
     }
 }

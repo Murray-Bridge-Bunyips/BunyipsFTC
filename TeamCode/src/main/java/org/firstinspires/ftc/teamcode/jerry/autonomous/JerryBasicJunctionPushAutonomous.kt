@@ -2,13 +2,12 @@ package org.firstinspires.ftc.teamcode.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.ButtonControl
-import org.firstinspires.ftc.teamcode.common.ButtonHashmap
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.Odometer
-import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.RobotConfig
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
+import org.firstinspires.ftc.teamcode.common.UserSelection
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryPrecisionDriveTask
@@ -29,23 +28,28 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
     private var imu: IMUOp? = null
     private var x: Odometer? = null
     private var y: Odometer? = null
-    private val tasks = ArrayDeque<TaskImpl>()
+    private val tasks = ArrayDeque<AutoTask>()
+    private val selection = UserSelection(this, {}, "Drive Left", "Drive Right")
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        if (config.assert(config.driveMotors))
+        if (NullSafety.assertNotNull(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        if (config.assert(config.fl))
+        if (NullSafety.assertNotNull(config.fl))
             x = Odometer(this, config.fl!!, config.xDiameter, config.xTicksPerRev)
 
-        if (config.assert(config.fr))
+        if (NullSafety.assertNotNull(config.fr))
             y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
-        if (config.assert(config.imu))
+        if (NullSafety.assertNotNull(config.imu))
             imu = IMUOp(this, config.imu!!)
 
-        when (ButtonHashmap.map(this, "Drive Left", "Drive Right")) {
+        selection.start()
+    }
+
+    override fun onStart() {
+        when (selection.result) {
             "Drive Left" ->
                 tasks.add(
                     JerryPrecisionDriveTask(
@@ -61,7 +65,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
                     )
                 )
 
-            "Drive Right" ->
+            else ->
                 tasks.add(
                     JerryPrecisionDriveTask(
                         this,
@@ -75,8 +79,6 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
                         1.0
                     )
                 )
-
-            else -> {}
         }
     }
 
@@ -91,7 +93,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
             tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive?.deinit()
+            drive?.stop()
         }
     }
 }

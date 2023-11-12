@@ -6,36 +6,28 @@ import android.util.Size;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import org.firstinspires.ftc.teamcode.common.vision.Processor;
+import org.firstinspires.ftc.teamcode.common.vision.data.VisionData;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.VisionPortalImpl;
-import org.firstinspires.ftc.vision.VisionProcessor;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 /**
- * Latest wrapper to support the v8.2+ SDK's included libraries for Camera operation.
- * Allows TFOD and AprilTag processors to be used in OpModes.
- * Vuforia is not supported, as we don't have any effective uses for it, and this feature is
- * getting phased out by the SDK.
+ * Component wrapper to support the v8.2+ SDK's included libraries for Camera operation.
+ * This is an expansible system to run Processor components using the VisionPortal.
  *
  * @author Lucas Bubner, 2023
  */
-// Using Java as opposed to Kotlin as null safety is not a major concern
-// due to the initialisation routine of the WebcamName device.
 public class Vision extends BunyipsComponent {
-    // Arrays to store the data from the processors
-    private final List<AprilTagData> aprilTagData = new ArrayList<>();
-    private final List<TfodData> tfodData = new ArrayList<>();
+    public static int CAMERA_WIDTH = 1280;
+    public static int CAMERA_HEIGHT = 720;
+    @SuppressWarnings("rawtypes")
+    private final List<Processor> processors = new ArrayList<>();
     private final WebcamName webcam;
-    private TfodProcessor tfod = null;
-    private AprilTagProcessor aprilTag = null;
-    private VisionPortal visionPortal = null;
+    private VisionPortal visionPortal;
 
     public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam) {
         super(opMode);
@@ -43,58 +35,63 @@ public class Vision extends BunyipsComponent {
     }
 
     /**
-     * Builds the VisionPortal after the VisionPortal has been constructed.
-     * @param builder Processor-rich builder pattern for the VisionPortal
-     * @return VisionPortalImpl
+     * Get all VisionProcessors attached to the VisionPortal.
      */
-    private VisionPortal constructVisionPortal(VisionPortal.Builder builder) {
-        return builder
-            .setCamera(webcam)
-            .setCameraResolution(new Size(1280, 720))
-            .enableCameraMonitoring(true)
-            .setAutoStopLiveView(true)
-            // Set any additional VisionPortal settings here
-            .build();
+    @SuppressWarnings("rawtypes")
+    public List<Processor> getAttachedProcessors() {
+        return processors;
     }
 
     /**
      * Initialises the Vision class with the specified processors.
-     * This method should only be called once per OpMode.
+     * This method should only be called once per OpMode. Additional calls will internally
+     * terminate the VisionPortal and reinitialise it with the new processors (this is a highly expensive operation).
+     * Processors will be STOPPED by default, you must call {@code start()} after initialising.
      *
      * @param processors TFOD and/or AprilTag
      */
-    public void init(Processors... processors) {
-        List<VisionProcessor> initialisedProcessors = new ArrayList<>();
-
-        for (Processors processor : processors) {
-            switch (processor) {
-                case TFOD:
-                    tfod = new TfodProcessor.Builder()
-                            // Specify custom TFOD settings here
-                            .build();
-                    initialisedProcessors.add(tfod);
-                    break;
-                case APRILTAG:
-                    aprilTag = new AprilTagProcessor.Builder()
-                            // Logitech C920
-                            .setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
-                            // Specify custom AprilTag settings here
-                            .build();
-                    initialisedProcessors.add(aprilTag);
-                    break;
-            }
+    @SuppressWarnings("rawtypes")
+    public void init(Processor... processors) {
+        if (visionPortal != null) {
+            getOpMode().log("WARNING: Vision already initialised! Tearing down...");
+            visionPortal.close();
+            visionPortal = null;
         }
+
+        if (processors.length == 0) {
+            throw new IllegalArgumentException("Vision: Must initialise at least one integrated processor!");
+        }
+
+        // Hand over instance control to the VisionPortal
+        this.processors.addAll(Arrays.asList(processors));
 
         // Initialise the VisionPortal with our newly created processors
         VisionPortal.Builder builder = new VisionPortal.Builder();
-        for (VisionProcessor processor : initialisedProcessors) {
+        for (Processor processor : processors) {
+            if (processor == null) {
+                throw new IllegalStateException("Vision: Processor is not instantiated!");
+            }
+            if (processor.getName() == null) {
+                throw new IllegalStateException("Vision: Processor name cannot be null!");
+            }
+            for (Processor otherProcessor : this.processors) {
+                if (otherProcessor != processor && otherProcessor.getName().equals(processor.getName())) {
+                    throw new IllegalStateException("Vision: Processor name must be unique!");
+                }
+            }
             builder.addProcessor(processor);
         }
 
-        visionPortal = constructVisionPortal(builder);
+        visionPortal = builder
+                .setCamera(webcam)
+                .setCameraResolution(new Size(CAMERA_WIDTH, CAMERA_HEIGHT))
+                .enableLiveView(true)
+                .setAutoStopLiveView(true)
+                // Set any additional VisionPortal settings here
+                .build();
 
         // Disable the vision processors by default. The OpMode must call start() to enable them.
-        for (VisionProcessor processor : initialisedProcessors) {
+        for (Processor processor : this.processors) {
             visionPortal.setProcessorEnabled(processor, false);
         }
 
@@ -103,49 +100,17 @@ public class Vision extends BunyipsComponent {
     }
 
     /**
-     * Add a custom VisionProcessor that is not AprilTag or TFOD.
-     * This method should be called with the VisionPortal already initialised with init().
-     * !! This method may be expensive to call as it will reconstruct the VisionPortal.
-     */
-    public void addCustomProcessor(VisionProcessor processor) {
-        if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised!");
-        }
-        if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
-            throw new IllegalArgumentException("Cannot add TFOD or AprilTag processors with this method!");
-        }
-        // Reconstruct the VisionPortal with the new processor
-        VisionPortal.Builder builder = new VisionPortal.Builder();
-        if (tfod != null) {
-            builder.addProcessor(tfod);
-        }
-        if (aprilTag != null) {
-            builder.addProcessor(aprilTag);
-        }
-        builder.addProcessor(processor);
-        visionPortal = constructVisionPortal(builder);
-    }
-
-    /**
-     * Start or stop a custom VisionProcessor that is not AprilTag or TFOD. (Level 2)
-     */
-    public void setCustomProcessorState(VisionProcessor processor, boolean state) {
-        if (visionPortal == null) {
-            throw new IllegalStateException("VisionPortal is not initialised!");
-        }
-        if (processor instanceof TfodProcessor || processor instanceof AprilTagProcessor) {
-            throw new IllegalArgumentException("Cannot start TFOD or AprilTag processors with this method!");
-        }
-        visionPortal.setProcessorEnabled(processor, state);
-    }
-
-    /**
      * Start desired processors. This method must be called before trying to extract data from
      * the cameras, and must be already initialised with the init() method.
      *
      * @param processors TFOD and/or AprilTag
      */
-    public void start(Processors... processors) {
+    @SuppressWarnings("rawtypes")
+    public void start(Processor... processors) {
+        if (visionPortal == null) {
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
+        }
+
         // Resume the stream if it was previously stopped or is not running
         if (visionPortal.getCameraState() == VisionPortal.CameraState.CAMERA_DEVICE_READY ||
                 visionPortal.getCameraState() == VisionPortal.CameraState.STOPPING_STREAM) {
@@ -153,21 +118,15 @@ public class Vision extends BunyipsComponent {
             // stream is resumed. This is a documented operation in the SDK.
             visionPortal.resumeStreaming();
         }
-        for (Processors processor : processors) {
-            switch (processor) {
-                case TFOD:
-                    if (tfod == null) {
-                        throw new IllegalStateException("TFOD processor is not initialised!");
-                    }
-                    visionPortal.setProcessorEnabled(tfod, true);
-                    break;
-                case APRILTAG:
-                    if (aprilTag == null) {
-                        throw new IllegalStateException("AprilTag processor is not initialised!");
-                    }
-                    visionPortal.setProcessorEnabled(aprilTag, true);
-                    break;
+
+        for (Processor processor : processors) {
+            if (processor == null) {
+                throw new IllegalStateException("Vision: Processor is not instantiated!");
             }
+            if (!this.processors.contains(processor)) {
+                throw new IllegalStateException("Vision: Tried to start a processor that was not initialised!");
+            }
+            visionPortal.setProcessorEnabled(processor, true);
         }
     }
 
@@ -181,37 +140,68 @@ public class Vision extends BunyipsComponent {
      * Note: The VisionPortal is automatically closed at the end of the OpMode's run time, calling
      * stop() or terminate() is not required at the end of an OpMode.
      * <p>
-     * Additionally passing stopPortal as true will pause the Camera Stream (Level 3). Pausing
+     * Passing no arguments will pause the Camera Stream (Level 3). Pausing
      * the camera stream will automatically disable any running processors. Note this may
-     * take some additional time to resume the stream if start() is called again. If you don't plan
+     * take some very small time to resume the stream if start() is called again. If you don't plan
      * on using the camera stream again, it is recommended to call terminate() instead.
      *
-     * @param stopPortal Whether to pause the Camera Stream (Level 3)
      * @param processors TFOD and/or AprilTag
      */
-    public void stop(boolean stopPortal, Processors... processors) {
-        if (stopPortal) {
-            // Pause the processor, this will also auto-close any VisionProcessors
-            visionPortal.stopStreaming();
-            return;
+    @SuppressWarnings("rawtypes")
+    public void stop(Processor... processors) {
+        if (visionPortal == null) {
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
         }
+
         // Disable processors without pausing the stream
-        for (Processors processor : processors) {
-            switch (processor) {
-                case TFOD:
-                    if (tfod == null) {
-                        throw new IllegalStateException("TFOD processor is not initialised!");
-                    }
-                    visionPortal.setProcessorEnabled(tfod, false);
-                    break;
-                case APRILTAG:
-                    if (aprilTag == null) {
-                        throw new IllegalStateException("AprilTag processor is not initialised!");
-                    }
-                    visionPortal.setProcessorEnabled(aprilTag, false);
-                    break;
+        for (Processor processor : processors) {
+            if (processor == null) {
+                throw new IllegalStateException("Vision: Processor is not instantiated!");
             }
+            if (!this.processors.contains(processor)) {
+                throw new IllegalStateException("Vision: Tried to stop a processor that was not initialised!");
+            }
+            visionPortal.setProcessorEnabled(processor, false);
         }
+    }
+
+    /**
+     * Stop all processors and pause the camera stream (Level 3).
+     */
+    public void stop() {
+        if (visionPortal == null) {
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
+        }
+        // Pause the processor, this will also auto-close any VisionProcessors
+        visionPortal.stopStreaming();
+    }
+
+    /**
+     * Tick all processor camera streams and extract data from the processors.
+     * This can optionally be done per processor by calling processor.update()
+     * This data is stored in the processor instance and can be accessed with the getters.
+     */
+    @SuppressWarnings("rawtypes")
+    public void tickAll() {
+        for (Processor processor : processors) {
+            processor.tick();
+        }
+    }
+
+    /**
+     * Get data from all processors after being ticked.
+     * This can optionally can be done per processor by calling processor.getData().
+     * This data is stored in the processor instance and can be accessed with getters.
+     *
+     * @return HashMap of all processor data from every attached processor
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public HashMap<String, List<VisionData>> getAllData() {
+        HashMap<String, List<VisionData>> data = new HashMap<>();
+        for (Processor processor : processors) {
+            data.put(processor.getName(), processor.getData());
+        }
+        return data;
     }
 
     /**
@@ -223,16 +213,24 @@ public class Vision extends BunyipsComponent {
      * <p>
      * It is strongly discouraged to reinitialise the VisionPortal in the same OpMode, as this
      * takes significant time and may cause the OpMode to hang or become unresponsive. Instead,
-     * use the start() and stop() methods to enable/disable the VisionPortal.
+     * use the {@code start()} and {@code stop()} methods to enable/disable the VisionPortal.
+     * Repeated calls to {@code init()} will also cause a termination of the VisionPortal.
      */
     public void terminate() {
+        if (visionPortal == null) {
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
+        }
         visionPortal.close();
+        visionPortal = null;
     }
 
     /**
      * Get the current status of the camera attached to the VisionPortal.
      */
     public VisionPortal.CameraState getStatus() {
+        if (visionPortal == null) {
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
+        }
         return visionPortal.getCameraState();
     }
 
@@ -240,6 +238,9 @@ public class Vision extends BunyipsComponent {
      * Get the current Frames Per Second of the VisionPortal.
      */
     public double getFps() {
+        if (visionPortal == null) {
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
+        }
         return visionPortal.getFps();
     }
 
@@ -248,121 +249,13 @@ public class Vision extends BunyipsComponent {
      * When initialised, live view is disabled by default.
      */
     public void setLiveView(boolean enabled) {
+        if (visionPortal == null) {
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
+        }
         if (enabled) {
             visionPortal.resumeLiveView();
         } else {
             visionPortal.stopLiveView();
         }
-    }
-
-    /**
-     * Tick the camera stream and extract data from the processors.
-     * This data is stored in the instance and can be accessed with the getters.
-     */
-    public void tick() {
-        if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
-            // Camera must be initialised and streaming before we can extract data
-            return;
-        }
-
-        // For every processor, check if it is enabled and extract data if it is
-        for (Processors processor : Processors.values()) {
-            switch (processor) {
-                case TFOD:
-                    if (tfod != null && visionPortal.getProcessorEnabled(tfod)) {
-                        interpretTfod();
-                    }
-                    break;
-                case APRILTAG:
-                    if (aprilTag != null && visionPortal.getProcessorEnabled(aprilTag)) {
-                        interpretAprilTag();
-                    }
-                    break;
-            }
-        }
-    }
-
-    private void interpretAprilTag() {
-        List<AprilTagDetection> detections = aprilTag.getFreshDetections();
-        if (detections == null) {
-            return;
-        }
-        aprilTagData.clear();
-        for (AprilTagDetection detection : detections) {
-            aprilTagData.add(new AprilTagData(
-                    detection.id,
-                    detection.hamming,
-                    detection.decisionMargin,
-                    detection.center,
-                    detection.corners,
-                    detection.metadata != null ? detection.metadata.name : null,
-                    detection.metadata != null ? detection.metadata.tagsize : null,
-                    detection.metadata != null ? detection.metadata.fieldPosition : null,
-                    detection.metadata != null ? detection.metadata.fieldOrientation : null,
-                    detection.metadata != null ? detection.metadata.distanceUnit : null,
-                    detection.ftcPose != null ? detection.ftcPose.x : null,
-                    detection.ftcPose != null ? detection.ftcPose.y : null,
-                    detection.ftcPose != null ? detection.ftcPose.z : null,
-                    detection.ftcPose != null ? detection.ftcPose.pitch : null,
-                    detection.ftcPose != null ? detection.ftcPose.roll : null,
-                    detection.ftcPose != null ? detection.ftcPose.yaw : null,
-                    detection.ftcPose != null ? detection.ftcPose.range : null,
-                    detection.ftcPose != null ? detection.ftcPose.bearing : null,
-                    detection.ftcPose != null ? detection.ftcPose.elevation : null,
-                    detection.rawPose,
-                    detection.frameAcquisitionNanoTime
-            ));
-        }
-    }
-
-    private void interpretTfod() {
-        List<Recognition> recognitions = tfod.getFreshRecognitions();
-        if (recognitions == null) {
-            return;
-        }
-        tfodData.clear();
-        for (Recognition recognition : recognitions) {
-            tfodData.add(new TfodData(
-                    recognition.getLabel(),
-                    recognition.getConfidence(),
-                    recognition.getLeft(),
-                    recognition.getTop(),
-                    recognition.getRight(),
-                    recognition.getBottom(),
-                    recognition.getWidth(),
-                    recognition.getHeight(),
-                    recognition.getImageWidth(),
-                    recognition.getImageHeight(),
-                    recognition.estimateAngleToObject(AngleUnit.DEGREES),
-                    recognition.estimateAngleToObject(AngleUnit.RADIANS)
-            ));
-        }
-    }
-
-    /**
-     * Primary getter for all TFOD data.
-     *
-     * @return List of all TFOD objects and their data
-     */
-    public List<TfodData> getTfodData() {
-        return this.tfodData;
-    }
-
-    /**
-     * Primary getter for all AprilTag data.
-     *
-     * @return List of all AprilTag objects and their data
-     */
-    public List<AprilTagData> getAprilTagData() {
-        return this.aprilTagData;
-    }
-
-    public enum Processors {
-        /**
-         * Caution! Using TFOD and using OpModes with high load may cause a watchdog timeout.
-         * Ensure to test for this, as system memory may deplete and cause unexpected behaviour.
-         */
-        TFOD,
-        APRILTAG
     }
 }

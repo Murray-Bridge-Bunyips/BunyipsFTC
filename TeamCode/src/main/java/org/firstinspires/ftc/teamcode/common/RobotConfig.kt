@@ -31,24 +31,10 @@ abstract class RobotConfig {
             hardwareDevice = hardwareMap?.get(device, name) as HardwareDevice
         } catch (e: Throwable) {
             errors.add(name)
-            e.localizedMessage?.let { DbgLog.msg(it) }
+            e.localizedMessage?.let { Dbg.log(it) }
         }
         return hardwareDevice
     }
-
-    /**
-     * Check if hardware is available by checking if the instance is null.
-     */
-    fun assert(vararg devices: HardwareDevice?): Boolean {
-        for (device in devices) {
-            if (device == null) {
-                return false
-            }
-        }
-        return true
-    }
-
-    fun assert(devices: List<HardwareDevice?>) = assert(*devices.toTypedArray())
 
     companion object {
         /**
@@ -67,18 +53,17 @@ abstract class RobotConfig {
         ): RobotConfig {
             // Check to make sure RobotConfig was instantiated, as this is a common error
             if (config == null) {
-                throw RuntimeException("OpMode member 'config' is not instantiated, make sure to initialise your config with 'private YourConfig config = new YourConfig();' (Java) or 'private var config = YourConfig()' (Kotlin) in your OpMode class members.")
+                throw RuntimeException("RobotConfig: OpMode member 'config' is not instantiated, make sure to initialise your config with 'private YourConfig config = new YourConfig();' (Java) or 'private var config = YourConfig()' (Kotlin) in your OpMode class members.")
             }
             config.hardwareMap = hardwareMap
             errors.clear()
             config.init()
             opMode.addTelemetry(
                 "${config.javaClass.simpleName.uppercase()}: Configuration completed with ${errors.size} error(s).",
-                false
             )
             if (errors.isNotEmpty()) {
                 for (error in errors) {
-                    opMode.addTelemetry("! DEV_FAULT: $error", true)
+                    opMode.addRetainedTelemetry("! DEV_FAULT: $error")
                 }
             }
             return config

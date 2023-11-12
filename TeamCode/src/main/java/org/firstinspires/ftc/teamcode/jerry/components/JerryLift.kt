@@ -34,8 +34,8 @@ class JerryLift(
     private var holdPosition: Int? = null
 
     private var deltaTimeout = 0
-    private val resetLock = While (
-        condition = {
+    private val resetLock = While(
+        {
             // Check if the delta is above 0 for 30 consecutive loops, if so, we have hit the limit
             val prev = (motors[0].currentPosition + motors[1].currentPosition) / 2
             val delta = (motors[0].currentPosition + motors[1].currentPosition) / 2 - prev
@@ -47,7 +47,7 @@ class JerryLift(
             // Reset lock when limit is pressed, delta is stagnant, or when manually interrupted
             !limit.isPressed && !opMode.gamepad2.right_bumper && deltaTimeout < 30
         },
-        runThis = {
+        {
             opMode.addTelemetry(
                 String.format(
                     "LIFT IS RESETTING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
@@ -56,7 +56,7 @@ class JerryLift(
                 )
             )
         },
-        callback = {
+        {
             for (motor in motors) {
                 // Finally, we reset the motors and we are now zeroed out again.
                 motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
@@ -67,15 +67,15 @@ class JerryLift(
             targetPosition = 0.0
             deltaTimeout = 0
         },
-        timeoutSeconds = 5.0
+        5.0
     )
 
-    private val releaseLock = While (
-        condition = {
+    private val releaseLock = While(
+        {
             // Release lock when motors have reached the target or manually interrupted
             arm1.isBusy && arm2.isBusy && !opMode.gamepad2.right_bumper
         },
-        runThis = {
+        {
             opMode.addTelemetry(
                 String.format(
                     "LIFT IS RECALLING TO HOLD POSITION %d... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
@@ -85,7 +85,7 @@ class JerryLift(
                 )
             )
         },
-        callback = {
+        {
             for (motor in motors) {
                 motor.power = 0.0
                 motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
@@ -94,7 +94,7 @@ class JerryLift(
             opMode.log("lift released to $holdPosition")
             holdPosition = null
         },
-        timeoutSeconds = 5.0
+        5.0
     )
 
     // Handle both manual and positional control modes
@@ -171,12 +171,13 @@ class JerryLift(
      */
     fun delta(dy: Double) {
         if (mode != ControlMode.MANUAL) {
-            throw IllegalStateException("delta() method can only be used in manual mode")
+            throw IllegalStateException("JerryLift: delta() method can only be used in manual mode")
         }
         if (dy < 0) {
             // Arm is ascending, auto close claw
-            if (claw.position == 0.0)
-                close()
+            // Auto-close removed 24/10/23 as it is now invasive
+//            if (claw.position == 0.0)
+//                close()
             // Check if the arm has reached maximum limit
             if ((arm1.currentPosition + arm2.currentPosition) / 2 >= HARD_LIMIT) {
                 // If so, stop the arm from moving further upwards
@@ -198,10 +199,10 @@ class JerryLift(
      */
     fun set(percent: Int) {
         if (mode != ControlMode.POSITIONAL) {
-            throw IllegalStateException("set() method can only be used in positional mode")
+            throw IllegalStateException("JerryLift: set() method can only be used in positional mode")
         }
         if (percent !in 0..100) {
-            throw IllegalArgumentException("set() method must be between 0 and 100%")
+            throw IllegalArgumentException("JerryLift: set() method must be between 0 and 100%")
         }
         if (percent == 0) {
             reset()
@@ -215,7 +216,7 @@ class JerryLift(
      */
     fun capture() {
         if (mode != ControlMode.MANUAL) {
-            throw IllegalStateException("capture() method can only be used in manual mode")
+            throw IllegalStateException("JerryLift: capture() method can only be used in manual mode")
         }
         val armPos = (arm1.currentPosition + arm2.currentPosition) / 2
         holdPosition = minOf(armPos, HARD_LIMIT)
@@ -227,7 +228,7 @@ class JerryLift(
      */
     fun release() {
         if (mode != ControlMode.MANUAL) {
-            throw IllegalStateException("release() method can only be used in manual mode")
+            throw IllegalStateException("JerryLift: release() method can only be used in manual mode")
         }
         if (holdPosition == null) {
             opMode.log("lift released but no capture was found")
@@ -263,7 +264,7 @@ class JerryLift(
 
         when (mode) {
             ControlMode.POSITIONAL -> {
-                // Ensure the arm does not overswing
+                // Ensure the arm does not over swing
                 if (targetPosition > HARD_LIMIT) {
                     targetPosition = HARD_LIMIT.toDouble()
                 }

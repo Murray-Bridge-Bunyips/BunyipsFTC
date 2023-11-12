@@ -4,11 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
 import org.firstinspires.ftc.teamcode.common.RobotConfig
-import org.firstinspires.ftc.teamcode.common.tasks.GetParkingPositionTask
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
+import org.firstinspires.ftc.teamcode.common.tasks.GetSignalTask
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
@@ -26,20 +27,20 @@ import java.util.ArrayDeque
 class JerryAutoTest : BunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: JerryDrive? = null
-    private var tagTask: GetParkingPositionTask? = null
+    private var tagTask: GetSignalTask? = null
     private var arm: JerryArm? = null
     private var cam: OpenCVCam? = null
     private var imu: IMUOp? = null
-    private val tasks = ArrayDeque<TaskImpl>()
+    private val tasks = ArrayDeque<AutoTask>()
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
-        if (config.assert(config.driveMotors)) {
+        if (NullSafety.assertNotNull(config.driveMotors)) {
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
         }
 
         drive?.setToBrake()
-        if (config.assert(config.imu)) {
+        if (NullSafety.assertNotNull(config.imu)) {
             imu = IMUOp(this, config.imu!!)
         }
         tasks.add(
@@ -49,7 +50,7 @@ class JerryAutoTest : BunyipsOpMode() {
                 "well here we are again, it's always such a pleasure, remember when you tried to kill me twice"
             )
         )
-        if (config.assert(config.armComponents)) {
+        if (NullSafety.assertNotNull(config.armComponents)) {
             arm = JerryArm(
                 this,
                 config.claw!!,
@@ -64,7 +65,7 @@ class JerryAutoTest : BunyipsOpMode() {
             config.webcam, config.monitorID
         )
 
-        tagTask = cam?.let { GetParkingPositionTask(this, it) }
+        tagTask = cam?.let { GetSignalTask(this, it) }
     }
 
     override fun onInitLoop(): Boolean {
@@ -77,7 +78,7 @@ class JerryAutoTest : BunyipsOpMode() {
 
     override fun onInitDone() {
         when (tagTask?.position) {
-            GetParkingPositionTask.ParkingPosition.LEFT -> {
+            GetSignalTask.ParkingPosition.LEFT -> {
                 // Draw a square
                 // Forward
                 tasks.add(JerryTimeDriveTask(this, 3.0, drive!!, 0.0, 0.5, 0.0))
@@ -90,12 +91,12 @@ class JerryAutoTest : BunyipsOpMode() {
                 // i do not care about consistency
             }
 
-            GetParkingPositionTask.ParkingPosition.RIGHT -> {
+            GetSignalTask.ParkingPosition.RIGHT -> {
                 // Spin 360 degrees right
                 tasks.add(JerryIMURotationTask(this, 10.0, imu!!, drive!!, 360.0, 0.5))
             }
 
-            GetParkingPositionTask.ParkingPosition.CENTER -> {
+            GetSignalTask.ParkingPosition.CENTER -> {
                 // Insult lucas in the console
                 tasks.add(
                     MessageTask(
@@ -126,7 +127,7 @@ class JerryAutoTest : BunyipsOpMode() {
             tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive?.deinit()
+            drive?.stop()
         }
     }
 }

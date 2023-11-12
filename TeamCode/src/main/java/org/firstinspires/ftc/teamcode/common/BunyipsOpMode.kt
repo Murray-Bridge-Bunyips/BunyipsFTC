@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.common
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.Telemetry.Item
+import org.firstinspires.ftc.teamcode.common.Text.formatString
 import kotlin.math.roundToInt
 
 /**
@@ -12,31 +13,32 @@ import kotlin.math.roundToInt
  * @author Lucas Bubner, 2023
  */
 abstract class BunyipsOpMode : LinearOpMode() {
-    private var movingAverageTimer: MovingAverageTimer? = null
-    var loopCount: Long = 0
+    var movingAverageTimer: MovingAverageTimer? = null
         private set
+
     private var operationsCompleted = false
     private var operationsPaused = false
-    private val stickyTelemetryObjects = mutableListOf<Pair<Int, Item>>()
 
     /**
-     * One-time setup for operations that need to be done for the opMode
+     * One-time setup for operations that need to be done for every OpMode
+     * This method is not exception protected!
      */
     private fun setup() {
         telemetry.log().displayOrder = Telemetry.Log.DisplayOrder.OLDEST_FIRST
         telemetry.captionValueSeparator = ""
         // Uncap the telemetry log limit to ensure we capture everything
-        telemetry.log().capacity = 999
+        telemetry.log().capacity = 999999
         movingAverageTimer = MovingAverageTimer(100)
     }
 
     /**
      * Runs upon the pressing of the INIT button on the Driver Station.
+     * This is where your hardware should be initialised.
      */
     protected abstract fun onInit()
 
     /**
-     * Run code to in a loop AFTER onInit has completed, until
+     * Run code in a loop AFTER onInit has completed, until
      * start is pressed on the Driver Station or true is returned to this method.
      * If not implemented, the opMode will continue on as normal and wait for start.
      */
@@ -66,6 +68,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
 
     /**
      * Perform one time clean-up operations after the OpMode finishes.
+     * This method is not exception protected!
      */
     protected open fun onStop() {
     }
@@ -75,47 +78,72 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * @throws InterruptedException
      */
     @Throws(InterruptedException::class)
-    override fun runOpMode() {
+    final override fun runOpMode() {
         try {
             try {
+                Dbg.log("===== BUNYIPSOPMODE =====")
                 telemetry.log().add("")
                 log("status changed: from idle to setup")
+                Dbg.log("BunyipsOpMode: setting up...")
                 // Run BunyipsOpMode setup
                 setup()
                 log("status changed: from setup to static_init")
-                // Run user-defined setup
-                onInit()
-                log("status changed: from static_init to dynamic_init")
+                Dbg.log("BunyipsOpMode: firing onInit()...")
                 // Store telemetry objects raised by onInit() by turning off auto-clear
                 setTelemetryAutoClear(false)
+                addTelemetry("===== BUNYIPSOPMODE =====")
+                // Run user-defined setup
+                try {
+                    onInit()
+                } catch (ie: InterruptedException) {
+                    throw ie
+                } catch (e: Throwable) {
+                    ErrorUtil.handleCatchAllException(e, ::log)
+                }
+                if (!gamepad1.atRest() || !gamepad2.atRest()) {
+                    log("warning: a gamepad was not zeroed during init. please ensure controllers zero out correctly.")
+                }
+                telemetry.update()
+                log("status changed: from static_init to dynamic_init")
+                Dbg.log("BunyipsOpMode: starting onInitLoop()...")
                 // Run user-defined dynamic initialisation
                 while (opModeInInit()) {
                     try {
                         // Run until onInitLoop returns true or the opMode is continued
                         if (onInitLoop()) break
                         telemetry.update()
+                    } catch (ie: InterruptedException) {
+                        // Don't swallow InterruptedExceptions, let the superclass handle them
+                        throw ie
                     } catch (e: Throwable) {
                         ErrorUtil.handleCatchAllException(e, ::log)
                     }
                 }
                 log("status changed: from dynamic_init to finish_init")
+                Dbg.log("BunyipsOpMode: firing onInitDone()...")
                 // Run user-defined final initialisation
                 onInitDone()
                 telemetry.addData("BUNYIPSOPMODE : ", "INIT COMPLETE -- PLAY WHEN READY.")
                 telemetry.update()
+            } catch (ie: InterruptedException) {
+                throw ie
             } catch (e: Throwable) {
                 ErrorUtil.handleCatchAllException(e, ::log)
             }
             log("status changed: from finish_init to ready")
+            Dbg.log("BunyipsOpMode: ready.")
             // Ready to go.
             waitForStart()
             setTelemetryAutoClear(true)
-            clearTelemetryData()
+            clearTelemetry()
             movingAverageTimer?.reset()
             log("status changed: from ready to running")
+            Dbg.log("BunyipsOpMode: starting activeLoop()...")
             try {
                 // Run user-defined start operations
                 onStart()
+            } catch (ie: InterruptedException) {
+                throw ie
             } catch (e: Throwable) {
                 ErrorUtil.handleCatchAllException(e, ::log)
             }
@@ -128,91 +156,125 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 try {
                     // Run user-defined active loop
                     activeLoop()
-                    loopCount++
+                    // Update telemetry and timers
+                    movingAverageTimer?.update()
+                    telemetry.update()
                 } catch (ie: InterruptedException) {
-                    // Preemptively exit the OpMode if an interrupt is thrown
                     throw ie
                 } catch (e: Throwable) {
-                    // Otherwise, let the handler manage them
+                    // Let the error logger handle any other exceptions
                     ErrorUtil.handleCatchAllException(e, ::log)
                 }
-                // Update telemetry and timers
-                movingAverageTimer?.update()
-                telemetry.update()
-                idle()
             }
             log("status changed: from running to finished")
+            Dbg.log("BunyipsOpMode: finished.")
             // Wait for user to hit stop
             while (opModeIsActive()) {
                 idle()
             }
+        } catch (t: Throwable) {
+            Dbg.error("BunyipsOpMode: unhandled throwable! <${t.message}>")
+            Dbg.sendStacktrace(t)
         } finally {
+            Dbg.log("BunyipsOpMode: cleaning up...")
             log("status changed: from finished to cleanup")
             onStop()
+            Dbg.log("BunyipsOpMode: exiting...")
         }
     }
 
-    /**
-     * Clear data from the telemetry cache.
-     */
-    private fun clearTelemetryData() {
-        if (telemetry.isAutoClear) {
-            telemetry.clear()
-        } else {
-            telemetry.clearAll()
-        }
-        if (opModeIsActive()) {
-            idle()
-        }
-    }
-
-    /**
-     * Add data to the telemetry object
-     * @param value A string to add to telemetry
-     * @param retained Optional parameter to retain the data on the screen
-     */
-    fun addTelemetry(value: String, retained: Boolean = false) {
+    private fun makeTelemetryObject(value: String): Item {
         // Add data to the telemetry object with runtime data
         var prefix = "T+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: 0.0}s : "
         if (prefix == "T+0s : ") {
             // Don't bother making a prefix if the time is zero
             prefix = ""
         }
-        val item = telemetry.addData("", prefix + value)
-        if (retained) {
-            // Set retained to true if the data is sticky
-            item.setRetained(true)
-            stickyTelemetryObjects.add(Pair(stickyTelemetryObjects.size + 1, item))
-        }
+        return telemetry.addData("", prefix + value)
     }
 
     /**
-     * Shorthand for addTelemetry(`value`, `retained`)
-     * Useful when passing by reference using ::telem
+     * Add data to the telemetry object
+     * @param value A string to add to telemetry
+     * @return The telemetry item added to the Driver Station
      */
-    fun telem(value: String, retained: Boolean = false) {
-        addTelemetry(value, retained)
+    fun addTelemetry(value: String): Item {
+        return makeTelemetryObject(value)
+    }
+
+    /**
+     * Add data to the telemetry object using a custom format string
+     * @param fstring A format string to add to telemetry
+     * @param objs The objects to format into the string
+     * @return The telemetry item added to the Driver Station
+     */
+    fun addTelemetry(fstring: String, vararg objs: Any): Item {
+        if (objs.isEmpty()) {
+            return addTelemetry(fstring)
+        }
+        return addTelemetry(formatString(fstring, objs.asList()))
+    }
+
+    /**
+     * Add retained non-auto-clearing data to the telemetry object
+     * @param value A string to add to telemetry
+     * @return The telemetry item added to the Driver Station
+     */
+    fun addRetainedTelemetry(value: String): Item {
+        return makeTelemetryObject(value).setRetained(true)
+    }
+
+    /**
+     * Add a data to the telemetry object using a custom format string
+     * @param fstring A format string to add to telemetry
+     * @param objs The objects to format into the string
+     * @return The telemetry item added to the Driver Station
+     */
+    fun addRetainedTelemetry(fstring: String, vararg objs: Any): Item {
+        if (objs.isEmpty()) {
+            return addRetainedTelemetry(fstring)
+        }
+        return addRetainedTelemetry(formatString(fstring, objs.asList()))
     }
 
     /**
      * Log a message to the telemetry log
+     * @param message The message to log
      */
     fun log(message: String) {
         telemetry.log().add(message)
     }
 
     /**
-     * Remove an entry from the telemetry object if it is sticky
+     * Log a message to the telemetry log using a format string
+     * @param fstring A format string to add to telemetry
+     * @param objs The objects to format into the string
      */
-    fun removeTelemetry(index: Int) {
-        if (index > 0 && index <= stickyTelemetryObjects.size) {
-            telemetry.removeItem(stickyTelemetryObjects[index - 1].second)
-            stickyTelemetryObjects.removeAt(index - 1)
+    fun log(fstring: String, vararg objs: Any) {
+        if (objs.isEmpty()) {
+            return log(fstring)
         }
-        // Update indexes of sticky telemetry objects
-        for (i in stickyTelemetryObjects.indices) {
-            stickyTelemetryObjects[i] = Pair(i + 1, stickyTelemetryObjects[i].second)
+        return log(formatString(fstring, objs.asList()))
+    }
+
+    /**
+     * Remove an entry from the telemetry object. Useful for removing retained data without clearing.
+     * This method should be combined with the return value of addTelemetry.
+     * Note this method is not needed if you are using unretained data, as it will be cleared automatically
+     * if auto-clear is enabled, which it is by default.
+     * @param items The telemetry items to remove
+     */
+    fun removeTelemetryItems(vararg items: Item) {
+        for (item in items) {
+            val res = telemetry.removeItem(item)
+            if (!res) {
+                log("failed to remove telemetry item: $item")
+            }
         }
+    }
+
+    fun removeTelemetryItems(items: List<Item>) {
+        removeTelemetryItems(*items.toTypedArray())
     }
 
     /**
@@ -220,7 +282,6 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun resetTelemetry() {
         telemetry.clearAll()
-        stickyTelemetryObjects.clear()
     }
 
     /**
@@ -248,20 +309,27 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Call to prevent hardware loop from calling activeLoop(), indicating an OpMode that is finished.
      */
     fun finish() {
+        if (operationsCompleted) {
+            return
+        }
         operationsCompleted = true
-        clearTelemetryData()
-        log("status changed: from running to finished")
+        Dbg.log("BunyipsOpMode: activeLoop() terminated by finish().")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop terminated. All operations completed.")
         telemetry.update()
     }
 
     /**
-     * Call to temporarily halt the activeLoop from running.
+     * Call to temporarily halt all activeLoop-related updates from running.
+     * Note this will pause all MovingAverageTimer and telemetry updates. These events
+     * must be handled manually if needed, which include any conditional calls to resume().
      */
     fun halt() {
+        if (operationsPaused) {
+            return
+        }
         operationsPaused = true
-        clearTelemetryData()
         log("status: from running to halted")
+        Dbg.log("BunyipsOpMode: activeLoop() halted.")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop halted. Operations paused.")
         telemetry.update()
     }
@@ -270,9 +338,12 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Call to resume the activeLoop after a halt() call.
      */
     fun resume() {
+        if (!operationsPaused) {
+            return
+        }
         operationsPaused = false
-        clearTelemetryData()
         log("status changed: from halted to running")
+        Dbg.log("BunyipsOpMode: activeLoop() resumed.")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop resumed. Operations resumed.")
         telemetry.update()
     }

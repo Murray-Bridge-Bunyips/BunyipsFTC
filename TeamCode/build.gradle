@@ -8,16 +8,23 @@
 // please think carefully as to whether such customizations are really necessary
 // before doing so.
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // Kotlin v1.6.0
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0'
+    }
+}
 
-// Custom definitions may go here
 apply plugin: 'kotlin-android'
-// Include common definitions from above.
+
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
 
 android {
     namespace = 'org.firstinspires.ftc.teamcode'
-
     packagingOptions {
         jniLibs.useLegacyPackaging true
     }
@@ -25,7 +32,9 @@ android {
 
 dependencies {
     implementation project(':FtcRobotController')
-    implementation 'org.openftc:easyopencv:1.6.2'
-    implementation 'org.openftc:apriltag:1.1.1'
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+
+    // TODO: Remove these dependencies as the SDK is updated to include them
+    implementation 'org.openftc:easyopencv:1.7.0'
+    implementation 'org.openftc:apriltag:2.0.0'
 }

@@ -3,12 +3,12 @@ package org.firstinspires.ftc.teamcode.jerry.autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.Odometer
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
-import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.RobotConfig
-import org.firstinspires.ftc.teamcode.common.tasks.GetParkingPositionTask
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
+import org.firstinspires.ftc.teamcode.common.tasks.GetSignalTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryPrecisionDriveTask
@@ -29,28 +29,28 @@ class JerrySignalAutonomous : BunyipsOpMode() {
     private var imu: IMUOp? = null
     private var x: Odometer? = null
     private var y: Odometer? = null
-    private var tagtask: GetParkingPositionTask? = null
-    private val tasks = ArrayDeque<TaskImpl>()
+    private var tagtask: GetSignalTask? = null
+    private val tasks = ArrayDeque<AutoTask>()
 
     override fun onInit() {
         // Configuration of camera and drive components
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         cam = OpenCVCam(this, config.webcam, config.monitorID)
-        if (config.assert(config.driveMotors))
+        if (NullSafety.assertNotNull(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
-        if (config.assert(config.fl))
+        if (NullSafety.assertNotNull(config.fl))
             x = Odometer(this, config.fl!!, config.xDiameter, config.xTicksPerRev)
 
-        if (config.assert(config.fr))
+        if (NullSafety.assertNotNull(config.fr))
             y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
-        if (config.assert(config.imu))
+        if (NullSafety.assertNotNull(config.imu))
             imu = IMUOp(this, config.imu!!)
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
-        tagtask = cam?.let { GetParkingPositionTask(this, it) }
+        tagtask = cam?.let { GetSignalTask(this, it) }
     }
 
     override fun onInitLoop(): Boolean {
@@ -66,7 +66,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         addTelemetry("ParkingPosition set to: $position")
 
         // Add movement tasks based on the signal position
-        if (position == GetParkingPositionTask.ParkingPosition.LEFT) {
+        if (position == GetSignalTask.ParkingPosition.LEFT) {
             // Drive forward if the position of the signal is LEFT
             tasks.add(
                 JerryPrecisionDriveTask(
@@ -81,7 +81,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
                     0.5
                 )
             )
-        } else if (position == GetParkingPositionTask.ParkingPosition.RIGHT) {
+        } else if (position == GetSignalTask.ParkingPosition.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
             tasks.add(
                 JerryPrecisionDriveTask(
@@ -125,7 +125,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
             tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive?.deinit()
+            drive?.stop()
         }
     }
 }

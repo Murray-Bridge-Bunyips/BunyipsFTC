@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.RobotConfig
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryIMURotationTask
@@ -22,7 +22,7 @@ class JerryIMURotateTest : BunyipsOpMode() {
     private var config = JerryConfig()
     private var imu: IMUOp? = null
     private var drive: JerryDrive? = null
-    private val tasks = ArrayDeque<TaskImpl>()
+    private val tasks = ArrayDeque<AutoTask>()
 
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
@@ -39,7 +39,7 @@ class JerryIMURotateTest : BunyipsOpMode() {
             tasks.removeFirst()
         }
         if (tasks.isEmpty()) {
-            drive?.deinit()
+            drive?.stop()
         }
     }
 }

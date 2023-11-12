@@ -3,19 +3,14 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.Odometer
-import org.firstinspires.ftc.teamcode.common.RelativeVector
-import org.firstinspires.ftc.teamcode.common.RobotVector
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.Task
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import kotlin.math.abs
 
 /**
  * Full-featured task for driving to a specific distance, with fail safes in case configuration is not available.
  * This supports movement throughout the 2D plane, and can be used to move in any one direction
- *
- * This system is being replaced by the new vector system in [JerryVectorDriveTask], which will allow for more complex movement,
- * but this is still maintained due to it's rigorous testing and reliability.
  *
  * @author Lucas Bubner, 2023
  */
@@ -26,11 +21,11 @@ class JerryPrecisionDriveTask(
     private val imu: IMUOp?,
     private val x: Odometer?,
     private val y: Odometer?,
-    private val distance_mm: Double,
+    private val distanceMM: Double,
     private val direction: Directions,
     private var power: Double,
     private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
-) : Task(opMode, time), TaskImpl {
+) : Task(opMode, time), AutoTask {
 
     init {
         try {
@@ -51,7 +46,7 @@ class JerryPrecisionDriveTask(
         LEFT, RIGHT, FORWARD, BACKWARD
     }
 
-    override fun isFinished(): Boolean {
+    override fun isTaskFinished(): Boolean {
         // Check if the task is done by checking if it has timed out in the super call or if the target has been reached
         // by the respective deadwheel. If the deadwheel is not available, then we cannot check if the target has been
         // reached, so we will just rely on the timeout.
@@ -60,11 +55,10 @@ class JerryPrecisionDriveTask(
         } else {
             y?.travelledMM()
         }
-        return super.isFinished() || evaluating != null && evaluating >= distance_mm
+        return evaluating != null && evaluating >= distanceMM
     }
 
     override fun init() {
-        super.init()
         // Capture vectors and start tracking
         imu?.startCapture()
         x?.track()
@@ -72,12 +66,7 @@ class JerryPrecisionDriveTask(
     }
 
     override fun run() {
-        if (isFinished()) {
-            drive?.deinit()
-            return
-        }
-
-        drive?.setSpeedXYR(
+        drive?.setSpeedUsingController(
             if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
             if (direction == Directions.FORWARD) -power else if (direction == Directions.BACKWARD) power else 0.0,
             imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0
@@ -95,7 +84,7 @@ class JerryPrecisionDriveTask(
                 } else {
                     String.format("%.2f", y?.travelledMM())
                 }
-            }/$distance_mm"
+            }/$distanceMM"
         )
 
         opMode.addTelemetry(
@@ -108,5 +97,9 @@ class JerryPrecisionDriveTask(
             }"
         )
 
+    }
+
+    override fun onFinish() {
+        drive?.stop()
     }
 }

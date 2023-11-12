@@ -18,15 +18,15 @@ class JerryNewVision : BunyipsOpMode() {
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         vision = Vision(this, config.webcam!!)
-        vision?.init(Vision.Processors.APRILTAG)
-        vision?.start(Vision.Processors.APRILTAG)
+//        vision?.init(Vision.Processors.APRILTAG)
+//        vision?.start(Vision.Processors.APRILTAG)
     }
 
     override fun activeLoop() {
-        vision?.tick()
+//        vision?.tick()
         addTelemetry("FPS: ${vision?.fps}")
         addTelemetry("Status: ${vision?.status}")
 //        addTelemetry("TFOD: ${vision?.tfodData}")
-        addTelemetry("AprilTag: ${vision?.aprilTagData}")
+//        addTelemetry("AprilTag: ${vision?.aprilTagData}")
     }
 }

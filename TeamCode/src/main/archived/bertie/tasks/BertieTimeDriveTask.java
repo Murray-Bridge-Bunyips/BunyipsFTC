@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.bertie.tasks;
 import org.firstinspires.ftc.teamcode.bertie.components.BertieDrive;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl;
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
 
 /*
     Robot BERTIE no longer exists; new robot is now JERRY

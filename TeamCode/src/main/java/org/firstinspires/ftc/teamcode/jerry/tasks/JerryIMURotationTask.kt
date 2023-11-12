@@ -2,8 +2,8 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.Task
-import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // Rotate the robot to a specific degree angle. This cannot be done with deadwheel assistance due to configuration.
@@ -21,7 +21,7 @@ class JerryIMURotationTask(
     // Angle information should be a degree of rotation relative to current angle where positive = cw
     private var angle: Double,
     private val speed: Double
-) : Task(opMode, time), TaskImpl {
+) : Task(opMode, time), AutoTask {
     // Enum to find out which way we need to be turning
     var direction: Direction = Direction.RIGHT
 
@@ -30,7 +30,6 @@ class JerryIMURotationTask(
     }
 
     override fun init() {
-        super.init()
         imu?.tick()
 
         // Find out which way we need to turn based on the information provided
@@ -43,17 +42,17 @@ class JerryIMURotationTask(
         }
 
         if (direction == Direction.LEFT) {
-            drive?.setSpeedXYR(0.0, 0.0, speed)
+            drive?.setSpeedUsingController(0.0, 0.0, speed)
         } else {
-            drive?.setSpeedXYR(0.0, 0.0, -speed)
+            drive?.setSpeedUsingController(0.0, 0.0, -speed)
         }
         drive?.update()
     }
 
     // Stop turning when we reach the target angle
-    override fun isFinished(): Boolean {
+    override fun isTaskFinished(): Boolean {
         val heading = imu?.heading
-        return super.isFinished() || if (direction == Direction.LEFT) {
+        return if (direction == Direction.LEFT) {
             // Angle will be decreasing
             heading != null && heading <= angle
         } else {
@@ -63,10 +62,10 @@ class JerryIMURotationTask(
     }
 
     override fun run() {
-        if (isFinished()) {
-            drive?.deinit()
-            return
-        }
         imu?.tick()
+    }
+
+    override fun onFinish() {
+        drive?.stop()
     }
 }

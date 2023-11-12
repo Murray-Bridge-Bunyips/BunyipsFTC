@@ -10,10 +10,11 @@ import org.firstinspires.ftc.teamcode.common.BunyipsComponent
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 
 /**
- * Arm controller for Jerry bot. Includes a claw and a lift.
+ * Arm controller for Jerry bot. Includes a claw and a lift with index-based positioning.
+ * Use JerryLift instead as the index-based system is not ideal for use.
  * @author Lucas Bubner, 2022
+ * @see JerryLift
  */
-@Deprecated("Use JerryLift instead as the index-based system is not ideal for use.")
 class JerryArm(
     opMode: BunyipsOpMode,
     private var claw: Servo,
@@ -63,7 +64,7 @@ class JerryArm(
 
         // Now we wait for the limit switch to be hit, or if the movement of the arm stops for long enough,
         // which means either the button failed or the motors had already triggered
-        // the bounds detection. Either way works and it won't hurt to use both, incase the limit
+        // the bounds detection. Either way works and it won't hurt to use both, in case the limit
         // switch breaks for some reason. Press right bumper to cancel the loop.
         // Using reversed operation as pressing results in the limit switch reporting false
         var e = 0
