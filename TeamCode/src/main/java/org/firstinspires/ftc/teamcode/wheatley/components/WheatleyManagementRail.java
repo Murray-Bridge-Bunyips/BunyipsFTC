@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  * on the off chance that I'm not dead the moment I pop off this thing."
  *
  * @author Lachlan Paul, 2023
+ * @author Lucas Bubner, 2023
  */
 public class WheatleyManagementRail extends BunyipsComponent {
     private final DcMotor extension;
@@ -30,11 +31,11 @@ public class WheatleyManagementRail extends BunyipsComponent {
     private int suspenderTarget;
     private double triggerTarget;
 
-    private static final int MAX_TICKS = 1000;
+    private static final int MAX_TICKS = 3000;
     private static final double PWR = 1.0;
 
-    private static final double ARMED = 0.0;
-    private static final double OPEN = 1.0;
+    private static final double ARMED = 1.0;
+    private static final double OPEN = 0.0;
 
     public WheatleyManagementRail(@NonNull BunyipsOpMode opMode, DcMotor extension, Servo trigger) {
         super(opMode);

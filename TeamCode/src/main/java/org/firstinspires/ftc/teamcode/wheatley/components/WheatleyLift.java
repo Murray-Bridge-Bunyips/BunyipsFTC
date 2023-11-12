@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  * Component for the arm used for lifting pixels
  *
  * @author Lachlan Paul, 2023
+ * @author Lucas Bubner, 2023
  */
 
 public class WheatleyLift extends BunyipsComponent {
@@ -57,7 +58,7 @@ public class WheatleyLift extends BunyipsComponent {
      * @param gamepadPosition the gamepad stick position to set the arm to
      */
     public void armLiftUsingController(double gamepadPosition) {
-        armPower = gamepadPosition / 2.5;
+        armPower = gamepadPosition / 3;
     }
 
     public void leftClaw() {

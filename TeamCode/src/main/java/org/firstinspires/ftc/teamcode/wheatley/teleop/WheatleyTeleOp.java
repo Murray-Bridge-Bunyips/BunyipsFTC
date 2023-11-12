@@ -24,6 +24,7 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
  * > gamepad2 y operates the right pixel claw
  *
  * @author Lachlan Paul, 2023
+ * @author Lucas Bubner, 2023
  */
 
 @TeleOp(name = "WHEATLEY: TeleOp", group = "WHEATLEY")
@@ -57,7 +58,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         // Launches the paper plane
         // The triggers are pressure sensitive, apparently.
         // Set to 1 to avoid any slight touches launching a nuke.
-        if (gamepad1.right_trigger == 1) {
+        if (gamepad2.right_trigger == 1.0) {
             cannon.fire();
         }
 

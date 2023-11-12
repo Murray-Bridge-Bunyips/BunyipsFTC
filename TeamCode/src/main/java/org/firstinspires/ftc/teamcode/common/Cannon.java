@@ -11,6 +11,7 @@ import com.qualcomm.robotcore.hardware.Servo;
  * "Fire in the hole!"
  *
  * @author Lachlan Paul, 2023
+ * @author Lucas Bubner, 2023
  */
 public class Cannon extends BunyipsComponent {
     private final Servo prolong;

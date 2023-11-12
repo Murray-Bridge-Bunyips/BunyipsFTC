@@ -27,19 +27,10 @@ public class GLaDOSServoCore extends BunyipsComponent {
         this.leftServo = leftServo;
         this.rightServo = rightServo;
 
-        if (leftServo.getPosition() == LEFT_SERVO_OPEN_POSITION) {
-            leftServoPosition = LEFT_SERVO_OPEN_POSITION;
-        } else {
-            leftServo.setPosition(LEFT_SERVO_CLOSED_POSITION);
-            leftServoPosition = LEFT_SERVO_CLOSED_POSITION;
-        }
-
-        if (rightServo.getPosition() == RIGHT_SERVO_OPEN_POSITION) {
-            rightServoPosition = RIGHT_SERVO_OPEN_POSITION;
-        } else {
-            rightServo.setPosition(RIGHT_SERVO_CLOSED_POSITION);
-            rightServoPosition = RIGHT_SERVO_CLOSED_POSITION;
-        }
+        // Always close on init
+        leftServoPosition = LEFT_SERVO_CLOSED_POSITION;
+        rightServoPosition = RIGHT_SERVO_CLOSED_POSITION;
+        update();
     }
 
     public void toggleServo(ServoSide servo) {

@@ -51,7 +51,6 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         arm = new GLaDOSArmCore(this, config.sr, config.sa, config.al, config.ls, config.rs, GLaDOSAlignmentCore.Mode.MANUAL);
         if (NullSafety.assertComponentArgs(this, Cannon.class, config.pl))
             cannon = new Cannon(this, config.pl);
-        arm.getServoController().update();
     }
 
     @Override
@@ -66,7 +65,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         } else if (gamepad1.left_bumper && !dec_pressed) {
             speed.decrement();
         }
-        addTelemetry("TriSpeed: Running at % speed", speed);
+        addTelemetry("TriSpeed: Running at % speed", speed.getSpeed());
 
         drive.setSpeedUsingController(x * speed.getMultiplier(), y * speed.getMultiplier(), r * speed.getMultiplier());
 

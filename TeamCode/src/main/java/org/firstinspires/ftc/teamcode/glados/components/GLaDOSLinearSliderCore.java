@@ -52,6 +52,8 @@ public class GLaDOSLinearSliderCore extends BunyipsComponent {
 
         rotator.reset();
         rotator.setup();
+        // Experimental
+//        rotator.setSnapshot(-100.0);
         rotator.setPower(ROTATOR_POWER);
 
         // Default mode is set to run on tracking

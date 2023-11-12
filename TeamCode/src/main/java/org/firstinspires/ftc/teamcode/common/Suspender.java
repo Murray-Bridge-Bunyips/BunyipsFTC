@@ -44,7 +44,7 @@ public class Suspender extends BunyipsComponent {
         STOWED_DEGREES = stowedDegrees;
         OPEN_DEGREES = openDegrees;
 
-        // TODO: Might need to set up a limit switch to determine if the arm is down-locked
+        // Might need to set up a limit switch to determine if the arm is down-locked
         // We will assume that the arm is down-locked for now
         status = Status.STOWED;
         action = Action.STOPPED;
