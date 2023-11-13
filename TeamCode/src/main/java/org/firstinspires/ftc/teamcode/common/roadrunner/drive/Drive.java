@@ -55,9 +55,8 @@ public interface Drive {
 
     Pose2d getLastError();
 
+    // waitForIdle was removed as BunyipsOpMode handles all dispatch manually
     void update();
-
-    void waitForIdle();
 
     boolean isBusy();
 

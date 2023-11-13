@@ -13,6 +13,10 @@ import org.firstinspires.ftc.teamcode.common.roadrunner.drive.localizers.TwoWhee
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.localizers.TwoWheelTrackingLocalizerCoefficients;
 import org.firstinspires.ftc.teamcode.common.roadrunner.util.Encoder;
 
+/**
+ * RoadRunner Mecanum Drive with two tracking dead wheels for localization
+ * @author Lucas Bubner, 2023
+ */
 public class DualDeadwheelMecanumDrive extends Mecanum {
     public DualDeadwheelMecanumDrive(@NonNull BunyipsOpMode opMode, DriveConstants constants, MecanumCoefficients mecanumCoefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx frontLeft, DcMotorEx backLeft, DcMotorEx frontRight, DcMotorEx backRight, TwoWheelTrackingLocalizerCoefficients localizerCoefficients, Encoder parallel, Encoder perpendicular) {
         super(opMode, constants, mecanumCoefficients, voltageSensor, imu, frontLeft, backLeft, frontRight, backRight);

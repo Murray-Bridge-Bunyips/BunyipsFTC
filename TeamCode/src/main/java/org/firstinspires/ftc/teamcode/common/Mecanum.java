@@ -102,11 +102,6 @@ public class Mecanum extends BunyipsComponent implements Drive {
     }
 
     @Override
-    public void waitForIdle() {
-        drive.waitForIdle();
-    }
-
-    @Override
     public boolean isBusy() {
         return drive.isBusy();
     }
