@@ -68,10 +68,16 @@ enum class Controller {
         }
 
         /**
-         * Convert the gamepad movement values to a Cartesian robot pose.
-         * @author Lucas Bubner, 2023
+         * Convert the gamepad movement values to a robot pose.
          */
-        fun makePose(x: Double, y: Double, r: Double): Pose2d {
+        fun makeRobotPose(x: Double, y: Double, r: Double): Pose2d {
+            return Cartesian.toPose(x, -y, r)
+        }
+
+        /**
+         * Convert the gamepad movement values to a Cartesian pose.
+         */
+        fun makeCartesianPose(x: Double, y: Double, r: Double): Pose2d {
             return Pose2d(x, -y, r)
         }
     }
