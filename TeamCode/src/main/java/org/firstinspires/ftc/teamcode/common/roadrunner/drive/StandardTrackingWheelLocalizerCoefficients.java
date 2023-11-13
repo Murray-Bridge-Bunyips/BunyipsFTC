@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.roadrunner.drive;
 
-public class TrackingWheelLocalizerCoefficients {
+public class StandardTrackingWheelLocalizerCoefficients {
 
     public double TICKS_PER_REV;
     public double WHEEL_RADIUS = 2; // in
@@ -8,40 +8,40 @@ public class TrackingWheelLocalizerCoefficients {
     public double LATERAL_DISTANCE = 10; // in; distance between the left and right wheels
     public double FORWARD_OFFSET = 4; // in; offset of the lateral wheel
 
-    public static class TrackingWheelLocalizerCoefficientsBuilder {
+    public static class StandardTrackingWheelLocalizerCoefficientsBuilder {
 
-        private final TrackingWheelLocalizerCoefficients trackingWheelCoefficients;
+        private final StandardTrackingWheelLocalizerCoefficients trackingWheelCoefficients;
 
-        public TrackingWheelLocalizerCoefficientsBuilder() {
-            trackingWheelCoefficients = new TrackingWheelLocalizerCoefficients();
+        public StandardTrackingWheelLocalizerCoefficientsBuilder() {
+            trackingWheelCoefficients = new StandardTrackingWheelLocalizerCoefficients();
         }
 
-        public TrackingWheelLocalizerCoefficientsBuilder setTicksPerRev(double ticksPerRev) {
+        public StandardTrackingWheelLocalizerCoefficientsBuilder setTicksPerRev(double ticksPerRev) {
             trackingWheelCoefficients.TICKS_PER_REV = ticksPerRev;
             return this;
         }
 
-        public TrackingWheelLocalizerCoefficientsBuilder setWheelRadius(double wheelRadius) {
+        public StandardTrackingWheelLocalizerCoefficientsBuilder setWheelRadius(double wheelRadius) {
             trackingWheelCoefficients.WHEEL_RADIUS = wheelRadius;
             return this;
         }
 
-        public TrackingWheelLocalizerCoefficientsBuilder setGearRatio(double gearRatio) {
+        public StandardTrackingWheelLocalizerCoefficientsBuilder setGearRatio(double gearRatio) {
             trackingWheelCoefficients.GEAR_RATIO = gearRatio;
             return this;
         }
 
-        public TrackingWheelLocalizerCoefficientsBuilder setLateralDistance(double lateralDistance) {
+        public StandardTrackingWheelLocalizerCoefficientsBuilder setLateralDistance(double lateralDistance) {
             trackingWheelCoefficients.LATERAL_DISTANCE = lateralDistance;
             return this;
         }
 
-        public TrackingWheelLocalizerCoefficientsBuilder setForwardOffset(double forwardOffset) {
+        public StandardTrackingWheelLocalizerCoefficientsBuilder setForwardOffset(double forwardOffset) {
             trackingWheelCoefficients.FORWARD_OFFSET = forwardOffset;
             return this;
         }
 
-        public TrackingWheelLocalizerCoefficients build() {
+        public StandardTrackingWheelLocalizerCoefficients build() {
             return trackingWheelCoefficients;
         }
     }

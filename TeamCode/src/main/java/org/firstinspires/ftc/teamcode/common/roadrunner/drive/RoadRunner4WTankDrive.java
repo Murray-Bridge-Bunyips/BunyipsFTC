@@ -58,7 +58,7 @@ public class RoadRunner4WTankDrive extends TankDrive {
         super(constants.kV, constants.kA, constants.kStatic, constants.TRACK_WIDTH);
 
         follower = new TankPIDVAFollower(coefficients.AXIAL_PID, coefficients.CROSS_TRACK_PID,
-                new Pose2d(0.5, 0.5, 0.08726646259971647), 0.5);
+                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
         VEL_CONSTRAINT = getVelocityConstraint(constants.MAX_VEL, constants.MAX_ANG_VEL, constants.TRACK_WIDTH);
         accelConstraint = getAccelerationConstraint(constants.MAX_ACCEL);

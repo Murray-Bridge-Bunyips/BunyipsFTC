@@ -53,8 +53,8 @@ public class DriveConstants {
      */
     public double MAX_VEL = 30;
     public double MAX_ACCEL = 30;
-    public double MAX_ANG_VEL = 1.0471975511965976;
-    public double MAX_ANG_ACCEL = 1.0471975511965976;
+    public double MAX_ANG_VEL = Math.toRadians(60);
+    public double MAX_ANG_ACCEL = Math.toRadians(60);
 
     public static double getMotorVelocityF(double ticksPerSecond) {
         // see https://docs.google.com/document/d/1tyWrXDfMidwYyP_5H4mZyVgaEswhOC35gvdmP-V-5hA/edit#heading=h.61g9ixenznbx

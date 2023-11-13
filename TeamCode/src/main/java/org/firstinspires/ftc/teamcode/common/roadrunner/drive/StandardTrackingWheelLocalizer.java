@@ -25,7 +25,7 @@ import java.util.List;
  * Reworked to use a builder parameters for multiple robot configurations.
  */
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
-    private final TrackingWheelLocalizerCoefficients coefficients;
+    private final StandardTrackingWheelLocalizerCoefficients coefficients;
     private final Encoder leftEncoder;
     private final Encoder rightEncoder;
     private final Encoder frontEncoder;
@@ -33,11 +33,11 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     private final List<Integer> lastEncPositions;
     private final List<Integer> lastEncVels;
 
-    public StandardTrackingWheelLocalizer(TrackingWheelLocalizerCoefficients coefficients, Encoder leftEncoder, Encoder rightEncoder, Encoder frontEncoder, List<Integer> lastTrackingEncPositions, List<Integer> lastTrackingEncVels) {
+    public StandardTrackingWheelLocalizer(StandardTrackingWheelLocalizerCoefficients coefficients, Encoder leftEncoder, Encoder rightEncoder, Encoder frontEncoder, List<Integer> lastTrackingEncPositions, List<Integer> lastTrackingEncVels) {
         super(Arrays.asList(
                 new Pose2d(0, coefficients.LATERAL_DISTANCE / 2, 0), // left
                 new Pose2d(0, -coefficients.LATERAL_DISTANCE / 2, 0), // right
-                new Pose2d(coefficients.FORWARD_OFFSET, 0, 1.5707963267948966) // front
+                new Pose2d(coefficients.FORWARD_OFFSET, 0, Math.toRadians(90)) // front
         ));
 
         this.coefficients = coefficients;

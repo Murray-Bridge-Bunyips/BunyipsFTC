@@ -27,7 +27,8 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * FtcDashboard cannot be utilised during a match according to <RS09>, so this is only for development.
      * It is allowed during the Pits or Practice Field, or in any other non-match situation.
      */
-    val telem: MultipleTelemetry = MultipleTelemetry(super.telemetry, FtcDashboard.getInstance().telemetry)
+    val telem: MultipleTelemetry =
+        MultipleTelemetry(super.telemetry, FtcDashboard.getInstance().telemetry)
 
     /**
      * One-time setup for operations that need to be done for every OpMode
