@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.wheatley.components;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -37,24 +36,24 @@ public class WheatleyConfig extends RobotConfig {
     // Declares all necessary motors
 
     // Expansion 1: fl
-    public DcMotor fl;
+    public DcMotorEx fl;
 
     // Expansion 0: bl
-    public DcMotor bl;
+    public DcMotorEx bl;
 
     // Expansion 2: fr
-    public DcMotor /*Are you*/ fr /*Or jk*/;
+    public DcMotorEx /*Are you*/ fr /*Or jk*/;
 
     // Expansion 3: br
-    public DcMotor br;
+    public DcMotorEx br;
 
     // Control 0: ra
     // Rotation Arm: Arm's rotation motor
-    public DcMotor ra;
+    public DcMotorEx ra;
 
     // Control 1: susMotor
     // Suspender Extension: Suspender extension motor
-    public DcMotor susMotor;
+    public DcMotorEx susMotor;
 
     // Control Servo 0: ls
     // Left Servo: Left Claw
@@ -92,15 +91,15 @@ public class WheatleyConfig extends RobotConfig {
     protected void init() {
 
         // Motor directions configured to work with current config
-        fl = (DcMotor) getHardware("fl", DcMotor.class);
-        bl = (DcMotor) getHardware("bl", DcMotor.class);
-        fr = (DcMotor) getHardware("fr", DcMotor.class);
-        br = (DcMotor) getHardware("br", DcMotor.class);
+        fl = (DcMotorEx) getHardware("fl", DcMotorEx.class);
+        bl = (DcMotorEx) getHardware("bl", DcMotorEx.class);
+        fr = (DcMotorEx) getHardware("fr", DcMotorEx.class);
+        br = (DcMotorEx) getHardware("br", DcMotorEx.class);
         ls = (Servo) getHardware("ls", Servo.class);
         rs = (Servo) getHardware("rs", Servo.class);
         webcam = (WebcamName) getHardware("webcam", WebcamName.class);
-        ra = (DcMotor) getHardware("ra", DcMotor.class);
-        susMotor = (DcMotor) getHardware("susMotor", DcMotor.class);
+        ra = (DcMotorEx) getHardware("ra", DcMotorEx.class);
+        susMotor = (DcMotorEx) getHardware("susMotor", DcMotorEx.class);
         susServo = (Servo) getHardware("susServo", Servo.class);
         pl = (Servo) getHardware("pl", Servo.class);
         imu = (IMU) getHardware("imu", IMU.class);

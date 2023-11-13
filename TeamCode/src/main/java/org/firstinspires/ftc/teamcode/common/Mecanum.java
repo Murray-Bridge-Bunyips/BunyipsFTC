@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.common;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -38,8 +39,14 @@ public class Mecanum extends BunyipsComponent implements Drive {
         return drive;
     }
 
-    public void setLocalizer(Localizer localizer) {
-        drive.setLocalizer(localizer);
+    @Override
+    public double getExternalHeading() {
+        return drive.getExternalHeading();
+    }
+
+    @Override
+    public void setExternalHeading(double value) {
+        drive.setExternalHeading(value);
     }
 
     public void setPowers(double v, double v1, double v2, double v3) {
@@ -107,6 +114,36 @@ public class Mecanum extends BunyipsComponent implements Drive {
     }
 
     @Override
+    public Pose2d getPoseEstimate() {
+        return drive.getPoseEstimate();
+    }
+
+    @Override
+    public void setPoseEstimate(Pose2d value) {
+        drive.setPoseEstimate(value);
+    }
+
+    @Override
+    public Pose2d getPoseVelocity() {
+        return drive.getPoseVelocity();
+    }
+
+    @Override
+    public void updatePoseEstimate() {
+        drive.updatePoseEstimate();
+    }
+
+    @Override
+    public void setDriveSignal(DriveSignal driveSignal) {
+        drive.setDriveSignal(driveSignal);
+    }
+
+    @Override
+    public void setDrivePower(Pose2d drivePower) {
+        drive.setDrivePower(drivePower);
+    }
+
+    @Override
     public void setMode(DcMotor.RunMode runMode) {
         drive.setMode(runMode);
     }
@@ -144,5 +181,14 @@ public class Mecanum extends BunyipsComponent implements Drive {
     @Override
     public Double getExternalHeadingVelocity() {
         return drive.getExternalHeadingVelocity();
+    }
+
+    @Override
+    public Localizer getLocalizer() {
+        return drive.getLocalizer();
+    }
+
+    public void setLocalizer(Localizer localizer) {
+        drive.setLocalizer(localizer);
     }
 }

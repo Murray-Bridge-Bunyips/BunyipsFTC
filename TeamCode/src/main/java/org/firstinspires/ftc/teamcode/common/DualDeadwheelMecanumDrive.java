@@ -15,6 +15,7 @@ import org.firstinspires.ftc.teamcode.common.roadrunner.util.Encoder;
 
 /**
  * RoadRunner Mecanum Drive with two tracking dead wheels for localization
+ *
  * @author Lucas Bubner, 2023
  */
 public class DualDeadwheelMecanumDrive extends Mecanum {

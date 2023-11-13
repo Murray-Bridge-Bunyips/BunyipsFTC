@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.common;
 
+/**
+ * Utility to convert between inches and metric units.
+ */
 public class Inches {
     public static double toCM(double inches) {
         return inches * 2.54;

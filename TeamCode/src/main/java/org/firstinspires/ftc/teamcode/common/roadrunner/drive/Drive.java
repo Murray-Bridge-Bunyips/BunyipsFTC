@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common.roadrunner.drive;
 
+import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
@@ -79,5 +80,23 @@ public interface Drive {
 
     Double getExternalHeadingVelocity();
 
+    Localizer getLocalizer();
+
     void setLocalizer(Localizer localizer);
+
+    double getExternalHeading();
+
+    void setExternalHeading(double value);
+
+    Pose2d getPoseEstimate();
+
+    void setPoseEstimate(Pose2d value);
+
+    Pose2d getPoseVelocity();
+
+    void updatePoseEstimate();
+
+    void setDriveSignal(DriveSignal driveSignal);
+
+    void setDrivePower(Pose2d drivePower);
 }
