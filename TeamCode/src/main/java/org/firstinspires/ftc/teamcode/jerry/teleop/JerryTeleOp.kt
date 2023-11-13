@@ -5,7 +5,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.MecanumDrive
 import org.firstinspires.ftc.teamcode.common.NullSafety
-import org.firstinspires.ftc.teamcode.common.RelativeVector
+import org.firstinspires.ftc.teamcode.common.RelativePose2d
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.UserSelection
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -64,7 +64,7 @@ class JerryTeleOp : BunyipsOpMode() {
                     config.fl!!,
                     config.fr!!,
                     imu!!,
-                    RelativeVector.FORWARD
+                    RelativePose2d.FORWARD
                 )
             } else {
                 JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)

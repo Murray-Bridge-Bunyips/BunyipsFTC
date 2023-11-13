@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.glados.tasks;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.RelativeVector;
+import org.firstinspires.ftc.teamcode.common.RelativePose2d;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
 
@@ -11,7 +11,9 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
  * Utilise a modified time control to drive GLaDOS based on Field Squares.
  *
  * @author Lucas Bubner, 2023
+ * @deprecated Migration to RoadRunner
  */
+@Deprecated
 public class GLaDOSSquareDriveTask extends Task {
     /**
      * Seconds to travel one square along X or Y axis at 1.0 power.

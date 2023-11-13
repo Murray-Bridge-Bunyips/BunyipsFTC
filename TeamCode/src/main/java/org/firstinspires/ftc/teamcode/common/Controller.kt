@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.hardware.Gamepad
 
 /**
@@ -67,12 +68,11 @@ enum class Controller {
         }
 
         /**
-         * Convert the gamepad movement values to a Cartesian robot vector.
-         * This is done by un-rotating (90 deg) the vectors provided by the controller.
+         * Convert the gamepad movement values to a Cartesian robot pose.
          * @author Lucas Bubner, 2023
          */
-        fun makeVector(x: Double, y: Double, r: Double): RobotVector {
-            return RobotVector(x, -y, r)
+        fun makePose(x: Double, y: Double, r: Double): Pose2d {
+            return Pose2d(x, -y, r)
         }
     }
 }

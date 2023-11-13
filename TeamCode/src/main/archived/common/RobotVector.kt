@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.util.Range
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit
 import kotlin.math.atan2
@@ -10,8 +11,11 @@ import kotlin.math.sqrt
 /**
  * Definitions of directional vectors in the format (x, y, r).
  * We don't have to define (z) as 3D space is irrelevant in this context.
+ *
  * @author Lucas Bubner, 2023
+ * @deprecated Migration to RoadRunner Pose2d
  */
+@Deprecated("Migration to RoadRunner Pose2d")
 data class RobotVector(var x: Double, var y: Double, var r: Double) {
     // Use inverse trig to find a polar angle from a Cartesian quantity
     val angle: Double

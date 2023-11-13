@@ -15,10 +15,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 public abstract class FieldCentricMecanumDrive extends MecanumDrive {
     private final IMUOp imu;
 
-    protected FieldCentricMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativeVector startingDirection) {
+    protected FieldCentricMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativePose2d startingDirection) {
         super(opMode, frontLeft, backLeft, frontRight, backRight);
         this.imu = imu;
-        if (startingDirection == RelativeVector.CLOCKWISE || startingDirection == RelativeVector.ANTICLOCKWISE) {
+        if (startingDirection == RelativePose2d.CLOCKWISE || startingDirection == RelativePose2d.ANTICLOCKWISE) {
             throw new IllegalArgumentException("FCMD: Cannot use rotational quantities as a starting direction");
         }
 
@@ -30,7 +30,7 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
             imu.resetHeading();
 
         // Current vector will be the robot's starting vector, must offset the IMU to align straight
-        imu.setOffset(startingDirection.getAngle());
+        imu.setOffset(startingDirection.getAngleDegrees());
     }
 
     /**

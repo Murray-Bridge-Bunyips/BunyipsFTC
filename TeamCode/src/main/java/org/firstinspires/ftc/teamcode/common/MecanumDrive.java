@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.common;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
@@ -211,24 +212,23 @@ public abstract class MecanumDrive extends BunyipsComponent {
     }
 
     /**
-     * Set motor speeds based on a RobotVector or RelativeVector.
+     * Set motor speeds based on a RobotVector or RelativePose2d.
      *
-     * @see org.firstinspires.ftc.teamcode.common.RobotVector#RobotVector(double, double, double)
-     * @see org.firstinspires.ftc.teamcode.common.RelativeVector
+     * @see org.firstinspires.ftc.teamcode.common.RelativePose2d
      */
     public <T> void setVector(T vector) {
-        if (vector instanceof RobotVector) {
-            RobotVector robotVector = (RobotVector) vector;
+        if (vector instanceof Pose2d) {
+            Pose2d robotVector = (Pose2d) vector;
             speedX = robotVector.getX();
             speedY = robotVector.getY();
-            speedR = robotVector.getR();
-        } else if (vector instanceof RelativeVector) {
-            RelativeVector relativeVector = (RelativeVector) vector;
+            speedR = robotVector.getHeading();
+        } else if (vector instanceof RelativePose2d) {
+            RelativePose2d relativeVector = (RelativePose2d) vector;
             speedX = relativeVector.getVector().getX();
             speedY = relativeVector.getVector().getY();
-            speedR = relativeVector.getVector().getR();
+            speedR = relativeVector.getVector().getHeading();
         } else {
-            throw new IllegalArgumentException("MecanumDrive: Vector must be of type RobotVector or RelativeVector");
+            throw new IllegalArgumentException("MecanumDrive: Vector must be of type RobotVector or RelativePose2d");
         }
     }
 
