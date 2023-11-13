@@ -69,80 +69,80 @@ public class DriveConstants {
         return rpm * GEAR_RATIO * 2 * Math.PI * WHEEL_RADIUS / 60.0;
     }
 
-    public static class DriveConstantsBuilder {
+    public static class Builder {
 
         private final DriveConstants driveConstants;
 
-        public DriveConstantsBuilder() {
+        public Builder() {
             driveConstants = new DriveConstants();
         }
 
-        public DriveConstantsBuilder setTicksPerRev(double ticksPerRev) {
+        public Builder setTicksPerRev(double ticksPerRev) {
             driveConstants.TICKS_PER_REV = ticksPerRev;
             return this;
         }
 
-        public DriveConstantsBuilder setMaxRPM(double maxRPM) {
+        public Builder setMaxRPM(double maxRPM) {
             driveConstants.MAX_RPM = maxRPM;
             return this;
         }
 
-        public DriveConstantsBuilder setRunUsingEncoder(boolean runUsingEncoder) {
+        public Builder setRunUsingEncoder(boolean runUsingEncoder) {
             driveConstants.RUN_USING_ENCODER = runUsingEncoder;
             return this;
         }
 
-        public DriveConstantsBuilder setMotorVeloPID(PIDFCoefficients motorVeloPID) {
+        public Builder setMotorVeloPID(PIDFCoefficients motorVeloPID) {
             driveConstants.MOTOR_VELO_PID = motorVeloPID;
             return this;
         }
 
-        public DriveConstantsBuilder setWheelRadius(double wheelRadius) {
+        public Builder setWheelRadius(double wheelRadius) {
             driveConstants.WHEEL_RADIUS = wheelRadius;
             return this;
         }
 
-        public DriveConstantsBuilder setGearRatio(double gearRatio) {
+        public Builder setGearRatio(double gearRatio) {
             driveConstants.GEAR_RATIO = gearRatio;
             return this;
         }
 
-        public DriveConstantsBuilder setTrackWidth(double trackWidth) {
+        public Builder setTrackWidth(double trackWidth) {
             driveConstants.TRACK_WIDTH = trackWidth;
             return this;
         }
 
-        public DriveConstantsBuilder setKV(double kV) {
+        public Builder setKV(double kV) {
             driveConstants.kV = kV;
             return this;
         }
 
-        public DriveConstantsBuilder setKA(double kA) {
+        public Builder setKA(double kA) {
             driveConstants.kA = kA;
             return this;
         }
 
-        public DriveConstantsBuilder setKStatic(double kStatic) {
+        public Builder setKStatic(double kStatic) {
             driveConstants.kStatic = kStatic;
             return this;
         }
 
-        public DriveConstantsBuilder setMaxVel(double maxVel) {
+        public Builder setMaxVel(double maxVel) {
             driveConstants.MAX_VEL = maxVel;
             return this;
         }
 
-        public DriveConstantsBuilder setMaxAccel(double maxAccel) {
+        public Builder setMaxAccel(double maxAccel) {
             driveConstants.MAX_ACCEL = maxAccel;
             return this;
         }
 
-        public DriveConstantsBuilder setMaxAngVel(double maxAngVel) {
+        public Builder setMaxAngVel(double maxAngVel) {
             driveConstants.MAX_ANG_VEL = maxAngVel;
             return this;
         }
 
-        public DriveConstantsBuilder setMaxAngAccel(double maxAngAccel) {
+        public Builder setMaxAngAccel(double maxAngAccel) {
             driveConstants.MAX_ANG_ACCEL = maxAngAccel;
             return this;
         }

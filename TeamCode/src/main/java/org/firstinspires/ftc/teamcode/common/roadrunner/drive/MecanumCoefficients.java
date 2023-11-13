@@ -5,6 +5,8 @@ import com.acmerobotics.roadrunner.control.PIDCoefficients;
 /**
  * Constants for RoadRunner mecanum drive.
  * Reworked to use a builder for multiple robot configurations.
+ *
+ * @author Lucas Bubner, 2023
  */
 public class MecanumCoefficients {
     public PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
@@ -14,40 +16,40 @@ public class MecanumCoefficients {
     public double VY_WEIGHT = 1;
     public double OMEGA_WEIGHT = 1;
 
-    public static class MecanumCoefficientsBuilder {
+    public static class Builder {
 
         private final MecanumCoefficients mecanumCoefficients;
 
-        public MecanumCoefficientsBuilder() {
+        public Builder() {
             mecanumCoefficients = new MecanumCoefficients();
         }
 
-        public MecanumCoefficientsBuilder setTranslationalPID(PIDCoefficients translationalPID) {
+        public Builder setTranslationalPID(PIDCoefficients translationalPID) {
             mecanumCoefficients.TRANSLATIONAL_PID = translationalPID;
             return this;
         }
 
-        public MecanumCoefficientsBuilder setHeadingPID(PIDCoefficients headingPID) {
+        public Builder setHeadingPID(PIDCoefficients headingPID) {
             mecanumCoefficients.HEADING_PID = headingPID;
             return this;
         }
 
-        public MecanumCoefficientsBuilder setLateralMultiplier(double lateralMultiplier) {
+        public Builder setLateralMultiplier(double lateralMultiplier) {
             mecanumCoefficients.LATERAL_MULTIPLIER = lateralMultiplier;
             return this;
         }
 
-        public MecanumCoefficientsBuilder setVXWeight(double vxWeight) {
+        public Builder setVXWeight(double vxWeight) {
             mecanumCoefficients.VX_WEIGHT = vxWeight;
             return this;
         }
 
-        public MecanumCoefficientsBuilder setVYWeight(double vyWeight) {
+        public Builder setVYWeight(double vyWeight) {
             mecanumCoefficients.VY_WEIGHT = vyWeight;
             return this;
         }
 
-        public MecanumCoefficientsBuilder setOmegaWeight(double omegaWeight) {
+        public Builder setOmegaWeight(double omegaWeight) {
             mecanumCoefficients.OMEGA_WEIGHT = omegaWeight;
             return this;
         }

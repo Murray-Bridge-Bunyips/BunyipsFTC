@@ -2,6 +2,12 @@ package org.firstinspires.ftc.teamcode.common.roadrunner.drive;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 
+/**
+ * Constants for RoadRunner tank drive.
+ * Reworked to use a builder for multiple robot configurations.
+ *
+ * @author Lucas Bubner, 2023
+ */
 public class TankCoefficients {
     public PIDCoefficients AXIAL_PID = new PIDCoefficients(0, 0, 0);
     public PIDCoefficients CROSS_TRACK_PID = new PIDCoefficients(0, 0, 0);
@@ -9,35 +15,35 @@ public class TankCoefficients {
     public double VX_WEIGHT = 1;
     public double OMEGA_WEIGHT = 1;
 
-    public static class TankCoefficientsBuilder {
+    public static class Builder {
 
         private final TankCoefficients tankCoefficients;
 
-        public TankCoefficientsBuilder() {
+        public Builder() {
             tankCoefficients = new TankCoefficients();
         }
 
-        public TankCoefficientsBuilder setAxialPID(PIDCoefficients axialPID) {
+        public Builder setAxialPID(PIDCoefficients axialPID) {
             tankCoefficients.AXIAL_PID = axialPID;
             return this;
         }
 
-        public TankCoefficientsBuilder setCrossTrackPID(PIDCoefficients crossTrackPID) {
+        public Builder setCrossTrackPID(PIDCoefficients crossTrackPID) {
             tankCoefficients.CROSS_TRACK_PID = crossTrackPID;
             return this;
         }
 
-        public TankCoefficientsBuilder setHeadingPID(PIDCoefficients headingPID) {
+        public Builder setHeadingPID(PIDCoefficients headingPID) {
             tankCoefficients.HEADING_PID = headingPID;
             return this;
         }
 
-        public TankCoefficientsBuilder setVXWeight(double vxWeight) {
+        public Builder setVXWeight(double vxWeight) {
             tankCoefficients.VX_WEIGHT = vxWeight;
             return this;
         }
 
-        public TankCoefficientsBuilder setOmegaWeight(double omegaWeight) {
+        public Builder setOmegaWeight(double omegaWeight) {
             tankCoefficients.OMEGA_WEIGHT = omegaWeight;
             return this;
         }

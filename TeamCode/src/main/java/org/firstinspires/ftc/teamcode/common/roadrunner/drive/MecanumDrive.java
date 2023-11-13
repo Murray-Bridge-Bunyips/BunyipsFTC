@@ -3,16 +3,11 @@ package org.firstinspires.ftc.teamcode.common.roadrunner.drive;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.drive.DriveSignal;
-import com.acmerobotics.roadrunner.drive.TankDrive;
-import com.acmerobotics.roadrunner.followers.TankPIDVAFollower;
+import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
-import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.TankVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -33,35 +28,37 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * RoadRunner Tank drive hardware implementation for REV hardware.
- * Reworked to use a builder parameters for multiple robot configurations.
+ * RoadRunner Mecanum drive hardware implementation for REV hardware.
+ * Reworked to use builder parameters for multiple robot configurations.
  */
-public class RoadRunner4WTankDrive extends TankDrive {
+public class MecanumDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive implements Drive {
     private final DriveConstants constants;
-    private final TankCoefficients coefficients;
-
-    private final TrajectorySequenceRunner trajectorySequenceRunner;
-
+    private final MecanumCoefficients coefficients;
     private final TrajectoryVelocityConstraint VEL_CONSTRAINT;
-    private final TrajectoryAccelerationConstraint accelConstraint;
-
+    private final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT;
+    private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
 
+    private final DcMotorEx leftFront;
+    private final DcMotorEx leftRear;
+    private final DcMotorEx rightRear;
+    private final DcMotorEx rightFront;
     private final List<DcMotorEx> motors;
-    private final List<DcMotorEx> leftMotors;
-    private final List<DcMotorEx> rightMotors;
-    private final IMU imu;
 
+    private final IMU imu;
     private final VoltageSensor batteryVoltageSensor;
 
-    public RoadRunner4WTankDrive(DriveConstants constants, TankCoefficients coefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
-        super(constants.kV, constants.kA, constants.kStatic, constants.TRACK_WIDTH);
+    private final List<Integer> lastEncPositions = new ArrayList<>();
+    private final List<Integer> lastEncVels = new ArrayList<>();
 
-        follower = new TankPIDVAFollower(coefficients.AXIAL_PID, coefficients.CROSS_TRACK_PID,
+    public MecanumDrive(DriveConstants constants, MecanumCoefficients coefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
+        super(constants.kV, constants.kA, constants.kStatic, constants.TRACK_WIDTH, constants.TRACK_WIDTH, coefficients.LATERAL_MULTIPLIER);
+
+        follower = new HolonomicPIDVAFollower(coefficients.TRANSLATIONAL_PID, coefficients.TRANSLATIONAL_PID, coefficients.HEADING_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
-        VEL_CONSTRAINT = getVelocityConstraint(constants.MAX_VEL, constants.MAX_ANG_VEL, constants.TRACK_WIDTH);
-        accelConstraint = getAccelerationConstraint(constants.MAX_ACCEL);
+        VEL_CONSTRAINT = Drive.getVelocityConstraint(constants.MAX_VEL, constants.MAX_ANG_VEL, constants.TRACK_WIDTH);
+        ACCEL_CONSTRAINT = Drive.getAccelerationConstraint(constants.MAX_ACCEL);
 
 //        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 
@@ -76,12 +73,15 @@ public class RoadRunner4WTankDrive extends TankDrive {
 
         assert fl != null && fr != null && bl != null && br != null && imu != null;
 
-        // Assumes IMU is initialised from RobotConfig
+        // Assumes IMU was initialised from RobotConfig
         this.imu = imu;
 
-        motors = Arrays.asList(fl, bl, br, fr);
-        leftMotors = Arrays.asList(fl, bl);
-        rightMotors = Arrays.asList(br, fr);
+        leftFront = fl;
+        leftRear = bl;
+        rightRear = br;
+        rightFront = fr;
+
+        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -99,42 +99,31 @@ public class RoadRunner4WTankDrive extends TankDrive {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, constants.MOTOR_VELO_PID);
         }
 
-        // if desired, use setLocalizer() to change the localization method
-        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
+        List<Integer> lastTrackingEncPositions = new ArrayList<>();
+        List<Integer> lastTrackingEncVels = new ArrayList<>();
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 constants.RUN_USING_ENCODER, follower, coefficients.HEADING_PID, batteryVoltageSensor,
-                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()
+                lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
         );
     }
 
-    public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
-        return new MinVelocityConstraint(Arrays.asList(
-                new AngularVelocityConstraint(maxAngularVel),
-                new TankVelocityConstraint(maxVel, trackWidth)
-        ));
-    }
-
-    public static TrajectoryAccelerationConstraint getAccelerationConstraint(double maxAccel) {
-        return new ProfileAccelerationConstraint(maxAccel);
-    }
-
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
-        return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, accelConstraint);
+        return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed) {
-        return new TrajectoryBuilder(startPose, reversed, VEL_CONSTRAINT, accelConstraint);
+        return new TrajectoryBuilder(startPose, reversed, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading) {
-        return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, accelConstraint);
+        return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }
 
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return new TrajectorySequenceBuilder(
                 startPose,
-                VEL_CONSTRAINT, accelConstraint,
+                VEL_CONSTRAINT, ACCEL_CONSTRAINT,
                 constants.MAX_ANG_VEL, constants.MAX_ANG_ACCEL
         );
     }
@@ -210,6 +199,7 @@ public class RoadRunner4WTankDrive extends TankDrive {
                 coefficients.p, coefficients.i, coefficients.d,
                 coefficients.f * 12 / batteryVoltageSensor.getVoltage()
         );
+
         for (DcMotorEx motor : motors) {
             motor.setPIDFCoefficients(runMode, compensatedCoefficients);
         }
@@ -218,19 +208,18 @@ public class RoadRunner4WTankDrive extends TankDrive {
     public void setWeightedDrivePower(Pose2d drivePower) {
         Pose2d vel = drivePower;
 
-        if (Math.abs(drivePower.getX()) + Math.abs(drivePower.getHeading()) > 1) {
+        if (Math.abs(drivePower.getX()) + Math.abs(drivePower.getY())
+                + Math.abs(drivePower.getHeading()) > 1) {
             // re-normalize the powers according to the weights
             double denom = coefficients.VX_WEIGHT * Math.abs(drivePower.getX())
+                    + coefficients.VY_WEIGHT * Math.abs(drivePower.getY())
                     + coefficients.OMEGA_WEIGHT * Math.abs(drivePower.getHeading());
 
             vel = new Pose2d(
                     coefficients.VX_WEIGHT * drivePower.getX(),
-                    0,
+                    coefficients.VY_WEIGHT * drivePower.getY(),
                     coefficients.OMEGA_WEIGHT * drivePower.getHeading()
             ).div(denom);
-        } else {
-            // Ensure the y axis is zeroed out.
-            vel = new Pose2d(drivePower.getX(), 0, drivePower.getHeading());
         }
 
         setDrivePower(vel);
@@ -239,35 +228,36 @@ public class RoadRunner4WTankDrive extends TankDrive {
     @NonNull
     @Override
     public List<Double> getWheelPositions() {
-        double leftSum = 0, rightSum = 0;
-        for (DcMotorEx leftMotor : leftMotors) {
-            leftSum += constants.encoderTicksToInches(leftMotor.getCurrentPosition());
-        }
-        for (DcMotorEx rightMotor : rightMotors) {
-            rightSum += constants.encoderTicksToInches(rightMotor.getCurrentPosition());
-        }
-        return Arrays.asList(leftSum / leftMotors.size(), rightSum / rightMotors.size());
-    }
+        lastEncPositions.clear();
 
-    public List<Double> getWheelVelocities() {
-        double leftSum = 0, rightSum = 0;
-        for (DcMotorEx leftMotor : leftMotors) {
-            leftSum += constants.encoderTicksToInches(leftMotor.getVelocity());
+        List<Double> wheelPositions = new ArrayList<>();
+        for (DcMotorEx motor : motors) {
+            int position = motor.getCurrentPosition();
+            lastEncPositions.add(position);
+            wheelPositions.add(constants.encoderTicksToInches(position));
         }
-        for (DcMotorEx rightMotor : rightMotors) {
-            rightSum += constants.encoderTicksToInches(rightMotor.getVelocity());
-        }
-        return Arrays.asList(leftSum / leftMotors.size(), rightSum / rightMotors.size());
+        return wheelPositions;
     }
 
     @Override
-    public void setMotorPowers(double v, double v1) {
-        for (DcMotorEx leftMotor : leftMotors) {
-            leftMotor.setPower(v);
+    public List<Double> getWheelVelocities() {
+        lastEncVels.clear();
+
+        List<Double> wheelVelocities = new ArrayList<>();
+        for (DcMotorEx motor : motors) {
+            int vel = (int) motor.getVelocity();
+            lastEncVels.add(vel);
+            wheelVelocities.add(constants.encoderTicksToInches(vel));
         }
-        for (DcMotorEx rightMotor : rightMotors) {
-            rightMotor.setPower(v1);
-        }
+        return wheelVelocities;
+    }
+
+    @Override
+    public void setMotorPowers(double v, double v1, double v2, double v3) {
+        leftFront.setPower(v);
+        leftRear.setPower(v1);
+        rightRear.setPower(v2);
+        rightFront.setPower(v3);
     }
 
     @Override

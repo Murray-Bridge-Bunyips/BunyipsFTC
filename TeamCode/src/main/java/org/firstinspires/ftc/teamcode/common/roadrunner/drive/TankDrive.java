@@ -3,16 +3,16 @@ package org.firstinspires.ftc.teamcode.common.roadrunner.drive;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.drive.DriveSignal;
-import com.acmerobotics.roadrunner.drive.MecanumDrive;
-import com.acmerobotics.roadrunner.followers.HolonomicPIDVAFollower;
+import com.acmerobotics.roadrunner.followers.TankPIDVAFollower;
 import com.acmerobotics.roadrunner.followers.TrajectoryFollower;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
-import com.acmerobotics.roadrunner.trajectory.constraints.MecanumVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
+import com.acmerobotics.roadrunner.trajectory.constraints.TankVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -33,37 +33,35 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * RoadRunner Mecanum drive hardware implementation for REV hardware.
+ * RoadRunner Tank drive hardware implementation for REV hardware.
  * Reworked to use a builder parameters for multiple robot configurations.
  */
-public class RoadRunnerMecanumDrive extends MecanumDrive {
+public class TankDrive extends com.acmerobotics.roadrunner.drive.TankDrive implements Drive {
     private final DriveConstants constants;
-    private final MecanumCoefficients coefficients;
-    private final TrajectoryVelocityConstraint VEL_CONSTRAINT;
-    private final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT;
+    private final TankCoefficients coefficients;
+
     private final TrajectorySequenceRunner trajectorySequenceRunner;
+
+    private final TrajectoryVelocityConstraint VEL_CONSTRAINT;
+    private final TrajectoryAccelerationConstraint accelConstraint;
+
     private final TrajectoryFollower follower;
 
-    private final DcMotorEx leftFront;
-    private final DcMotorEx leftRear;
-    private final DcMotorEx rightRear;
-    private final DcMotorEx rightFront;
     private final List<DcMotorEx> motors;
-
+    private final List<DcMotorEx> leftMotors;
+    private final List<DcMotorEx> rightMotors;
     private final IMU imu;
+
     private final VoltageSensor batteryVoltageSensor;
 
-    private final List<Integer> lastEncPositions = new ArrayList<>();
-    private final List<Integer> lastEncVels = new ArrayList<>();
+    public TankDrive(DriveConstants constants, TankCoefficients coefficients, Localizer localizer, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
+        super(constants.kV, constants.kA, constants.kStatic, constants.TRACK_WIDTH);
 
-    public RoadRunnerMecanumDrive(DriveConstants constants, MecanumCoefficients coefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
-        super(constants.kV, constants.kA, constants.kStatic, constants.TRACK_WIDTH, constants.TRACK_WIDTH, coefficients.LATERAL_MULTIPLIER);
-
-        follower = new HolonomicPIDVAFollower(coefficients.TRANSLATIONAL_PID, coefficients.TRANSLATIONAL_PID, coefficients.HEADING_PID,
+        follower = new TankPIDVAFollower(coefficients.AXIAL_PID, coefficients.CROSS_TRACK_PID,
                 new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
         VEL_CONSTRAINT = getVelocityConstraint(constants.MAX_VEL, constants.MAX_ANG_VEL, constants.TRACK_WIDTH);
-        ACCEL_CONSTRAINT = getAccelerationConstraint(constants.MAX_ACCEL);
+        accelConstraint = getAccelerationConstraint(constants.MAX_ACCEL);
 
 //        LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 
@@ -78,15 +76,12 @@ public class RoadRunnerMecanumDrive extends MecanumDrive {
 
         assert fl != null && fr != null && bl != null && br != null && imu != null;
 
-        // Assumes IMU was initialised from RobotConfig
+        // Assumes IMU is initialised from RobotConfig
         this.imu = imu;
 
-        leftFront = fl;
-        leftRear = bl;
-        rightRear = br;
-        rightFront = fr;
-
-        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
+        motors = Arrays.asList(fl, bl, br, fr);
+        leftMotors = Arrays.asList(fl, bl);
+        rightMotors = Arrays.asList(br, fr);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -104,22 +99,19 @@ public class RoadRunnerMecanumDrive extends MecanumDrive {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, constants.MOTOR_VELO_PID);
         }
 
-        List<Integer> lastTrackingEncPositions = new ArrayList<>();
-        List<Integer> lastTrackingEncVels = new ArrayList<>();
-
-        // if desired, use setLocalizer() to change the localization method
-        // setLocalizer(new StandardTrackingWheelLocalizer(hardwareMap, lastTrackingEncPositions, lastTrackingEncVels));
+        if (localizer != null)
+            setLocalizer(localizer);
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 constants.RUN_USING_ENCODER, follower, coefficients.HEADING_PID, batteryVoltageSensor,
-                lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
+                new ArrayList<>(), new ArrayList<>(), new ArrayList<>(), new ArrayList<>()
         );
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
         return new MinVelocityConstraint(Arrays.asList(
                 new AngularVelocityConstraint(maxAngularVel),
-                new MecanumVelocityConstraint(maxVel, trackWidth)
+                new TankVelocityConstraint(maxVel, trackWidth)
         ));
     }
 
@@ -128,21 +120,21 @@ public class RoadRunnerMecanumDrive extends MecanumDrive {
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
-        return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
+        return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, accelConstraint);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed) {
-        return new TrajectoryBuilder(startPose, reversed, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
+        return new TrajectoryBuilder(startPose, reversed, VEL_CONSTRAINT, accelConstraint);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading) {
-        return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
+        return new TrajectoryBuilder(startPose, startHeading, VEL_CONSTRAINT, accelConstraint);
     }
 
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return new TrajectorySequenceBuilder(
                 startPose,
-                VEL_CONSTRAINT, ACCEL_CONSTRAINT,
+                VEL_CONSTRAINT, accelConstraint,
                 constants.MAX_ANG_VEL, constants.MAX_ANG_ACCEL
         );
     }
@@ -218,7 +210,6 @@ public class RoadRunnerMecanumDrive extends MecanumDrive {
                 coefficients.p, coefficients.i, coefficients.d,
                 coefficients.f * 12 / batteryVoltageSensor.getVoltage()
         );
-
         for (DcMotorEx motor : motors) {
             motor.setPIDFCoefficients(runMode, compensatedCoefficients);
         }
@@ -227,18 +218,19 @@ public class RoadRunnerMecanumDrive extends MecanumDrive {
     public void setWeightedDrivePower(Pose2d drivePower) {
         Pose2d vel = drivePower;
 
-        if (Math.abs(drivePower.getX()) + Math.abs(drivePower.getY())
-                + Math.abs(drivePower.getHeading()) > 1) {
+        if (Math.abs(drivePower.getX()) + Math.abs(drivePower.getHeading()) > 1) {
             // re-normalize the powers according to the weights
             double denom = coefficients.VX_WEIGHT * Math.abs(drivePower.getX())
-                    + coefficients.VY_WEIGHT * Math.abs(drivePower.getY())
                     + coefficients.OMEGA_WEIGHT * Math.abs(drivePower.getHeading());
 
             vel = new Pose2d(
                     coefficients.VX_WEIGHT * drivePower.getX(),
-                    coefficients.VY_WEIGHT * drivePower.getY(),
+                    0,
                     coefficients.OMEGA_WEIGHT * drivePower.getHeading()
             ).div(denom);
+        } else {
+            // Ensure the y axis is zeroed out.
+            vel = new Pose2d(drivePower.getX(), 0, drivePower.getHeading());
         }
 
         setDrivePower(vel);
@@ -247,36 +239,35 @@ public class RoadRunnerMecanumDrive extends MecanumDrive {
     @NonNull
     @Override
     public List<Double> getWheelPositions() {
-        lastEncPositions.clear();
-
-        List<Double> wheelPositions = new ArrayList<>();
-        for (DcMotorEx motor : motors) {
-            int position = motor.getCurrentPosition();
-            lastEncPositions.add(position);
-            wheelPositions.add(constants.encoderTicksToInches(position));
+        double leftSum = 0, rightSum = 0;
+        for (DcMotorEx leftMotor : leftMotors) {
+            leftSum += constants.encoderTicksToInches(leftMotor.getCurrentPosition());
         }
-        return wheelPositions;
+        for (DcMotorEx rightMotor : rightMotors) {
+            rightSum += constants.encoderTicksToInches(rightMotor.getCurrentPosition());
+        }
+        return Arrays.asList(leftSum / leftMotors.size(), rightSum / rightMotors.size());
     }
 
-    @Override
     public List<Double> getWheelVelocities() {
-        lastEncVels.clear();
-
-        List<Double> wheelVelocities = new ArrayList<>();
-        for (DcMotorEx motor : motors) {
-            int vel = (int) motor.getVelocity();
-            lastEncVels.add(vel);
-            wheelVelocities.add(constants.encoderTicksToInches(vel));
+        double leftSum = 0, rightSum = 0;
+        for (DcMotorEx leftMotor : leftMotors) {
+            leftSum += constants.encoderTicksToInches(leftMotor.getVelocity());
         }
-        return wheelVelocities;
+        for (DcMotorEx rightMotor : rightMotors) {
+            rightSum += constants.encoderTicksToInches(rightMotor.getVelocity());
+        }
+        return Arrays.asList(leftSum / leftMotors.size(), rightSum / rightMotors.size());
     }
 
     @Override
-    public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+    public void setMotorPowers(double v, double v1) {
+        for (DcMotorEx leftMotor : leftMotors) {
+            leftMotor.setPower(v);
+        }
+        for (DcMotorEx rightMotor : rightMotors) {
+            rightMotor.setPower(v1);
+        }
     }
 
     @Override

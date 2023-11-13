@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.roadrunner.drive;
+package org.firstinspires.ftc.teamcode.common.roadrunner.drive.localizers;
 
 import androidx.annotation.NonNull;
 
@@ -21,8 +21,6 @@ import java.util.List;
  *    |              |
  *    |              |
  *    \--------------/
- *
- * Reworked to use a builder parameters for multiple robot configurations.
  */
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
     private final StandardTrackingWheelLocalizerCoefficients coefficients;
