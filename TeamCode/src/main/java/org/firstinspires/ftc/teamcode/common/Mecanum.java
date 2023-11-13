@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.common;
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -15,31 +16,30 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.Drive;
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumCoefficients;
-import org.firstinspires.ftc.teamcode.common.roadrunner.drive.localizers.TwoWheelTrackingLocalizer;
-import org.firstinspires.ftc.teamcode.common.roadrunner.drive.localizers.TwoWheelTrackingLocalizerCoefficients;
 import org.firstinspires.ftc.teamcode.common.roadrunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.common.roadrunner.util.Encoder;
 
 import java.util.List;
 
 /**
  * Wrapper component for the RoadRunner Mecanum Drive, bringing RoadRunner functionality
  * to the BunyipsOpMode framework.
- * Utilises two dead wheels for localization.
  *
  * @author Lucas Bubner, 2023
  */
 public class Mecanum extends BunyipsComponent implements Drive {
     private final org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumDrive drive;
 
-    public Mecanum(@NonNull BunyipsOpMode opMode, DriveConstants constants, TwoWheelTrackingLocalizerCoefficients localizerCoefficients, MecanumCoefficients mecanumCoefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx frontLeft, DcMotorEx backLeft, DcMotorEx frontRight, DcMotorEx backRight, Encoder parallel, Encoder perpendicular) {
+    public Mecanum(@NonNull BunyipsOpMode opMode, DriveConstants constants, MecanumCoefficients mecanumCoefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx frontLeft, DcMotorEx backLeft, DcMotorEx frontRight, DcMotorEx backRight) {
         super(opMode);
         drive = new org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumDrive(constants, mecanumCoefficients, voltageSensor, imu, frontLeft, frontRight, backLeft, backRight);
-        drive.setLocalizer(new TwoWheelTrackingLocalizer(localizerCoefficients, parallel, perpendicular, drive));
     }
 
     public org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumDrive getInstance() {
         return drive;
+    }
+
+    public void setLocalizer(Localizer localizer) {
+        drive.setLocalizer(localizer);
     }
 
     public void setPowers(double v, double v1, double v2, double v3) {

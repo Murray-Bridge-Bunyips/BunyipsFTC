@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.common.roadrunner.drive;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.AngularVelocityConstraint;
@@ -78,4 +79,6 @@ public interface Drive {
     double getRawExternalHeading();
 
     Double getExternalHeadingVelocity();
+
+    void setLocalizer(Localizer localizer);
 }
