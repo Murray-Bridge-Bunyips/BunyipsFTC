@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
  *
  * @author Lucas Bubner, 2023
  */
-@TeleOp(name = "", group = "GLaDOS")
+@TeleOp(name = "template", group = "GLaDOS")
 @Disabled
 public class GLaDOSDummyOpMode extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
