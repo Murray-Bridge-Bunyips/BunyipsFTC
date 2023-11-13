@@ -5,9 +5,10 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 
 /**
  * Interface abstraction for encoder motors, for functionality such as enabling/disabling tracking.
+ * Includes calculations for distance travelled and revolutions turned.
  * @author Lucas Bubner, 2023
  */
-interface Encoder {
+interface EncoderTracker {
     enum class Scope {
         RELATIVE, GLOBAL
     }

@@ -11,7 +11,7 @@ class Odometer(
     override val motor: DcMotorEx,
     override val wheelDiameterMM: Double?,
     override val ticksPerRevolution: Double?,
-) : BunyipsComponent(opMode), Encoder {
+) : BunyipsComponent(opMode), EncoderTracker {
     override var reduction: Double = 1.0
     override var snapshot: Double = 0.0
 }

@@ -31,15 +31,8 @@ package org.firstinspires.ftc.teamcode.common;
 
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-/**
- * Experimental class for scaling motor run time based on voltage.
- */
-public class Power {
-    public static double scaleSecondsOnVoltage(BunyipsOpMode opMode, double seconds) {
-        return seconds * 12.0 / getVoltage(opMode);
-    }
-
-    public static double getVoltage(BunyipsOpMode opMode) {
+public class Voltage {
+    public static double getRobotVoltage(BunyipsOpMode opMode) {
         double result = Double.POSITIVE_INFINITY;
         for (VoltageSensor sensor : opMode.hardwareMap.voltageSensor) {
             double voltage = sensor.getVoltage();

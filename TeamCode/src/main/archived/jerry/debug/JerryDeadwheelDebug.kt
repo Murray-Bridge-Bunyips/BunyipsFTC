@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.Encoder
+import org.firstinspires.ftc.teamcode.common.EncoderTracker
 import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.Odometer
 import org.firstinspires.ftc.teamcode.common.RobotConfig
@@ -30,9 +30,9 @@ class JerryDeadwheelDebug : BunyipsOpMode() {
     }
 
     override fun activeLoop() {
-        addTelemetry("X Encoder: ${x?.position(Encoder.Scope.GLOBAL)}g, ${x?.position()}r")
-        addTelemetry("Y Encoder: ${y?.position(Encoder.Scope.GLOBAL)}g, ${y?.position()}r")
-        addTelemetry("X MM: ${x?.travelledMM(Encoder.Scope.GLOBAL)}g, ${x?.travelledMM()}r")
-        addTelemetry("Y MM: ${y?.travelledMM(Encoder.Scope.GLOBAL)}g, ${y?.travelledMM()}r")
+        addTelemetry("X Encoder: ${x?.position(EncoderTracker.Scope.GLOBAL)}g, ${x?.position()}r")
+        addTelemetry("Y Encoder: ${y?.position(EncoderTracker.Scope.GLOBAL)}g, ${y?.position()}r")
+        addTelemetry("X MM: ${x?.travelledMM(EncoderTracker.Scope.GLOBAL)}g, ${x?.travelledMM()}r")
+        addTelemetry("Y MM: ${y?.travelledMM(EncoderTracker.Scope.GLOBAL)}g, ${y?.travelledMM()}r")
     }
 }

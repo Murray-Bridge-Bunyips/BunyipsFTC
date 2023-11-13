@@ -9,8 +9,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.Orientation
 
 /**
  * IMUOperation custom common class for internal IMUs
- * This class is used to abstract the IMU reading and provide a more human-friendly reading,
- * while allowing operation such as the PrecisionDrive system to be used.
+ *
+ * This class is used to abstract the IMU reading and provide a more human-friendly reading, serving
+ * as a wrapper for the internal IMU class. RoadRunner uses the direct IMU class, so this class is
+ * only for use in other situations such as reading the IMU for other tasks.
  *
  * This code has been updated to use the new SDK v8.1 specification on 03/06/2023.
  *

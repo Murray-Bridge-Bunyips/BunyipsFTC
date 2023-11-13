@@ -11,7 +11,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  *
  * @author Lucas Bubner, 2023
  * @see MecanumDrive
+ * @deprecated Deprecated by RoadRunner
  */
+@Deprecated
 public abstract class FieldCentricMecanumDrive extends MecanumDrive {
     private final IMUOp imu;
 

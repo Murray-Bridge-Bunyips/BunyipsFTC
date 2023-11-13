@@ -15,7 +15,9 @@ import java.util.Locale;
  * needed as the drive system is developed for a robot.
  *
  * @author Lucas Bubner, 2023
+ * @deprecated Deprecated by RoadRunner
  */
+@Deprecated
 public abstract class MecanumDrive extends BunyipsComponent {
 
     private final DcMotor frontLeft;
