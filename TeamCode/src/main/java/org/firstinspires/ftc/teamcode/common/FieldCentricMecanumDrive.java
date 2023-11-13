@@ -30,7 +30,7 @@ public abstract class FieldCentricMecanumDrive extends MecanumDrive {
             imu.resetHeading();
 
         // Current vector will be the robot's starting vector, must offset the IMU to align straight
-        imu.setOffset(startingDirection.getAngleDegrees());
+        imu.setOffset(startingDirection.getDegrees());
     }
 
     /**

@@ -29,7 +29,7 @@ enum class RelativePose2d(val vector: Pose2d) {
     CLOCKWISE(Pose2d(0.0, 0.0, 1.0)),
     ANTICLOCKWISE(Pose2d(0.0, 0.0, -1.0));
 
-    val angleDegrees: Double
+    val degrees: Double
         get() = Math.toDegrees(vector.headingVec().angle())
 
     companion object {
