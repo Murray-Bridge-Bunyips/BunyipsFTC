@@ -1,1 +1,1 @@
-<img src="weetly.webp" alt="wheatman" height="50" width="2000"/>
+<img src="weetly.png" alt="wheatman" height="100" width="800"/>

@@ -16,19 +16,17 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  */
 
 public class WheatleyLift extends BunyipsComponent {
-    private final DcMotor arm;
-    private final Servo leftServo;
-    private final Servo rightServo;
-    private int armPosition;
-    private double armPower;
-
-    private double leftClawTarget;
-    private double rightClawTarget;
-
     private static final double LS_OPEN = 1.0;
     private static final double LS_CLOSED = 0.0;
     private static final double RS_OPEN = 0.0;
     private static final double RS_CLOSED = 1.0;
+    private static final double ARM_SPEED = 0.5;
+    private final DcMotor arm;
+    private final Servo leftServo;
+    private final Servo rightServo;
+    private int armTarget;
+    private double leftClawTarget;
+    private double rightClawTarget;
 
     public WheatleyLift(@NonNull BunyipsOpMode opMode, DcMotor arm, Servo leftServo, Servo rightServo) {
         super(opMode);
@@ -36,11 +34,27 @@ public class WheatleyLift extends BunyipsComponent {
         this.leftServo = leftServo;
         this.rightServo = rightServo;
 
-        // Shuts the claws on init to avoid problems with their associated Boolean variables
-        // For some reason they're like this and I don't feel like fixing it rn
+        // Auto close claws on init for preloading
         leftClawTarget = LS_CLOSED;
         rightClawTarget = RS_CLOSED;
         update();
+
+        arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        arm.setTargetPosition(0);
+        arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        arm.setPower(ARM_SPEED);
+
+        // TODO: Need limit switches to increase awareness of the arm system
+    }
+
+    /**
+     * Access methods for the arm motor
+     *
+     * @return DcMotor instance for the arm
+     */
+    public DcMotor getMotor() {
+        return arm;
     }
 
     /**
@@ -48,8 +62,8 @@ public class WheatleyLift extends BunyipsComponent {
      *
      * @param position specific position to set the arm to
      */
-    public void armLift(int position) {
-        armPosition = position;
+    public void setPosition(int position) {
+        armTarget = position;
     }
 
     /**
@@ -57,11 +71,14 @@ public class WheatleyLift extends BunyipsComponent {
      *
      * @param gamepadPosition the gamepad stick position to set the arm to
      */
-    public void armLiftUsingController(double gamepadPosition) {
-        armPower = gamepadPosition / 3;
+    public void actuateUsingController(double gamepadPosition) {
+        armTarget -= gamepadPosition * 10;
     }
 
-    public void leftClaw() {
+    /**
+     * Open or close the left claw
+     */
+    public void toggleLeftClaw() {
         if (leftServo.getPosition() == LS_OPEN) {
             leftClawTarget = LS_CLOSED;
         } else {
@@ -69,7 +86,24 @@ public class WheatleyLift extends BunyipsComponent {
         }
     }
 
-    public void rightClaw() {
+    /**
+     * Close the left claw
+     */
+    public void closeLeftClaw() {
+        leftClawTarget = LS_CLOSED;
+    }
+
+    /**
+     * Open the left claw
+     */
+    public void openLeftClaw() {
+        leftClawTarget = LS_OPEN;
+    }
+
+    /**
+     * Open or close the right claw
+     */
+    public void toggleRightClaw() {
         if (rightServo.getPosition() == RS_OPEN) {
             rightClawTarget = RS_CLOSED;
         } else {
@@ -77,34 +111,26 @@ public class WheatleyLift extends BunyipsComponent {
         }
     }
 
-    public void update() {
-        if (armPosition != 0) {
-            arm.setTargetPosition(armPosition);
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if (arm.isBusy()) {
-                return;
-            }
-            armPosition = 0;
-            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }
+    /**
+     * Close the right claw
+     */
+    public void closeRightClaw() {
+        rightClawTarget = RS_CLOSED;
+    }
 
-        // This is an attempt at preventing the arm falling from it's own weight when it's at
-        // certain angles.
-        // Comment out if broken
-        if (armPower == 0) {
-            arm.setTargetPosition(arm.getCurrentPosition());
-            arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            // Will try to hold the arm in place with 25% power
-            arm.setPower(0.25);
-        } else {
-            arm.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            arm.setPower(armPower);
-        }
+    /**
+     * Open the right claw
+     */
+    public void openRightClaw() {
+        rightClawTarget = RS_OPEN;
+    }
+
+    public void update() {
+        arm.setTargetPosition(armTarget);
 
         leftServo.setPosition(leftClawTarget);
         rightServo.setPosition(rightClawTarget);
 
-        getOpMode().addTelemetry("Left Claw: %", leftClawTarget == LS_OPEN ? "OPEN" : "CLOSED");
-        getOpMode().addTelemetry("Right Claw: %", rightClawTarget == RS_OPEN ? "OPEN" : "CLOSED");
+        getOpMode().addTelemetry("Claws: L_% R_%", leftClawTarget == LS_OPEN ? "OPEN" : "CLOSED", rightClawTarget == RS_OPEN ? "OPEN" : "CLOSED");
     }
 }

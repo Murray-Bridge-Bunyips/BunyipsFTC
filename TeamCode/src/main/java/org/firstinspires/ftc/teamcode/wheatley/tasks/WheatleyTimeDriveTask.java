@@ -41,6 +41,7 @@ public class WheatleyTimeDriveTask extends Task {
 
     @Override
     public boolean isTaskFinished() {
+        // Time control only
         return false;
     }
 

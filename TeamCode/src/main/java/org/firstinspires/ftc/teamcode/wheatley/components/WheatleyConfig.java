@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.wheatley.components;
 
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -66,6 +68,9 @@ public class WheatleyConfig extends RobotConfig {
     // USB device "webcam"
     public WebcamName webcam;
 
+    // Internally mounted on I2C C0 "imu"
+    public IMU imu;
+
     @Override
     protected void init() {
 
@@ -81,9 +86,23 @@ public class WheatleyConfig extends RobotConfig {
         susMotor = (DcMotor) getHardware("susMotor", DcMotor.class);
         susServo = (Servo) getHardware("susServo", Servo.class);
         pl = (Servo) getHardware("pl", Servo.class);
+        imu = (IMU) getHardware("imu", IMU.class);
 
         // This is because the fr motor was going the wrong way
         if (fr != null)
             fr.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        if (imu == null) {
+            return;
+        }
+
+        imu.initialize(
+                new IMU.Parameters(
+                        new RevHubOrientationOnRobot(
+                                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                        )
+                )
+        );
     }
 }

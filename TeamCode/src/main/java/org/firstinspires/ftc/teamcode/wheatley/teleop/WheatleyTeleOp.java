@@ -43,41 +43,52 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     protected void onInit() {
         config = (WheatleyConfig) RobotConfig.newConfig(this, config, hardwareMap);
         drive = new WheatleyMecanumDrive(this, config.fl, config.bl, config.fr, config.br);
-        lift = new WheatleyLift(this, config.ra, config.ls, config.rs);
-        suspender = new WheatleyManagementRail(this, config.susMotor, config.susServo);
+        if (NullSafety.assertComponentArgs(this, WheatleyLift.class, config.ra, config.ls, config.rs))
+            lift = new WheatleyLift(this, config.ra, config.ls, config.rs);
+        if (NullSafety.assertComponentArgs(this, WheatleyManagementRail.class, config.susMotor, config.susServo))
+            suspender = new WheatleyManagementRail(this, config.susMotor, config.susServo);
         if (NullSafety.assertComponentArgs(this, Cannon.class, config.pl))
             cannon = new Cannon(this, config.pl);
+
+        // TODO: Review systems for operator ease of use
     }
 
     @Override
     protected void activeLoop() {
         drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-
-        lift.armLiftUsingController(gamepad2.left_stick_y);
+        lift.actuateUsingController(gamepad2.left_stick_y);
 
         // Launches the paper plane
         // The triggers are pressure sensitive, apparently.
         // Set to 1 to avoid any slight touches launching a nuke.
         if (gamepad2.right_trigger == 1.0) {
+            // "Now then, let's see what we got here. Ah! 'Reactor Core Emergency Heat Venting Protocols.'
+            // that's the problem right there, isn't it? 'Emergency'. you don't want to see 'emergency'
+            // flashing at you. Never good that, is it? Right. DELETE."
             cannon.fire();
         }
 
-        if (gamepad2.dpad_up) {
-            suspender.release();
+        // Reset cannon for debugging purposes
+        if (gamepad2.options) {
+            // "Undelete, undelete! Where's the undelete button?"
+            cannon.reset();
         }
-        suspender.hookArm(gamepad2.right_stick_y);
+
+        // Unlock suspender
+        if (gamepad2.dpad_up) {
+            suspender.activate();
+        }
+        // Will noop if the suspender is locked
+        suspender.actuateUsingController(gamepad2.right_stick_y);
 
         // Claw controls
         if (gamepad2.x && !xPressed) {
-            lift.leftClaw();
+            lift.toggleLeftClaw();
         } else if (gamepad2.y && !yPressed) {
-            lift.rightClaw();
+            lift.toggleRightClaw();
         }
 
-        // Adds a message on the driver hub stating the status of different controller inputs
-        addTelemetry("Left Stick X: %", gamepad1.left_stick_x);
-        addTelemetry("Left Stick Y: %", gamepad1.left_stick_y);
-
+        // Register actions only once per press
         xPressed = gamepad2.x;
         yPressed = gamepad2.y;
 
@@ -85,8 +96,12 @@ public class WheatleyTeleOp extends BunyipsOpMode {
          * TODO: Pick out some good Wheatley voice lines for telemetry
          * Different lines will be displayed depending on different values
          * They should overwrite each other and NOT stack
+         *
+         * They should also be out of the way of the other actually important telemetry
+         * "Could a moron do THAT?" as wheatley throws 35,000 errors at once
          */
 
+        // Send stateful updates to the hardware
         drive.update();
         lift.update();
         suspender.update();

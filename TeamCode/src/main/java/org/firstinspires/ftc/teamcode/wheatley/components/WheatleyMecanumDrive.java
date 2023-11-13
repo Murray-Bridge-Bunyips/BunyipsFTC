@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 
 /**
- * Mecanum Drive for Wheatley
+ * <a href="https://raw.githubusercontent.com/Murray-Bridge-Bunyips/BunyipsFTC/devid-heath/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/wheatley/weetly.png">Mecanum Drive for Wheatley</a>
  *
  * @author Lachlan Paul, 2023
  */

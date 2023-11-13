@@ -13,32 +13,31 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
  */
 public class WheatleyLiftTask extends Task {
     private final WheatleyLift lift;
-    private int move;
+    private final int targetPosition;
 
-    public WheatleyLiftTask(@NonNull BunyipsOpMode opMode, double time, WheatleyLift lift, int move) {
+    public WheatleyLiftTask(@NonNull BunyipsOpMode opMode, double time, WheatleyLift lift, int targetPosition) {
         super(opMode, time);
         this.lift = lift;
+        this.targetPosition = targetPosition;
     }
 
     @Override
     public void init() {
-        // noop
+        lift.setPosition(targetPosition);
     }
 
     @Override
     public void run() {
-        // TODO: Set proper values
-        lift.armLift(move);
+        getOpMode().addTelemetry("Lift running: %/%", lift.getMotor().getCurrentPosition(), targetPosition);
+    }
+
+    @Override
+    public boolean isTaskFinished() {
+        return lift.getMotor().isBusy();
     }
 
     @Override
     public void onFinish() {
         // noop
-    }
-
-    @Override
-    public boolean isTaskFinished() {
-        // Time control
-        return false;
     }
 }

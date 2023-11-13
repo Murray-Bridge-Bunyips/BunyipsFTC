@@ -24,18 +24,15 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  * @author Lucas Bubner, 2023
  */
 public class WheatleyManagementRail extends BunyipsComponent {
+    private static final double PWR = 1.0; // Full power since we are holding the whole robot
+    private static final double ARMED = 1.0;
+    private static final double OPEN = 0.0;
     private final DcMotor extension;
     // Frustration, is getting bigger,
     // bang, bang, bang,
     private final Servo /*pull my devil*/ trigger;
-    private int suspenderTarget;
+    private double suspenderPower;
     private double triggerTarget;
-
-    private static final int MAX_TICKS = 3000;
-    private static final double PWR = 1.0;
-
-    private static final double ARMED = 1.0;
-    private static final double OPEN = 0.0;
 
     public WheatleyManagementRail(@NonNull BunyipsOpMode opMode, DcMotor extension, Servo trigger) {
         super(opMode);
@@ -43,41 +40,60 @@ public class WheatleyManagementRail extends BunyipsComponent {
         this.trigger = trigger;
 
         triggerTarget = ARMED;
-        update();
 
-        // Assumes extension arm is set at zero
         extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Assumes the motor is in the retracted position when the robot is initialised
+        // This position is no longer limited because Heath will scream and get increasingly angry
         extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        extension.setTargetPosition(0);
-        extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        // will not dispatch a motor update as it is in RUN_TO_POSITION
-        extension.setPower(PWR);
+
+        // Default to locking to prevent the slider from slipping out
+        suspenderPower = 0.0;
+        update();
     }
 
     /**
      * Release the Suspender
      */
-    public void release() {
+    public void activate() {
         triggerTarget = OPEN;
     }
 
     /**
-     * Return trigger to stowed
+     * Return trigger to stowed, locking position
      */
     public void reset() {
         triggerTarget = ARMED;
     }
 
-    public void hookArm(double gamepadPosition) {
+    /**
+     * Operate the suspender using a gamepad when the Suspender is released
+     *
+     * @param gamepadPosition gamepad.stick_y
+     */
+    public void actuateUsingController(double gamepadPosition) {
         if (trigger.getPosition() == OPEN) {
-            suspenderTarget -= gamepadPosition * 10;
+            // stick_y is negative on the controller
+            suspenderPower = Range.clip(-gamepadPosition, -1.0, 1.0);
         }
-        suspenderTarget = Range.clip(suspenderTarget, 0, MAX_TICKS);
     }
 
+    /**
+     * Send stateful updates to the hardware
+     */
     public void update() {
-        extension.setTargetPosition(suspenderTarget);
+        if (suspenderPower == 0.0) {
+            // Hold arm in place, this will be the case while the arm is locked as well
+            // as suspenderPower cannot be mutated while the arm is locked
+            extension.setTargetPosition(extension.getCurrentPosition());
+            extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            extension.setPower(PWR);
+        } else {
+            // Move arm in accordance with the user's input
+            extension.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            extension.setPower(suspenderPower);
+        }
         trigger.setPosition(triggerTarget);
-        getOpMode().addTelemetry("Suspender: %, % ticks", trigger.getPosition() == OPEN ? "OPEN" : "ARMED", extension.getCurrentPosition());
+        getOpMode().addTelemetry("Suspender: %, % at % ticks", trigger.getPosition() == OPEN ? "OPEN" : "ARMED", triggerTarget == OPEN ? "LOCKED" : suspenderPower == 0 ? "HOLDING" : "MOVING", extension.getCurrentPosition());
     }
 }

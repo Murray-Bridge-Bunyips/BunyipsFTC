@@ -32,17 +32,15 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSServoCore;
  */
 @TeleOp(name = "GLaDOS: TeleOp", group = "GLaDOS")
 public class GLaDOSTeleOp extends BunyipsOpMode {
+    private final TriSpeed speed = new TriSpeed(TriSpeed.Speed.NORMAL);
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSPOVDriveCore drive;
     private GLaDOSArmCore arm;
     private Cannon cannon;
-
     private boolean x_pressed;
     private boolean b_pressed;
     private boolean inc_pressed;
     private boolean dec_pressed;
-
-    private final TriSpeed speed = new TriSpeed(TriSpeed.Speed.NORMAL);
 
     @Override
     protected void onInit() {

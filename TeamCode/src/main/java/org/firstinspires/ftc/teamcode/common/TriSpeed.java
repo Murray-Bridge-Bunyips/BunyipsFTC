@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.common;
 /**
  * Tri-speed configuration for gamepad inputs.
  * This is an update-less component that does not need active polling with BunyipsOpMode.
+ *
  * @author Lucas Bubner, 2023
  */
 public class TriSpeed {
@@ -40,6 +41,7 @@ public class TriSpeed {
 
     /**
      * Multiplier for the current speed that can be used for scaling
+     *
      * @return multiplier for the current speed
      */
     public double getMultiplier() {

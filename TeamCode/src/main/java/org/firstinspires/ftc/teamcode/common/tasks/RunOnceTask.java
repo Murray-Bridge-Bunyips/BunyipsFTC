@@ -5,28 +5,28 @@ import androidx.annotation.NonNull;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 
 public abstract class RunOnceTask extends Task {
-    public RunOnceTask(@NonNull BunyipsOpMode opMode) {
+    protected RunOnceTask(@NonNull BunyipsOpMode opMode) {
         // Time will be ignored as this task will only run once
         super(opMode, 1);
     }
 
     @Override
-    final public void init() {
+    public final void init() {
     }
 
     @Override
-    final public void run() {
+    public final void run() {
         runOnce();
         setTaskFinished(true);
     }
 
     @Override
-    final public boolean isTaskFinished() {
+    public final boolean isTaskFinished() {
         return getTaskFinished();
     }
 
     @Override
-    final public void onFinish() {
+    public final void onFinish() {
     }
 
     public abstract void runOnce();
