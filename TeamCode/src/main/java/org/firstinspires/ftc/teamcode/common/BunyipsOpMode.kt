@@ -392,10 +392,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         operationsCompleted = true
         Dbg.log("BunyipsOpMode: activeLoop() terminated by finish().")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop terminated. All operations completed.")
-        dashboard.telemetry?.addData(
-            "BUNYIPSOPMODE : ",
-            "activeLoop terminated. All operations completed."
-        )
+        dashboard.telemetry?.addData("BUNYIPSOPMODE", "activeLoop terminated. All operations completed.")
         pushTelemetry()
     }
 
@@ -412,7 +409,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         updateOpModeStatus("halted")
         Dbg.log("BunyipsOpMode: activeLoop() halted.")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop halted. Operations paused.")
-        dashboard.telemetry?.addData("BUNYIPSOPMODE : ", "activeLoop halted. Operations paused.")
+        dashboard.telemetry?.addData("BUNYIPSOPMODE", "activeLoop halted. Operations paused.")
         pushTelemetry()
     }
 
@@ -427,7 +424,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         updateOpModeStatus("running")
         Dbg.log("BunyipsOpMode: activeLoop() resumed.")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop resumed. Operations resumed.")
-        dashboard.telemetry?.addData("BUNYIPSOPMODE : ", "activeLoop resumed. Operations resumed.")
+        dashboard.telemetry?.addData("BUNYIPSOPMODE", "activeLoop resumed. Operations resumed.")
         pushTelemetry()
     }
 
