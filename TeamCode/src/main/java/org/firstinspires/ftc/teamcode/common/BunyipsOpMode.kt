@@ -100,9 +100,9 @@ abstract class BunyipsOpMode : LinearOpMode() {
     final override fun runOpMode() {
         try {
             try {
-                Dbg.log("=============== BunyipsOpMode ${BuildConfig.BUILD_INFO} sdk${BuildConfig.VERSION_NAME} ===============")
+                Dbg.log("=============== BunyipsOpMode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} sdk${BuildConfig.VERSION_NAME} ===============")
                 // Not pushing to FtcDashboard as it is in Logcat
-                telemetry.log().add("bunyipsopmode ${BuildConfig.BUILD_INFO} sdk${BuildConfig.VERSION_NAME}")
+                telemetry.log().add("bunyipsopmode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} sdk${BuildConfig.VERSION_NAME}")
                 updateOpModeStatus("setup")
                 Dbg.log("BunyipsOpMode: setting up...")
                 // Run BunyipsOpMode setup

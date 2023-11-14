@@ -20,12 +20,11 @@ buildscript {
 
 apply plugin: 'kotlin-android'
 
-// https://stackoverflow.com/questions/17097263/automatic-versioning-of-android-build-using-git-describe-with-gradle
-def getVersionName = { ->
+def getCommit = { ->
     try {
         def stdout = new ByteArrayOutputStream()
         exec {
-            commandLine 'git', 'describe', '--tags', '--dirty'
+            commandLine 'git', 'describe', '--always', '--dirty'
             standardOutput = stdout
         }
         return stdout.toString().trim()
@@ -63,7 +62,9 @@ android {
     }
 
     defaultConfig {
-        buildConfigField "String", "BUILD_INFO", '"' + getVersionName() + " " + getBranch() + " " + getBuildTime() + '"'
+        buildConfigField "String", "GIT_COMMIT", '"' + getCommit() + '"'
+        buildConfigField "String", "GIT_BRANCH", '"' + getBranch() + '"'
+        buildConfigField "String", "BUILD_TIME", '"' + getBuildTime() + '"'
     }
 }
 
