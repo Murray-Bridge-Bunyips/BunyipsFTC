@@ -5,7 +5,7 @@ package org.firstinspires.ftc.teamcode.common
  * @author Shaun, 11/06/2017.
  */
 class MovingAverageTimer @JvmOverloads constructor(
-    num: Int = 100,
+    bufferSize: Int = 100,
     resolution: Resolution? = Resolution.MILLISECONDS
 ) {
     // A ring buffer is used to keep track of a moving average
@@ -30,7 +30,7 @@ class MovingAverageTimer @JvmOverloads constructor(
 
     init {
         reset()
-        ringBufferSize = num
+        ringBufferSize = bufferSize
         loopTimeRingBuffer = LongArray(ringBufferSize)
         val hdr = String.format("\n%-12s%-12s%-12s%-12s", "Loops", "TotalTime", "MovAvg", "Avg")
         when (resolution) {

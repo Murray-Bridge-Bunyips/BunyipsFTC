@@ -20,6 +20,39 @@ buildscript {
 
 apply plugin: 'kotlin-android'
 
+// https://stackoverflow.com/questions/17097263/automatic-versioning-of-android-build-using-git-describe-with-gradle
+def getVersionName = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'describe', '--tags', '--dirty'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return null
+    }
+}
+
+def getBranch = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return null
+    }
+}
+
+def getBuildTime = { ->
+    return new Date().format("yyyy-MM-dd@HH:mm:ss", TimeZone.getDefault())
+}
+
 apply from: '../build.common.gradle'
 apply from: '../build.dependencies.gradle'
 
@@ -27,6 +60,10 @@ android {
     namespace = 'org.firstinspires.ftc.teamcode'
     packagingOptions {
         jniLibs.useLegacyPackaging true
+    }
+
+    defaultConfig {
+        buildConfigField "String", "BUILD_INFO", '"' + getVersionName() + " " + getBranch() + " " + getBuildTime() + '"'
     }
 }
 

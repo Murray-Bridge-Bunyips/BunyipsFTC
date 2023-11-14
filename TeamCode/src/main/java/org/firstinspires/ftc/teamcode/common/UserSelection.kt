@@ -110,7 +110,7 @@ class UserSelection<T>(
 
             // Must manually call telemetry push as the BYO may not be handling them
             // This will not clear out any other telemetry as auto clear is disabled
-            opMode.telemetry.update()
+            opMode.pushTelemetry()
 
             while (selectedOpMode == null && opMode.opModeInInit() && !isInterrupted) {
                 for ((str, button) in buttons) {
@@ -137,7 +137,7 @@ class UserSelection<T>(
 
             // Clean up telemetry and reset auto clear
             opMode.removeTelemetryItems(retainedObjects)
-            opMode.telemetry.update()
+            opMode.pushTelemetry()
             opMode.setTelemetryAutoClear(true)
 
             try {

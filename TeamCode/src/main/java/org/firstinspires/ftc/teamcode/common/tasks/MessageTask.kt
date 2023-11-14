@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.common.tasks
 
-import android.annotation.SuppressLint
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 
 /**
@@ -12,10 +11,8 @@ class MessageTask(opMode: BunyipsOpMode, time: Double, private val message: Stri
         return
     }
 
-    @SuppressLint("DefaultLocale")
     override fun run() {
-        opMode.addTelemetry(String.format("%s || %.2f", message, time))
-        opMode.telemetry.update()
+        opMode.addTelemetry(message)
     }
 
     override fun isTaskFinished(): Boolean {

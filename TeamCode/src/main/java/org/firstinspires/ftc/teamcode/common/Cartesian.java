@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 
 /**
  * Rotational utilities for Pose2d and Vector2d.
+ *
  * @author Lucas Bubner, 2023
  */
 public class Cartesian {
