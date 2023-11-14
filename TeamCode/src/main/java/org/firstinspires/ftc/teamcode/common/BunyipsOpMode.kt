@@ -7,7 +7,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.Telemetry.Item
 import org.firstinspires.ftc.teamcode.BuildConfig
 import org.firstinspires.ftc.teamcode.common.Text.formatString
-import org.firstinspires.ftc.teamcode.common.Text.round
 import kotlin.math.roundToInt
 
 /**
@@ -23,7 +22,9 @@ abstract class BunyipsOpMode : LinearOpMode() {
 
     private var operationsCompleted = false
     private var operationsPaused = false
+
     private var opModeStatus = "idle"
+    private lateinit var overheadTelemetry: Item
 
     /**
      * FtcDashboard cannot be utilised during a match according to <RS09>, so this is only for development.
@@ -48,6 +49,12 @@ abstract class BunyipsOpMode : LinearOpMode() {
         telemetry.log().capacity = 999999
         // dashboard?.telemetry?.log()?.capacity = 999999
         movingAverageTimer = MovingAverageTimer(100)
+
+        // Assign overhead telemetry as it has been configured now
+        overheadTelemetry =
+            telemetry.addData("", "BOM: idle | T+0s | 0.000ms | u1: (?,?,?) | u2: (?,?,?)")
+                .setRetained(true)
+        pushTelemetry()
     }
 
     /**
@@ -102,7 +109,8 @@ abstract class BunyipsOpMode : LinearOpMode() {
             try {
                 Dbg.log("=============== BunyipsOpMode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} sdk${BuildConfig.VERSION_NAME} ===============")
                 // Not pushing to FtcDashboard as it is in Logcat
-                telemetry.log().add("bunyipsopmode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} sdk${BuildConfig.VERSION_NAME}")
+                telemetry.log()
+                    .add("bunyipsopmode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} sdk${BuildConfig.VERSION_NAME}")
                 updateOpModeStatus("setup")
                 Dbg.log("BunyipsOpMode: setting up...")
                 // Run BunyipsOpMode setup
@@ -220,19 +228,23 @@ abstract class BunyipsOpMode : LinearOpMode() {
 
         // Requeue new overhead status message
         // This is only showed on the Driver Station for brevity
-        val overheadLine = telemetry.addLine()
-        overheadLine.addData("BOM: ", opModeStatus)
-        overheadLine.addData("", "T+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: 0}s")
-        overheadLine.addData("", movingAverageTimer?.movingAverageString() ?: "0.000ms")
-        overheadLine.addData("u1: ", formatString("(%,%,%)", round(gamepad1.left_stick_x, 1), round(gamepad1.left_stick_y, 1), round(gamepad1.right_stick_x, 1)))
-        overheadLine.addData("u2: ", formatString("(%,%,%)", round(gamepad2.left_stick_x, 1), round(gamepad1.left_stick_y, 1), round(gamepad2.right_stick_x, 1)))
-        // Newline to separate from other telemetry
-        overheadLine.addData("", "")
+        overheadTelemetry.setValue(
+            "BOM: $opModeStatus | T+${
+                movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: 0
+            }s | ${movingAverageTimer?.movingAverageString() ?: "0.000ms"} | u1: ${
+                Controller.movementString(gamepad1)
+            } | u2: ${
+                Controller.movementString(gamepad2)
+            }\n"
+        )
     }
 
     private fun makeTelemetryObject(value: String): Item {
         // Create a clone object to insert into the dashboard
-        queuedPacket.put("T+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: 0}s", value)
+        queuedPacket.put(
+            "T+${movingAverageTimer?.elapsedTime()?.div(1000)?.roundToInt() ?: 0}s",
+            value
+        )
         return telemetry.addData("", value)
     }
 
@@ -310,6 +322,11 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun removeTelemetryItems(vararg items: Item) {
         for (item in items) {
+            if (item == overheadTelemetry) {
+                // I'm not even sure how the user would be able to get
+                // their hands on overheadTelemetry, but just in case
+                throw IllegalArgumentException("Cannot remove overhead telemetry item!")
+            }
             val res = telemetry.removeItem(item)
             if (!res) {
                 log("failed to remove telemetry item: $item")
@@ -326,6 +343,10 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun resetTelemetry() {
         telemetry.clearAll()
+        // Must reassign the overhead telemetry item
+        overheadTelemetry =
+            telemetry.addData("", "BOM: unknown | T+?s | ?ms | u1: (?,?,?) | u2: (?,?,?)")
+                .setRetained(true)
         dashboard.clearTelemetry()
     }
 
@@ -371,7 +392,10 @@ abstract class BunyipsOpMode : LinearOpMode() {
         operationsCompleted = true
         Dbg.log("BunyipsOpMode: activeLoop() terminated by finish().")
         telemetry.addData("BUNYIPSOPMODE : ", "activeLoop terminated. All operations completed.")
-        dashboard.telemetry?.addData("BUNYIPSOPMODE : ", "activeLoop terminated. All operations completed.")
+        dashboard.telemetry?.addData(
+            "BUNYIPSOPMODE : ",
+            "activeLoop terminated. All operations completed."
+        )
         pushTelemetry()
     }
 

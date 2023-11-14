@@ -7,6 +7,7 @@ import java.util.Locale;
 
 /**
  * Text and string manipulation utilities.
+ *
  * @author Lucas Bubner, 2023
  */
 public class Text {

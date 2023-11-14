@@ -80,5 +80,12 @@ enum class Controller {
         fun makeCartesianPose(x: Double, y: Double, r: Double): Pose2d {
             return Pose2d(x, -y, r)
         }
+
+        /**
+         * Return a string of all buttons and values currently pressed.
+         */
+        fun movementString(gamepad: Gamepad): String {
+            TODO()
+        }
     }
 }
