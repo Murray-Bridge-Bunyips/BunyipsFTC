@@ -72,7 +72,7 @@ public class WheatleyLift extends BunyipsComponent {
      * @param gamepadPosition the gamepad stick position to set the arm to
      */
     public void actuateUsingController(double gamepadPosition) {
-        armTarget -= gamepadPosition * 10;
+        armTarget -= gamepadPosition * 2;
     }
 
     /**
