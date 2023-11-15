@@ -72,7 +72,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
         OpModeSelection[] varargs = opModes.toArray(new OpModeSelection[0]);
         if (varargs.length == 0) {
             log("auto: no OpModeSelections defined, skipping selection phase");
-            opModes.add(new OpModeSelection("DEFAULT"));
+            opModes.add(new OpModeSelection(new DefaultOpMode()));
         }
         if (varargs.length > 1) {
             // Run task allocation if OpModeSelections are defined
@@ -140,9 +140,9 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
     /**
      * Run code in a loop AFTER onBegin() has completed, until
      * start is pressed on the Driver Station or the {@link #setInitTask initTask} is done.
-     * If not implemented, the opMode will try to run your initTask, and if that is null,
+     * If not implemented, the OpMode will try to run your initTask, and if that is null,
      * the dynamic_init phase will be skipped.
-     * Overriding this method will fully detach your UserSelection from alerting BYO of its runtime,
+     * Overriding this method will fully detach your UserSelection from alerting BOM of its runtime,
      * so override with caution or ensure to use a super call.
      *
      * @see #setInitTask
@@ -302,7 +302,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * in which case it will run immediately after onInitialisation() has completed.
      * This is where you should add your tasks to the run queue.
      *
-     * @param selectedOpMode the OpMode selected by the user, if applicable. Will be "DEFAULT" if no OpModeSelections were defined, or
+     * @param selectedOpMode the OpMode selected by the user, if applicable. Will be DefaultOpMode if no OpModeSelections were defined, or
      *                       NULL if the user did not select an OpMode.
      * @see #addTask(AutoTask)
      */

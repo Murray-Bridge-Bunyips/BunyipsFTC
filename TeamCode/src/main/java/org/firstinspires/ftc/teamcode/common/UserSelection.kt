@@ -74,7 +74,7 @@ class UserSelection<T>(
             if (opmodes.isEmpty()) {
                 try {
                     callback(null)
-                } catch (e: Exception) {
+                } catch (e: Throwable) {
                     ErrorUtil.handleCatchAllException(e, opMode::log)
                 }
             }
@@ -108,7 +108,7 @@ class UserSelection<T>(
             }
             retainedObjects.add(opMode.addRetainedTelemetry("---------!!!--------"))
 
-            // Must manually call telemetry push as the BYO may not be handling them
+            // Must manually call telemetry push as the BOM may not be handling them
             // This will not clear out any other telemetry as auto clear is disabled
             opMode.pushTelemetry()
 
@@ -142,7 +142,7 @@ class UserSelection<T>(
 
             try {
                 callback(selectedOpMode)
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 ErrorUtil.handleCatchAllException(e, opMode::log)
             }
         } finally {

@@ -106,14 +106,15 @@ abstract class BunyipsOpMode : LinearOpMode() {
     @Throws(InterruptedException::class)
     final override fun runOpMode() {
         try {
+            updateOpModeStatus("setup")
             Dbg.log("=============== BunyipsOpMode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} sdk${BuildConfig.VERSION_NAME} ===============")
             // Not pushing to FtcDashboard as it is in Logcat
             telemetry.log()
                 .add("bunyipsopmode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} sdk${BuildConfig.VERSION_NAME}")
-            updateOpModeStatus("setup")
             Dbg.log("BunyipsOpMode: setting up...")
             // Run BunyipsOpMode setup
             setup()
+
             updateOpModeStatus("static_init")
             Dbg.log("BunyipsOpMode: firing onInit()...")
             // Store telemetry objects raised by onInit() by turning off auto-clear
@@ -129,6 +130,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 // All InterruptedExceptions are handled by the FTC SDK and are raised in ErrorUtil
                 ErrorUtil.handleCatchAllException(e, ::log)
             }
+
             updateOpModeStatus("dynamic_init")
             pushTelemetry()
             Dbg.log("BunyipsOpMode: starting onInitLoop()...")
@@ -154,31 +156,35 @@ abstract class BunyipsOpMode : LinearOpMode() {
             }
 
             // Ready to go.
+            updateOpModeStatus("ready")
             telemetry.addData("BUNYIPSOPMODE : ", "INIT COMPLETE -- PLAY WHEN READY.")
             queuedPacket.put("BUNYIPSOPMODE", "INIT COMPLETE -- PLAY WHEN READY.")
-            updateOpModeStatus("ready")
             Dbg.log("BunyipsOpMode: ready.")
-
             // Set telemetry to an inert state while we wait for start
             pushTelemetry()
             overheadTelemetry.setValue("BOM: ready | T+0s | 0.000ms | u1: (?) | u2: (?)\n")
+
             waitForStart()
 
             // Play button has been pressed
+            updateOpModeStatus("starting")
             setTelemetryAutoClear(true)
             clearTelemetry()
             movingAverageTimer?.reset()
-            updateOpModeStatus("running")
-            Dbg.log("BunyipsOpMode: starting activeLoop()...")
+            Dbg.log("BunyipsOpMode: firing onStart()...")
             try {
                 // Run user-defined start operations
                 onStart()
             } catch (e: Throwable) {
                 ErrorUtil.handleCatchAllException(e, ::log)
             }
+
+            updateOpModeStatus("running")
+            Dbg.log("BunyipsOpMode: starting activeLoop()...")
             while (opModeIsActive() && !operationsCompleted) {
                 if (operationsPaused) {
                     // If the OpMode is paused, skip the loop and wait for the next hardware cycle
+                    // Timers and telemetry will remain frozen and have to be controlled externally
                     idle()
                     continue
                 }
@@ -192,9 +198,12 @@ abstract class BunyipsOpMode : LinearOpMode() {
                 movingAverageTimer?.update()
                 pushTelemetry()
             }
+
             updateOpModeStatus("finished")
+            // overheadTelemetry will no longer update, will remain frozen on last value
+            pushTelemetry()
             Dbg.log("BunyipsOpMode: finished.")
-            // Wait for user to hit stop
+            // Wait for user to hit stop or for the OpMode to be terminated
             while (opModeIsActive()) {
                 idle()
             }
