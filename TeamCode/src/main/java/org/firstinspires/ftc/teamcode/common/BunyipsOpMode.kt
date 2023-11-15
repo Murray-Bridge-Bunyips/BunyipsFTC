@@ -106,11 +106,11 @@ abstract class BunyipsOpMode : LinearOpMode() {
     @Throws(InterruptedException::class)
     final override fun runOpMode() {
         try {
-            updateOpModeStatus("setup")
             Dbg.log("=============== BunyipsOpMode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} sdk${BuildConfig.VERSION_NAME} ===============")
             // Not pushing to FtcDashboard as it is in Logcat
             telemetry.log()
                 .add("bunyipsopmode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} sdk${BuildConfig.VERSION_NAME}")
+            updateOpModeStatus("setup")
             Dbg.log("BunyipsOpMode: setting up...")
             // Run BunyipsOpMode setup
             setup()

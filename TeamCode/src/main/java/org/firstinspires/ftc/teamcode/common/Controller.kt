@@ -47,6 +47,26 @@ enum class Controller {
             return buttonPressed
         }
 
+        fun getChar(button: Controller): Char {
+            when (button) {
+                DPAD_UP -> return 'u'
+                DPAD_DOWN -> return 'd'
+                DPAD_LEFT -> return 'l'
+                DPAD_RIGHT -> return 'r'
+                A -> return 'a'
+                B -> return 'b'
+                X -> return 'x'
+                Y -> return 'y'
+                START -> return '*'
+                BACK -> return '-'
+                LEFT_BUMPER -> return '<'
+                RIGHT_BUMPER -> return '>'
+                LEFT_STICK_BUTTON -> return 'L'
+                RIGHT_STICK_BUTTON -> return 'R'
+                NONE -> return 'n'
+            }
+        }
+
         /**
          * Map an array of arguments to controller buttons.
          * @author Lucas Bubner, 2023
@@ -85,7 +105,30 @@ enum class Controller {
          * Return a string of all buttons and values currently pressed.
          */
         fun movementString(gamepad: Gamepad): String {
-            TODO()
+            if (gamepad.id == -1) return "(dc)"
+            var str = "("
+            for (button in values()) {
+                if (button == NONE) continue
+                if (isSelected(gamepad, button)) {
+                    str += getChar(button)
+                }
+            }
+            if (gamepad.left_stick_y != 0.0f)
+                str += "[ly]"
+            if (gamepad.left_stick_x != 0.0f)
+                str += "[lx]"
+            if (gamepad.right_stick_y != 0.0f)
+                str += "[ry]"
+            if (gamepad.right_stick_x != 0.0f)
+                str += "[rx]"
+            if (gamepad.left_trigger != 0.0f)
+                str += "[lt]"
+            if (gamepad.right_trigger != 0.0f)
+                str += "[rt]"
+            if (str == "(")
+                str += "n"
+            str += ")"
+            return str
         }
     }
 }
