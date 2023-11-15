@@ -55,7 +55,7 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
         getOpMode().addTelemetry("Localizer: X:%cm Y:%cm %deg",
                 round(Inches.toCM(drive.getPoseEstimate().getX()), 1),
                 round(Inches.toCM(drive.getPoseEstimate().getY()), 1),
-                round(drive.getPoseEstimate().getHeading(), 1));
+                round(Math.toDegrees(drive.getPoseEstimate().getHeading()), 1));
         drive.update();
     }
 
