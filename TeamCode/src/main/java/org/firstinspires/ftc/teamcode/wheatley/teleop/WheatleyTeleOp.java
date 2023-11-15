@@ -49,8 +49,6 @@ public class WheatleyTeleOp extends BunyipsOpMode {
             suspender = new WheatleyManagementRail(this, config.susMotor, config.susServo);
         if (NullSafety.assertComponentArgs(this, Cannon.class, config.pl))
             cannon = new Cannon(this, config.pl);
-
-        // TODO: Review systems for operator ease of use
     }
 
     @Override

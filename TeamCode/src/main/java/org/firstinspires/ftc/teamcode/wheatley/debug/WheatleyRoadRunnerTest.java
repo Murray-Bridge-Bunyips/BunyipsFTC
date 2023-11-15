@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Inches;
-import org.firstinspires.ftc.teamcode.common.Mecanum;
+import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
@@ -19,7 +19,7 @@ import java.util.List;
 @Autonomous(name = "WHEATLEY: RoadRunner Test", group = "WHEATLEY")
 public class WheatleyRoadRunnerTest extends AutonomousBunyipsOpMode {
     private WheatleyConfig config = new WheatleyConfig();
-    private Mecanum drive;
+    private MecanumDrive drive;
     private final Trajectory testTrajectory = drive.trajectoryBuilder(drive.getPoseEstimate())
             .forward(Inches.fromM(1))
             .build();
@@ -27,7 +27,7 @@ public class WheatleyRoadRunnerTest extends AutonomousBunyipsOpMode {
     @Override
     protected void onInitialisation() {
         config = (WheatleyConfig) RobotConfig.newConfig(this, config, hardwareMap);
-        drive = new Mecanum(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
     }
 
     @Override

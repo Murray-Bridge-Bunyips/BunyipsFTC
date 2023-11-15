@@ -31,11 +31,10 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      */
     protected final ArrayList<OpModeSelection> opModes = new ArrayList<>();
     private final ArrayDeque<AutoTask> tasks = new ArrayDeque<>();
-    private int taskCount;
-
     // Pre and post queues cannot have their tasks removed, so we can rely on their .size() methods
     private final ArrayDeque<AutoTask> postQueue = new ArrayDeque<>();
     private final ArrayDeque<AutoTask> preQueue = new ArrayDeque<>();
+    private int taskCount;
     private UserSelection<OpModeSelection> userSelection;
     // Init-task does not count as a queued task, so we start at 1
     private int currentTask = 1;
@@ -254,6 +253,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * Remove a task from the queue
      * This assumes that the overhead OpMode has instance control over the task, as this method
      * will search for an object reference to the task and remove it from the queue
+     *
      * @param task the task to be removed
      */
     public void removeTask(@NotNull AutoTask task) {

@@ -36,7 +36,7 @@ import java.util.List;
  * RoadRunner Tank drive hardware implementation for REV hardware.
  * Reworked to use a builder parameters for multiple robot configurations.
  */
-public class TankDrive extends com.acmerobotics.roadrunner.drive.TankDrive implements Drive {
+public class TankRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.TankDrive implements RoadRunnerDrive {
     private final DriveConstants constants;
     private final TankCoefficients coefficients;
 
@@ -54,7 +54,7 @@ public class TankDrive extends com.acmerobotics.roadrunner.drive.TankDrive imple
 
     private final VoltageSensor batteryVoltageSensor;
 
-    public TankDrive(DriveConstants constants, TankCoefficients coefficients, Localizer localizer, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
+    public TankRoadRunnerDrive(DriveConstants constants, TankCoefficients coefficients, Localizer localizer, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
         super(constants.kV, constants.kA, constants.kStatic, constants.TRACK_WIDTH);
 
         follower = new TankPIDVAFollower(coefficients.AXIAL_PID, coefficients.CROSS_TRACK_PID,

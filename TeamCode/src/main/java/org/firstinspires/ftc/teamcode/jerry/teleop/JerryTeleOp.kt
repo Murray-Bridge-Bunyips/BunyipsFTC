@@ -3,10 +3,10 @@ package org.firstinspires.ftc.teamcode.jerry.teleop
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
-import org.firstinspires.ftc.teamcode.common.MecanumDrive
 import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.RelativePose2d
 import org.firstinspires.ftc.teamcode.common.RobotConfig
+import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.UserSelection
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
@@ -28,7 +28,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryPolarDrive
 @TeleOp(name = "JERRY: TeleOp", group = "JERRY")
 class JerryTeleOp : BunyipsOpMode() {
     private var config = JerryConfig()
-    private var drive: MecanumDrive? = null
+    private var drive: StandardMecanumDrive? = null
     private var imu: IMUOp? = null
     private var lift: JerryLift? = null
     private val selector: UserSelection<String> =
