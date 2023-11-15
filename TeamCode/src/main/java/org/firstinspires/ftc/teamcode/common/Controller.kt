@@ -11,6 +11,7 @@ enum class Controller {
     A, B, X, Y, START, BACK, DPAD_UP, DPAD_DOWN, DPAD_LEFT, DPAD_RIGHT, LEFT_BUMPER, RIGHT_BUMPER, LEFT_STICK_BUTTON, RIGHT_STICK_BUTTON, NONE;
 
     companion object {
+        @JvmStatic
         fun isSelected(gamepad: Gamepad, buttonControl: Controller?): Boolean {
             var buttonPressed = false
             when (buttonControl) {
@@ -47,6 +48,7 @@ enum class Controller {
             return buttonPressed
         }
 
+        @JvmStatic
         fun getChar(button: Controller): Char {
             when (button) {
                 DPAD_UP -> return 'u'
@@ -71,6 +73,7 @@ enum class Controller {
          * Map an array of arguments to controller buttons.
          * @author Lucas Bubner, 2023
          */
+        @JvmStatic
         fun <T> mapArgs(args: Array<out T>): HashMap<T, Controller> {
             // Map strings of args to every controller enum in order
             if (args.size >= values().size) {
@@ -90,6 +93,7 @@ enum class Controller {
         /**
          * Convert the gamepad movement values to a robot pose.
          */
+        @JvmStatic
         fun makeRobotPose(x: Double, y: Double, r: Double): Pose2d {
             return Cartesian.toPose(x, -y, r)
         }
@@ -97,6 +101,7 @@ enum class Controller {
         /**
          * Convert the gamepad movement values to a Cartesian pose.
          */
+        @JvmStatic
         fun makeCartesianPose(x: Double, y: Double, r: Double): Pose2d {
             return Pose2d(x, -y, r)
         }
@@ -104,6 +109,7 @@ enum class Controller {
         /**
          * Return a string of all buttons and values currently pressed.
          */
+        @JvmStatic
         fun movementString(gamepad: Gamepad): String {
             if (gamepad.id == -1) return "(dc)"
             var str = "("
