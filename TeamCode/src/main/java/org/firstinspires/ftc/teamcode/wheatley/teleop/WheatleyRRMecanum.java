@@ -28,4 +28,9 @@ public class WheatleyRRMecanum extends BunyipsOpMode {
         drive.setWeightedDrivePower(Controller.makeRobotPose(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x));
         drive.update();
     }
+
+    @Override
+    protected void onStop() {
+        drive.teardown();
+    }
 }

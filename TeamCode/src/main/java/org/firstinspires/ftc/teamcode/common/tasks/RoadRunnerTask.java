@@ -34,9 +34,9 @@ public class RoadRunnerTask extends Task {
     @Override
     public void init() {
         if (trajectory != null) {
-            drive.followTrajectory(trajectory);
+            drive.followTrajectoryAsync(trajectory);
         } else if (trajectorySequence != null) {
-            drive.followTrajectorySequence(trajectorySequence);
+            drive.followTrajectorySequenceAsync(trajectorySequence);
         } else {
             throw new NullPointerException("No trajectory or trajectory sequence was provided to the RoadRunnerTask");
         }

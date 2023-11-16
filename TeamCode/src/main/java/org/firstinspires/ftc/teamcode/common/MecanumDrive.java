@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.common;
 
-import static org.firstinspires.ftc.teamcode.common.Text.formatString;
 import static org.firstinspires.ftc.teamcode.common.Text.round;
 
 import androidx.annotation.NonNull;
@@ -53,10 +52,11 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
 
     @Override
     public void update() {
-        getOpMode().telemetry.addData("", formatString("Localizer: X:%cm Y:%cm %deg",
+        getOpMode().addTelemetry("Localizer: X:%cm Y:%cm %deg",
                 round(Inches.toCM(drive.getPoseEstimate().getX()), 1),
                 round(Inches.toCM(drive.getPoseEstimate().getY()), 1),
-                round(Math.toDegrees(drive.getPoseEstimate().getHeading()), 1)));
+                round(Math.toDegrees(drive.getPoseEstimate().getHeading()), 1));
+
         drive.update();
     }
 

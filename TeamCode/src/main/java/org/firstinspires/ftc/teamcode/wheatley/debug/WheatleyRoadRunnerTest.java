@@ -44,4 +44,9 @@ public class WheatleyRoadRunnerTest extends AutonomousBunyipsOpMode {
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
         addTask(new RoadRunnerTask(this, 5, drive, testTrajectory));
     }
+
+    @Override
+    protected void onStop() {
+        drive.teardown();
+    }
 }

@@ -125,10 +125,6 @@ public class WheatleyConfig extends RobotConfig {
                 )
         );
 
-        TwoWheelTrackingLocalizerCoefficients coefficients = new TwoWheelTrackingLocalizerCoefficients.Builder()
-
-                .build();
-
         // TODO: Tune
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(537.6)
