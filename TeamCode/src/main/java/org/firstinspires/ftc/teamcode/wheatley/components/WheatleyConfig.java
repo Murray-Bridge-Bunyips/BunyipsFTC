@@ -55,11 +55,11 @@ public class WheatleyConfig extends RobotConfig {
     // Suspender Extension: Suspender extension motor
     public DcMotorEx susMotor;
 
-    // Control Servo 0: ls
+    // Control Servo 1: ls
     // Left Servo: Left Claw
     public Servo ls;
 
-    // Control Servo 1: rs
+    // Control Servo 0: rs
     // Right Servo: Right Claw
     public Servo rs;
 
@@ -107,6 +107,9 @@ public class WheatleyConfig extends RobotConfig {
         // This is because the fr motor was going the wrong way
         if (fr != null)
             fr.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        if (ra != null)
+            ra.setDirection(DcMotorSimple.Direction.REVERSE);
 
         if (imu == null) {
             // huh

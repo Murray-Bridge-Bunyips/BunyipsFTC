@@ -37,7 +37,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     private Cannon cannon;
 
     private boolean xPressed;
-    private boolean yPressed;
+    private boolean bPressed;
 
     @Override
     protected void onInit() {
@@ -82,13 +82,13 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         // Claw controls
         if (gamepad2.x && !xPressed) {
             lift.toggleLeftClaw();
-        } else if (gamepad2.y && !yPressed) {
+        } else if (gamepad2.b && !bPressed) {
             lift.toggleRightClaw();
         }
 
         // Register actions only once per press
         xPressed = gamepad2.x;
-        yPressed = gamepad2.y;
+        bPressed = gamepad2.b;
 
         /*
          * TODO: Pick out some good Wheatley voice lines for telemetry

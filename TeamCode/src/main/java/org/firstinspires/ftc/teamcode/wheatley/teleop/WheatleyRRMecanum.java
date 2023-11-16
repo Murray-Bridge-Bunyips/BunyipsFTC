@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.wheatley.teleop;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
@@ -13,7 +12,7 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
  * RoadRunner Mecanum Drive test for TeleOp
  */
 @TeleOp(name = "WHEATLEY: RoadRunner Mecanum Drive", group = "WHEATLEY")
-@Disabled
+//@Disabled
 public class WheatleyRRMecanum extends BunyipsOpMode {
     private WheatleyConfig config = new WheatleyConfig();
     private MecanumDrive drive;
