@@ -1,8 +1,14 @@
 package org.firstinspires.ftc.teamcode.glados.debug;
 
+import android.graphics.Bitmap;
+
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.UserSelection;
@@ -85,8 +91,7 @@ public class GLaDOSVisionTest extends BunyipsOpMode {
     protected void activeLoop() {
         if (vision == null) return;
         vision.tickAll();
-//        addTelemetry(String.valueOf(vision.getAllData()));
-        addTelemetry(String.valueOf(vision.getAttachedProcessors().get(0).getData()));
+        addTelemetry(String.valueOf(vision.getAllData()));
     }
 
     private enum Procs {
