@@ -1,20 +1,16 @@
 package org.firstinspires.ftc.teamcode.glados.debug;
 
-import android.graphics.Bitmap;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.external.function.Consumer;
-import org.firstinspires.ftc.robotcore.external.function.Continuation;
-import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.UserSelection;
 import org.firstinspires.ftc.teamcode.common.Vision;
 import org.firstinspires.ftc.teamcode.common.cameras.C920;
 import org.firstinspires.ftc.teamcode.common.vision.AprilTag;
+import org.firstinspires.ftc.teamcode.common.vision.FtcDashboardBitmap;
 import org.firstinspires.ftc.teamcode.common.vision.Processor;
 import org.firstinspires.ftc.teamcode.common.vision.TFOD;
 import org.firstinspires.ftc.teamcode.common.vision.TeamProp;
@@ -64,8 +60,14 @@ public class GLaDOSVisionTest extends BunyipsOpMode {
                 processors.add(tp);
                 break;
         }
+        // Always add the FtcDashboardBitmap processor
+        FtcDashboardBitmap fdb = new FtcDashboardBitmap();
+        processors.add(fdb);
+
         vision.init(processors.toArray(new Processor[0]));
         vision.start(processors.toArray(new Processor[0]));
+
+        FtcDashboard.getInstance().startCameraStream(fdb, 0);
         i = addRetainedTelemetry("Camera Stream available.");
         return Unit.INSTANCE;
     }
@@ -92,6 +94,12 @@ public class GLaDOSVisionTest extends BunyipsOpMode {
         if (vision == null) return;
         vision.tickAll();
         addTelemetry(String.valueOf(vision.getAllData()));
+    }
+
+    @Override
+    protected void onStop() {
+        FtcDashboard.getInstance().stopCameraStream();
+        vision.terminate();
     }
 
     private enum Procs {

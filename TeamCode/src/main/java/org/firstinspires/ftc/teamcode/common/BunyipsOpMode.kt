@@ -308,7 +308,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
             }
             val res = telemetry.removeItem(item)
             if (!res) {
-                log("failed to remove telemetry item: $item")
+                Dbg.logd("Could not find telemetry item to remove: $item")
             }
         }
     }

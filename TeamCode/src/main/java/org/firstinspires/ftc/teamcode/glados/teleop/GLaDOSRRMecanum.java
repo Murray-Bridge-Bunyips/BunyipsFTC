@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.common.Controller;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
-import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 
 /**
  * RoadRunner Mecanum Drive test for TeleOp

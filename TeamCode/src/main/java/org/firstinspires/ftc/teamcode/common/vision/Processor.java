@@ -21,9 +21,14 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
     /**
      * Vision Processor Wrapper
      * Parameterized type T must be a subclass extension of VisionData and getName must return a non-null value
+     * Remove all parameters from the constructor and replace with:
      * Super-call: {@code super([yourVisionDataClass].class)}
+     *
+     * @noinspection ConstructorNotProtectedInAbstractClass
      */
-    protected Processor(Class<T> type) {
+    // Public constructor as IntelliJ will auto generate a protected constructor, and it needs
+    // to be public in order to be instantiated by the Vision system
+    public Processor(Class<T> type) {
         if (type == VisionData.class || !VisionData.class.isAssignableFrom(type)) {
             throw new IllegalArgumentException("Processor: T must extend VisionData");
         }
