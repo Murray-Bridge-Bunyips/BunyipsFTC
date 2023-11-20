@@ -20,14 +20,15 @@ import java.util.List;
 public class GLaDOSRoadRunnerTest extends AutonomousBunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;
-    private final Trajectory testTrajectory = drive.trajectoryBuilder(drive.getPoseEstimate())
-            .forward(Inches.fromM(1))
-            .build();
+    private Trajectory testTrajectory;
 
     @Override
     protected void onInitialisation() {
         config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
         drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+        testTrajectory = drive.trajectoryBuilder(drive.getPoseEstimate())
+                .forward(Inches.fromM(1))
+                .build();
     }
 
     @Override
