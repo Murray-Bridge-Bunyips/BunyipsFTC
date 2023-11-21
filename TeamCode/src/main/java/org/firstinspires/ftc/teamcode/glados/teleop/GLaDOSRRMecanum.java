@@ -1,8 +1,10 @@
 package org.firstinspires.ftc.teamcode.glados.teleop;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.Controller;
 import org.firstinspires.ftc.teamcode.common.DualDeadwheelMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
@@ -24,6 +26,7 @@ public class GLaDOSRRMecanum extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
+        drive.setWeightedDrivePower(Controller.makeRobotPose(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x));
         drive.update();
     }
 

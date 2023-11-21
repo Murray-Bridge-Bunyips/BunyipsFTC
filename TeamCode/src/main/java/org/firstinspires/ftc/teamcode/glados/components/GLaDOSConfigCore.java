@@ -81,7 +81,6 @@ public class GLaDOSConfigCore extends RobotConfig {
         imu = (IMU) getHardware("imu", IMU.class);
 
         if (fl != null) {
-            // The forward left wheel goes the wrong way without us changing
             fl.setDirection(DcMotorSimple.Direction.REVERSE);
             fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         }
@@ -125,7 +124,7 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setMaxRPM(312.5)
                 .setRunUsingEncoder(false)
                 .setWheelRadius(1.4763)
-                .setGearRatio(1)
+                .setGearRatio((1.0 / 5.0) * (1.0 / 4.0))
                 .setTrackWidth(15.5)
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
                 .setMaxVel(41.065033847087705)
@@ -135,7 +134,7 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .build();
 
         localizerCoefficients = new TwoWheelTrackingLocalizerCoefficients.Builder()
-                .setTicksPerRev(2400)
+                .setTicksPerRev(1200)
                 .setGearRatio(1)
                 .setWheelRadius(Inches.fromMM(50) / 2)
                 .setParallelX(-12)
@@ -155,6 +154,7 @@ public class GLaDOSConfigCore extends RobotConfig {
         DcMotorEx ppe = (DcMotorEx) getHardware("perpendicularEncoder", DcMotorEx.class);
         if (ppe != null) {
             perpendicularEncoder = new Encoder(ppe);
+            perpendicularEncoder.setDirection(Encoder.Direction.REVERSE);
         }
     }
 }

@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
 import org.firstinspires.ftc.teamcode.common.tasks.RoadRunnerTask;
+import org.firstinspires.ftc.teamcode.common.tasks.RoadRunnerTurnTask;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class GLaDOSRoadRunnerTest extends AutonomousBunyipsOpMode {
         config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
         drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
         testTrajectory = drive.trajectoryBuilder(drive.getPoseEstimate())
-                .forward(Inches.fromM(1))
+                .forward(Inches.fromCM(10))
                 .build();
     }
 
@@ -44,6 +45,7 @@ public class GLaDOSRoadRunnerTest extends AutonomousBunyipsOpMode {
     @Override
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
         addTask(new RoadRunnerTask(this, 5, drive, testTrajectory));
+        addTask(new RoadRunnerTurnTask(this, 20, drive, 90));
     }
 
     @Override

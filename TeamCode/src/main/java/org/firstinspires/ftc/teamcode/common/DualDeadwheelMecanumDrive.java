@@ -19,8 +19,8 @@ import org.firstinspires.ftc.teamcode.common.roadrunner.util.Encoder;
  * @author Lucas Bubner, 2023
  */
 public class DualDeadwheelMecanumDrive extends MecanumDrive {
-    public DualDeadwheelMecanumDrive(@NonNull BunyipsOpMode opMode, DriveConstants constants, MecanumCoefficients mecanumCoefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx frontLeft, DcMotorEx backLeft, DcMotorEx frontRight, DcMotorEx backRight, TwoWheelTrackingLocalizerCoefficients localizerCoefficients, Encoder parallel, Encoder perpendicular) {
-        super(opMode, constants, mecanumCoefficients, voltageSensor, imu, frontLeft, backLeft, frontRight, backRight);
+    public DualDeadwheelMecanumDrive(@NonNull BunyipsOpMode opMode, DriveConstants constants, MecanumCoefficients mecanumCoefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight, TwoWheelTrackingLocalizerCoefficients localizerCoefficients, Encoder parallel, Encoder perpendicular) {
+        super(opMode, constants, mecanumCoefficients, voltageSensor, imu, frontLeft, frontRight, backLeft, backRight);
         setLocalizer(new TwoWheelTrackingLocalizer(localizerCoefficients, parallel, perpendicular, getInstance()));
     }
 }

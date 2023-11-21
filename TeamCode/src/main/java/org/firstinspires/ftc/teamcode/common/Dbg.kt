@@ -50,10 +50,12 @@ object Dbg {
      * Best used in a scenario where the program cannot continue normally or at required functionality
      * @param message message to error
      */
+    @JvmStatic
     fun error(message: String) {
         Log.e(TAG, ERR_PREPEND + message)
     }
 
+    @JvmStatic
     fun error(format: String, vararg args: Any?) {
         error(formatString(format, *args))
     }
@@ -62,6 +64,7 @@ object Dbg {
      * Report out a stacktrace.
      * @param e throwable
      */
+    @JvmStatic
     fun sendStacktrace(e: Throwable) {
         Log.e(TAG, e.toString())
         for (el in e.stackTrace) {
@@ -75,10 +78,12 @@ object Dbg {
      * Best used in a scenario where the program can continue, but the user should be warned
      * @param message message to warn
      */
+    @JvmStatic
     fun warn(message: String) {
         Log.w(TAG, WRN_PREPEND + message)
     }
 
+    @JvmStatic
     fun warn(format: String, vararg args: Any?) {
         warn(formatString(format, *args))
     }
@@ -88,10 +93,12 @@ object Dbg {
      * Best used from critical classes to log internal state
      * @param message message to log
      */
+    @JvmStatic
     fun logd(message: String) {
         Log.d(TAG, message)
     }
 
+    @JvmStatic
     fun logd(format: String, vararg args: Any?) {
         logd(formatString(format, *args))
     }
@@ -101,10 +108,12 @@ object Dbg {
      * Best used to log a message or value to Logcat from user code
      * @param message message to log
      */
+    @JvmStatic
     fun log(message: String) {
         Log.i(TAG, message)
     }
 
+    @JvmStatic
     fun log(format: String, vararg args: Any?) {
         log(formatString(format, *args))
     }
