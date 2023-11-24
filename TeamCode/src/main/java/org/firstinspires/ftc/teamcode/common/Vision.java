@@ -181,7 +181,7 @@ public class Vision extends BunyipsComponent {
 
     /**
      * Tick all processor camera streams and extract data from the processors.
-     * This can optionally be done per processor by calling processor.update()
+     * This can optionally be done per processor by calling processor.tick()
      * This data is stored in the processor instance and can be accessed with the getters.
      */
     @SuppressWarnings("rawtypes")
@@ -261,5 +261,14 @@ public class Vision extends BunyipsComponent {
         } else {
             visionPortal.stopLiveView();
         }
+    }
+
+    /**
+     * Returns the state of VisionPortal. Specifically if it is null or not
+     *
+     * @return answers the question "is VisionPortal null?"
+     */
+    public boolean visionPortalNull() {
+        return visionPortal == null;
     }
 }

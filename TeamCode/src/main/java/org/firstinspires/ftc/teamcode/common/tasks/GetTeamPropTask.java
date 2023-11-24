@@ -24,15 +24,18 @@ public class GetTeamPropTask extends Task {
 
     @Override
     public void init() {
-//        try {
-//            if (vision.getStatus() == VisionPortal.CameraState.STREAMING) {
-//                // Camera is already running, notify of this
-//                Dbg.log("TeamPropTask is reinitialising Vision!");
-//            }
-//            if (vision.getStatus() == VisionPortal.CameraState.CAMERA_DEVICE_READY) {
-//
-//            }
-//        }
+        if (vision.visionPortalNull()) {
+            if (vision.getStatus() == VisionPortal.CameraState.STREAMING) {
+                // Camera is already running, notify of this
+                Dbg.log("TeamPropTask is reinitialising Vision!");
+            }
+
+            if (vision.getStatus() == VisionPortal.CameraState.CAMERA_DEVICE_READY) {
+
+            }
+        } else {
+            vision.init(); // I think this needs to have an argument?
+        }
     }
 
     @Override
