@@ -80,26 +80,17 @@ public class GLaDOSConfigCore extends RobotConfig {
         pl = (Servo) getHardware("pl", Servo.class);
         imu = (IMU) getHardware("imu", IMU.class);
 
-        if (fl != null) {
-            fl.setDirection(DcMotorSimple.Direction.REVERSE);
-            fl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        }
-
-        // Explicitly set all other motors for easy debugging
-        if (fr != null) {
+        if (fr != null)
             fr.setDirection(DcMotorSimple.Direction.FORWARD);
-            fr.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        }
 
-        if (br != null) {
-            br.setDirection(DcMotorSimple.Direction.FORWARD);
-            br.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        }
+        if (fl != null)
+            fl.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        if (bl != null) {
-            bl.setDirection(DcMotorSimple.Direction.FORWARD);
-            bl.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        }
+        if (br != null)
+            br.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        if (bl != null)
+            bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         if (sa != null) {
             sa.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -119,6 +110,7 @@ public class GLaDOSConfigCore extends RobotConfig {
                 )
         );
 
+        // TODO: Tune
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(537.6)
                 .setMaxRPM(312.5)

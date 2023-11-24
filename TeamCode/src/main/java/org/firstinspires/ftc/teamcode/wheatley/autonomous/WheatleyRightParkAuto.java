@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.wheatley.autonomous;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
@@ -27,6 +28,7 @@ import java.util.List;
  * @author Lachlan Paul, 2023
  */
 @Autonomous(name = "WHEATLEY: RIGHT Park", group = "WHEATLEY")
+@Disabled
 public class WheatleyRightParkAuto extends AutonomousBunyipsOpMode {
     private WheatleyConfig config = new WheatleyConfig();
     private WheatleyMecanumDrive drive;

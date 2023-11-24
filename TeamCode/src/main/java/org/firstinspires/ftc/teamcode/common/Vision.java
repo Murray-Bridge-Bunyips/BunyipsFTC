@@ -5,6 +5,8 @@ import android.util.Size;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.config.Config;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.common.vision.Processor;
 import org.firstinspires.ftc.teamcode.common.vision.data.VisionData;
@@ -21,6 +23,7 @@ import java.util.List;
  *
  * @author Lucas Bubner, 2023
  */
+@Config
 public class Vision extends BunyipsComponent {
     public static int CAMERA_WIDTH = 1280;
     public static int CAMERA_HEIGHT = 720;
@@ -199,6 +202,7 @@ public class Vision extends BunyipsComponent {
     public HashMap<String, List<VisionData>> getAllData() {
         HashMap<String, List<VisionData>> data = new HashMap<>();
         for (Processor processor : processors) {
+            if (processor.getClass().getSimpleName().equals("NoData")) continue;
             data.put(processor.getName(), processor.getData());
         }
         return data;

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.glados.autonomous;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
@@ -22,6 +23,7 @@ import java.util.List;
  * @author Lucas Bubner, 2023
  */
 @Autonomous(name = "GLaDOS: Backstage LEFT Park", group = "GLaDOS")
+@Disabled
 public class GLaDOSParkLeftBackstageAuto extends AutonomousBunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSPOVDriveCore drive;

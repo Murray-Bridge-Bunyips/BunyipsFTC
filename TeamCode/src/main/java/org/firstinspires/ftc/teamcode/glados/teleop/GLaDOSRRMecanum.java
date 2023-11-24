@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 /**
  * RoadRunner Mecanum Drive test for TeleOp
  */
-@TeleOp(name = "GLaDOS: RoadRunner Mecanum Drive", group = "GLADOS")
+@TeleOp(name = "GLaDOS: RoadRunner Mecanum Drive", group = "GLaDOS")
 //@Disabled
 public class GLaDOSRRMecanum extends BunyipsOpMode {
     private GLaDOSConfigCore config = new GLaDOSConfigCore();

@@ -104,9 +104,17 @@ public class WheatleyConfig extends RobotConfig {
         pl = (Servo) getHardware("pl", Servo.class);
         imu = (IMU) getHardware("imu", IMU.class);
 
-        // This is because the fr motor was going the wrong way
         if (fr != null)
-            fr.setDirection(DcMotorSimple.Direction.REVERSE);
+            fr.setDirection(DcMotorSimple.Direction.FORWARD);
+
+        if (fl != null)
+            fl.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        if (br != null)
+            br.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        if (bl != null)
+            bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         if (ra != null)
             ra.setDirection(DcMotorSimple.Direction.REVERSE);
