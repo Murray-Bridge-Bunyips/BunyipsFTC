@@ -15,6 +15,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  */
 @Deprecated
 public abstract class FieldCentricStandardMecanumDrive extends StandardMecanumDrive {
+    // FIXME: As of right now, Jerry still relies on this file
+    // At some point we should migrate Jerry over so we can move this file over to /archived
     private final IMUOp imu;
 
     protected FieldCentricStandardMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativePose2d startingDirection) {

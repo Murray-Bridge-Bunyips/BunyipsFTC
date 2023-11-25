@@ -4,11 +4,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Cannon;
+import org.firstinspires.ftc.teamcode.common.Controller;
 import org.firstinspires.ftc.teamcode.common.NullSafety;
+import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyManagementRail;
-import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
 
 /**
  * Primary TeleOp for all of Wheatley's functions.
@@ -30,7 +31,7 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
 public class WheatleyTeleOp extends BunyipsOpMode {
 
     private final WheatleyConfig config = new WheatleyConfig();
-    private WheatleyMecanumDrive drive;
+    private MecanumDrive drive;
     private WheatleyLift lift;
     private WheatleyManagementRail suspender; // no way it's the wheatley management rail:tm:
     private Cannon cannon;
@@ -41,7 +42,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     @Override
     protected void onInit() {
         config.init(this, hardwareMap);
-        drive = new WheatleyMecanumDrive(this, config.fl, config.bl, config.fr, config.br);
+        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.bl, config.fr, config.br);
         if (NullSafety.assertComponentArgs(this, WheatleyLift.class, config.ra, config.ls, config.rs))
             lift = new WheatleyLift(this, config.ra, config.ls, config.rs);
         if (NullSafety.assertComponentArgs(this, WheatleyManagementRail.class, config.susMotor, config.susServo))
@@ -52,7 +53,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+        drive.setWeightedDrivePower(Controller.makeRobotPose(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x));
         lift.actuateUsingController(gamepad2.left_stick_y);
 
         // Launches the paper plane

@@ -18,6 +18,8 @@ import java.util.Locale;
  */
 @Deprecated
 public abstract class StandardMecanumDrive extends BunyipsComponent {
+    // FIXME: As of right now, Jerry still relies on this file
+    // At some point we should migrate Jerry over so we can move this file over to /archived
 
     private final DcMotor frontLeft;
     private final DcMotor backLeft;
