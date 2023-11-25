@@ -62,7 +62,7 @@ public class GLaDOSConfigCore extends RobotConfig {
     public MecanumCoefficients mecanumCoefficients;
 
     @Override
-    protected void init() {
+    protected void assignHardware() {
         webcam = (WebcamName) getHardware("webcam", WebcamName.class);
         fl = (DcMotorEx) getHardware("fl", DcMotorEx.class);
         fr = (DcMotorEx) getHardware("fr", DcMotorEx.class);
@@ -81,10 +81,10 @@ public class GLaDOSConfigCore extends RobotConfig {
         imu = (IMU) getHardware("imu", IMU.class);
 
         if (fr != null)
-            fr.setDirection(DcMotorSimple.Direction.FORWARD);
+            fr.setDirection(DcMotorSimple.Direction.REVERSE);
 
         if (fl != null)
-            fl.setDirection(DcMotorSimple.Direction.REVERSE);
+            fl.setDirection(DcMotorSimple.Direction.FORWARD);
 
         if (br != null)
             br.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -110,14 +110,13 @@ public class GLaDOSConfigCore extends RobotConfig {
                 )
         );
 
-        // TODO: Tune
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(537.6)
                 .setMaxRPM(312.5)
                 .setRunUsingEncoder(false)
                 .setWheelRadius(1.4763)
                 .setGearRatio((1.0 / 5.0) * (1.0 / 4.0))
-                .setTrackWidth(15.5)
+                .setTrackWidth(15.3)
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
                 .setMaxVel(41.065033847087705)
                 .setMaxAccel(41.065033847087705)
@@ -129,10 +128,10 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setTicksPerRev(1200)
                 .setGearRatio(1)
                 .setWheelRadius(Inches.fromMM(50) / 2)
-                .setParallelX(-12)
-                .setParallelY(-4.5)
-                .setPerpendicularX(-15)
-                .setPerpendicularY(0)
+                .setParallelX(0)
+                .setParallelY(0)
+                .setPerpendicularX(4.2)
+                .setPerpendicularY(3.5)
                 .build();
 
         mecanumCoefficients = new MecanumCoefficients.Builder()
@@ -141,12 +140,13 @@ public class GLaDOSConfigCore extends RobotConfig {
         DcMotorEx pe = (DcMotorEx) getHardware("parallelEncoder", DcMotorEx.class);
         if (pe != null) {
             parallelEncoder = new Encoder(pe);
+            parallelEncoder.setDirection(Encoder.Direction.FORWARD);
         }
 
         DcMotorEx ppe = (DcMotorEx) getHardware("perpendicularEncoder", DcMotorEx.class);
         if (ppe != null) {
             perpendicularEncoder = new Encoder(ppe);
-            perpendicularEncoder.setDirection(Encoder.Direction.REVERSE);
+            perpendicularEncoder.setDirection(Encoder.Direction.FORWARD);
         }
     }
 }

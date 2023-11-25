@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.NullSafety
-import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.UserSelection
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -29,7 +28,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
     private val selection = UserSelection(this, {}, "Drive Left", "Drive Right")
 
     override fun onInit() {
-        config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
+        config.init(this, hardwareMap)
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 

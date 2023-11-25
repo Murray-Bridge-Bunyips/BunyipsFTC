@@ -23,6 +23,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
 
     private var opModeStatus = "idle"
     private lateinit var overheadTelemetry: Item
+    private var telemetryQueue = 0
 
     /**
      * One-time setup for operations that need to be done for every OpMode
@@ -222,6 +223,9 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * This will only push dashboard changes made through addTelemetry() and log() calls.
      */
     fun pushTelemetry() {
+        if (telemetry.isAutoClear)
+            telemetryQueue = 0
+
         telemetry.update()
 
         // Requeue new overhead status message
@@ -238,11 +242,32 @@ abstract class BunyipsOpMode : LinearOpMode() {
     }
 
     /**
+     * Ensure an exception is not thrown due to the telemetry object being bigger than 250 objects.
+     */
+    private fun flushTelemetryQueue() {
+        telemetryQueue++
+        if (telemetryQueue >= 250) {
+            // We have to flush out telemetry as the queue is too big
+            pushTelemetry()
+            if (telemetry.isAutoClear) {
+                // Flush successful
+                Dbg.logd("Telemetry queue exceeded 250 messages, auto-pushing to flush...")
+            }
+        }
+    }
+
+    /**
      * Add data to the telemetry object
      * @param value A string to add to telemetry
      * @return The telemetry item added to the Driver Station
      */
     fun addTelemetry(value: String): Item {
+        flushTelemetryQueue()
+        if (telemetryQueue >= 250 && !telemetry.isAutoClear) {
+            // Auto flush will fail as clearing is not permitted
+            // We will send telemetry to the debugger instead as a fallback
+            Dbg.log("Telemetry overflow: $value")
+        }
         return telemetry.addData("", value)
     }
 
@@ -262,6 +287,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * @return The telemetry item added to the Driver Station
      */
     fun addRetainedTelemetry(value: String): Item {
+        flushTelemetryQueue()
         return telemetry.addData("", value).setRetained(true)
     }
 
@@ -321,6 +347,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Reset telemetry data, including retention
      */
     fun resetTelemetry() {
+        telemetryQueue = 0
         telemetry.clearAll()
         // Must reassign the overhead telemetry item
         overheadTelemetry =
@@ -332,6 +359,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Clear telemetry on screen, not including retention
      */
     fun clearTelemetry() {
+        telemetryQueue = 0
         telemetry.clear()
     }
 

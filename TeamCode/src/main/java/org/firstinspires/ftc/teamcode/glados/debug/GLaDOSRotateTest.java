@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
 import java.util.Locale;
@@ -17,11 +16,11 @@ import java.util.Locale;
 @TeleOp(name = "GLaDOS: Rotator Motor Degrees Runner", group = "GLaDOS")
 public class GLaDOSRotateTest extends BunyipsOpMode {
     double target;
-    private GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private final GLaDOSConfigCore config = new GLaDOSConfigCore();
 
     @Override
     protected void onInit() {
-        config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
+        config.init(this, hardwareMap);
         config.sr.reset();
         config.sr.track();
         config.sr.setTargetPosition(0);

@@ -5,7 +5,6 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
-import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.GetSignalTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -34,7 +33,7 @@ class JerrySignalAutonomous : BunyipsOpMode() {
 
     override fun onInit() {
         // Configuration of camera and drive components
-        config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
+        config.init(this, hardwareMap)
         cam = OpenCVCam(this, config.webcam, config.monitorID)
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)

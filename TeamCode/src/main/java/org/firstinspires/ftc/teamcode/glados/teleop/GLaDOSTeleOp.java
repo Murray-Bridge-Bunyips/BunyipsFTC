@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Cannon;
 import org.firstinspires.ftc.teamcode.common.NullSafety;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.TriSpeed;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSAlignmentCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSArmCore;
@@ -33,7 +32,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSServoCore;
 @TeleOp(name = "GLaDOS: TeleOp", group = "GLaDOS")
 public class GLaDOSTeleOp extends BunyipsOpMode {
     private final TriSpeed speed = new TriSpeed(TriSpeed.Speed.NORMAL);
-    private GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSPOVDriveCore drive;
     private GLaDOSArmCore arm;
     private Cannon cannon;
@@ -44,7 +43,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
+        config.init(this, hardwareMap);
         drive = new GLaDOSPOVDriveCore(this, config.fl, config.bl, config.fr, config.br);
         arm = new GLaDOSArmCore(this, config.sr, config.sa, config.al, config.ls, config.rs, GLaDOSAlignmentCore.Mode.MANUAL);
         if (NullSafety.assertComponentArgs(this, Cannon.class, config.pl))

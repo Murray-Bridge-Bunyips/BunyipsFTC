@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.StartingPositions;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
@@ -25,12 +24,12 @@ import java.util.List;
 @Autonomous(name = "GLaDOS: Backstage RIGHT Park", group = "GLaDOS")
 @Disabled
 public class GLaDOSParkRightBackstageAuto extends AutonomousBunyipsOpMode {
-    private GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private GLaDOSPOVDriveCore drive;
 
     @Override
     protected void onInitialisation() {
-        config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
+        config.init(this, hardwareMap);
         drive = new GLaDOSPOVDriveCore(this, config.fl, config.bl, config.fr, config.br);
     }
 

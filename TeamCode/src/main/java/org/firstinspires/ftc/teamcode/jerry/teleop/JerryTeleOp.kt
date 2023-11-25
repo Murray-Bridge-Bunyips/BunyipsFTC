@@ -5,7 +5,6 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.RelativePose2d
-import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.UserSelection
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -36,7 +35,7 @@ class JerryTeleOp : BunyipsOpMode() {
 
     override fun onInit() {
         // Configure drive and lift subsystems
-        config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
+        config.init(this, hardwareMap)
         selector.start()
         if (NullSafety.assertNotNull(config.imu)) {
             imu = IMUOp(this, config.imu!!)

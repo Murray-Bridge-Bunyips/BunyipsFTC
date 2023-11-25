@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Controller;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 
 /**
@@ -14,12 +13,12 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 @TeleOp(name = "WHEATLEY: RoadRunner Mecanum Drive", group = "WHEATLEY")
 //@Disabled
 public class WheatleyRRMecanum extends BunyipsOpMode {
-    private WheatleyConfig config = new WheatleyConfig();
+    private final WheatleyConfig config = new WheatleyConfig();
     private MecanumDrive drive;
 
     @Override
     protected void onInit() {
-        config = (WheatleyConfig) RobotConfig.newConfig(this, config, hardwareMap);
+        config.init(this, hardwareMap);
         drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
     }
 

@@ -1,8 +1,13 @@
 package org.firstinspires.ftc.teamcode.common.tests;
 
+import static org.firstinspires.ftc.teamcode.common.vision.TeamPropColours.BLUE_ELEMENT_B;
+import static org.firstinspires.ftc.teamcode.common.vision.TeamPropColours.BLUE_ELEMENT_G;
+import static org.firstinspires.ftc.teamcode.common.vision.TeamPropColours.BLUE_ELEMENT_R;
+import static org.firstinspires.ftc.teamcode.common.vision.TeamPropColours.RED_ELEMENT_B;
+import static org.firstinspires.ftc.teamcode.common.vision.TeamPropColours.RED_ELEMENT_G;
+import static org.firstinspires.ftc.teamcode.common.vision.TeamPropColours.RED_ELEMENT_R;
+
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
@@ -30,19 +35,10 @@ import kotlin.Unit;
  */
 @TeleOp(name = "COMMON: Vision Test")
 //@Disabled
-@Config
 public class VisionTest extends BunyipsOpMode {
     private Vision vision;
     private Telemetry.Item i;
     private final UserSelection<Procs> proc = new UserSelection<>(this, this::callback, Procs.values());
-
-    public static int RED_ELEMENT_R = 175;
-    public static int RED_ELEMENT_G = 27;
-    public static int RED_ELEMENT_B = 2;
-
-    public static int BLUE_ELEMENT_R = 26;
-    public static int BLUE_ELEMENT_G = 57;
-    public static int BLUE_ELEMENT_B = 178;
 
     @SuppressWarnings("rawtypes")
     private Unit callback(Procs selection) {

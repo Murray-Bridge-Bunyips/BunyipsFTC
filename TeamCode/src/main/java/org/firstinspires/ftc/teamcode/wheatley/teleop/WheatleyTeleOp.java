@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Cannon;
 import org.firstinspires.ftc.teamcode.common.NullSafety;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyManagementRail;
@@ -30,7 +29,7 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
 @TeleOp(name = "WHEATLEY: TeleOp", group = "WHEATLEY")
 public class WheatleyTeleOp extends BunyipsOpMode {
 
-    private WheatleyConfig config = new WheatleyConfig();
+    private final WheatleyConfig config = new WheatleyConfig();
     private WheatleyMecanumDrive drive;
     private WheatleyLift lift;
     private WheatleyManagementRail suspender; // no way it's the wheatley management rail:tm:
@@ -41,7 +40,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config = (WheatleyConfig) RobotConfig.newConfig(this, config, hardwareMap);
+        config.init(this, hardwareMap);
         drive = new WheatleyMecanumDrive(this, config.fl, config.bl, config.fr, config.br);
         if (NullSafety.assertComponentArgs(this, WheatleyLift.class, config.ra, config.ls, config.rs))
             lift = new WheatleyLift(this, config.ra, config.ls, config.rs);

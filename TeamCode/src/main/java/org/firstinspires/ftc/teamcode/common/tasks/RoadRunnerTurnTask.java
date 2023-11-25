@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
-import org.firstinspires.ftc.teamcode.common.Dbg;
 
 /**
  * Task for running RoadRunner trajectories using the BunyipsOpMode Task system
@@ -16,7 +15,7 @@ import org.firstinspires.ftc.teamcode.common.Dbg;
 public class RoadRunnerTurnTask extends Task {
     private final MecanumDrive drive;
 
-    private double angle;
+    private final double angle;
 
     public RoadRunnerTurnTask(@NonNull BunyipsOpMode opMode, double time, MecanumDrive drive, double angle) {
         super(opMode, time);

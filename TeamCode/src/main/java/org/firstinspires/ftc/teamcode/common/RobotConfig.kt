@@ -2,17 +2,45 @@ package org.firstinspires.ftc.teamcode.common
 
 import com.qualcomm.robotcore.hardware.HardwareDevice
 import com.qualcomm.robotcore.hardware.HardwareMap
+import org.firstinspires.ftc.robotcore.internal.system.Assert
 
 /**
  * Abstract class to use as parent to the class you will define to mirror a "saved configuration" on the Robot Controller
+ * ```
+ *     private final YourConfig config = new YourConfig();
+ *
+ *     @Override
+ *     protected void onInit() {
+ *         config.init(this, hardwareMap);
+ *     }
+ * ```
  */
 abstract class RobotConfig {
     protected var hardwareMap: HardwareMap? = null
 
     /**
-     * Initialise the hardwareMap and assign the class instance variables to the class they represent.
+     * Assign class instance variables to public HardwareDevices.
      */
-    protected abstract fun init()
+    protected abstract fun assignHardware()
+
+    /**
+     * Use HardwareMap to fetch HardwareDevices and assign instances.
+     * Should be called as the first line in onInit();
+     */
+    fun init(opMode: BunyipsOpMode, hardwareMap: HardwareMap) {
+        errors.clear()
+        this.hardwareMap = hardwareMap
+        Assert.assertNotNull(hardwareMap)
+        assignHardware()
+        opMode.addTelemetry(
+            "${this.javaClass.simpleName}: Configuration completed with ${errors.size} error(s).",
+        )
+        if (errors.isNotEmpty()) {
+            for (error in errors) {
+                opMode.addRetainedTelemetry("! DEV_FAULT: $error")
+            }
+        }
+    }
 
     /**
      * Convenience method for reading the device from the hardwareMap without having to check for exceptions.
@@ -41,32 +69,5 @@ abstract class RobotConfig {
          * Static array of hardware errors stored via hardware name.
          */
         val errors = ArrayList<String>()
-
-        /**
-         * Factory method for creating a new instance of a configuration with a HardwareMap.
-         */
-        @JvmStatic
-        fun newConfig(
-            opMode: BunyipsOpMode,
-            config: RobotConfig?,
-            hardwareMap: HardwareMap
-        ): RobotConfig {
-            // Check to make sure RobotConfig was instantiated, as this is a common error
-            if (config == null) {
-                throw RuntimeException("RobotConfig: OpMode member 'config' is not instantiated, make sure to initialise your config with 'private YourConfig config = new YourConfig();' (Java) or 'private var config = YourConfig()' (Kotlin) in your OpMode class members.")
-            }
-            config.hardwareMap = hardwareMap
-            errors.clear()
-            config.init()
-            opMode.addTelemetry(
-                "${config.javaClass.simpleName}: Configuration completed with ${errors.size} error(s).",
-            )
-            if (errors.isNotEmpty()) {
-                for (error in errors) {
-                    opMode.addRetainedTelemetry("! DEV_FAULT: $error")
-                }
-            }
-            return config
-        }
     }
 }

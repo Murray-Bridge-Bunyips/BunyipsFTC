@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.jerry.debug
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
-import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.GetSignalTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 
@@ -17,7 +16,7 @@ class JerrySignalAnalyse : BunyipsOpMode() {
     private var task: GetSignalTask? = null
 
     override fun onInit() {
-        config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
+        config.init(this, hardwareMap)
         cam = OpenCVCam(this, config.webcam, config.monitorID)
         task = cam?.let { GetSignalTask(this, it) }
     }

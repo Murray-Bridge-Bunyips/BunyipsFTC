@@ -150,7 +150,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * start is pressed on the Driver Station or the {@link #setInitTask initTask} is done.
      * If not implemented, the OpMode will try to run your initTask, and if that is null,
      * the dynamic_init phase will be skipped.
-     * Overriding this method will fully detach your UserSelection from alerting BOM of its runtime,
+     * Overriding this method will fully detach your UserSelection and initTask from runtime,
      * so override with caution or ensure to use a super call.
      *
      * @see #setInitTask

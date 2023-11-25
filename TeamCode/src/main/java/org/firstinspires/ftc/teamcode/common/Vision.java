@@ -83,6 +83,7 @@ public class Vision extends BunyipsComponent {
                 }
             }
             builder.addProcessor(processor);
+            getOpMode().log("vision processor '%' initialised.", processor.getClass().getSimpleName());
         }
 
         visionPortal = builder
@@ -100,6 +101,7 @@ public class Vision extends BunyipsComponent {
 
         // Disable live view by default
         visionPortal.stopLiveView();
+        getOpMode().log("visionportal ready.");
     }
 
     /**
@@ -119,6 +121,7 @@ public class Vision extends BunyipsComponent {
                 visionPortal.getCameraState() == VisionPortal.CameraState.STOPPING_STREAM) {
             // Note if the camera state is STOPPING_STREAM, it will block the thread until the
             // stream is resumed. This is a documented operation in the SDK.
+            getOpMode().log("visionportal restarting...");
             visionPortal.resumeStreaming();
         }
 
@@ -130,6 +133,7 @@ public class Vision extends BunyipsComponent {
                 throw new IllegalStateException("Vision: Tried to start a processor that was not initialised!");
             }
             visionPortal.setProcessorEnabled(processor, true);
+            getOpMode().log("vision processor '%' started.", processor.getClass().getSimpleName());
         }
     }
 
@@ -165,6 +169,7 @@ public class Vision extends BunyipsComponent {
                 throw new IllegalStateException("Vision: Tried to stop a processor that was not initialised!");
             }
             visionPortal.setProcessorEnabled(processor, false);
+            getOpMode().log("vision processor '%' paused.", processor.getClass().getSimpleName());
         }
     }
 
@@ -177,6 +182,7 @@ public class Vision extends BunyipsComponent {
         }
         // Pause the processor, this will also auto-close any VisionProcessors
         visionPortal.stopStreaming();
+        getOpMode().log("visionportal stopped.");
     }
 
     /**
@@ -226,6 +232,7 @@ public class Vision extends BunyipsComponent {
         }
         visionPortal.close();
         visionPortal = null;
+        getOpMode().log("visionportal terminated.");
     }
 
     /**
@@ -264,11 +271,11 @@ public class Vision extends BunyipsComponent {
     }
 
     /**
-     * Returns the state of VisionPortal. Specifically if it is null or not
+     * Returns the state of VisionPortal. Specifically if it is null or not.
      *
-     * @return answers the question "is VisionPortal null?"
+     * @return whether the VisionPortal has been initialised with init() or not
      */
-    public boolean visionPortalNull() {
-        return visionPortal == null;
+    public boolean isInitialised() {
+        return visionPortal != null;
     }
 }
