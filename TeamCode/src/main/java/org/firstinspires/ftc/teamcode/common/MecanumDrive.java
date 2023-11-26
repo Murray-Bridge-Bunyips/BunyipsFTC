@@ -36,8 +36,8 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
     public MecanumDrive(@NonNull BunyipsOpMode opMode, DriveConstants constants, MecanumCoefficients mecanumCoefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
         super(opMode);
         drive = new MecanumRoadRunnerDrive(constants, mecanumCoefficients, voltageSensor, imu, fl, fr, bl, br);
-        if (GlobalStorage.contains("lastPose")) {
-            drive.setPoseEstimate((Pose2d) GlobalStorage.get("lastPose"));
+        if (RobotConfig.getLastKnownPosition() != null) {
+            drive.setPoseEstimate(RobotConfig.getLastKnownPosition());
         }
     }
 
@@ -47,7 +47,7 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
      */
     public void teardown() {
         // Store the last pose estimate in global storage
-        GlobalStorage.put("lastPose", drive.getPoseEstimate());
+        RobotConfig.setLastKnownPosition(drive.getPoseEstimate());
         // Safety stop to prevent a runaway robot
         drive.setWeightedDrivePower(new Pose2d(0, 0, 0));
     }

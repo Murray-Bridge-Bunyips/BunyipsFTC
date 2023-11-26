@@ -88,7 +88,7 @@ public class WheatleyConfig extends RobotConfig {
     public MecanumCoefficients mecanumCoefficients;
 
     @Override
-    protected void assignHardware() {
+    protected void configureHardware() {
 
         // Motor directions configured to work with current config
         fl = (DcMotorEx) getHardware("fl", DcMotorEx.class);

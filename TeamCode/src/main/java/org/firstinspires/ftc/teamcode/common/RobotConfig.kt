@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.common
 
+import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.hardware.HardwareDevice
 import com.qualcomm.robotcore.hardware.HardwareMap
 import org.firstinspires.ftc.robotcore.internal.system.Assert
@@ -21,7 +22,7 @@ abstract class RobotConfig {
     /**
      * Assign class instance variables to public HardwareDevices.
      */
-    protected abstract fun assignHardware()
+    protected abstract fun configureHardware()
 
     /**
      * Use HardwareMap to fetch HardwareDevices and assign instances.
@@ -31,7 +32,7 @@ abstract class RobotConfig {
         errors.clear()
         this.hardwareMap = hardwareMap
         Assert.assertNotNull(hardwareMap)
-        assignHardware()
+        configureHardware()
         opMode.addTelemetry(
             "${this.javaClass.simpleName}: Configuration completed with ${errors.size} error(s).",
         )
@@ -64,10 +65,18 @@ abstract class RobotConfig {
         return hardwareDevice
     }
 
+    // Global storage objects
     companion object {
         /**
          * Static array of hardware errors stored via hardware name.
          */
+        @JvmStatic
         val errors = ArrayList<String>()
+
+        /**
+         * Static Pose2d to store the robot's last known position after an OpMode has ended.
+         */
+        @JvmStatic
+        var lastKnownPosition: Pose2d? = null
     }
 }

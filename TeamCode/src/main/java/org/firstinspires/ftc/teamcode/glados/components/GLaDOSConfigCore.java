@@ -62,7 +62,7 @@ public class GLaDOSConfigCore extends RobotConfig {
     public MecanumCoefficients mecanumCoefficients;
 
     @Override
-    protected void assignHardware() {
+    protected void configureHardware() {
         webcam = (WebcamName) getHardware("webcam", WebcamName.class);
         fl = (DcMotorEx) getHardware("fl", DcMotorEx.class);
         fr = (DcMotorEx) getHardware("fr", DcMotorEx.class);

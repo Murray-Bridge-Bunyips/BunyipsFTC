@@ -29,7 +29,7 @@ public class ExampleConfig extends RobotConfig {
     // This will map your instance variables (above) to the actual hardware you have named in
     // the Driver Station application.
     @Override
-    protected void assignHardware() {
+    protected void configureHardware() {
         // Find a Driver Station configuration name called 'left_motor' and assign it to the leftMotor instance variable
         // getHardware will return a type of HardwareDevice, and we can cast it to the type we want.
         // In this case, we want a DcMotor, so we cast it to a DcMotor.
