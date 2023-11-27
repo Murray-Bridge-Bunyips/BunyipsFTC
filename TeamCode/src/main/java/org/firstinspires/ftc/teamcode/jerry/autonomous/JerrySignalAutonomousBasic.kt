@@ -31,7 +31,7 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
 
     override fun onInit() {
         // Configuration of camera and drive components
-        config.init(this, hardwareMap)
+        config.init(this)
         cam = OpenCVCam(this, config.webcam, config.monitorID)
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)

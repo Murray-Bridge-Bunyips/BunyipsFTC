@@ -15,7 +15,7 @@ class JerryNewVision : BunyipsOpMode() {
     private var vision: Vision? = null
 
     override fun onInit() {
-        config.init(this, hardwareMap)
+        config.init(this)
         vision = Vision(this, config.webcam!!)
 //        vision?.init(Vision.Processors.APRILTAG)
 //        vision?.start(Vision.Processors.APRILTAG)

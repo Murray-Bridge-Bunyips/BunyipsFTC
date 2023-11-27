@@ -20,10 +20,6 @@ public class GetTeamPropTask extends Task {
     private boolean initFired;
     private TeamProp.Positions position;
 
-    public TeamProp.Positions getPosition() {
-        return position;
-    }
-
     public GetTeamPropTask(@NonNull BunyipsOpMode opMode, Vision vision) {
         super(opMode);
         this.vision = vision;
@@ -35,8 +31,13 @@ public class GetTeamPropTask extends Task {
         this.teamProp = teamProp;
     }
 
+    public TeamProp.Positions getPosition() {
+        return position;
+    }
+
     /**
      * Late init method for dynamically installing a TeamProp processor
+     *
      * @param teamProp TeamProp Processor to use
      */
     public void setTeamProp(TeamProp teamProp) {

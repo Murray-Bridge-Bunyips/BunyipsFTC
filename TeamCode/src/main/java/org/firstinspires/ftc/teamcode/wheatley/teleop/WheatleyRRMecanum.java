@@ -18,7 +18,7 @@ public class WheatleyRRMecanum extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this, hardwareMap);
+        config.init(this);
         drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
     }
 

@@ -18,7 +18,7 @@ public class ExampleDebug extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this, hardwareMap);
+        config.init(this);
         imu = new IMUOp(this, config.imu);
     }
 

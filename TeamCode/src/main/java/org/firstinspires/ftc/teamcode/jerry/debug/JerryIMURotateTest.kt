@@ -24,7 +24,7 @@ class JerryIMURotateTest : BunyipsOpMode() {
     private val tasks = ArrayDeque<AutoTask>()
 
     override fun onInit() {
-        config.init(this, hardwareMap)
+        config.init(this)
         imu = IMUOp(this, config.imu!!)
         drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 

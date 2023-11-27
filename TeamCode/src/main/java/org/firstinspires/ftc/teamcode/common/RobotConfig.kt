@@ -1,9 +1,10 @@
 package org.firstinspires.ftc.teamcode.common
 
 import com.acmerobotics.roadrunner.geometry.Pose2d
+import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.HardwareDevice
 import com.qualcomm.robotcore.hardware.HardwareMap
-import org.firstinspires.ftc.robotcore.internal.system.Assert
+import java.util.Objects
 
 /**
  * Abstract class to use as parent to the class you will define to mirror a "saved configuration" on the Robot Controller
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.robotcore.internal.system.Assert
  *
  *     @Override
  *     protected void onInit() {
- *         config.init(this, hardwareMap);
+ *         config.init(this);
  *     }
  * ```
  */
@@ -27,18 +28,23 @@ abstract class RobotConfig {
     /**
      * Use HardwareMap to fetch HardwareDevices and assign instances.
      * Should be called as the first line in onInit();
+     * @param opMode the OpMode instance - usually the `this` object when at the root OpMode.
      */
-    fun init(opMode: BunyipsOpMode, hardwareMap: HardwareMap) {
+    fun init(opMode: OpMode) {
         errors.clear()
-        this.hardwareMap = hardwareMap
-        Assert.assertNotNull(hardwareMap)
+        this.hardwareMap = opMode.hardwareMap
+        Objects.requireNonNull(
+            this.hardwareMap,
+            "HardwareMap was null in ${this.javaClass.simpleName}!"
+        )
         configureHardware()
-        opMode.addTelemetry(
+        opMode.telemetry.addData(
+            "",
             "${this.javaClass.simpleName}: Configuration completed with ${errors.size} error(s).",
         )
         if (errors.isNotEmpty()) {
             for (error in errors) {
-                opMode.addRetainedTelemetry("! DEV_FAULT: $error")
+                opMode.telemetry.addData("", "! DEV_FAULT: $error").setRetained(true)
             }
         }
     }

@@ -18,7 +18,7 @@ public class GLaDOSRRMecanum extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this, hardwareMap);
+        config.init(this);
         drive = new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
     }
 

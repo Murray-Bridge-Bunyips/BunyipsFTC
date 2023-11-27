@@ -28,7 +28,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
     private val selection = UserSelection(this, {}, "Drive Left", "Drive Right")
 
     override fun onInit() {
-        config.init(this, hardwareMap)
+        config.init(this)
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 

@@ -12,12 +12,12 @@ import org.firstinspires.ftc.teamcode.example.examplerobot.tasks.ExampleTimeDriv
 import java.util.List;
 
 public class ExampleAuto extends AutonomousBunyipsOpMode {
-    private ExampleDrive drive;
     private final ExampleConfig config = new ExampleConfig();
+    private ExampleDrive drive;
 
     @Override
     protected void onInitialisation() {
-        config.init(this, hardwareMap);
+        config.init(this);
         drive = new ExampleDrive(this, config.leftMotor, config.rightMotor);
     }
 

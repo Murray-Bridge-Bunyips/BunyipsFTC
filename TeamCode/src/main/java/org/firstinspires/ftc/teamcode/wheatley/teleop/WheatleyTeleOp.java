@@ -41,7 +41,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this, hardwareMap);
+        config.init(this);
         drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.bl, config.fr, config.br);
         if (NullSafety.assertComponentArgs(this, WheatleyLift.class, config.ra, config.ls, config.rs))
             lift = new WheatleyLift(this, config.ra, config.ls, config.rs);

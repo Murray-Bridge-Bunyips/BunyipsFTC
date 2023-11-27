@@ -35,7 +35,7 @@ class JerryTeleOp : BunyipsOpMode() {
 
     override fun onInit() {
         // Configure drive and lift subsystems
-        config.init(this, hardwareMap)
+        config.init(this)
         selector.start()
         if (NullSafety.assertNotNull(config.imu)) {
             imu = IMUOp(this, config.imu!!)

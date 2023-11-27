@@ -11,7 +11,7 @@ public class WheatleyRotationTest extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this, hardwareMap);
+        config.init(this);
     }
 
     @Override

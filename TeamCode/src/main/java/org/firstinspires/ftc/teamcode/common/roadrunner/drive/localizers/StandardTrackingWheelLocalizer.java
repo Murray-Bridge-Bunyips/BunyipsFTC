@@ -27,10 +27,8 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     private final Encoder leftEncoder;
     private final Encoder rightEncoder;
     private final Encoder frontEncoder;
-
     private final List<Integer> lastEncPositions;
     private final List<Integer> lastEncVels;
-
     public StandardTrackingWheelLocalizer(StandardTrackingWheelLocalizerCoefficients coefficients, Encoder leftEncoder, Encoder rightEncoder, Encoder frontEncoder, List<Integer> lastTrackingEncPositions, List<Integer> lastTrackingEncVels) {
         super(Arrays.asList(
                 new Pose2d(0, coefficients.LATERAL_DISTANCE / 2, 0), // left
@@ -48,6 +46,10 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         this.leftEncoder = leftEncoder;
         this.rightEncoder = rightEncoder;
         this.frontEncoder = frontEncoder;
+    }
+
+    public StandardTrackingWheelLocalizerCoefficients getCoefficients() {
+        return coefficients;
     }
 
     public double encoderTicksToInches(double ticks) {

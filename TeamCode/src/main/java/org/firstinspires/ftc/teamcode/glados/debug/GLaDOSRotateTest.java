@@ -15,12 +15,12 @@ import java.util.Locale;
  */
 @TeleOp(name = "GLaDOS: Rotator Motor Degrees Runner", group = "GLaDOS")
 public class GLaDOSRotateTest extends BunyipsOpMode {
-    double target;
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    double target;
 
     @Override
     protected void onInit() {
-        config.init(this, hardwareMap);
+        config.init(this);
         config.sr.reset();
         config.sr.track();
         config.sr.setTargetPosition(0);

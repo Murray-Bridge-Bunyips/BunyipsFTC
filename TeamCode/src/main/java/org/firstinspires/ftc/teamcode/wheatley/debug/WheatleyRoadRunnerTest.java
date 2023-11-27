@@ -23,7 +23,7 @@ public class WheatleyRoadRunnerTest extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onInitialisation() {
-        config.init(this, hardwareMap);
+        config.init(this);
         drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
         testTrajectory = drive.trajectoryBuilder(drive.getPoseEstimate())
                 .forward(Inches.fromM(1))

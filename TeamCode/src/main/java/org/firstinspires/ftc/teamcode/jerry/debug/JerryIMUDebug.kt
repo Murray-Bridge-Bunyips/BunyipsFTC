@@ -14,7 +14,7 @@ class JerryIMUDebug : BunyipsOpMode() {
     private var imu: IMUOp? = null
 
     override fun onInit() {
-        config.init(this, hardwareMap)
+        config.init(this)
         imu = IMUOp(this, config.imu!!)
         imu?.startCapture()
     }

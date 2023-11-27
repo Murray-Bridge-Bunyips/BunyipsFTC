@@ -9,7 +9,12 @@ enum class StartingPositions {
          */
         @JvmStatic
         fun use(): List<OpModeSelection> {
-            return listOf(OpModeSelection(RED_LEFT), OpModeSelection(RED_RIGHT), OpModeSelection(BLUE_LEFT), OpModeSelection(BLUE_RIGHT))
+            return listOf(
+                OpModeSelection(RED_LEFT),
+                OpModeSelection(RED_RIGHT),
+                OpModeSelection(BLUE_LEFT),
+                OpModeSelection(BLUE_RIGHT)
+            )
         }
     }
 }

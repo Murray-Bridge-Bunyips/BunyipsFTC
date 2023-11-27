@@ -55,6 +55,10 @@ public class TwoWheelTrackingLocalizer extends TwoTrackingWheelLocalizer {
         this.perpendicularEncoder = perpendicularEncoder;
     }
 
+    public TwoWheelTrackingLocalizerCoefficients getCoefficients() {
+        return coefficients;
+    }
+
     public double encoderTicksToInches(double ticks) {
         return coefficients.WHEEL_RADIUS * 2 * Math.PI * coefficients.GEAR_RATIO * ticks / coefficients.TICKS_PER_REV;
     }

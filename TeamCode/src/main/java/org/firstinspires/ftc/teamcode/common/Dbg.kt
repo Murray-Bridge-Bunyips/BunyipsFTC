@@ -30,7 +30,7 @@ OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 package org.firstinspires.ftc.teamcode.common
 
-import android.util.Log
+import com.qualcomm.robotcore.util.RobotLog
 import org.firstinspires.ftc.teamcode.common.Text.formatString
 
 /**
@@ -52,7 +52,7 @@ object Dbg {
      */
     @JvmStatic
     fun error(message: String) {
-        Log.e(TAG, ERR_PREPEND + message)
+        RobotLog.ee(TAG, ERR_PREPEND + message)
     }
 
     @JvmStatic
@@ -66,9 +66,9 @@ object Dbg {
      */
     @JvmStatic
     fun sendStacktrace(e: Throwable) {
-        Log.e(TAG, e.toString())
+        RobotLog.ee(TAG, e.toString())
         for (el in e.stackTrace) {
-            Log.e(TAG, el.toString())
+            RobotLog.ee(TAG, el.toString())
         }
     }
 
@@ -80,7 +80,7 @@ object Dbg {
      */
     @JvmStatic
     fun warn(message: String) {
-        Log.w(TAG, WRN_PREPEND + message)
+        RobotLog.ww(TAG, WRN_PREPEND + message)
     }
 
     @JvmStatic
@@ -95,7 +95,7 @@ object Dbg {
      */
     @JvmStatic
     fun logd(message: String) {
-        Log.d(TAG, message)
+        RobotLog.dd(TAG, message)
     }
 
     @JvmStatic
@@ -110,7 +110,7 @@ object Dbg {
      */
     @JvmStatic
     fun log(message: String) {
-        Log.i(TAG, message)
+        RobotLog.ii(TAG, message)
     }
 
     @JvmStatic

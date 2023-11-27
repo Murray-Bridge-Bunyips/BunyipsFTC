@@ -29,7 +29,7 @@ public class GLaDOSParkLeftBackstageAuto extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onInitialisation() {
-        config.init(this, hardwareMap);
+        config.init(this);
         drive = new GLaDOSPOVDriveCore(this, config.fl, config.bl, config.fr, config.br);
     }
 

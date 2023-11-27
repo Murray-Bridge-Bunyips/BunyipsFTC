@@ -16,7 +16,7 @@ public class GLaDOSExtensionRunner extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this, hardwareMap);
+        config.init(this);
     }
 
     @Override

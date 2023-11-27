@@ -11,14 +11,14 @@ import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleCon
 import java.util.List;
 
 public class ExampleSignalAutonomous extends AutonomousBunyipsOpMode {
-    private GetSignalTask initTask;
     private final ExampleConfig config = new ExampleConfig();
+    private GetSignalTask initTask;
     @SuppressWarnings("FieldCanBeLocal")
     private OpenCVCam cam;
 
     @Override
     protected void onInitialisation() {
-        config.init(this, hardwareMap);
+        config.init(this);
         cam = new OpenCVCam(this, config.webcam, null);
         initTask = new GetSignalTask(this, cam);
     }

@@ -16,7 +16,7 @@ class JerrySignalAnalyse : BunyipsOpMode() {
     private var task: GetSignalTask? = null
 
     override fun onInit() {
-        config.init(this, hardwareMap)
+        config.init(this)
         cam = OpenCVCam(this, config.webcam, config.monitorID)
         task = cam?.let { GetSignalTask(this, it) }
     }

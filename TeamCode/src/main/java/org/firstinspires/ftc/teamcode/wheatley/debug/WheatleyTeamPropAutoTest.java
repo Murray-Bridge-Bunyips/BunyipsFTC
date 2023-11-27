@@ -31,7 +31,7 @@ public class WheatleyTeamPropAutoTest extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onInitialisation() {
-        config.init(this, hardwareMap);
+        config.init(this);
         vision = new Vision(this, config.webcam);
         initTask = new GetTeamPropTask(this, vision);
     }

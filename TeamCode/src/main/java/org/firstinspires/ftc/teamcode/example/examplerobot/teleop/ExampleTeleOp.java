@@ -24,7 +24,7 @@ public class ExampleTeleOp extends BunyipsOpMode {
     protected void onInit() {
         // This line is required to initialise config and allow you to access all your instance
         // variables declared in the config class. This is required for all OpMode classes.
-        config.init(this, hardwareMap);
+        config.init(this);
 
         // Initialise all your components! e.g.
         drive = new ExampleDrive(this, config.leftMotor, config.rightMotor);
