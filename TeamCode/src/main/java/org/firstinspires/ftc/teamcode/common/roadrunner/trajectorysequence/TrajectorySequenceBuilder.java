@@ -115,6 +115,22 @@ public class TrajectorySequenceBuilder {
         );
     }
 
+    public double getBaseTurnConstraintMaxAngVel() {
+        return baseTurnConstraintMaxAngVel;
+    }
+
+    public double getBaseTurnConstraintMaxAngAccel() {
+        return baseTurnConstraintMaxAngAccel;
+    }
+
+    public TrajectoryVelocityConstraint getBaseVelConstraint() {
+        return baseVelConstraint;
+    }
+
+    public TrajectoryAccelerationConstraint getBaseAccelConstraint() {
+        return baseAccelConstraint;
+    }
+
     public TrajectorySequenceBuilder lineTo(Vector2d endPosition) {
         return addPath(() -> currentTrajectoryBuilder.lineTo(endPosition, currentVelConstraint, currentAccelConstraint));
     }

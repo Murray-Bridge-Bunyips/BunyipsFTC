@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.Task
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 /**
  * Base drive task which will run XYR speed for a given time
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 class JerryTimeDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
-    private val drive: JerryDrive?,
+    private val drive: StandardMecanumDrive?,
     private val x: Double,
     private val y: Double,
     private val r: Double

@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.Task
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import kotlin.math.abs
 
 /**
@@ -16,7 +16,7 @@ import kotlin.math.abs
 class JerryPrecisionDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
-    private val drive: JerryDrive?,
+    private val drive: StandardMecanumDrive?,
     private val imu: IMUOp?,
     // Odometry moved to Wheatley
 //    private val x: Odometer?,

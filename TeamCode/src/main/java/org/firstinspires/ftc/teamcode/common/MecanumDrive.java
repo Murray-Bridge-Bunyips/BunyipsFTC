@@ -21,6 +21,7 @@ import org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumCoefficient
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumRoadRunnerDrive;
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.RoadRunnerDrive;
 import org.firstinspires.ftc.teamcode.common.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.common.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 
 import java.util.List;
 
@@ -45,11 +46,22 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
      * Cleanup and store the last pose estimate in global storage.
      * Should be run in BunyipsOpMode.onStop()
      */
-    public void teardown() {
+    public void stop() {
         // Store the last pose estimate in global storage
         RobotConfig.setLastKnownPosition(drive.getPoseEstimate());
         // Safety stop to prevent a runaway robot
-        drive.setWeightedDrivePower(new Pose2d(0, 0, 0));
+        drive.stop();
+    }
+
+    /**
+     * For continuity, keep setSpeedUsingController for setting drive speeds.
+     *
+     * @param x gamepad.left_stick_x or similar
+     * @param y gamepad.left_stick_y or similar
+     * @param r gamepad.right_stick_x or similar
+     */
+    public void setSpeedUsingController(double x, double y, double r) {
+        drive.setWeightedDrivePower(Controller.makeRobotPose(x, y, r));
     }
 
     @Override
@@ -93,6 +105,11 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
     @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading) {
         return drive.trajectoryBuilder(startPose, startHeading);
+    }
+
+    @Override
+    public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
+        return drive.trajectorySequenceBuilder(startPose);
     }
 
     @Override

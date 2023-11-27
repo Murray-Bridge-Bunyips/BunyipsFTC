@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Cannon;
-import org.firstinspires.ftc.teamcode.common.Controller;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.NullSafety;
 import org.firstinspires.ftc.teamcode.common.TriSpeed;
@@ -65,7 +64,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         }
         addTelemetry("TriSpeed: Running at % speed", speed.getSpeed());
 
-        drive.setWeightedDrivePower(Controller.makeRobotPose(x * speed.getMultiplier(), y * speed.getMultiplier(), r * speed.getMultiplier()));
+        drive.setSpeedUsingController(x * speed.getMultiplier(), y * speed.getMultiplier(), r * speed.getMultiplier());
 
         // Linear slider rotator
         arm.getSliderController().setTargetAngleUsingController(gamepad2.left_stick_y);

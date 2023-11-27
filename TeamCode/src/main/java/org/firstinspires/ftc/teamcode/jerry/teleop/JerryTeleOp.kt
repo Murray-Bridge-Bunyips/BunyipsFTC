@@ -2,15 +2,14 @@ package org.firstinspires.ftc.teamcode.jerry.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.FieldCentricStandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.RelativePose2d
 import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.UserSelection
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
-import org.firstinspires.ftc.teamcode.jerry.components.JerryPolarDrive
 
 /**
  * Primary TeleOp for all of Jerry's functions.
@@ -56,17 +55,18 @@ class JerryTeleOp : BunyipsOpMode() {
     private fun initDrive() {
         if (NullSafety.assertNotNull(config.driveMotors)) {
             drive = if (selector.result == "FIELD-CENTRIC" || imu == null) {
-                JerryPolarDrive(
+                FieldCentricStandardMecanumDrive(
                     this,
                     config.bl!!,
                     config.br!!,
                     config.fl!!,
                     config.fr!!,
                     imu!!,
+                    true,
                     RelativePose2d.FORWARD
                 )
             } else {
-                JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+                StandardMecanumDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
             }
         }
     }

@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.IMUOp
+import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.Task
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // This tasks only uses the IMU and time in order to drive, to see the implementation of both deadwheel and IMU
 // see the PrecisionDrive task
@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 class JerryIMUDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
-    private val drive: JerryDrive?,
+    private val drive: StandardMecanumDrive?,
     private val imu: IMUOp?,
     private val x: Double,
     private val y: Double,

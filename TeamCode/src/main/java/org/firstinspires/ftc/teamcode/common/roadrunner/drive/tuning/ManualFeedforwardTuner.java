@@ -65,7 +65,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
 
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, dashboard.getTelemetry());
 
-        final VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
+        VoltageSensor voltageSensor = hardwareMap.voltageSensor.iterator().next();
 
         mode = Mode.TUNING_MODE;
 
@@ -107,7 +107,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     double targetPower = Kinematics.calculateMotorFeedforward(motionState.getV(), motionState.getA(), ROBOT_CONFIG.driveConstants.kV, ROBOT_CONFIG.driveConstants.kA, ROBOT_CONFIG.driveConstants.kStatic);
 
                     final double NOMINAL_VOLTAGE = 12.0;
-                    final double voltage = voltageSensor.getVoltage();
+                    double voltage = voltageSensor.getVoltage();
                     drive.setDrivePower(new Pose2d(NOMINAL_VOLTAGE / voltage * targetPower, 0, 0));
                     drive.updatePoseEstimate();
 

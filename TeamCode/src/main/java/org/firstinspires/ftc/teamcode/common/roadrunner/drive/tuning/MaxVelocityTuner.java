@@ -34,7 +34,7 @@ public class MaxVelocityTuner extends LinearOpMode {
     private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
     public static double RUNTIME = 2.0;
     private ElapsedTime timer;
-    private double maxVelocity = 0.0;
+    private double maxVelocity;
     private VoltageSensor batteryVoltageSensor;
 
     @Override

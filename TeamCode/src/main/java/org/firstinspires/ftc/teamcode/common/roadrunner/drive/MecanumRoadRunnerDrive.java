@@ -108,6 +108,11 @@ public class MecanumRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.Me
         );
     }
 
+    @Override
+    public void stop() {
+        setMotorPowers(0, 0, 0, 0);
+    }
+
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
         return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, ACCEL_CONSTRAINT);
     }

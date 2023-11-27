@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.glados.tasks;
 import androidx.annotation.NonNull;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.Cartesian;
 import org.firstinspires.ftc.teamcode.common.Controller;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.tasks.Task;
@@ -33,7 +34,7 @@ public class GLaDOSTimeDriveTask extends Task {
 
     @Override
     public void run() {
-        drive.setWeightedDrivePower(Controller.makeRobotPose(x, y, r));
+        drive.setWeightedDrivePower(Cartesian.toPose(x, y, r));
         drive.update();
     }
 
@@ -44,6 +45,6 @@ public class GLaDOSTimeDriveTask extends Task {
 
     @Override
     public void onFinish() {
-        drive.teardown();
+        drive.stop();
     }
 }

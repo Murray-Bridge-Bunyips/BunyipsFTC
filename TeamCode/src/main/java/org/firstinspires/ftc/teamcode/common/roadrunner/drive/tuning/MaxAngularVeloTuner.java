@@ -32,7 +32,7 @@ public class MaxAngularVeloTuner extends LinearOpMode {
     private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
     public static double RUNTIME = 4.0;
     private ElapsedTime timer;
-    private double maxAngVelocity = 0.0;
+    private double maxAngVelocity;
 
     @Override
     public void runOpMode() throws InterruptedException {

@@ -5,7 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.MecanumDrive;
+import org.firstinspires.ftc.teamcode.common.roadrunner.drive.RoadRunnerDrive;
 import org.firstinspires.ftc.teamcode.common.roadrunner.trajectorysequence.TrajectorySequence;
 
 /**
@@ -13,19 +13,19 @@ import org.firstinspires.ftc.teamcode.common.roadrunner.trajectorysequence.Traje
  *
  * @author Lucas Bubner, 2023
  */
-public class RoadRunnerTask extends Task {
-    private final MecanumDrive drive;
+public class RoadRunnerTask<T extends RoadRunnerDrive> extends Task {
+    private final T drive;
 
     private Trajectory trajectory;
     private TrajectorySequence trajectorySequence;
 
-    public RoadRunnerTask(@NonNull BunyipsOpMode opMode, double time, MecanumDrive drive, Trajectory trajectory) {
+    public RoadRunnerTask(@NonNull BunyipsOpMode opMode, double time, T drive, Trajectory trajectory) {
         super(opMode, time);
         this.drive = drive;
         this.trajectory = trajectory;
     }
 
-    public RoadRunnerTask(@NonNull BunyipsOpMode opMode, double time, MecanumDrive drive, TrajectorySequence trajectorySequence) {
+    public RoadRunnerTask(@NonNull BunyipsOpMode opMode, double time, T drive, TrajectorySequence trajectorySequence) {
         super(opMode, time);
         this.drive = drive;
         this.trajectorySequence = trajectorySequence;
@@ -49,7 +49,7 @@ public class RoadRunnerTask extends Task {
 
     @Override
     public void onFinish() {
-        // noop
+        drive.stop();
     }
 
     @Override

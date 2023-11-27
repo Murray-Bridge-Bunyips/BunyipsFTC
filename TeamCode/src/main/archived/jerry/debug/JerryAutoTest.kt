@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.common.tasks.GetSignalTask
 import org.firstinspires.ftc.teamcode.common.tasks.MessageTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryArm
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryIMURotationTask
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
@@ -26,7 +25,7 @@ import java.util.ArrayDeque
 @Autonomous(name = "JERRY: Patriarch of the Bunyips Family", group = "JERRY")
 class JerryAutoTest : BunyipsOpMode() {
     private var config = JerryConfig()
-    private var drive: JerryDrive? = null
+    private var drive: StandardMecanumDrive? = null
     private var tagTask: GetSignalTask? = null
     private var arm: JerryArm? = null
     private var cam: OpenCVCam? = null
@@ -36,7 +35,7 @@ class JerryAutoTest : BunyipsOpMode() {
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         if (NullSafety.assertNotNull(config.driveMotors)) {
-            drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+            drive = StandardMecanumDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
         }
 
         drive?.setToBrake()

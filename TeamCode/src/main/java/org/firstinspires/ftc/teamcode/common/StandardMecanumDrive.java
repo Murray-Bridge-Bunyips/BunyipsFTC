@@ -8,18 +8,14 @@ import com.qualcomm.robotcore.util.Range;
 import java.util.Locale;
 
 /**
- * Base class for a drive system that uses Mecanum wheels.
+ * Base class for a Cartesian drive system that uses Mecanum wheels.
  * Includes all the common math done across all Mecanum drive systems.
- * Should be extended instead of implemented directly to allow for additional methods that may be
- * needed as the drive system is developed for a robot.
+ * This system is deprecated by RoadRunner, but remains for legacy/non-RoadRunner purposes.
  *
  * @author Lucas Bubner, 2023
- * @deprecated Deprecated by RoadRunner
+ * @see MecanumDrive
  */
-@Deprecated
-public abstract class StandardMecanumDrive extends BunyipsComponent {
-    // FIXME: As of right now, Jerry still relies on this file
-    // At some point we should migrate Jerry over so we can move this file over to /archived
+public class StandardMecanumDrive extends BunyipsComponent {
 
     private final DcMotor frontLeft;
     private final DcMotor backLeft;
@@ -34,7 +30,7 @@ public abstract class StandardMecanumDrive extends BunyipsComponent {
     // Store and declare prioritisation when given instruction to calculate motor powers
     private Priority priority = Priority.NORMALISED;
 
-    protected StandardMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight) {
+    public StandardMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight) {
         super(opMode);
         this.frontLeft = frontLeft;
         this.backLeft = backLeft;

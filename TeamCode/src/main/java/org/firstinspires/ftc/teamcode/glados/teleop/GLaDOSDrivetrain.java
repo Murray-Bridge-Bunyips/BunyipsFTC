@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.glados.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.Controller;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
@@ -28,7 +27,7 @@ public class GLaDOSDrivetrain extends BunyipsOpMode {
         double x = gamepad1.left_stick_x;
         double y = gamepad1.left_stick_y;
         double r = gamepad1.right_stick_x;
-        drive.setWeightedDrivePower(Controller.makeRobotPose(x, y, r / 2));
+        drive.setSpeedUsingController(x, y, r / 2);
         drive.update();
     }
 }

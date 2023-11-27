@@ -5,21 +5,16 @@ import androidx.annotation.NonNull;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 /**
- * Variant of the MecanumDrive that uses field-centric controls, accounting for robot heading.
- * Should be extended instead of implemented directly to allow for additional methods that may be
- * needed as the drive system is developed for a robot.
+ * Variant of the Cartesian MecanumDrive that uses field-centric controls, accounting for robot heading.
+ * This system is deprecated by RoadRunner, but remains for legacy/non-RoadRunner purposes.
  *
  * @author Lucas Bubner, 2023
- * @see StandardMecanumDrive
- * @deprecated Deprecated by RoadRunner
+ * @see FieldCentricMecanumDrive
  */
-@Deprecated
-public abstract class FieldCentricStandardMecanumDrive extends StandardMecanumDrive {
-    // FIXME: As of right now, Jerry still relies on this file
-    // At some point we should migrate Jerry over so we can move this file over to /archived
+public class FieldCentricStandardMecanumDrive extends StandardMecanumDrive {
     private final IMUOp imu;
 
-    protected FieldCentricStandardMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativePose2d startingDirection) {
+    public FieldCentricStandardMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativePose2d startingDirection) {
         super(opMode, frontLeft, backLeft, frontRight, backRight);
         this.imu = imu;
         if (startingDirection == RelativePose2d.CLOCKWISE || startingDirection == RelativePose2d.ANTICLOCKWISE) {

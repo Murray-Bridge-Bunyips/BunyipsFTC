@@ -2,16 +2,14 @@ package org.firstinspires.ftc.teamcode.glados.autonomous;
 
 import androidx.annotation.Nullable;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.common.AutonomousBunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.Inches;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
+import org.firstinspires.ftc.teamcode.common.RoadRunnerAutonomousBunyipsOpMode;
+import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
-import org.firstinspires.ftc.teamcode.common.tasks.RoadRunnerTask;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
 import java.util.List;
@@ -21,19 +19,16 @@ import java.util.List;
  *
  * @author Lachlan Paul, 2023
  */
-public class GLaDOSRoadRunnerTest extends AutonomousBunyipsOpMode {
-    private GLaDOSConfigCore config;
-    private MecanumDrive drive;
-    private Trajectory trajectory;
-    double x1 = 10.0;
-    double y1 = 10.0;
+@Autonomous(name = "GLaDOS: RoadRunner Test", group = "GLADOS")
+public class GLaDOSRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+    private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    double x1 = 10.0, y1 = 10.0;
+
     @Override
     protected void onInitialisation() {
         config.init(this);
-        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.bl, config.fr, config.br);
-        trajectory = drive.trajectoryBuilder(new Pose2d(0, 0, 0))
-                .splineTo(new Vector2d(x1, y1), Math.toRadians(90))
-                .build();
+        RobotConfig.setLastKnownPosition(null);
+        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
     }
 
     @Override
@@ -48,6 +43,8 @@ public class GLaDOSRoadRunnerTest extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
-        addTask(new RoadRunnerTask(this, 5, drive, trajectory));
+        addNewTrajectory()
+                .splineTo(new Vector2d(x1, y1), Math.toRadians(90))
+                .build();
     }
 }

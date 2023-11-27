@@ -8,14 +8,13 @@ import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.RobotConfig
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryVectorDriveTask
 import java.util.ArrayDeque
 
 @Autonomous(name="JERRY: VectorTest")
 class JerryVectorTest : BunyipsOpMode() {
     private var config = JerryConfig()
-    private var drive: JerryDrive? = null
+    private var drive: StandardMecanumDrive? = null
     private var imu: IMUOp? = null
     private var x: Odometer? = null
     private var y: Odometer? = null
@@ -24,7 +23,7 @@ class JerryVectorTest : BunyipsOpMode() {
     override fun onInit() {
         config = RobotConfig.newConfig(this, config, hardwareMap) as JerryConfig
         if (config.affirm(config.driveMotors))
-            drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+            drive = StandardMecanumDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
         if (config.affirm(config.fl))
             x = Odometer(this, config.fl!!, config.xDiameter, config.xTicksPerRev)

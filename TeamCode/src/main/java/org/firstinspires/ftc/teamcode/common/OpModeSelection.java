@@ -38,6 +38,6 @@ public class OpModeSelection {
 
     @Override
     public boolean equals(Object o) {
-        return getName().equals(o) || getObj() == o || o == this;
+        return name.equals(o) || obj == o || o == this;
     }
 }

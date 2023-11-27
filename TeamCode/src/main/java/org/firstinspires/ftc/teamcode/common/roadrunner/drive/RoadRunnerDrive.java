@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.common.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.common.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 
 import java.util.Arrays;
 import java.util.List;
@@ -36,11 +37,15 @@ public interface RoadRunnerDrive {
         return new ProfileAccelerationConstraint(maxAccel);
     }
 
+    void stop();
+
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose);
 
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed);
 
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading);
+
+    TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose);
 
     void turnAsync(double angle);
 

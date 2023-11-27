@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.wheatley.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.Controller;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 
@@ -24,12 +23,12 @@ public class WheatleyRRMecanum extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        drive.setWeightedDrivePower(Controller.makeRobotPose(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x));
+        drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         drive.update();
     }
 
     @Override
     protected void onStop() {
-        drive.teardown();
+        drive.stop();
     }
 }

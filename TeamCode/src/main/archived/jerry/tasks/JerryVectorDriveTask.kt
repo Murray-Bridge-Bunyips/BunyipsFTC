@@ -6,7 +6,6 @@ import org.firstinspires.ftc.teamcode.common.Odometer
 import org.firstinspires.ftc.teamcode.common.RelativeVector
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 import org.firstinspires.ftc.teamcode.common.tasks.TaskImpl
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.common.RobotVector
 import kotlin.math.abs
 
@@ -23,7 +22,7 @@ import kotlin.math.abs
 class JerryVectorDriveTask<T>(
     opMode: BunyipsOpMode,
     time: Double,
-    private val drive: JerryDrive?,
+    private val drive: StandardMecanumDrive?,
     private val imu: IMUOp?,
     private val x: Odometer?,
     private val y: Odometer?,

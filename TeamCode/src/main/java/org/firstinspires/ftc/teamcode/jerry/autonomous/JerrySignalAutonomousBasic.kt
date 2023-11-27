@@ -5,10 +5,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
 import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.OpenCVCam
+import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.GetSignalTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryTimeDriveTask
 import java.util.ArrayDeque
 
@@ -25,7 +25,7 @@ import java.util.ArrayDeque
 class JerrySignalAutonomousBasic : BunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: OpenCVCam? = null
-    private var drive: JerryDrive? = null
+    private var drive: StandardMecanumDrive? = null
     private var tagtask: GetSignalTask? = null
     private val tasks = ArrayDeque<AutoTask>()
 
@@ -34,7 +34,7 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         config.init(this)
         cam = OpenCVCam(this, config.webcam, config.monitorID)
         if (NullSafety.assertNotNull(config.driveMotors))
-            drive = JerryDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+            drive = StandardMecanumDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.

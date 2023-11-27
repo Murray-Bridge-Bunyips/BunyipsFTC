@@ -119,6 +119,11 @@ public class TankRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.TankD
         return new ProfileAccelerationConstraint(maxAccel);
     }
 
+    @Override
+    public void stop() {
+        setMotorPowers(0, 0);
+    }
+
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
         return new TrajectoryBuilder(startPose, VEL_CONSTRAINT, accelConstraint);
     }

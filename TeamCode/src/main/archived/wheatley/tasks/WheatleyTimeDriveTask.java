@@ -48,6 +48,6 @@ public class WheatleyTimeDriveTask extends Task {
 
     @Override
     public void onFinish() {
-        drive.teardown();
+        drive.stop();
     }
 }
