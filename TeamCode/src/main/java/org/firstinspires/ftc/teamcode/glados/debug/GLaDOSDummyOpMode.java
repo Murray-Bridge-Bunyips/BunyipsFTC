@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
 /**
@@ -15,11 +14,11 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 @TeleOp(name = "template", group = "GLaDOS")
 @Disabled
 public class GLaDOSDummyOpMode extends BunyipsOpMode {
-    private GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private final GLaDOSConfigCore config = new GLaDOSConfigCore();
 
     @Override
     protected void onInit() {
-        config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
+        config.init(this);
     }
 
     @Override

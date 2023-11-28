@@ -2,13 +2,13 @@ package org.firstinspires.ftc.teamcode.example.examplerobot.components;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsComponent;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.RelativeVector;
-import org.firstinspires.ftc.teamcode.common.RobotVector;
+import org.firstinspires.ftc.teamcode.common.RelativePose2d;
 
 import java.util.Locale;
 
@@ -164,15 +164,15 @@ public class ExampleMecanumDrive extends BunyipsComponent {
     }
 
     /**
-     * Set motor speeds based on a RobotVector or RelativeVector.
+     * Set motor speeds based on a Pose2d or RelativePose2d.
      */
     public <T> void setVector(T vector) {
-        if (vector instanceof RobotVector) {
-            RobotVector robotVector = (RobotVector) vector;
-            setSpeedXYR(robotVector.getX(), -robotVector.getY(), robotVector.getR());
-        } else if (vector instanceof RelativeVector) {
-            RelativeVector relativeVector = (RelativeVector) vector;
-            setSpeedXYR(relativeVector.getVector().getX(), -relativeVector.getVector().getY(), relativeVector.getVector().getR());
+        if (vector instanceof Pose2d) {
+            Pose2d robotVector = (Pose2d) vector;
+            setSpeedXYR(robotVector.getX(), -robotVector.getY(), robotVector.getHeading());
+        } else if (vector instanceof RelativePose2d) {
+            RelativePose2d relativeVector = (RelativePose2d) vector;
+            setSpeedXYR(relativeVector.getVector().getX(), -relativeVector.getVector().getY(), relativeVector.getVector().getHeading());
         }
     }
 

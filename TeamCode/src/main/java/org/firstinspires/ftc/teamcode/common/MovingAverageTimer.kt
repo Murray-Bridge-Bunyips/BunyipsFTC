@@ -5,7 +5,7 @@ package org.firstinspires.ftc.teamcode.common
  * @author Shaun, 11/06/2017.
  */
 class MovingAverageTimer @JvmOverloads constructor(
-    num: Int = 100,
+    bufferSize: Int = 100,
     resolution: Resolution? = Resolution.MILLISECONDS
 ) {
     // A ring buffer is used to keep track of a moving average
@@ -30,7 +30,7 @@ class MovingAverageTimer @JvmOverloads constructor(
 
     init {
         reset()
-        ringBufferSize = num
+        ringBufferSize = bufferSize
         loopTimeRingBuffer = LongArray(ringBufferSize)
         val hdr = String.format("\n%-12s%-12s%-12s%-12s", "Loops", "TotalTime", "MovAvg", "Avg")
         when (resolution) {
@@ -43,8 +43,8 @@ class MovingAverageTimer @JvmOverloads constructor(
 
             Resolution.MILLISECONDS -> {
                 this.resolution = MILLIS_IN_NANO
-                avgFormatStr = "%3.3f msecs"
-                toStringFormatStr = """${hdr}msecs
+                avgFormatStr = "%3.3f ms"
+                toStringFormatStr = """${hdr}ms
 %-12d%-12.3f%-12.3f%-12.3f
  min        %-12.3f%-12.3f%-12.3f
  max        %-12.3f%-12.3f%-12.3f"""
@@ -52,8 +52,8 @@ class MovingAverageTimer @JvmOverloads constructor(
 
             else -> {
                 this.resolution = MILLIS_IN_NANO
-                avgFormatStr = "%3.3f msecs"
-                toStringFormatStr = """${hdr}msecs
+                avgFormatStr = "%3.3f ms"
+                toStringFormatStr = """${hdr}ms
 %-12d%-12.3f%-12.3f%-12.3f
  min        %-12.3f%-12.3f%-12.3f
  max        %-12.3f%-12.3f%-12.3f"""

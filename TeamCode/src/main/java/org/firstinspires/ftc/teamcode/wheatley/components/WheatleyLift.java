@@ -16,10 +16,10 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
  */
 
 public class WheatleyLift extends BunyipsComponent {
-    private static final double LS_OPEN = 1.0;
-    private static final double LS_CLOSED = 0.0;
-    private static final double RS_OPEN = 0.0;
-    private static final double RS_CLOSED = 1.0;
+    private static final double LS_OPEN = 0.0;
+    private static final double LS_CLOSED = 1.0;
+    private static final double RS_OPEN = 1.0;
+    private static final double RS_CLOSED = 0.0;
     private static final double ARM_SPEED = 0.5;
     private final DcMotor arm;
     private final Servo leftServo;
@@ -72,7 +72,7 @@ public class WheatleyLift extends BunyipsComponent {
      * @param gamepadPosition the gamepad stick position to set the arm to
      */
     public void actuateUsingController(double gamepadPosition) {
-        armTarget -= gamepadPosition * 10;
+        armTarget -= gamepadPosition * 2;
     }
 
     /**

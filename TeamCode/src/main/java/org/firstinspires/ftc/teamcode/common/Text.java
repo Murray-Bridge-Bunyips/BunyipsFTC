@@ -5,6 +5,11 @@ import java.util.IllegalFormatFlagsException;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Text and string manipulation utilities.
+ *
+ * @author Lucas Bubner, 2023
+ */
 public class Text {
     /**
      * Format a string using only '%' placeholders.
@@ -41,7 +46,14 @@ public class Text {
     /**
      * Round a number to a certain number of decimal points.
      */
-    public static double round(double toRound, int toNums) {
-        return Double.parseDouble(String.format(Locale.getDefault(), "%." + toNums + "f", toRound));
+    public static double round(double num, int toDecimalPlaces) {
+        return Double.parseDouble(String.format(Locale.getDefault(), "%." + toDecimalPlaces + "f", num));
+    }
+
+    /**
+     * Round a number to a certain number of decimal points.
+     */
+    public static float round(float num, int toDecimalPlaces) {
+        return Float.parseFloat(String.format(Locale.getDefault(), "%." + toDecimalPlaces + "f", num));
     }
 }

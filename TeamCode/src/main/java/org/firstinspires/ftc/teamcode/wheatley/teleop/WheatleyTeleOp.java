@@ -4,12 +4,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Cannon;
+import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.NullSafety;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyManagementRail;
-import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
 
 /**
  * Primary TeleOp for all of Wheatley's functions.
@@ -30,27 +29,25 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyMecanumDrive;
 @TeleOp(name = "WHEATLEY: TeleOp", group = "WHEATLEY")
 public class WheatleyTeleOp extends BunyipsOpMode {
 
-    private WheatleyConfig config = new WheatleyConfig();
-    private WheatleyMecanumDrive drive;
+    private final WheatleyConfig config = new WheatleyConfig();
+    private MecanumDrive drive;
     private WheatleyLift lift;
     private WheatleyManagementRail suspender; // no way it's the wheatley management rail:tm:
     private Cannon cannon;
 
     private boolean xPressed;
-    private boolean yPressed;
+    private boolean bPressed;
 
     @Override
     protected void onInit() {
-        config = (WheatleyConfig) RobotConfig.newConfig(this, config, hardwareMap);
-        drive = new WheatleyMecanumDrive(this, config.fl, config.bl, config.fr, config.br);
+        config.init(this);
+        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.bl, config.fr, config.br);
         if (NullSafety.assertComponentArgs(this, WheatleyLift.class, config.ra, config.ls, config.rs))
             lift = new WheatleyLift(this, config.ra, config.ls, config.rs);
         if (NullSafety.assertComponentArgs(this, WheatleyManagementRail.class, config.susMotor, config.susServo))
             suspender = new WheatleyManagementRail(this, config.susMotor, config.susServo);
         if (NullSafety.assertComponentArgs(this, Cannon.class, config.pl))
             cannon = new Cannon(this, config.pl);
-
-        // TODO: Review systems for operator ease of use
     }
 
     @Override
@@ -84,13 +81,13 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         // Claw controls
         if (gamepad2.x && !xPressed) {
             lift.toggleLeftClaw();
-        } else if (gamepad2.y && !yPressed) {
+        } else if (gamepad2.b && !bPressed) {
             lift.toggleRightClaw();
         }
 
         // Register actions only once per press
         xPressed = gamepad2.x;
-        yPressed = gamepad2.y;
+        bPressed = gamepad2.b;
 
         /*
          * TODO: Pick out some good Wheatley voice lines for telemetry

@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.glados.debug;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
 /**
@@ -13,19 +12,19 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
  */
 @TeleOp(name = "GLaDOS: Extrusion Motor Runner", group = "GLaDOS")
 public class GLaDOSExtensionRunner extends BunyipsOpMode {
-    private GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private final GLaDOSConfigCore config = new GLaDOSConfigCore();
 
     @Override
     protected void onInit() {
-        config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
+        config.init(this);
     }
 
     @Override
     protected void activeLoop() {
-        if (config.sa != null) {
-            config.sa.setPower(gamepad1.left_stick_y);
-            addTelemetry("Extrusion Motor Position: %", config.sa.getCurrentPosition());
-            addTelemetry("Extrusion Motor Power: %", config.sa.getPower());
+        if (config.suspenderActuator != null) {
+            config.suspenderActuator.setPower(gamepad1.left_stick_y);
+            addTelemetry("Extrusion Motor Position: %", config.suspenderActuator.getCurrentPosition());
+            addTelemetry("Extrusion Motor Power: %", config.suspenderActuator.getPower());
         }
     }
 }

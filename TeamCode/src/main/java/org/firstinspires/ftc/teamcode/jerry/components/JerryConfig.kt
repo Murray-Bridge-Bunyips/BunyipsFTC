@@ -41,7 +41,7 @@ class JerryConfig : RobotConfig() {
     val armComponents: List<HardwareDevice?>
         get() = listOf(arm1, arm2, claw, limit)
 
-    override fun init() {
+    override fun configureHardware() {
         bl = getHardware("Back Left", DcMotorEx::class.java) as? DcMotorEx
         br = getHardware("Back Right", DcMotorEx::class.java) as? DcMotorEx
         fl = getHardware("Front Left", DcMotorEx::class.java) as? DcMotorEx

@@ -1,10 +1,10 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.CartesianMecanumDrive
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.Task
-import org.firstinspires.ftc.teamcode.jerry.components.JerryDrive
 
 // Rotate the robot to a specific degree angle. This cannot be done with deadwheel assistance due to configuration.
 /**
@@ -17,7 +17,7 @@ class JerryIMURotationTask(
     opMode: BunyipsOpMode,
     time: Double,
     private val imu: IMUOp?,
-    private val drive: JerryDrive?,
+    private val drive: CartesianMecanumDrive?,
     // Angle information should be a degree of rotation relative to current angle where positive = cw
     private var angle: Double,
     private val speed: Double

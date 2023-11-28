@@ -20,8 +20,8 @@ public class GLaDOSMoveArmTask extends Task {
 
     @Override
     public void init() {
-        arm.getSliderController().setTargetAngle(rotatorDegrees);
-        arm.getSliderController().setExtrusionLength(sliderPosition, getTime());
+//        arm.getSliderController().setTargetAngle(rotatorDegrees);
+//        arm.getSliderController().setExtrusionLength(sliderPosition, getTime());
     }
 
     @Override

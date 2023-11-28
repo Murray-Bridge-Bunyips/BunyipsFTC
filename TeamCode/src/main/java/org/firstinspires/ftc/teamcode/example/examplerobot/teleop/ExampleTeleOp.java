@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.example.examplerobot.teleop;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleConfig;
 import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleDrive;
 
@@ -17,7 +16,7 @@ public class ExampleTeleOp extends BunyipsOpMode {
 
     // You MUST make a new instance of ExampleConfig as a class member
     // This is because the newConfig static method does not make an instance to work with
-    private ExampleConfig config = new ExampleConfig();
+    private final ExampleConfig config = new ExampleConfig();
     private ExampleDrive drive;
 
     // onInit and activeLoop are the two functions that you will need to implement.
@@ -25,7 +24,7 @@ public class ExampleTeleOp extends BunyipsOpMode {
     protected void onInit() {
         // This line is required to initialise config and allow you to access all your instance
         // variables declared in the config class. This is required for all OpMode classes.
-        config = (ExampleConfig) RobotConfig.newConfig(this, config, hardwareMap);
+        config.init(this);
 
         // Initialise all your components! e.g.
         drive = new ExampleDrive(this, config.leftMotor, config.rightMotor);

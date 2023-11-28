@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.example.examplerobot.debug;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.IMUOp;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.example.examplerobot.components.ExampleConfig;
 
 /**
@@ -14,12 +13,12 @@ public class ExampleDebug extends BunyipsOpMode {
     // This file is an example test to ensure that the IMU is working correctly, by printing the
     // heading constantly to the Driver Station
 
-    private ExampleConfig config = new ExampleConfig();
+    private final ExampleConfig config = new ExampleConfig();
     private IMUOp imu;
 
     @Override
     protected void onInit() {
-        config = (ExampleConfig) RobotConfig.newConfig(this, config, hardwareMap);
+        config.init(this);
         imu = new IMUOp(this, config.imu);
     }
 

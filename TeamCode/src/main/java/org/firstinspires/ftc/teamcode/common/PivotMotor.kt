@@ -8,16 +8,15 @@ import com.qualcomm.robotcore.hardware.DcMotorImpl
  * Extension of DcMotor that implements a pivotal encoder for tracking the position of a pivot.
  * @author Lucas Bubner, 2023
  */
-
 class PivotMotor(
     override val motor: DcMotorEx,
     override val ticksPerRevolution: Double,
     override var reduction: Double = 1.0,
-) : DcMotorImpl(motor.controller, motor.portNumber), Encoder {
+) : DcMotorImpl(motor.controller, motor.portNumber), EncoderTracker {
     override val wheelDiameterMM = null
     override var snapshot: Double = 0.0
 
-    override fun travelledMM(scope: Encoder.Scope): Double {
+    override fun travelledMM(scope: EncoderTracker.Scope): Double {
         throw IllegalAccessException("PivotMotor: Cannot access travelledMM on a PivotMotor or PivotMotor variant")
     }
 
@@ -30,22 +29,22 @@ class PivotMotor(
         motor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
     }
 
-    fun getDegrees(scope: Encoder.Scope = Encoder.Scope.RELATIVE): Double {
+    fun getDegrees(scope: EncoderTracker.Scope = EncoderTracker.Scope.RELATIVE): Double {
         return (position(scope) / ticksPerRevolution) * 360
     }
 
     // Java interop
     fun getDegrees(): Double {
-        return getDegrees(Encoder.Scope.RELATIVE)
+        return getDegrees(EncoderTracker.Scope.RELATIVE)
     }
 
-    fun getRadians(scope: Encoder.Scope = Encoder.Scope.RELATIVE): Double {
+    fun getRadians(scope: EncoderTracker.Scope = EncoderTracker.Scope.RELATIVE): Double {
         return (position(scope) / ticksPerRevolution) * (2 * Math.PI)
     }
 
     // Java interop
     fun getRadians(): Double {
-        return getRadians(Encoder.Scope.RELATIVE)
+        return getRadians(EncoderTracker.Scope.RELATIVE)
     }
 
     fun setDegrees(degrees: Double) {

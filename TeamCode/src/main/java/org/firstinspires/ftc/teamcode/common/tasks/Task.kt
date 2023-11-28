@@ -77,7 +77,7 @@ abstract class Task : AutoTask {
         // Finish tasks that exceed a time limit, if the OpMode is stopped, or if the task is
         // set to run indefinitely and the OpMode is not in init-phase.
         // In order to prevent an infinite running task we prohibit indefinite tasks outside of init
-        if ((currentTime > startTime + time && time != 0.0) || opMode.isStopRequested || (time == 0.0 && !opMode.opModeInInit())) {
+        if ((time != 0.0 && currentTime > startTime + time) || (time == 0.0 && !opMode.opModeInInit())) {
             if (!finisherFired)
                 onFinish()
             finisherFired = true

@@ -3,10 +3,8 @@ package org.firstinspires.ftc.teamcode.glados.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
-import org.firstinspires.ftc.teamcode.common.RobotConfig;
+import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
-import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
-
 
 /**
  * POV drivetrain only for GLaDOS.
@@ -15,13 +13,13 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSPOVDriveCore;
  */
 @TeleOp(name = "GLaDOS: Drivetrain", group = "GLaDOS")
 public class GLaDOSDrivetrain extends BunyipsOpMode {
-    private GLaDOSConfigCore config = new GLaDOSConfigCore();
-    private GLaDOSPOVDriveCore drive;
+    private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private MecanumDrive drive;
 
     @Override
     protected void onInit() {
-        config = (GLaDOSConfigCore) RobotConfig.newConfig(this, config, hardwareMap);
-        drive = new GLaDOSPOVDriveCore(this, config.fl, config.bl, config.fr, config.br);
+        config.init(this);
+        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.backLeft, config.frontRight, config.backRight);
     }
 
     @Override
