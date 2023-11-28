@@ -37,7 +37,7 @@ import java.util.Objects;
  * Pressing B/O (Xbox/PS4) will cede control back to the tuning process.
  */
 @Config
-@Autonomous(group = "tuning")
+@Autonomous(name = "ManualFeedforwardTuner", group = "tuning")
 @Disabled
 public class ManualFeedforwardTuner extends LinearOpMode {
     // Temporarily match this config to your robot's config
@@ -56,7 +56,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
     @Override
     public void runOpMode() {
         ROBOT_CONFIG.init(this);
-        drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.fl, ROBOT_CONFIG.fr, ROBOT_CONFIG.bl, ROBOT_CONFIG.br);
+        drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.frontLeft, ROBOT_CONFIG.frontRight, ROBOT_CONFIG.backLeft, ROBOT_CONFIG.backRight);
 
         if (ROBOT_CONFIG.driveConstants.RUN_USING_ENCODER) {
             RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " +

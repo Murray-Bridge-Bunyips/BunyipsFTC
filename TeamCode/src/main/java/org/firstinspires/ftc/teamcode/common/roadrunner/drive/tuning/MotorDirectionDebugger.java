@@ -24,23 +24,10 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
  * A / X         - Rear  Left
  * The buttons are mapped to match the wheels spatially if you
  * were to rotate the gamepad 45deg°. x/square is the front left
- * ________        and each button corresponds to the wheel as you go clockwise
- * / ______ \
- * ------------.-'   _  '-..+              Front of Bot
- * /   _  ( Y )  _  \                  ^
- * |  ( X )  _  ( B ) |     Front Left   \    Front Right
- * ___  '.      ( A )     /|       Wheel       \      Wheel
- * .'    '.    '-._____.-'  .'       (x/▢)        \     (Y/Δ)
- * |       |                 |                      \
- * '.___.' '.               |          Rear Left    \   Rear Right
- * '.             /             Wheel       \    Wheel
- * \.          .'              (A/X)        \   (B/O)
- * \________/
- * <p>
- * Uncomment the @Disabled tag below to use this opmode.
+ * and each button corresponds to the wheel as you go clockwise
  */
 @Config
-@TeleOp(group = "tuning")
+@TeleOp(name = "MotorDirectionDebugger", group = "tuning")
 @Disabled
 public class MotorDirectionDebugger extends LinearOpMode {
     // Temporarily match this config to your robot's config
@@ -52,7 +39,7 @@ public class MotorDirectionDebugger extends LinearOpMode {
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
         ROBOT_CONFIG.init(this);
-        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.fl, ROBOT_CONFIG.fr, ROBOT_CONFIG.bl, ROBOT_CONFIG.br);
+        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.frontLeft, ROBOT_CONFIG.frontRight, ROBOT_CONFIG.backLeft, ROBOT_CONFIG.backRight);
 
         telemetry.addLine("Press play to begin the debugging opmode");
         telemetry.update();

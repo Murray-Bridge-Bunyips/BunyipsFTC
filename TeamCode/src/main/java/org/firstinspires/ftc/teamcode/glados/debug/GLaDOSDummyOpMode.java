@@ -19,7 +19,6 @@ public class GLaDOSDummyOpMode extends BunyipsOpMode {
     @Override
     protected void onInit() {
         config.init(this);
-
     }
 
     @Override

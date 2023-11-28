@@ -19,7 +19,7 @@ public class GLaDOSDrivetrain extends BunyipsOpMode {
     @Override
     protected void onInit() {
         config.init(this);
-        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.bl, config.fr, config.br);
+        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.backLeft, config.frontRight, config.backRight);
     }
 
     @Override

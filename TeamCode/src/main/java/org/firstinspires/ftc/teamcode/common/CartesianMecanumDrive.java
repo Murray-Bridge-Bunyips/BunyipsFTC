@@ -15,7 +15,7 @@ import java.util.Locale;
  * @author Lucas Bubner, 2023
  * @see MecanumDrive
  */
-public class StandardMecanumDrive extends BunyipsComponent {
+public class CartesianMecanumDrive extends BunyipsComponent {
 
     private final DcMotor frontLeft;
     private final DcMotor backLeft;
@@ -30,7 +30,7 @@ public class StandardMecanumDrive extends BunyipsComponent {
     // Store and declare prioritisation when given instruction to calculate motor powers
     private Priority priority = Priority.NORMALISED;
 
-    public StandardMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight) {
+    public CartesianMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight) {
         super(opMode);
         this.frontLeft = frontLeft;
         this.backLeft = backLeft;

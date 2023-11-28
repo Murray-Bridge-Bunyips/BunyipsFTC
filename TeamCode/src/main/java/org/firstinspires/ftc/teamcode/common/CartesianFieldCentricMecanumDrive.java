@@ -11,10 +11,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
  * @author Lucas Bubner, 2023
  * @see FieldCentricMecanumDrive
  */
-public class FieldCentricStandardMecanumDrive extends StandardMecanumDrive {
+public class CartesianFieldCentricMecanumDrive extends CartesianMecanumDrive {
     private final IMUOp imu;
 
-    public FieldCentricStandardMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativePose2d startingDirection) {
+    public CartesianFieldCentricMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativePose2d startingDirection) {
         super(opMode, frontLeft, backLeft, frontRight, backRight);
         this.imu = imu;
         if (startingDirection == RelativePose2d.CLOCKWISE || startingDirection == RelativePose2d.ANTICLOCKWISE) {

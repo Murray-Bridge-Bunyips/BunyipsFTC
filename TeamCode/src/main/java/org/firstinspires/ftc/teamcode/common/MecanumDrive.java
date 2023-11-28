@@ -55,6 +55,7 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
 
     /**
      * For continuity, keep setSpeedUsingController for setting drive speeds.
+     * Internally runs setWeightedDrivePower() and converts the controller input to a robot Pose2d.
      *
      * @param x gamepad.left_stick_x or similar
      * @param y gamepad.left_stick_y or similar
@@ -108,6 +109,7 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return drive.trajectorySequenceBuilder(startPose);
     }

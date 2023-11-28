@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
  * This is a simple routine to test translational drive capabilities.
  */
 @Config
-@Autonomous(group = "tuning")
+@Autonomous(name = "StrafeTest", group = "tuning")
 @Disabled
 public class StrafeTest extends LinearOpMode {
     // Temporarily match this config to your robot's config
@@ -29,7 +29,7 @@ public class StrafeTest extends LinearOpMode {
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
 
         ROBOT_CONFIG.init(this);
-        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.fl, ROBOT_CONFIG.fr, ROBOT_CONFIG.bl, ROBOT_CONFIG.br);
+        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.frontLeft, ROBOT_CONFIG.frontRight, ROBOT_CONFIG.backLeft, ROBOT_CONFIG.backRight);
 
         Trajectory trajectory = drive.trajectoryBuilder(new Pose2d())
                 .strafeRight(DISTANCE)

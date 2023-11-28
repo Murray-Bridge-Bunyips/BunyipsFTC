@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.jerry.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.FieldCentricStandardMecanumDrive
+import org.firstinspires.ftc.teamcode.common.CartesianFieldCentricMecanumDrive
+import org.firstinspires.ftc.teamcode.common.CartesianMecanumDrive
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.NullSafety
 import org.firstinspires.ftc.teamcode.common.RelativePose2d
-import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.UserSelection
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
@@ -26,7 +26,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryLift
 @TeleOp(name = "JERRY: TeleOp", group = "JERRY")
 class JerryTeleOp : BunyipsOpMode() {
     private var config = JerryConfig()
-    private var drive: StandardMecanumDrive? = null
+    private var drive: CartesianMecanumDrive? = null
     private var imu: IMUOp? = null
     private var lift: JerryLift? = null
     private val selector: UserSelection<String> =
@@ -55,7 +55,7 @@ class JerryTeleOp : BunyipsOpMode() {
     private fun initDrive() {
         if (NullSafety.assertNotNull(config.driveMotors)) {
             drive = if (selector.result == "FIELD-CENTRIC" || imu == null) {
-                FieldCentricStandardMecanumDrive(
+                CartesianFieldCentricMecanumDrive(
                     this,
                     config.bl!!,
                     config.br!!,
@@ -66,7 +66,13 @@ class JerryTeleOp : BunyipsOpMode() {
                     RelativePose2d.FORWARD
                 )
             } else {
-                StandardMecanumDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+                CartesianMecanumDrive(
+                    this,
+                    config.bl!!,
+                    config.br!!,
+                    config.fl!!,
+                    config.fr!!
+                )
             }
         }
     }

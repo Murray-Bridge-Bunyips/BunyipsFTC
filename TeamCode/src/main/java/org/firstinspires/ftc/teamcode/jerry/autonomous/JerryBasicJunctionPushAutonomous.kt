@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.CartesianMecanumDrive
 import org.firstinspires.ftc.teamcode.common.IMUOp
 import org.firstinspires.ftc.teamcode.common.NullSafety
-import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.UserSelection
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
@@ -22,7 +22,7 @@ import java.util.ArrayDeque
 )
 class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
     private var config = JerryConfig()
-    private var drive: StandardMecanumDrive? = null
+    private var drive: CartesianMecanumDrive? = null
     private var imu: IMUOp? = null
     private val tasks = ArrayDeque<AutoTask>()
     private val selection = UserSelection(this, {}, "Drive Left", "Drive Right")
@@ -30,7 +30,13 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
     override fun onInit() {
         config.init(this)
         if (NullSafety.assertNotNull(config.driveMotors))
-            drive = StandardMecanumDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+            drive = CartesianMecanumDrive(
+                this,
+                config.bl!!,
+                config.br!!,
+                config.fl!!,
+                config.fr!!
+            )
 
         if (NullSafety.assertNotNull(config.imu))
             imu = IMUOp(this, config.imu!!)

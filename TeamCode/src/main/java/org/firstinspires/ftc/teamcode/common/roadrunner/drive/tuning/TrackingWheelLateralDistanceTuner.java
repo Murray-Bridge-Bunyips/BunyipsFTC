@@ -65,7 +65,7 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
  * precision. The heading should still line up.
  */
 @Config
-@TeleOp(group = "tuning")
+@TeleOp(name = "TrackingWheelLateralDistanceTuner", group = "tuning")
 @Disabled
 public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
     // Temporarily match this config to your robot's config
@@ -75,7 +75,7 @@ public class TrackingWheelLateralDistanceTuner extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         ROBOT_CONFIG.init(this);
-        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.fl, ROBOT_CONFIG.fr, ROBOT_CONFIG.bl, ROBOT_CONFIG.br);
+        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.frontLeft, ROBOT_CONFIG.frontRight, ROBOT_CONFIG.backLeft, ROBOT_CONFIG.backRight);
         // Must set localizer to a StandardTrackingWheelLocalizer, at the moment this will not run
         Localizer localizer = drive.getLocalizer();
 

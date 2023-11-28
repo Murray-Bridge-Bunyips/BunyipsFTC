@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
-import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
+import org.firstinspires.ftc.teamcode.common.CartesianMecanumDrive
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 
@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.common.tasks.Task
 class JerryTimeDriveTask(
     opMode: BunyipsOpMode,
     time: Double,
-    private val drive: StandardMecanumDrive?,
+    private val drive: CartesianMecanumDrive?,
     private val x: Double,
     private val y: Double,
     private val r: Double

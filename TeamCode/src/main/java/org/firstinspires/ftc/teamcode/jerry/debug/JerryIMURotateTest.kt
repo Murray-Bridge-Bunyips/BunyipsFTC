@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.jerry.debug
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.CartesianMecanumDrive
 import org.firstinspires.ftc.teamcode.common.IMUOp
-import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryIMURotationTask
@@ -20,13 +20,19 @@ import java.util.ArrayDeque
 class JerryIMURotateTest : BunyipsOpMode() {
     private var config = JerryConfig()
     private var imu: IMUOp? = null
-    private var drive: StandardMecanumDrive? = null
+    private var drive: CartesianMecanumDrive? = null
     private val tasks = ArrayDeque<AutoTask>()
 
     override fun onInit() {
         config.init(this)
         imu = IMUOp(this, config.imu!!)
-        drive = StandardMecanumDrive(this, config.bl!!, config.br!!, config.fl!!, config.fr!!)
+        drive = CartesianMecanumDrive(
+            this,
+            config.bl!!,
+            config.br!!,
+            config.fl!!,
+            config.fr!!
+        )
 
         tasks.add(JerryIMURotationTask(this, 15.0, imu!!, drive!!, -360.0, 0.5))
     }

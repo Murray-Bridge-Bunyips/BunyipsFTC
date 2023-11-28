@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode.jerry.tasks
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode
+import org.firstinspires.ftc.teamcode.common.CartesianMecanumDrive
 import org.firstinspires.ftc.teamcode.common.IMUOp
-import org.firstinspires.ftc.teamcode.common.StandardMecanumDrive
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask
 import org.firstinspires.ftc.teamcode.common.tasks.Task
 
@@ -17,7 +17,7 @@ class JerryIMURotationTask(
     opMode: BunyipsOpMode,
     time: Double,
     private val imu: IMUOp?,
-    private val drive: StandardMecanumDrive?,
+    private val drive: CartesianMecanumDrive?,
     // Angle information should be a degree of rotation relative to current angle where positive = cw
     private var angle: Double,
     private val speed: Double

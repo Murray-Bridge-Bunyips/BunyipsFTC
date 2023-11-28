@@ -7,7 +7,6 @@ import org.firstinspires.ftc.teamcode.common.Cannon;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.NullSafety;
 import org.firstinspires.ftc.teamcode.common.TriSpeed;
-import org.firstinspires.ftc.teamcode.glados.components.GLaDOSAlignmentCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSArmCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSServoCore;
@@ -44,10 +43,10 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
     @Override
     protected void onInit() {
         config.init(this);
-        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.bl, config.fr, config.br);
-        arm = new GLaDOSArmCore(this, config.sr, config.sa, config.al, config.ls, config.rs, GLaDOSAlignmentCore.Mode.MANUAL);
-        if (NullSafety.assertComponentArgs(this, Cannon.class, config.pl))
-            cannon = new Cannon(this, config.pl);
+        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.backLeft, config.frontRight, config.backRight);
+        arm = new GLaDOSArmCore(this, config.leftPixel, config.rightPixel, config.pixelAlignment);
+        if (NullSafety.assertComponentArgs(this, Cannon.class, config.launcher))
+            cannon = new Cannon(this, config.launcher);
     }
 
     @Override
@@ -67,11 +66,11 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         drive.setSpeedUsingController(x * speed.getMultiplier(), y * speed.getMultiplier(), r * speed.getMultiplier());
 
         // Linear slider rotator
-        arm.getSliderController().setTargetAngleUsingController(gamepad2.left_stick_y);
-        // Linear slider extender
-        arm.getSliderController().setExtrusionPowerUsingController(gamepad2.right_stick_y);
-        // Linear slider alignment servo
-        arm.getAlignmentController().setPositionUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);
+//        arm.getSliderController().setTargetAngleUsingController(gamepad2.left_stick_y);
+//        // Linear slider extender
+//        arm.getSliderController().setExtrusionPowerUsingController(gamepad2.right_stick_y);
+//        // Linear slider alignment servo
+//        arm.getAlignmentController().setPositionUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);
 
         // Left claw servo
         if (gamepad2.x && !x_pressed) {
