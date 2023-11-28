@@ -44,7 +44,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
     protected void onInit() {
         config.init(this);
         drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.backLeft, config.frontRight, config.backRight);
-        arm = new GLaDOSArmCore(this, config.leftPixel, config.rightPixel, config.pixelAlignment);
+        arm = new GLaDOSArmCore(this, config.leftPixel, config.rightPixel, config.pixelAlignment, config.suspenderActuator, config.pixelMotion);
         if (NullSafety.assertComponentArgs(this, Cannon.class, config.launcher))
             cannon = new Cannon(this, config.launcher);
     }
