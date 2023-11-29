@@ -22,7 +22,6 @@ import java.util.List;
 @Autonomous(name = "GLaDOS: RoadRunner Test", group = "GLADOS")
 public class GLaDOSRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
-    double x1 = 10.0, y1 = 10.0;
 
     @Override
     protected void onInitialisation() {
@@ -44,7 +43,10 @@ public class GLaDOSRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Meca
     @Override
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
         addNewTrajectory()
-                .splineTo(new Vector2d(x1, y1), Math.toRadians(90))
+                .forward(1)
+                .turn(Math.PI)
+                .forward(1)
+                .turn(Math.PI)
                 .build();
     }
 }

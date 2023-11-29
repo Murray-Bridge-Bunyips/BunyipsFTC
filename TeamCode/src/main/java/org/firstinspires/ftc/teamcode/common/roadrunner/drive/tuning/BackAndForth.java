@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.common.Inches;
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumRoadRunnerDrive;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
@@ -28,12 +29,12 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
  */
 @Config
 @Autonomous(name = "BackAndForth", group = "tuning")
-@Disabled
+//@Disabled
 public class BackAndForth extends LinearOpMode {
 
     // Temporarily match this config to your robot's config
     private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
-    public static double DISTANCE = 50;
+    public static double DISTANCE = Inches.fromM(1);
 
     @Override
     public void runOpMode() throws InterruptedException {

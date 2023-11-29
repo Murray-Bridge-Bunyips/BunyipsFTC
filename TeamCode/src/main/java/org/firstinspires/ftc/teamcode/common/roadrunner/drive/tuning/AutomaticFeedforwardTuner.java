@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.firstinspires.ftc.teamcode.common.roadrunner.drive.localizers.TwoWheelTrackingLocalizer;
 import org.firstinspires.ftc.teamcode.common.roadrunner.util.LoggingUtil;
 import org.firstinspires.ftc.teamcode.common.roadrunner.util.RegressionUtil;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
@@ -33,7 +34,7 @@ import java.util.List;
  */
 @Config
 @Autonomous(name = "AutomaticFeedforwardTuner", group = "tuning")
-@Disabled
+//@Disabled
 public class AutomaticFeedforwardTuner extends LinearOpMode {
     // Temporarily match this config to your robot's config
     private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
@@ -44,6 +45,7 @@ public class AutomaticFeedforwardTuner extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
         ROBOT_CONFIG.init(this);
         MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.frontLeft, ROBOT_CONFIG.frontRight, ROBOT_CONFIG.backLeft, ROBOT_CONFIG.backRight);
+        drive.setLocalizer(new TwoWheelTrackingLocalizer(ROBOT_CONFIG.localizerCoefficients, ROBOT_CONFIG.parallelEncoder, ROBOT_CONFIG.perpendicularEncoder, drive));
 
         if (ROBOT_CONFIG.driveConstants.RUN_USING_ENCODER) {
             RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " +
