@@ -17,6 +17,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.firstinspires.ftc.teamcode.common.roadrunner.drive.localizers.TwoWheelTrackingLocalizer;
 import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 
 import java.util.Objects;
@@ -38,7 +39,7 @@ import java.util.Objects;
  */
 @Config
 @Autonomous(name = "ManualFeedforwardTuner", group = "tuning")
-@Disabled
+//@Disabled
 public class ManualFeedforwardTuner extends LinearOpMode {
     // Temporarily match this config to your robot's config
     private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
@@ -46,6 +47,11 @@ public class ManualFeedforwardTuner extends LinearOpMode {
     private final FtcDashboard dashboard = FtcDashboard.getInstance();
     private MecanumRoadRunnerDrive drive;
     private Mode mode;
+
+    // Coefficients from driveConstants are able to be dynamically set in FtcDashboard
+    public static double kV = ROBOT_CONFIG.driveConstants.kV;
+    public static double kA = ROBOT_CONFIG.driveConstants.kA;
+    public static double kStatic = ROBOT_CONFIG.driveConstants.kStatic;
 
     private static MotionProfile generateProfile(boolean movingForward) {
         MotionState start = new MotionState(movingForward ? 0 : DISTANCE, 0, 0, 0);
@@ -57,6 +63,8 @@ public class ManualFeedforwardTuner extends LinearOpMode {
     public void runOpMode() {
         ROBOT_CONFIG.init(this);
         drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.frontLeft, ROBOT_CONFIG.frontRight, ROBOT_CONFIG.backLeft, ROBOT_CONFIG.backRight);
+        drive.setLocalizer(new TwoWheelTrackingLocalizer(ROBOT_CONFIG.localizerCoefficients, ROBOT_CONFIG.parallelEncoder, ROBOT_CONFIG.perpendicularEncoder, drive));
+
 
         if (ROBOT_CONFIG.driveConstants.RUN_USING_ENCODER) {
             RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " +
@@ -104,7 +112,7 @@ public class ManualFeedforwardTuner extends LinearOpMode {
                     }
 
                     MotionState motionState = activeProfile.get(profileTime);
-                    double targetPower = Kinematics.calculateMotorFeedforward(motionState.getV(), motionState.getA(), ROBOT_CONFIG.driveConstants.kV, ROBOT_CONFIG.driveConstants.kA, ROBOT_CONFIG.driveConstants.kStatic);
+                    double targetPower = Kinematics.calculateMotorFeedforward(motionState.getV(), motionState.getA(), kV, kA, kStatic);
 
                     final double NOMINAL_VOLTAGE = 12.0;
                     double voltage = voltageSensor.getVoltage();

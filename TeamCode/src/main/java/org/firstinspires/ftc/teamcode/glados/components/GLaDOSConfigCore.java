@@ -135,6 +135,9 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setMaxAccel(41.065033847087705)
                 .setMaxAngVel(Math.toRadians(130.71406249999998))
                 .setMaxAngAccel(Math.toRadians(130.71406249999998))
+                .setKV(0.01461)
+                .setKStatic(0.05833)
+                .setKA(0.00066) // r^2 for this test was 0.26, confirm accuracy of this value
                 .build();
 
         localizerCoefficients = new TwoWheelTrackingLocalizerCoefficients.Builder()
