@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class MecanumRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive implements RoadRunnerDrive {
     private final DriveConstants constants;
-    private final MecanumCoefficients coefficients;
+    private MecanumCoefficients coefficients;
     private final TrajectoryVelocityConstraint VEL_CONSTRAINT;
     private final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT;
     private final TrajectorySequenceRunner trajectorySequenceRunner;
@@ -50,6 +50,14 @@ public class MecanumRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.Me
 
     private final List<Integer> lastEncPositions = new ArrayList<>();
     private final List<Integer> lastEncVels = new ArrayList<>();
+
+    public MecanumCoefficients getCoefficients() {
+        return coefficients;
+    }
+
+    public void setCoefficients(MecanumCoefficients coefficients) {
+        this.coefficients = coefficients;
+    }
 
     public MecanumRoadRunnerDrive(DriveConstants constants, MecanumCoefficients coefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
         super(constants.kV, constants.kA, constants.kStatic, constants.TRACK_WIDTH, constants.TRACK_WIDTH, coefficients.LATERAL_MULTIPLIER);
