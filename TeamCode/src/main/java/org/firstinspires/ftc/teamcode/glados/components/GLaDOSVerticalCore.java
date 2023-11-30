@@ -11,8 +11,9 @@ import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 public class GLaDOSVerticalCore extends BunyipsComponent {
     private static final double PWR = 1.0; // Full power since we are holding the whole robot
     private static final int MAX_POSITION = 300;
-    private int targetPosition;
     private final DcMotorEx motor;
+    private int targetPosition;
+
     public GLaDOSVerticalCore(@NonNull BunyipsOpMode opMode, DcMotorEx suspenderActuator) {
         super(opMode);
         motor = suspenderActuator;

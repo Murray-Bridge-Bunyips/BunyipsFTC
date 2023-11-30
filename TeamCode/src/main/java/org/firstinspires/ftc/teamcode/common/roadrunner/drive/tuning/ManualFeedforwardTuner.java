@@ -10,7 +10,6 @@ import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
 import com.acmerobotics.roadrunner.profile.MotionState;
 import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.RobotLog;
@@ -44,14 +43,13 @@ public class ManualFeedforwardTuner extends LinearOpMode {
     // Temporarily match this config to your robot's config
     private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
     public static double DISTANCE = 72; // in
-    private final FtcDashboard dashboard = FtcDashboard.getInstance();
-    private MecanumRoadRunnerDrive drive;
-    private Mode mode;
-
     // Coefficients from driveConstants are able to be dynamically set in FtcDashboard
     public static double kV = ROBOT_CONFIG.driveConstants.kV;
     public static double kA = ROBOT_CONFIG.driveConstants.kA;
     public static double kStatic = ROBOT_CONFIG.driveConstants.kStatic;
+    private final FtcDashboard dashboard = FtcDashboard.getInstance();
+    private MecanumRoadRunnerDrive drive;
+    private Mode mode;
 
     private static MotionProfile generateProfile(boolean movingForward) {
         MotionState start = new MotionState(movingForward ? 0 : DISTANCE, 0, 0, 0);

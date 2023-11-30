@@ -45,7 +45,7 @@ public class WheatleyFarParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mecan
             return;
         }
 
-        switch ((StartingPositions)selectedOpMode.getObj()) {
+        switch ((StartingPositions) selectedOpMode.getObj()) {
             case RED_LEFT:
                 addNewTrajectory()
                         .forward(Inches.fromCM(150))

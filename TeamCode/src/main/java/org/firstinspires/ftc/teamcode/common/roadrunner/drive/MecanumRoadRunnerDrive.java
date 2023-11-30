@@ -33,31 +33,20 @@ import java.util.List;
  */
 public class MecanumRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.MecanumDrive implements RoadRunnerDrive {
     private final DriveConstants constants;
-    private MecanumCoefficients coefficients;
     private final TrajectoryVelocityConstraint VEL_CONSTRAINT;
     private final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT;
     private final TrajectorySequenceRunner trajectorySequenceRunner;
     private final TrajectoryFollower follower;
-
     private final DcMotorEx leftFront;
     private final DcMotorEx leftRear;
     private final DcMotorEx rightRear;
     private final DcMotorEx rightFront;
     private final List<DcMotorEx> motors;
-
     private final IMU imu;
     private final VoltageSensor batteryVoltageSensor;
-
     private final List<Integer> lastEncPositions = new ArrayList<>();
     private final List<Integer> lastEncVels = new ArrayList<>();
-
-    public MecanumCoefficients getCoefficients() {
-        return coefficients;
-    }
-
-    public void setCoefficients(MecanumCoefficients coefficients) {
-        this.coefficients = coefficients;
-    }
+    private MecanumCoefficients coefficients;
 
     public MecanumRoadRunnerDrive(DriveConstants constants, MecanumCoefficients coefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
         super(constants.kV, constants.kA, constants.kStatic, constants.TRACK_WIDTH, constants.TRACK_WIDTH, coefficients.LATERAL_MULTIPLIER);
@@ -114,6 +103,14 @@ public class MecanumRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.Me
                 constants.RUN_USING_ENCODER, follower, coefficients.HEADING_PID, batteryVoltageSensor,
                 lastEncPositions, lastEncVels, lastTrackingEncPositions, lastTrackingEncVels
         );
+    }
+
+    public MecanumCoefficients getCoefficients() {
+        return coefficients;
+    }
+
+    public void setCoefficients(MecanumCoefficients coefficients) {
+        this.coefficients = coefficients;
     }
 
     @Override

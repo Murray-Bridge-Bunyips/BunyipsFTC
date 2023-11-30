@@ -7,12 +7,9 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.common.Inches;
 import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.DriveConstants;
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumCoefficients;
-import org.firstinspires.ftc.teamcode.common.roadrunner.drive.localizers.TwoWheelTrackingLocalizerCoefficients;
-import org.firstinspires.ftc.teamcode.common.roadrunner.util.Encoder;
 
 /**
  * Wheatley robot configuration and hardware declarations
@@ -77,14 +74,7 @@ public class WheatleyConfig extends RobotConfig {
     // Internally mounted on I2C C0 "imu"
     public IMU imu;
 
-    // Unmounted
-    public Encoder parallelEncoder;
-
-    // Unmounted
-    public Encoder perpendicularEncoder;
-
     public DriveConstants driveConstants;
-    public TwoWheelTrackingLocalizerCoefficients localizerCoefficients;
     public MecanumCoefficients mecanumCoefficients;
 
     @Override
@@ -148,28 +138,7 @@ public class WheatleyConfig extends RobotConfig {
                 .setMaxAngAccel(Math.toRadians(130.71406249999998))
                 .build();
 
-        localizerCoefficients = new TwoWheelTrackingLocalizerCoefficients.Builder()
-                .setTicksPerRev(2400)
-                .setGearRatio(1)
-                .setWheelRadius(Inches.fromMM(50) / 2)
-                // TODO: Set these values
-                .setParallelX(0)
-                .setParallelY(0)
-                .setPerpendicularX(0)
-                .setPerpendicularY(0)
-                .build();
-
         mecanumCoefficients = new MecanumCoefficients.Builder()
                 .build();
-
-        DcMotorEx pe = (DcMotorEx) getHardware("parallelEncoder", DcMotorEx.class);
-        if (pe != null) {
-            parallelEncoder = new Encoder(pe);
-        }
-
-        DcMotorEx ppe = (DcMotorEx) getHardware("perpendicularEncoder", DcMotorEx.class);
-        if (ppe != null) {
-            perpendicularEncoder = new Encoder(ppe);
-        }
     }
 }

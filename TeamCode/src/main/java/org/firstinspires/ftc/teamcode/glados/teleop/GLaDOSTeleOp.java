@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Cannon;
+import org.firstinspires.ftc.teamcode.common.DualDeadwheelMecanumDrive;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.NullSafety;
 import org.firstinspires.ftc.teamcode.common.TriSpeed;
@@ -43,7 +44,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
     @Override
     protected void onInit() {
         config.init(this);
-        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight);
+        drive = new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
         arm = new GLaDOSArmCore(this, config.leftPixel, config.rightPixel, config.pixelAlignment, config.suspenderActuator, config.pixelMotion);
         if (NullSafety.assertComponentArgs(this, Cannon.class, config.launcher))
             cannon = new Cannon(this, config.launcher);
