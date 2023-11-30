@@ -2,12 +2,8 @@ package org.firstinspires.ftc.teamcode.glados.autonomous;
 
 import androidx.annotation.Nullable;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.common.DualDeadwheelMecanumDrive;
-import org.firstinspires.ftc.teamcode.common.Inches;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
 import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.RoadRunnerAutonomousBunyipsOpMode;
@@ -30,7 +26,7 @@ public class GLaDOSRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Meca
     protected void onInitialisation() {
         config.init(this);
         RobotConfig.setLastKnownPosition(null);
-        drive = new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
+        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight);
     }
 
     @Override
@@ -46,7 +42,10 @@ public class GLaDOSRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Meca
     @Override
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
         addNewTrajectory()
-                .forward(Inches.fromCM(15))
+                .forward(1)
+                .turn(Math.PI)
+                .forward(1)
+                .turn(Math.PI)
                 .build();
     }
 }
