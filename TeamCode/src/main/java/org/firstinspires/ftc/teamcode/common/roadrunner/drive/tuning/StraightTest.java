@@ -19,11 +19,11 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
  */
 @Config
 @Autonomous(name = "StraightTest", group = "tuning")
-@Disabled
+//@Disabled
 public class StraightTest extends LinearOpMode {
     // Temporarily match this config to your robot's config
     private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
-    public static double DISTANCE = 60; // in
+    public static double DISTANCE = 39.3701; // in
 
     @Override
     public void runOpMode() throws InterruptedException {

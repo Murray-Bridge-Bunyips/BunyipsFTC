@@ -149,6 +149,7 @@ public class MecanumRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.Me
 
     public void turn(double angle) {
         turnAsync(angle);
+        waitForIdle();
     }
 
     public void followTrajectoryAsync(Trajectory trajectory) {
@@ -161,6 +162,12 @@ public class MecanumRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.Me
 
     public void followTrajectory(Trajectory trajectory) {
         followTrajectoryAsync(trajectory);
+        waitForIdle();
+    }
+
+    public void waitForIdle() {
+        while (!Thread.currentThread().isInterrupted() && isBusy())
+            update();
     }
 
     public void followTrajectorySequenceAsync(TrajectorySequence trajectorySequence) {
@@ -169,6 +176,7 @@ public class MecanumRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.Me
 
     public void followTrajectorySequence(TrajectorySequence trajectorySequence) {
         followTrajectorySequenceAsync(trajectorySequence);
+        waitForIdle();
     }
 
     public Pose2d getLastError() {

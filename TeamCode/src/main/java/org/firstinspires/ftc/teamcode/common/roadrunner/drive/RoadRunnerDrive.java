@@ -39,6 +39,8 @@ public interface RoadRunnerDrive {
 
     void stop();
 
+    void waitForIdle();
+
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose);
 
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed);
@@ -61,7 +63,6 @@ public interface RoadRunnerDrive {
 
     Pose2d getLastError();
 
-    // waitForIdle was removed as BunyipsOpMode handles all dispatch manually
     void update();
 
     boolean isBusy();

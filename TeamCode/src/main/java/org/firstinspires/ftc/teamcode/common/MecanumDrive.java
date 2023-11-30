@@ -53,6 +53,10 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
         drive.stop();
     }
 
+    public void waitForIdle() {
+        drive.waitForIdle();
+    }
+
     /**
      * For continuity, keep setSpeedUsingController for setting drive speeds.
      * Internally runs setWeightedDrivePower() and converts the controller input to a robot Pose2d.

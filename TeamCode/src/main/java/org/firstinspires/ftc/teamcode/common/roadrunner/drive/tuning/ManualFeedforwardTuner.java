@@ -44,9 +44,9 @@ public class ManualFeedforwardTuner extends LinearOpMode {
     private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
     public static double DISTANCE = 72; // in
     // Coefficients from driveConstants are able to be dynamically set in FtcDashboard
-    public static double kV = ROBOT_CONFIG.driveConstants.kV;
-    public static double kA = ROBOT_CONFIG.driveConstants.kA;
-    public static double kStatic = ROBOT_CONFIG.driveConstants.kStatic;
+    public static double kV = 0.0;
+    public static double kA = 0.0;
+    public static double kStatic = 0.0;
     private final FtcDashboard dashboard = FtcDashboard.getInstance();
     private MecanumRoadRunnerDrive drive;
     private Mode mode;
