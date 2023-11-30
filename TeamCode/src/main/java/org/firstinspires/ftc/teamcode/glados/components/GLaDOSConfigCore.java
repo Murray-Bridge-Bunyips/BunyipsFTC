@@ -135,7 +135,7 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setMaxAccel(41.065033847087705)
                 .setMaxAngVel(Math.toRadians(130.71406249999998))
                 .setMaxAngAccel(Math.toRadians(130.71406249999998))
-                .setKV(0.0016)
+                .setKV(0.0016) // TODO: tune this higher (0.014 default)
                 .setKStatic(0.05833)
                 .setKA(0.01401)
                 .build();
