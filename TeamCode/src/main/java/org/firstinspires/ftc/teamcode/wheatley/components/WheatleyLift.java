@@ -44,8 +44,6 @@ public class WheatleyLift extends BunyipsComponent {
         arm.setTargetPosition(0);
         arm.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         arm.setPower(ARM_SPEED);
-
-        // TODO: Need limit switches to increase awareness of the arm system
     }
 
     /**

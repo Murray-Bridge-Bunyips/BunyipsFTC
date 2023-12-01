@@ -37,16 +37,18 @@ public class GLaDOSConfigCore extends RobotConfig {
     public Encoder parallelEncoder;
     // Control 3: Perpendicular Encoder "ppe"
     public Encoder perpendicularEncoder;
-    // Control ?: Suspender Actuator "sa"
+    // Control 0: Suspender Actuator "sa"
     public DcMotorEx suspenderActuator;
-    // Control Servo ?: Pixel Forward Motion Servo "pm"
+    // Control Servo 5: Pixel Forward Motion Servo "pm"
     public CRServo pixelMotion;
-    // Control Servo ?: Pixel Alignment Servo "al"
+    // Control Servo 4: Pixel Alignment Servo "al"
     public Servo pixelAlignment;
-    // Control Servo ?: Left Servo "ls"
+    // Control Servo 2: Left Servo "ls"
     public Servo leftPixel;
-    // Control Servo ?: Right Servo "rs"
+    // Control Servo 3: Right Servo "rs"
     public Servo rightPixel;
+    // Control Servo 1: Suspension Hook "sh"
+    public Servo suspenderHook;
     // Control Servo ?: Plane Launcher "pl"
     public Servo launcher;
     // Internally mounted on I2C C0 "imu"
@@ -81,6 +83,9 @@ public class GLaDOSConfigCore extends RobotConfig {
 
         // Suspender/pixel upward motion system
         suspenderActuator = (DcMotorEx) getHardware("sa", DcMotorEx.class);
+        suspenderHook = (Servo) getHardware("sh", Servo.class);
+        if (suspenderHook != null)
+            suspenderHook.scaleRange(0.14, 0.85);
 
         // Pixel manipulation system
         pixelMotion = (CRServo) getHardware("pm", CRServo.class);

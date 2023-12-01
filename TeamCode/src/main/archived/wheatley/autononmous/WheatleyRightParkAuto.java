@@ -62,7 +62,6 @@ public class WheatleyRightParkAuto extends AutonomousBunyipsOpMode {
             return;
         }
 
-        // TODO: Set tasks for Auto
         switch (selectedOpMode.getName()) {
             case "SHORT_BLUE":
                 break;

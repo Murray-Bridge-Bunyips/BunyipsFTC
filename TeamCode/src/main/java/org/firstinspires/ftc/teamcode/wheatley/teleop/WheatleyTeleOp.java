@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.Cannon;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
-import org.firstinspires.ftc.teamcode.common.NullSafety;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyLift;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyManagementRail;
@@ -42,12 +41,12 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     protected void onInit() {
         config.init(this);
         drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.bl, config.fr, config.br);
-        if (NullSafety.assertComponentArgs(this, WheatleyLift.class, config.ra, config.ls, config.rs))
-            lift = new WheatleyLift(this, config.ra, config.ls, config.rs);
-        if (NullSafety.assertComponentArgs(this, WheatleyManagementRail.class, config.susMotor, config.susServo))
-            suspender = new WheatleyManagementRail(this, config.susMotor, config.susServo);
-        if (NullSafety.assertComponentArgs(this, Cannon.class, config.pl))
-            cannon = new Cannon(this, config.pl);
+//        if (NullSafety.assertComponentArgs(this, WheatleyLift.class, config.ra, config.ls, config.rs))
+//            lift = new WheatleyLift(this, config.ra, config.ls, config.rs);
+//        if (NullSafety.assertComponentArgs(this, WheatleyManagementRail.class, config.susMotor, config.susServo))
+//            suspender = new WheatleyManagementRail(this, config.susMotor, config.susServo);
+//        if (NullSafety.assertComponentArgs(this, Cannon.class, config.pl))
+//            cannon = new Cannon(this, config.pl);
     }
 
     @Override

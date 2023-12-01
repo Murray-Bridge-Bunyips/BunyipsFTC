@@ -35,7 +35,8 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
     @Override
     protected void onInitialisation() {
         config.init(this);
-        arm = new WheatleyLift(this, config.ra, config.ls, config.rs);
+        // TODO: Use/make new arm controller (common?)
+//        arm = new WheatleyLift(this, config.ra, config.ls, config.rs);
         initTask = new GetTeamPropTask(this, vision);
         vision = new Vision(this, config.webcam);
     }

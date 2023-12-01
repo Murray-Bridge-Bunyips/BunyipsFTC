@@ -62,7 +62,6 @@ public class WheatleyLeftParkAuto extends AutonomousBunyipsOpMode {
             return;
         }
 
-        // TODO: Set tasks for Auto
         switch (selectedOpMode.getName()) {
             case "SHORT_BLUE":
                 addTask(new WheatleyTimeDriveTask(this, 2, drive, -0.75, 0, 0));
