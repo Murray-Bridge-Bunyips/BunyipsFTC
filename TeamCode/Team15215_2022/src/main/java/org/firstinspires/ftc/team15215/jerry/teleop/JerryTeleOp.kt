@@ -1,0 +1,111 @@
+package org.firstinspires.ftc.team15215.jerry.teleop
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.team15215.jerry.components.JerryConfig
+import org.firstinspires.ftc.team15215.jerry.components.JerryLift
+import org.murraybridgebunyips.ftc.bunyipslib.BunyipsOpMode
+import org.murraybridgebunyips.ftc.bunyipslib.CartesianFieldCentricMecanumDrive
+import org.murraybridgebunyips.ftc.bunyipslib.CartesianMecanumDrive
+import org.murraybridgebunyips.ftc.bunyipslib.IMUOp
+import org.murraybridgebunyips.ftc.bunyipslib.NullSafety
+import org.murraybridgebunyips.ftc.bunyipslib.RelativePose2d
+import org.murraybridgebunyips.ftc.bunyipslib.UserSelection
+
+/**
+ * Primary TeleOp for all of Jerry's functions.
+ *
+ * Uses gamepad1 for drive control and gamepad2 for lift control.
+ * > gamepad1 left stick for driving
+ * > gamepad1 right stick for turning
+ * > gamepad2 left stick for lift movement
+ * > gamepad2 A to open claw
+ * > gamepad2 B to close claw
+ *
+ * @author Lucas Bubner, 2022-2023
+ */
+@TeleOp(name = "TeleOp")
+class JerryTeleOp : BunyipsOpMode() {
+    private var config = JerryConfig()
+    private var drive: CartesianMecanumDrive? = null
+    private var imu: IMUOp? = null
+    private var lift: JerryLift? = null
+    private val selector: UserSelection<String> =
+        UserSelection(this, { initDrive() }, "POV", "FIELD-CENTRIC")
+
+    override fun onInit() {
+        // Configure drive and lift subsystems
+        config.init(this)
+        selector.start()
+        if (NullSafety.assertNotNull(config.imu)) {
+            imu = IMUOp(this, config.imu!!)
+        }
+        drive?.setToBrake()
+        if (NullSafety.assertNotNull(config.armComponents)) {
+            lift = JerryLift(
+                this,
+                JerryLift.ControlMode.MANUAL,
+                config.claw!!,
+                config.arm1!!,
+                config.arm2!!,
+                config.limit!!
+            )
+        }
+    }
+
+    private fun initDrive() {
+        if (NullSafety.assertNotNull(config.driveMotors)) {
+            drive = if (selector.result == "FIELD-CENTRIC" || imu == null) {
+                CartesianFieldCentricMecanumDrive(
+                    this,
+                    config.bl!!,
+                    config.br!!,
+                    config.fl!!,
+                    config.fr!!,
+                    imu!!,
+                    true,
+                    RelativePose2d.FORWARD
+                )
+            } else {
+                CartesianMecanumDrive(
+                    this,
+                    config.bl!!,
+                    config.br!!,
+                    config.fl!!,
+                    config.fr!!
+                )
+            }
+        }
+    }
+
+    override fun onInitLoop(): Boolean {
+        return !selector.isAlive
+    }
+
+    override fun activeLoop() {
+        // Set changing variables and gather raw data
+        val x = gamepad1.left_stick_x.toDouble()
+        val y = gamepad1.left_stick_y.toDouble()
+        val r = gamepad1.right_stick_x.toDouble()
+        val v = gamepad2.left_stick_y.toDouble()
+
+//        addTelemetry(String.format(Locale.getDefault(),
+//            "Controller: X: %.2f, Y: %.2f, R: %.2f", x, y, r))
+
+        // Set speeds of motors and interpret any data
+        drive?.setSpeedUsingController(x, y, r)
+        lift?.delta(v)
+        if (gamepad2.a) {
+            lift?.open()
+        } else if (gamepad2.b) {
+            lift?.close()
+        }
+
+        if (gamepad2.left_bumper) {
+            lift?.reset()
+        }
+
+        // Update live movements of all motors
+        drive?.update()
+        lift?.update()
+    }
+}

@@ -113,6 +113,10 @@ public class MecanumRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.Me
         this.coefficients = coefficients;
     }
 
+    public DriveConstants getConstants() {
+        return constants;
+    }
+
     @Override
     public void stop() {
         setMotorPowers(0, 0, 0, 0);

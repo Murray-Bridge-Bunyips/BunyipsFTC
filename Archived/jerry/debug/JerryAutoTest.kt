@@ -22,7 +22,7 @@ import java.util.ArrayDeque
  */
 
 @Disabled
-@Autonomous(name = "JERRY: Patriarch of the Bunyips Family", group = "JERRY")
+@Autonomous(name = "Patriarch of the Bunyips Family")
 class JerryAutoTest : BunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: StandardMecanumDrive? = null

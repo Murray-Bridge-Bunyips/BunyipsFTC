@@ -21,9 +21,9 @@ import java.util.ArrayDeque
  * @author Lucas Bubner, 2023
  */
 @Autonomous(
-    name = "JERRY: PowerPlay Cone Placement & Signal Park",
+    name = "PowerPlay Cone Placement & Signal Park",
     group = "JERRY",
-    preselectTeleOp = "JERRY: TeleOp"
+    preselectTeleOp = "TeleOp"
 )
 @Disabled
 // Experimental Vector autonomous. This code was scrapped as it served little advantage over setSpeedXYR.

@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 import org.firstinspires.ftc.teamcode.jerry.tasks.JerryVectorDriveTask
 import java.util.ArrayDeque
 
-@Autonomous(name="JERRY: VectorTest")
+@Autonomous(name="VectorTest")
 class JerryVectorTest : BunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: StandardMecanumDrive? = null

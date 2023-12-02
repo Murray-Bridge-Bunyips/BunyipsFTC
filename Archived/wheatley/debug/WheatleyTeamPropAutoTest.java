@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 
 import java.util.List;
 
-@Autonomous(name = "WHEATLEY: GetTeamPropTask Test", group = "WHEATLEY")
+@Autonomous(name = "GetTeamPropTask Test")
 public class WheatleyTeamPropAutoTest extends AutonomousBunyipsOpMode {
     private final WheatleyConfig config = new WheatleyConfig();
     private GetTeamPropTask initTask;

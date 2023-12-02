@@ -9,7 +9,7 @@ Kotlin.
 	MAINTAINED ROBOT CODE in this repository (under TeamCode/):
             ⭐ GLaDOS: Mecanum-drive CenterStage robot, 2023-2024, BUNYIPS 15215
             ⭐ WHEATLEY: Mecanum-drive CenterStage robot, 2023-2024, MULYAWONKS 22407
-	     	JERRY: Mecanum-drive PowerPlay robot, 2022-2023, BUNYIPS 24736
+	     	JERRY: Mecanum-drive PowerPlay robot, 2022-2023, BUNYIPS 15215
 
 	Unmaintained robot code in this repository (under Archived/):
             DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, MULYAWONKS 22407

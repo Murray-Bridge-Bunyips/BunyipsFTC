@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author Lucas Bubner, 2023
  */
-@Autonomous(name = "GLaDOS: Backstage LEFT Park", group = "GLaDOS")
+@Autonomous(name = "Backstage LEFT Park")
 @Disabled
 public class GLaDOSParkLeftBackstageAuto extends AutonomousBunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();

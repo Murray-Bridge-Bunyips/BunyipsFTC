@@ -27,7 +27,7 @@ import java.util.List;
  *
  * @author Lachlan Paul, 2023
  */
-@Autonomous(name = "WHEATLEY: LEFT Park", group = "WHEATLEY")
+@Autonomous(name = "LEFT Park")
 @Disabled
 public class WheatleyLeftParkAuto extends AutonomousBunyipsOpMode {
     private WheatleyConfig config = new WheatleyConfig();

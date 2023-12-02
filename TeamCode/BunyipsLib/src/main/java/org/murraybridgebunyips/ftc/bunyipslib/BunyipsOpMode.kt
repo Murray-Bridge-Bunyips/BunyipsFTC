@@ -29,15 +29,11 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * This method is not exception protected!
      */
     private fun setup() {
-        // At the moment, FtcDashboard hasn't implemented some methods, so we have them commented out for now
-        // This does not apply to the normal Driver Station telemetry
         telemetry.log().displayOrder = Telemetry.Log.DisplayOrder.OLDEST_FIRST
-        // dashboard?.telemetry?.log()?.displayOrder = Telemetry.Log.DisplayOrder.OLDEST_FIRST
         telemetry.captionValueSeparator = ""
-        // dashboard?.telemetry?.captionValueSeparator = ""
+
         // Uncap the telemetry log limit to ensure we capture everything
         telemetry.log().capacity = 999999
-        // dashboard?.telemetry?.log()?.capacity = 999999
 
         movingAverageTimer = MovingAverageTimer(100)
 
@@ -98,7 +94,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
     final override fun runOpMode() {
         try {
             // Using log instead of logd as this message is special
-            Dbg.log("=============== BunyipsOpMode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} id:${BuildConfig.ID}===============")
+            Dbg.log("=============== BunyipsOpMode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} id:${BuildConfig.ID} ===============")
             // Separate log from telemetry
             telemetry.log().add("")
             telemetry.log()

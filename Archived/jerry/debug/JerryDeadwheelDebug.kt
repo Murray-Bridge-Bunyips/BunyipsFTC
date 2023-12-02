@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.jerry.components.JerryConfig
 /**
  * Debug opmode for deadwheel readouts.
  */
-@TeleOp(name = "JERRY: Deadwheel Debug", group = "JERRY")
+@TeleOp(name = "Deadwheel Debug")
 class JerryDeadwheelDebug : BunyipsOpMode() {
     private var config = JerryConfig()
     private var x: Odometer? = null

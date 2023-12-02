@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 
-@TeleOp(name = "WHEATLEY: Rotation Test", group = "WHEATLEY")
+@TeleOp(name = "Rotation Test")
 public class WheatleyRotationTest extends BunyipsOpMode {
     private final WheatleyConfig config = new WheatleyConfig();
 
