@@ -100,6 +100,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
             telemetry.log()
                 .add("bunyipsopmode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME}")
             opModeStatus = "setup"
+            pushTelemetry()
             Dbg.logd("BunyipsOpMode: setting up...")
             // Run BunyipsOpMode setup
             setup()
@@ -136,6 +137,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
             }
 
             opModeStatus = "finish_init"
+            pushTelemetry()
             Dbg.logd("BunyipsOpMode: firing onInitDone()...")
             // Run user-defined final initialisation
             try {
@@ -158,6 +160,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
             opModeStatus = "starting"
             setTelemetryAutoClear(true)
             clearTelemetry()
+            pushTelemetry()
             movingAverageTimer.reset()
             Dbg.logd("BunyipsOpMode: firing onStart()...")
             try {
@@ -203,6 +206,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         } finally {
             Dbg.logd("BunyipsOpMode: cleaning up...")
             opModeStatus = "terminating"
+            pushTelemetry()
             onStop()
             Dbg.logd("BunyipsOpMode: exiting...")
         }
