@@ -1,26 +1,49 @@
-    === MURRAY BRIDGE HIGH SCHOOL STUDENT ROBOTICS CLUB CODE REPOSITORY ===
-	Contains SDK used for all Java + Kotlin developed FTC robots
-	
-	South Australian FTC Teams 15215, 22407, 24736
-    Murray Bridge High School
-	
-	MAINTAINED ROBOT CODE in this repository (under TeamCode/):
-            ⭐ GLaDOS: Mecanum-drive CenterStage robot, 2023-2024, MURRAY BRIDGE BUNYIPS
-            ⭐ WHEATLEY: Mecanum-drive CenterStage robot, 2023-2024, MURRAY BRIDGE MULYAWONKS
-	     	JERRY: Mecanum-drive PowerPlay robot, 2022-2023, MURRAY BRIDGE BUNYIPS
-
-	Unmaintained robot code in this repository (under Archived/):
-            DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, MURRAY BRIDGE MULYAWONKS
-		BERTIE: Mecanum-drive FreightFrenzy robot, 2021-2022, MURRAY BRIDGE BUNYIPS
-        	LISA: Two-wheel-drive minibot for high-speed performance
-	
-	Robot code not in this repository (written in Blocks by other members of the club):
-		- ATLAS: CenterStage robot, MURRAY BRIDGE LIZARDS
+## BunyipsFTC
 [![View TeamCode - Stable](https://img.shields.io/static/v1?label=View+TeamCode&message=Stable&color=2ea44f)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/stable/TeamCode/)
 [![CodeFactor](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc/badge)](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc)<br>
 [![View TeamCode - Development](https://img.shields.io/static/v1?label=View+TeamCode&message=Development&color=informational)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/devid-heath/TeamCode/)<br>
-[![View TeamCode - Archived](https://img.shields.io/static/v1?label=View+TeamCode&message=Archived&color=inactive)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/stable/TeamCode/src/main/archived)
+[![View TeamCode - Archived](https://img.shields.io/static/v1?label=View+TeamCode&message=Archived&color=inactive)](./Archived)<br><br>
+This repository contains all maintained code for our FTC robots constructed after 2021 using Java and
+Kotlin.
 
+	MAINTAINED ROBOT CODE in this repository (under TeamCode/):
+            ⭐ GLaDOS: Mecanum-drive CenterStage robot, 2023-2024, BUNYIPS 15215
+            ⭐ WHEATLEY: Mecanum-drive CenterStage robot, 2023-2024, MULYAWONKS 22407
+	     	JERRY: Mecanum-drive PowerPlay robot, 2022-2023, BUNYIPS 24736
+
+	Unmaintained robot code in this repository (under Archived/):
+            DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, MULYAWONKS 22407
+		BERTIE: Mecanum-drive FreightFrenzy robot, 2021-2022, BUNYIPS 15215
+        	LISA: Two-wheel-drive minibot for high-speed performance
+	
+	Robot code not in this repository (written in Blocks by other members of the club):
+		ATLAS: Tank-drive CenterStage robot, 2023-2024, LIZARDS 24736
+
+  This repository is also used to maintain and develop **[BunyipsLib](./TeamCode/BunyipsLib)**, our own FTC library we use to program robots with efficiency and ease.
+
+## Conventions
+
+- All OpModes should include the robot name in their Driver Station name, group, and file prefix
+  to avoid confusion.
+- OpModes should derive from
+  [BunyipsLib](./TeamCode/BunyipsLib),
+  by extending
+  LinearOpMode wrappers such as BunyipsOpMode, AutonomousBunyipsOpMode,
+  RoadRunnerAutonomousBunyipsOpMode etc and integrating appropriate developer tools (RobotConfig,
+  BunyipsComponent, Task etc..)
+- Robots should be organised based on `teleop`, `autonomous`, `debug`, `components`, and `tasks`
+  packages.<br><br>
+  See the [example/](./TeamCode/BunyipsLib/src/main/java/org/murraybridgebunyips/ftc/bunyipslib/example) directory and robots for examples of applying the full suite of
+  BunyipsLib/BunyipsOpMode developer abstractions.
+
+## File structure
+
+OpModes are organised and built as separate Gradle profiles to reduce clutter.
+
+All non-active archived code is stored in [Archived/](./Archived) and is not built.  
+This code is not maintained and may be using deprecated or broken functionality.
+
+___
 
 ## NOTICE
 
