@@ -20,9 +20,11 @@ import org.murraybridgebunyips.ftc.bunyipslib.tasks.RoadRunnerTask;
 public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDrive> extends AutonomousBunyipsOpMode {
 
     /**
-     * Default timeout for RoadRunner tasks in seconds.
+     * Default timeout for RoadRunner tasks, set high to avoid the task being killed.
+     * I suppose this value is not really "infinite", but if your task takes longer than 277.8 hours,
+     * you have bigger problems than this.
      */
-    public static final double DEFAULT_ROADRUNNER_TIMEOUT = 5.0;
+    public static final double INFINITE_TIMEOUT = 999999;
 
     /**
      * Drive instance to be used for RoadRunner trajectories.
@@ -35,7 +37,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
 
     /**
      * Create a new builder for the custom RoadRunner trajectory, which will automatically add a
-     * task to the queue when build() is called, optionally with a timeout control ({@link #DEFAULT_ROADRUNNER_TIMEOUT}, {@link RoadRunnerTrajectoryTaskBuilder#setTimeout(double)}).
+     * task to the queue when build() is called, optionally with a timeout control ({@link RoadRunnerTrajectoryTaskBuilder#setTimeout(double)}).
      * <p>
      * This method is the combination of {@link #newTrajectory()} and {@link #addTrajectory(Trajectory)}.
      *
@@ -98,7 +100,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
      */
     public void addTrajectory(Trajectory trajectory) {
         if (drive == null) throw new NullPointerException("drive instance is not set!");
-        addTask(new RoadRunnerTask<>(this, DEFAULT_ROADRUNNER_TIMEOUT, drive, trajectory));
+        addTask(new RoadRunnerTask<>(this, INFINITE_TIMEOUT, drive, trajectory));
     }
 
     /**
@@ -108,7 +110,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
      */
     public void addTrajectory(TrajectorySequence trajectorySequence) {
         if (drive == null) throw new NullPointerException("drive instance is not set!");
-        addTask(new RoadRunnerTask<>(this, DEFAULT_ROADRUNNER_TIMEOUT, drive, trajectorySequence));
+        addTask(new RoadRunnerTask<>(this, INFINITE_TIMEOUT, drive, trajectorySequence));
     }
 
     /**
@@ -137,7 +139,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
      * Builder class for a RoadRunner trajectory, which supports adding the trajectory to the Task queue.
      */
     protected class RoadRunnerTrajectoryTaskBuilder extends TrajectorySequenceBuilder<RoadRunnerTrajectoryTaskBuilder> {
-        private double timeout = DEFAULT_ROADRUNNER_TIMEOUT;
+        private double timeout = INFINITE_TIMEOUT;
 
         public RoadRunnerTrajectoryTaskBuilder(Pose2d startPose, Double startTangent, TrajectoryVelocityConstraint baseVelConstraint, TrajectoryAccelerationConstraint baseAccelConstraint, double baseTurnConstraintMaxAngVel, double baseTurnConstraintMaxAngAccel) {
             super(startPose, startTangent, baseVelConstraint, baseAccelConstraint, baseTurnConstraintMaxAngVel, baseTurnConstraintMaxAngAccel);
@@ -150,8 +152,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
         /**
          * Set a timeout for the trajectory, to be applied to the overhead task running the trajectory.
          * Should be called first, before any other builder methods.
-         * If this method is not called, DEFAULT_ROADRUNNER_TIMEOUT will be used.
-         * Setting timeout to -1 will disable the timeout.
+         * If this method is not called or fed negative values, an infinite timeout will be used.
          *
          * @param timeout Timeout in seconds
          * @return trajectory builder
@@ -160,8 +161,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
         public RoadRunnerTrajectoryTaskBuilder setTimeout(double timeout) {
             // javascript reference is done
             if (timeout < 0) {
-                // Set to a large number to avoid the task being killed
-                timeout = 999999;
+                return this;
             }
             this.timeout = timeout;
             return this;
