@@ -102,6 +102,7 @@ public class WheatleyConfig extends RobotConfig {
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
                 .setMaxVel(41.065033847087705)
                 .setMaxAccel(41.065033847087705)
+                // 179.687013 in degrees
                 .setMaxAngVel(3.13613)
                 .setMaxAngAccel(3.13613)
                 .setKV(0.0145)

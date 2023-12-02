@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.common.OpModeSelection;
 import org.firstinspires.ftc.teamcode.common.RoadRunnerAutonomousBunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.StartingPositions;
 import org.firstinspires.ftc.teamcode.common.tasks.AutoTask;
+import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 
 import java.util.List;
 
@@ -30,9 +31,12 @@ import java.util.List;
 
 @Autonomous(name = "WHEATLEY: Close Park Auto", group = "WHEATLEY")
 public class WheatleyCloseParkAuto extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+    private final WheatleyConfig config = new WheatleyConfig();
+
     @Override
     protected void onInitialisation() {
-
+        config.init(this);
+        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
     }
 
     @Override
@@ -57,24 +61,27 @@ public class WheatleyCloseParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
                         .splineTo(new Vector2d(10.99, -37.08), Math.toRadians(91.27))
                         .splineTo(new Vector2d(62.19, -11.57), Math.toRadians(0.00))
                         .build();
+                break;
 
             case BLUE_LEFT:
                 addNewTrajectory()
                         .forward(Inches.fromCM(150))
                         .strafeLeft(Inches.fromCM(140))
                         .build();
+                break;
 
             case RED_RIGHT:
                 addNewTrajectory()
                         .strafeRight(Inches.fromCM(140))
                         .build();
+                break;
 
             case BLUE_RIGHT:
                 addNewTrajectory(new Pose2d(10.79, 71.61, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(11.57, 32.76), Math.toRadians(270.00))
                         .splineTo(new Vector2d(61.41, 12.36), Math.toRadians(0.00))
                         .build();
-
+                break;
         }
     }
 }

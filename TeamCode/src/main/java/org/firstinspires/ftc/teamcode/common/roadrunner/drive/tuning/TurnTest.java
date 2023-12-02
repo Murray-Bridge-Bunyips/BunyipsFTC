@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode.common.roadrunner.drive.tuning;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumRoadRunnerDrive;
@@ -14,7 +13,7 @@ import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
  */
 @Config
 @Autonomous(name = "TurnTest", group = "tuning")
-@Disabled
+//@Disabled
 public class TurnTest extends LinearOpMode {
     // Temporarily match this config to your robot's config
 //    private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
@@ -32,6 +31,7 @@ public class TurnTest extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        drive.turn(Math.toRadians(ANGLE));
+//        drive.turn(Math.toRadians(ANGLE));
+        drive.followTrajectorySequence(drive.trajectorySequenceBuilder(drive.getPoseEstimate()).turn(Math.toRadians(90)).build());
     }
 }

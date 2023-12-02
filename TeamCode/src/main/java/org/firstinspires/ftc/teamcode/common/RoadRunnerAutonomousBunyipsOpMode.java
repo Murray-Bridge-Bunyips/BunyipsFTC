@@ -159,7 +159,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
         // javascript reference incoming
         public RoadRunnerTrajectoryTaskBuilder setTimeout(double timeout) {
             // javascript reference is done
-            if (timeout == -1.0) {
+            if (timeout < 0) {
                 // Set to a large number to avoid the task being killed
                 timeout = 999999;
             }
