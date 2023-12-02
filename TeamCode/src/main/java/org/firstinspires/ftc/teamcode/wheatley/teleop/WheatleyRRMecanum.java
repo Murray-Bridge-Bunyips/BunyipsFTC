@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.common.BunyipsOpMode;
 import org.firstinspires.ftc.teamcode.common.MecanumDrive;
+import org.firstinspires.ftc.teamcode.common.RobotConfig;
 import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 
 /**
@@ -18,6 +19,7 @@ public class WheatleyRRMecanum extends BunyipsOpMode {
     @Override
     protected void onInit() {
         config.init(this);
+        RobotConfig.setLastKnownPosition(null);
         drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
     }
 

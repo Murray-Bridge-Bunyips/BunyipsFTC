@@ -151,6 +151,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
          * Set a timeout for the trajectory, to be applied to the overhead task running the trajectory.
          * Should be called first, before any other builder methods.
          * If this method is not called, DEFAULT_ROADRUNNER_TIMEOUT will be used.
+         * Setting timeout to -1 will disable the timeout.
          *
          * @param timeout Timeout in seconds
          * @return trajectory builder
@@ -158,6 +159,10 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
         // javascript reference incoming
         public RoadRunnerTrajectoryTaskBuilder setTimeout(double timeout) {
             // javascript reference is done
+            if (timeout == -1.0) {
+                // Set to a large number to avoid the task being killed
+                timeout = 999999;
+            }
             this.timeout = timeout;
             return this;
         }

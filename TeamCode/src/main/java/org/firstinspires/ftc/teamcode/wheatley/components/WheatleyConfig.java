@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.wheatley.components;
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -65,7 +66,7 @@ public class WheatleyConfig extends RobotConfig {
         imu = (IMU) getHardware("imu", IMU.class);
 
         if (fr != null)
-            fr.setDirection(DcMotorSimple.Direction.FORWARD);
+            fr.setDirection(DcMotorSimple.Direction.REVERSE);
 
         if (fl != null)
             fl.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -91,25 +92,27 @@ public class WheatleyConfig extends RobotConfig {
         );
 
 
-        // TODO: Tune
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(28)
                 .setMaxRPM(6000)
                 .setRunUsingEncoder(false)
-                .setWheelRadius(Inches.fromMM(75) / 2)
+                .setWheelRadius(Inches.fromMM(75) / 2.0)
                 .setGearRatio(1.0 / 13.1)
-                .setTrackWidth(15.3)
+                .setTrackWidth(20.5)
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
                 .setMaxVel(41.065033847087705)
                 .setMaxAccel(41.065033847087705)
-                .setMaxAngVel(Math.toRadians(130.71406249999998))
-                .setMaxAngAccel(Math.toRadians(130.71406249999998))
-//                .setKV(0.0016)
-//                .setKStatic(0.05833)
-//                .setKA(0.01401)
+                .setMaxAngVel(3.13613)
+                .setMaxAngAccel(3.13613)
+                .setKV(0.0145)
+                .setKStatic(0.06422)
+                .setKA(0.001)
                 .build();
 
         mecanumCoefficients = new MecanumCoefficients.Builder()
+                .setLateralMultiplier(60.0 / 54.07)
+                .setTranslationalPID(new PIDCoefficients(8, 0, 0))
+                .setHeadingPID(new PIDCoefficients(8, 0, 0))
                 .build();
     }
 }

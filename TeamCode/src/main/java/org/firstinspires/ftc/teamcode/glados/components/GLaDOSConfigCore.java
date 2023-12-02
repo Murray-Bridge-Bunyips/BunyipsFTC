@@ -132,7 +132,7 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setTicksPerRev(28)
                 .setMaxRPM(6000)
                 .setRunUsingEncoder(false)
-                .setWheelRadius(Inches.fromMM(75) / 2)
+                .setWheelRadius(Inches.fromMM(75) / 2.0)
                 .setGearRatio(1.0 / 13.1)
                 .setTrackWidth(15.3)
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
@@ -140,7 +140,7 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setMaxAccel(41.065033847087705)
                 .setMaxAngVel(Math.toRadians(130.71406249999998))
                 .setMaxAngAccel(Math.toRadians(130.71406249999998))
-                .setKV(0.0016) // TODO: tune this higher (0.014 default)
+                .setKV(0.0016)
                 .setKStatic(0.05833)
                 .setKA(0.01401)
                 .build();

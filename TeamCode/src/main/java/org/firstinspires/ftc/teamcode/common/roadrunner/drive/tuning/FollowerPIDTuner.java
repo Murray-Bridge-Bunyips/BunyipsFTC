@@ -1,17 +1,14 @@
 package org.firstinspires.ftc.teamcode.common.roadrunner.drive.tuning;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumCoefficients;
 import org.firstinspires.ftc.teamcode.common.roadrunner.drive.MecanumRoadRunnerDrive;
-import org.firstinspires.ftc.teamcode.common.roadrunner.drive.localizers.TwoWheelTrackingLocalizer;
 import org.firstinspires.ftc.teamcode.common.roadrunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
+import org.firstinspires.ftc.teamcode.wheatley.components.WheatleyConfig;
 
 /*
  * Op mode for preliminary tuning of the follower PID coefficients (located in the drive base
@@ -31,21 +28,15 @@ import org.firstinspires.ftc.teamcode.glados.components.GLaDOSConfigCore;
 @Disabled
 public class FollowerPIDTuner extends LinearOpMode {
     // Temporarily match this config to your robot's config
-    private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
+//    private static final GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
+    private static final WheatleyConfig ROBOT_CONFIG = new WheatleyConfig();
     public static double DISTANCE = 48; // in
-
-    public static double TRANSLATION_kP = 0.0;
-    public static double TRANSLATION_kI = 0.0;
-    public static double TRANSLATION_kD = 0.0;
-    public static double HEADING_kP = 0.0;
-    public static double HEADING_kI = 0.0;
-    public static double HEADING_kD = 0.0;
 
     @Override
     public void runOpMode() throws InterruptedException {
         ROBOT_CONFIG.init(this);
-        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.frontLeft, ROBOT_CONFIG.frontRight, ROBOT_CONFIG.backLeft, ROBOT_CONFIG.backRight);
-        drive.setLocalizer(new TwoWheelTrackingLocalizer(ROBOT_CONFIG.localizerCoefficients, ROBOT_CONFIG.parallelEncoder, ROBOT_CONFIG.perpendicularEncoder, drive));
+        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.fl, ROBOT_CONFIG.fr, ROBOT_CONFIG.bl, ROBOT_CONFIG.br);
+//        drive.setLocalizer(new TwoWheelTrackingLocalizer(ROBOT_CONFIG.localizerCoefficients, ROBOT_CONFIG.parallelEncoder, ROBOT_CONFIG.perpendicularEncoder, drive));
 
 
         Pose2d startPose = new Pose2d(-DISTANCE / 2, -DISTANCE / 2, 0);
@@ -57,12 +48,6 @@ public class FollowerPIDTuner extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (!isStopRequested()) {
-            drive.setCoefficients(
-                    new MecanumCoefficients.Builder()
-                            .setTranslationalPID(new PIDCoefficients(TRANSLATION_kP, TRANSLATION_kI, TRANSLATION_kD))
-                            .setHeadingPID(new PIDCoefficients(HEADING_kP, HEADING_kI, HEADING_kD))
-                            .build()
-            );
             TrajectorySequence trajSeq = drive.trajectorySequenceBuilder(startPose)
                     .forward(DISTANCE)
                     .turn(Math.toRadians(90))
