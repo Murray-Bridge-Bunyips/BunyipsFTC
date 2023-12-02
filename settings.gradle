@@ -1,2 +1,7 @@
 include ':FtcRobotController'
-include ':TeamCode'
+include ':Team15215'
+include ':Team22407'
+include ':BunyipsLib'
+project(":Team15215").projectDir = new File("TeamCode/Team15215")
+project(":Team22407").projectDir = new File("TeamCode/Team22407")
+project(":BunyipsLib").projectDir = new File("TeamCode/BunyipsLib")

@@ -1,0 +1,15 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // Kotlin v1.6.0
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0'
+    }
+}
+
+apply from: "../build.common.gradle"
+
+dependencies {
+    implementation project(":BunyipsLib")
+}

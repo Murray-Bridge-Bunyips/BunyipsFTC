@@ -4,21 +4,21 @@
 	South Australian FTC Teams 15215, 22407, 24736
     Murray Bridge High School
 	
-	MAINTAINED ROBOT CODE in this repository (under src/main/java/.../teamcode):
+	MAINTAINED ROBOT CODE in this repository (under TeamCode/):
             ⭐ GLaDOS: Mecanum-drive CenterStage robot, 2023-2024, MURRAY BRIDGE BUNYIPS
             ⭐ WHEATLEY: Mecanum-drive CenterStage robot, 2023-2024, MURRAY BRIDGE MULYAWONKS
 	     	JERRY: Mecanum-drive PowerPlay robot, 2022-2023, MURRAY BRIDGE BUNYIPS
 
-	Unmaintained robot code in this repository (under src/main/archived):
+	Unmaintained robot code in this repository (under Archived/):
             DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, MURRAY BRIDGE MULYAWONKS
 		BERTIE: Mecanum-drive FreightFrenzy robot, 2021-2022, MURRAY BRIDGE BUNYIPS
         	LISA: Two-wheel-drive minibot for high-speed performance
 	
 	Robot code not in this repository (written in Blocks by other members of the club):
 		- ATLAS: CenterStage robot, MURRAY BRIDGE LIZARDS
-[![View TeamCode - Stable](https://img.shields.io/static/v1?label=View+TeamCode&message=Stable&color=2ea44f)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/stable/TeamCode/src/main/java/org/firstinspires/ftc/teamcode)
+[![View TeamCode - Stable](https://img.shields.io/static/v1?label=View+TeamCode&message=Stable&color=2ea44f)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/stable/TeamCode/)
 [![CodeFactor](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc/badge)](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc)<br>
-[![View TeamCode - Development](https://img.shields.io/static/v1?label=View+TeamCode&message=Development&color=informational)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/devid-heath/TeamCode/src/main/java/org/firstinspires/ftc/teamcode)<br>
+[![View TeamCode - Development](https://img.shields.io/static/v1?label=View+TeamCode&message=Development&color=informational)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/devid-heath/TeamCode/)<br>
 [![View TeamCode - Archived](https://img.shields.io/static/v1?label=View+TeamCode&message=Archived&color=inactive)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/stable/TeamCode/src/main/archived)
 
 
