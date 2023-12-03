@@ -22,7 +22,8 @@ public class WheatleyRRMecanum extends BunyipsOpMode {
         RobotConfig.setLastKnownPosition(null);
         drive = new MecanumDrive(
                 this, config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
+        );
     }
 
     @Override
