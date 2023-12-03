@@ -23,8 +23,7 @@ Kotlin.
 
 ## Conventions
 
-- All OpModes should include the robot name in their Driver Station name, group, and file prefix
-  to avoid confusion.
+- All modules in robot files should prepend their robot names to avoid confusion when working across robots. This is not required for DS names due to the independent package builds.
 - OpModes should derive from
   [BunyipsLib](./TeamCode/BunyipsLib),
   by extending
