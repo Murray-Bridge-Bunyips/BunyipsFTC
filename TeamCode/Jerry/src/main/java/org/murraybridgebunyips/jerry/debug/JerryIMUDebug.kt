@@ -1,0 +1,31 @@
+package org.murraybridgebunyips.jerry.debug
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
+import org.murraybridgebunyips.bunyipslib.IMUOp
+import org.murraybridgebunyips.jerry.components.JerryConfig
+
+/**
+ * Debug opmode for IMU readouts.
+ */
+@TeleOp(name = "IMU Debug")
+class JerryIMUDebug : BunyipsOpMode() {
+    private var config = JerryConfig()
+    private var imu: IMUOp? = null
+
+    override fun onInit() {
+        config.init(this)
+        imu = IMUOp(this, config.imu!!)
+        imu?.startCapture()
+    }
+
+    override fun activeLoop() {
+//        addTelemetry(
+//            config?.imu?.getAngularOrientation(
+//                AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES
+//            )?.thirdAngle.toString()
+//        )
+        addTelemetry(imu?.heading.toString())
+        imu?.tick()
+    }
+}

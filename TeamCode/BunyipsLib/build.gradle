@@ -67,7 +67,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    namespace = 'org.murraybridgebunyips.ftc.bunyipslib'
+    namespace = 'org.murraybridgebunyips.bunyipslib'
 }
 
 dependencies {

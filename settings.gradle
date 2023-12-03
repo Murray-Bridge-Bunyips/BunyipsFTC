@@ -1,9 +1,9 @@
 include ':FtcRobotController'
-include ':Team15215_2022'
-include ':Team15215_2023'
-include ':Team22407_2023'
+include ':Jerry'
+include ':GLaDOS'
+include ':Wheatley'
 include ':BunyipsLib'
-project(":Team15215_2022").projectDir = new File("TeamCode/Team15215_2022")
-project(":Team15215_2023").projectDir = new File("TeamCode/Team15215_2023")
-project(":Team22407_2023").projectDir = new File("TeamCode/Team22407_2023")
+project(":Jerry").projectDir = new File("TeamCode/Jerry")
+project(":GLaDOS").projectDir = new File("TeamCode/GLaDOS")
+project(":Wheatley").projectDir = new File("TeamCode/Wheatley")
 project(":BunyipsLib").projectDir = new File("TeamCode/BunyipsLib")
