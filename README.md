@@ -32,7 +32,7 @@ Kotlin.
   BunyipsComponent, Task etc..)
 - Robots should be organised based on `teleop`, `autonomous`, `debug`, `components`, and `tasks`
   packages.<br><br>
-  See the [example/](./TeamCode/BunyipsLib/src/main/java/org/murraybridgebunyips/ftc/bunyipslib/example) directory and robots for examples of applying the full suite of
+  See the [example/](./TeamCode/BunyipsLib/src/main/java/org/murraybridgebunyips/bunyipslib/example) directory and robots for examples of applying the full suite of
   BunyipsLib/BunyipsOpMode developer abstractions.
 
 ## File structure
