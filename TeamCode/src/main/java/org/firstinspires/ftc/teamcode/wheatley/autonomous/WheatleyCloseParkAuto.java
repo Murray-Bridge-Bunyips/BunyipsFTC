@@ -36,7 +36,9 @@ public class WheatleyCloseParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
     @Override
     protected void onInitialisation() {
         config.init(this);
-        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+        drive = new MecanumDrive(
+                this, config.driveConstants, config.mecanumCoefficients,
+                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
     }
 
     @Override

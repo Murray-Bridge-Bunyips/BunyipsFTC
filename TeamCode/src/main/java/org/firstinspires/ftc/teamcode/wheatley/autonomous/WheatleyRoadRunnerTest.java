@@ -25,7 +25,9 @@ public class WheatleyRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Me
     protected void onInitialisation() {
         config.init(this);
         RobotConfig.setLastKnownPosition(null);
-        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+        drive = new MecanumDrive(
+                this, config.driveConstants, config.mecanumCoefficients,
+                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
     }
 
     @Override

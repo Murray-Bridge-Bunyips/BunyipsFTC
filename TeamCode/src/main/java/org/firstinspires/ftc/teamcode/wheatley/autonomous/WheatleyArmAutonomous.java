@@ -80,10 +80,12 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
             case LEFT:
                 addNewTrajectory(new Pose2d(-35.81, -71.43, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-48.13, -45.85), Math.toRadians(90.00))
+                        .addDisplacementMarker(() -> {
+                            // TODO: Set proper values/actions
+                            arm.setPosition(90);
+                            arm.toggleLeftClaw();
+                        })
                         .build();
-
-                arm.setPosition(90);
-                arm.toggleLeftClaw();
 
             case RIGHT:
 

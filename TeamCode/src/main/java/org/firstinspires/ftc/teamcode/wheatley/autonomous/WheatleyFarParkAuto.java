@@ -38,7 +38,10 @@ public class WheatleyFarParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mecan
     protected void onInitialisation() {
         config.init(this);
         RobotConfig.setLastKnownPosition(null);
-        drive = new MecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+        drive = new MecanumDrive(
+                this, config.driveConstants, config.mecanumCoefficients,
+                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
+        );
     }
 
     @Override
@@ -59,11 +62,6 @@ public class WheatleyFarParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mecan
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case RED_LEFT:
-//                addNewTrajectory(new Pose2d(-37.14, -71.05, Math.toRadians(90.00)))
-//                        .splineTo(new Vector2d(-37.33, -38.46), Math.toRadians(90.33))
-//                        .splineTo(new Vector2d(59.68, -10.61), Math.toRadians(16.02))
-//                        .build();
-
                 addNewTrajectory()
                         .setTimeout(-1)
                         .forward(Inches.fromCM(175))
@@ -94,10 +92,12 @@ public class WheatleyFarParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mecan
                 break;
 
             case BLUE_RIGHT:
+                // RED_LEFT and BLUE_RIGHT should pretty much be the same, just taking different turns
                 addNewTrajectory(new Pose2d(-35.31, 72.00, Math.toRadians(90.00)))
                         .setTimeout(-1)
-                        .splineTo(new Vector2d(-37.67, 32.96), Math.toRadians(266.55))
-                        .splineTo(new Vector2d(58.86, 12.16), Math.toRadians(0.00))
+                        .forward(Inches.fromCM(175))
+                        .turn(Math.toRadians(90))
+                        .forward(Inches.fromCM(340))
                         .build();
                 break;
         }
