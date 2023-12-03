@@ -2,8 +2,7 @@ package org.murraybridgebunyips.bunyipslib.tasks;
 
 import androidx.annotation.NonNull;
 
-import org.firstinspires.ftc.teamcode.common.tasks.Task;
-import org.firstinspires.ftc.teamcode.common.vision.data.TfodData;
+import org.murraybridgebunyips.bunyipslib.vision.data.TfodData;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.TFOD;

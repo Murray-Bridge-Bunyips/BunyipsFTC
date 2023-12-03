@@ -1,6 +1,6 @@
 package org.murraybridgebunyips.bunyipslib.example.examplerobot.autonomous;
 
-import org.firstinspires.ftc.teamcode.common.tasks.WaitTask;
+import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.OpenCVCam;

@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.common.vision.data.VisionData;
+import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
 

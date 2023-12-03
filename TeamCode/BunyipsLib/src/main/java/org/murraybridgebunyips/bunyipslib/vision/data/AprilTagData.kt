@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.vision.data
+package org.murraybridgebunyips.bunyipslib.vision.data
 
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit

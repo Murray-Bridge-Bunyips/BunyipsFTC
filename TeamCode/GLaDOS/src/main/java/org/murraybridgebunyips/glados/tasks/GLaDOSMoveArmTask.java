@@ -2,7 +2,7 @@ package org.murraybridgebunyips.glados.tasks;
 
 import androidx.annotation.NonNull;
 
-import org.firstinspires.ftc.teamcode.common.tasks.Task;
+import org.murraybridgebunyips.bunyipslib.tasks.Task;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.glados.components.GLaDOSArmCore;
 

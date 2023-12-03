@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.vision.data
+package org.murraybridgebunyips.bunyipslib.vision.data
 
 /**
  * Base class for all vision data structures.

@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.common.tasks
+package org.murraybridgebunyips.bunyipslib.tasks
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
 
 /**
  * Abstract implementation class to use custom ArrayDeque tasks in an

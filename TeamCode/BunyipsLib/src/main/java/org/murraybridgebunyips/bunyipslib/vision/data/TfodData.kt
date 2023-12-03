@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.common.vision.data
+package org.murraybridgebunyips.bunyipslib.vision.data
 
 /**
  * Utility data structure for TensorFlow Object Detections.

@@ -7,7 +7,7 @@ import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.teamcode.common.vision.data.NoData;
+import org.murraybridgebunyips.bunyipslib.vision.data.NoData;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 

@@ -1,6 +1,6 @@
 package org.murraybridgebunyips.jerry.tasks
 
-import org.firstinspires.ftc.teamcode.common.tasks.Task
+import org.murraybridgebunyips.bunyipslib.tasks.Task
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
 import org.murraybridgebunyips.jerry.components.JerryLift

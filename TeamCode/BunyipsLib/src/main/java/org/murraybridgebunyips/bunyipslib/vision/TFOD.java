@@ -5,7 +5,7 @@ import android.graphics.Canvas;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.teamcode.common.vision.data.TfodData;
+import org.murraybridgebunyips.bunyipslib.vision.data.TfodData;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
 import org.opencv.core.Mat;
 

@@ -1,6 +1,5 @@
 package org.murraybridgebunyips.bunyipslib.vision.data
 
-import org.firstinspires.ftc.teamcode.common.vision.data.VisionData
 import org.murraybridgebunyips.bunyipslib.vision.TeamProp
 
 /**
