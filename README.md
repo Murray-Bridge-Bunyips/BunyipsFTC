@@ -2,7 +2,7 @@
 [![View TeamCode - Stable](https://img.shields.io/static/v1?label=View+TeamCode&message=Stable&color=2ea44f)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/stable/TeamCode/)
 [![CodeFactor](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc/badge)](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc)<br>
 [![View TeamCode - Development](https://img.shields.io/static/v1?label=View+TeamCode&message=Development&color=informational)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/devid-heath/TeamCode/)<br>
-[![View TeamCode - Archived](https://img.shields.io/static/v1?label=View+TeamCode&message=Archived&color=inactive)](./Archived)<br><br>
+[![View TeamCode - Archived](https://img.shields.io/static/v1?label=View+TeamCode&message=Archived&color=inactive)](TeamCode/Archived)<br><br>
 This repository contains all maintained code for our FTC robots constructed after 2021 using Java and
 Kotlin.
 
@@ -39,7 +39,7 @@ Kotlin.
 
 OpModes are organised and built as separate Gradle profiles to reduce clutter.
 
-All non-active archived code is stored in [Archived/](./Archived) and is not built.  
+All non-active archived code is stored in [Archived/](TeamCode/Archived) and is not built.  
 This code is not maintained and may be using deprecated or broken functionality.
 
 ___
