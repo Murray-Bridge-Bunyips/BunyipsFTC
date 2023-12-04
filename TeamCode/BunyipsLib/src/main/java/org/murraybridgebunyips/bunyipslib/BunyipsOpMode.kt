@@ -100,10 +100,10 @@ abstract class BunyipsOpMode : LinearOpMode() {
             telemetry.log()
                 .add("bunyipsopmode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME}")
             opModeStatus = "setup"
-            pushTelemetry()
             Dbg.logd("BunyipsOpMode: setting up...")
             // Run BunyipsOpMode setup
             setup()
+            pushTelemetry()
 
             opModeStatus = "static_init"
             Dbg.logd("BunyipsOpMode: firing onInit()...")

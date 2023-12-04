@@ -10,7 +10,7 @@ import org.murraybridgebunyips.bunyipslib.Controller;
 /**
  * Universal OpMode to test the BunyipsOpMode functionality
  */
-@TeleOp(name = "COMMON: BunyipsOpMode")
+@TeleOp(name = "BunyipsOpMode")
 @Disabled
 public class BunyipsOpModeTest extends BunyipsOpMode {
     @Override

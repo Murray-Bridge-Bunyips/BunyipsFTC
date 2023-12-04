@@ -29,7 +29,7 @@ public abstract class MaxAngularVeloTuner extends LinearOpMode {
     private double maxAngVelocity;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         if (drive == null) throw new NullPointerException("drive is null!");
 
 

@@ -32,7 +32,7 @@ public abstract class MaxVelocityTuner extends LinearOpMode {
     private VoltageSensor batteryVoltageSensor;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         if (drive == null) throw new NullPointerException("drive is null!");
 
 

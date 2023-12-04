@@ -22,6 +22,18 @@ public class FieldCentricMecanumDrive extends MecanumDrive {
     }
 
     @Override
+    public void setSpeedUsingController(double x, double y, double r) {
+        double heading = getExternalHeading();
+        double sin = Math.sin(heading);
+        double cos = Math.cos(heading);
+        super.setSpeedUsingController(
+                x * cos - y * sin,
+                x * sin + y * cos,
+                r
+        );
+    }
+
+    @Override
     public void setWeightedDrivePower(Pose2d drivePower) {
         double heading = getExternalHeading();
         double sin = Math.sin(heading);

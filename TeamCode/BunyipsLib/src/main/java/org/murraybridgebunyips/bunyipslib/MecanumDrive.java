@@ -33,6 +33,7 @@ import java.util.List;
  */
 public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
     private final MecanumRoadRunnerDrive drive;
+    private final IMU imu;
 
     public MecanumDrive(@NonNull BunyipsOpMode opMode, DriveConstants constants, MecanumCoefficients mecanumCoefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
         super(opMode);
@@ -40,6 +41,11 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
         if (RobotConfig.getLastKnownPosition() != null) {
             drive.setPoseEstimate(RobotConfig.getLastKnownPosition());
         }
+        this.imu = imu;
+    }
+
+    public void resetYaw() {
+        imu.resetYaw();
     }
 
     /**

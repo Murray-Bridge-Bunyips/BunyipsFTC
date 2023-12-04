@@ -67,7 +67,7 @@ public abstract class TrackingWheelLateralDistanceTuner extends LinearOpMode {
     protected MecanumRoadRunnerDrive drive;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         if (drive == null) throw new NullPointerException("drive is null!");
 
         // Must set localizer to a StandardTrackingWheelLocalizer, at the moment this will not run

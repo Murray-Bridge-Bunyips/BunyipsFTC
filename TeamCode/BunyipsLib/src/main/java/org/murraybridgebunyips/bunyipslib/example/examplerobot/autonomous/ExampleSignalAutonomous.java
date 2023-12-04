@@ -1,12 +1,12 @@
 package org.murraybridgebunyips.bunyipslib.example.examplerobot.autonomous;
 
-import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.OpenCVCam;
 import org.murraybridgebunyips.bunyipslib.example.examplerobot.components.ExampleConfig;
 import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask;
+import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 
 import java.util.List;
 

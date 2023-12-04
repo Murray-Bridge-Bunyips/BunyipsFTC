@@ -1,7 +1,7 @@
 package org.murraybridgebunyips.bunyipslib.vision;
 
-import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 
 import java.util.ArrayList;
 import java.util.List;

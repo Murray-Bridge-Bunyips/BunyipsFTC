@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.glados.components;
 
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -85,7 +86,7 @@ public class GLaDOSConfigCore extends RobotConfig {
         suspenderActuator = (DcMotorEx) getHardware("sa", DcMotorEx.class);
         suspenderHook = (Servo) getHardware("sh", Servo.class);
         if (suspenderHook != null)
-            suspenderHook.scaleRange(0.14, 0.85);
+            suspenderHook.scaleRange(0.25, 1);
 
         // Pixel manipulation system
         pixelMotion = (CRServo) getHardware("pm", CRServo.class);
@@ -134,15 +135,16 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setRunUsingEncoder(false)
                 .setWheelRadius(Inches.fromMM(75) / 2.0)
                 .setGearRatio(1.0 / 13.1)
-                .setTrackWidth(15.3)
+                .setTrackWidth(20.5)
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
                 .setMaxVel(41.065033847087705)
                 .setMaxAccel(41.065033847087705)
-                .setMaxAngVel(Math.toRadians(130.71406249999998))
-                .setMaxAngAccel(Math.toRadians(130.71406249999998))
-                .setKV(0.0016)
-                .setKStatic(0.05833)
-                .setKA(0.01401)
+                // 179.687013 in degrees
+                .setMaxAngVel(3.13613)
+                .setMaxAngAccel(3.13613)
+                .setKV(0.01395)
+                .setKStatic(0.06311)
+                .setKA(0.0015)
                 .build();
 
         localizerCoefficients = new TwoWheelTrackingLocalizerCoefficients.Builder()
@@ -156,6 +158,9 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .build();
 
         mecanumCoefficients = new MecanumCoefficients.Builder()
+                .setLateralMultiplier(60.0 / 59.846666)
+                .setTranslationalPID(new PIDCoefficients(8, 0, 0))
+                .setHeadingPID(new PIDCoefficients(10, 0, 0))
                 .build();
     }
 }

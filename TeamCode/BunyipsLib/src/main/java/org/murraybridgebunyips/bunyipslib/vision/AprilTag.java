@@ -3,10 +3,10 @@ package org.murraybridgebunyips.bunyipslib.vision;
 import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.murraybridgebunyips.bunyipslib.vision.data.AprilTagData;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import org.murraybridgebunyips.bunyipslib.cameras.CameraType;
+import org.murraybridgebunyips.bunyipslib.vision.data.AprilTagData;
 import org.opencv.core.Mat;
 
 import java.util.List;

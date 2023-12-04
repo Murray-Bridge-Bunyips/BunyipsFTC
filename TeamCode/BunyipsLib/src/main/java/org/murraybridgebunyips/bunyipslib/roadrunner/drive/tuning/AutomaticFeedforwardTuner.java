@@ -36,7 +36,7 @@ public abstract class AutomaticFeedforwardTuner extends LinearOpMode {
     protected MecanumRoadRunnerDrive drive;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         if (drive == null) throw new NullPointerException("drive is null!");
         if (drive.getConstants().RUN_USING_ENCODER) {
             RobotLog.setGlobalErrorMsg("Feedforward constants usually don't need to be tuned " +

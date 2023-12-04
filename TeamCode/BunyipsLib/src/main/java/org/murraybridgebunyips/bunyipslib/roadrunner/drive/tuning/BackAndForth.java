@@ -31,7 +31,7 @@ public abstract class BackAndForth extends LinearOpMode {
     protected MecanumRoadRunnerDrive drive;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         if (drive == null) throw new NullPointerException("drive is null!");
 
         Trajectory trajectoryForward = drive.trajectoryBuilder(new Pose2d())

@@ -33,7 +33,7 @@ import kotlin.Unit;
  *
  * @author Lucas Bubner, 2023
  */
-@TeleOp(name = "COMMON: Vision Test")
+@TeleOp(name = "Vision Test")
 //@Disabled
 public class VisionTest extends BunyipsOpMode {
     private Vision vision;

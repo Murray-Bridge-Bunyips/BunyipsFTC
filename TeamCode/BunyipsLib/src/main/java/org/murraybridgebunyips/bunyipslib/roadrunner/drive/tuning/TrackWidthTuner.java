@@ -29,7 +29,7 @@ public abstract class TrackWidthTuner extends LinearOpMode {
     protected MecanumRoadRunnerDrive drive;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         if (drive == null) throw new NullPointerException("drive is null!");
 
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());

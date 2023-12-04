@@ -2,8 +2,8 @@ package org.murraybridgebunyips.wheatley.tasks;
 
 import androidx.annotation.NonNull;
 
-import org.murraybridgebunyips.bunyipslib.tasks.Task;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.tasks.Task;
 import org.murraybridgebunyips.wheatley.components.WheatleyLift;
 
 /**

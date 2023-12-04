@@ -48,6 +48,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
         if (drive == null) throw new NullPointerException("drive instance is not set!");
         // noinspection rawtypes
         TrajectorySequenceBuilder builder = drive.trajectorySequenceBuilder(startPose);
+        drive.setPoseEstimate(startPose);
         return new RoadRunnerTrajectoryTaskBuilder(startPose, builder.getBaseVelConstraint(), builder.getBaseAccelConstraint(), builder.getBaseTurnConstraintMaxAngVel(), builder.getBaseTurnConstraintMaxAngAccel());
     }
 
@@ -79,6 +80,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
      */
     public TrajectoryBuilder newTrajectory(Pose2d startPose) {
         if (drive == null) throw new NullPointerException("drive instance is not set!");
+        drive.setPoseEstimate(startPose);
         return drive.trajectoryBuilder(startPose);
     }
 

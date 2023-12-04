@@ -2,10 +2,10 @@ package org.murraybridgebunyips.bunyipslib.tasks;
 
 import androidx.annotation.NonNull;
 
-import org.murraybridgebunyips.bunyipslib.vision.data.TfodData;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.TFOD;
+import org.murraybridgebunyips.bunyipslib.vision.data.TfodData;
 
 import java.util.List;
 

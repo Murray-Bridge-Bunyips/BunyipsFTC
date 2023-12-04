@@ -4,19 +4,19 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.TwoWheelTrackingLocalizer;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.AutomaticFeedforwardTuner;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.StraightTest;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
  * Tuning wrapper for RoadRunner.
  */
 @Autonomous(name = "RoadRunner Tuning")
-public class GLaDOSRoadRunnerTuning extends AutomaticFeedforwardTuner {
+public class GLaDOSRoadRunnerTuning extends StraightTest {
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
         ROBOT_CONFIG.init(this);
-        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.frontLeft, ROBOT_CONFIG.frontRight, ROBOT_CONFIG.backLeft, ROBOT_CONFIG.backRight);
+        drive = new MecanumRoadRunnerDrive(ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.frontLeft, ROBOT_CONFIG.frontRight, ROBOT_CONFIG.backLeft, ROBOT_CONFIG.backRight);
         drive.setLocalizer(new TwoWheelTrackingLocalizer(ROBOT_CONFIG.localizerCoefficients, ROBOT_CONFIG.parallelEncoder, ROBOT_CONFIG.perpendicularEncoder, drive));
         super.runOpMode();
     }

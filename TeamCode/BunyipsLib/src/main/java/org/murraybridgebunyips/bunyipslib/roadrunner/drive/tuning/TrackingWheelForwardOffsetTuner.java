@@ -42,7 +42,7 @@ public abstract class TrackingWheelForwardOffsetTuner extends LinearOpMode {
     protected MecanumRoadRunnerDrive drive;
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         Telemetry telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         if (drive == null) throw new NullPointerException("drive is null!");
 

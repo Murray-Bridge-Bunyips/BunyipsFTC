@@ -8,9 +8,9 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
+import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 
 import java.util.ArrayList;
 import java.util.Arrays;
