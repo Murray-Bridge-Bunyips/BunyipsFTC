@@ -38,7 +38,10 @@ public class GLaDOSArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mecan
     protected void onInitialisation() {
         config.init(this);
         // TODO: Use/make new arm controller (common?)
-        arm = new GLaDOSArmCore(this, config.leftPixel, config.rightPixel, config.pixelAlignment, config.suspenderActuator, config.pixelMotion);
+        arm = new GLaDOSArmCore(
+                this, config.leftPixel, config.rightPixel, config.pixelAlignment,
+                config.suspenderActuator, config.pixelMotion
+        );
         initTask = new GetTeamPropTask(this, vision);
         vision = new Vision(this, config.webcam);
     }
