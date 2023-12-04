@@ -1,4 +1,4 @@
-// BunyipsFTC common gradle resources for TeamCode modules
+// BunyipsFTC common Gradle resources for TeamCode robot applications
 
 apply plugin: 'kotlin-android'
 
@@ -17,5 +17,6 @@ android {
 
 dependencies {
     implementation project(':FtcRobotController')
+    implementation project(":BunyipsLib")
     annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 }

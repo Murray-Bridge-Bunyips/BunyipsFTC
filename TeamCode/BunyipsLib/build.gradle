@@ -1,12 +1,4 @@
-buildscript {
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        // Kotlin v1.6.0
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0'
-    }
-}
+// BunyipsLib Gradle configuration
 
 plugins {
     id 'com.android.library' apply false
@@ -48,6 +40,7 @@ def getRandomID = { ->
     return UUID.randomUUID().toString()
 }
 
+// Not using common module as it is an application not a library, will import deps manually
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply from: "../../build.dependencies.gradle"
