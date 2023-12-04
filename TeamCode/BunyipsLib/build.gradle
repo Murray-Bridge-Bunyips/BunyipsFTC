@@ -1,0 +1,78 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        // Kotlin v1.6.0
+        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.0'
+    }
+}
+
+plugins {
+    id 'com.android.library' apply false
+}
+
+def getCommit = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'describe', '--always', '--dirty'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return null
+    }
+}
+
+def getBranch = { ->
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'rev-parse', '--abbrev-ref', 'HEAD'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    }
+    catch (ignored) {
+        return null
+    }
+}
+
+def getBuildTime = { ->
+    return new Date().format("yyyy-MM-dd@HH:mm:ss", TimeZone.getDefault())
+}
+
+def getRandomID = { ->
+    return UUID.randomUUID().toString()
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply from: "../../build.dependencies.gradle"
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        minSdkVersion 24
+        //noinspection ExpiredTargetSdkVersion
+        targetSdkVersion 28
+        buildConfigField "String", "GIT_COMMIT", '"' + getCommit() + '"'
+        buildConfigField "String", "GIT_BRANCH", '"' + getBranch() + '"'
+        buildConfigField "String", "BUILD_TIME", '"' + getBuildTime() + '"'
+        buildConfigField "String", "ID", '"' + getRandomID() + '"'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    namespace = 'org.murraybridgebunyips.bunyipslib'
+}
+
+dependencies {
+    // RoadRunner v0.5
+    implementation 'org.apache.commons:commons-math3:3.6.1'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.7'
+    implementation 'com.acmerobotics.roadrunner:core:0.5.6'
+}
