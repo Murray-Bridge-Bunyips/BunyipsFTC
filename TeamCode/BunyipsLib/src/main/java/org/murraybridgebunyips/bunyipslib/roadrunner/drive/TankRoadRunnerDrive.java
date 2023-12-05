@@ -120,6 +120,11 @@ public class TankRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.TankD
     }
 
     @Override
+    public TrajectorySequenceRunner getTrajectorySequenceRunner() {
+        return trajectorySequenceRunner;
+    }
+
+    @Override
     public void stop() {
         setMotorPowers(0, 0);
     }

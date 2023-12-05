@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.glados.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
@@ -13,6 +14,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * @author Lucas Bubner, 2023
  */
 @TeleOp(name = "Drivetrain")
+@Disabled
 public class GLaDOSDrivetrain extends BunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;

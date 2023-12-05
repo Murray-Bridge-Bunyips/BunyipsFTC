@@ -127,15 +127,15 @@ public class PersonalityCoreArm extends BunyipsComponent {
         return claws;
     }
 
-    public void toggleServo(DualClaws.ServoSide side) {
+    public void toggleClaw(DualClaws.ServoSide side) {
         claws.toggleServo(side);
     }
 
-    public void closeServo(DualClaws.ServoSide side) {
+    public void closeClaw(DualClaws.ServoSide side) {
         claws.closeServo(side);
     }
 
-    public void openServo(DualClaws.ServoSide side) {
+    public void openClaw(DualClaws.ServoSide side) {
         claws.openServo(side);
     }
 

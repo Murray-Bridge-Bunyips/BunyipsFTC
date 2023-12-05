@@ -3,6 +3,7 @@ package org.murraybridgebunyips.wheatley.autonomous;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
@@ -18,6 +19,7 @@ import java.util.List;
  * Test for RoadRunner.
  */
 @Autonomous(name = "RoadRunner Test")
+@Disabled
 public class WheatleyRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final WheatleyConfig config = new WheatleyConfig();
 

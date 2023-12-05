@@ -168,14 +168,19 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * Can be called to add custom tasks in a robot's autonomous
      *
      * @param newTask task to add to the run queue
+     * @param ack     suppress the warning that a task was added manually before onReady
      */
-    public void addTask(@NotNull AutoTask newTask) {
-        if (!hasGottenCallback) {
+    public void addTask(@NotNull AutoTask newTask, boolean ack) {
+        if (!hasGottenCallback && !ack) {
             log("auto: caution! a task was added manually before the onReady callback");
         }
         tasks.add(newTask);
         taskCount++;
         log("auto: % has been added as task %/%", newTask.getClass().getSimpleName(), taskCount, taskCount);
+    }
+
+    public void addTask(@NotNull AutoTask newTask) {
+        addTask(newTask, false);
     }
 
     /**

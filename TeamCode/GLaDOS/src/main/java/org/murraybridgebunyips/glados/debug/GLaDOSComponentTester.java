@@ -55,7 +55,6 @@ public class GLaDOSComponentTester extends BunyipsOpMode {
 
         inc = gamepad1.dpad_right;
         dec = gamepad1.dpad_left;
-        addTelemetry("%", config.suspenderHook.getPosition());
         addTelemetry("Use gamepad1.left_stick_y to control component. Use dpad_left and dpad_right to switch components.");
         addTelemetry("Currently controlling: %", currentComponent == 0 ? "Left Pixel" : currentComponent == 1 ? "Right Pixel" : currentComponent == 2 ? "Pixel Alignment" : currentComponent == 3 ? "Pixel Motion" : currentComponent == 4 ? "Suspender Actuator" : "Suspender Hook");
     }

@@ -176,5 +176,23 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
             addTask(new RoadRunnerTask<>(getOpMode(), timeout, drive, builtTrajectory));
             return builtTrajectory;
         }
+
+        // Optional method to build as the first thing the robot will do
+        public TrajectorySequence buildWithPriority() {
+            if (drive == null) throw new NullPointerException("drive instance is not set!");
+            TrajectorySequence builtTrajectory = super.build();
+            addTaskFirst(new RoadRunnerTask<>(getOpMode(), timeout, drive, builtTrajectory));
+            return builtTrajectory;
+        }
+
+        // Optional method to build as the very last thing the robot will do
+        // This differs from standard build, as it will wait for the init-callback to run first before
+        // appending tasks to the queue
+        public TrajectorySequence buildWithLowPriority() {
+            if (drive == null) throw new NullPointerException("drive instance is not set!");
+            TrajectorySequence builtTrajectory = super.build();
+            addTaskLast(new RoadRunnerTask<>(getOpMode(), timeout, drive, builtTrajectory));
+            return builtTrajectory;
+        }
     }
 }

@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.wheatley.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
@@ -11,7 +12,7 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  * RoadRunner Mecanum Drive test for TeleOp
  */
 @TeleOp(name = "RoadRunner Mecanum Drive")
-//@Disabled
+@Disabled
 public class WheatleyRRMecanum extends BunyipsOpMode {
     private final WheatleyConfig config = new WheatleyConfig();
     private MecanumDrive drive;

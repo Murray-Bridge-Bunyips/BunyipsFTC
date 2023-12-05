@@ -22,6 +22,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDriv
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
+import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceRunner;
 
 import java.util.List;
 
@@ -46,6 +47,11 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
 
     public void resetYaw() {
         imu.resetYaw();
+    }
+
+    @Override
+    public TrajectorySequenceRunner getTrajectorySequenceRunner() {
+        return drive.getTrajectorySequenceRunner();
     }
 
     /**
