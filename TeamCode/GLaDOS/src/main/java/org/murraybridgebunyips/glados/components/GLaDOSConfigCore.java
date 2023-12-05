@@ -115,7 +115,7 @@ public class GLaDOSConfigCore extends RobotConfig {
             suspenderActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
-        boolean res = imu.initialize(
+        boolean res = imu != null && imu.initialize(
                 new IMU.Parameters(
                         new RevHubOrientationOnRobot(
                                 RevHubOrientationOnRobot.LogoFacingDirection.UP,

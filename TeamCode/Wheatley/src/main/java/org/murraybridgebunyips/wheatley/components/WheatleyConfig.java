@@ -2,11 +2,15 @@ package org.murraybridgebunyips.wheatley.components;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
@@ -31,23 +35,30 @@ public class WheatleyConfig extends RobotConfig {
     //    left_front = hardwareMap.get(DcMotor.class, "left_front");
     //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
 
-    // Declares all necessary motors
-
     // Expansion 1: fl
     public DcMotorEx fl;
-
     // Expansion 0: bl
     public DcMotorEx bl;
-
     // Expansion 2: fr
     public DcMotorEx /*Are you*/ fr /*Or jk*/;
-
     // Expansion 3: br
     public DcMotorEx br;
-
+    // Control 0: Suspender Actuator "sa"
+    public DcMotorEx suspenderActuator;
+    // Control Servo 5: Pixel Forward Motion Servo "pm"
+    public CRServo pixelMotion;
+    // Control Servo 4: Pixel Alignment Servo "al"
+    public Servo pixelAlignment;
+    // Control Servo 2: Left Servo "ls"
+    public Servo leftPixel;
+    // Control Servo 3: Right Servo "rs"
+    public Servo rightPixel;
+    // Control Servo 1: Suspension Hook "sh"
+    public Servo suspenderHook;
+    // Control Servo ?: Plane Launcher "pl"
+    public Servo launcher;
     // USB: Webcam "webcam"
     public WebcamName webcam;
-
     // Internally mounted on I2C C0 "imu"
     public IMU imu;
 
@@ -77,12 +88,26 @@ public class WheatleyConfig extends RobotConfig {
         if (bl != null)
             bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        if (imu == null) {
-            // huh
-            throw new RuntimeException("IMU is null?");
+        // Suspender/pixel upward motion system
+        suspenderActuator = (DcMotorEx) getHardware("sa", DcMotorEx.class);
+        suspenderHook = (Servo) getHardware("sh", Servo.class);
+        if (suspenderHook != null)
+            suspenderHook.scaleRange(0.25, 1);
+        if (suspenderActuator != null) {
+            suspenderActuator.setDirection(DcMotorSimple.Direction.FORWARD);
+            suspenderActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
-        imu.initialize(
+        // Pixel manipulation system
+        pixelMotion = (CRServo) getHardware("pm", CRServo.class);
+        pixelAlignment = (Servo) getHardware("al", Servo.class);
+        leftPixel = (Servo) getHardware("ls", Servo.class);
+        rightPixel = (Servo) getHardware("rs", Servo.class);
+
+        // Paper Drone launcher system
+        launcher = (Servo) getHardware("pl", Servo.class);
+
+        boolean res = imu != null && imu.initialize(
                 new IMU.Parameters(
                         new RevHubOrientationOnRobot(
                                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
@@ -91,6 +116,9 @@ public class WheatleyConfig extends RobotConfig {
                 )
         );
 
+        if (!res) {
+            Dbg.error("IMU failed to initialise!");
+        }
 
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(28)
