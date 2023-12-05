@@ -6,8 +6,6 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
-import org.murraybridgebunyips.wheatley.components.WheatleyLift;
-import org.murraybridgebunyips.wheatley.components.WheatleyManagementRail;
 
 /**
  * Primary TeleOp for all of Wheatley's functions.
@@ -30,8 +28,6 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
     private final WheatleyConfig config = new WheatleyConfig();
     private MecanumDrive drive;
-    private WheatleyLift lift;
-    private WheatleyManagementRail suspender; // no way it's the wheatley management rail:tm:
     private Cannon cannon;
 
     private boolean xPressed;
@@ -55,7 +51,6 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     @Override
     protected void activeLoop() {
         drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
-        lift.actuateUsingController(gamepad2.left_stick_y);
 
         // Launches the paper plane
         // The triggers are pressure sensitive, apparently.
@@ -73,18 +68,9 @@ public class WheatleyTeleOp extends BunyipsOpMode {
             cannon.reset();
         }
 
-        // Unlock suspender
-        if (gamepad2.dpad_up) {
-            suspender.activate();
-        }
-        // Will noop if the suspender is locked
-        suspender.actuateUsingController(gamepad2.right_stick_y);
-
         // Claw controls
         if (gamepad2.x && !xPressed) {
-            lift.toggleLeftClaw();
         } else if (gamepad2.b && !bPressed) {
-            lift.toggleRightClaw();
         }
 
         // Register actions only once per press
@@ -102,8 +88,6 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
         // Send stateful updates to the hardware
         drive.update();
-        lift.update();
-        suspender.update();
         cannon.update();
     }
 }

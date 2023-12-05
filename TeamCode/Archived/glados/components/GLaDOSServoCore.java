@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.glados.components;
+package org.murraybridgebunyips.bunyipslib.personalitycore;
 
 import androidx.annotation.NonNull;
 

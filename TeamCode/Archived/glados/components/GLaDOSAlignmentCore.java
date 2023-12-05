@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.glados.components;
+package org.murraybridgebunyips.bunyipslib.personalitycore;
 
 
 import static org.murraybridgebunyips.bunyipslib.Text.round;

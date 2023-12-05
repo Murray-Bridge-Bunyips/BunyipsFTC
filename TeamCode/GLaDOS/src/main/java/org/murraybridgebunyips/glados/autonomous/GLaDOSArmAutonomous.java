@@ -21,15 +21,12 @@ import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
-import org.murraybridgebunyips.glados.components.GLaDOSArmCore;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
-import org.murraybridgebunyips.glados.components.GLaDOSServoCore;
 
 import java.util.List;
 
 public class GLaDOSArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
-    private GLaDOSArmCore arm;
     private GetTeamPropTask initTask;
     private Vision vision;
     private TeamProp processor;
@@ -37,11 +34,6 @@ public class GLaDOSArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mecan
     @Override
     protected void onInitialisation() {
         config.init(this);
-        // TODO: Use/make new arm controller (common?)
-        arm = new GLaDOSArmCore(
-                this, config.leftPixel, config.rightPixel, config.pixelAlignment,
-                config.suspenderActuator, config.pixelMotion
-        );
         initTask = new GetTeamPropTask(this, vision);
         vision = new Vision(this, config.webcam);
     }
@@ -87,10 +79,6 @@ public class GLaDOSArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mecan
                 addNewTrajectory(new Pose2d(-35.81, -71.43, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-48.13, -45.85), Math.toRadians(90.00))
                         .build();
-
-                // TODO: Set proper values
-                arm.getVerticalController().setTargetPosition(90);
-                arm.getServoController().toggleServo(GLaDOSServoCore.ServoSide.LEFT);
 
             case RIGHT:
 

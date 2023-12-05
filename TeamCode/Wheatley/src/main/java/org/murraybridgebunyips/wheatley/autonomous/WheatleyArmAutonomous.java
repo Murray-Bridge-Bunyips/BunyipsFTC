@@ -21,13 +21,11 @@ import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
-import org.murraybridgebunyips.wheatley.components.WheatleyLift;
 
 import java.util.List;
 
 public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final WheatleyConfig config = new WheatleyConfig();
-    private WheatleyLift arm;
     private GetTeamPropTask initTask;
     private Vision vision;
     private TeamProp processor;
@@ -35,8 +33,6 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
     @Override
     protected void onInitialisation() {
         config.init(this);
-        // TODO: Use/make new arm controller (common?)
-//        arm = new WheatleyLift(this, config.ra, config.ls, config.rs);
         initTask = new GetTeamPropTask(this, vision);
         vision = new Vision(this, config.webcam);
     }
@@ -81,9 +77,6 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
                 addNewTrajectory(new Pose2d(-35.81, -71.43, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-48.13, -45.85), Math.toRadians(90.00))
                         .build();
-
-                arm.setPosition(90);
-                arm.toggleLeftClaw();
 
             case RIGHT:
 

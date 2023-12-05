@@ -8,9 +8,7 @@ import org.murraybridgebunyips.bunyipslib.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.NullSafety;
 import org.murraybridgebunyips.bunyipslib.TriSpeed;
-import org.murraybridgebunyips.glados.components.GLaDOSArmCore;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
-import org.murraybridgebunyips.glados.components.GLaDOSServoCore;
 
 /**
  * TeleOp for GLaDOS robot FTC 15215
@@ -34,7 +32,6 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
     private final TriSpeed speed = new TriSpeed(TriSpeed.Speed.NORMAL);
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;
-    private GLaDOSArmCore arm;
     private Cannon cannon;
     private boolean x_pressed;
     private boolean b_pressed;
@@ -49,10 +46,6 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
                 hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelEncoder, config.perpendicularEncoder
-        );
-        arm = new GLaDOSArmCore(
-                this, config.leftPixel, config.rightPixel, config.pixelAlignment,
-                config.suspenderActuator, config.pixelMotion
         );
         if (NullSafety.assertComponentArgs(this, Cannon.class, config.launcher))
             cannon = new Cannon(this, config.launcher);
@@ -74,21 +67,12 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
 
         drive.setSpeedUsingController(x * speed.getMultiplier(), y * speed.getMultiplier(), r * speed.getMultiplier());
 
-        // Linear slider rotator
-//        arm.getSliderController().setTargetAngleUsingController(gamepad2.left_stick_y);
-//        // Linear slider extender
-//        arm.getSliderController().setExtrusionPowerUsingController(gamepad2.right_stick_y);
-//        // Linear slider alignment servo
-//        arm.getAlignmentController().setPositionUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);
-
         // Left claw servo
         if (gamepad2.x && !x_pressed) {
-            arm.getServoController().toggleServo(GLaDOSServoCore.ServoSide.LEFT);
         }
 
         // Right claw servo
         if (gamepad2.b && !b_pressed) {
-            arm.getServoController().toggleServo(GLaDOSServoCore.ServoSide.RIGHT);
         }
 
         // Airplane launcher
@@ -107,7 +91,6 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
 
         // Dispatch stateful changes
         drive.update();
-        arm.update();
         cannon.update();
     }
 }

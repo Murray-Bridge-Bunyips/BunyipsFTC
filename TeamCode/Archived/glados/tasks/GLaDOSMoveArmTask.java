@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.tasks.Task;
-import org.murraybridgebunyips.glados.components.GLaDOSArmCore;
+import org.murraybridgebunyips.bunyipslib.personalitycore.GLaDOSArmCore;
 
 public class GLaDOSMoveArmTask extends Task {
     private final GLaDOSArmCore arm;
