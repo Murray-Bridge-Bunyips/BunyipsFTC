@@ -12,12 +12,15 @@ import androidx.annotation.Nullable;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 
+import org.murraybridgebunyips.bunyipslib.DualClaws;
+import org.murraybridgebunyips.bunyipslib.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.Vision;
+import org.murraybridgebunyips.bunyipslib.personalitycore.PersonalityCoreArm;
 import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
@@ -25,8 +28,12 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 import java.util.List;
 
-public class GLaDOSArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+/**
+ * Autonomous for placing a pixel on the spike mark indicated by the team prop.
+ */
+public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private PersonalityCoreArm arm;
     private GetTeamPropTask initTask;
     private Vision vision;
     private TeamProp processor;
@@ -36,6 +43,8 @@ public class GLaDOSArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mecan
         config.init(this);
         initTask = new GetTeamPropTask(this, vision);
         vision = new Vision(this, config.webcam);
+        drive = new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
+        arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
     }
 
     @Override
@@ -76,19 +85,24 @@ public class GLaDOSArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mecan
 
         switch (initTask.getPosition()) {
             case LEFT:
-                addNewTrajectory(new Pose2d(-35.81, -71.43, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(-48.13, -45.85), Math.toRadians(90.00))
+                addNewTrajectory(new Pose2d(-35.77, -61.22, Math.toRadians(90.00)))
+                        .splineTo(new Vector2d(-45.61, -34.52), Math.toRadians(110.22))
+                        .addDisplacementMarker(() -> arm.openClaw(DualClaws.ServoSide.LEFT).update())
                         .build();
+                break;
 
             case RIGHT:
-
+                addNewTrajectory(new Pose2d(-36.86, -61.38, Math.toRadians(90.00)))
+                        .splineTo(new Vector2d(-28.11, -39.51), Math.toRadians(68.20))
+                        .addDisplacementMarker(() -> arm.openClaw(DualClaws.ServoSide.LEFT).update())
+                        .build();
+                break;
 
             case CENTER:
                 addNewTrajectory()
                         .forward(Inches.fromCM(120))
+                        .addDisplacementMarker(() -> arm.openClaw(DualClaws.ServoSide.LEFT).update())
                         .build();
-
-
         }
     }
 }

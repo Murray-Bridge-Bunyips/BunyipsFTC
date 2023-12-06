@@ -18,7 +18,9 @@ import org.murraybridgebunyips.bunyipslib.personalitycore.submodules.Personality
 
 /**
  * Overhead class that handles a single instantiation of other PersonalityCore components.
+ * Allows a one-level chain pattern to be used to call methods on the submodules.
  * @author Lucas Bubner, 2023
+ * @noinspection UnusedReturnValue
  */
 @Config
 public class PersonalityCoreArm extends BunyipsComponent {
@@ -51,92 +53,110 @@ public class PersonalityCoreArm extends BunyipsComponent {
         return clawMover;
     }
 
-    public void actuateClawMoverUsingController(double y) {
+    public PersonalityCoreClawMover actuateClawMoverUsingController(double y) {
         clawMover.actuateUsingController(y);
+        return clawMover;
     }
 
-    public void setClawMoverPower(double power) {
+    public PersonalityCoreClawMover setClawMoverPower(double power) {
         clawMover.setPower(power);
+        return clawMover;
     }
 
-    public void runClawMoverFor(double seconds, double power) {
+    public PersonalityCoreClawMover runClawMoverFor(double seconds, double power) {
         clawMover.runFor(seconds, power);
+        return clawMover;
     }
 
     public PersonalityCoreClawRotator getClawRotator() {
         return clawRotator;
     }
 
-    public void faceClawToBoard() {
+    public PersonalityCoreClawRotator faceClawToBoard() {
         clawRotator.faceBoard();
+        return clawRotator;
     }
 
-    public void faceClawToGround() {
+    public PersonalityCoreClawRotator faceClawToGround() {
         clawRotator.faceGround();
+        return clawRotator;
     }
 
-    public void actuateClawRotatorUsingController(double y) {
+    public PersonalityCoreClawRotator actuateClawRotatorUsingController(double y) {
         clawRotator.actuateUsingController(y);
+        return clawRotator;
     }
 
-    public void setClawRotatorPosition(double target) {
+    public PersonalityCoreClawRotator setClawRotatorPosition(double target) {
         clawRotator.setPosition(target);
+        return clawRotator;
     }
 
-    public void setClawRotatorDegrees(double degrees) {
+    public PersonalityCoreClawRotator setClawRotatorDegrees(double degrees) {
         clawRotator.setDegrees(degrees);
+        return clawRotator;
     }
 
     public PersonalityCoreHook getHook() {
         return hook;
     }
 
-    public void actuateHookUsingController(double y) {
+    public PersonalityCoreHook actuateHookUsingController(double y) {
         hook.actuateUsingController(y);
+        return hook;
     }
 
-    public void setHookPosition(double y) {
+    public PersonalityCoreHook setHookPosition(double y) {
         hook.setPosition(y);
+        return hook;
     }
 
-    public void extendHook() {
+    public PersonalityCoreHook extendHook() {
         hook.extend();
+        return hook;
     }
 
-    public void retractHook() {
+    public PersonalityCoreHook retractHook() {
         hook.retract();
+        return hook;
     }
 
-    public void uprightHook() {
+    public PersonalityCoreHook uprightHook() {
         hook.upright();
+        return hook;
     }
 
     public PersonalityCoreManagementRail getManagementRail() {
         return managementRail;
     }
 
-    public void actuateManagementRailUsingController(double y) {
+    public PersonalityCoreManagementRail actuateManagementRailUsingController(double y) {
         managementRail.actuateUsingController(y);
+        return managementRail;
     }
 
-    public void setManagementRailPower(double p) {
+    public PersonalityCoreManagementRail setManagementRailPower(double p) {
         managementRail.setPower(p);
+        return managementRail;
     }
 
     public DualClaws getClaws() {
         return claws;
     }
 
-    public void toggleClaw(DualClaws.ServoSide side) {
+    public DualClaws toggleClaw(DualClaws.ServoSide side) {
         claws.toggleServo(side);
+        return claws;
     }
 
-    public void closeClaw(DualClaws.ServoSide side) {
+    public DualClaws closeClaw(DualClaws.ServoSide side) {
         claws.closeServo(side);
+        return claws;
     }
 
-    public void openClaw(DualClaws.ServoSide side) {
+    public DualClaws openClaw(DualClaws.ServoSide side) {
         claws.openServo(side);
+        return claws;
     }
 
     public void update() {
