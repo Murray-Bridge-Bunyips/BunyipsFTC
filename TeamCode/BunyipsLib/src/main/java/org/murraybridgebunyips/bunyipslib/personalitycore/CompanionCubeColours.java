@@ -1,9 +1,9 @@
-package org.murraybridgebunyips.bunyipslib.vision;
+package org.murraybridgebunyips.bunyipslib.personalitycore;
 
 import com.acmerobotics.dashboard.config.Config;
 
 @Config
-public class TeamPropColours {
+public class CompanionCubeColours {
     public static int RED_ELEMENT_R = 175;
     public static int RED_ELEMENT_G = 27;
     public static int RED_ELEMENT_B = 2;

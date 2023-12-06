@@ -1,11 +1,11 @@
 package org.murraybridgebunyips.bunyipslib.tests;
 
-import static org.murraybridgebunyips.bunyipslib.vision.TeamPropColours.BLUE_ELEMENT_B;
-import static org.murraybridgebunyips.bunyipslib.vision.TeamPropColours.BLUE_ELEMENT_G;
-import static org.murraybridgebunyips.bunyipslib.vision.TeamPropColours.BLUE_ELEMENT_R;
-import static org.murraybridgebunyips.bunyipslib.vision.TeamPropColours.RED_ELEMENT_B;
-import static org.murraybridgebunyips.bunyipslib.vision.TeamPropColours.RED_ELEMENT_G;
-import static org.murraybridgebunyips.bunyipslib.vision.TeamPropColours.RED_ELEMENT_R;
+import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.BLUE_ELEMENT_B;
+import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.BLUE_ELEMENT_G;
+import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.BLUE_ELEMENT_R;
+import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.RED_ELEMENT_B;
+import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.RED_ELEMENT_G;
+import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.RED_ELEMENT_R;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;

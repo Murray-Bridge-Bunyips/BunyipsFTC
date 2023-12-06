@@ -18,6 +18,7 @@ import java.util.List;
  * refactored to work with our vision system
  *
  * @author FTC 14133, <a href="https://github.com/FTC14133/FTC14133-2023-2024/blob/Detection-TeamElement/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/Subsystems/TeamElementDetection/Pipeline/SplitAveragePipeline.java">...</a>
+ * @noinspection FieldCanBeLocal
  */
 public class TeamProp extends Processor<TeamPropData> {
     private final List<Integer> ELEMENT_COLOR;
@@ -28,6 +29,14 @@ public class TeamProp extends Processor<TeamPropData> {
     private double distance2;
     private double distance3;
     private double max_distance;
+
+    // Patch to avoid leaking memory
+    private Mat zone1;
+    private Mat zone2;
+    private Mat zone3;
+    private Scalar avgColor1;
+    private Scalar avgColor2;
+    private Scalar avgColor3;
 
     /**
      * Vision Processor Wrapper
@@ -46,14 +55,14 @@ public class TeamProp extends Processor<TeamPropData> {
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
         // Rect (top left x, top left y, bottom right x, bottom right y)
-        Mat zone1 = frame.submat(new Rect(0, 0, line1x, Vision.CAMERA_HEIGHT));
-        Mat zone2 = frame.submat(new Rect(line1x, 0, line2x - line1x, Vision.CAMERA_HEIGHT));
-        Mat zone3 = frame.submat(new Rect(line2x, 0, Vision.CAMERA_WIDTH - line2x, Vision.CAMERA_HEIGHT));
+        zone1 = frame.submat(new Rect(0, 0, line1x, Vision.CAMERA_HEIGHT));
+        zone2 = frame.submat(new Rect(line1x, 0, line2x - line1x, Vision.CAMERA_HEIGHT));
+        zone3 = frame.submat(new Rect(line2x, 0, Vision.CAMERA_WIDTH - line2x, Vision.CAMERA_HEIGHT));
 
         // Averaging the colors in the zones
-        Scalar avgColor1 = Core.mean(zone1);
-        Scalar avgColor2 = Core.mean(zone2);
-        Scalar avgColor3 = Core.mean(zone3);
+        avgColor1 = Core.mean(zone1);
+        avgColor2 = Core.mean(zone2);
+        avgColor3 = Core.mean(zone3);
 
         // Putting averaged colors on zones (we can see on camera now)
         zone1.setTo(avgColor1);
