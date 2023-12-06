@@ -59,27 +59,27 @@ public class WheatleyCloseParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
         }
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
-            case RED_LEFT:
+            case STARTING_RED_LEFT:
                 addNewTrajectory(new Pose2d(11.38, -72.59, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(10.99, -37.08), Math.toRadians(91.27))
                         .splineTo(new Vector2d(62.19, -11.57), Math.toRadians(0.00))
                         .build();
                 break;
 
-            case BLUE_LEFT:
+            case STARTING_BLUE_LEFT:
                 addNewTrajectory()
                         .forward(Inches.fromCM(150))
                         .strafeLeft(Inches.fromCM(140))
                         .build();
                 break;
 
-            case RED_RIGHT:
+            case STARTING_RED_RIGHT:
                 addNewTrajectory()
                         .strafeRight(Inches.fromCM(140))
                         .build();
                 break;
 
-            case BLUE_RIGHT:
+            case STARTING_BLUE_RIGHT:
                 addNewTrajectory(new Pose2d(10.79, 71.61, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(11.57, 32.76), Math.toRadians(270.00))
                         .splineTo(new Vector2d(61.41, 12.36), Math.toRadians(0.00))

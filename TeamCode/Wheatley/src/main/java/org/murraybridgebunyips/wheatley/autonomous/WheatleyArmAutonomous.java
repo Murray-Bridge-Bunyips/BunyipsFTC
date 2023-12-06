@@ -54,12 +54,12 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
         }
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
-            case RED_LEFT:
-            case RED_RIGHT:
+            case STARTING_RED_LEFT:
+            case STARTING_RED_RIGHT:
                 processor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);
                 break;
-            case BLUE_LEFT:
-            case BLUE_RIGHT:
+            case STARTING_BLUE_LEFT:
+            case STARTING_BLUE_RIGHT:
                 processor = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
                 break;
         }

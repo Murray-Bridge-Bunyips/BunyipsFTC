@@ -1,7 +1,11 @@
 package org.murraybridgebunyips.bunyipslib
 
+/**
+ * Enum for determining where the robot is starting on the field. This can be used to determine
+ * which autonomous path to take.
+ */
 enum class StartingPositions {
-    RED_LEFT, RED_RIGHT, BLUE_LEFT, BLUE_RIGHT;
+    STARTING_RED_LEFT, STARTING_RED_RIGHT, STARTING_BLUE_LEFT, STARTING_BLUE_RIGHT;
 
     companion object {
         /**
@@ -10,10 +14,10 @@ enum class StartingPositions {
         @JvmStatic
         fun use(): List<OpModeSelection> {
             return listOf(
-                OpModeSelection(RED_LEFT),
-                OpModeSelection(RED_RIGHT),
-                OpModeSelection(BLUE_LEFT),
-                OpModeSelection(BLUE_RIGHT)
+                OpModeSelection(STARTING_RED_LEFT),
+                OpModeSelection(STARTING_RED_RIGHT),
+                OpModeSelection(STARTING_BLUE_LEFT),
+                OpModeSelection(STARTING_BLUE_RIGHT)
             )
         }
     }

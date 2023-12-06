@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
@@ -61,14 +60,14 @@ public class WheatleyFarParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mecan
         }
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
-            case RED_LEFT:
+            case STARTING_RED_LEFT:
                 addNewTrajectory(new Pose2d(-36.05, -71.43, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-36.99, -33.21), Math.toRadians(91.42))
                         .splineTo(new Vector2d(62.16, -12.96), Math.toRadians(0.00))
                         .build();
                 break;
 
-            case BLUE_LEFT:
+            case STARTING_BLUE_LEFT:
 //                addNewTrajectory(new Pose2d(-36.99, 71.05, Math.toRadians(270.00)))
 //                        .splineTo(new Vector2d(-30.00, 37.55), Math.toRadians(-7.71))
 //
@@ -91,7 +90,7 @@ public class WheatleyFarParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mecan
 
                 break;
 
-            case RED_RIGHT:
+            case STARTING_RED_RIGHT:
                 addNewTrajectory(new Pose2d(-36.99, -71.05, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-29.03, -37.55), Math.toRadians(-7.71))
                         .splineTo(new Vector2d(32.07, -37.37), Math.toRadians(-13.92))
@@ -99,7 +98,7 @@ public class WheatleyFarParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mecan
                         .build();
                 break;
 
-            case BLUE_RIGHT:
+            case STARTING_BLUE_RIGHT:
                 addNewTrajectory(new Pose2d(-36.05, 71.43, Math.toRadians(270.00)))
                         .splineTo(new Vector2d(-36.99, 33.21), Math.toRadians(268.58))
                         .splineTo(new Vector2d(61.40, 12.58), Math.toRadians(0.00))
