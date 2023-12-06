@@ -51,12 +51,15 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         );
         if (NullSafety.assertComponentArgs(this, Cannon.class, config.launcher))
             cannon = new Cannon(this, config.launcher);
-        arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
+        arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment,
+                config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel
+        );
     }
 
     @Override
     protected void activeLoop() {
         drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
+
         // Launches the paper plane
         // The triggers are pressure sensitive, apparently.
         // Set to 1 to avoid any slight touches launching a nuke.

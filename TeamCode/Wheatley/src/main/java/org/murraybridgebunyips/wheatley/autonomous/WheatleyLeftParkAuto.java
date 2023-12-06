@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
@@ -29,8 +28,8 @@ import java.util.List;
  * @author Lachlan Paul, 2023
  */
 
-@Autonomous(name = "Close Park Auto")
-public class WheatleyCloseParkAuto extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+@Autonomous(name = "Left Park Auto")
+public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final WheatleyConfig config = new WheatleyConfig();
 
     @Override
@@ -60,29 +59,39 @@ public class WheatleyCloseParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
-                addNewTrajectory(new Pose2d(11.38, -72.59, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(10.99, -37.08), Math.toRadians(91.27))
-                        .splineTo(new Vector2d(62.19, -11.57), Math.toRadians(0.00))
+//                addNewTrajectory(new Pose2d(11.45, -71.05, Math.toRadians(90.00)))
+//                        .splineTo(new Vector2d(62.92, -11.26), Math.toRadians(0.00))
+//                        .build();
+
+                addNewTrajectory(new Pose2d(-36.80, -71.01, Math.toRadians(90.00)))
+                        .splineTo(new Vector2d(-37.19, -31.03), Math.toRadians(90.56))
+                        .splineTo(new Vector2d(62.25, -12.93), Math.toRadians(0.00))
                         .build();
                 break;
 
             case STARTING_BLUE_LEFT:
-                addNewTrajectory()
-                        .forward(Inches.fromCM(150))
-                        .strafeLeft(Inches.fromCM(140))
+                addNewTrajectory(new Pose2d(11.14, 67.23, Math.toRadians(90.00)))
+                        .setReversed(true)
+                        .splineTo(new Vector2d(60.86, 61.26), Math.toRadians(0.00))
+                        .setReversed(false)
                         .build();
                 break;
 
             case STARTING_RED_RIGHT:
-                addNewTrajectory()
-                        .strafeRight(Inches.fromCM(140))
+                addNewTrajectory(new Pose2d(11.93, -71.01, Math.toRadians(90.00)))
+                        .splineTo(new Vector2d(12.73, -34.41), Math.toRadians(92.63))
+                        .splineTo(new Vector2d(65.44, -13.33), Math.toRadians(0.00))
                         .build();
                 break;
 
             case STARTING_BLUE_RIGHT:
-                addNewTrajectory(new Pose2d(10.79, 71.61, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(11.57, 32.76), Math.toRadians(270.00))
-                        .splineTo(new Vector2d(61.41, 12.36), Math.toRadians(0.00))
+                addNewTrajectory(new Pose2d(-37.19, 70.81, Math.toRadians(90.00)))
+                        .setReversed(true)
+                        .splineTo(new Vector2d(-36.00, 28.04), Math.toRadians(-88.41))
+                        .splineTo(new Vector2d(9.55, 7.56), Math.toRadians(-24.21))
+                        // TODO: Put wait here
+                        .splineTo(new Vector2d(60.27, 60.27), Math.toRadians(0.00))
+                        .setReversed(false)
                         .build();
                 break;
         }

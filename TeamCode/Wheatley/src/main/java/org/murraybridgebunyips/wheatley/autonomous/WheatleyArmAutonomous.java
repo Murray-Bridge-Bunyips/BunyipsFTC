@@ -11,12 +11,15 @@ import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.murraybridgebunyips.bunyipslib.DualClaws;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.Vision;
+import org.murraybridgebunyips.bunyipslib.personalitycore.PersonalityCoreArm;
 import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
@@ -24,8 +27,11 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 import java.util.List;
 
+@TeleOp(name = "Arm Autonomous")
 public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final WheatleyConfig config = new WheatleyConfig();
+    private MecanumDrive drive;
+    private PersonalityCoreArm arm;
     private GetTeamPropTask initTask;
     private Vision vision;
     private TeamProp processor;
@@ -33,6 +39,13 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
     @Override
     protected void onInitialisation() {
         config.init(this);
+        arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment,
+                config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel
+        );
+        drive = new MecanumDrive(
+                this, config.driveConstants, config.mecanumCoefficients,
+                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
+        );
         initTask = new GetTeamPropTask(this, vision);
         vision = new Vision(this, config.webcam);
     }
@@ -74,9 +87,12 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
 
         switch (initTask.getPosition()) {
             case LEFT:
-                addNewTrajectory(new Pose2d(-35.81, -71.43, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(-48.13, -45.85), Math.toRadians(90.00))
+                addNewTrajectory(new Pose2d(-36.43, -71.81, Math.toRadians(90.00)))
+                        .splineTo(new Vector2d(-47.21, -45.13), Math.toRadians(90.00))
                         .build();
+
+                arm.faceClawToGround();
+                arm.toggleClaw(DualClaws.ServoSide.LEFT);
 
             case RIGHT:
 
