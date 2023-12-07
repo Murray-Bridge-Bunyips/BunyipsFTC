@@ -32,9 +32,9 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     // Servo values for the dual claw at the front
     public static double LEFT_CLAW_OPEN = 0.0;
-    public static double RIGHT_CLAW_OPEN = 0.0;
+    public static double RIGHT_CLAW_OPEN = 1.0;
     public static double LEFT_CLAW_CLOSED = 1.0;
-    public static double RIGHT_CLAW_CLOSED = 1.0;
+    public static double RIGHT_CLAW_CLOSED = 0.0;
 
     public PersonalityCoreArm(@NonNull BunyipsOpMode opMode, CRServo pixelMotion, Servo pixelAlignment, Servo suspenderHook, DcMotorEx suspenderActuator, Servo leftPixel, Servo rightPixel) {
         super(opMode);

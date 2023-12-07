@@ -71,7 +71,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         }
 
         // Reset cannon for debugging purposes
-        if (gamepad1.options) {
+        if (gamepad1.back) {
             // "Undelete, undelete! Where's the undelete button?"
             cannon.reset();
         }
