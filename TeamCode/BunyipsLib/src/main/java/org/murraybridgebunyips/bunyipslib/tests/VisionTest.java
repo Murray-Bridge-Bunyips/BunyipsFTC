@@ -56,11 +56,11 @@ public class VisionTest extends BunyipsOpMode {
                 processors.add(at);
                 break;
             case TEAMPROP_RED:
-                TeamProp tpr = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);
+                TeamProp tpr = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B, true);
                 processors.add(tpr);
                 break;
             case TEAMPROP_BLUE:
-                TeamProp tpb = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
+                TeamProp tpb = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B, true);
                 processors.add(tpb);
                 break;
         }

@@ -38,11 +38,11 @@ public class PersonalityCoreHook extends BunyipsComponent {
     }
 
     public void extend() {
-        target = RETRACTED;
+        target = EXTENDED;
     }
 
     public void retract() {
-        target = EXTENDED;
+        target = RETRACTED;
     }
 
     public void upright() {

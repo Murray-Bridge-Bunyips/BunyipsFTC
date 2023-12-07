@@ -31,6 +31,14 @@ public class PersonalityCoreClawMover extends BunyipsComponent {
         this.power = Range.clip(-y, -1.0, 1.0);
     }
 
+    public void actuateUsingDpad(boolean up, boolean down) {
+        if (!up && !down) {
+            this.power = 0;
+            return;
+        }
+        this.power = up ? 1 : -1;
+    }
+
     public void setPower(double power) {
         if (currentTimeout != 0) return;
         this.power = Range.clip(power, -1.0, 1.0);

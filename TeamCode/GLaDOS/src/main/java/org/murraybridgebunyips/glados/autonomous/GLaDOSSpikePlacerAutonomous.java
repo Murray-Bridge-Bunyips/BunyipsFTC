@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.DualClaws;
 import org.murraybridgebunyips.bunyipslib.DualDeadwheelMecanumDrive;
@@ -31,6 +32,7 @@ import java.util.List;
 /**
  * Autonomous for placing a pixel on the spike mark indicated by the team prop.
  */
+@Autonomous(name = "Spike Mark Placer")
 public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private PersonalityCoreArm arm;
@@ -41,8 +43,8 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
     @Override
     protected void onInitialisation() {
         config.init(this);
-        initTask = new GetTeamPropTask(this, vision);
         vision = new Vision(this, config.webcam);
+        initTask = new GetTeamPropTask(this, vision);
         drive = new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
         arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
     }
@@ -54,7 +56,7 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
 
     @Override
     protected AutoTask setInitTask() {
-        return null;
+        return initTask;
     }
 
     @Override
@@ -66,12 +68,12 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
             case STARTING_RED_RIGHT:
-                processor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);
+                processor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B, true);
                 break;
 
             case STARTING_BLUE_LEFT:
             case STARTING_BLUE_RIGHT:
-                processor = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
+                processor = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B, true);
                 break;
         }
         vision.init(processor);
@@ -99,10 +101,10 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
                 break;
 
             case CENTER:
-                addNewTrajectory()
-                        .forward(Inches.fromCM(120))
-                        .addDisplacementMarker(() -> arm.openClaw(DualClaws.ServoSide.LEFT).update())
+                addNewTrajectory(new Pose2d(10.31, -61.22, Math.toRadians(181.67)))
+                        .lineToLinearHeading(new Pose2d(12.18, -39.36, Math.toRadians(87.22)))
                         .build();
+                break;
         }
     }
 }

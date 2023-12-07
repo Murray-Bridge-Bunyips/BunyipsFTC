@@ -90,10 +90,10 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         }
 
         // Aperture Science High Energy Pellet Launcher
-        if (gamepad2.right_trigger == 1.0) {
+        if (gamepad1.right_trigger == 1.0) {
             cannon.fire();
         }
-        if (gamepad2.back) {
+        if (gamepad1.back) {
             cannon.reset();
         }
 
@@ -118,6 +118,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
 
         // Dispatch stateful changes
         drive.update();
+        arm.update();
         cannon.update();
     }
 }

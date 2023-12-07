@@ -90,6 +90,11 @@ public class PersonalityCoreArm extends BunyipsComponent {
         return clawMover;
     }
 
+    public PersonalityCoreClawMover actuateClawMoverUsingDpad(boolean up, boolean down) {
+        clawMover.actuateUsingDpad(up, down);
+        return clawMover;
+    }
+
     /**
      * Directly access the claw rotator submodule.
      * @return PersonalityCoreClawRotator

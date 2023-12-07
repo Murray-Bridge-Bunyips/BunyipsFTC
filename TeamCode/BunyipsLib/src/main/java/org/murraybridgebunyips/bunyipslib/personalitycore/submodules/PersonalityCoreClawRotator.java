@@ -36,7 +36,7 @@ public class PersonalityCoreClawRotator extends BunyipsComponent {
     }
 
     public void actuateUsingController(double y) {
-        this.target -= y / 5;
+        this.target -= y / 12;
         this.target = Range.clip(this.target, 0.0, 1.0);
     }
 

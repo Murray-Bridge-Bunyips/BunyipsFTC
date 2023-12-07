@@ -89,17 +89,18 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         } else if (gamepad2.a) {
             arm.faceClawToGround();
         }
+        arm.actuateClawRotatorUsingController(gamepad2.right_stick_y);
 
         // Management rail controls
         arm.actuateManagementRailUsingController(gamepad2.left_stick_y);
 
         // Claw mover controls
-        arm.actuateClawMoverUsingController(gamepad2.right_stick_y);
+        arm.actuateClawMoverUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);
 
         // Hook controls
-        if (gamepad2.dpad_up) {
+        if (gamepad1.dpad_up) {
             arm.extendHook();
-        } else if (gamepad2.dpad_down) {
+        } else if (gamepad1.dpad_down) {
             arm.retractHook();
         }
 

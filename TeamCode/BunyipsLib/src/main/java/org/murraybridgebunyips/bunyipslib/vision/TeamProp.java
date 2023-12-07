@@ -24,6 +24,7 @@ public class TeamProp extends Processor<TeamPropData> {
     private final List<Integer> ELEMENT_COLOR;
     private final int line1x = Vision.CAMERA_WIDTH / 3;
     private final int line2x = (Vision.CAMERA_WIDTH / 3) * 2;
+    private boolean isFlipped;
 
     private double distance1;
     private double distance2;
@@ -47,9 +48,10 @@ public class TeamProp extends Processor<TeamPropData> {
      * @param g Green value of the element color (0-255)
      * @param b Blue value of the element color (0-255)
      */
-    public TeamProp(int r, int g, int b) {
+    public TeamProp(int r, int g, int b, boolean isFlipped) {
         super(TeamPropData.class);
         ELEMENT_COLOR = Arrays.asList(r, g, b);
+        this.isFlipped = isFlipped;
     }
 
     @Override
@@ -110,11 +112,17 @@ public class TeamProp extends Processor<TeamPropData> {
     public void tick() {
         data.clear();
         if (max_distance == distance1) {
-            data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));
+            if (isFlipped)
+                data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
+            else
+                data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));
         } else if (max_distance == distance2) {
             data.add(new TeamPropData(Positions.CENTER, distance1, distance2, distance3, max_distance));
         } else {
-            data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
+            if (isFlipped)
+                data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));
+            else
+                data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
         }
     }
 

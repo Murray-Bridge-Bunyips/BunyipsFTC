@@ -104,15 +104,17 @@ public class WheatleyConfig extends RobotConfig {
         suspenderActuator = (DcMotorEx) getHardware("sa", DcMotorEx.class);
         suspenderHook = (Servo) getHardware("sh", Servo.class);
         if (suspenderHook != null)
-            suspenderHook.scaleRange(0.25, 1);
+            suspenderHook.scaleRange(0.6, 1);
         if (suspenderActuator != null) {
-            suspenderActuator.setDirection(DcMotorSimple.Direction.FORWARD);
+            suspenderActuator.setDirection(DcMotorSimple.Direction.REVERSE);
             suspenderActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
         // Pixel manipulation system
         pixelMotion = (CRServo) getHardware("pm", CRServo.class);
         pixelAlignment = (Servo) getHardware("al", Servo.class);
+        if (pixelAlignment != null)
+            pixelAlignment.scaleRange(0.37, 1.0);
         leftPixel = (Servo) getHardware("ls", Servo.class);
         rightPixel = (Servo) getHardware("rs", Servo.class);
 
