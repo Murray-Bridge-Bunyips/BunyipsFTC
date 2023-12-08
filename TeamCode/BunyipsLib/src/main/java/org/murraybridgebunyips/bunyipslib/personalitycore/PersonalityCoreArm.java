@@ -245,6 +245,14 @@ public class PersonalityCoreArm extends BunyipsComponent {
     }
 
     /**
+     * Determine if the management rail is on an automatic runMangementRailFor
+     * @return boolean
+     */
+    public boolean isManagementRailBusy() {
+        return managementRail.isBusy();
+    }
+
+    /**
      * Directly access the dual claw submodule.
      * @return DualClaws
      */

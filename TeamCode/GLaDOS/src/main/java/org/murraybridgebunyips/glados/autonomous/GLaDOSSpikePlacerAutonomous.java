@@ -27,6 +27,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.CallbackTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
+import org.murraybridgebunyips.glados.tasks.GLaDOSRunManagementRailTask;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
     private GetTeamPropTask initTask;
     private Vision vision;
     private TeamProp processor;
+    private StartingPositions startingPosition;
 
     @Override
     protected void onInitialisation() {
@@ -66,7 +68,9 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
             return;
         }
 
-        switch ((StartingPositions) selectedOpMode.getObj()) {
+        this.startingPosition = (StartingPositions) selectedOpMode.getObj();
+
+        switch (startingPosition) {
             case STARTING_RED_LEFT:
             case STARTING_RED_RIGHT:
                 processor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B, true);
@@ -79,6 +83,10 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
         }
         vision.init(processor);
         initTask.setTeamProp(processor);
+
+        addTask(new CallbackTask(this, () -> arm.setClawRotatorDegrees(10).update()));
+        addTask(new GLaDOSRunManagementRailTask(this, 1.0, arm.getManagementRail(), 1.0));
+        addTask(new CallbackTask(this, () -> arm.openClaw(DualClaws.ServoSide.LEFT).update()));
     }
 
     @Override
@@ -88,22 +96,29 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
 
         switch (initTask.getPosition()) {
             case LEFT:
+
                 break;
             case CENTER:
-                addNewTrajectory(new Pose2d(8.75, -63.88, Math.toRadians(180.00)))
-                        .lineTo(new Vector2d(12.96, -47.64))
-                        .lineToLinearHeading(new Pose2d(12.18, -41.08, Math.toRadians(90.00)))
-                        .build();
+//                addNewTrajectory(new Pose2d(11.40, -62.00, Math.toRadians(180.00)))
+//                        .lineToLinearHeading(new Pose2d(16.40, -48.10, Math.toRadians(90.00)))
+//                        .lineToLinearHeading(new Pose2d(11.71, -34.52, Math.toRadians(90.00)))
+//                        .buildWithPriority();
+                addNewTrajectory()
+                        .turn(Math.toRadians(-90.0))
+                        .buildWithPriority();
+                break;
             case RIGHT:
-                addNewTrajectory(new Pose2d(10.93, -62.94, Math.toRadians(180.00)))
-                        .addDisplacementMarker(() -> arm.setClawRotatorDegrees(10).update())
-                        .lineToLinearHeading(new Pose2d(15.93, -41.08, Math.toRadians(90.00)))
-                        .back(5)
-                        .build();
-                addTask(new CallbackTask(this, () -> arm.openClaw(DualClaws.ServoSide.LEFT).update()));
-                addTask(new CallbackTask(this, () -> arm.runManagementRailFor(0.5, 0.4).update()));
+//                addNewTrajectory(new Pose2d(11.40, -62.00, Math.toRadians(180.00)))
+//                        .lineToSplineHeading(new Pose2d(24.99, -43.42, Math.toRadians(90.00)))
+//                        .buildWithPriority();
+                addNewTrajectory()
+                        .turn(Math.toRadians(-180.0))
+                        .buildWithPriority();
                 break;
         }
 
+        addNewTrajectory(new Pose2d(0, 0, Math.toRadians(180.00)))
+                .lineTo(new Vector2d(0, Inches.fromCM(-83)))
+                .buildWithPriority();
     }
 }

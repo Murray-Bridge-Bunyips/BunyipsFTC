@@ -44,6 +44,10 @@ public class PersonalityCoreManagementRail extends BunyipsComponent {
         timer.reset();
     }
 
+    public boolean isBusy() {
+        return currentTimeout != 0;
+    }
+
     public void update() {
         if (currentTimeout != 0) {
             if (timer.seconds() >= currentTimeout) currentTimeout = 0;
