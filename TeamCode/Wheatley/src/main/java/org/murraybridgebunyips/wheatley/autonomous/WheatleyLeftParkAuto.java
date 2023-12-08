@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
@@ -68,9 +69,7 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
 
             case STARTING_BLUE_LEFT:
                 addNewTrajectory(new Pose2d(11.14, 67.23, Math.toRadians(90.00)))
-                        .setReversed(true)
-                        .splineTo(new Vector2d(60.86, 61.26), Math.toRadians(0.00))
-                        .setReversed(false)
+                        .strafeLeft(Inches.fromCM(30))
                         .build();
                 break;
 
@@ -79,17 +78,24 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
                         .splineTo(new Vector2d(12.73, -34.41), Math.toRadians(92.63))
                         .splineTo(new Vector2d(65.44, -13.33), Math.toRadians(0.00))
                         .build();
+
+                // Use this code if above is shitty and you don't have time to fix
+                // Make necessary edits though
+//                addNewTrajectory()
+//                        .forward(Inches.fromCM(100))
+//                        .strafeRight(Inches.fromCM(50))
+//                        .build();
                 break;
 
             case STARTING_BLUE_RIGHT:
                 addNewTrajectory(new Pose2d(-37.19, 70.81, Math.toRadians(90.00)))
-                        .setReversed(true)
+//                        .setReversed(true)
                         .splineTo(new Vector2d(-36.00, 28.04), Math.toRadians(-88.41))
                         .splineTo(new Vector2d(9.55, 7.56), Math.toRadians(-24.21))
                         // TODO: Test wait here
                         .waitSeconds(10)
                         .splineTo(new Vector2d(60.27, 60.27), Math.toRadians(0.00))
-                        .setReversed(false)
+//                        .setReversed(false)
                         .build();
                 break;
         }

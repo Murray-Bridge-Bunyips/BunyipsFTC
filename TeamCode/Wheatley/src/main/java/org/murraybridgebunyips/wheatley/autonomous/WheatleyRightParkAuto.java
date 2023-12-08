@@ -77,6 +77,13 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
                         .splineTo(new Vector2d(61.26, 11.93), Math.toRadians(0.00))
                         .setReversed(false)
                         .build();
+
+                // Use this code if above is shitty and you don't have time to fix
+                // Make necessary edits though
+//                addNewTrajectory()
+//                        .forward(Inches.fromCM(100))
+//                        .strafeLeft(Inches.fromCM(50))
+//                        .build();
                 break;
 
             case STARTING_RED_RIGHT:
