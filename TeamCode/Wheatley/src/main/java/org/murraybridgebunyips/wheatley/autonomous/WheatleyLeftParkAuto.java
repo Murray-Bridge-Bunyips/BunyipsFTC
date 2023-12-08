@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * Parking autonomous for Wheatley
- * This Auto is for when you are CLOSEST to the backdrop
+ * This Auto is for when you are parking on the LEFT of your alliance backdrop
  * Make sure to coordinate with your alliance before selecting an Autonomous
  * <p></p>
  * A for Short Red<p></p>
@@ -59,13 +59,10 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
-//                addNewTrajectory(new Pose2d(11.45, -71.05, Math.toRadians(90.00)))
-//                        .splineTo(new Vector2d(62.92, -11.26), Math.toRadians(0.00))
-//                        .build();
-
                 addNewTrajectory(new Pose2d(-36.80, -71.01, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(-37.19, -31.03), Math.toRadians(90.56))
-                        .splineTo(new Vector2d(62.25, -12.93), Math.toRadians(0.00))
+                        .waitSeconds(15)
+                        .splineTo(new Vector2d(-60.19, -31.03), Math.toRadians(100.56))
+                        .splineTo(new Vector2d(100.25, -12.93), Math.toRadians(-50))
                         .build();
                 break;
 
@@ -89,7 +86,8 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
                         .setReversed(true)
                         .splineTo(new Vector2d(-36.00, 28.04), Math.toRadians(-88.41))
                         .splineTo(new Vector2d(9.55, 7.56), Math.toRadians(-24.21))
-                        // TODO: Put wait here
+                        // TODO: Test wait here
+                        .waitSeconds(10)
                         .splineTo(new Vector2d(60.27, 60.27), Math.toRadians(0.00))
                         .setReversed(false)
                         .build();
