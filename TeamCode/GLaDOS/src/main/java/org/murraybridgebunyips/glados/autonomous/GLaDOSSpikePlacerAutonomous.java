@@ -23,6 +23,7 @@ import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.personalitycore.PersonalityCoreArm;
 import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
+import org.murraybridgebunyips.bunyipslib.tasks.CallbackTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
@@ -87,24 +88,22 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
 
         switch (initTask.getPosition()) {
             case LEFT:
-                addNewTrajectory(new Pose2d(-35.77, -61.22, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(-45.61, -34.52), Math.toRadians(110.22))
-                        .addDisplacementMarker(() -> arm.openClaw(DualClaws.ServoSide.LEFT).update())
-                        .build();
                 break;
-
-            case RIGHT:
-                addNewTrajectory(new Pose2d(-36.86, -61.38, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(-28.11, -39.51), Math.toRadians(68.20))
-                        .addDisplacementMarker(() -> arm.openClaw(DualClaws.ServoSide.LEFT).update())
-                        .build();
-                break;
-
             case CENTER:
-                addNewTrajectory(new Pose2d(10.31, -61.22, Math.toRadians(181.67)))
-                        .lineToLinearHeading(new Pose2d(12.18, -39.36, Math.toRadians(87.22)))
+                addNewTrajectory(new Pose2d(8.75, -63.88, Math.toRadians(180.00)))
+                        .lineTo(new Vector2d(12.96, -47.64))
+                        .lineToLinearHeading(new Pose2d(12.18, -41.08, Math.toRadians(90.00)))
                         .build();
+            case RIGHT:
+                addNewTrajectory(new Pose2d(10.93, -62.94, Math.toRadians(180.00)))
+                        .addDisplacementMarker(() -> arm.setClawRotatorDegrees(10).update())
+                        .lineToLinearHeading(new Pose2d(15.93, -41.08, Math.toRadians(90.00)))
+                        .back(5)
+                        .build();
+                addTask(new CallbackTask(this, () -> arm.openClaw(DualClaws.ServoSide.LEFT).update()));
+                addTask(new CallbackTask(this, () -> arm.runManagementRailFor(0.5, 0.4).update()));
                 break;
         }
+
     }
 }

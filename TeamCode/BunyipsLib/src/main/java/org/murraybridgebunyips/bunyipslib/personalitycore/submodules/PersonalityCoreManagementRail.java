@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsComponent;
@@ -16,7 +17,9 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 public class PersonalityCoreManagementRail extends BunyipsComponent {
     private static final double HOLDING_POWER = 0.3;
     private final DcMotorEx motor;
+    private double currentTimeout;
     private double power;
+    private final ElapsedTime timer = new ElapsedTime();
 
     public PersonalityCoreManagementRail(@NonNull BunyipsOpMode opMode, DcMotorEx motor) {
         super(opMode);
@@ -27,11 +30,6 @@ public class PersonalityCoreManagementRail extends BunyipsComponent {
         motor.setTargetPosition(motor.getCurrentPosition());
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
-
-    // Autonomous will never have to use this class, so we will just have TeleOp methods
-    // That of course assuming our teammate doesn't stack tens of pixels in the first few seconds,
-    // in which case our contributions would be negligible anyways
-    // This may change if we want to pick anything up in Auto
     public void actuateUsingController(double y) {
         power = Range.clip(-y, -1.0, 1.0);
     }
@@ -40,7 +38,17 @@ public class PersonalityCoreManagementRail extends BunyipsComponent {
         power = Range.clip(p, -1.0, 1.0);
     }
 
+    public void runFor(double seconds, double power) {
+        currentTimeout = seconds;
+        this.power = power;
+        timer.reset();
+    }
+
     public void update() {
+        if (currentTimeout != 0) {
+            if (timer.seconds() >= currentTimeout) currentTimeout = 0;
+            return;
+        }
         if (power == 0.0) {
             // Hold arm in place
             motor.setTargetPosition(motor.getCurrentPosition());

@@ -3,6 +3,7 @@ package org.murraybridgebunyips.bunyipslib.vision;
 import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.data.TeamPropData;
 import org.opencv.core.Core;
@@ -74,7 +75,7 @@ public class TeamProp extends Processor<TeamPropData> {
         distance1 = color_distance(avgColor1, ELEMENT_COLOR);
         distance2 = color_distance(avgColor2, ELEMENT_COLOR);
         distance3 = color_distance(avgColor3, ELEMENT_COLOR);
-        max_distance = Math.min(distance3, Math.min(distance1, distance2));
+        max_distance = Math.max(distance3, Math.max(distance1, distance2));
 
         return frame;
     }
@@ -111,18 +112,19 @@ public class TeamProp extends Processor<TeamPropData> {
     @Override
     public void tick() {
         data.clear();
+        Dbg.log(String.valueOf((distance1 + distance3) / distance2));
         if (max_distance == distance1) {
             if (isFlipped)
-                data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
-            else
                 data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));
-        } else if (max_distance == distance2) {
+            else
+                data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
+        } else if ((distance1 + distance3) / distance2 > 9) {
             data.add(new TeamPropData(Positions.CENTER, distance1, distance2, distance3, max_distance));
         } else {
             if (isFlipped)
-                data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));
-            else
                 data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
+            else
+                data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));
         }
     }
 

@@ -88,6 +88,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         } else if (gamepad2.a) {
             arm.faceClawToGround();
         }
+        arm.actuateClawRotatorUsingController(gamepad2.right_stick_y);
 
         // Aperture Science High Energy Pellet Launcher
         if (gamepad1.right_trigger == 1.0) {
@@ -101,12 +102,12 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         arm.actuateManagementRailUsingController(gamepad2.left_stick_y);
 
         // Aperture Science Gamepad-Enhanced Precision Pixel Grabbing Pixel Placing Pixel Claw Mover
-        arm.actuateClawMoverUsingController(gamepad2.right_stick_y);
+        arm.actuateClawMoverUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);
 
         // Aperture Science Self-Suspending Suspender Suspension System
-        if (gamepad2.dpad_up) {
+        if (gamepad1.dpad_up) {
             arm.extendHook();
-        } else if (gamepad2.dpad_down) {
+        } else if (gamepad1.dpad_down) {
             arm.retractHook();
         }
 
