@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.murraybridgebunyips.bunyipslib.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
@@ -23,6 +24,7 @@ public class GLaDOSRightPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDr
     @Override
     protected void onInitialisation() {
         config.init(this);
+        drive = new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
     }
 
     @Override
@@ -64,6 +66,7 @@ public class GLaDOSRightPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDr
                         .build();
                 break;
             case STARTING_BLUE_RIGHT:
+                // worlds worst autonomous
                 addNewTrajectory(new Pose2d(-38.89, 63.10, Math.toRadians(270.00)))
                         .lineToLinearHeading(new Pose2d(-38.73, 9.21, Math.toRadians(360.00)))
                         .lineTo(new Vector2d(72.62, 11.09))
