@@ -56,7 +56,7 @@ public class SensorKLNavxMicro extends LinearOpMode {
     /** In this sample, for illustration purposes we use two interfaces on the one gyro object.
      * That's likely atypical: you'll probably use one or the other in any given situation,
      * depending on what you're trying to do. {@link IntegratingGyroscope} (and it's base interface,
-     * {@link Gyroscope}) are org.firstinspires.ftc.teamcode.common interfaces supported by possibly several different gyro
+     * {@link Gyroscope}) are common interfaces supported by possibly several different gyro
      * implementations. {@link NavxMicroNavigationSensor}, by contrast, provides functionality that
      * is unique to the navX Micro sensor.
      */
