@@ -60,13 +60,13 @@ public class GLaDOSRightPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDr
                         .build();
                 break;
             case STARTING_BLUE_LEFT:
-                addNewTrajectory(new Pose2d(14.68, 65.13, Math.toRadians(270.00)))
-                        .splineToLinearHeading(new Pose2d(37.64, 34.36, Math.toRadians(-90.00)), Math.toRadians(-90.00))
-                        .splineTo(new Vector2d(72.78, 11.25), Math.toRadians(0.00))
-                        .build();
+                // worlds worst autonomous on blue right
+//                addNewTrajectory(new Pose2d(14.68, 65.13, Math.toRadians(270.00)))
+//                        .splineToLinearHeading(new Pose2d(37.64, 34.36, Math.toRadians(-90.00)), Math.toRadians(-90.00))
+//                        .splineTo(new Vector2d(72.78, 11.25), Math.toRadians(0.00))
+//                        .build();
                 break;
             case STARTING_BLUE_RIGHT:
-                // worlds worst autonomous
                 addNewTrajectory(new Pose2d(-38.89, 63.10, Math.toRadians(270.00)))
                         .lineToLinearHeading(new Pose2d(-38.73, 9.21, Math.toRadians(360.00)))
                         .lineTo(new Vector2d(72.62, 11.09))
