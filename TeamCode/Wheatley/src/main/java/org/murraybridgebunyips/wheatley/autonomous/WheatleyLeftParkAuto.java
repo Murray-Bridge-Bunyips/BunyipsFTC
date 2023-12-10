@@ -68,23 +68,27 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
                 break;
 
             case STARTING_BLUE_LEFT:
-                addNewTrajectory(new Pose2d(11.14, 67.23, Math.toRadians(90.00)))
-                        .strafeLeft(Inches.fromCM(30))
+                addNewTrajectory()
+                        .strafeLeft(Inches.fromCM(116.84))
+                        .build();
+
+                addNewTrajectory()
+                        .strafeRight(Inches.fromCM(10))
                         .build();
                 break;
 
             case STARTING_RED_RIGHT:
-                addNewTrajectory(new Pose2d(11.93, -71.01, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(12.73, -34.41), Math.toRadians(92.63))
-                        .splineTo(new Vector2d(65.44, -13.33), Math.toRadians(0.00))
+                addNewTrajectory()
+                        .forward(Inches.fromCM(116.84))
                         .build();
 
-                // Use this code if above is shitty and you don't have time to fix
-                // Make necessary edits though
-//                addNewTrajectory()
-//                        .forward(Inches.fromCM(100))
-//                        .strafeRight(Inches.fromCM(50))
-//                        .build();
+                addNewTrajectory()
+                        .strafeRight(Inches.fromCM(116.84))
+                        .build();
+
+                addNewTrajectory()
+                        .strafeLeft(Inches.fromCM(5))
+                        .build();
                 break;
 
             case STARTING_BLUE_RIGHT:

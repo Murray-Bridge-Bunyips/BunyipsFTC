@@ -6,6 +6,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
@@ -71,24 +72,26 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
                 break;
 
             case STARTING_BLUE_LEFT:
-                addNewTrajectory(new Pose2d(11.54, 63.05, Math.toRadians(90.00)))
-                        .setReversed(true)
-                        .splineTo(new Vector2d(11.73, 32.82), Math.toRadians(269.70))
-                        .splineTo(new Vector2d(61.26, 11.93), Math.toRadians(0.00))
-                        .setReversed(false)
+                addNewTrajectory()
+                        .forward(Inches.fromCM(116.84))
                         .build();
 
-                // Use this code if above is shitty and you don't have time to fix
-                // Make necessary edits though
-//                addNewTrajectory()
-//                        .forward(Inches.fromCM(100))
-//                        .strafeLeft(Inches.fromCM(50))
-//                        .build();
+                addNewTrajectory()
+                        .strafeLeft(Inches.fromCM(116.84))
+                        .build();
+
+                addNewTrajectory()
+                        .strafeRight(Inches.fromCM(5))
+                        .build();
                 break;
 
             case STARTING_RED_RIGHT:
-                addNewTrajectory(new Pose2d(10.54, -70.61, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(60.86, -61.46), Math.toRadians(0.00))
+                addNewTrajectory()
+                        .strafeRight(Inches.fromCM(116.84))
+                        .build();
+
+                addNewTrajectory()
+                        .strafeLeft(Inches.fromCM(10))
                         .build();
                 break;
 
