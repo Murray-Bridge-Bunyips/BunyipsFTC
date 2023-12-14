@@ -37,6 +37,10 @@ public class ExampleLift extends BunyipsComponent {
         liftPositionPointer++;
     }
 
+    public boolean isBusy() {
+        return liftMotor.isBusy();
+    }
+
     public void liftDown() {
         // Do the opposite of liftUp()
         if (liftPositionPointer <= 0) {

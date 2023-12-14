@@ -1,8 +1,12 @@
 package org.murraybridgebunyips.bunyipslib.example.examplerobot.teleop;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.Controller;
+import org.murraybridgebunyips.bunyipslib.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.TankDrive;
 import org.murraybridgebunyips.bunyipslib.example.examplerobot.components.ExampleConfig;
-import org.murraybridgebunyips.bunyipslib.example.examplerobot.components.ExampleDrive;
 
 /**
  * Introduction to using BunyipsOpMode as the top-level component for a robot OpMode.
@@ -17,7 +21,7 @@ public class ExampleTeleOp extends BunyipsOpMode {
     // You MUST make a new instance of ExampleConfig as a class member
     // This is because the newConfig static method does not make an instance to work with
     private final ExampleConfig config = new ExampleConfig();
-    private ExampleDrive drive;
+    private TankDrive drive;
 
     // onInit and activeLoop are the two functions that you will need to implement.
     @Override
@@ -27,7 +31,7 @@ public class ExampleTeleOp extends BunyipsOpMode {
         config.init(this);
 
         // Initialise all your components! e.g.
-        drive = new ExampleDrive(this, config.leftMotor, config.rightMotor);
+        drive = new TankDrive(this, config.driveConstants, config.coefficients, config.imu, config.leftFrontMotor, config.leftBackMotor, config.leftBackMotor, config.rightBackMotor);
     }
 
     @Override
@@ -35,7 +39,7 @@ public class ExampleTeleOp extends BunyipsOpMode {
         // You can access gamepad inputs using the built-in gamepad functions, e.g.
         // gamepad1.left_stick_x
 
-        drive.run(gamepad1.left_stick_y);
+        drive.setWeightedDrivePower(Controller.makeRobotPose(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x));
         drive.update();
 
         // ActiveLoop will run every hardware cycle, therefore this code will continually set motor

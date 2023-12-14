@@ -54,7 +54,7 @@ public class TankRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.TankD
 
     private final VoltageSensor batteryVoltageSensor;
 
-    public TankRoadRunnerDrive(DriveConstants constants, TankCoefficients coefficients, Localizer localizer, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
+    public TankRoadRunnerDrive(DriveConstants constants, TankCoefficients coefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
         super(constants.kV, constants.kA, constants.kStatic, constants.TRACK_WIDTH);
 
         follower = new TankPIDVAFollower(coefficients.AXIAL_PID, coefficients.CROSS_TRACK_PID,
@@ -98,9 +98,6 @@ public class TankRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.TankD
         if (constants.RUN_USING_ENCODER && constants.MOTOR_VELO_PID != null) {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, constants.MOTOR_VELO_PID);
         }
-
-        if (localizer != null)
-            setLocalizer(localizer);
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(
                 constants.RUN_USING_ENCODER, follower, coefficients.HEADING_PID, batteryVoltageSensor,

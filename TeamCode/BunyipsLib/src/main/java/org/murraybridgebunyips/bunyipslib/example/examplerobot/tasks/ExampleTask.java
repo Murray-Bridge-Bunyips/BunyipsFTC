@@ -3,24 +3,25 @@ package org.murraybridgebunyips.bunyipslib.example.examplerobot.tasks;
 import androidx.annotation.NonNull;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.example.examplerobot.components.ExampleDrive;
+import org.murraybridgebunyips.bunyipslib.Dbg;
+import org.murraybridgebunyips.bunyipslib.example.examplerobot.components.ExampleLift;
 import org.murraybridgebunyips.bunyipslib.tasks.Task;
 
 // Tasks are used to run OpMode code in Autonomous sections. It works by giving each task a specific
 // amount of time to run, where it has it's own loop to run code in. This is useful for running
 // specific tasks, such as moving the drive system for a certain amount of time, or until a certain
 // condition is met.
-public class ExampleTimeDriveTask extends Task {
+public class ExampleTask extends Task {
     // You will need to store any COMPONENTS you wish to control in your task as a local instance
-    private final ExampleDrive drive;
+    private final ExampleLift lift;
 
     // If you extend task without `time`, your task will never call itself finished!
-    public ExampleTimeDriveTask(@NonNull BunyipsOpMode opMode, double time, ExampleDrive drive) {
+    public ExampleTask(@NonNull BunyipsOpMode opMode, double time, ExampleLift lift) {
         // Here, we allow the superclass to handle time and opMode. These are required.
         super(opMode, time);
 
         // Inside the constructor you can pass whatever you wish to control, for example, a drive
-        this.drive = drive;
+        this.lift = lift;
     }
 
     // Tasks have an init() method, which will run code once upon starting
@@ -28,13 +29,13 @@ public class ExampleTimeDriveTask extends Task {
     @Override
     public void init() {
         // Init stuff here
+        lift.liftUp();
     }
 
     // The run() method will run until the task timer runs out, or the finished state is set to true.
     @Override
     public void run() {
-        drive.run(0.5);
-        drive.update();
+        lift.update();
     }
 
     // Tasks have an optional isTaskFinished() method you can override, which will be the condition
@@ -46,12 +47,12 @@ public class ExampleTimeDriveTask extends Task {
         // it. If you wish to check it yourself, your overhead caller should be checking isFinished(),
         // which internally checks isTaskFinished() and the timeout.
         // AutonomousBunyipsOpMode handles this automatically.
-        return drive.isAtPosition(1000.0);
+        return !lift.isBusy();
     }
 
     @Override
     public void onFinish() {
         // Runs as soon as the task is deemed 'finished'
-        drive.run(0.0);
+        Dbg.log("finished running exampletask");
     }
 }
