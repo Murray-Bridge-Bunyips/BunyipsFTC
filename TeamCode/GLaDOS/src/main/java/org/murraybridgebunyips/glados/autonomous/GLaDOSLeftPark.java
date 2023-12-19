@@ -17,14 +17,18 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 import java.util.List;
 
-@Autonomous(name="Left Park")
+@Autonomous(name = "Left Park")
 public class GLaDOSLeftPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
 
     @Override
     protected void onInitialisation() {
         config.init(this);
-        drive = new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
+    }
+
+    @Override
+    protected MecanumDrive setDrive() {
+        return new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
     }
 
     @Override

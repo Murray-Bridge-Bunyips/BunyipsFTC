@@ -1,10 +1,7 @@
 package org.murraybridgebunyips.bunyipslib.example.examplerobot.teleop;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
-import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.TankDrive;
 import org.murraybridgebunyips.bunyipslib.example.examplerobot.components.ExampleConfig;
 

@@ -25,7 +25,8 @@ public class TeamProp extends Processor<TeamPropData> {
     private final List<Integer> ELEMENT_COLOR;
     private final int line1x = Vision.CAMERA_WIDTH / 3;
     private final int line2x = (Vision.CAMERA_WIDTH / 3) * 2;
-    private boolean isFlipped;
+    // TODO: Improve this hack to have integrated flipping of the actual camera source
+    private final boolean isFlipped;
 
     private double distance1;
     private double distance2;

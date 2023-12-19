@@ -13,6 +13,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 
 /**
  * Horizontal CRServo motion for the GLaDOS/Wheatley robot
+ *
  * @author Lucas Bubner, 2023
  */
 public class PersonalityCoreClawMover extends BunyipsComponent {
@@ -28,15 +29,15 @@ public class PersonalityCoreClawMover extends BunyipsComponent {
 
     public void actuateUsingController(double y) {
         if (currentTimeout != 0) return;
-        this.power = Range.clip(-y, -1.0, 1.0);
+        power = Range.clip(-y, -1.0, 1.0);
     }
 
     public void actuateUsingDpad(boolean up, boolean down) {
         if (!up && !down) {
-            this.power = 0;
+            power = 0;
             return;
         }
-        this.power = up ? 1 : -1;
+        power = up ? 1 : -1;
     }
 
     public void setPower(double power) {
@@ -47,7 +48,7 @@ public class PersonalityCoreClawMover extends BunyipsComponent {
     public void runFor(double seconds, double power) {
         if (currentTimeout != 0) return;
         this.power = power;
-        this.currentTimeout = seconds;
+        currentTimeout = seconds;
         timer.reset();
     }
 

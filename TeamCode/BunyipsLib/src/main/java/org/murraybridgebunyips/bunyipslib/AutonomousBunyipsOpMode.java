@@ -62,8 +62,14 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
         return Unit.INSTANCE;
     }
 
+    /**
+     * This method should not be overridden, as it is used internally to handle the
+     * asynchronous task allocation. Use onInitialisation() instead.
+     *
+     * @see #onInitialisation()
+     */
     @Override
-    protected final void onInit() {
+    protected void onInit() {
         // Run user-defined hardware initialisation
         onInitialisation();
         // Set user-defined initTask

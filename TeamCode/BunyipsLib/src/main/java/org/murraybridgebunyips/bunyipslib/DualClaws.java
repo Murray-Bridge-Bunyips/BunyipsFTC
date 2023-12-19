@@ -21,10 +21,10 @@ public class DualClaws extends BunyipsComponent {
         super(opMode);
         this.left = left;
         this.right = right;
-        this.LEFT_SERVO_CLOSED_POSITION = leftClosed;
-        this.LEFT_SERVO_OPEN_POSITION = leftOpen;
-        this.RIGHT_SERVO_CLOSED_POSITION = rightClosed;
-        this.RIGHT_SERVO_OPEN_POSITION = rightOpen;
+        LEFT_SERVO_CLOSED_POSITION = leftClosed;
+        LEFT_SERVO_OPEN_POSITION = leftOpen;
+        RIGHT_SERVO_CLOSED_POSITION = rightClosed;
+        RIGHT_SERVO_OPEN_POSITION = rightOpen;
 
         // Always close on init
         leftServoPosition = leftClosed;

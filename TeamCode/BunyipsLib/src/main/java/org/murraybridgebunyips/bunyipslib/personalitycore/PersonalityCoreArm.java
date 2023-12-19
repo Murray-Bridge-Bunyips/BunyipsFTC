@@ -19,22 +19,22 @@ import org.murraybridgebunyips.bunyipslib.personalitycore.submodules.Personality
 /**
  * Overhead class that handles a single instantiation of other PersonalityCore components.
  * Allows a one-level chain pattern to be used to call methods on the submodules.
+ *
  * @author Lucas Bubner, 2023
  * @noinspection UnusedReturnValue
  */
 @Config
 public class PersonalityCoreArm extends BunyipsComponent {
+    // Servo values for the dual claw at the front
+    public static double LEFT_CLAW_OPEN = 1.0;
+    public static double RIGHT_CLAW_OPEN;
+    public static double LEFT_CLAW_CLOSED;
+    public static double RIGHT_CLAW_CLOSED = 1.0;
     private PersonalityCoreClawMover clawMover;
     private PersonalityCoreClawRotator clawRotator;
     private PersonalityCoreHook hook;
     private PersonalityCoreManagementRail managementRail;
     private DualClaws claws;
-
-    // Servo values for the dual claw at the front
-    public static double LEFT_CLAW_OPEN = 1.0;
-    public static double RIGHT_CLAW_OPEN = 0.0;
-    public static double LEFT_CLAW_CLOSED = 0.0;
-    public static double RIGHT_CLAW_CLOSED = 1.0;
 
     public PersonalityCoreArm(@NonNull BunyipsOpMode opMode, CRServo pixelMotion, Servo pixelAlignment, Servo suspenderHook, DcMotorEx suspenderActuator, Servo leftPixel, Servo rightPixel) {
         super(opMode);
@@ -52,6 +52,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Directly access the claw mover submodule.
+     *
      * @return PersonalityCoreClawMover
      */
     public PersonalityCoreClawMover getClawMover() {
@@ -60,6 +61,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Actuate the horizontal claw mover using the controller.
+     *
      * @param y gamepad.stick_y
      * @return PersonalityCoreClawMover
      */
@@ -70,6 +72,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Set the claw mover power directly.
+     *
      * @param power power to set
      * @return PersonalityCoreClawMover
      */
@@ -81,8 +84,9 @@ public class PersonalityCoreArm extends BunyipsComponent {
     /**
      * Run the claw mover for a given number of seconds at a given power.
      * Requires constant update() calls to be made.
+     *
      * @param seconds seconds to run for
-     * @param power power to run at
+     * @param power   power to run at
      * @return PersonalityCoreClawMover
      */
     public PersonalityCoreClawMover runClawMoverFor(double seconds, double power) {
@@ -97,6 +101,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Directly access the claw rotator submodule.
+     *
      * @return PersonalityCoreClawRotator
      */
     public PersonalityCoreClawRotator getClawRotator() {
@@ -105,6 +110,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Face the claw towards the 30 degree board.
+     *
      * @return PersonalityCoreClawRotator
      */
     public PersonalityCoreClawRotator faceClawToBoard() {
@@ -114,6 +120,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Face the claw towards the ground.
+     *
      * @return PersonalityCoreClawRotator
      */
     public PersonalityCoreClawRotator faceClawToGround() {
@@ -123,6 +130,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Actuate the claw rotator (attached just above the claws) using the controller.
+     *
      * @param y gamepad.stick_y
      * @return PersonalityCoreClawRotator
      */
@@ -133,6 +141,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Set the claw rotator position, 0==facing the ground, 1==facing the board.
+     *
      * @param target power to set
      * @return PersonalityCoreClawRotator
      */
@@ -143,6 +152,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Set the claw rotator position, 0==facing the ground, 30==facing the board.
+     *
      * @param degrees degrees to set
      * @return PersonalityCoreClawRotator
      */
@@ -153,6 +163,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Directly access the hook submodule.
+     *
      * @return PersonalityCoreHook
      */
     public PersonalityCoreHook getHook() {
@@ -161,6 +172,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Actuate the suspension hook using the controller. Will hold its position when the controller is released.
+     *
      * @param y gamepad.stick_y
      * @return PersonalityCoreHook
      */
@@ -171,6 +183,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Set the hook position directly, 0==stored, 1==deployed.
+     *
      * @param y position to set
      * @return PersonalityCoreHook
      */
@@ -181,6 +194,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Extend the hook to full rotation.
+     *
      * @return PersonalityCoreHook
      */
     public PersonalityCoreHook extendHook() {
@@ -190,6 +204,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Retract the hook to the safe position.
+     *
      * @return PersonalityCoreHook
      */
     public PersonalityCoreHook retractHook() {
@@ -199,6 +214,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Set the hook to the upright (slighly less than extended) position.
+     *
      * @return PersonalityCoreHook
      */
     public PersonalityCoreHook uprightHook() {
@@ -208,6 +224,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Directly access the management rail submodule.
+     *
      * @return PersonalityCoreManagementRail
      */
     public PersonalityCoreManagementRail getManagementRail() {
@@ -216,6 +233,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Actuate the management rail using the controller.
+     *
      * @param y gamepad.stick_y
      * @return PersonalityCoreManagementRail
      */
@@ -226,6 +244,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Set the management rail power directly.
+     *
      * @param p power to set
      * @return PersonalityCoreManagementRail
      */
@@ -236,6 +255,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Run the management rail for seconds.
+     *
      * @param s seconds
      * @param p power
      */
@@ -246,6 +266,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Determine if the management rail is on an automatic runMangementRailFor
+     *
      * @return boolean
      */
     public boolean isManagementRailBusy() {
@@ -254,6 +275,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Directly access the dual claw submodule.
+     *
      * @return DualClaws
      */
     public DualClaws getClaws() {
@@ -262,6 +284,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Toggle the claw open/closed.
+     *
      * @param side side to toggle
      * @return DualClaws
      */
@@ -272,6 +295,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Open the claw.
+     *
      * @param side side to open
      * @return DualClaws
      */
@@ -282,6 +306,7 @@ public class PersonalityCoreArm extends BunyipsComponent {
 
     /**
      * Close the claw.
+     *
      * @param side side to close
      * @return DualClaws
      */

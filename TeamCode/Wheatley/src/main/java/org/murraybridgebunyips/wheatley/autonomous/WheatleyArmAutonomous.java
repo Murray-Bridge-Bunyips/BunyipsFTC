@@ -42,12 +42,16 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
         arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment,
                 config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel
         );
-        drive = new MecanumDrive(
+        vision = new Vision(this, config.webcam);
+        initTask = new GetTeamPropTask(this, vision);
+    }
+
+    @Override
+    protected MecanumDrive setDrive() {
+        return new MecanumDrive(
                 this, config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
-        vision = new Vision(this, config.webcam);
-        initTask = new GetTeamPropTask(this, vision);
     }
 
     @Override

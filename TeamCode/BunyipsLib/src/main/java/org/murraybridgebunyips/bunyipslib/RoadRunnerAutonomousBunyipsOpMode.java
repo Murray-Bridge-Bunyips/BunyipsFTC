@@ -28,12 +28,29 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
 
     /**
      * Drive instance to be used for RoadRunner trajectories.
-     * You should assign this as you normally would, but instead relying on the superclass to handle
-     * managing the class member.
+     * This is automatically set by the {@link #setDrive()} method, ensuring that the drive instance
+     * is set before any tasks are added to the queue.
      * <p>
      * {@code drive = new MecanumDrive(...)}
      */
     protected T drive;
+
+    /**
+     * Set the drive instance to be used for RoadRunner trajectories. This method ensures
+     * that the drive instance is set to avoid accidental NullPointerExceptions, similar to how
+     * setOpModes and setInitTask are handled. This is called after initialisation, so your config
+     * instance will be available.
+     *
+     * @return RoadRunner drive instance, can be instantiated here or as a class member
+     */
+    protected abstract T setDrive();
+
+    @Override
+    protected final void onInit() {
+        super.onInit();
+        if (drive == null)
+            drive = setDrive();
+    }
 
     /**
      * Create a new builder for the custom RoadRunner trajectory, which will automatically add a

@@ -10,6 +10,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 
 /**
  * Suspension hook for the GLaDOS/Wheatley robot.
+ *
  * @author Lucas Bubner, 2023
  */
 public class PersonalityCoreHook extends BunyipsComponent {
@@ -29,8 +30,8 @@ public class PersonalityCoreHook extends BunyipsComponent {
     }
 
     public void actuateUsingController(double y) {
-        this.target -= y / 5;
-        this.target = Range.clip(this.target, 0.0, 1.0);
+        target -= y / 5;
+        target = Range.clip(target, 0.0, 1.0);
     }
 
     public void setPosition(double target) {

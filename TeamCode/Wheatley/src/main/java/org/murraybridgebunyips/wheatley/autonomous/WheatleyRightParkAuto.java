@@ -38,7 +38,11 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
     protected void onInitialisation() {
         config.init(this);
         RobotConfig.setLastKnownPosition(null);
-        drive = new MecanumDrive(
+    }
+
+    @Override
+    protected MecanumDrive setDrive() {
+        return new MecanumDrive(
                 this, config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );

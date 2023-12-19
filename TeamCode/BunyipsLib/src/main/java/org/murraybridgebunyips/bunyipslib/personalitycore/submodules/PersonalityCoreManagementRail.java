@@ -12,14 +12,15 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 
 /**
  * Vertical motion motor controller for the GLaDOS/Wheatley robot.
+ *
  * @author Lucas Bubner, 2023
  */
 public class PersonalityCoreManagementRail extends BunyipsComponent {
     private static final double HOLDING_POWER = 0.3;
     private final DcMotorEx motor;
+    private final ElapsedTime timer = new ElapsedTime();
     private double currentTimeout;
     private double power;
-    private final ElapsedTime timer = new ElapsedTime();
 
     public PersonalityCoreManagementRail(@NonNull BunyipsOpMode opMode, DcMotorEx motor) {
         super(opMode);
@@ -30,6 +31,7 @@ public class PersonalityCoreManagementRail extends BunyipsComponent {
         motor.setTargetPosition(motor.getCurrentPosition());
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
+
     public void actuateUsingController(double y) {
         power = Range.clip(-y, -1.0, 1.0);
     }

@@ -48,8 +48,12 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
         config.init(this);
         vision = new Vision(this, config.webcam);
         initTask = new GetTeamPropTask(this, vision);
-        drive = new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
         arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
+    }
+
+    @Override
+    protected MecanumDrive setDrive() {
+        return new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
     }
 
     @Override
@@ -68,7 +72,7 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
             return;
         }
 
-        this.startingPosition = (StartingPositions) selectedOpMode.getObj();
+        startingPosition = (StartingPositions) selectedOpMode.getObj();
 
         switch (startingPosition) {
             case STARTING_RED_LEFT:

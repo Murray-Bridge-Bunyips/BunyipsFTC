@@ -12,6 +12,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 
 /**
  * Rotation/claw rotational alignment for the GLaDOS/Wheatley robot
+ *
  * @author Lucas Bubner, 2023
  */
 public class PersonalityCoreClawRotator extends BunyipsComponent {
@@ -36,8 +37,8 @@ public class PersonalityCoreClawRotator extends BunyipsComponent {
     }
 
     public void actuateUsingController(double y) {
-        this.target -= y / 12;
-        this.target = Range.clip(this.target, 0.0, 1.0);
+        target -= y / 12;
+        target = Range.clip(target, 0.0, 1.0);
     }
 
     public void setPosition(double target) {
