@@ -86,6 +86,15 @@ abstract class Task : AutoTask {
         return taskFinished || isTaskFinished()
     }
 
+    /**
+     * Reset a task to an uninitialised and unfinished state.
+     */
+    protected fun reset() {
+        startTime = 0.0
+        taskFinished = false
+        finisherFired = false
+    }
+
     protected val currentTime: Double
         get() = System.nanoTime() / NANOS_IN_SECONDS
 
