@@ -74,7 +74,7 @@ public class TFOD extends Processor<TfodData> {
     }
 
     @Override
-    public Object processFrame(Mat frame, long captureTimeNanos) {
+    public Object onProcessFrame(Mat frame, long captureTimeNanos) {
         return instance.processFrame(frame, captureTimeNanos);
     }
 

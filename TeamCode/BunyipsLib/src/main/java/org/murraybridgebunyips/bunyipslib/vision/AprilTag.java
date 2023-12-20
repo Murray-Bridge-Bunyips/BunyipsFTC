@@ -84,7 +84,7 @@ public class AprilTag extends Processor<AprilTagData> {
     }
 
     @Override
-    public Object processFrame(Mat frame, long captureTimeNanos) {
+    public Object onProcessFrame(Mat frame, long captureTimeNanos) {
         return instance.processFrame(frame, captureTimeNanos);
     }
 

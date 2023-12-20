@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
 import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
@@ -29,12 +29,20 @@ public class Vision extends BunyipsComponent {
     public static int CAMERA_HEIGHT = 720;
     @SuppressWarnings("rawtypes")
     private final List<Processor> processors = new ArrayList<>();
-    private final WebcamName webcam;
+    private final CameraName camera;
     private VisionPortal visionPortal;
 
-    public Vision(@NonNull BunyipsOpMode opMode, WebcamName webcam) {
+    public Vision(@NonNull BunyipsOpMode opMode, CameraName camera, int cameraWidth, int cameraHeight) {
         super(opMode);
-        this.webcam = webcam;
+        this.camera = camera;
+        // Allow the user to set the camera resolution if they want
+        CAMERA_WIDTH = cameraWidth;
+        CAMERA_HEIGHT = cameraHeight;
+    }
+
+    public Vision(@NonNull BunyipsOpMode opMode, CameraName camera) {
+        super(opMode);
+        this.camera = camera;
     }
 
     /**
@@ -51,7 +59,7 @@ public class Vision extends BunyipsComponent {
      * terminate the VisionPortal and reinitialise it with the new processors (this is a highly expensive operation).
      * Processors will be STOPPED by default, you must call {@code start()} after initialising.
      *
-     * @param processors TFOD and/or AprilTag
+     * @param processors Processor instances
      */
     @SuppressWarnings("rawtypes")
     public void init(Processor... processors) {
@@ -87,7 +95,7 @@ public class Vision extends BunyipsComponent {
         }
 
         visionPortal = builder
-                .setCamera(webcam)
+                .setCamera(camera)
                 .setCameraResolution(new Size(CAMERA_WIDTH, CAMERA_HEIGHT))
                 .enableLiveView(true)
                 .setAutoStopLiveView(true)
@@ -108,7 +116,7 @@ public class Vision extends BunyipsComponent {
      * Start desired processors. This method must be called before trying to extract data from
      * the cameras, and must be already initialised with the init() method.
      *
-     * @param processors TFOD and/or AprilTag
+     * @param processors Processor instances
      */
     @SuppressWarnings("rawtypes")
     public void start(Processor... processors) {
@@ -152,7 +160,7 @@ public class Vision extends BunyipsComponent {
      * take some very small time to resume the stream if start() is called again. If you don't plan
      * on using the camera stream again, it is recommended to call terminate() instead.
      *
-     * @param processors TFOD and/or AprilTag
+     * @param processors Processor instances
      */
     @SuppressWarnings("rawtypes")
     public void stop(Processor... processors) {
@@ -233,6 +241,44 @@ public class Vision extends BunyipsComponent {
         visionPortal.close();
         visionPortal = null;
         getOpMode().log("visionportal terminated.");
+    }
+
+    /**
+     * Flip a processor feed horizontally and vertically (rotate 180deg).
+     * Should be called after processors are initialised, and can be called at any time after.
+     *
+     * @param processors Processor instances
+     */
+    @SuppressWarnings("rawtypes")
+    public void flip(Processor... processors) {
+        if (visionPortal == null) {
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
+        }
+        for (Processor processor : processors) {
+            if (processor == null) {
+                throw new IllegalStateException("Vision: Processor is not instantiated!");
+            }
+            if (!this.processors.contains(processor)) {
+                throw new IllegalStateException("Vision: Tried to flip a processor that was not initialised!");
+            }
+            processor.setFlipped(!processor.isFlipped());
+            getOpMode().log("vision processor '%' flipped %.", processor.getClass().getSimpleName(), processor.isFlipped() ? "upside-down" : "right-side up");
+        }
+    }
+
+    /**
+     * Flip all processor feeds horizontally and vertically (180deg, useful if your camera is mounted upside-down).
+     * Should be called after processors are initialised, and can be called at any time after.
+     */
+    @SuppressWarnings("rawtypes")
+    public void flip() {
+        if (visionPortal == null) {
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
+        }
+        for (Processor processor : processors) {
+            processor.setFlipped(!processor.isFlipped());
+            getOpMode().log("vision processor '%' flipped %.", processor.getClass().getSimpleName(), processor.isFlipped() ? "upside-down" : "right-side up");
+        }
     }
 
     /**

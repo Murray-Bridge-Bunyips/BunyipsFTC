@@ -38,7 +38,7 @@ public class FtcDashboardBitmap extends Processor<NoData> implements CameraStrea
     }
 
     @Override
-    public Object processFrame(Mat frame, long captureTimeNanos) {
+    public Object onProcessFrame(Mat frame, long captureTimeNanos) {
         Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(frame, b);
         lastFrame.set(b);

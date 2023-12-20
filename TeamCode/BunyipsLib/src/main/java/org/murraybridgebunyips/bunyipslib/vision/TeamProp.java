@@ -3,7 +3,6 @@ package org.murraybridgebunyips.bunyipslib.vision;
 import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.data.TeamPropData;
 import org.opencv.core.Core;
@@ -25,8 +24,6 @@ public class TeamProp extends Processor<TeamPropData> {
     private final List<Integer> ELEMENT_COLOR;
     private final int line1x = Vision.CAMERA_WIDTH / 3;
     private final int line2x = (Vision.CAMERA_WIDTH / 3) * 2;
-    // TODO: Improve this hack to have integrated flipping of the actual camera source
-    private final boolean isFlipped;
 
     private double distance1;
     private double distance2;
@@ -50,14 +47,13 @@ public class TeamProp extends Processor<TeamPropData> {
      * @param g Green value of the element color (0-255)
      * @param b Blue value of the element color (0-255)
      */
-    public TeamProp(int r, int g, int b, boolean isFlipped) {
+    public TeamProp(int r, int g, int b) {
         super(TeamPropData.class);
         ELEMENT_COLOR = Arrays.asList(r, g, b);
-        this.isFlipped = isFlipped;
     }
 
     @Override
-    public Object processFrame(Mat frame, long captureTimeNanos) {
+    public Object onProcessFrame(Mat frame, long captureTimeNanos) {
         // Rect (top left x, top left y, bottom right x, bottom right y)
         zone1 = frame.submat(new Rect(0, 0, line1x, Vision.CAMERA_HEIGHT));
         zone2 = frame.submat(new Rect(line1x, 0, line2x - line1x, Vision.CAMERA_HEIGHT));
@@ -113,19 +109,12 @@ public class TeamProp extends Processor<TeamPropData> {
     @Override
     public void tick() {
         data.clear();
-        Dbg.log(String.valueOf((distance1 + distance3) / distance2));
         if (max_distance == distance1) {
-            if (isFlipped)
-                data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));
-            else
-                data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
+            data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
         } else if ((distance1 + distance3) / distance2 > 9) {
             data.add(new TeamPropData(Positions.CENTER, distance1, distance2, distance3, max_distance));
         } else {
-            if (isFlipped)
-                data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
-            else
-                data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));
+            data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));
         }
     }
 
