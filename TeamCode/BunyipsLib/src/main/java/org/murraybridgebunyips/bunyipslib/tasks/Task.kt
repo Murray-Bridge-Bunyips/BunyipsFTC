@@ -89,10 +89,17 @@ abstract class Task : AutoTask {
     /**
      * Reset a task to an uninitialised and unfinished state.
      */
-    protected fun reset() {
+    fun reset() {
         startTime = 0.0
         taskFinished = false
         finisherFired = false
+    }
+
+    /**
+     * @return Whether the task is currently running
+     */
+    fun isRunning(): Boolean {
+        return startTime != 0.0 && !taskFinished
     }
 
     protected val currentTime: Double
