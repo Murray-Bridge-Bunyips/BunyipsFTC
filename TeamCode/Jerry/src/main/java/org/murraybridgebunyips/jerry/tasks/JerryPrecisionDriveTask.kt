@@ -11,6 +11,13 @@ import kotlin.math.abs
  * Full-featured task for driving to a specific distance, with fail safes in case configuration is not available.
  * This supports movement throughout the 2D plane, and can be used to move in any one direction
  * 13/11/23: removed precision from precision drive as odometry is removed from Jerry now
+ *
+ * ** THIS SYSTEM IS DEPRECATED IN FAVOUR OF ROADRUNNER **
+ * Autonomous movement should be done using RoadRunner, and future robots should try to be built
+ * with RoadRunner as the path generation toolset. This task is only here for legacy purposes.
+ * RoadRunner offers a much more robust and reliable path generation system, and is much more
+ * accurate than the systems you're able to build by hand.
+ *
  * @author Lucas Bubner, 2023
  */
 class JerryPrecisionDriveTask(
@@ -18,7 +25,7 @@ class JerryPrecisionDriveTask(
     time: Double,
     private val drive: CartesianMecanumDrive?,
     private val imu: IMUOp?,
-    // Odometry moved to Wheatley
+    // Odometry moved to other robots, removed from Jerry
 //    private val x: Odometer?,
 //    private val y: Odometer?,
 //    private val distanceMM: Double,

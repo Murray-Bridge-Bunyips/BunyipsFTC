@@ -2,7 +2,7 @@ package org.murraybridgebunyips.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.OpenCVCam
+import org.murraybridgebunyips.bunyipslib.Vision
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 
@@ -12,12 +12,12 @@ import org.murraybridgebunyips.jerry.components.JerryConfig
 @TeleOp(name = "PowerPlay Signal Debug")
 class JerrySignalAnalyse : BunyipsOpMode() {
     private var config = JerryConfig()
-    private var cam: OpenCVCam? = null
+    private var cam: Vision? = null
     private var task: GetSignalTask? = null
 
     override fun onInit() {
         config.init(this)
-        cam = OpenCVCam(this, config.webcam, config.monitorID)
+        cam = Vision(this, config.webcam)
         task = cam?.let { GetSignalTask(this, it) }
     }
 

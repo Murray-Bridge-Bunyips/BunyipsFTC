@@ -17,7 +17,9 @@ import org.openftc.easyopencv.OpenCvPipeline
  * and these can be attached to the VisionPortal in Vision. This will give you access to everything you need.
  *
  * @author Lucas Bubner, 2023
+ * @deprecated Use Vision instead
  */
+@Deprecated("Use Vision instead")
 class OpenCVCam(
     opmode: BunyipsOpMode,
     webcam: WebcamName?,

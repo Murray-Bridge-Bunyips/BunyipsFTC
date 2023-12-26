@@ -2,15 +2,15 @@ package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.NullSafety
-import org.murraybridgebunyips.bunyipslib.OpenCVCam
+import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.Vision
 import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryTimeDriveTask
-import java.util.ArrayDeque
 
 /**
  * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
@@ -22,17 +22,16 @@ import java.util.ArrayDeque
     group = "JERRY",
     preselectTeleOp = "TeleOp"
 )
-class JerrySignalAutonomousBasic : BunyipsOpMode() {
+class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
     private var config = JerryConfig()
-    private var cam: OpenCVCam? = null
+    private var cam: Vision? = null
     private var drive: CartesianMecanumDrive? = null
     private var tagtask: GetSignalTask? = null
-    private val tasks = ArrayDeque<AutoTask>()
 
-    override fun onInit() {
+    override fun onInitialisation() {
         // Configuration of camera and drive components
         config.init(this)
-        cam = OpenCVCam(this, config.webcam, config.monitorID)
+        cam = Vision(this, config.webcam)
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
                 this,
@@ -47,10 +46,16 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         tagtask = cam?.let { GetSignalTask(this, it) }
     }
 
-    override fun onInitLoop(): Boolean {
-        // Using OpenCV and AprilTags in order to detect the Signal sleeve
-        tagtask?.run()
-        return tagtask?.isFinished() ?: true
+    override fun setOpModes(): MutableList<OpModeSelection>? {
+        return null
+    }
+
+    override fun setInitTask(): AutoTask? {
+        return tagtask
+    }
+
+    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
+        addTask(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
     }
 
     override fun onInitDone() {
@@ -62,27 +67,10 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         // Add movement tasks based on the signal position
         if (position == GetSignalTask.ParkingPosition.LEFT) {
             // Drive forward if the position of the signal is LEFT
-            tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, 1.0, 0.0))
+            addTaskFirst(JerryTimeDriveTask(this, 1.5, drive, 0.0, 1.0, 0.0))
         } else if (position == GetSignalTask.ParkingPosition.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
-            tasks.add(JerryTimeDriveTask(this, 1.5, drive, 0.0, -1.0, 0.0))
-        }
-
-        tasks.add(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
-    }
-
-    override fun activeLoop() {
-        val currentTask = tasks.peekFirst()
-        if (currentTask == null) {
-            finish()
-            return
-        }
-        currentTask.run()
-        if (currentTask.isFinished()) {
-            tasks.removeFirst()
-        }
-        if (tasks.isEmpty()) {
-            drive?.stop()
+            addTaskFirst(JerryTimeDriveTask(this, 1.5, drive, 0.0, -1.0, 0.0))
         }
     }
 }

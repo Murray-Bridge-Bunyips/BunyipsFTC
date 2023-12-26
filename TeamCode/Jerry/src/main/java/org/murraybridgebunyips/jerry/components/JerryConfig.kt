@@ -27,13 +27,13 @@ class JerryConfig : RobotConfig() {
     var imu: IMU? = null
     var limit: TouchSensor? = null
 
-    // Encoder configuration
-    val xDiameter = 50.0
-    val xTicksPerRev = 2400.0
-
-    // The Y encoder is the same as the X encoder
-    val yDiameter = xDiameter
-    val yTicksPerRev = xTicksPerRev
+//    // Encoder configuration
+//    val xDiameter = 50.0
+//    val xTicksPerRev = 2400.0
+//
+//    // The Y encoder is the same as the X encoder
+//    val yDiameter = xDiameter
+//    val yTicksPerRev = xTicksPerRev
 
     val driveMotors: List<DcMotorEx?>
         get() = listOf(bl, br, fl, fr)
@@ -57,14 +57,10 @@ class JerryConfig : RobotConfig() {
             "cameraMonitorViewId", "id", hardwareMap!!.appContext.packageName
         )
 
-        /*
-           Deadwheels attached as an encoder on the front two motors
-           X encoder = port 3, Front Left
-           Y encoder = port 4, Front Right
-
-           BQLZR 600P/R encoders
-           @ https://www.amazon.com.au/Signswise-Incremental-Encoder-Dc5-24v-Voltage/dp/B00UTIFCVA
-         */
+        // Dead wheels were moved to other robots for future seasons in pairment with RoadRunner
+        // Jerry is now a simple mecanum drive robot, and still relies on the older but reliable
+        // CartesianMecanumDrive systems and manual handwritten movement generation tasks.
+        // As such, dead wheel code has been commented out throughout the Jerry codebase.
 
         // Motor direction configuration
         fl?.direction = Direction.REVERSE

@@ -2,7 +2,7 @@ package org.murraybridgebunyips.bunyipslib.example.examplerobot.autonomous;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
-import org.murraybridgebunyips.bunyipslib.OpenCVCam;
+import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.example.examplerobot.components.ExampleConfig;
 import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask;
@@ -16,13 +16,16 @@ import java.util.List;
 public class ExampleSignalAutonomous extends AutonomousBunyipsOpMode {
     private final ExampleConfig config = new ExampleConfig();
     private GetSignalTask initTask;
+
+    // Generally, fields you want should always be declared as class members rather than local
+    // This is for clarity, memory management, and for consistency with the rest of the codebase.
     @SuppressWarnings("FieldCanBeLocal")
-    private OpenCVCam cam;
+    private Vision cam;
 
     @Override
     protected void onInitialisation() {
         config.init(this);
-        cam = new OpenCVCam(this, config.webcam, null);
+        cam = new Vision(this, config.webcam);
         initTask = new GetSignalTask(this, cam);
     }
 

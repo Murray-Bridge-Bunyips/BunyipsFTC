@@ -128,6 +128,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
             // Not ready to run tasks yet, tell the user selection to terminate if it hasn't
             if (!userSelection.isInterrupted())
                 userSelection.interrupt();
+            Dbg.logd("AutonomousBunyipsOpMode is busy-waiting for a late UserSelection callback...");
             return;
         }
 
@@ -320,6 +321,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      *     }
      * </code></pre>
      */
+    @Nullable
     protected abstract List<OpModeSelection> setOpModes();
 
     /**
@@ -338,6 +340,7 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
      * @see #addTaskFirst(AutoTask)
      * @see #addTaskLast(AutoTask)
      */
+    @Nullable
     protected abstract AutoTask setInitTask();
 
     /**

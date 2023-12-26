@@ -6,7 +6,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
 import org.murraybridgebunyips.bunyipslib.tasks.Task
 
 /**
- * Base drive task which will run XYR speed for a given time
+ * Base drive task which will run Cartesian XYR speed for a given time
  * Only used for tests and as a failsafe, do not use in actual OpMode as field positioning data is lost
  * Use JerryPrecisionDriveTask instead!
  * @see JerryPrecisionDriveTask
@@ -24,7 +24,7 @@ class JerryTimeDriveTask(
     }
 
     override fun run() {
-        drive?.setSpeedUsingController(x, -y, r)
+        drive?.setSpeedXYR(x, y, r)
         drive?.update()
     }
 

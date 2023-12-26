@@ -13,6 +13,7 @@ enum class StartingPositions {
          */
         @JvmStatic
         fun use(): List<OpModeSelection> {
+            // TODO: Flip to be proportional to the controller if rotated 45 degrees with ABXY
             return listOf(
                 OpModeSelection(STARTING_RED_LEFT),
                 OpModeSelection(STARTING_RED_RIGHT),
