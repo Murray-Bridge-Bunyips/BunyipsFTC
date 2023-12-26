@@ -31,6 +31,9 @@ package org.murraybridgebunyips.bunyipslib;
 
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+/**
+ * Utility class for getting the robot voltage from the hardware map
+ */
 public class Voltage {
     public static double getRobotVoltage(BunyipsOpMode opMode) {
         double result = Double.POSITIVE_INFINITY;

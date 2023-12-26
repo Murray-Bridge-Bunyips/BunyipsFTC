@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 
 import java.util.Objects;
 
@@ -24,7 +24,7 @@ import java.util.Objects;
 @Config
 public abstract class MaxAngularVeloTuner extends LinearOpMode {
     public static double RUNTIME = 4.0;
-    protected MecanumRoadRunnerDrive drive;
+    protected RoadRunnerDrive drive;
     private ElapsedTime timer;
     private double maxAngVelocity;
 

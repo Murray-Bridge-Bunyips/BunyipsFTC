@@ -57,10 +57,10 @@ class JerryTeleOp : BunyipsOpMode() {
             drive = if (selector.result == "FIELD-CENTRIC" || imu == null) {
                 CartesianFieldCentricMecanumDrive(
                     this,
-                    config.bl!!,
-                    config.br!!,
                     config.fl!!,
                     config.fr!!,
+                    config.bl!!,
+                    config.br!!,
                     imu!!,
                     true,
                     RelativePose2d.FORWARD
@@ -68,10 +68,10 @@ class JerryTeleOp : BunyipsOpMode() {
             } else {
                 CartesianMecanumDrive(
                     this,
-                    config.bl!!,
-                    config.br!!,
                     config.fl!!,
-                    config.fr!!
+                    config.fr!!,
+                    config.bl!!,
+                    config.br!!
                 )
             }
         }

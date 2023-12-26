@@ -3,8 +3,9 @@ package org.murraybridgebunyips.bunyipslib.tasks
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 
 /**
- * Abstract implementation class to use custom ArrayDeque tasks in an
- * activeLoop, simulating multiple different looping operations in a linear sense.
+ * A task - an action that can be run as a scheduled routine to loop through actions
+ * until a criteria or timeout is met. This is very similar to FRC WPILib "Command-based" programming.
+ * @author Lucas Bubner, 2022-2023
  */
 abstract class Task : AutoTask {
     protected var time: Double

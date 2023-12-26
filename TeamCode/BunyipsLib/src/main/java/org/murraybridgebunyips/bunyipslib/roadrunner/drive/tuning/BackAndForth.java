@@ -6,7 +6,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.murraybridgebunyips.bunyipslib.Inches;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 
 /*
  * Op mode for preliminary tuning of the follower PID coefficients (located in the drive base
@@ -28,7 +28,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDriv
 public abstract class BackAndForth extends LinearOpMode {
 
     public static double DISTANCE = Inches.fromM(1);
-    protected MecanumRoadRunnerDrive drive;
+    protected RoadRunnerDrive drive;
 
     @Override
     public void runOpMode() {

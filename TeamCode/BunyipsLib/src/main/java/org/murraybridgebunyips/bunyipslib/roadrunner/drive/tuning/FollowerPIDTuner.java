@@ -4,7 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 
 /*
@@ -23,7 +23,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.Trajecto
 @Config
 public abstract class FollowerPIDTuner extends LinearOpMode {
     public static double DISTANCE = 48; // in
-    protected MecanumRoadRunnerDrive drive;
+    protected RoadRunnerDrive drive;
 
     @Override
     public void runOpMode() {

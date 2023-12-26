@@ -4,7 +4,12 @@ import java.io.PrintWriter
 import java.io.StringWriter
 
 /**
- * Util to prevent unhandled exceptions from crashing the app
+ * Util to prevent unhandled exceptions from crashing the app.
+ * This will log the exception and stacktrace to the Driver Station, allowing OpModes to continue running.
+ * In the past, exceptions used to cause an EMERGENCY STOP condition, but has changed to a more modern popup window,
+ * however, this class is still useful as it will not terminate the OpMode and will allow code to continue
+ * while providing full logging in both Logcat and the Driver Station.
+ * @see NullSafety
  */
 object ErrorUtil {
     private const val MAX_STACKTRACE_CHARS = 250

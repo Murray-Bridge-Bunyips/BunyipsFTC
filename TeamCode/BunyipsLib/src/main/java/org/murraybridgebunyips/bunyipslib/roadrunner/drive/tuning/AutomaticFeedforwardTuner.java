@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.util.LoggingUtil;
 import org.murraybridgebunyips.bunyipslib.roadrunner.util.RegressionUtil;
 
@@ -33,7 +33,7 @@ public abstract class AutomaticFeedforwardTuner extends LinearOpMode {
     public static double MAX_POWER = 0.7;
     public static double DISTANCE = 100; // in
 
-    protected MecanumRoadRunnerDrive drive;
+    protected RoadRunnerDrive drive;
 
     @Override
     public void runOpMode() {

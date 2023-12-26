@@ -7,7 +7,7 @@ import com.acmerobotics.roadrunner.util.Angle;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.RobotLog;
 
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.StandardTrackingWheelLocalizer;
 
 /**
@@ -64,7 +64,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.StandardTr
 @Config
 public abstract class TrackingWheelLateralDistanceTuner extends LinearOpMode {
     public static int NUM_TURNS = 10;
-    protected MecanumRoadRunnerDrive drive;
+    protected RoadRunnerDrive drive;
 
     @Override
     public void runOpMode() {

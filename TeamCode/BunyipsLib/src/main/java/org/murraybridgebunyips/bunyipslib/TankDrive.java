@@ -22,6 +22,12 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.Trajecto
 
 import java.util.List;
 
+/**
+ * Wrapper component for the RoadRunner Tank Drive, integrating RoadRunner and BunyipsLib to be used
+ * as a BunyipsComponent.
+ *
+ * @author Lucas Bubner, 2023
+ */
 public class TankDrive extends BunyipsComponent implements RoadRunnerDrive {
     private final TankRoadRunnerDrive instance;
 
@@ -46,6 +52,11 @@ public class TankDrive extends BunyipsComponent implements RoadRunnerDrive {
     }
 
     @Override
+    public DriveConstants getConstants() {
+        return instance.getConstants();
+    }
+
+    @Override
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
         return instance.trajectoryBuilder(startPose);
     }
@@ -61,6 +72,7 @@ public class TankDrive extends BunyipsComponent implements RoadRunnerDrive {
     }
 
     @Override
+    @SuppressWarnings("rawtypes")
     public TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose) {
         return instance.trajectorySequenceBuilder(startPose);
     }

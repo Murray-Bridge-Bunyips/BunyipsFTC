@@ -13,7 +13,8 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 
 /**
- * Task for running RoadRunner trajectories using the BunyipsOpMode Task system
+ * Task for running RoadRunner trajectories using the BunyipsOpMode Task system.
+ * This is the task that is used for all RoadRunner tasks in RoadRunnerAutonomousBunyipsOpMode.
  *
  * @author Lucas Bubner, 2023
  */

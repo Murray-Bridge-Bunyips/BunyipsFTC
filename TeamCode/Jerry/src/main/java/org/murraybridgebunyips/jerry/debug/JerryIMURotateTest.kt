@@ -28,10 +28,10 @@ class JerryIMURotateTest : BunyipsOpMode() {
         imu = IMUOp(this, config.imu!!)
         drive = CartesianMecanumDrive(
             this,
-            config.bl!!,
-            config.br!!,
             config.fl!!,
-            config.fr!!
+            config.fr!!,
+            config.bl!!,
+            config.br!!
         )
 
         tasks.add(JerryIMURotationTask(this, 15.0, imu!!, drive!!, -360.0, 0.5))

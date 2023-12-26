@@ -9,15 +9,12 @@ import org.openftc.easyopencv.OpenCvPipeline
 /**
  * Wrapper for OpenFTC's EasyOpenCV library.
  *
- * This is a simplified version of CameraOp class to include only OpenCV operations,
- * heavily reducing bloat for OpModes that don't need to use Vuforia or TensorFlow.
- *
- * If using AprilTags, use the Vision class instead, as it will use the SDKs libraries which
+ * It is better recommended to use the Vision class instead, as it will use the SDKs libraries which
  * are more reliable and have more interoperability. This wrapper should only be used if
- * absolutely necessary (e.g. if you need to use OpenCVs built-in pipeline methods).
+ * absolutely necessary (e.g. if you need to use OpenCV directly and the SDK is not enough)
  *
  * Note that making a class that extends VisionProcessor will give you access to OpenCV pipeline methods,
- * and these can be attached to the VisionPortal in Vision. This is the recommended way to use OpenCV.
+ * and these can be attached to the VisionPortal in Vision. This will give you access to everything you need.
  *
  * @author Lucas Bubner, 2023
  */

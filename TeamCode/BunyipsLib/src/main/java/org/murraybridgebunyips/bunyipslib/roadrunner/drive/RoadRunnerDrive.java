@@ -44,6 +44,8 @@ public interface RoadRunnerDrive {
 
     void waitForIdle();
 
+    DriveConstants getConstants();
+
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose);
 
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose, boolean reversed);

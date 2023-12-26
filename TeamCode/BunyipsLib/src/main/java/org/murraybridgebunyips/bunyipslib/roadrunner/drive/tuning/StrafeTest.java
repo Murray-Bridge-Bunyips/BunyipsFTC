@@ -8,7 +8,7 @@ import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 
 /*
  * This is a simple routine to test translational drive capabilities.
@@ -16,7 +16,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDriv
 @Config
 public abstract class StrafeTest extends LinearOpMode {
     public static double DISTANCE = 60; // in
-    protected MecanumRoadRunnerDrive drive;
+    protected RoadRunnerDrive drive;
 
     @Override
     public void runOpMode() {

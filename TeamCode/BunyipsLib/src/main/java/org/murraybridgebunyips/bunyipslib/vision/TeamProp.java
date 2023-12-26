@@ -112,6 +112,7 @@ public class TeamProp extends Processor<TeamPropData> {
         if (max_distance == distance1) {
             data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));
         } else if ((distance1 + distance3) / distance2 > 9) {
+            // The ratio of distances will be significantly different if the element is in the center
             data.add(new TeamPropData(Positions.CENTER, distance1, distance2, distance3, max_distance));
         } else {
             data.add(new TeamPropData(Positions.LEFT, distance1, distance2, distance3, max_distance));

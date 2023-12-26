@@ -4,7 +4,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 
 /**
  * This is a simple teleop routine for testing localization. Drive the robot around like a normal
@@ -15,7 +15,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDriv
  */
 public abstract class LocalizationTest extends LinearOpMode {
 
-    protected MecanumRoadRunnerDrive drive;
+    protected RoadRunnerDrive drive;
 
 
     @Override

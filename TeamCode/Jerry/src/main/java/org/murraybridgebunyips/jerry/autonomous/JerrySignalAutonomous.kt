@@ -38,10 +38,10 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
                 this,
-                config.bl!!,
-                config.br!!,
                 config.fl!!,
-                config.fr!!
+                config.fr!!,
+                config.bl!!,
+                config.br!!
             )
 
 //        if (NullSafety.assertNotNull(config.fl))

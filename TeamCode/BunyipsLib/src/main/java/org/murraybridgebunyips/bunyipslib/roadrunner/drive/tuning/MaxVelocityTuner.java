@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 
 import java.util.Objects;
 
@@ -26,7 +26,7 @@ import java.util.Objects;
 @Config
 public abstract class MaxVelocityTuner extends LinearOpMode {
     public static double RUNTIME = 2.0;
-    protected MecanumRoadRunnerDrive drive;
+    protected RoadRunnerDrive drive;
     private ElapsedTime timer;
     private double maxVelocity;
     private VoltageSensor batteryVoltageSensor;

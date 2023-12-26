@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 
 import java.util.Objects;
 
@@ -41,7 +41,7 @@ public abstract class ManualFeedforwardTuner extends LinearOpMode {
     public static double kA;
     public static double kStatic;
     private final FtcDashboard dashboard = FtcDashboard.getInstance();
-    protected MecanumRoadRunnerDrive drive;
+    protected RoadRunnerDrive drive;
     private Mode mode;
 
     private MotionProfile generateProfile(boolean movingForward) {

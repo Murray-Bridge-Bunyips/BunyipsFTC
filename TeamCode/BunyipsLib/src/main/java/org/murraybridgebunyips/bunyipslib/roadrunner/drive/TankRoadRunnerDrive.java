@@ -195,6 +195,11 @@ public class TankRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.TankD
             update();
     }
 
+    @Override
+    public DriveConstants getConstants() {
+        return constants;
+    }
+
     public boolean isBusy() {
         return trajectorySequenceRunner.isBusy();
     }

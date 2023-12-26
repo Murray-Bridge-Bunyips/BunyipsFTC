@@ -30,7 +30,7 @@ public class CartesianMecanumDrive extends BunyipsComponent {
     // Store and declare prioritisation when given instruction to calculate motor powers
     private Priority priority = Priority.NORMALISED;
 
-    public CartesianMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor backLeft, DcMotor frontRight, DcMotor backRight) {
+    public CartesianMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
         super(opMode);
         this.frontLeft = frontLeft;
         this.backLeft = backLeft;

@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 
+/**
+ * A task that runs once and then immediately completes.
+ */
 public abstract class RunOnceTask extends Task {
     protected RunOnceTask(@NonNull BunyipsOpMode opMode) {
         // Time will be ignored as this task will only run once

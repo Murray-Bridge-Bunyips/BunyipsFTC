@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.RobotLog;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 
 import java.util.List;
 
@@ -44,7 +44,7 @@ import java.util.List;
 @Config
 public abstract class DriveVelocityPIDTuner extends LinearOpMode {
     public static double DISTANCE = 72; // in
-    protected MecanumRoadRunnerDrive drive;
+    protected RoadRunnerDrive drive;
 
     private MotionProfile generateProfile(boolean movingForward) {
         MotionState start = new MotionState(movingForward ? 0 : DISTANCE, 0, 0, 0);

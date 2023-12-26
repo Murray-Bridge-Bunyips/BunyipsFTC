@@ -10,6 +10,9 @@ import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 
 import java.util.List;
 
+/**
+ * Autonomous example of using POWERPLAY AprilTag detection to determine the parking position.
+ */
 public class ExampleSignalAutonomous extends AutonomousBunyipsOpMode {
     private final ExampleConfig config = new ExampleConfig();
     private GetSignalTask initTask;
@@ -30,6 +33,8 @@ public class ExampleSignalAutonomous extends AutonomousBunyipsOpMode {
 
     @Override
     protected AutoTask setInitTask() {
+        // Will run this task until it is complete, then move on to onInitDone(), or will terminate
+        // once the OpMode is started.
         return initTask;
     }
 

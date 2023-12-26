@@ -36,10 +36,10 @@ class JerrySignalAutonomousBasic : BunyipsOpMode() {
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
                 this,
-                config.bl!!,
-                config.br!!,
                 config.fl!!,
-                config.fr!!
+                config.fr!!,
+                config.bl!!,
+                config.br!!
             )
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our

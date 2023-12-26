@@ -27,8 +27,8 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.Trajecto
 import java.util.List;
 
 /**
- * Wrapper component for the RoadRunner Mecanum Drive, bringing RoadRunner functionality
- * to the BunyipsOpMode framework.
+ * Wrapper component for the RoadRunner Mecanum Drive, integrating RoadRunner and BunyipsLib to be used
+ * as a BunyipsComponent.
  *
  * @author Lucas Bubner, 2023
  */
@@ -39,6 +39,7 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
     public MecanumDrive(@NonNull BunyipsOpMode opMode, DriveConstants constants, MecanumCoefficients mecanumCoefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
         super(opMode);
         drive = new MecanumRoadRunnerDrive(constants, mecanumCoefficients, voltageSensor, imu, fl, fr, bl, br);
+        // If we have a last known position, set the pose estimate to it
         if (RobotConfig.getLastKnownPosition() != null) {
             drive.setPoseEstimate(RobotConfig.getLastKnownPosition());
         }
@@ -67,6 +68,11 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
 
     public void waitForIdle() {
         drive.waitForIdle();
+    }
+
+    @Override
+    public DriveConstants getConstants() {
+        return drive.getConstants();
     }
 
     /**

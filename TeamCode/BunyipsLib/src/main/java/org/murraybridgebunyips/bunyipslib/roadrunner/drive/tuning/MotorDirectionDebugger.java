@@ -26,6 +26,10 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDriv
 @Config
 public abstract class MotorDirectionDebugger extends LinearOpMode {
     public static double MOTOR_POWER = 0.7;
+
+    /**
+     * Note this will only work with a MecanumRoadRunnerDrive, as it assumes there are four motors
+     */
     protected MecanumRoadRunnerDrive drive;
 
     @Override
