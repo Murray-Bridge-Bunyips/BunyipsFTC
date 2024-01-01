@@ -254,4 +254,8 @@ public class MecanumDrive extends BunyipsComponent implements RoadRunnerDrive {
     public void setLocalizer(Localizer localizer) {
         drive.setLocalizer(localizer);
     }
+
+    public void cancelTrajectory() {
+        drive.cancelTrajectory();
+    }
 }

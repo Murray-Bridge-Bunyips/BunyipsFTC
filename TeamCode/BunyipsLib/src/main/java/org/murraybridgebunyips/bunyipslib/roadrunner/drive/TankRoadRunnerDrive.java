@@ -290,4 +290,9 @@ public class TankRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.TankD
     public Double getExternalHeadingVelocity() {
         return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
     }
+
+    @Override
+    public void cancelTrajectory() {
+        trajectorySequenceRunner.cancelTrajectory();
+    }
 }

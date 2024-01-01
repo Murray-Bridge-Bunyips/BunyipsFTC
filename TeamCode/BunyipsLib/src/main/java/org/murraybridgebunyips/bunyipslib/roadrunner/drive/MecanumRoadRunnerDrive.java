@@ -289,4 +289,9 @@ public class MecanumRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.Me
     public Double getExternalHeadingVelocity() {
         return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
     }
+
+    @Override
+    public void cancelTrajectory() {
+        trajectorySequenceRunner.cancelTrajectory();
+    }
 }

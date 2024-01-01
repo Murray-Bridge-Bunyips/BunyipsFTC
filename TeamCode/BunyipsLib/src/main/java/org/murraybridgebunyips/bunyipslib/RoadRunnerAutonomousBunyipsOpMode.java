@@ -53,12 +53,14 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
     }
 
     /**
-     * Create a new builder for the custom RoadRunner trajectory, which will automatically add a
+     * STRONGLY RECOMMENDED: Use this method to build a new RoadRunner trajectory to the queue.
+     * Creates a new builder for a RoadRunner trajectory, which will automatically add a
      * task to the queue when build() is called, optionally with a timeout control ({@link RoadRunnerTrajectoryTaskBuilder#setTimeout(double)}).
      * <p>
-     * This method is the combination of {@link #newTrajectory()} and {@link #addTrajectory(Trajectory)}.
+     * This method is the combination of {@link #newTrajectorySequence()} and {@link #addTrajectory(TrajectorySequence)},
+     * using a custom builder that supports {@code setTimeout()} and priority building.
      *
-     * @param startPose Starting pose of the trajectory
+     * @param startPose Starting pose of the trajectory, ** WILL SET DRIVE POSE ESTIMATE TO THIS POSE **
      * @return Builder for the trajectory
      */
     public RoadRunnerTrajectoryTaskBuilder addNewTrajectory(Pose2d startPose) {
@@ -72,9 +74,12 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
     }
 
     /**
-     * Create a new builder for the custom RoadRunner trajectory, which will automatically add a
+     * STRONGLY RECOMMENDED: Use this method to build a new RoadRunner trajectory to the queue.
+     * Creates a new builder for a RoadRunner trajectory, which will automatically add a
      * task to the queue when build() is called, optionally with a timeout control.
-     * This method is the combination of {@link #newTrajectory()} and {@link #addTrajectory(Trajectory)}.
+     * This method is the combination of {@link #newTrajectorySequence()} and {@link #addTrajectory(TrajectorySequence)},
+     * using a custom builder that supports {@code setTimeout()} and priority building.
+     * Without arguments, will use the current pose estimate of the drive.
      *
      * @return Builder for the trajectory
      * @see #addNewTrajectory(Pose2d)
@@ -95,20 +100,9 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
 
     /**
      * Create a new builder for a RoadRunner trajectory using the drive system.
-     *
-     * @param startPose Starting pose of the trajectory
-     * @return Builder for the trajectory
-     */
-    public TrajectoryBuilder newTrajectory(Pose2d startPose) {
-        if (drive == null)
-            drive = setDrive();
-        if (drive == null) throw new NullPointerException("drive instance is not set!");
-        drive.setPoseEstimate(startPose);
-        return drive.trajectoryBuilder(startPose);
-    }
-
-    /**
-     * Create a new builder for a RoadRunner trajectory using the drive system.
+     * This will use the builder directly from RoadRunner, see {@link #addNewTrajectory(Pose2d)} for
+     * integrated task building, or if you prefer you can use {@link #addTrajectory(Trajectory)}
+     * to add your sequence to the queue manually.
      *
      * @return Builder for the trajectory
      * @see #newTrajectory(Pose2d)
@@ -121,7 +115,62 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
     }
 
     /**
-     * Add a RoadRunner trajectory to the queue, with a default timeout.
+     * Create a new builder for a standard RoadRunner trajectory using the drive system.
+     * This will use the builder directly from RoadRunner, see {@link #addNewTrajectory(Pose2d)} for
+     * integrated task building, or if you prefer you can use {@link #addTrajectory(Trajectory)}
+     * to add your sequence to the queue manually.
+     *
+     * @param startPose Starting pose of the trajectory, ** WILL SET DRIVE POSE ESTIMATE TO THIS POSE **
+     * @return Builder for the trajectory
+     */
+    public TrajectoryBuilder newTrajectory(Pose2d startPose) {
+        if (drive == null)
+            drive = setDrive();
+        if (drive == null) throw new NullPointerException("drive instance is not set!");
+        drive.setPoseEstimate(startPose);
+        return drive.trajectoryBuilder(startPose);
+    }
+
+    /**
+     * Create a new builder for a standard RoadRunner trajectory sequence using the drive system.
+     * This will use the builder directly from RoadRunner, see {@link #addNewTrajectory(Pose2d)} for
+     * integrated task building, or if you prefer you can use {@link #addTrajectory(TrajectorySequence)}
+     * to add your sequence to the queue manually.
+     *
+     * @return Builder for the trajectory
+     * @see #newTrajectorySequence(Pose2d)
+     */
+    @SuppressWarnings("rawtypes")
+    public TrajectorySequenceBuilder newTrajectorySequence() {
+        if (drive == null)
+            drive = setDrive();
+        if (drive == null) throw new NullPointerException("drive instance is not set!");
+        return drive.trajectorySequenceBuilder(drive.getPoseEstimate());
+    }
+
+    /**
+     * Create a new builder for a standard RoadRunner trajectory sequence using the drive system.
+     * This will use the builder directly from RoadRunner, see {@link #addNewTrajectory(Pose2d)} for
+     * integrated task building, or if you prefer you can use {@link #addTrajectory(TrajectorySequence)}
+     * to add your sequence to the queue manually.
+     *
+     * @param startPose Starting pose of the trajectory, ** WILL SET DRIVE POSE ESTIMATE TO THIS POSE **
+     * @return Builder for the trajectory
+     */
+    @SuppressWarnings("rawtypes")
+    public TrajectorySequenceBuilder newTrajectorySequence(Pose2d startPose) {
+        if (drive == null)
+            drive = setDrive();
+        if (drive == null) throw new NullPointerException("drive instance is not set!");
+        drive.setPoseEstimate(startPose);
+        return drive.trajectorySequenceBuilder(startPose);
+    }
+
+    /**
+     * Add a RoadRunner trajectory to the queue, with a default infinite timeout and default priority.
+     * To customise the timeout, see {@link #addTrajectory(Trajectory, double)}.
+     * To customise the priority, see {@link #addTrajectory(Trajectory, PriorityLevel)}.
+     * To customise both, see {@link #addTrajectory(Trajectory, PriorityLevel, double)}.
      *
      * @param trajectory Trajectory to add
      */
@@ -133,19 +182,32 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
     }
 
     /**
-     * Add a RoadRunner trajectory to the queue, with a default timeout.
+     * Add a RoadRunner trajectory to the queue, with a default infinite timeout.
+     * To customise the timeout, see {@link #addTrajectory(Trajectory, PriorityLevel, double)}.
      *
-     * @param trajectorySequence Trajectory to add
+     * @param trajectory Trajectory to add
+     * @param priority   Priority level of the task, see {@link PriorityLevel}
      */
-    public void addTrajectory(TrajectorySequence trajectorySequence) {
+    public void addTrajectory(Trajectory trajectory, PriorityLevel priority) {
         if (drive == null)
             drive = setDrive();
         if (drive == null) throw new NullPointerException("drive instance is not set!");
-        addTask(new RoadRunnerTask<>(this, INFINITE_TIMEOUT, drive, trajectorySequence));
+        switch (priority) {
+            case LAST:
+                addTaskLast(new RoadRunnerTask<>(this, INFINITE_TIMEOUT, drive, trajectory));
+                break;
+            case NORMAL:
+                addTask(new RoadRunnerTask<>(this, INFINITE_TIMEOUT, drive, trajectory));
+                break;
+            case FIRST:
+                addTaskFirst(new RoadRunnerTask<>(this, INFINITE_TIMEOUT, drive, trajectory));
+                break;
+        }
     }
 
     /**
-     * Add a RoadRunner trajectory to the queue, with a task timeout other than the default.
+     * Add a RoadRunner trajectory to the queue, with a task timeout other than the default, and default priority.
+     * To customise the priority, see {@link #addTrajectory(Trajectory, PriorityLevel, double)}.
      *
      * @param trajectory Trajectory to add
      * @param timeout    Timeout in seconds
@@ -160,6 +222,70 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
     /**
      * Add a RoadRunner trajectory to the queue, with a task timeout other than the default.
      *
+     * @param trajectory Trajectory to add
+     * @param timeout    Timeout in seconds
+     * @param priority   Priority level of the task, see {@link PriorityLevel}
+     */
+    public void addTrajectory(Trajectory trajectory, PriorityLevel priority, double timeout) {
+        if (drive == null)
+            drive = setDrive();
+        if (drive == null) throw new NullPointerException("drive instance is not set!");
+        switch (priority) {
+            case LAST:
+                addTaskLast(new RoadRunnerTask<>(this, timeout, drive, trajectory));
+                break;
+            case NORMAL:
+                addTask(new RoadRunnerTask<>(this, timeout, drive, trajectory));
+                break;
+            case FIRST:
+                addTaskFirst(new RoadRunnerTask<>(this, timeout, drive, trajectory));
+                break;
+        }
+    }
+
+    /**
+     * Add a RoadRunner trajectory to the queue, with a default infinite timeout and default priority.
+     * To customise the timeout, see {@link #addTrajectory(TrajectorySequence, double)}.
+     * To customise the priority, see {@link #addTrajectory(TrajectorySequence, PriorityLevel)}.
+     * To customise both, see {@link #addTrajectory(TrajectorySequence, PriorityLevel, double)}.
+     *
+     * @param trajectorySequence Trajectory to add
+     */
+    public void addTrajectory(TrajectorySequence trajectorySequence) {
+        if (drive == null)
+            drive = setDrive();
+        if (drive == null) throw new NullPointerException("drive instance is not set!");
+        addTask(new RoadRunnerTask<>(this, INFINITE_TIMEOUT, drive, trajectorySequence));
+    }
+
+    /**
+     * Add a RoadRunner trajectory to the queue, with a default infinite timeout.
+     * To customise the timeout, see {@link #addTrajectory(TrajectorySequence, PriorityLevel, double)}.
+     *
+     * @param trajectorySequence Trajectory to add
+     * @param priority           Priority level of the task, see {@link PriorityLevel}
+     */
+    public void addTrajectory(TrajectorySequence trajectorySequence, PriorityLevel priority) {
+        if (drive == null)
+            drive = setDrive();
+        if (drive == null) throw new NullPointerException("drive instance is not set!");
+        switch (priority) {
+            case LAST:
+                addTaskLast(new RoadRunnerTask<>(this, INFINITE_TIMEOUT, drive, trajectorySequence));
+                break;
+            case NORMAL:
+                addTask(new RoadRunnerTask<>(this, INFINITE_TIMEOUT, drive, trajectorySequence));
+                break;
+            case FIRST:
+                addTaskFirst(new RoadRunnerTask<>(this, INFINITE_TIMEOUT, drive, trajectorySequence));
+                break;
+        }
+    }
+
+    /**
+     * Add a RoadRunner trajectory to the queue, with a task timeout other than the default, and default priority.
+     * To customise the timeout, see {@link #addTrajectory(TrajectorySequence, PriorityLevel, double)}.
+     *
      * @param trajectorySequence Trajectory to add
      * @param timeout            Timeout in seconds
      */
@@ -168,6 +294,42 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
             drive = setDrive();
         if (drive == null) throw new NullPointerException("drive instance is not set!");
         addTask(new RoadRunnerTask<>(this, timeout, drive, trajectorySequence));
+    }
+
+    /**
+     * Add a RoadRunner trajectory to the queue, with a task timeout other than the default.
+     *
+     * @param trajectorySequence Trajectory to add
+     * @param timeout            Timeout in seconds
+     * @param priority           Priority level of the task, see {@link PriorityLevel}
+     */
+    public void addTrajectory(TrajectorySequence trajectorySequence, PriorityLevel priority, double timeout) {
+        if (drive == null)
+            drive = setDrive();
+        if (drive == null) throw new NullPointerException("drive instance is not set!");
+        switch (priority) {
+            case LAST:
+                addTaskLast(new RoadRunnerTask<>(this, timeout, drive, trajectorySequence));
+                break;
+            case NORMAL:
+                addTask(new RoadRunnerTask<>(this, timeout, drive, trajectorySequence));
+                break;
+            case FIRST:
+                addTaskFirst(new RoadRunnerTask<>(this, timeout, drive, trajectorySequence));
+                break;
+        }
+    }
+
+    /**
+     * Priority representation for building tasks.
+     * LAST: Add the task to the end of the queue after the onQueueReady() init callback has fired
+     * NORMAL: Add the task to the queue immediately (default)
+     * FIRST: Add the task to the front of the queue after the onQueueReady() init callback has fired
+     */
+    protected enum PriorityLevel {
+        LAST,
+        NORMAL,
+        FIRST // (tech challenge)
     }
 
     /**
@@ -202,6 +364,9 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
             return this;
         }
 
+        /**
+         * Build the trajectory sequence and add it to the task queue with default priority.
+         */
         @Override
         public TrajectorySequence build() {
             if (drive == null)
@@ -212,7 +377,11 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
             return builtTrajectory;
         }
 
-        // Optional method to build as the first thing the robot will do
+        /**
+         * Optional method to build as the very first thing the robot will do.
+         *
+         * @see PriorityLevel
+         */
         public TrajectorySequence buildWithPriority() {
             if (drive == null)
                 drive = setDrive();
@@ -222,9 +391,11 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
             return builtTrajectory;
         }
 
-        // Optional method to build as the very last thing the robot will do
-        // This differs from standard build, as it will wait for the init-callback to run first before
-        // appending tasks to the queue
+        /**
+         * Optional method to build as the very last thing the robot will do.
+         *
+         * @see PriorityLevel
+         */
         public TrajectorySequence buildWithLowPriority() {
             if (drive == null)
                 drive = setDrive();

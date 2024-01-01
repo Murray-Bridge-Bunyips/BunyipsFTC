@@ -211,4 +211,9 @@ public class TankDrive extends BunyipsComponent implements RoadRunnerDrive {
     public void setDrivePower(Pose2d drivePower) {
         instance.setDrivePower(drivePower);
     }
+
+    @Override
+    public void cancelTrajectory() {
+        instance.cancelTrajectory();
+    }
 }

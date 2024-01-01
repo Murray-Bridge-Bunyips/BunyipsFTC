@@ -52,6 +52,7 @@ public interface RoadRunnerDrive {
 
     TrajectoryBuilder trajectoryBuilder(Pose2d startPose, double startHeading);
 
+    @SuppressWarnings("rawtypes")
     TrajectorySequenceBuilder trajectorySequenceBuilder(Pose2d startPose);
 
     void turnAsync(double angle);
@@ -71,6 +72,8 @@ public interface RoadRunnerDrive {
     void update();
 
     boolean isBusy();
+
+    void cancelTrajectory();
 
     void setMode(DcMotor.RunMode runMode);
 
