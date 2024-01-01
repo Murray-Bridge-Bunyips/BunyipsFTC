@@ -76,15 +76,15 @@ enum class Controller {
         @JvmStatic
         fun <T> mapArgs(args: Array<out T>): HashMap<T, Controller> {
             // Map strings of args to every controller enum in order
-            if (args.size >= entries.size) {
+            if (args.size >= values().size) {
                 throw IllegalArgumentException("Controller: Number of args exceeds number of possible gamepad buttons (14).")
             }
             val map = HashMap<T, Controller>()
             for (i in args.indices) {
                 // For every arg, map it to the corresponding enum
-                map[args[i]] = entries.toTypedArray()[i]
+                map[args[i]] = values()[i]
                 if (args[i] is OpModeSelection) {
-                    (args[i] as OpModeSelection).assignedButton = entries.toTypedArray()[i]
+                    (args[i] as OpModeSelection).assignedButton = values()[i]
                 }
             }
             return map
@@ -113,7 +113,7 @@ enum class Controller {
         fun movementString(gamepad: Gamepad): String {
             if (gamepad.id == -1) return "(dc)"
             var str = "("
-            for (button in entries) {
+            for (button in values()) {
                 if (button == NONE) continue
                 if (isSelected(gamepad, button)) {
                     str += getChar(button)
