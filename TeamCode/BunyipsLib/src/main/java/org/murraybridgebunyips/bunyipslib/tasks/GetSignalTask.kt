@@ -1,6 +1,5 @@
 package org.murraybridgebunyips.bunyipslib.tasks
 
-import android.annotation.SuppressLint
 import com.qualcomm.robotcore.util.ElapsedTime
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.Vision
@@ -69,7 +68,6 @@ class GetSignalTask(opMode: BunyipsOpMode, private val vision: Vision) : Task(op
         return
     }
 
-    @SuppressLint("DefaultLocale")
     override fun run() {
         at.tick()
 
