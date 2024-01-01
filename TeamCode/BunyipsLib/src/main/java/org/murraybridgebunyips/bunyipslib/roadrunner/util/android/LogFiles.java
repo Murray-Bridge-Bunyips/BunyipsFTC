@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.bunyipslib.roadrunner.util;
+package org.murraybridgebunyips.bunyipslib.roadrunner.util.android;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

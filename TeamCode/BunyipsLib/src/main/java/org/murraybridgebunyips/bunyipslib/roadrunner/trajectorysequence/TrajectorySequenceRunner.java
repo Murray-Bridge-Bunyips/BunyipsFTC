@@ -22,7 +22,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.sequence
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.sequencesegment.TurnSegment;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.sequencesegment.WaitSegment;
 import org.murraybridgebunyips.bunyipslib.roadrunner.util.DashboardUtil;
-import org.murraybridgebunyips.bunyipslib.roadrunner.util.LogFiles;
+import org.murraybridgebunyips.bunyipslib.roadrunner.util.android.LogFiles;
 
 import java.util.ArrayList;
 import java.util.Collections;

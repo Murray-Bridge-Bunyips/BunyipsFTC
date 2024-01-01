@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import org.firstinspires.ftc.robotcore.external.Telemetry
 import org.firstinspires.ftc.robotcore.external.Telemetry.Item
 import org.murraybridgebunyips.bunyipslib.Text.formatString
+import org.murraybridgebunyips.bunyipslib.roadrunner.util.LynxModuleUtil
 import kotlin.math.roundToInt
 
 /**
@@ -95,6 +96,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         try {
             // Using log instead of logd as this message is special
             Dbg.log("=============== BunyipsOpMode ${BuildConfig.GIT_COMMIT} ${BuildConfig.GIT_BRANCH} ${BuildConfig.BUILD_TIME} id:${BuildConfig.ID} ===============")
+            LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap)
             // Separate log from telemetry
             telemetry.log().add("")
             telemetry.log()
