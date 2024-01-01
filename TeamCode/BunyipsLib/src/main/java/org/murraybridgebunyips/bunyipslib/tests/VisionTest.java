@@ -110,7 +110,8 @@ public class VisionTest extends BunyipsOpMode {
     @Override
     protected void onStop() {
         FtcDashboard.getInstance().stopCameraStream();
-        vision.terminate();
+        if (vision != null)
+            vision.terminate();
     }
 
     private enum Procs {
