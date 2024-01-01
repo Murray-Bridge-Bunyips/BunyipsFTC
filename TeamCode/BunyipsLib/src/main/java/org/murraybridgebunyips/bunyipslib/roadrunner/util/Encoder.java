@@ -4,15 +4,18 @@ import com.acmerobotics.roadrunner.util.NanoClock;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.murraybridgebunyips.bunyipslib.Dbg;
+import org.murraybridgebunyips.bunyipslib.RobotConfig;
+
 /**
  * Wraps a motor instance to provide corrected velocity counts and allow reversing independently of the corresponding
  * slot's motor direction
  */
 public class Encoder {
     private static final int CPS_STEP = 0x10000;
-    private final DcMotorEx motor;
-    private final NanoClock clock;
-    private final double[] velocityEstimates;
+    private DcMotorEx motor;
+    private NanoClock clock;
+    private double[] velocityEstimates;
     private Direction direction;
     private int lastPosition;
     private int velocityEstimateIdx;
@@ -33,6 +36,29 @@ public class Encoder {
         this(motor, NanoClock.system());
     }
 
+    public Encoder(String hardwareMapName, RobotConfig configInstance, NanoClock clock) {
+        DcMotorEx motor = (DcMotorEx) configInstance.getHardware(hardwareMapName, DcMotorEx.class);
+        if (motor == null) {
+            // Instantiation will still continue, NullPointerExceptions are bound to happen beyond this point
+            // Will need to check for null with isNull(), or to simply fix the problem (checking the instance itself for null will not work)
+            Dbg.warn("Encoder with name `%` failed to instantiate due to null motor. Ensure to check encoder.isNull() before using this device, or correcting the misconfiguration.", hardwareMapName);
+            return;
+        }
+
+        this.motor = motor;
+        this.clock = clock;
+
+        direction = Direction.FORWARD;
+
+        lastPosition = 0;
+        velocityEstimates = new double[3];
+        lastUpdateTime = clock.seconds();
+    }
+
+    public Encoder(String hardwareMapName, RobotConfig configInstance) {
+        this(hardwareMapName, configInstance, NanoClock.system());
+    }
+
     private static double inverseOverflow(double input, double estimate) {
         // convert to uint16
         int real = (int) input & 0xffff;
@@ -42,6 +68,15 @@ public class Encoder {
         // estimate-based correction: it finds the nearest multiple of 5 to correct the upper bits by
         real += Math.round((estimate - real) / (5 * CPS_STEP)) * 5 * CPS_STEP;
         return real;
+    }
+
+    /**
+     * Checks if the underlying motor for the encoder is null
+     * This is important to check as the encoder will still instantiate, but will not function correctly
+     * NullSafety.assertComponentArgs() will ensure to check for null motors on Encoders.
+     */
+    public boolean isNull() {
+        return motor == null;
     }
 
     public Direction getDirection() {

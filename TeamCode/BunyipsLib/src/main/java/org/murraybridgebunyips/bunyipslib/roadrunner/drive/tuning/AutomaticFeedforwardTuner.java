@@ -12,8 +12,8 @@ import com.qualcomm.robotcore.util.RobotLog;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.internal.system.Misc;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
-import org.murraybridgebunyips.bunyipslib.roadrunner.util.android.LoggingUtil;
 import org.murraybridgebunyips.bunyipslib.roadrunner.util.RegressionUtil;
+import org.murraybridgebunyips.bunyipslib.roadrunner.util.android.LoggingUtil;
 
 import java.util.ArrayList;
 import java.util.List;
