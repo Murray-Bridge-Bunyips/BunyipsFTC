@@ -14,12 +14,14 @@ import org.murraybridgebunyips.bunyipslib.tasks.Task;
 public class ExampleTask extends Task {
     // You will need to store any COMPONENTS you wish to control in your task as a local instance
     private final ExampleLift lift;
+    // You will also need to store the OpMode you are running in, if you wish to access telemetry
+    // This is optional.
+    private final BunyipsOpMode opMode;
 
-    // If you extend task without `time`, your task will never call itself finished!
     public ExampleTask(@NonNull BunyipsOpMode opMode, double time, ExampleLift lift) {
-        // Here, we allow the superclass to handle time and opMode. These are required.
-        super(opMode, time);
-
+        // Here, we allow the superclass to handle time controls. This is required.
+        super(time);
+        this.opMode = opMode;
         // Inside the constructor you can pass whatever you wish to control, for example, a drive
         this.lift = lift;
     }

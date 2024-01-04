@@ -3,7 +3,7 @@ package org.murraybridgebunyips.jerry.tasks
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
+import org.murraybridgebunyips.bunyipslib.tasks.Command
 import org.murraybridgebunyips.bunyipslib.tasks.Task
 import kotlin.math.abs
 
@@ -32,7 +32,7 @@ class JerryPrecisionDriveTask(
     private val direction: Directions,
     private var power: Double,
     private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
-) : Task(opMode, time), AutoTask {
+) : Task(opMode, time), Command {
 
     init {
         try {

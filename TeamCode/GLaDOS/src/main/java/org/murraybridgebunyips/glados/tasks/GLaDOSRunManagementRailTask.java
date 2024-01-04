@@ -7,11 +7,13 @@ import org.murraybridgebunyips.bunyipslib.personalitycore.submodules.Personality
 import org.murraybridgebunyips.bunyipslib.tasks.Task;
 
 public class GLaDOSRunManagementRailTask extends Task {
+    private final BunyipsOpMode opMode;
     private final PersonalityCoreManagementRail managementRail;
     private final double power;
 
     public GLaDOSRunManagementRailTask(@NonNull BunyipsOpMode opMode, double time, PersonalityCoreManagementRail managementRail, double power) {
-        super(opMode, time);
+        super(time);
+        this.opMode = opMode;
         this.managementRail = managementRail;
         if (managementRail == null) setTaskFinished(true);
         this.power = power;

@@ -6,7 +6,7 @@ import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
+import org.murraybridgebunyips.bunyipslib.tasks.Command
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
 
@@ -46,7 +46,7 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
         ).toMutableList()
     }
 
-    override fun setInitTask(): AutoTask? {
+    override fun setInitTask(): Command? {
         return null
     }
 

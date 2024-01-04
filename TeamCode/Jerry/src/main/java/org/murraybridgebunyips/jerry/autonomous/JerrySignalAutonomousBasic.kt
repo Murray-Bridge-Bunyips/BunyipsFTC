@@ -7,7 +7,7 @@ import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
 import org.murraybridgebunyips.bunyipslib.Vision
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
+import org.murraybridgebunyips.bunyipslib.tasks.Command
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryTimeDriveTask
@@ -50,7 +50,7 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
         return null
     }
 
-    override fun setInitTask(): AutoTask? {
+    override fun setInitTask(): Command? {
         return tagtask
     }
 

@@ -12,8 +12,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 public class CallbackTask extends RunOnceTask {
     private final Runnable callback;
 
-    public CallbackTask(@NonNull BunyipsOpMode opMode, Runnable callback) {
-        super(opMode);
+    public CallbackTask(Runnable callback) {
         this.callback = callback;
     }
 

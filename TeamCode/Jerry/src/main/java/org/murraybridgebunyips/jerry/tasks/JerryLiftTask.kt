@@ -1,7 +1,7 @@
 package org.murraybridgebunyips.jerry.tasks
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
+import org.murraybridgebunyips.bunyipslib.tasks.Command
 import org.murraybridgebunyips.bunyipslib.tasks.Task
 import org.murraybridgebunyips.jerry.components.JerryLift
 
@@ -15,7 +15,7 @@ class JerryLiftTask(
     private val lift: JerryLift?,
     private val percent: Int,
     private val power: Double? = null,
-) : Task(opMode, time), AutoTask {
+) : Task(opMode, time), Command {
 
     override fun init() {
         if (power != null) {

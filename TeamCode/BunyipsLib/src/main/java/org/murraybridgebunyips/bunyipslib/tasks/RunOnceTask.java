@@ -8,9 +8,9 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
  * A task that runs once and then immediately completes.
  */
 public abstract class RunOnceTask extends Task {
-    protected RunOnceTask(@NonNull BunyipsOpMode opMode) {
+    protected RunOnceTask() {
         // Time will be ignored as this task will only run once
-        super(opMode, 1);
+        super(1);
     }
 
     @Override

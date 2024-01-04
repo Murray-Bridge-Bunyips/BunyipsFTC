@@ -2,7 +2,7 @@ package org.murraybridgebunyips.jerry.tasks
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
+import org.murraybridgebunyips.bunyipslib.tasks.Command
 import org.murraybridgebunyips.bunyipslib.tasks.Task
 
 /**
@@ -18,7 +18,7 @@ class JerryTimeDriveTask(
     private val x: Double,
     private val y: Double,
     private val r: Double
-) : Task(opMode, time), AutoTask {
+) : Task(opMode, time), Command {
     override fun init() {
         return
     }

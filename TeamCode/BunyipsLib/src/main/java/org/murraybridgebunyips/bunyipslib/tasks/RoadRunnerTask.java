@@ -19,19 +19,22 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.Trajecto
  * @author Lucas Bubner, 2023
  */
 public class RoadRunnerTask<T extends RoadRunnerDrive> extends Task {
+    private final BunyipsOpMode opMode;
     private final T drive;
 
     private Trajectory trajectory;
     private TrajectorySequence trajectorySequence;
 
     public RoadRunnerTask(@NonNull BunyipsOpMode opMode, double time, T drive, Trajectory trajectory) {
-        super(opMode, time);
+        super(time);
+        this.opMode = opMode;
         this.drive = drive;
         this.trajectory = trajectory;
     }
 
     public RoadRunnerTask(@NonNull BunyipsOpMode opMode, double time, T drive, TrajectorySequence trajectorySequence) {
-        super(opMode, time);
+        super(time);
+        this.opMode = opMode;
         this.drive = drive;
         this.trajectorySequence = trajectorySequence;
     }
@@ -66,11 +69,11 @@ public class RoadRunnerTask<T extends RoadRunnerDrive> extends Task {
         double angle = Math.atan2(endPose.getY() - drive.getPoseEstimate().getY(), endPose.getX() - drive.getPoseEstimate().getX());
 
         // Time to completion
-        getOpMode().addTelemetry("Duration: %/% sec", round(getDeltaTime(), 2), round(duration, 2));
+        opMode.addTelemetry("Duration: %/% sec", round(getDeltaTime(), 2), round(duration, 2));
         drive.update();
 
-        getOpMode().addTelemetry("Distance to target: %cm", round(Inches.toCM(distance), 2));
-        getOpMode().addTelemetry("Angle to target: %deg", round(Math.toDegrees(angle), 2));
+        opMode.addTelemetry("Distance to target: %cm", round(Inches.toCM(distance), 2));
+        opMode.addTelemetry("Angle to target: %deg", round(Math.toDegrees(angle), 2));
     }
 
     @Override

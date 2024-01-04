@@ -22,7 +22,7 @@ import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.personalitycore.PersonalityCoreArm;
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
+import org.murraybridgebunyips.bunyipslib.tasks.Command;
 import org.murraybridgebunyips.bunyipslib.tasks.CallbackTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
@@ -62,7 +62,7 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
     }
 
     @Override
-    protected AutoTask setInitTask() {
+    protected Command setInitTask() {
         return initTask;
     }
 
@@ -89,9 +89,9 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
         vision.flip();
         initTask.setTeamProp(processor);
 
-        addTask(new CallbackTask(this, () -> arm.setClawRotatorDegrees(10).update()));
+        addTask(new CallbackTask(() -> arm.setClawRotatorDegrees(10).update()));
         addTask(new GLaDOSRunManagementRailTask(this, 1.0, arm.getManagementRail(), 1.0));
-        addTask(new CallbackTask(this, () -> arm.openClaw(DualClaws.ServoSide.LEFT).update()));
+        addTask(new CallbackTask(() -> arm.openClaw(DualClaws.ServoSide.LEFT).update()));
     }
 
     @Override

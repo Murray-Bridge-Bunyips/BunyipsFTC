@@ -6,7 +6,7 @@ import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
+import org.murraybridgebunyips.bunyipslib.tasks.Command
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryIMURotationTask
 
@@ -38,7 +38,7 @@ class JerryIMURotateTest : AutonomousBunyipsOpMode() {
         return null
     }
 
-    override fun setInitTask(): AutoTask? {
+    override fun setInitTask(): Command? {
         return null
     }
 

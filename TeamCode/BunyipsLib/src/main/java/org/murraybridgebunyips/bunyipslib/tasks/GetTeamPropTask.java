@@ -15,18 +15,19 @@ import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
  * @author Lachlan Paul, 2023
  */
 public class GetTeamPropTask extends Task {
+    private final BunyipsOpMode opMode;
     private final Vision vision;
     private TeamProp teamProp;
     private boolean initFired;
     private TeamProp.Positions position;
 
     public GetTeamPropTask(@NonNull BunyipsOpMode opMode, Vision vision) {
-        super(opMode);
+        this.opMode = opMode;
         this.vision = vision;
     }
 
     public GetTeamPropTask(@NonNull BunyipsOpMode opMode, Vision vision, TeamProp teamProp) {
-        super(opMode);
+        this.opMode = opMode;
         this.vision = vision;
         this.teamProp = teamProp;
     }
@@ -80,7 +81,7 @@ public class GetTeamPropTask extends Task {
             // TeamProp will never have more than one data instance
             position = teamProp.getData().get(0).getPosition();
         }
-        getOpMode().addTelemetry("Spike mark reading: %", position);
+        opMode.addTelemetry("Spike mark reading: %", position);
     }
 
     @Override

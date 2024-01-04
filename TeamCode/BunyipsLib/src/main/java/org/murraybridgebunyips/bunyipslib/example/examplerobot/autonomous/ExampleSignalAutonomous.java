@@ -4,7 +4,7 @@ import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.example.examplerobot.components.ExampleConfig;
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
+import org.murraybridgebunyips.bunyipslib.tasks.Command;
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 
@@ -26,7 +26,7 @@ public class ExampleSignalAutonomous extends AutonomousBunyipsOpMode {
     protected void onInitialisation() {
         config.init(this);
         cam = new Vision(this, config.webcam);
-        initTask = new GetSignalTask(this, cam);
+        initTask = new GetSignalTask(cam);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class ExampleSignalAutonomous extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected AutoTask setInitTask() {
+    protected Command setInitTask() {
         // Will run this task until it is complete, then move on to onInitDone(), or will terminate
         // once the OpMode is started.
         return initTask;
