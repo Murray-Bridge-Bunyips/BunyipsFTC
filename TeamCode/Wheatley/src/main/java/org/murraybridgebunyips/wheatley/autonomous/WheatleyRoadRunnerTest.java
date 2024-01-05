@@ -10,7 +10,7 @@ import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
-import org.murraybridgebunyips.bunyipslib.tasks.Command;
+import org.murraybridgebunyips.bunyipslib.tasks.RobotTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 import java.util.List;
@@ -43,7 +43,7 @@ public class WheatleyRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Me
     }
 
     @Override
-    protected Command setInitTask() {
+    protected RobotTask setInitTask() {
         return null;
     }
 

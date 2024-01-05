@@ -6,8 +6,8 @@ package org.murraybridgebunyips.bunyipslib.tasks
  * reflective of the past nature of how the Task system was implemented in BunyipsLib.
  * @author Lucas Bubner, 2022-2024
  */
-abstract class Task : Command {
-    protected var time: Double
+abstract class Task : RobotTask {
+    protected open var time: Double
     private var startTime = 0.0
 
     @Volatile

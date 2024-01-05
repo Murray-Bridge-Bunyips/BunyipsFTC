@@ -6,7 +6,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
  * Relay a message to the driver station for a specific time.
  */
 class MessageTask(private val opMode: BunyipsOpMode, time: Double, private val message: String) :
-    Task(time), Command {
+    Task(time), RobotTask {
 
     override fun init() {
         return

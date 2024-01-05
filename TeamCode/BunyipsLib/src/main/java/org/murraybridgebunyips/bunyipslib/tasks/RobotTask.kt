@@ -1,9 +1,9 @@
 package org.murraybridgebunyips.bunyipslib.tasks
 
 /**
- * Structure of a Command to execute through the Task system.
+ * Structure of a Task to execute through the command system.
  */
-interface Command {
+interface RobotTask {
     fun init()
     fun run()
     fun isFinished(): Boolean

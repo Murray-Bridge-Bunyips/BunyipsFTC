@@ -12,7 +12,7 @@ import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
-import org.murraybridgebunyips.bunyipslib.tasks.Command;
+import org.murraybridgebunyips.bunyipslib.tasks.RobotTask;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 import java.util.List;
@@ -37,7 +37,7 @@ public class GLaDOSLeftPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDri
     }
 
     @Override
-    protected Command setInitTask() {
+    protected RobotTask setInitTask() {
         return null;
     }
 

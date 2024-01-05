@@ -9,7 +9,7 @@ import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.TankDrive;
 import org.murraybridgebunyips.bunyipslib.example.examplerobot.components.ExampleConfig;
-import org.murraybridgebunyips.bunyipslib.tasks.Command;
+import org.murraybridgebunyips.bunyipslib.tasks.RobotTask;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public class ExampleRoadRunnerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
     }
 
     @Override
-    protected Command setInitTask() {
+    protected RobotTask setInitTask() {
         return null;
     }
 

@@ -7,7 +7,7 @@ import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
 import org.murraybridgebunyips.bunyipslib.Vision
-import org.murraybridgebunyips.bunyipslib.tasks.Command
+import org.murraybridgebunyips.bunyipslib.tasks.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
@@ -61,7 +61,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
         return null
     }
 
-    override fun setInitTask(): Command? {
+    override fun setInitTask(): RobotTask? {
         return tagtask
     }
 

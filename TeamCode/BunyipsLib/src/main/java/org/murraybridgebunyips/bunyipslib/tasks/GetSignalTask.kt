@@ -1,7 +1,6 @@
 package org.murraybridgebunyips.bunyipslib.tasks
 
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.Vision
 import org.murraybridgebunyips.bunyipslib.vision.AprilTag
 
@@ -11,7 +10,7 @@ import org.murraybridgebunyips.bunyipslib.vision.AprilTag
  * @author Lucas Bubner, 2022-2023
  */
 class GetSignalTask(private val vision: Vision) : Task(),
-    Command {
+    RobotTask {
     private lateinit var at: AprilTag
     private val lockTimer = ElapsedTime()
 //    private var noDetections = 0

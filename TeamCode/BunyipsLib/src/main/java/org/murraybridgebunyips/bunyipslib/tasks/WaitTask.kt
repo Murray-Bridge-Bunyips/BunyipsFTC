@@ -5,7 +5,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 /**
  * Task to wait for a specific amount of time.
  */
-class WaitTask(private val opMode: BunyipsOpMode, time: Double) : Task(time), Command {
+class WaitTask(private val opMode: BunyipsOpMode, time: Double) : Task(time), RobotTask {
     override fun init() {
         return
     }

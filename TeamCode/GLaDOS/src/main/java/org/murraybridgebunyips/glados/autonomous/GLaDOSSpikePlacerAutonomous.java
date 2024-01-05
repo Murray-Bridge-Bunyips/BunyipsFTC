@@ -22,7 +22,7 @@ import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.personalitycore.PersonalityCoreArm;
-import org.murraybridgebunyips.bunyipslib.tasks.Command;
+import org.murraybridgebunyips.bunyipslib.tasks.RobotTask;
 import org.murraybridgebunyips.bunyipslib.tasks.CallbackTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
@@ -62,7 +62,7 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
     }
 
     @Override
-    protected Command setInitTask() {
+    protected RobotTask setInitTask() {
         return initTask;
     }
 

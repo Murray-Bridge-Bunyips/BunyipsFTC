@@ -18,8 +18,7 @@ import java.util.List;
  *
  * @author Lucas Bubner, 2023
  */
-public class GetWhitePixelTask extends Task {
-    private final BunyipsOpMode opMode;
+public class GetWhitePixelTask extends BunyipsTask {
     /**
      * For use in CAPTURE mode, lock in the spike detection if it is detected for this many frames
      */
@@ -47,7 +46,7 @@ public class GetWhitePixelTask extends Task {
      * @param aggression How decisive the task should be in determining if a spike has been found
      */
     public GetWhitePixelTask(@NonNull BunyipsOpMode opMode, Vision vision, TFOD tfod, Aggression aggression) {
-        this.opMode = opMode;
+        super(opMode);
         this.vision = vision;
         this.tfod = tfod;
         this.aggression = aggression;
@@ -65,7 +64,7 @@ public class GetWhitePixelTask extends Task {
             vision.start(tfod);
         } catch (IllegalStateException e) {
             // OpMode did not start the VisionPortal for us, we better do it ourselves
-            opMode.log("WARNING: TFOD processor not initialised by Vision.init()! Initialising now...");
+            getOpMode().log("WARNING: TFOD processor not initialised by Vision.init()! Initialising now...");
             vision.init(tfod);
             vision.start(tfod);
         }

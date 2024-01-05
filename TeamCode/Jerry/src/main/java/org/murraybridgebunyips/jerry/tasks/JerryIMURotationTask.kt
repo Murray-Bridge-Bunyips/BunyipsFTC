@@ -3,8 +3,8 @@ package org.murraybridgebunyips.jerry.tasks
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
-import org.murraybridgebunyips.bunyipslib.tasks.Command
-import org.murraybridgebunyips.bunyipslib.tasks.Task
+import org.murraybridgebunyips.bunyipslib.tasks.BunyipsTask
+import org.murraybridgebunyips.bunyipslib.tasks.RobotTask
 
 // Rotate the robot to a specific degree angle. This cannot be done with deadwheel assistance due to configuration.
 /**
@@ -21,7 +21,7 @@ class JerryIMURotationTask(
     // Angle information should be a degree of rotation relative to current angle where positive = cw
     private var angle: Double,
     private val speed: Double
-) : Task(opMode, time), Command {
+) : BunyipsTask(opMode, time), RobotTask {
     // Enum to find out which way we need to be turning
     var direction: Direction = Direction.RIGHT
 
