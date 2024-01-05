@@ -1,7 +1,5 @@
 package org.murraybridgebunyips.bunyipslib;
 
-import org.murraybridgebunyips.bunyipslib.tasks.Task;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -14,11 +12,7 @@ public class Scheduler {
 
     public void run() {
         for (BunyipsSubsystem subsystem : subsystems) {
-            Task currentTask = subsystem.getCurrentTask();
-            if (currentTask != null) {
-                currentTask.run();
-            }
-            subsystem.update();
+            subsystem.run();
         }
     }
 }

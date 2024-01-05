@@ -5,7 +5,6 @@ import androidx.annotation.NonNull;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.personalitycore.submodules.PersonalityCoreManagementRail;
 import org.murraybridgebunyips.bunyipslib.tasks.BunyipsTask;
-import org.murraybridgebunyips.bunyipslib.tasks.Task;
 
 public class GLaDOSRunManagementRailTask extends BunyipsTask {
     private final PersonalityCoreManagementRail managementRail;
@@ -14,7 +13,7 @@ public class GLaDOSRunManagementRailTask extends BunyipsTask {
     public GLaDOSRunManagementRailTask(@NonNull BunyipsOpMode opMode, double time, PersonalityCoreManagementRail managementRail, double power) {
         super(opMode, time);
         this.managementRail = managementRail;
-        if (managementRail == null) setTaskFinished(true);
+        if (managementRail == null) finishNow();
         this.power = power;
     }
 

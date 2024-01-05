@@ -142,7 +142,6 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
         }
 
         addTelemetry("Running task (%/%): %", this.currentTask, taskCount, currentTask.getClass().getSimpleName());
-        currentTask.run();
 
         // AutonomousBunyipsOpMode is handling all task completion checks, manual checks not required
         if (currentTask.isFinished()) {
@@ -150,6 +149,9 @@ public abstract class AutonomousBunyipsOpMode extends BunyipsOpMode {
             log("auto: task %/% (%) finished", this.currentTask, taskCount, currentTask.getClass().getSimpleName());
             this.currentTask++;
         }
+
+        // Ensure we run the task after checking if it is finished, to ensure init() is called
+        currentTask.run();
     }
 
     /**

@@ -5,6 +5,6 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 /**
  * Task interface with BunyipsOpMode dependency injection.
  */
-abstract class BunyipsTask(open val opMode: BunyipsOpMode, override var time: Double) : Task(time) {
+abstract class BunyipsTask(open val opMode: BunyipsOpMode, time: Double) : Task(time) {
     constructor(opMode: BunyipsOpMode) : this(opMode, 0.0)
 }

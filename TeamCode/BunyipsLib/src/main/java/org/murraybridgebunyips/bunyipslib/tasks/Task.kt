@@ -7,11 +7,16 @@ package org.murraybridgebunyips.bunyipslib.tasks
  * @author Lucas Bubner, 2022-2024
  */
 abstract class Task : RobotTask {
-    protected open var time: Double
+    /**
+     * Maximum timeout (sec) of the task. If set to zero this will serve as an indefinite task.
+     */
+    var timeout: Double
+
     private var startTime = 0.0
 
     @Volatile
     var taskFinished = false
+        private set
 
     private var finisherFired = false
 
@@ -19,15 +24,15 @@ abstract class Task : RobotTask {
      * @param time Maximum timeout (sec) of the task. If set to zero this will serve as an indefinite task.
      */
     constructor(time: Double) {
-        this.time = time
+        this.timeout = time
     }
 
     /**
      * Overloading base Task allows any tasks that may not want to use a time restriction,
-     * such as an init-loop task. This will perform the same as a task also defined with a time of 0 seconds.
+     * such as an init-loop or default task. This will perform the same as a task also defined with a time of 0 seconds.
      */
     constructor() {
-        time = 0.0
+        timeout = 0.0
     }
 
     /**
@@ -37,8 +42,8 @@ abstract class Task : RobotTask {
 
     /**
      * To run as an activeLoop during this task's duration.
-     * Somewhere in your polling loop you must call isFinished() to determine when the task is finished.
-     * (AutonomousBunyipsOpMode will handle this automatically and checking isFinished() is not required)
+     * Somewhere in your polling loop you must call isFinished() to determine when the task is finished, and to fire init() and onFinish() accordingly.
+     * Both Scheduler and AutonomousBunyipsOpMode will handle this for you.
      * @see onFinish()
      */
     abstract override fun run()
@@ -67,7 +72,7 @@ abstract class Task : RobotTask {
             return true
         }
         // Finish tasks that exceed a time limit defined by the task
-        if (time != 0.0 && currentTime > startTime + time) {
+        if (timeout != 0.0 && currentTime > startTime + timeout) {
             if (!finisherFired)
                 onFinish()
             finisherFired = true
@@ -86,16 +91,21 @@ abstract class Task : RobotTask {
     }
 
     /**
-     * @return Whether the task is currently running
+     * Force a task to finish immediately.
      */
-    fun isRunning(): Boolean {
-        return startTime != 0.0 && !taskFinished
+    fun finishNow() {
+        taskFinished = true
     }
 
-    protected val currentTime: Double
+    /**
+     * @return Whether the task is currently running (calls to run() should be made)
+     */
+    val isRunning: Boolean = startTime != 0.0 && !taskFinished
+
+    val currentTime: Double
         get() = System.nanoTime() / NANOS_IN_SECONDS
 
-    protected val deltaTime: Double
+    val deltaTime: Double
         get() = currentTime - startTime
 
     companion object {
