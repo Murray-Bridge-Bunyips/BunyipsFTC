@@ -3,7 +3,7 @@ package org.murraybridgebunyips.bunyipslib;
 import androidx.annotation.Nullable;
 
 import org.jetbrains.annotations.NotNull;
-import org.murraybridgebunyips.bunyipslib.tasks.RobotTask;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

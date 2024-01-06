@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.bunyipslib.tasks
+package org.murraybridgebunyips.bunyipslib.tasks.bases
 
 /**
  * Structure of a Task to execute through the command system.

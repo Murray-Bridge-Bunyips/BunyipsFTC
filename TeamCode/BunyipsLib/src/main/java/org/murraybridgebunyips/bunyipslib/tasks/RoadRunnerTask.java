@@ -11,6 +11,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask;
 
 /**
  * Task for running RoadRunner trajectories using the BunyipsOpMode Task system.

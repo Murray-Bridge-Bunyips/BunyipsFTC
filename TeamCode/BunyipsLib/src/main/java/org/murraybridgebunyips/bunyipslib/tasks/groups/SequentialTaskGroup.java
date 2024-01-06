@@ -1,6 +1,6 @@
 package org.murraybridgebunyips.bunyipslib.tasks.groups;
 
-import org.murraybridgebunyips.bunyipslib.tasks.Task;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
 import java.util.Iterator;
 

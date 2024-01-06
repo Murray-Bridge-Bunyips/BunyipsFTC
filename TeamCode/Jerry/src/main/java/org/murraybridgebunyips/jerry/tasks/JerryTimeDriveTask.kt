@@ -2,9 +2,8 @@ package org.murraybridgebunyips.jerry.tasks
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
-import org.murraybridgebunyips.bunyipslib.tasks.BunyipsTask
-import org.murraybridgebunyips.bunyipslib.tasks.RobotTask
-import org.murraybridgebunyips.bunyipslib.tasks.Task
+import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 
 /**
  * Base drive task which will run Cartesian XYR speed for a given time

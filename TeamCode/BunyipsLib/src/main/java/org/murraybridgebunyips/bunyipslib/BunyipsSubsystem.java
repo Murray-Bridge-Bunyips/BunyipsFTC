@@ -2,7 +2,7 @@ package org.murraybridgebunyips.bunyipslib;
 
 import androidx.annotation.NonNull;
 
-import org.murraybridgebunyips.bunyipslib.tasks.Task;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
 public abstract class BunyipsSubsystem extends BunyipsComponent {
     private Task currentTask;

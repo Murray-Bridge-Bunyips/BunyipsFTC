@@ -7,7 +7,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.Scheduler;
-import org.murraybridgebunyips.bunyipslib.tasks.CallbackTask;
+import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -35,7 +35,7 @@ public class GLaDOSDrivetrainC extends BunyipsOpMode {
     }
 
     private void setCommands() {
-        drive.setDefaultTask(new CallbackTask(() -> drive.update()));
+        drive.setDefaultTask(new InstantTask(() -> drive.update()));
     }
 
     @Override

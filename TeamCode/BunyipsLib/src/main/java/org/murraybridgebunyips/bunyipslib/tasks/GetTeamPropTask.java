@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.Vision;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask;
 import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
 
 /**

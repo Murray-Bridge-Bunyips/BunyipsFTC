@@ -1,6 +1,7 @@
-package org.murraybridgebunyips.bunyipslib.tasks
+package org.murraybridgebunyips.bunyipslib.tasks.bases
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
+import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 
 /**
  * Task interface with BunyipsOpMode dependency injection.

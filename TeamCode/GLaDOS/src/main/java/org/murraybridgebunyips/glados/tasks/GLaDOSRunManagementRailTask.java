@@ -4,7 +4,7 @@ import androidx.annotation.NonNull;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.personalitycore.submodules.PersonalityCoreManagementRail;
-import org.murraybridgebunyips.bunyipslib.tasks.BunyipsTask;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask;
 
 public class GLaDOSRunManagementRailTask extends BunyipsTask {
     private final PersonalityCoreManagementRail managementRail;

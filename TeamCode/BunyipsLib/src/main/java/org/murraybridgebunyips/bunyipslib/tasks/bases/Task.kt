@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.bunyipslib.tasks
+package org.murraybridgebunyips.bunyipslib.tasks.bases
 
 /**
  * A task, or command is an action that can be performed by a robot. This has been designed
@@ -6,34 +6,20 @@ package org.murraybridgebunyips.bunyipslib.tasks
  * reflective of the past nature of how the Task system was implemented in BunyipsLib.
  * @author Lucas Bubner, 2022-2024
  */
-abstract class Task : RobotTask {
-    /**
-     * Maximum timeout (sec) of the task. If set to zero this will serve as an indefinite task.
-     */
-    var timeout: Double
+abstract class Task(timeoutSeconds: Double) : RobotTask {
 
-    private var startTime = 0.0
+    /**
+     * Maximum timeout (sec) of the task. If set to 0 this will serve as an indefinite task, and
+     * will only finish when isTaskFinished() returns true.
+     */
+    var timeout: Double = timeoutSeconds
 
     @Volatile
     var taskFinished = false
         private set
 
+    private var startTime = 0.0
     private var finisherFired = false
-
-    /**
-     * @param time Maximum timeout (sec) of the task. If set to zero this will serve as an indefinite task.
-     */
-    constructor(time: Double) {
-        this.timeout = time
-    }
-
-    /**
-     * Overloading base Task allows any tasks that may not want to use a time restriction,
-     * such as an init-loop or default task. This will perform the same as a task also defined with a time of 0 seconds.
-     */
-    constructor() {
-        timeout = 0.0
-    }
 
     /**
      * Define code to run once, when the task is started.

@@ -3,9 +3,8 @@ package org.murraybridgebunyips.jerry.tasks
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
-import org.murraybridgebunyips.bunyipslib.tasks.BunyipsTask
-import org.murraybridgebunyips.bunyipslib.tasks.RobotTask
-import org.murraybridgebunyips.bunyipslib.tasks.Task
+import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import kotlin.math.abs
 
 /**

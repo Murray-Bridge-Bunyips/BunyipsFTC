@@ -1,14 +1,16 @@
 package org.murraybridgebunyips.bunyipslib.tasks;
 
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RunOnceTask;
+
 /**
  * A task to run a callback before immediately completing.
  * <p>
- * {@code new CallbackTask(this, () -> addTelemetry("Hello world"));}
+ * {@code new InstantTask(() -> addTelemetry("Hello world"));}
  */
-public class CallbackTask extends RunOnceTask {
+public class InstantTask extends RunOnceTask {
     private final Runnable callback;
 
-    public CallbackTask(Runnable callback) {
+    public InstantTask(Runnable callback) {
         this.callback = callback;
     }
 
