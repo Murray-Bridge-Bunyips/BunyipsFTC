@@ -12,7 +12,7 @@ public abstract class BunyipsSubsystem extends BunyipsComponent {
         super(opMode);
     }
 
-    private Task getCurrentTask() {
+    public Task getCurrentTask() {
         if (currentTask == null || currentTask.isFinished()) {
             currentTask = defaultTask;
         }
@@ -21,6 +21,10 @@ public abstract class BunyipsSubsystem extends BunyipsComponent {
 
     public final void setDefaultTask(Task defaultTask) {
         this.defaultTask = defaultTask;
+    }
+
+    public final void setCurrentTask(Task currentTask) {
+        this.currentTask = currentTask;
     }
 
     public final void run() {
