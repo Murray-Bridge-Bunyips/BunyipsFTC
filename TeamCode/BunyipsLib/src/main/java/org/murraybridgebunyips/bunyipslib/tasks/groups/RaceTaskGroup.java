@@ -10,14 +10,14 @@ import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
  */
 public class RaceTaskGroup extends TaskGroup {
     @Override
-    public void run() {
+    public final void run() {
         for (Task task : tasks) {
             task.run();
         }
     }
 
     @Override
-    public boolean isTaskFinished() {
+    public final boolean isTaskFinished() {
         for (Task task : tasks) {
             if (task.isFinished()) return true;
         }

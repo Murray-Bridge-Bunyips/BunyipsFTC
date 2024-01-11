@@ -45,6 +45,9 @@ abstract class Task(timeoutSeconds: Double) : RobotTask {
      */
     abstract fun isTaskFinished(): Boolean
 
+    /**
+     * Must be called in a polling loop before run() to ensure init() is called first.
+     */
     final override fun isFinished(): Boolean {
         if (startTime == 0.0) {
             init()
@@ -81,6 +84,17 @@ abstract class Task(timeoutSeconds: Double) : RobotTask {
      */
     fun finishNow() {
         taskFinished = true
+    }
+
+    /**
+     * Force a task to finish immediately, and fire the onFinish() method without waiting
+     * for the next polling loop. This method is useful when your task is about to die and
+     * needs to finish up immediately.
+     */
+    fun forceFinish() {
+        taskFinished = true
+        finisherFired = true
+        onFinish()
     }
 
     /**

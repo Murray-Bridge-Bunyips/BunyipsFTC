@@ -24,6 +24,20 @@ public abstract class BunyipsSubsystem extends BunyipsComponent {
     }
 
     public final void setCurrentTask(Task currentTask) {
+        // Lockout if a task is currently running that is not the default task
+        if (currentTask != defaultTask) {
+            Dbg.warn("Attempted to set a task while another task was running in %, this was ignored.", this.getClass().getCanonicalName());
+            return;
+        }
+        this.currentTask = currentTask;
+    }
+
+    public final void setHighPriorityCurrentTask(Task currentTask) {
+        // Task will be cancelled abruptly, run the finish callback now
+        if (currentTask != defaultTask) {
+            Dbg.warn("A high-priority task has forcefully interrupted the current task in %.", this.getClass().getCanonicalName());
+            currentTask.forceFinish();
+        }
         this.currentTask = currentTask;
     }
 

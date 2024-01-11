@@ -9,7 +9,7 @@ import java.util.Iterator;
  *
  * @author Lucas Bubner, 2024
  */
-public final class SequentialTaskGroup extends TaskGroup {
+public class SequentialTaskGroup extends TaskGroup {
     private final Iterator<Task> taskIterator;
     private Task currentTask;
 
@@ -20,7 +20,7 @@ public final class SequentialTaskGroup extends TaskGroup {
     }
 
     @Override
-    public void run() {
+    public final void run() {
         if (currentTask.isFinished()) {
             if (!taskIterator.hasNext()) {
                 finishNow();
@@ -33,7 +33,7 @@ public final class SequentialTaskGroup extends TaskGroup {
     }
 
     @Override
-    public boolean isTaskFinished() {
+    public final boolean isTaskFinished() {
         for (Task task : tasks) {
             if (!task.isFinished()) return false;
         }
