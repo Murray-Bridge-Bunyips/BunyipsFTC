@@ -9,7 +9,7 @@ import java.util.TreeMap;
  * Utility from FTCLib
  * <a href="https://github.com/FTCLib/FTCLib/blob/master/core/src/main/java/com/arcrobotics/ftclib/util/LUT.java">Source</a>
  */
-public class LUT<T extends Number, R> extends TreeMap<T, R> {
+public class LookupTable<T extends Number, R> extends TreeMap<T, R> {
 
     public void add(T key, R out) {
         put(key, out);

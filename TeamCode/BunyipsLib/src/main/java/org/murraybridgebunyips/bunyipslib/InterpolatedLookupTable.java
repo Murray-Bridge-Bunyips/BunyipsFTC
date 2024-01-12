@@ -10,19 +10,19 @@ import java.util.List;
  * Utility from FTCLib
  * <a href="https://github.com/FTCLib/FTCLib/blob/master/core/src/main/java/com/arcrobotics/ftclib/util/InterpLUT.java">Source</a>
  */
-public class InterpLUT {
+public class InterpolatedLookupTable {
 
     private List<Double> mX = new ArrayList<>();
     private List<Double> mY = new ArrayList<>();
     private List<Double> mM = new ArrayList<>();
 
-    private InterpLUT(List<Double> x, List<Double> y, List<Double> m) {
+    private InterpolatedLookupTable(List<Double> x, List<Double> y, List<Double> m) {
         mX = x;
         mY = y;
         mM = m;
     }
 
-    public InterpLUT() {
+    public InterpolatedLookupTable() {
     }
 
     public void add(double input, double output) {
