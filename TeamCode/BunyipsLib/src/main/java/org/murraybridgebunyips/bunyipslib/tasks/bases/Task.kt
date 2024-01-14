@@ -1,5 +1,7 @@
 package org.murraybridgebunyips.bunyipslib.tasks.bases
 
+import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem
+
 /**
  * A task, or command is an action that can be performed by a robot. This has been designed
  * to reflect closely the command-based programming style used in FRC, while still being
@@ -7,6 +9,22 @@ package org.murraybridgebunyips.bunyipslib.tasks.bases
  * @author Lucas Bubner, 2022-2024
  */
 abstract class Task(timeoutSeconds: Double) : RobotTask {
+    private var overrideOnConflict: Boolean? = null
+
+    fun shouldOverrideOnConflict(): Boolean? {
+        return overrideOnConflict
+    }
+
+    fun addDependency(dependencySubsystem: BunyipsSubsystem) {
+        dependencySubsystem.addDependencyFromTask(this.hashCode())
+        if (overrideOnConflict == null)
+            overrideOnConflict = false
+    }
+
+    constructor(timeoutSeconds: Double, dependencySubsystem: BunyipsSubsystem, shouldOverrideOtherTasks: Boolean) : this(timeoutSeconds) {
+        addDependency(dependencySubsystem)
+        overrideOnConflict = shouldOverrideOtherTasks
+    }
 
     /**
      * Maximum timeout (sec) of the task. If set to 0 this will serve as an indefinite task, and

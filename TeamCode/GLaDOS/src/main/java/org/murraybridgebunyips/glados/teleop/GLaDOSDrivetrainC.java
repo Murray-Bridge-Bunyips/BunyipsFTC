@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.Scheduler;
@@ -19,7 +20,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 @Disabled
 public class GLaDOSDrivetrainC extends BunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
-    private final Scheduler scheduler = new Scheduler();
+    private final Scheduler scheduler = new Scheduler(this);
     private MecanumDrive drive;
 
     @Override
@@ -31,21 +32,16 @@ public class GLaDOSDrivetrainC extends BunyipsOpMode {
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelEncoder, config.perpendicularEncoder
         );
-        setCommands();
-    }
 
-    private void setCommands() {
-        drive.setDefaultTask(new InstantTask(() -> drive.update()));
+        scheduler.addSubsystems(drive);
+        scheduler.whenPressed(Controller.User.ONE, Controller.A)
+                .run(new InstantTask(() -> addTelemetry("Hello world")))
+                .immediately();
     }
 
     @Override
     protected void activeLoop() {
         scheduler.run();
-//        double x = gamepad1.left_stick_x;
-//        double y = gamepad1.left_stick_y;
-//        double r = gamepad1.right_stick_x;
-//        drive.setSpeedUsingController(x, y, r);
-//        drive.update();
     }
 }
 

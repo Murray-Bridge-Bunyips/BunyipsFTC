@@ -4,7 +4,10 @@ import androidx.annotation.NonNull;
 
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
+import java.util.ArrayList;
+
 public abstract class BunyipsSubsystem extends BunyipsComponent {
+    private final ArrayList<Integer> dependencies = new ArrayList<>();
     private Task currentTask;
     private Task defaultTask;
 
@@ -23,13 +26,32 @@ public abstract class BunyipsSubsystem extends BunyipsComponent {
         this.defaultTask = defaultTask;
     }
 
-    public final void setCurrentTask(Task currentTask) {
+    public final boolean setCurrentTask(Task currentTask) {
+        if (this.currentTask == currentTask)
+            return true;
+
         // Lockout if a task is currently running that is not the default task
         if (currentTask != defaultTask) {
+            // Override if the task is designed to override
+            // shouldOverrideOnConflict might be null if it is a non-command task
+            if (Boolean.TRUE.equals(currentTask.shouldOverrideOnConflict())) {
+                setHighPriorityCurrentTask(currentTask);
+                return true;
+            }
             Dbg.warn("Attempted to set a task while another task was running in %, this was ignored.", this.getClass().getCanonicalName());
-            return;
+            return false;
         }
+
         this.currentTask = currentTask;
+        return true;
+    }
+
+    public final void addDependencyFromTask(int taskHashCode) {
+        dependencies.add(taskHashCode);
+    }
+
+    public final ArrayList<Integer> getTaskDependencies() {
+        return dependencies;
     }
 
     public final void setHighPriorityCurrentTask(Task currentTask) {

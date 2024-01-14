@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.bunyipslib.tasks;
 
+import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RunOnceTask;
 
 /**
@@ -10,8 +11,11 @@ import org.murraybridgebunyips.bunyipslib.tasks.bases.RunOnceTask;
 public class InstantTask extends RunOnceTask {
     private final Runnable callback;
 
-    public InstantTask(Runnable callback) {
+    public InstantTask(Runnable callback, BunyipsSubsystem... dependencies) {
         this.callback = callback;
+        for (BunyipsSubsystem dependency : dependencies) {
+            addDependency(dependency);
+        }
     }
 
     @Override
