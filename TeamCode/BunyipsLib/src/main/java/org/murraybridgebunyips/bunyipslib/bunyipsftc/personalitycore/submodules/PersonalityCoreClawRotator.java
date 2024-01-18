@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.bunyipslib.personalitycore.submodules;
+package org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.submodules;
 
 import static org.murraybridgebunyips.bunyipslib.Text.round;
 
@@ -7,15 +7,15 @@ import androidx.annotation.NonNull;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsComponent;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 
 /**
  * Rotation/claw rotational alignment for the GLaDOS/Wheatley robot
  *
  * @author Lucas Bubner, 2023
  */
-public class PersonalityCoreClawRotator extends BunyipsComponent {
+public class PersonalityCoreClawRotator extends BunyipsSubsystem {
     private final Servo rotator;
 
     // Assumes servo is programmed to 0==0 && 1=30

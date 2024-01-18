@@ -2,7 +2,7 @@ package org.murraybridgebunyips.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.Vision
+import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 
@@ -17,7 +17,8 @@ class JerrySignalAnalyse : BunyipsOpMode() {
 
     override fun onInit() {
         config.init(this)
-        cam = Vision(this, config.webcam)
+        cam =
+            Vision(this, config.webcam)
         task = cam?.let { GetSignalTask(it) }
     }
 

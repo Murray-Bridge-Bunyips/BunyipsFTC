@@ -1,11 +1,11 @@
 package org.murraybridgebunyips.bunyipslib.tests;
 
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.BLUE_ELEMENT_B;
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.BLUE_ELEMENT_G;
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.BLUE_ELEMENT_R;
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.RED_ELEMENT_B;
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.RED_ELEMENT_G;
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.RED_ELEMENT_R;
+import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.BLUE_ELEMENT_B;
+import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.BLUE_ELEMENT_G;
+import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.BLUE_ELEMENT_R;
+import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.RED_ELEMENT_B;
+import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.RED_ELEMENT_G;
+import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.RED_ELEMENT_R;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -15,13 +15,13 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.UserSelection;
-import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.cameras.C920;
-import org.murraybridgebunyips.bunyipslib.vision.AprilTag;
-import org.murraybridgebunyips.bunyipslib.vision.FtcDashboardBitmap;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
-import org.murraybridgebunyips.bunyipslib.vision.TFOD;
-import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
+import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
+import org.murraybridgebunyips.bunyipslib.vision.processors.FtcDashboardBitmap;
+import org.murraybridgebunyips.bunyipslib.vision.processors.TFOD;
+import org.murraybridgebunyips.bunyipslib.vision.processors.TeamProp;
 
 import java.util.ArrayList;
 
@@ -103,7 +103,7 @@ public class VisionTest extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        vision.tickAll();
+        vision.update();
         addTelemetry(String.valueOf(vision.getAllData()));
     }
 

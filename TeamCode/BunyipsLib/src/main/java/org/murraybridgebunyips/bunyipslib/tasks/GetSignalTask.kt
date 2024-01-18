@@ -1,10 +1,10 @@
 package org.murraybridgebunyips.bunyipslib.tasks
 
 import com.qualcomm.robotcore.util.ElapsedTime
-import org.murraybridgebunyips.bunyipslib.Vision
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
-import org.murraybridgebunyips.bunyipslib.vision.AprilTag
+import org.murraybridgebunyips.bunyipslib.vision.Vision
+import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag
 
 /**
  * Intermediate task for using AprilTag detections to detect a Signal position during an initLoop.
@@ -69,8 +69,8 @@ class GetSignalTask(private val vision: Vision) : Task(0.0),
         return
     }
 
-    override fun run() {
-        at.tick()
+    override fun periodic() {
+        at.update()
 
         // Caution! ParkingPosition will be null if the camera does not pick up anything in it's task runtime.
         // Be sure to check if ParkingPosition is null before setting up your specific tasks, to handle a fallback value.

@@ -1,7 +1,7 @@
 package org.murraybridgebunyips.jerry.tasks
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 
@@ -23,7 +23,7 @@ class JerryTimeDriveTask(
         return
     }
 
-    override fun run() {
+    override fun periodic() {
         drive?.setSpeedXYR(x, y, r)
         drive?.update()
     }

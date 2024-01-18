@@ -26,6 +26,6 @@ class JerryIMUDebug : BunyipsOpMode() {
 //            )?.thirdAngle.toString()
 //        )
         addTelemetry(imu?.heading.toString())
-        imu?.tick()
+        imu?.update()
     }
 }

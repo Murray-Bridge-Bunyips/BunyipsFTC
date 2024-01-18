@@ -1,7 +1,7 @@
 package org.murraybridgebunyips.jerry.tasks
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
@@ -76,7 +76,7 @@ class JerryPrecisionDriveTask(
 //        y?.track()
     }
 
-    override fun run() {
+    override fun periodic() {
         drive?.setSpeedXYR(
             if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
             if (direction == Directions.FORWARD) power else if (direction == Directions.BACKWARD) power else 0.0,
@@ -84,7 +84,7 @@ class JerryPrecisionDriveTask(
         )
 
         drive?.update()
-        imu?.tick()
+        imu?.update()
 
         // Add telemetry of current operation
 //        opMode.addTelemetry(

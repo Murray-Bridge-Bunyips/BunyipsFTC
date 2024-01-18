@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.bunyipslib.vision;
+package org.murraybridgebunyips.bunyipslib.vision.processors;
 
 import android.graphics.Canvas;
 
@@ -6,6 +6,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.tfod.TfodProcessor;
+import org.murraybridgebunyips.bunyipslib.vision.Processor;
 import org.murraybridgebunyips.bunyipslib.vision.data.TfodData;
 import org.opencv.core.Mat;
 
@@ -41,7 +42,7 @@ public class TFOD extends Processor<TfodData> {
         return "tfod";
     }
 
-    public void tick() {
+    public void update() {
         List<Recognition> recognitions = instance.getFreshRecognitions();
         if (recognitions == null) {
             return;

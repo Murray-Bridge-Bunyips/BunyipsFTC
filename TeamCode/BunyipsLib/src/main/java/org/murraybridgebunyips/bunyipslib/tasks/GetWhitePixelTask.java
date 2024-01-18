@@ -3,10 +3,10 @@ package org.murraybridgebunyips.bunyipslib.tasks;
 import androidx.annotation.NonNull;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask;
-import org.murraybridgebunyips.bunyipslib.vision.TFOD;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.data.TfodData;
+import org.murraybridgebunyips.bunyipslib.vision.processors.TFOD;
 
 import java.util.List;
 
@@ -90,8 +90,8 @@ public class GetWhitePixelTask extends BunyipsTask {
     }
 
     @Override
-    public void run() {
-        tfod.tick();
+    public void periodic() {
+        tfod.update();
         List<TfodData> tfodData = tfod.getData();
         if (tfodData.size() == 0) {
             foundSpike = false;

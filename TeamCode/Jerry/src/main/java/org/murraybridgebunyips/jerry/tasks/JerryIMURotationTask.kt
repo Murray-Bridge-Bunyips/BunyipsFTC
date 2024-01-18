@@ -1,7 +1,7 @@
 package org.murraybridgebunyips.jerry.tasks
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
@@ -30,7 +30,7 @@ class JerryIMURotationTask(
     }
 
     override fun init() {
-        imu?.tick()
+        imu?.update()
 
         // Find out which way we need to turn based on the information provided
         direction = if (angle < 0.0) {
@@ -61,8 +61,8 @@ class JerryIMURotationTask(
         }
     }
 
-    override fun run() {
-        imu?.tick()
+    override fun periodic() {
+        imu?.update()
     }
 
     override fun onFinish() {

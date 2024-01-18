@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.bunyipslib;
+package org.murraybridgebunyips.bunyipslib.drive;
 
 import static org.murraybridgebunyips.bunyipslib.Text.round;
 
@@ -16,6 +16,11 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
+import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
+import org.murraybridgebunyips.bunyipslib.Controller;
+import org.murraybridgebunyips.bunyipslib.Inches;
+import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
@@ -28,7 +33,7 @@ import java.util.List;
 
 /**
  * Wrapper component for the RoadRunner Mecanum Drive, integrating RoadRunner and BunyipsLib to be used
- * as a BunyipsComponent.
+ * as a BunyipsSubsystem.
  *
  * @author Lucas Bubner, 2023
  */
@@ -56,8 +61,7 @@ public class MecanumDrive extends BunyipsSubsystem implements RoadRunnerDrive {
     }
 
     /**
-     * Cleanup and store the last pose estimate in global storage.
-     * Should be run in BunyipsOpMode.onStop()
+     * Cleanup and store the last pose estimate in global storage, while stopping the motors.
      */
     public void stop() {
         // Store the last pose estimate in global storage

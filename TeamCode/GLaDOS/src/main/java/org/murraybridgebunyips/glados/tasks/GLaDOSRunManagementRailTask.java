@@ -3,7 +3,7 @@ package org.murraybridgebunyips.glados.tasks;
 import androidx.annotation.NonNull;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.personalitycore.submodules.PersonalityCoreManagementRail;
+import org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.submodules.PersonalityCoreManagementRail;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask;
 
 public class GLaDOSRunManagementRailTask extends BunyipsTask {
@@ -23,7 +23,7 @@ public class GLaDOSRunManagementRailTask extends BunyipsTask {
     }
 
     @Override
-    public void run() {
+    public void periodic() {
         managementRail.update();
     }
 

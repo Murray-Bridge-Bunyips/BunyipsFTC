@@ -2,11 +2,11 @@ package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
-import org.murraybridgebunyips.bunyipslib.Vision
+import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
@@ -33,7 +33,8 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
     override fun onInitialisation() {
         // Configuration of camera and drive components
         config.init(this)
-        cam = Vision(this, config.webcam)
+        cam =
+            Vision(this, config.webcam)
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
                 this,

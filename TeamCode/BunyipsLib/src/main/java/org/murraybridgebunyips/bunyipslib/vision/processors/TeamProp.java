@@ -1,9 +1,10 @@
-package org.murraybridgebunyips.bunyipslib.vision;
+package org.murraybridgebunyips.bunyipslib.vision.processors;
 
 import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.murraybridgebunyips.bunyipslib.Vision;
+import org.murraybridgebunyips.bunyipslib.vision.Processor;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.data.TeamPropData;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -107,7 +108,7 @@ public class TeamProp extends Processor<TeamPropData> {
     }
 
     @Override
-    public void tick() {
+    public void update() {
         data.clear();
         if (max_distance == distance1) {
             data.add(new TeamPropData(Positions.RIGHT, distance1, distance2, distance3, max_distance));

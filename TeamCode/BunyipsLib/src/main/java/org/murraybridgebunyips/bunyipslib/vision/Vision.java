@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.bunyipslib;
+package org.murraybridgebunyips.bunyipslib.vision;
 
 
 import android.util.Size;
@@ -9,7 +9,8 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.murraybridgebunyips.bunyipslib.vision.Processor;
+import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.List;
  * @author Lucas Bubner, 2023
  */
 @Config
-public class Vision extends BunyipsComponent {
+public class Vision extends BunyipsSubsystem {
     public static int CAMERA_WIDTH = 1280;
     public static int CAMERA_HEIGHT = 720;
     @SuppressWarnings("rawtypes")
@@ -195,13 +196,14 @@ public class Vision extends BunyipsComponent {
 
     /**
      * Tick all processor camera streams and extract data from the processors.
-     * This can optionally be done per processor by calling processor.tick()
+     * This can optionally be done per processor by calling processor.update()
      * This data is stored in the processor instance and can be accessed with the getters.
      */
     @SuppressWarnings("rawtypes")
-    public void tickAll() {
+    @Override
+    public void update() {
         for (Processor processor : processors) {
-            processor.tick();
+            processor.update();
         }
     }
 

@@ -28,7 +28,7 @@ class JerryLiftTask(
         return lift?.isBusy() == false
     }
 
-    override fun run() {
+    override fun periodic() {
         lift?.update()
     }
 

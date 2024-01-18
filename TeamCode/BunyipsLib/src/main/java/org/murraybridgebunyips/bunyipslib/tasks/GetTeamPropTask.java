@@ -4,9 +4,9 @@ import androidx.annotation.NonNull;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Dbg;
-import org.murraybridgebunyips.bunyipslib.Vision;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask;
-import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
+import org.murraybridgebunyips.bunyipslib.vision.processors.TeamProp;
 
 /**
  * Task for detecting on which spike the Team Prop is placed on.
@@ -67,7 +67,7 @@ public class GetTeamPropTask extends BunyipsTask {
     }
 
     @Override
-    public void run() {
+    public void periodic() {
         if (teamProp == null) {
             // We can't do anything meaningful right now
             return;
@@ -76,7 +76,7 @@ public class GetTeamPropTask extends BunyipsTask {
             // TeamProp is available and we should try to initialise it now
             init();
         }
-        teamProp.tick();
+        teamProp.update();
         if (teamProp.getData().size() > 0) {
             // TeamProp will never have more than one data instance
             position = teamProp.getData().get(0).getPosition();

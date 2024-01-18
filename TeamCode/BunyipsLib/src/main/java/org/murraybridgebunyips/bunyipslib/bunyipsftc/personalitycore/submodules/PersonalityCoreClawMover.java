@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.bunyipslib.personalitycore.submodules;
+package org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.submodules;
 
 import static org.murraybridgebunyips.bunyipslib.Text.round;
 
@@ -8,15 +8,15 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsComponent;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 
 /**
  * Horizontal CRServo motion for the GLaDOS/Wheatley robot
  *
  * @author Lucas Bubner, 2023
  */
-public class PersonalityCoreClawMover extends BunyipsComponent {
+public class PersonalityCoreClawMover extends BunyipsSubsystem {
     private final CRServo servo;
     private double power;
     private double currentTimeout;

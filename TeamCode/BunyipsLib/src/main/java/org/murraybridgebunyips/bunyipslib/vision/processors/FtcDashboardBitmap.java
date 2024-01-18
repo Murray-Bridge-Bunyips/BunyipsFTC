@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.bunyipslib.vision;
+package org.murraybridgebunyips.bunyipslib.vision.processors;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -7,6 +7,7 @@ import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.murraybridgebunyips.bunyipslib.vision.Processor;
 import org.murraybridgebunyips.bunyipslib.vision.data.NoData;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
@@ -63,7 +64,7 @@ public class FtcDashboardBitmap extends Processor<NoData> implements CameraStrea
     }
 
     @Override
-    public void tick() {
+    public void update() {
         // noop
     }
 }
