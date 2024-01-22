@@ -14,6 +14,7 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityCons
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.murraybridgebunyips.bunyipslib.drive.Drivebase;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceRunner;
@@ -23,10 +24,11 @@ import java.util.List;
 
 /**
  * Interface for access methods in RoadRunner drive classes.
+ * This extends Drivebase and can be a drop-in replacement for it.
  *
  * @author Lucas Bubner, 2023
  */
-public interface RoadRunnerDrive {
+public interface RoadRunnerDrive extends Drivebase {
     static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {
         return new MinVelocityConstraint(Arrays.asList(
                 new AngularVelocityConstraint(maxAngularVel),

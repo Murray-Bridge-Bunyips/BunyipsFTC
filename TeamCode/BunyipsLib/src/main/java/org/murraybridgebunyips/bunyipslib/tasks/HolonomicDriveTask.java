@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.jetbrains.annotations.NotNull;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
+import org.murraybridgebunyips.bunyipslib.EmergencyStop;
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RunForeverTask;
@@ -22,7 +23,7 @@ public class HolonomicDriveTask<T extends BunyipsSubsystem> extends RunForeverTa
     public HolonomicDriveTask(Gamepad gamepad, @NotNull T mecanumDrive) {
         super(mecanumDrive, false);
         if (!(mecanumDrive instanceof MecanumDrive) && !(mecanumDrive instanceof CartesianMecanumDrive))
-            throw new IllegalArgumentException("HolonomicDriveTask must be used with a holonomic drivetrain");
+            throw new EmergencyStop("HolonomicDriveTask must be used with a holonomic drivetrain");
         drive = mecanumDrive;
         this.gamepad = gamepad;
     }

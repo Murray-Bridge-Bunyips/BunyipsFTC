@@ -26,6 +26,22 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
     private boolean isFlipped;
 
     /**
+     * Determine whether the processor is attached to the vision system
+     * Checking this is useful for processors that have been passed into tasks but cannot
+     * be checked by looking directly at the vision system
+     */
+    private boolean isAttached;
+
+    public boolean isAttached() {
+        return isAttached;
+    }
+
+    // For internal use only
+    public void setAttached(boolean attached) {
+        isAttached = attached;
+    }
+
+    /**
      * Vision Processor Wrapper
      * Parameterized type T must be a subclass extension of VisionData and getName must return a non-null value
      * Remove all parameters from the constructor and replace with:

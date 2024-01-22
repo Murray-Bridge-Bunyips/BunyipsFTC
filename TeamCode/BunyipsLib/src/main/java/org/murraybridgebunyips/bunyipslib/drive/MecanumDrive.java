@@ -92,6 +92,11 @@ public class MecanumDrive extends BunyipsSubsystem implements RoadRunnerDrive {
     }
 
     @Override
+    public void setPower(Pose2d pose) {
+        drive.setWeightedDrivePower(pose);
+    }
+
+    @Override
     public void update() {
         getOpMode().addTelemetry("Localizer: X:%cm Y:%cm %deg",
                 round(Inches.toCM(drive.getPoseEstimate().getX()), 1),

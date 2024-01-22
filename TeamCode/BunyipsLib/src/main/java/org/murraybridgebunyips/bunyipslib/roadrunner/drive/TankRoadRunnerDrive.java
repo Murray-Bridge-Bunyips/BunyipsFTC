@@ -23,6 +23,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceRunner;
@@ -294,5 +295,15 @@ public class TankRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.TankD
     @Override
     public void cancelTrajectory() {
         trajectorySequenceRunner.cancelTrajectory();
+    }
+
+    @Override
+    public void setSpeedUsingController(double x, double y, double r) {
+        setWeightedDrivePower(Controller.makeRobotPose(x, y, r));
+    }
+
+    @Override
+    public void setPower(Pose2d pose) {
+        setWeightedDrivePower(pose);
     }
 }

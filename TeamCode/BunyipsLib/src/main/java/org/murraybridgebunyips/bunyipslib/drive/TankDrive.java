@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
+import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.TankCoefficients;
@@ -217,5 +218,15 @@ public class TankDrive extends BunyipsSubsystem implements RoadRunnerDrive {
     @Override
     public void cancelTrajectory() {
         instance.cancelTrajectory();
+    }
+
+    @Override
+    public void setSpeedUsingController(double x, double y, double r) {
+        setWeightedDrivePower(Controller.makeRobotPose(x, y, r));
+    }
+
+    @Override
+    public void setPower(Pose2d pose) {
+        setWeightedDrivePower(pose);
     }
 }
