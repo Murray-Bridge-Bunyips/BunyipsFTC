@@ -293,17 +293,23 @@ public class TankRoadRunnerDrive extends com.acmerobotics.roadrunner.drive.TankD
     }
 
     @Override
+    public void setWeightedDrivePowerFieldCentric(Pose2d pose) {
+        double heading = getExternalHeading();
+        double sin = Math.sin(heading);
+        double cos = Math.cos(heading);
+        setWeightedDrivePower(new Pose2d(
+                pose.getX() * cos - pose.getY() * sin,
+                pose.getX() * sin + pose.getY() * cos,
+                pose.getHeading()
+        ));
+    }
+
+    public void setSpeedUsingControllerFieldCentric(double x, double y, double r) {
+        setWeightedDrivePowerFieldCentric(Controller.makeRobotPose(x, y, r));
+    }
+
+    @Override
     public void cancelTrajectory() {
         trajectorySequenceRunner.cancelTrajectory();
-    }
-
-    @Override
-    public void setSpeedUsingController(double x, double y, double r) {
-        setWeightedDrivePower(Controller.makeRobotPose(x, y, r));
-    }
-
-    @Override
-    public void setPower(Pose2d pose) {
-        setWeightedDrivePower(pose);
     }
 }

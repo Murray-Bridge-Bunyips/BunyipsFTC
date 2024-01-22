@@ -6,19 +6,19 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.EmergencyStop;
-import org.murraybridgebunyips.bunyipslib.drive.Drivebase;
 import org.murraybridgebunyips.bunyipslib.pid.PIDController;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RunForeverTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.TFOD;
 
 /**
  * Task to align to a pixel using the vision system.
- * @param <T> the drivetrain to use
+ * @param <T> the drivetrain to use (must implement RoadRunnerDrive for X pose forward info/FCD)
  * @author Lucas Bubner, 2024
  */
 public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask {
-    private final Drivebase drive;
+    private final RoadRunnerDrive drive;
     private final Vision vision;
     private final TFOD tfod;
     private final Gamepad gamepad;
@@ -26,9 +26,9 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
 
     public AlignToPixelTask(Gamepad gamepad, T drive, Vision vision, TFOD tfod, PIDController controller) {
         super(drive, false);
-        if (!(drive instanceof Drivebase))
-            throw new EmergencyStop("AlignToPixelTask must be used with a drivetrain");
-        this.drive = (Drivebase) drive;
+        if (!(drive instanceof RoadRunnerDrive))
+            throw new EmergencyStop("AlignToPixelTask must be used with a drivetrain with X forward Pose/IMU info");
+        this.drive = (RoadRunnerDrive) drive;
         this.vision = vision;
         this.tfod = tfod;
         this.gamepad = gamepad;
@@ -49,7 +49,7 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
         Pose2d pose = Controller.makeRobotPose(gamepad.left_stick_x, gamepad.left_stick_y, gamepad.right_stick_x);
 
         if (tfod.getData().size() > 0) {
-            drive.setPower(
+            drive.setWeightedDrivePower(
                     new Pose2d(
                             pose.getX(),
                             pose.getY(),
@@ -57,7 +57,8 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
                     )
             );
         } else {
-            drive.setPower(pose);
+            // Consider using FCD once testing is done
+            drive.setWeightedDrivePower(pose);
         }
     }
 
