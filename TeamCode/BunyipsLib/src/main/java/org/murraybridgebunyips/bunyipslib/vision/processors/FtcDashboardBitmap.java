@@ -8,7 +8,7 @@ import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
-import org.murraybridgebunyips.bunyipslib.vision.data.NoData;
+import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 
@@ -19,19 +19,9 @@ import java.util.concurrent.atomic.AtomicReference;
  *
  * @author <a href="https://github.com/acmerobotics/ftc-dashboard/blob/master/TeamCode/src/main/java/org/firstinspires/ftc/teamcode/VisionPortalStreamingOpMode.java">ACME Robotics</a>
  */
-public class FtcDashboardBitmap extends Processor<NoData> implements CameraStreamSource {
+public class FtcDashboardBitmap extends Processor<VisionData> implements CameraStreamSource {
     private final AtomicReference<Bitmap> lastFrame =
             new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
-
-    /**
-     * Vision Processor Wrapper
-     * Parameterized type T must be a subclass extension of VisionData and getName must return a non-null value
-     * Remove all parameters from the constructor and replace with:
-     * Super-call: {@code super([yourVisionDataClass].class)}
-     */
-    public FtcDashboardBitmap() {
-        super(NoData.class);
-    }
 
     @Override
     public void init(int width, int height, CameraCalibration calibration) {

@@ -21,7 +21,6 @@ public class AprilTag extends Processor<AprilTagData> {
     private final AprilTagProcessor instance;
 
     public AprilTag(CameraType camInfo) {
-        super(AprilTagData.class);
         instance = new AprilTagProcessor.Builder()
                 .setLensIntrinsics(camInfo.getFx(), camInfo.getFy(), camInfo.getCx(), camInfo.getCy())
                 // Specify custom AprilTag settings here

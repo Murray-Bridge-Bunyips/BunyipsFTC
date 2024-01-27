@@ -40,16 +40,11 @@ public class TeamProp extends Processor<TeamPropData> {
     private Scalar avgColor3;
 
     /**
-     * Vision Processor Wrapper
-     * Parameterized type T must be a subclass extension of VisionData
-     * Super-call: {@code super([yourVisionDataClass].class)}
-     *
      * @param r Red value of the element color (0-255)
      * @param g Green value of the element color (0-255)
      * @param b Blue value of the element color (0-255)
      */
     public TeamProp(int r, int g, int b) {
-        super(TeamPropData.class);
         ELEMENT_COLOR = Arrays.asList(r, g, b);
     }
 

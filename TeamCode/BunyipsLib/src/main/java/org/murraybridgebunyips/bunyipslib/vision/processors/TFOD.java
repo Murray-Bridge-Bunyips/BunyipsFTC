@@ -21,7 +21,6 @@ public class TFOD extends Processor<TfodData> {
     private final TfodProcessor instance;
 
     public TFOD() {
-        super(TfodData.class);
         instance = new TfodProcessor.Builder()
                 // Specify custom TFOD settings here
                 // By default this will load the current season assets
