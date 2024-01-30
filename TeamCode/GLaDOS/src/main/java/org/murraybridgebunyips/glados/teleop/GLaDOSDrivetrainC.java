@@ -8,6 +8,7 @@ import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.Scheduler;
+import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
@@ -16,8 +17,8 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  *
  * @author Lucas Bubner, 2023
  */
-@TeleOp(name = "Drivetrain")
-@Disabled
+@TeleOp(name = "Drivetrain cmd")
+//@Disabled
 public class GLaDOSDrivetrainC extends BunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private final Scheduler scheduler = new Scheduler(this);
@@ -34,9 +35,7 @@ public class GLaDOSDrivetrainC extends BunyipsOpMode {
         );
 
         scheduler.addSubsystems(drive);
-        scheduler.whenPressed(Controller.User.ONE, Controller.A)
-                .run(new InstantTask(() -> addTelemetry("Hello world")))
-                .immediately();
+        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive));
     }
 
     @Override

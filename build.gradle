@@ -5,11 +5,9 @@
  */
 buildscript {
     ext.kotlin_version = '1.9.20'
-    ext.fast_load_version = '0.1.2'
     repositories {
         mavenCentral()
         google()
-        maven { url = 'https://www.matthewo.tech/maven/' } // FTC Fast Load
     }
     dependencies {
         // Note for FTC Teams: Do not modify this yourself.
@@ -17,9 +15,6 @@ buildscript {
 
         // Kotlin configuration for BunyipsFTC TeamCode, needs to be placed in the root build.gradle
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // FTC Fast Load configuration, causes too much of a headache to be worth it putting in TeamCode
-        classpath "org.team11260:fast-load-plugin:$fast_load_version"
     }
 }
 

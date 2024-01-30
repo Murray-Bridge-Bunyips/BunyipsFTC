@@ -15,8 +15,6 @@ android {
     }
 }
 
-apply plugin: 'org.team11260.fast-load-plugin'
-
 dependencies {
     implementation project(':FtcRobotController')
     implementation project(":BunyipsLib")
