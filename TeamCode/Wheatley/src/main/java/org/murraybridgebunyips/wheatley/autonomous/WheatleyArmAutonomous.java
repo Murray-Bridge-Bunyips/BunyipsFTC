@@ -100,10 +100,20 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
                 arm.toggleClaw(DualClaws.ServoSide.LEFT);
 
             case RIGHT:
+                addNewTrajectory(new Pose2d(-36.57, -71.24, Math.toRadians(90.00)))
+                        .splineTo(new Vector2d(-32.78, -39.79), Math.toRadians(82.34))
+                        .build();
 
+                arm.faceClawToGround();
+                arm.toggleClaw(DualClaws.ServoSide.LEFT);
 
             case CENTER:
+                addNewTrajectory(new Pose2d(-36.58, -74.71, Math.toRadians(90.00)))
+                        .splineTo(new Vector2d(-36.00, -37.35), Math.toRadians(90.29))
+                        .build();
 
+                arm.faceClawToGround();
+                arm.toggleClaw(DualClaws.ServoSide.LEFT);
 
         }
     }
