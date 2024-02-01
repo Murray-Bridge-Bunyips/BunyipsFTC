@@ -17,16 +17,26 @@ public class WhitePixel extends Processor<VisionData> {
     }
 
     @Override
+    public void init(int width, int height, CameraCalibration calibration) {
+
+    }
+
+    @Override
+    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+
+    }
+
+    @Override
     public void update() {
 
     }
 
-    private Scalar lower = new Scalar(192.7, 123.3, 106.3);
-    private Scalar upper = new Scalar(255, 255, 255);
+    private final Scalar lower = new Scalar(192.7, 123.3, 106.3);
+    private final Scalar upper = new Scalar(255, 255, 255);
 
-    private Mat ycrcbMat       = new Mat();
-    private Mat binaryMat      = new Mat();
-    private Mat maskedInputMat = new Mat();
+    private final Mat ycrcbMat = new Mat();
+    private final Mat binaryMat = new Mat();
+    private final Mat maskedInputMat = new Mat();
 
 
     @Override
@@ -41,7 +51,7 @@ public class WhitePixel extends Processor<VisionData> {
          * Takes our "input" mat as an input, and outputs
          * to a separate Mat buffer "ycrcbMat"
          */
-        Imgproc.cvtColor(frame, ycrcbMat, Imgproc.COLOR_RGB2HSV);
+        Imgproc.cvtColor(frame, ycrcbMat, Imgproc.COLOR_RGB2YCrCb);
 
         /*
          * This is where our thresholding actually happens.
@@ -84,15 +94,5 @@ public class WhitePixel extends Processor<VisionData> {
          */
         maskedInputMat.copyTo(frame);
         return frame;
-    }
-
-    @Override
-    public void init(int width, int height, CameraCalibration calibration) {
-
-    }
-
-    @Override
-    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
-
     }
 }
