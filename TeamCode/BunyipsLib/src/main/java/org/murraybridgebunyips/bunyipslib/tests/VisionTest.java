@@ -22,6 +22,7 @@ import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
 import org.murraybridgebunyips.bunyipslib.vision.processors.FtcDashboardBitmap;
 import org.murraybridgebunyips.bunyipslib.vision.processors.TFOD;
 import org.murraybridgebunyips.bunyipslib.vision.processors.TeamProp;
+import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
 
 import java.util.ArrayList;
 
@@ -62,6 +63,10 @@ public class VisionTest extends BunyipsOpMode {
             case TEAMPROP_BLUE:
                 TeamProp tpb = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
                 processors.add(tpb);
+                break;
+            case WHITE_PIXEL:
+                WhitePixel wp = new WhitePixel();
+                processors.add(wp);
                 break;
         }
         // Always add the FtcDashboardBitmap processor
@@ -118,6 +123,7 @@ public class VisionTest extends BunyipsOpMode {
         TFOD,
         APRILTAG,
         TEAMPROP_RED,
-        TEAMPROP_BLUE
+        TEAMPROP_BLUE,
+        WHITE_PIXEL
     }
 }

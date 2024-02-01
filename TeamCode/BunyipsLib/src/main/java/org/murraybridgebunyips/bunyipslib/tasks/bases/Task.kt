@@ -1,6 +1,7 @@
 package org.murraybridgebunyips.bunyipslib.tasks.bases
 
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem
+import org.murraybridgebunyips.bunyipslib.Dbg
 
 /**
  * A task, or command is an action that can be performed by a robot. This has been designed
@@ -102,7 +103,7 @@ abstract class Task(timeoutSeconds: Double) : RobotTask {
             taskFinished = true
 
         // Finish tasks that exceed a time limit defined by the task
-        if (timeout != 0.0 && currentTime > startTime + timeout) {
+        if (startTime != 0.0 && timeout != 0.0 && currentTime > startTime + timeout) {
             taskFinished = true
         }
 
