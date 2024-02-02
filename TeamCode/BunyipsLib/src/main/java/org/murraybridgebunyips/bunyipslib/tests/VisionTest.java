@@ -19,7 +19,6 @@ import org.murraybridgebunyips.bunyipslib.cameras.C920;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
-import org.murraybridgebunyips.bunyipslib.vision.processors.FtcDashboardBitmap;
 import org.murraybridgebunyips.bunyipslib.vision.processors.TFOD;
 import org.murraybridgebunyips.bunyipslib.vision.processors.TeamProp;
 import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
@@ -69,14 +68,11 @@ public class VisionTest extends BunyipsOpMode {
                 processors.add(wp);
                 break;
         }
-        // Always add the FtcDashboardBitmap processor
-        FtcDashboardBitmap fdb = new FtcDashboardBitmap();
-        processors.add(fdb);
 
         vision.init(processors.toArray(new Processor[0]));
         vision.start(processors.toArray(new Processor[0]));
 
-        FtcDashboard.getInstance().startCameraStream(fdb, 0);
+        FtcDashboard.getInstance().startCameraStream(processors.get(0), 0);
         i = addRetainedTelemetry("Camera Stream available.");
         return Unit.INSTANCE;
     }

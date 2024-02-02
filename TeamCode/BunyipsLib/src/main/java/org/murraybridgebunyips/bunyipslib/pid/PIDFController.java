@@ -77,15 +77,6 @@ public class PIDFController {
      * Sets the error which is considered tolerable for use with {@link #atSetPoint()}.
      *
      * @param positionTolerance Position error which is tolerable.
-     */
-    public void setTolerance(double positionTolerance) {
-        setTolerance(positionTolerance, Double.POSITIVE_INFINITY);
-    }
-
-    /**
-     * Sets the error which is considered tolerable for use with {@link #atSetPoint()}.
-     *
-     * @param positionTolerance Position error which is tolerable.
      * @param velocityTolerance Velocity error which is tolerable.
      */
     public void setTolerance(double positionTolerance, double velocityTolerance) {
@@ -146,6 +137,15 @@ public class PIDFController {
     }
 
     /**
+     * Sets the error which is considered tolerable for use with {@link #atSetPoint()}.
+     *
+     * @param positionTolerance Position error which is tolerable.
+     */
+    public void setTolerance(double positionTolerance) {
+        setTolerance(positionTolerance, Double.POSITIVE_INFINITY);
+    }
+
+    /**
      * @return the velocity error e'(t)
      */
     public double getVelocityError() {
@@ -185,7 +185,7 @@ public class PIDFController {
     public double calculate(double pv) {
         prevErrorVal = errorVal_p;
 
-        double currentTimeStamp = (double) System.nanoTime() / 1E9;
+        double currentTimeStamp = System.nanoTime() / 1.0E9;
         if (lastTimeStamp == 0) lastTimeStamp = currentTimeStamp;
         period = currentTimeStamp - lastTimeStamp;
         lastTimeStamp = currentTimeStamp;
@@ -197,7 +197,7 @@ public class PIDFController {
             measuredValue = pv;
         }
 
-        if (Math.abs(period) > 1E-6) {
+        if (Math.abs(period) > 1.0E-6) {
             errorVal_v = (errorVal_p - prevErrorVal) / period;
         } else {
             errorVal_v = 0;
@@ -230,36 +230,36 @@ public class PIDFController {
         totalError = 0;
     }
 
-    public void setP(double kp) {
-        kP = kp;
-    }
-
-    public void setI(double ki) {
-        kI = ki;
-    }
-
-    public void setD(double kd) {
-        kD = kd;
-    }
-
-    public void setF(double kf) {
-        kF = kf;
-    }
-
     public double getP() {
         return kP;
+    }
+
+    public void setP(double kp) {
+        kP = kp;
     }
 
     public double getI() {
         return kI;
     }
 
+    public void setI(double ki) {
+        kI = ki;
+    }
+
     public double getD() {
         return kD;
     }
 
+    public void setD(double kd) {
+        kD = kd;
+    }
+
     public double getF() {
         return kF;
+    }
+
+    public void setF(double kf) {
+        kF = kf;
     }
 
     public double getPeriod() {
