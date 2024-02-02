@@ -12,6 +12,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.bases.RunForeverTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.TFOD;
 import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
+import org.murraybridgebunyips.bunyipslib.vision.processors.YCbCrColourThreshold;
 
 /**
  * Task to align to a pixel using the vision system.
@@ -21,11 +22,11 @@ import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
 public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask {
     private final RoadRunnerDrive drive;
     private final Vision vision;
-    private final WhitePixel processor;
+    private final YCbCrColourThreshold processor;
     private final Gamepad gamepad;
     private final PIDController controller;
 
-    public AlignToPixelTask(Gamepad gamepad, T drive, Vision vision, WhitePixel processor, PIDController controller) {
+    public AlignToPixelTask(Gamepad gamepad, T drive, Vision vision, YCbCrColourThreshold processor, PIDController controller) {
         super(drive, false);
         if (!(drive instanceof RoadRunnerDrive))
             throw new EmergencyStop("AlignToPixelTask must be used with a drivetrain with X forward Pose/IMU info");
@@ -41,7 +42,7 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
         if (!vision.isInitialised())
             vision.init(processor);
         if (!vision.getAttachedProcessors().contains(processor))
-            throw new EmergencyStop("Vision processor was initialised without TFOD");
+            throw new EmergencyStop("Vision processor was initialised without being attached to the vision system");
         vision.start(processor);
     }
 
@@ -54,7 +55,7 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
                     new Pose2d(
                             pose.getX(),
                             pose.getY(),
-                            -controller.calculate(processor.getData().get(0).getYaw(), 0)
+                            -controller.calculate(processor.getData().get(0).getCenterX(), 0.5)
                     )
             );
         } else {
