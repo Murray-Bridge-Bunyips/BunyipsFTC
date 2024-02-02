@@ -5,12 +5,18 @@ import android.graphics.Canvas;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
 import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
+import org.murraybridgebunyips.bunyipslib.vision.data.WhitePixelData;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-public class WhitePixel extends Processor<VisionData> {
+import java.util.ArrayList;
+import java.util.List;
+
+public class WhitePixel extends Processor<WhitePixelData> {
     @Override
     public String getName() {
        return "whitepixel";
@@ -28,7 +34,20 @@ public class WhitePixel extends Processor<VisionData> {
 
     @Override
     public void update() {
-
+        MatOfPoint largestContour = null;
+        double largestArea = 0;
+        for (MatOfPoint contour : contours) {
+            double area = Imgproc.contourArea(contour);
+            if (area > largestArea) {
+                largestArea = area;
+                largestContour = contour;
+            }
+        }
+        data.clear();
+        if (largestContour != null) {
+            Rect boundingRect = Imgproc.boundingRect(largestContour);
+            data.add(new WhitePixelData(boundingRect.x + boundingRect.width / 2.0));
+        }
     }
 
     private final Scalar lower = new Scalar(192.7, 123.3, 106.3);
@@ -37,6 +56,8 @@ public class WhitePixel extends Processor<VisionData> {
     private final Mat ycrcbMat = new Mat();
     private final Mat binaryMat = new Mat();
     private final Mat maskedInputMat = new Mat();
+    private final List<MatOfPoint> contours = new ArrayList<>();
+    private final Mat hierarchy = new Mat();
 
 
     @Override
@@ -84,6 +105,13 @@ public class WhitePixel extends Processor<VisionData> {
          * range (RGB 0, 0, 0. All discarded pixels will be black)
          */
         Core.bitwise_and(frame, frame, maskedInputMat, binaryMat);
+
+        /*
+         * Find the contours of the binary Mat. This will
+         * populate the "contours" list with the contours
+         * found in the binary Mat.
+         */
+        Imgproc.findContours(binaryMat, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
         /*
          * Different from OpenCvPipeline, you cannot return
