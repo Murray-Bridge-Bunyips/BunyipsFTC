@@ -49,7 +49,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
 
     @Override
     protected void assignCommands() {
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive));
+        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
         scheduler.whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
                 .run(new AlignToPixelTask<>(gamepad1, drive, vision, processor, new PIDController(0.1, 0, 0)))
                 .finishingWhen(() -> !gamepad1.right_bumper);

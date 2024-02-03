@@ -3,7 +3,8 @@ package org.murraybridgebunyips.bunyipslib
 import com.acmerobotics.roadrunner.geometry.Pose2d
 import com.qualcomm.robotcore.eventloop.opmode.OpMode
 import com.qualcomm.robotcore.hardware.Gamepad
-import java.util.Objects
+import java.util.*
+import kotlin.collections.HashMap
 
 /**
  * Utility class for the different button and analog controls on the gamepad.
