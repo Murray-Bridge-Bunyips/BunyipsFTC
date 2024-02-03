@@ -14,7 +14,7 @@ import org.murraybridgebunyips.bunyipslib.RelativePose2d;
  * This system is deprecated by RoadRunner, but remains for legacy/non-RoadRunner purposes.
  *
  * @author Lucas Bubner, 2023
- * @see FieldCentricMecanumDrive
+ * @see MecanumDrive
  */
 public class CartesianFieldCentricMecanumDrive extends CartesianMecanumDrive {
     private final IMUOp imu;

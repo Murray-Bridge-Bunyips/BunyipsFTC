@@ -23,8 +23,8 @@ public abstract class CommandBasedBunyipsOpMode extends BunyipsOpMode {
 
     @Override
     protected final void activeLoop() {
-        scheduler.run();
         periodic();
+        scheduler.run();
     }
 
     // Access to the other BunyipsOpMode methods (onInitLoop() etc.) are handled by the user of this class, as
@@ -50,7 +50,7 @@ public abstract class CommandBasedBunyipsOpMode extends BunyipsOpMode {
     protected abstract void assignCommands();
 
     /**
-     * Override this method to run any additional activeLoop() code after the Scheduler runs.
+     * Override this method to run any additional activeLoop() code before the Scheduler runs.
      */
     protected void periodic() {
     }

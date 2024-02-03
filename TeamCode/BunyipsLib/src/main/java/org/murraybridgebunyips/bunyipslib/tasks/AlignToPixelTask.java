@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.bunyipslib.tasks;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -10,16 +11,20 @@ import org.murraybridgebunyips.bunyipslib.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RunForeverTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.bunyipslib.vision.processors.TFOD;
-import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
 import org.murraybridgebunyips.bunyipslib.vision.processors.YCbCrColourThreshold;
 
 /**
  * Task to align to a pixel using the vision system.
+ *
  * @param <T> the drivetrain to use (must implement RoadRunnerDrive for X pose forward info/FCD)
  * @author Lucas Bubner, 2024
  */
+@Config
 public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask {
+    public static double kP;
+    public static double kI;
+    public static double kD;
+
     private final RoadRunnerDrive drive;
     private final Vision vision;
     private final YCbCrColourThreshold processor;
@@ -48,6 +53,9 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
 
     @Override
     public void periodic() {
+        // FtcDashboard live tuning
+        controller.setPID(kP, kI, kD);
+
         Pose2d pose = Controller.makeRobotPose(gamepad.left_stick_x, gamepad.left_stick_y, gamepad.right_stick_x);
 
         if (processor.getData().size() > 0) {

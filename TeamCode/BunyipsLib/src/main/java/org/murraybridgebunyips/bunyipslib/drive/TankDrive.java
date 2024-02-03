@@ -26,8 +26,9 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.Trajecto
 import java.util.List;
 
 /**
- * Wrapper component for the RoadRunner Tank Drive, integrating RoadRunner and BunyipsLib to be used
- * as a BunyipsSubsystem.
+ * This is the standard TankDrive class for modern BunyipsFTC robots.
+ * This is a component for the RoadRunner Tank Drive, integrating RoadRunner and BunyipsLib to be used
+ * as a BunyipsSubsystem. As such, this allows for integrated trajectory and pose management.
  *
  * @author Lucas Bubner, 2023
  */

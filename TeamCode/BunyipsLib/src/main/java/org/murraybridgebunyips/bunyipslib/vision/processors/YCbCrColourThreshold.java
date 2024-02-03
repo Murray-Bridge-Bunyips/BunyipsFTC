@@ -1,5 +1,8 @@
 package org.murraybridgebunyips.bunyipslib.vision.processors;
 
+import android.graphics.Canvas;
+
+import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
 import org.murraybridgebunyips.bunyipslib.vision.data.ContourData;
 import org.opencv.core.Core;
@@ -12,10 +15,12 @@ import org.opencv.imgproc.Imgproc;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Colour thresholding processor for YCbCr colour space, used to find colour contours in an image.
+ *
+ * @author Lucas Bubner, 2024
+ */
 public abstract class YCbCrColourThreshold extends Processor<ContourData> {
-    public abstract Scalar getLower();
-    public abstract Scalar getUpper();
-
     private final Scalar lower = getLower();
     private final Scalar upper = getUpper();
     private final Mat ycrcbMat = new Mat();
@@ -23,6 +28,10 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
     private final Mat maskedInputMat = new Mat();
     private final List<MatOfPoint> contours = new ArrayList<>();
     private final Mat hierarchy = new Mat();
+
+    public abstract Scalar getLower();
+
+    public abstract Scalar getUpper();
 
     @Override
     public void update() {
@@ -100,5 +109,16 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
          */
         maskedInputMat.copyTo(frame);
         return frame;
+    }
+
+    // These methods are optionally overridden by the user
+    // as they are often not used or needed
+
+    @Override
+    public void init(int width, int height, CameraCalibration calibration) {
+    }
+
+    @Override
+    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
     }
 }

@@ -28,7 +28,7 @@ public class RoadRunnerTask<T extends RoadRunnerDrive> extends BunyipsTask {
 
     // Needed as the pre-check condition for task finishing will fire since the initialisation routine
     // may not have fired which assigns the drive a task
-    private boolean taskStartedRunning = false;
+    private boolean taskStartedRunning;
 
     public RoadRunnerTask(@NonNull BunyipsOpMode opMode, double time, T drive, Trajectory trajectory) {
         super(opMode, time);
