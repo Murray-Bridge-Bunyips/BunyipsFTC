@@ -44,7 +44,7 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
     private StartingPositions startingPosition;
 
     @Override
-    protected void onInitialisation() {
+    protected void onInitialise() {
         config.init(this);
         vision = new Vision(this, config.webcam);
         initTask = new GetTeamPropTask(this, vision);

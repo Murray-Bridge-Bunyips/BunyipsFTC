@@ -35,7 +35,7 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
     private final WheatleyConfig config = new WheatleyConfig();
 
     @Override
-    protected void onInitialisation() {
+    protected void onInitialise() {
         config.init(this);
         RobotConfig.setLastKnownPosition(null);
     }

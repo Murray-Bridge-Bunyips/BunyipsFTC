@@ -22,7 +22,7 @@ public class GLaDOSRightPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDr
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
 
     @Override
-    protected void onInitialisation() {
+    protected void onInitialise() {
         config.init(this);
     }
 

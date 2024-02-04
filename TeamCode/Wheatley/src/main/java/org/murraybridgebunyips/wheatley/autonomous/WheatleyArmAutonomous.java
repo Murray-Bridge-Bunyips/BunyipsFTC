@@ -37,7 +37,7 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
     private TeamProp processor;
 
     @Override
-    protected void onInitialisation() {
+    protected void onInitialise() {
         config.init(this);
         arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment,
                 config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel
