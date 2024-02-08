@@ -12,7 +12,10 @@ import org.murraybridgebunyips.bunyipslib.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RunForeverTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
+import org.murraybridgebunyips.bunyipslib.vision.data.ContourData;
 import org.murraybridgebunyips.bunyipslib.vision.processors.YCbCrColourThreshold;
+
+import java.util.List;
 
 /**
  * Task to align to a pixel using the vision system.
@@ -27,17 +30,15 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
     public static double kD;
 
     private final RoadRunnerDrive drive;
-    private final Vision vision;
     private final YCbCrColourThreshold processor;
     private final Gamepad gamepad;
     private final PIDController controller;
 
-    public AlignToPixelTask(Gamepad gamepad, T drive, Vision vision, YCbCrColourThreshold processor, PIDController controller) {
+    public AlignToPixelTask(Gamepad gamepad, T drive, YCbCrColourThreshold processor, PIDController controller) {
         super(drive, false);
         if (!(drive instanceof RoadRunnerDrive))
             throw new EmergencyStop("AlignToPixelTask must be used with a drivetrain with X forward Pose/IMU info");
         this.drive = (RoadRunnerDrive) drive;
-        this.vision = vision;
         this.processor = processor;
         this.gamepad = gamepad;
         this.controller = controller;
@@ -48,11 +49,8 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
 
     @Override
     public void init() {
-        if (!vision.isInitialised())
-            vision.init(processor);
-        if (!vision.getAttachedProcessors().contains(processor))
-            throw new EmergencyStop("Vision processor was initialised without being attached to the vision system");
-        vision.start(processor);
+        if (!processor.isAttached())
+            throw new RuntimeException("Vision processor was initialised without being attached to the vision system");
     }
 
     @Override
@@ -61,13 +59,15 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
         controller.setPID(kP, kI, kD);
 
         Pose2d pose = Controller.makeRobotPose(gamepad.left_stick_x, gamepad.left_stick_y, gamepad.right_stick_x);
-
-        if (processor.getData().size() > 0) {
+        List<ContourData> data = processor.getData();
+        if (data.size() > 0) {
+            // TODO: fix that getData() is returning stale data
+            // Dbg.log("yaw: %", data.get(0).getYaw());
             drive.setWeightedDrivePower(
                     new Pose2d(
                             pose.getX(),
                             pose.getY(),
-                            -controller.calculate(processor.getData().get(0).getCenterX(), 0.5)
+                            -controller.calculate(data.get(0).getCenterX(), 0.5)
                     )
             );
         } else {
@@ -79,6 +79,5 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
     @Override
     public void onFinish() {
 //        drive.setSpeedUsingController(0, 0, 0);
-        vision.stop(processor);
     }
 }

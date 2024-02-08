@@ -97,7 +97,8 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
     public abstract Object onProcessFrame(Mat frame, long captureTimeNanos);
 
     @Override
-    public final Object processFrame(Mat frame, long captureTimeNanos) {
+    public final Object processFrame(Mat f, long captureTimeNanos) {
+        Mat frame = f.clone();
         if (isFlipped)
             Core.flip(frame, frame, -1);
         Object procFrame = onProcessFrame(frame, captureTimeNanos);

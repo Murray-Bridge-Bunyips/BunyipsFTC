@@ -24,7 +24,7 @@ import java.util.Arrays;
 @Config
 public class SwitchableVisionSender extends BunyipsSubsystem {
     // Can be changed via FtcDashboard
-    public static String CURRENT_PROCESSOR_NAME;
+    public static String CURRENT_PROCESSOR_NAME = "";
     public static int MAX_FPS;
     private final ArrayList<Processor> processors = new ArrayList<>();
     private String lastProcessorName;
@@ -33,6 +33,8 @@ public class SwitchableVisionSender extends BunyipsSubsystem {
         super(opMode);
         FtcDashboard.getInstance().stopCameraStream();
         this.processors.addAll(Arrays.asList(processors));
+        if (processors.length > 0)
+            CURRENT_PROCESSOR_NAME = processors[0].getName();
     }
 
     /**
@@ -57,7 +59,7 @@ public class SwitchableVisionSender extends BunyipsSubsystem {
                 .orElse(null);
 
         if (currentProcessor == null || !currentProcessor.isAttached()) {
-            Dbg.error(getClass(), "Unable to find a processor '%' to attached to a Vision system, FtcDashboard sending cancelled.", CURRENT_PROCESSOR_NAME);
+            Dbg.warn(getClass(), "Unable to find a processor '%' to attached to a Vision system, FtcDashboard sending cancelled.", CURRENT_PROCESSOR_NAME);
             FtcDashboard.getInstance().stopCameraStream();
             return;
         }

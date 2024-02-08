@@ -12,6 +12,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.AlignToPixelTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.bunyipslib.vision.SwitchableVisionSender;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
+import org.murraybridgebunyips.bunyipslib.vision.processors.RawFeed;
 import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
@@ -40,7 +41,10 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
         );
         vision = new Vision(this, config.webcam);
         processor = new WhitePixel();
-        sender = new SwitchableVisionSender(this, processor);
+        RawFeed rf = new RawFeed();
+        vision.init(processor, rf);
+        vision.start(processor, rf);
+        sender = new SwitchableVisionSender(this, processor, rf);
         sender.muteTaskReports();
     }
 
@@ -56,7 +60,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
     protected void assignCommands() {
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
         scheduler.whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
-                .run(new AlignToPixelTask<>(gamepad1, drive, vision, processor, new PIDController(1, 0, 0)))
+                .run(new AlignToPixelTask<>(gamepad1, drive, processor, new PIDController(0.0005, 0, 0)))
                 .finishingWhen(() -> !gamepad1.right_bumper);
     }
 }
