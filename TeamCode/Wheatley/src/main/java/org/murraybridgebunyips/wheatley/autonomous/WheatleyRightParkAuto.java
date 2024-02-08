@@ -12,6 +12,7 @@ import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
+import org.murraybridgebunyips.bunyipslib.tasks.MessageTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
@@ -66,12 +67,18 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
-                addNewTrajectory(new Pose2d(-36.20, -70.21, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(-37.79, -20.29), Math.toRadians(92.04))
-                        .splineTo(new Vector2d(31.62, -13.33), Math.toRadians(-29.59))
-                        // TODO: Test this time
-                        .waitSeconds(5)
-                        .splineTo(new Vector2d(61.66, -59.87), Math.toRadians(0.00))
+                addTask(new MessageTask(this, 15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                addNewTrajectory()
+                        .forward(5)
+                        .build();
+                addNewTrajectory()
+                        .strafeRight(Inches.fromCM(180))
+                        .build();
+                addNewTrajectory()
+                        .back(2)
+                        .build();
+                addNewTrajectory()
+                        .strafeRight(100)
                         .build();
                 break;
 

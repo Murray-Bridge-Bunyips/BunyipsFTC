@@ -2,8 +2,6 @@ package org.murraybridgebunyips.wheatley.autonomous;
 
 import androidx.annotation.Nullable;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.Inches;
@@ -65,50 +63,37 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
-//                addTask(new MessageTask(this, 15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
-                // TODO: fix
-                addNewTrajectory(new Pose2d(-36.80, -71.01))
-                        .forward(Inches.fromCM(185))
+                addTask(new MessageTask(this, 15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                addNewTrajectory()
+                        .forward(180)
                         .build();
-
-                addNewTrajectory(new Pose2d(-36.80, -71.01))
-                        .strafeRight(Inches.fromCM(280))
+                addNewTrajectory()
+                        .strafeRight(200)
                         .build();
                 break;
 
             case STARTING_BLUE_LEFT:
                 addNewTrajectory()
-                        .strafeLeft(Inches.fromCM(116.84))
-                        .build();
-
-                addNewTrajectory()
-                        .strafeRight(Inches.fromCM(10))
+                        .strafeLeft(Inches.fromCM(180))
                         .build();
                 break;
 
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .forward(Inches.fromCM(116.84))
+                        .forward(Inches.fromCM(180))
                         .build();
 
                 addNewTrajectory()
-                        .strafeRight(Inches.fromCM(116.84))
-                        .build();
-
-                addNewTrajectory()
-                        .strafeLeft(Inches.fromCM(5))
+                        .strafeRight(Inches.fromCM(180))
                         .build();
                 break;
 
             case STARTING_BLUE_RIGHT:
-                addNewTrajectory(new Pose2d(-37.19, 70.81, Math.toRadians(90.00)))
-//                        .setReversed(true)
-                        .splineTo(new Vector2d(-36.00, 28.04), Math.toRadians(-88.41))
-                        .splineTo(new Vector2d(9.55, 7.56), Math.toRadians(-24.21))
-                        // TODO: Test wait here
-                        .waitSeconds(10)
-                        .splineTo(new Vector2d(60.27, 60.27), Math.toRadians(0.00))
-//                        .setReversed(false)
+                 addNewTrajectory()
+                        .forward(180)
+                        .build();
+                addNewTrajectory()
+                        .strafeLeft(200)
                         .build();
                 break;
         }

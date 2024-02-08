@@ -155,7 +155,7 @@ public class WheatleyConfig extends RobotConfig {
         mecanumCoefficients = new MecanumCoefficients.Builder()
                 .setLateralMultiplier(60.0 / 54.07)
                 .setTranslationalPID(new PIDCoefficients(8, 0, 0))
-                .setHeadingPID(new PIDCoefficients(8, 0, 0))
+                .setHeadingPID(new PIDCoefficients(10, 0, 0))
                 .build();
     }
 }
