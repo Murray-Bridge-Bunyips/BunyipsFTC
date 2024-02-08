@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.Controller;
+import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.EmergencyStop;
 import org.murraybridgebunyips.bunyipslib.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
@@ -40,6 +41,9 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
         this.processor = processor;
         this.gamepad = gamepad;
         this.controller = controller;
+        kP = controller.getP();
+        kI = controller.getI();
+        kD = controller.getD();
     }
 
     @Override

@@ -91,7 +91,7 @@ public class VisionTest extends BunyipsOpMode {
 
     @Override
     protected void onStart() {
-        if (vision == null) {
+        if (vision == null || visionSender == null) {
             exit();
         }
         removeTelemetryItems(i);
@@ -99,7 +99,6 @@ public class VisionTest extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        vision.update();
         visionSender.update();
         addTelemetry(String.valueOf(vision.getAllData()));
     }

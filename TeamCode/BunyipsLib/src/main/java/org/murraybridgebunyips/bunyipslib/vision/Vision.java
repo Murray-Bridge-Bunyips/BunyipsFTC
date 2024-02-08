@@ -9,6 +9,7 @@ import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.murraybridgebunyips.bunyipslib.BunyipsComponent;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
@@ -21,11 +22,14 @@ import java.util.List;
 /**
  * Component wrapper to support the v8.2+ SDK's included libraries for Camera operation.
  * This is an expansible system to run Processor components using the VisionPortal.
+ * <p>
+ * This is not a subsystem, as it runs on another thread and updates are managed at the discretion
+ * of the VisionPortal.
  *
  * @author Lucas Bubner, 2023
  */
 @Config
-public class Vision extends BunyipsSubsystem {
+public class Vision extends BunyipsComponent {
     public static int CAMERA_WIDTH = 1280;
     public static int CAMERA_HEIGHT = 720;
     @SuppressWarnings("rawtypes")
@@ -195,21 +199,7 @@ public class Vision extends BunyipsSubsystem {
     }
 
     /**
-     * Tick all processor camera streams and extract data from the processors.
-     * This can optionally be done per processor by calling processor.update()
-     * This data is stored in the processor instance and can be accessed with the getters.
-     */
-    @SuppressWarnings("rawtypes")
-    @Override
-    public void update() {
-        for (Processor processor : processors) {
-            processor.update();
-        }
-    }
-
-    /**
      * Get data from all processors after being ticked.
-     * This can optionally can be done per processor by calling processor.getData().
      * This data is stored in the processor instance and can be accessed with getters.
      *
      * @return HashMap of all processor data from every attached processor

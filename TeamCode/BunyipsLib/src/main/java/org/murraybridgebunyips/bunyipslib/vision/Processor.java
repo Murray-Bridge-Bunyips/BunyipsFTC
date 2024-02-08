@@ -11,8 +11,10 @@ import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -25,7 +27,7 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
     /**
      * List of all vision data detected since the last stateful update
      */
-    protected final List<T> data = new ArrayList<>();
+    protected final ArrayList<T> data = new ArrayList<>();
 
     /**
      * Bitmap for use with FtcDashboard and Bitmap processing
@@ -81,6 +83,7 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
      * collecting, or otherwise processing new vision data per frame. This method should
      * refresh `this.data` with the latest information from the vision system to be accessed
      * with your methods on .getData().T (your VisionData class).
+     * This method will be called automatically once attached to a Vision instance.
      */
     public abstract void update();
 
@@ -97,10 +100,12 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
     public final Object processFrame(Mat frame, long captureTimeNanos) {
         if (isFlipped)
             Core.flip(frame, frame, -1);
+        Object procFrame = onProcessFrame(frame, captureTimeNanos);
         Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(frame, b);
         lastFrame.set(b);
-        return onProcessFrame(frame, captureTimeNanos);
+        update();
+        return procFrame;
     }
 
     @Override
