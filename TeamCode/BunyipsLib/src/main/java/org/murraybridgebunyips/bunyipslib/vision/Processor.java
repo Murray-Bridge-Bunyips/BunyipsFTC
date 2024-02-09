@@ -108,7 +108,10 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
         Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(frame, b);
         lastFrame.set(b);
-        update();
+        synchronized (data) {
+            data.clear();
+            update();
+        }
         return procFrame;
     }
 

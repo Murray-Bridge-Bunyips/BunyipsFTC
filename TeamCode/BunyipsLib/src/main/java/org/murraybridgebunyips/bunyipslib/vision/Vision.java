@@ -205,7 +205,6 @@ public class Vision extends BunyipsComponent {
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public HashMap<String, List<VisionData>> getAllData() {
-        // TODO: check whether data from here is being properly reflected with sync calls
         HashMap<String, List<VisionData>> data = new HashMap<>();
         for (Processor processor : processors) {
             data.put(processor.getName(), processor.getData());

@@ -35,14 +35,11 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
 
     @Override
     public void update() {
-        synchronized (data) {
-            data.clear();
-            for (MatOfPoint contour : contours) {
-                Rect boundingRect = Imgproc.boundingRect(contour);
-                if (boundingRect.height < 100 && boundingRect.width < 100)
-                    continue;
-                data.add(new ContourData(boundingRect));
-            }
+        for (MatOfPoint contour : contours) {
+            Rect boundingRect = Imgproc.boundingRect(contour);
+            if (boundingRect.height < 100 && boundingRect.width < 100)
+                continue;
+            data.add(new ContourData(boundingRect));
         }
     }
 
@@ -96,6 +93,7 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
          * populate the "contours" list with the contours
          * found in the binary Mat.
          */
+        contours.clear();
         Imgproc.findContours(binaryMat, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
         /*
