@@ -12,6 +12,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.murraybridgebunyips.bunyipslib.BunyipsComponent;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
+import org.murraybridgebunyips.bunyipslib.vision.processors.RawFeed;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,19 +23,29 @@ import java.util.List;
  * Component wrapper to support the v8.2+ SDK's included libraries for Camera operation.
  * This is an expansible system to run Processor components using the VisionPortal.
  * <p>
- * This is not a subsystem, as it runs on another thread and updates are managed at the discretion
- * of the VisionPortal.
+ * You will pass your own processors that you manage, and Vision will handle the data collection.
+ * <p>
+ * Vision is not a traditional subsystem, as it runs on another thread and updates are
+ * managed at the discretion of the VisionPortal. Once set up, Vision will automatically
+ * manage the camera stream and defined processor updates. All you will need to do is collect
+ * the data from the processors and use it in your OpMode.
  *
  * @author Lucas Bubner, 2023
  */
 @Config
 public class Vision extends BunyipsComponent {
+    /**
+     * A built-in raw feed Processor that will do nothing but provide the raw camera feed.
+     * Useful for debugging and testing, pass Vision.raw to init() and start() to use it.
+     */
+    public static final RawFeed raw = new RawFeed();
     public static int CAMERA_WIDTH = 1280;
     public static int CAMERA_HEIGHT = 720;
     @SuppressWarnings("rawtypes")
     private final List<Processor> processors = new ArrayList<>();
     private final CameraName camera;
     private VisionPortal visionPortal;
+    private SwitchableVisionSender visionSender;
 
     public Vision(@NonNull BunyipsOpMode opMode, CameraName camera, int cameraWidth, int cameraHeight) {
         super(opMode);
@@ -198,8 +209,9 @@ public class Vision extends BunyipsComponent {
     }
 
     /**
-     * Get data from all processors after being ticked.
-     * This data is stored in the processor instance and can be accessed with getters.
+     * Get the culmination of data from all attached processors.
+     * It is recommended to instead call getData() on individual processors to get their data,
+     * however, this method exists to provide a quick way to get all data at once.
      *
      * @return HashMap of all processor data from every attached processor
      */
@@ -317,5 +329,46 @@ public class Vision extends BunyipsComponent {
      */
     public boolean isInitialised() {
         return visionPortal != null;
+    }
+
+    /**
+     * Start the VisionSender thread to send all processor data to FtcDashboard.
+     */
+    public void startDashboardSender() {
+        visionSender = new SwitchableVisionSender(getOpMode(), this);
+        visionSender.start();
+    }
+
+    /**
+     * Set the processor to display on FtcDashboard.
+     *
+     * @param processorName the name of the processor to display on FtcDashboard
+     */
+    public void setDashboardProcessor(String processorName) {
+        if (visionSender != null) {
+            visionSender.setStreamingProcessor(processorName);
+        }
+    }
+
+    /**
+     * Set the processor to display on FtcDashboard.
+     *
+     * @param processor the processor to display on FtcDashboard
+     */
+    @SuppressWarnings("rawtypes")
+    public void setDashboardProcessor(Processor processor) {
+        if (visionSender != null) {
+            visionSender.setStreamingProcessor(processor.getName());
+        }
+    }
+
+    /**
+     * Stop the VisionSender thread to stop sending all processor data to FtcDashboard.
+     * This method is effectively called automatically when the OpMode is no longer active.
+     */
+    public void stopDashboardSender() {
+        if (visionSender != null) {
+            visionSender.interrupt();
+        }
     }
 }

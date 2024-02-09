@@ -17,7 +17,6 @@ import org.murraybridgebunyips.bunyipslib.EmergencyStop;
 import org.murraybridgebunyips.bunyipslib.UserSelection;
 import org.murraybridgebunyips.bunyipslib.cameras.C920;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
-import org.murraybridgebunyips.bunyipslib.vision.SwitchableVisionSender;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
 import org.murraybridgebunyips.bunyipslib.vision.processors.RawFeed;
@@ -39,7 +38,6 @@ public class VisionTest extends BunyipsOpMode {
     private Vision vision;
     private Processor chosenProcessor;
     private Telemetry.Item i;
-    private SwitchableVisionSender visionSender;
     private final UserSelection<Procs> procChooser = new UserSelection<>(this, this::callback, Procs.values());
 
     @SuppressWarnings("rawtypes")
@@ -69,7 +67,7 @@ public class VisionTest extends BunyipsOpMode {
         RawFeed rf = new RawFeed();
         vision.init(chosenProcessor, rf);
         vision.start(chosenProcessor, rf);
-        visionSender = new SwitchableVisionSender(this, chosenProcessor, rf);
+        vision.startDashboardSender();
 
         i = addRetainedTelemetry("Camera Stream available.");
         return Unit.INSTANCE;
@@ -93,7 +91,7 @@ public class VisionTest extends BunyipsOpMode {
 
     @Override
     protected void onStart() {
-        if (vision == null || visionSender == null) {
+        if (vision == null) {
             exit();
         }
         removeTelemetryItems(i);
@@ -101,7 +99,6 @@ public class VisionTest extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        visionSender.update();
 //        addTelemetry(String.valueOf(vision.getAllData()));
         addTelemetry(String.valueOf(chosenProcessor.getData()));
     }

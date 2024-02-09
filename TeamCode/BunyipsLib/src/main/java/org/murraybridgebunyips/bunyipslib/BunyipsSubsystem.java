@@ -20,7 +20,7 @@ public abstract class BunyipsSubsystem extends BunyipsComponent {
     private final ArrayList<Integer> dependencies = new ArrayList<>();
     private Task currentTask;
     private Task defaultTask = new IdleTask();
-    private boolean mutedReports = false;
+    private boolean mutedReports;
 
     protected BunyipsSubsystem(@NonNull BunyipsOpMode opMode) {
         super(opMode);
