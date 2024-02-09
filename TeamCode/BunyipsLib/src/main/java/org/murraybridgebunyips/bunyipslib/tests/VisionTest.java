@@ -20,6 +20,7 @@ import org.murraybridgebunyips.bunyipslib.vision.Processor;
 import org.murraybridgebunyips.bunyipslib.vision.SwitchableVisionSender;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
+import org.murraybridgebunyips.bunyipslib.vision.processors.RawFeed;
 import org.murraybridgebunyips.bunyipslib.vision.processors.TFOD;
 import org.murraybridgebunyips.bunyipslib.vision.processors.TeamProp;
 import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
@@ -36,6 +37,7 @@ import kotlin.Unit;
 //@Disabled
 public class VisionTest extends BunyipsOpMode {
     private Vision vision;
+    private Processor chosenProcessor;
     private Telemetry.Item i;
     private SwitchableVisionSender visionSender;
     private final UserSelection<Procs> procChooser = new UserSelection<>(this, this::callback, Procs.values());
@@ -45,7 +47,7 @@ public class VisionTest extends BunyipsOpMode {
         if (selection == null) {
             return Unit.INSTANCE;
         }
-        Processor chosenProcessor = null;
+        //Processor chosenProcessor = null;
         switch (selection) {
             case TFOD:
                 chosenProcessor = new TFOD();
@@ -64,10 +66,10 @@ public class VisionTest extends BunyipsOpMode {
                 break;
         }
 
-        vision.init(chosenProcessor);
-        vision.start(chosenProcessor);
-        visionSender = new SwitchableVisionSender(this, chosenProcessor);
-        visionSender.setStreamingProcessor(chosenProcessor.getName());
+        RawFeed rf = new RawFeed();
+        vision.init(chosenProcessor, rf);
+        vision.start(chosenProcessor, rf);
+        visionSender = new SwitchableVisionSender(this, chosenProcessor, rf);
 
         i = addRetainedTelemetry("Camera Stream available.");
         return Unit.INSTANCE;
@@ -100,7 +102,8 @@ public class VisionTest extends BunyipsOpMode {
     @Override
     protected void activeLoop() {
         visionSender.update();
-        addTelemetry(String.valueOf(vision.getAllData()));
+//        addTelemetry(String.valueOf(vision.getAllData()));
+        addTelemetry(String.valueOf(chosenProcessor.getData()));
     }
 
     @Override

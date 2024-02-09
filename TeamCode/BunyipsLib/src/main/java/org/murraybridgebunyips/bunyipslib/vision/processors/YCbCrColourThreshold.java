@@ -35,20 +35,14 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
 
     @Override
     public void update() {
-        MatOfPoint largestContour = null;
-        double largestArea = 0;
-        for (MatOfPoint contour : contours) {
-            double area = Imgproc.contourArea(contour);
-            if (area > largestArea) {
-                largestArea = area;
-                largestContour = contour;
+        synchronized (data) {
+            data.clear();
+            for (MatOfPoint contour : contours) {
+                Rect boundingRect = Imgproc.boundingRect(contour);
+                if (boundingRect.height < 100 && boundingRect.width < 100)
+                    continue;
+                data.add(new ContourData(boundingRect));
             }
-        }
-        data.clear();
-        if (largestContour != null) {
-            Rect boundingRect = Imgproc.boundingRect(largestContour);
-            Rect imageSize = new Rect(0, 0, binaryMat.width(), binaryMat.height());
-            data.add(new ContourData(boundingRect, imageSize));
         }
     }
 

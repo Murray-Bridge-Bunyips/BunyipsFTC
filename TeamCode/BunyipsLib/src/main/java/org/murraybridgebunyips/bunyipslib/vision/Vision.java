@@ -11,7 +11,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.murraybridgebunyips.bunyipslib.BunyipsComponent;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 
 import java.util.ArrayList;
@@ -206,9 +205,9 @@ public class Vision extends BunyipsComponent {
      */
     @SuppressWarnings({"rawtypes", "unchecked"})
     public HashMap<String, List<VisionData>> getAllData() {
+        // TODO: check whether data from here is being properly reflected with sync calls
         HashMap<String, List<VisionData>> data = new HashMap<>();
         for (Processor processor : processors) {
-            if (processor.getName().equals("NoData")) continue;
             data.put(processor.getName(), processor.getData());
         }
         return data;

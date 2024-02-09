@@ -11,10 +11,9 @@ import org.opencv.android.Utils;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -27,13 +26,15 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
     /**
      * List of all vision data detected since the last stateful update
      */
-    protected final ArrayList<T> data = new ArrayList<>();
+    protected final List<T> data = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Bitmap for use with FtcDashboard and Bitmap processing
      */
     private final AtomicReference<Bitmap> lastFrame =
             new AtomicReference<>(Bitmap.createBitmap(1, 1, Bitmap.Config.RGB_565));
+
+    private Mat currentFrame;
 
     /**
      * Whether the camera stream should be processed with a vertical and horizontal flip
@@ -75,7 +76,9 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
      * @return list of all vision data detected since the last stateful update
      */
     public List<T> getData() {
-        return data;
+        synchronized (data) {
+            return data;
+        }
     }
 
     /**

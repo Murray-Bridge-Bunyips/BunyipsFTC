@@ -6,7 +6,6 @@ import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
 
-import org.checkerframework.checker.units.qual.A;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
@@ -27,6 +26,7 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
      * Default timeout for RoadRunner tasks, a value of 0.0 will run the task until it is finished.
      */
     public static final double DEFAULT_TIMEOUT = 0.0;
+    private final ArrayList<RoadRunnerTask<T>> rrTasks = new ArrayList<>();
 
     /**
      * Drive instance to be used for RoadRunner trajectories.
@@ -60,8 +60,6 @@ public abstract class RoadRunnerAutonomousBunyipsOpMode<T extends RoadRunnerDriv
         if (drive == null)
             drive = setDrive();
     }
-
-    private final ArrayList<RoadRunnerTask<T>> rrTasks = new ArrayList<>();
 
     private Pose2d getPreviousPose() {
         // Needed to splice the last pose from the last trajectory
