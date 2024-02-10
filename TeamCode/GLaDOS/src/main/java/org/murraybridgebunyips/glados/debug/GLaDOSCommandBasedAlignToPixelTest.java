@@ -28,7 +28,6 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
     private MecanumDrive drive;
     private Vision vision;
     private WhitePixel processor;
-    private SwitchableVisionSender sender;
 
     @Override
     protected void onInitialisation() {
@@ -41,18 +40,15 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
         );
         vision = new Vision(this, config.webcam);
         processor = new WhitePixel();
-        RawFeed rf = new RawFeed();
-        vision.init(processor, rf);
-        vision.start(processor, rf);
-        sender = new SwitchableVisionSender(this, processor, rf);
-        sender.muteTaskReports();
+        vision.init(processor, Vision.raw);
+        vision.start(processor, Vision.raw);
+        vision.startDashboardSender();
     }
 
     @Override
     protected BunyipsSubsystem[] setSubsystems() {
         return new BunyipsSubsystem[] {
                 drive,
-                sender
         };
     }
 

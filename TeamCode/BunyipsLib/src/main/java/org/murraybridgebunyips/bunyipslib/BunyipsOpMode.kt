@@ -213,6 +213,8 @@ abstract class BunyipsOpMode : LinearOpMode() {
             Dbg.logd("BunyipsOpMode: opmode stop requested. cleaning up...")
             opModeStatus = "terminating"
             pushTelemetry()
+            // Ensure all user threads have been told to stop
+            Threads.stopAll()
             onStop()
             Dbg.logd("BunyipsOpMode: exiting...")
         }

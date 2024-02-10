@@ -7,6 +7,7 @@ import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.RelativePose2d
+import org.murraybridgebunyips.bunyipslib.Threads
 import org.murraybridgebunyips.bunyipslib.UserSelection
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.components.JerryLift
@@ -35,7 +36,7 @@ class JerryTeleOp : BunyipsOpMode() {
     override fun onInit() {
         // Configure drive and lift subsystems
         config.init(this)
-        selector.start()
+        Threads.start(selector)
         if (NullSafety.assertNotNull(config.imu)) {
             imu = IMUOp(this, config.imu!!)
         }
@@ -78,7 +79,7 @@ class JerryTeleOp : BunyipsOpMode() {
     }
 
     override fun onInitLoop(): Boolean {
-        return !selector.isAlive
+        return !Threads.isRunning(selector)
     }
 
     override fun activeLoop() {

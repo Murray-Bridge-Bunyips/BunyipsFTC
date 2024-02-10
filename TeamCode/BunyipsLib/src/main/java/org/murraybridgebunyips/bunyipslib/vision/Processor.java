@@ -17,7 +17,12 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Base class for all vision processors using the Vision system
+ * Base class for all vision processors using the Vision system.
+ * <p>
+ * A processor will be attached to a Vision instance and will be called to process frames,
+ * allowing you to access your data here using the .getData() method. This makes it useful
+ * for tasks to access the latest data from the vision system, without needing to directly
+ * interface with the Vision instance.
  *
  * @author Lucas Bubner, 2023
  */
@@ -41,13 +46,13 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
      */
     private boolean isFlipped;
 
-    /**
-     * Determine whether the processor is attached to the vision system
-     * Checking this is useful for processors that have been passed into tasks but cannot
-     * be checked by looking directly at the vision system
-     */
     private boolean isAttached;
 
+    /**
+     * Determine whether the processor is attached to a Vision instance.
+     * Checking this is useful for processors that have been passed into tasks but cannot
+     * be checked by looking directly at the vision system.
+     */
     public boolean isAttached() {
         return isAttached;
     }
@@ -108,7 +113,10 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
         Bitmap b = Bitmap.createBitmap(frame.width(), frame.height(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(frame, b);
         lastFrame.set(b);
-        update();
+        synchronized (data) {
+            data.clear();
+            update();
+        }
         return procFrame;
     }
 
