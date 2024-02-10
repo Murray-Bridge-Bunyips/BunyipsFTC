@@ -3,7 +3,6 @@ package org.murraybridgebunyips.bunyipslib.vision;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.murraybridgebunyips.bunyipslib.Dbg;
 
@@ -15,28 +14,25 @@ import java.util.Objects;
  * to see the same feed when debugging across different processors. FtcDashboard allows us to send
  * custom bitmaps, and we can use this to send the feed from different processors to the dashboard.
  * <p>
- * This sender is not a traditional subsystem, as it runs on another thread and is not a part of the main loop,
+ * This sender is not a traditional subsystem, as it is designed to run on another thread not a part of the main loop,
  * similar to how Vision is handled. When started, SwitchableVisionSender will automatically
- * manage the FtcDashboard feed and processor switching, and will end when the OpMode is no longer active.
- * If you need to end this thread early, you can call interrupt() on the instance.
- * <p>
- * Utilities are provided on the Vision instance class to manage creating and managing this sender.
+ * manage the FtcDashboard feed and processor switching, and should be interrupted automatically if used
+ * with the Threads utility at the end of a BunyipsOpMode. Ensure to manage your threads properly if
+ * not using the Threads utility.
  *
  * @author Lucas Bubner, 2024
  */
 @SuppressWarnings("rawtypes")
 @Config
-public class SwitchableVisionSender extends Thread {
+public class SwitchableVisionSender implements Runnable {
     // Can be changed via FtcDashboard
     public static String CURRENT_PROCESSOR_NAME = "";
     public static int MAX_FPS;
-    private final LinearOpMode opMode;
     private final Vision vision;
     private String lastProcessorName;
 
-    public SwitchableVisionSender(LinearOpMode opMode, Vision vision) {
+    public SwitchableVisionSender(Vision vision) {
         FtcDashboard.getInstance().stopCameraStream();
-        this.opMode = opMode;
         this.vision = vision;
         if (vision.getAttachedProcessors().size() > 0)
             CURRENT_PROCESSOR_NAME = vision.getAttachedProcessors().get(0).getName();
@@ -53,7 +49,7 @@ public class SwitchableVisionSender extends Thread {
 
     @Override
     public void run() {
-        while (!opMode.isStopRequested()) {
+        while (!Thread.currentThread().isInterrupted()) {
             if (Objects.equals(CURRENT_PROCESSOR_NAME, "") || CURRENT_PROCESSOR_NAME.equals(lastProcessorName))
                 continue;
 

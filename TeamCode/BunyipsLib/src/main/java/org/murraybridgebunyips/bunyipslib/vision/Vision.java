@@ -11,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.murraybridgebunyips.bunyipslib.BunyipsComponent;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.Threads;
 import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 import org.murraybridgebunyips.bunyipslib.vision.processors.RawFeed;
 
@@ -335,8 +336,8 @@ public class Vision extends BunyipsComponent {
      * Start the VisionSender thread to send all processor data to FtcDashboard.
      */
     public void startDashboardSender() {
-        visionSender = new SwitchableVisionSender(getOpMode(), this);
-        visionSender.start();
+        visionSender = new SwitchableVisionSender(this);
+        Threads.start(visionSender);
     }
 
     /**
@@ -368,7 +369,7 @@ public class Vision extends BunyipsComponent {
      */
     public void stopDashboardSender() {
         if (visionSender != null) {
-            visionSender.interrupt();
+            Threads.stop(visionSender);
         }
     }
 }

@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.EmergencyStop;
+import org.murraybridgebunyips.bunyipslib.Threads;
 import org.murraybridgebunyips.bunyipslib.UserSelection;
 import org.murraybridgebunyips.bunyipslib.cameras.C920;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
@@ -36,7 +37,6 @@ import kotlin.Unit;
 //@Disabled
 public class VisionTest extends BunyipsOpMode {
     private Vision vision;
-    private Processor chosenProcessor;
     private Telemetry.Item i;
     private final UserSelection<Procs> procChooser = new UserSelection<>(this, this::callback, Procs.values());
 
@@ -45,7 +45,7 @@ public class VisionTest extends BunyipsOpMode {
         if (selection == null) {
             return Unit.INSTANCE;
         }
-        //Processor chosenProcessor = null;
+        Processor chosenProcessor = null;
         switch (selection) {
             case TFOD:
                 chosenProcessor = new TFOD();
@@ -75,7 +75,7 @@ public class VisionTest extends BunyipsOpMode {
 
     @Override
     protected boolean onInitLoop() {
-        return !procChooser.isAlive();
+        return !Threads.isRunning(procChooser);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class VisionTest extends BunyipsOpMode {
         } catch (IllegalArgumentException e) {
             throw new EmergencyStop("VisionTest is missing a webcam called 'webcam'!");
         }
-        procChooser.start();
+        Threads.start(procChooser);
     }
 
     @Override
@@ -99,8 +99,7 @@ public class VisionTest extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-//        addTelemetry(String.valueOf(vision.getAllData()));
-        addTelemetry(String.valueOf(chosenProcessor.getData()));
+        addTelemetry(String.valueOf(vision.getAllData()));
     }
 
     @Override
