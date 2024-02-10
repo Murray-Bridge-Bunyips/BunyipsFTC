@@ -18,7 +18,7 @@ public class Threads {
      * @param <T>  the type of the task
      */
     public static <T extends Runnable> void start(T task) {
-        Dbg.logd(Threads.class, "Running new thread: % ...", task.getClass().getSimpleName());
+        Dbg.logd(Threads.class, "running new thread: % ...", task.getClass().getSimpleName());
         Thread thread = new Thread(task);
         thread.start();
         threads.put(task.hashCode(), thread);
@@ -31,7 +31,7 @@ public class Threads {
      * This method is automatically called at the end of a BunyipsOpMode.
      */
     public static void stopAll() {
-        Dbg.logd(Threads.class, "Stopping all threads...");
+        Dbg.logd(Threads.class, "stopping all threads...");
         for (Thread thread : threads.values()) {
             thread.interrupt();
         }
@@ -59,11 +59,11 @@ public class Threads {
     public static <T extends Runnable> void stop(T task) {
         Thread thread = threads.get(task.hashCode());
         if (thread != null) {
-            Dbg.logd(Threads.class, "Stopping thread: % ...", task.getClass().getSimpleName());
+            Dbg.logd(Threads.class, "stopping thread: % ...", task.getClass().getSimpleName());
             thread.interrupt();
             threads.remove(task.hashCode());
         } else {
-            Dbg.warn(Threads.class, "Tried to stop a task '%' that is not being managed by Threads.", task.getClass().getSimpleName());
+            Dbg.warn(Threads.class, "tried to stop a task '%' that is not being managed by Threads.", task.getClass().getSimpleName());
         }
     }
 
@@ -99,17 +99,17 @@ public class Threads {
         Thread thread = threads.get(task.hashCode());
         if (thread != null) {
             if (interrupt) {
-                Dbg.logd(Threads.class, "Stopping thread: % ...", task.getClass().getSimpleName());
+                Dbg.logd(Threads.class, "stopping thread: % ...", task.getClass().getSimpleName());
                 thread.interrupt();
             }
             try {
-                Dbg.logd(Threads.class, "Waiting for thread: % ...", task.getClass().getSimpleName());
+                Dbg.logd(Threads.class, "waiting for thread: % ...", task.getClass().getSimpleName());
                 thread.join();
             } catch (InterruptedException e) {
-                Dbg.error(Threads.class, "Thread '%' was interrupted while waiting.", task.getClass().getSimpleName());
+                Dbg.error(Threads.class, "thread '%' was interrupted while waiting.", task.getClass().getSimpleName());
             }
         } else {
-            Dbg.warn(Threads.class, "Tried to wait for a task '%' that is not being managed by Threads.", task.getClass().getSimpleName());
+            Dbg.warn(Threads.class, "tried to wait for a task '%' that is not being managed by Threads.", task.getClass().getSimpleName());
         }
     }
 }

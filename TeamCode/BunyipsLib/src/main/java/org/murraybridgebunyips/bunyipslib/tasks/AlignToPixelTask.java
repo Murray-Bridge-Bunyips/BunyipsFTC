@@ -58,18 +58,21 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
 
         Pose2d pose = Controller.makeRobotPose(gamepad.left_stick_x, gamepad.left_stick_y, gamepad.right_stick_x);
         List<ContourData> data = processor.getData();
-        if (data.size() > 0) {
-            // TODO: fix that getData() is returning stale data
-            // Dbg.log("yaw: %", data.get(0).getYaw());
+
+        ContourData biggestContour = data.stream()
+                .max((a, b) -> (int) (a.getArea() - b.getArea()))
+                .orElse(null);
+
+        if (biggestContour != null) {
             drive.setWeightedDrivePower(
                     new Pose2d(
                             pose.getX(),
                             pose.getY(),
-                            -controller.calculate(data.get(0).getCenterX(), 0.5)
+                            -controller.calculate(biggestContour.getYaw(), 0.5)
                     )
             );
         } else {
-            // Consider using FCD once testing is done
+            // TODO: Consider using FCD once testing is done
             drive.setWeightedDrivePower(pose);
         }
     }

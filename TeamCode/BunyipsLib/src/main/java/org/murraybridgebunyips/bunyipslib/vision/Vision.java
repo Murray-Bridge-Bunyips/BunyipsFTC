@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Component wrapper to support the v8.2+ SDK's included libraries for Camera operation.
@@ -39,7 +40,7 @@ public class Vision extends BunyipsComponent {
      * A built-in raw feed Processor that will do nothing but provide the raw camera feed.
      * Useful for debugging and testing, pass Vision.raw to init() and start() to use it.
      */
-    public static final RawFeed raw = new RawFeed();
+    public static RawFeed raw = new RawFeed();
     public static int CAMERA_WIDTH = 1280;
     public static int CAMERA_HEIGHT = 720;
     @SuppressWarnings("rawtypes")
@@ -91,9 +92,16 @@ public class Vision extends BunyipsComponent {
         // Hand over instance control to the VisionPortal
         this.processors.addAll(Arrays.asList(processors));
 
+        // Use a new raw processor if present as it might be attached to an old Vision instance
+        if (Arrays.stream(processors).anyMatch(p -> p.getName().equals("rawfeed"))) {
+            this.processors.remove(raw);
+            raw = new RawFeed();
+            this.processors.add(raw);
+        }
+
         // Initialise the VisionPortal with our newly created processors
         VisionPortal.Builder builder = new VisionPortal.Builder();
-        for (Processor processor : processors) {
+        for (Processor processor : this.processors) {
             if (processor == null) {
                 throw new IllegalStateException("Vision: Processor is not instantiated!");
             }
@@ -113,8 +121,8 @@ public class Vision extends BunyipsComponent {
         visionPortal = builder
                 .setCamera(camera)
                 .setCameraResolution(new Size(CAMERA_WIDTH, CAMERA_HEIGHT))
+                // Live view needs to be enabled to allow for drawFrame() to work for FtcDashboard
                 .enableLiveView(true)
-                .setAutoStopLiveView(true)
                 // Set any additional VisionPortal settings here
                 .build();
 
@@ -123,8 +131,6 @@ public class Vision extends BunyipsComponent {
             visionPortal.setProcessorEnabled(processor, false);
         }
 
-        // Disable live view by default
-        visionPortal.stopLiveView();
         getOpMode().log("visionportal ready.");
     }
 
@@ -220,6 +226,7 @@ public class Vision extends BunyipsComponent {
     public HashMap<String, List<VisionData>> getAllData() {
         HashMap<String, List<VisionData>> data = new HashMap<>();
         for (Processor processor : processors) {
+            if (Objects.equals(processor.getName(), "rawfeed")) continue;
             data.put(processor.getName(), processor.getData());
         }
         return data;
@@ -306,21 +313,6 @@ public class Vision extends BunyipsComponent {
             throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
         }
         return visionPortal.getFps();
-    }
-
-    /**
-     * Start or stop the live camera view (Level 1).
-     * When initialised, live view is disabled by default.
-     */
-    public void setLiveView(boolean enabled) {
-        if (visionPortal == null) {
-            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
-        }
-        if (enabled) {
-            visionPortal.resumeLiveView();
-        } else {
-            visionPortal.stopLiveView();
-        }
     }
 
     /**
