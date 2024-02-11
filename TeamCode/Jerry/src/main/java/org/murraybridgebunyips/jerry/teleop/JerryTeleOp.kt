@@ -22,7 +22,7 @@ import org.murraybridgebunyips.jerry.components.JerryLift
  * > gamepad2 A to open claw
  * > gamepad2 B to close claw
  *
- * @author Lucas Bubner, 2022-2023
+ * @author Lucas Bubner, 2022
  */
 @TeleOp(name = "TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
