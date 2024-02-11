@@ -19,11 +19,8 @@ class JerryNewVision : BunyipsOpMode() {
         AprilTag(C920())
 
     override fun onInit() {
-        config.init(this)
-        vision = Vision(
-            this,
-            config.webcam!!
-        )
+        config.init()
+        vision = Vision(config.webcam!!)
         vision?.init(aprilTag)
         vision?.start(aprilTag)
     }

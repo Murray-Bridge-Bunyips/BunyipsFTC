@@ -1,10 +1,7 @@
 package org.murraybridgebunyips.bunyipslib.drive;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.IMUOp;
 import org.murraybridgebunyips.bunyipslib.RelativePose2d;
@@ -19,8 +16,8 @@ import org.murraybridgebunyips.bunyipslib.RelativePose2d;
 public class CartesianFieldCentricMecanumDrive extends CartesianMecanumDrive {
     private final IMUOp imu;
 
-    public CartesianFieldCentricMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativePose2d startingDirection) {
-        super(opMode, frontLeft, frontRight, backLeft, backRight);
+    public CartesianFieldCentricMecanumDrive(DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight, IMUOp imu, boolean invalidatePreviousHeading, RelativePose2d startingDirection) {
+        super(frontLeft, frontRight, backLeft, backRight);
         this.imu = imu;
         if (startingDirection == RelativePose2d.CLOCKWISE || startingDirection == RelativePose2d.ANTICLOCKWISE) {
             throw new IllegalArgumentException("FCMD: Cannot use rotational quantities as a starting direction");

@@ -1,10 +1,9 @@
 package org.murraybridgebunyips.jerry.tasks
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
-import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 import kotlin.math.abs
 
 /**
@@ -21,7 +20,6 @@ import kotlin.math.abs
  * @author Lucas Bubner, 2023
  */
 class JerryPrecisionDriveTask(
-    opMode: BunyipsOpMode,
     time: Double,
     private val drive: CartesianMecanumDrive?,
     private val imu: IMUOp?,
@@ -32,7 +30,7 @@ class JerryPrecisionDriveTask(
     private val direction: Directions,
     private var power: Double,
     private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
-) : BunyipsTask(opMode, time), RobotTask {
+) : Task(time), RobotTask {
 
     init {
         try {

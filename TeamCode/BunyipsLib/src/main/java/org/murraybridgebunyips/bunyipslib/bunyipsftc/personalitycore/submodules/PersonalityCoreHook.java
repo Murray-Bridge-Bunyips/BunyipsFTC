@@ -1,11 +1,8 @@
 package org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.submodules;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 
 /**
@@ -22,8 +19,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
     private final double RETRACTED = 0.0;
     private double target;
 
-    public PersonalityCoreHook(@NonNull BunyipsOpMode opMode, Servo hook) {
-        super(opMode);
+    public PersonalityCoreHook(Servo hook) {
         this.hook = hook;
         target = RETRACTED;
         update();

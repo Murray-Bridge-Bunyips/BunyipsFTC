@@ -1,7 +1,5 @@
 package org.murraybridgebunyips.bunyipslib;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -20,8 +18,7 @@ public class Cannon extends BunyipsSubsystem {
     private final Servo prolong;
     private double target;
 
-    public Cannon(@NonNull BunyipsOpMode opMode, Servo prolong) {
-        super(opMode);
+    public Cannon(Servo prolong) {
         this.prolong = prolong;
 
         // We assume there will always be a paper plane in the cannon at the start of a match

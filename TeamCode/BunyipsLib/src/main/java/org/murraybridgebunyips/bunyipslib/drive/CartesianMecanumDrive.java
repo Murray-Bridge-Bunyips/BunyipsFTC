@@ -1,11 +1,8 @@
 package org.murraybridgebunyips.bunyipslib.drive;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.Controller;
 
@@ -34,8 +31,7 @@ public class CartesianMecanumDrive extends BunyipsSubsystem {
     // Store and declare prioritisation when given instruction to calculate motor powers
     private Priority priority = Priority.NORMALISED;
 
-    public CartesianMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
-        super(opMode);
+    public CartesianMecanumDrive(DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
         this.frontLeft = frontLeft;
         this.backLeft = backLeft;
         this.frontRight = frontRight;

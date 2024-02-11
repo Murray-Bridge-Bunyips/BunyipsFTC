@@ -1,7 +1,5 @@
 package org.murraybridgebunyips.bunyipslib.drive;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
@@ -12,7 +10,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
@@ -35,8 +32,7 @@ import java.util.List;
 public class TankDrive extends BunyipsSubsystem implements RoadRunnerDrive {
     private final TankRoadRunnerDrive instance;
 
-    public TankDrive(@NonNull BunyipsOpMode opMode, DriveConstants constants, TankCoefficients coefficients, IMU imu, DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight) {
-        super(opMode);
+    public TankDrive(DriveConstants constants, TankCoefficients coefficients, IMU imu, DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight) {
         instance = new TankRoadRunnerDrive(constants, coefficients, opMode.hardwareMap.voltageSensor, imu, frontLeft, frontRight, backLeft, backRight);
     }
 

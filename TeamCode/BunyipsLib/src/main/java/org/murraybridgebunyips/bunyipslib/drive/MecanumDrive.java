@@ -2,8 +2,6 @@ package org.murraybridgebunyips.bunyipslib.drive;
 
 import static org.murraybridgebunyips.bunyipslib.Text.round;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
@@ -16,7 +14,6 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.Inches;
@@ -43,8 +40,7 @@ public class MecanumDrive extends BunyipsSubsystem implements RoadRunnerDrive {
     private final MecanumRoadRunnerDrive drive;
     private final IMU imu;
 
-    public MecanumDrive(@NonNull BunyipsOpMode opMode, DriveConstants constants, MecanumCoefficients mecanumCoefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
-        super(opMode);
+    public MecanumDrive(DriveConstants constants, MecanumCoefficients mecanumCoefficients, HardwareMap.DeviceMapping<VoltageSensor> voltageSensor, IMU imu, DcMotorEx fl, DcMotorEx fr, DcMotorEx bl, DcMotorEx br) {
         drive = new MecanumRoadRunnerDrive(constants, mecanumCoefficients, voltageSensor, imu, fl, fr, bl, br);
         // If we have a last known position, set the pose estimate to it
         if (RobotConfig.getLastKnownPosition() != null) {

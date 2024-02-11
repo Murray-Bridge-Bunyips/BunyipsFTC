@@ -1,9 +1,8 @@
 package org.murraybridgebunyips.jerry.tasks
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
-import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 
 /**
  * Base drive task which will run Cartesian XYR speed for a given time
@@ -12,13 +11,12 @@ import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
  * @see JerryPrecisionDriveTask
  */
 class JerryTimeDriveTask(
-    opMode: BunyipsOpMode,
     time: Double,
     private val drive: CartesianMecanumDrive?,
     private val x: Double,
     private val y: Double,
     private val r: Double
-) : BunyipsTask(opMode, time), RobotTask {
+) : Task(time), RobotTask {
     override fun init() {
         return
     }

@@ -3,14 +3,11 @@ package org.murraybridgebunyips.bunyipslib.vision;
 
 import android.util.Size;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.murraybridgebunyips.bunyipslib.BunyipsComponent;
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Threads;
 import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 import org.murraybridgebunyips.bunyipslib.vision.processors.RawFeed;
@@ -49,16 +46,14 @@ public class Vision extends BunyipsComponent {
     private VisionPortal visionPortal;
     private SwitchableVisionSender visionSender;
 
-    public Vision(@NonNull BunyipsOpMode opMode, CameraName camera, int cameraWidth, int cameraHeight) {
-        super(opMode);
+    public Vision(CameraName camera, int cameraWidth, int cameraHeight) {
         this.camera = camera;
         // Allow the user to set the camera resolution if they want
         CAMERA_WIDTH = cameraWidth;
         CAMERA_HEIGHT = cameraHeight;
     }
 
-    public Vision(@NonNull BunyipsOpMode opMode, CameraName camera) {
-        super(opMode);
+    public Vision(CameraName camera) {
         this.camera = camera;
     }
 

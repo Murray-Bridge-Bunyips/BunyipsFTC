@@ -44,14 +44,14 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this);
+        config.init();
         drive = new MecanumDrive(
-                this, config.driveConstants, config.mecanumCoefficients,
+                config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
-        if (NullSafety.assertComponentArgs(this, Cannon.class, config.launcher))
-            cannon = new Cannon(this, config.launcher);
-        arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment,
+        if (NullSafety.assertComponentArgs(Cannon.class, config.launcher))
+            cannon = new Cannon(config.launcher);
+        arm = new PersonalityCoreArm(config.pixelMotion, config.pixelAlignment,
                 config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel
         );
     }

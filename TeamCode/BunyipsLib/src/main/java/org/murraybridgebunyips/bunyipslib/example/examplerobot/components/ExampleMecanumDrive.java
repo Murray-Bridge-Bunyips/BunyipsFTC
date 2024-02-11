@@ -1,12 +1,9 @@
 package org.murraybridgebunyips.bunyipslib.example.examplerobot.components;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.RelativePose2d;
 
@@ -32,10 +29,7 @@ public class ExampleMecanumDrive extends BunyipsSubsystem {
     // Store and declare prioritisation when given instruction to calculate motor powers
     private Priority priority = Priority.NORMALISED;
 
-    public ExampleMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
-        // Required to delegate the BunyipsOpMode instance to the superclass.
-        super(opMode);
-
+    public ExampleMecanumDrive(DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
         // Assign constructor parameters to the ExampleMecanumDrive instance
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;

@@ -32,12 +32,11 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
 
     override fun onInitialisation() {
         // Configuration of camera and drive components
-        config.init(this)
+        config.init()
         cam =
-            Vision(this, config.webcam)
+            Vision(config.webcam)
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
-                this,
                 config.fl!!,
                 config.fr!!,
                 config.bl!!,
@@ -51,7 +50,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
 //            y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
         if (NullSafety.assertNotNull(config.imu))
-            imu = IMUOp(this, config.imu!!)
+            imu = IMUOp(config.imu!!)
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
@@ -71,7 +70,6 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
         // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
         addTask(
             JerryPrecisionDriveTask(
-                this,
                 4.0,
                 drive,
                 imu,
@@ -95,7 +93,6 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
             // Drive forward if the position of the signal is LEFT
             addTaskFirst(
                 JerryPrecisionDriveTask(
-                    this,
                     3.5,
                     drive,
                     imu,
@@ -110,7 +107,6 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
             // Drive backward if the position of the signal is RIGHT
             addTaskFirst(
                 JerryPrecisionDriveTask(
-                    this,
                     3.0,
                     drive,
                     imu,
