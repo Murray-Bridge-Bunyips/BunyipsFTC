@@ -36,8 +36,8 @@ abstract class BunyipsOpMode : LinearOpMode() {
          * This can be used instead of dependency injection to access the current OpMode, as it is a singleton.
          *
          * BunyipsComponent and Task internally use this to grant access to the current OpMode through
-         * the `opMode` property. Ensure all Tasks and BunyipsComponents are instantiated during the onInit() cycle,
-         * otherwise this property will be null.
+         * the `opMode` property. You must ensure all Tasks and BunyipsComponents are instantiated during runtime,
+         * (such as during onInit()), otherwise this property will be null.
          */
         @JvmStatic
         lateinit var instance: BunyipsOpMode
