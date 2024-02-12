@@ -20,7 +20,7 @@ public class BrainbotVision extends BunyipsOpMode {
     @Override
     protected void onInit() {
         config.init(this);
-        vision = new Vision(this, config.camera);
+        vision = new Vision(config.camera);
         WhitePixel wp = new WhitePixel();
         TeamProp tp = new TeamProp(255, 0, 0);
         vision.init(wp, tp);
