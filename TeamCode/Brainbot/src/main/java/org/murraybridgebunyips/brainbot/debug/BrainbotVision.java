@@ -22,15 +22,9 @@ public class BrainbotVision extends BunyipsOpMode {
         config.init(this);
         vision = new Vision(config.camera);
         WhitePixel wp = new WhitePixel();
-        TeamProp tp = new TeamProp(255, 0, 0);
-        vision.init(wp, tp);
-        vision.start(wp, tp);
+        vision.init(wp);
+        vision.start(wp);
         vision.startDashboardSender();
-    }
-
-    @Override
-    protected void onStart() {
-        vision.setDashboardProcessor("whitepixel");
     }
 
     @Override
