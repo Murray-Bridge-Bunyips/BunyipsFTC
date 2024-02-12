@@ -34,7 +34,7 @@ public class SwitchableVisionSender implements Runnable {
     public SwitchableVisionSender(Vision vision) {
         FtcDashboard.getInstance().stopCameraStream();
         this.vision = vision;
-        if (vision.getAttachedProcessors().size() > 0)
+        if (vision.getAttachedProcessors().size() > 0 && CURRENT_PROCESSOR_NAME.equals(""))
             CURRENT_PROCESSOR_NAME = vision.getAttachedProcessors().get(0).getName();
     }
 

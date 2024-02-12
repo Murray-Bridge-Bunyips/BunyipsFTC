@@ -16,7 +16,6 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.EmergencyStop;
 import org.murraybridgebunyips.bunyipslib.Threads;
 import org.murraybridgebunyips.bunyipslib.UserSelection;
-import org.murraybridgebunyips.bunyipslib.cameras.C920;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
@@ -51,7 +50,7 @@ public class VisionTest extends BunyipsOpMode {
                 chosenProcessor = new TFOD();
                 break;
             case APRILTAG:
-                chosenProcessor = new AprilTag(new C920());
+                chosenProcessor = new AprilTag();
                 break;
             case TEAMPROP_RED:
                 chosenProcessor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);

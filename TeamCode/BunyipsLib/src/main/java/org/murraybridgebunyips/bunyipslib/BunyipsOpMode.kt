@@ -167,7 +167,14 @@ abstract class BunyipsOpMode : LinearOpMode() {
             Dbg.logd("BunyipsOpMode: ready.")
             // Set telemetry to an inert state while we wait for start
             pushTelemetry()
-            overheadTelemetry.setValue("BOM: ready | T+0s | 0.000ms | (?) (?)\n")
+            overheadTelemetry.setValue(
+                "BOM: ready | T+0s | ${
+                    round(
+                        movingAverageTimer.elapsedTime() / 1000.0,
+                        2
+                    )
+                }s init | (?) (?)\n"
+            )
 
             waitForStart()
 

@@ -117,6 +117,9 @@ public class Vision extends BunyipsComponent {
                 .setCamera(camera)
                 .setCameraResolution(new Size(CAMERA_WIDTH, CAMERA_HEIGHT))
                 // Live view needs to be enabled to allow for drawFrame() to work for FtcDashboard
+                // for integrated processors such as TFOD and AprilTag as they don't like to work
+                // outside of the live view environment
+                // TODO: Confirm if this patch still works when used with a Control Hub
                 .enableLiveView(true)
                 // Set any additional VisionPortal settings here
                 .build();
@@ -317,6 +320,21 @@ public class Vision extends BunyipsComponent {
      */
     public boolean isInitialised() {
         return visionPortal != null;
+    }
+
+    /**
+     * Get the VisionPortal directly for advanced operations.
+     * This method should be used with caution, as it can be used to directly manipulate the
+     * VisionPortal and its resources. It is recommended to use the provided methods in this
+     * class to manage the VisionPortal.
+     *
+     * @return the VisionPortal instance
+     */
+    public VisionPortal getVisionPortal() {
+        if (visionPortal == null) {
+            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
+        }
+        return visionPortal;
     }
 
     /**
