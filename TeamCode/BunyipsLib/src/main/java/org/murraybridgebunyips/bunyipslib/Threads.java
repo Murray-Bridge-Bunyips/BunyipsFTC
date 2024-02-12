@@ -14,12 +14,12 @@ public class Threads {
     /**
      * Start a new thread with the given task.
      *
-     * @param task the task to run on the new thread, must implement Runnable
-     * @param <T>  the type of the task
+     * @param task the runnable task to run on the new thread
      */
-    public static <T extends Runnable> void start(T task) {
-        Dbg.logd(Threads.class, "Running new thread: % ...", task.getClass().getSimpleName());
+    public static void start(Runnable task) {
+        Dbg.logd(Threads.class, "starting new thread: % ...", task.getClass().getSimpleName());
         Thread thread = new Thread(task);
+        thread.setName(task.getClass().getSimpleName());
         thread.start();
         threads.put(task.hashCode(), thread);
     }
@@ -31,8 +31,8 @@ public class Threads {
      * This method is automatically called at the end of a BunyipsOpMode.
      */
     public static void stopAll() {
-        Dbg.logd(Threads.class, "Stopping all threads...");
         for (Thread thread : threads.values()) {
+            Dbg.logd(Threads.class, "stopping thread: % ...", thread.getName());
             thread.interrupt();
         }
         threads.clear();
@@ -41,11 +41,10 @@ public class Threads {
     /**
      * Check if a task is currently running.
      *
-     * @param task the task to check
-     * @param <T>  the type of the task
+     * @param task the task to check, must be managed by Threads
      * @return true if the task is running, false otherwise
      */
-    public static <T extends Runnable> boolean isRunning(T task) {
+    public static boolean isRunning(Runnable task) {
         Thread thread = threads.get(task.hashCode());
         return thread != null && thread.isAlive();
     }
@@ -53,27 +52,26 @@ public class Threads {
     /**
      * Stop a specific task that is currently running.
      *
-     * @param task the task to stop
-     * @param <T>  the type of the task
+     * @param task the task to stop, must be managed by Threads
      */
-    public static <T extends Runnable> void stop(T task) {
+    public static void stop(Runnable task) {
         Thread thread = threads.get(task.hashCode());
         if (thread != null) {
-            Dbg.logd(Threads.class, "Stopping thread: % ...", task.getClass().getSimpleName());
+            Dbg.logd(Threads.class, "stopping thread: % ...", thread.getName());
             thread.interrupt();
             threads.remove(task.hashCode());
         } else {
-            Dbg.warn(Threads.class, "Tried to stop a task '%' that is not being managed by Threads.", task.getClass().getSimpleName());
+            Dbg.warn(Threads.class, "tried to stop a task '%' that is not being managed by Threads.", task.getClass().getSimpleName());
         }
     }
 
     /**
      * Restart a specific task by stopping it and then starting it again.
      *
-     * @param task the task to restart
-     * @param <T>  the type of the task
+     * @param task the task to restart, must be managed by Threads
      */
-    public static <T extends Runnable> void restart(T task) {
+    public static void restart(Runnable task) {
+        Dbg.logd(Threads.class, "attempting to restart task: % ...", task.getClass().getSimpleName());
         stop(task);
         start(task);
     }
@@ -81,35 +79,33 @@ public class Threads {
     /**
      * Wait for a specific task to finish running.
      *
-     * @param task the task to wait for
-     * @param <T>  the type of the task
+     * @param task the task to wait for, must be managed by Threads
      */
-    public static <T extends Runnable> void waitFor(T task) {
+    public static void waitFor(Runnable task) {
         waitFor(task, false);
     }
 
     /**
      * Wait for a specific task to finish running, with the option to interrupt it.
      *
-     * @param task      the task to wait for
+     * @param task      the task to wait for, must be managed by Threads
      * @param interrupt whether to interrupt the task first then wait
-     * @param <T>       the type of the task
      */
-    public static <T extends Runnable> void waitFor(T task, boolean interrupt) {
+    public static void waitFor(Runnable task, boolean interrupt) {
         Thread thread = threads.get(task.hashCode());
         if (thread != null) {
             if (interrupt) {
-                Dbg.logd(Threads.class, "Stopping thread: % ...", task.getClass().getSimpleName());
+                Dbg.logd(Threads.class, "stopping thread: % ...", task.getClass().getSimpleName());
                 thread.interrupt();
             }
             try {
-                Dbg.logd(Threads.class, "Waiting for thread: % ...", task.getClass().getSimpleName());
+                Dbg.logd(Threads.class, "waiting for thread: % ...", task.getClass().getSimpleName());
                 thread.join();
             } catch (InterruptedException e) {
-                Dbg.error(Threads.class, "Thread '%' was interrupted while waiting.", task.getClass().getSimpleName());
+                Dbg.error(Threads.class, "thread '%' was interrupted while waiting.", task.getClass().getSimpleName());
             }
         } else {
-            Dbg.warn(Threads.class, "Tried to wait for a task '%' that is not being managed by Threads.", task.getClass().getSimpleName());
+            Dbg.warn(Threads.class, "tried to wait for a task '%' that is not being managed by Threads.", task.getClass().getSimpleName());
         }
     }
 }

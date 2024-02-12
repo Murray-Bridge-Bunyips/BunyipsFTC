@@ -24,12 +24,12 @@ public class GLaDOSLeftPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDri
 
     @Override
     protected void onInitialise() {
-        config.init(this);
+        config.init();
     }
 
     @Override
     protected MecanumDrive setDrive() {
-        return new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
+        return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class GLaDOSLeftPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDri
 
     @Override
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
-        addTask(new MessageTask(this, 5, "hi"));
+        addTask(new MessageTask(5, "hi"));
         if (selectedOpMode == null) {
             return;
         }

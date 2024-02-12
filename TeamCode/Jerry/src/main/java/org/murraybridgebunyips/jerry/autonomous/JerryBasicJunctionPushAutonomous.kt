@@ -25,10 +25,9 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
     private var imu: IMUOp? = null
 
     override fun onInitialisation() {
-        config.init(this)
+        config.init()
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
-                this,
                 config.fl!!,
                 config.fr!!,
                 config.bl!!,
@@ -36,7 +35,7 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
             )
 
         if (NullSafety.assertNotNull(config.imu))
-            imu = IMUOp(this, config.imu!!)
+            imu = IMUOp(config.imu!!)
     }
 
     override fun setOpModes(): MutableList<OpModeSelection> {
@@ -56,7 +55,6 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
             Direction.DRIVE_LEFT ->
                 addTask(
                     JerryPrecisionDriveTask(
-                        this,
                         1.5,
                         drive,
                         imu,
@@ -68,7 +66,6 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
             else ->
                 addTask(
                     JerryPrecisionDriveTask(
-                        this,
                         1.5,
                         drive,
                         imu,

@@ -1,9 +1,6 @@
 package org.murraybridgebunyips.bunyipslib.tasks;
 
-import androidx.annotation.NonNull;
-
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.BunyipsTask;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.NoTimeoutTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.data.TfodData;
 import org.murraybridgebunyips.bunyipslib.vision.processors.TFOD;
@@ -19,7 +16,7 @@ import java.util.List;
  *
  * @author Lucas Bubner, 2023
  */
-public class GetWhitePixelTask extends BunyipsTask {
+public class GetWhitePixelTask extends NoTimeoutTask {
     /**
      * For use in CAPTURE mode, lock in the spike detection if it is detected for this many frames
      */
@@ -41,13 +38,11 @@ public class GetWhitePixelTask extends BunyipsTask {
     /**
      * Assumes tfod has already been initialised with vision.init(tfod) in the OpMode
      *
-     * @param opMode     this
      * @param vision     Vision management class instance
      * @param tfod       VisionProcessor instance for TFOD
      * @param aggression How decisive the task should be in determining if a spike has been found
      */
-    public GetWhitePixelTask(@NonNull BunyipsOpMode opMode, Vision vision, TFOD tfod, Aggression aggression) {
-        super(opMode);
+    public GetWhitePixelTask(Vision vision, TFOD tfod, Aggression aggression) {
         this.vision = vision;
         this.tfod = tfod;
         this.aggression = aggression;
@@ -65,7 +60,7 @@ public class GetWhitePixelTask extends BunyipsTask {
             vision.start(tfod);
         } catch (IllegalStateException e) {
             // OpMode did not start the VisionPortal for us, we better do it ourselves
-            getOpMode().log("WARNING: TFOD processor not initialised by Vision.init()! Initialising now...");
+            opMode.log("WARNING: TFOD processor not initialised by Vision.init()! Initialising now...");
             vision.init(tfod);
             vision.start(tfod);
         }

@@ -16,7 +16,7 @@ public class WheatleyDummy extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this);
+        config.init();
     }
 
     @Override

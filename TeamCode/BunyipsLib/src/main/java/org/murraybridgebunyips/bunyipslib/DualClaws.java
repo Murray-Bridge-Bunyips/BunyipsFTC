@@ -1,7 +1,5 @@
 package org.murraybridgebunyips.bunyipslib;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
@@ -17,8 +15,7 @@ public class DualClaws extends BunyipsSubsystem {
     private double leftServoPosition;
     private double rightServoPosition;
 
-    public DualClaws(@NonNull BunyipsOpMode opMode, Servo left, Servo right, double leftClosed, double leftOpen, double rightClosed, double rightOpen) {
-        super(opMode);
+    public DualClaws(Servo left, Servo right, double leftClosed, double leftOpen, double rightClosed, double rightOpen) {
         this.left = left;
         this.right = right;
         LEFT_SERVO_CLOSED_POSITION = leftClosed;
@@ -77,7 +74,7 @@ public class DualClaws extends BunyipsSubsystem {
     public void update() {
         left.setPosition(leftServoPosition);
         right.setPosition(rightServoPosition);
-        getOpMode().addTelemetry("Servos: L_% R_%", left.getPosition() == LEFT_SERVO_OPEN_POSITION ? "OPEN" : "CLOSE", right.getPosition() == RIGHT_SERVO_OPEN_POSITION ? "OPEN" : "CLOSE");
+        opMode.addTelemetry("Servos: L_% R_%", left.getPosition() == LEFT_SERVO_OPEN_POSITION ? "OPEN" : "CLOSE", right.getPosition() == RIGHT_SERVO_OPEN_POSITION ? "OPEN" : "CLOSE");
     }
 
     public enum ServoSide {

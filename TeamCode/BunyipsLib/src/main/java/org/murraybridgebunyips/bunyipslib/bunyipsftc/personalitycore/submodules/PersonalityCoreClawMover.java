@@ -2,13 +2,10 @@ package org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.submodules
 
 import static org.murraybridgebunyips.bunyipslib.Text.round;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 
 /**
@@ -22,8 +19,7 @@ public class PersonalityCoreClawMover extends BunyipsSubsystem {
     private double currentTimeout;
     private ElapsedTime timer;
 
-    public PersonalityCoreClawMover(@NonNull BunyipsOpMode opMode, CRServo servo) {
-        super(opMode);
+    public PersonalityCoreClawMover(CRServo servo) {
         this.servo = servo;
     }
 
@@ -54,9 +50,9 @@ public class PersonalityCoreClawMover extends BunyipsSubsystem {
 
     public void update() {
         servo.setPower(power);
-        getOpMode().addTelemetry("Claw Horizontal: % power", round(servo.getPower(), 1));
+        opMode.addTelemetry("Claw Horizontal: % power", round(servo.getPower(), 1));
         if (currentTimeout != 0) {
-            getOpMode().addTelemetry(" - running for % seconds", currentTimeout);
+            opMode.addTelemetry(" - running for % seconds", currentTimeout);
             if (timer.seconds() >= currentTimeout) {
                 currentTimeout = 0;
                 power = 0;

@@ -30,12 +30,11 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
 
     override fun onInitialisation() {
         // Configuration of camera and drive components
-        config.init(this)
+        config.init()
         cam =
-            Vision(this, config.webcam)
+            Vision(config.webcam)
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
-                this,
                 config.fl!!,
                 config.fr!!,
                 config.bl!!,
@@ -56,7 +55,7 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
     }
 
     override fun onQueueReady(selectedOpMode: OpModeSelection?) {
-        addTask(JerryTimeDriveTask(this, 1.5, drive, 1.0, 0.0, 0.0))
+        addTask(JerryTimeDriveTask(1.5, drive, 1.0, 0.0, 0.0))
     }
 
     override fun onInitDone() {
@@ -68,10 +67,10 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
         // Add movement tasks based on the signal position
         if (position == GetSignalTask.ParkingPosition.LEFT) {
             // Drive forward if the position of the signal is LEFT
-            addTaskFirst(JerryTimeDriveTask(this, 1.5, drive, 0.0, 1.0, 0.0))
+            addTaskFirst(JerryTimeDriveTask(1.5, drive, 0.0, 1.0, 0.0))
         } else if (position == GetSignalTask.ParkingPosition.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
-            addTaskFirst(JerryTimeDriveTask(this, 1.5, drive, 0.0, -1.0, 0.0))
+            addTaskFirst(JerryTimeDriveTask(1.5, drive, 0.0, -1.0, 0.0))
         }
     }
 }

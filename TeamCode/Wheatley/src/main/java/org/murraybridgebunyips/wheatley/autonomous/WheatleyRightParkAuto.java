@@ -37,14 +37,14 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
 
     @Override
     protected void onInitialise() {
-        config.init(this);
+        config.init();
         RobotConfig.setLastKnownPosition(null);
     }
 
     @Override
     protected MecanumDrive setDrive() {
         return new MecanumDrive(
-                this, config.driveConstants, config.mecanumCoefficients,
+                config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
     }
@@ -67,7 +67,7 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
-                addTask(new MessageTask(this, 15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 addNewTrajectory()
                         .forward(5)
                         .build();

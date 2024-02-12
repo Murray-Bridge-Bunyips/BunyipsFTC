@@ -3,14 +3,11 @@ package org.murraybridgebunyips.bunyipslib.vision;
 
 import android.util.Size;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.murraybridgebunyips.bunyipslib.BunyipsComponent;
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Threads;
 import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
 import org.murraybridgebunyips.bunyipslib.vision.processors.RawFeed;
@@ -19,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Component wrapper to support the v8.2+ SDK's included libraries for Camera operation.
@@ -39,7 +37,7 @@ public class Vision extends BunyipsComponent {
      * A built-in raw feed Processor that will do nothing but provide the raw camera feed.
      * Useful for debugging and testing, pass Vision.raw to init() and start() to use it.
      */
-    public static final RawFeed raw = new RawFeed();
+    public static RawFeed raw = new RawFeed();
     public static int CAMERA_WIDTH = 1280;
     public static int CAMERA_HEIGHT = 720;
     @SuppressWarnings("rawtypes")
@@ -48,16 +46,14 @@ public class Vision extends BunyipsComponent {
     private VisionPortal visionPortal;
     private SwitchableVisionSender visionSender;
 
-    public Vision(@NonNull BunyipsOpMode opMode, CameraName camera, int cameraWidth, int cameraHeight) {
-        super(opMode);
+    public Vision(CameraName camera, int cameraWidth, int cameraHeight) {
         this.camera = camera;
         // Allow the user to set the camera resolution if they want
         CAMERA_WIDTH = cameraWidth;
         CAMERA_HEIGHT = cameraHeight;
     }
 
-    public Vision(@NonNull BunyipsOpMode opMode, CameraName camera) {
-        super(opMode);
+    public Vision(CameraName camera) {
         this.camera = camera;
     }
 
@@ -80,7 +76,7 @@ public class Vision extends BunyipsComponent {
     @SuppressWarnings("rawtypes")
     public void init(Processor... processors) {
         if (visionPortal != null) {
-            getOpMode().log("WARNING: Vision already initialised! Tearing down...");
+            opMode.log("WARNING: Vision already initialised! Tearing down...");
             terminate();
         }
 
@@ -91,9 +87,16 @@ public class Vision extends BunyipsComponent {
         // Hand over instance control to the VisionPortal
         this.processors.addAll(Arrays.asList(processors));
 
+        // Use a new raw processor if present as it might be attached to an old Vision instance
+        if (Arrays.stream(processors).anyMatch(p -> p.getName().equals("rawfeed"))) {
+            this.processors.remove(raw);
+            raw = new RawFeed();
+            this.processors.add(raw);
+        }
+
         // Initialise the VisionPortal with our newly created processors
         VisionPortal.Builder builder = new VisionPortal.Builder();
-        for (Processor processor : processors) {
+        for (Processor processor : this.processors) {
             if (processor == null) {
                 throw new IllegalStateException("Vision: Processor is not instantiated!");
             }
@@ -107,14 +110,14 @@ public class Vision extends BunyipsComponent {
             }
             builder.addProcessor(processor);
             processor.setAttached(true);
-            getOpMode().log("vision processor '%' initialised.", processor.getName());
+            opMode.log("vision processor '%' initialised.", processor.getName());
         }
 
         visionPortal = builder
                 .setCamera(camera)
                 .setCameraResolution(new Size(CAMERA_WIDTH, CAMERA_HEIGHT))
+                // Live view needs to be enabled to allow for drawFrame() to work for FtcDashboard
                 .enableLiveView(true)
-                .setAutoStopLiveView(true)
                 // Set any additional VisionPortal settings here
                 .build();
 
@@ -123,9 +126,7 @@ public class Vision extends BunyipsComponent {
             visionPortal.setProcessorEnabled(processor, false);
         }
 
-        // Disable live view by default
-        visionPortal.stopLiveView();
-        getOpMode().log("visionportal ready.");
+        opMode.log("visionportal ready.");
     }
 
     /**
@@ -145,7 +146,7 @@ public class Vision extends BunyipsComponent {
                 visionPortal.getCameraState() == VisionPortal.CameraState.STOPPING_STREAM) {
             // Note if the camera state is STOPPING_STREAM, it will block the thread until the
             // stream is resumed. This is a documented operation in the SDK.
-            getOpMode().log("visionportal restarting...");
+            opMode.log("visionportal restarting...");
             visionPortal.resumeStreaming();
         }
 
@@ -157,7 +158,7 @@ public class Vision extends BunyipsComponent {
                 throw new IllegalStateException("Vision: Tried to start a processor that was not initialised!");
             }
             visionPortal.setProcessorEnabled(processor, true);
-            getOpMode().log("vision processor '%' started.", processor.getName());
+            opMode.log("vision processor '%' started.", processor.getName());
         }
     }
 
@@ -193,7 +194,7 @@ public class Vision extends BunyipsComponent {
                 throw new IllegalStateException("Vision: Tried to stop a processor that was not initialised!");
             }
             visionPortal.setProcessorEnabled(processor, false);
-            getOpMode().log("vision processor '%' paused.", processor.getName());
+            opMode.log("vision processor '%' paused.", processor.getName());
         }
     }
 
@@ -206,7 +207,7 @@ public class Vision extends BunyipsComponent {
         }
         // Pause the processor, this will also auto-close any VisionProcessors
         visionPortal.stopStreaming();
-        getOpMode().log("visionportal stopped.");
+        opMode.log("visionportal stopped.");
     }
 
     /**
@@ -220,6 +221,7 @@ public class Vision extends BunyipsComponent {
     public HashMap<String, List<VisionData>> getAllData() {
         HashMap<String, List<VisionData>> data = new HashMap<>();
         for (Processor processor : processors) {
+            if (Objects.equals(processor.getName(), "rawfeed")) continue;
             data.put(processor.getName(), processor.getData());
         }
         return data;
@@ -247,7 +249,7 @@ public class Vision extends BunyipsComponent {
         }
         visionPortal.close();
         visionPortal = null;
-        getOpMode().log("visionportal terminated.");
+        opMode.log("visionportal terminated.");
     }
 
     /**
@@ -269,7 +271,7 @@ public class Vision extends BunyipsComponent {
                 throw new IllegalStateException("Vision: Tried to flip a processor that was not initialised!");
             }
             processor.setFlipped(!processor.isFlipped());
-            getOpMode().log("vision processor '%' flipped %.", processor.getName(), processor.isFlipped() ? "upside-down" : "right-side up");
+            opMode.log("vision processor '%' flipped %.", processor.getName(), processor.isFlipped() ? "upside-down" : "right-side up");
         }
     }
 
@@ -284,7 +286,7 @@ public class Vision extends BunyipsComponent {
         }
         for (Processor processor : processors) {
             processor.setFlipped(!processor.isFlipped());
-            getOpMode().log("vision processor '%' flipped %.", processor.getName(), processor.isFlipped() ? "upside-down" : "right-side up");
+            opMode.log("vision processor '%' flipped %.", processor.getName(), processor.isFlipped() ? "upside-down" : "right-side up");
         }
     }
 
@@ -306,21 +308,6 @@ public class Vision extends BunyipsComponent {
             throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
         }
         return visionPortal.getFps();
-    }
-
-    /**
-     * Start or stop the live camera view (Level 1).
-     * When initialised, live view is disabled by default.
-     */
-    public void setLiveView(boolean enabled) {
-        if (visionPortal == null) {
-            throw new IllegalStateException("Vision: VisionPortal is not initialised from init()!");
-        }
-        if (enabled) {
-            visionPortal.resumeLiveView();
-        } else {
-            visionPortal.stopLiveView();
-        }
     }
 
     /**

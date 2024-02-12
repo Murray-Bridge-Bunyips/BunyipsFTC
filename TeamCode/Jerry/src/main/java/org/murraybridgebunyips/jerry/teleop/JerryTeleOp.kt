@@ -22,7 +22,7 @@ import org.murraybridgebunyips.jerry.components.JerryLift
  * > gamepad2 A to open claw
  * > gamepad2 B to close claw
  *
- * @author Lucas Bubner, 2022-2023
+ * @author Lucas Bubner, 2022
  */
 @TeleOp(name = "TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
@@ -35,15 +35,14 @@ class JerryTeleOp : BunyipsOpMode() {
 
     override fun onInit() {
         // Configure drive and lift subsystems
-        config.init(this)
+        config.init()
         Threads.start(selector)
         if (NullSafety.assertNotNull(config.imu)) {
-            imu = IMUOp(this, config.imu!!)
+            imu = IMUOp(config.imu!!)
         }
         drive?.setToBrake()
         if (NullSafety.assertNotNull(config.armComponents)) {
             lift = JerryLift(
-                this,
                 JerryLift.ControlMode.MANUAL,
                 config.claw!!,
                 config.arm1!!,
@@ -57,7 +56,6 @@ class JerryTeleOp : BunyipsOpMode() {
         if (NullSafety.assertNotNull(config.driveMotors)) {
             drive = if (selector.result == "FIELD-CENTRIC" || imu == null) {
                 CartesianFieldCentricMecanumDrive(
-                    this,
                     config.fl!!,
                     config.fr!!,
                     config.bl!!,
@@ -68,7 +66,6 @@ class JerryTeleOp : BunyipsOpMode() {
                 )
             } else {
                 CartesianMecanumDrive(
-                    this,
                     config.fl!!,
                     config.fr!!,
                     config.bl!!,

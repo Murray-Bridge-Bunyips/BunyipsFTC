@@ -1,10 +1,7 @@
 package org.murraybridgebunyips.bunyipslib.example.examplerobot.components;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 
 // See ExampleDrive before looking at this file.
@@ -17,8 +14,7 @@ public class ExampleLift extends BunyipsSubsystem {
     private final int[] liftPositions = {0, 100, 200, 300, 400, 500};
     private int liftPositionPointer;
 
-    public ExampleLift(@NonNull BunyipsOpMode opMode, DcMotor liftMotor) {
-        super(opMode);
+    public ExampleLift(DcMotor liftMotor) {
         this.liftMotor = liftMotor;
 
         // In the constructor you are also able to set any other variables that you wish to use in
@@ -64,6 +60,6 @@ public class ExampleLift extends BunyipsSubsystem {
         // Can update telemetry functions too
         // The modified telemetry function takes in a value to show on the Driver Station, and
         // whether or not to keep it on the screen upon the next activeLoop.
-        getOpMode().addTelemetry("Lift Position: " + position);
+        opMode.addTelemetry("Lift Position: " + position);
     }
 }

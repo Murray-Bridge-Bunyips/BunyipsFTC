@@ -10,9 +10,7 @@ import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.tasks.AlignToPixelTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
-import org.murraybridgebunyips.bunyipslib.vision.SwitchableVisionSender;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.bunyipslib.vision.processors.RawFeed;
 import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
@@ -31,14 +29,14 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
 
     @Override
     protected void onInitialisation() {
-        config.init(this);
+        config.init();
         drive = new DualDeadwheelMecanumDrive(
-                this, config.driveConstants, config.mecanumCoefficients,
+                config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelEncoder, config.perpendicularEncoder
         );
-        vision = new Vision(this, config.webcam);
+        vision = new Vision(config.webcam);
         processor = new WhitePixel();
         vision.init(processor, Vision.raw);
         vision.start(processor, Vision.raw);
@@ -55,7 +53,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
     @Override
     protected void assignCommands() {
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
-        scheduler.whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
+        scheduler().whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
                 .run(new AlignToPixelTask<>(gamepad1, drive, processor, new PIDController(0.0005, 0, 0)))
                 .finishingWhen(() -> !gamepad1.right_bumper);
     }

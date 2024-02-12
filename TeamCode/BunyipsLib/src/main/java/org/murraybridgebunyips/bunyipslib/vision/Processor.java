@@ -1,6 +1,7 @@
 package org.murraybridgebunyips.bunyipslib.vision;
 
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 
 import org.firstinspires.ftc.robotcore.external.function.Consumer;
 import org.firstinspires.ftc.robotcore.external.function.Continuation;
@@ -90,7 +91,8 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
      * Called to update new data from the vision system, which involves interpreting,
      * collecting, or otherwise processing new vision data per frame. This method should
      * refresh `this.data` with the latest information from the vision system to be accessed
-     * with your methods on .getData().T (your VisionData class).
+     * with your methods on .getData().T (your VisionData class). `this.data` is automatically
+     * cleared upon each iteration, so opt to using realtime data in this method.
      * This method will be called automatically once attached to a Vision instance.
      */
     public abstract void update();
@@ -119,6 +121,20 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
         }
         return procFrame;
     }
+
+    @Override
+    public final void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+        Bitmap f = lastFrame.get();
+        // Link bitmap to canvas
+        Canvas linkedCanvas = new Canvas(f);
+        onFrameDraw(linkedCanvas, onscreenWidth, onscreenHeight, scaleBmpPxToCanvasPx, scaleCanvasDensity, userContext);
+        // Copy back into the canvas for rendering
+        // On FtcDashboard this causes any drawFrames to flicker, but this is not because it is losing tracking
+        // TODO: test if the Control Hub will still render drawFrames even if the RC screen technically does not exist
+        canvas.drawBitmap(f, 0, 0, null);
+    }
+
+    public abstract void onFrameDraw(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext);
 
     @Override
     public void getFrameBitmap(Continuation<? extends Consumer<Bitmap>> continuation) {

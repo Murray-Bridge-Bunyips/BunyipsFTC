@@ -13,7 +13,7 @@ import java.util.Objects
  *
  *     @Override
  *     protected void onInit() {
- *         config.init(this);
+ *         config.init();
  *     }
  * ```
  */
@@ -27,10 +27,14 @@ abstract class RobotConfig {
 
     /**
      * Use HardwareMap to fetch HardwareDevices and assign instances.
-     * Should be called as the first line in onInit();
+     * Should be called as the first line in your init cycle.
      * @param opMode the OpMode instance - usually the `this` object when at the root OpMode.
      */
     fun init(opMode: OpMode) {
+        if (opMode is BunyipsOpMode) {
+            init()
+            return
+        }
         errors.clear()
         this.hardwareMap = opMode.hardwareMap
         Objects.requireNonNull(
@@ -45,6 +49,31 @@ abstract class RobotConfig {
         if (errors.isNotEmpty()) {
             for (error in errors) {
                 opMode.telemetry.addData("", "! DEV_FAULT: $error").setRetained(true)
+            }
+        }
+    }
+
+    /**
+     * Use HardwareMap to fetch HardwareDevices and assign instances.
+     * Should be called as the first line in onInit();
+     *
+     * Argument-less init() cannot be used with a non-BunyipsOpMode instance (will throw an UninitializedPropertyAccessException)
+     */
+    fun init() {
+        val opMode = BunyipsOpMode.instance
+        errors.clear()
+        this.hardwareMap = opMode.hardwareMap
+        Objects.requireNonNull(
+            this.hardwareMap,
+            "HardwareMap was null in ${this.javaClass.simpleName}!"
+        )
+        configureHardware()
+        opMode.addTelemetry(
+            "${this.javaClass.simpleName}: Configuration completed with ${errors.size} error(s).",
+        )
+        if (errors.isNotEmpty()) {
+            for (error in errors) {
+                opMode.addTelemetry("! DEV_FAULT: $error").setRetained(true)
             }
         }
     }

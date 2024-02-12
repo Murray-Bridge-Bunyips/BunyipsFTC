@@ -1,11 +1,8 @@
 package org.murraybridgebunyips.bunyipslib.drive;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.Controller;
 
@@ -34,8 +31,7 @@ public class CartesianMecanumDrive extends BunyipsSubsystem {
     // Store and declare prioritisation when given instruction to calculate motor powers
     private Priority priority = Priority.NORMALISED;
 
-    public CartesianMecanumDrive(@NonNull BunyipsOpMode opMode, DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
-        super(opMode);
+    public CartesianMecanumDrive(DcMotor frontLeft, DcMotor frontRight, DcMotor backLeft, DcMotor backRight) {
         this.frontLeft = frontLeft;
         this.backLeft = backLeft;
         this.frontRight = frontRight;
@@ -108,7 +104,7 @@ public class CartesianMecanumDrive extends BunyipsSubsystem {
     public void update() {
         if (priority == Priority.ROTATIONAL) {
             rotationalUpdate();
-            getOpMode().addTelemetry(String.format(Locale.getDefault(), "Rotation-priority Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR));
+            opMode.addTelemetry(String.format(Locale.getDefault(), "Rotation-priority Mecanum Drive: Forward: %.2f, Strafe: %.2f, Rotate: %.2f", speedX, speedY, speedR));
             return;
         }
 
@@ -132,7 +128,7 @@ public class CartesianMecanumDrive extends BunyipsSubsystem {
         backLeft.setPower(backLeftPower);
         backRight.setPower(backRightPower);
 
-        getOpMode().addTelemetry(String.format(Locale.getDefault(), "Mecanum Drive: X: %.2f, Y: %.2f, R: %.2f", speedX, speedY, speedR));
+        opMode.addTelemetry(String.format(Locale.getDefault(), "Mecanum Drive: X: %.2f, Y: %.2f, R: %.2f", speedX, speedY, speedR));
     }
 
     /**

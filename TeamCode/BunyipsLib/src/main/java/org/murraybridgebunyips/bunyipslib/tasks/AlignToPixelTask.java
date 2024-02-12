@@ -9,7 +9,7 @@ import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.EmergencyStop;
 import org.murraybridgebunyips.bunyipslib.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RunForeverTask;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.ForeverTask;
 import org.murraybridgebunyips.bunyipslib.vision.data.ContourData;
 import org.murraybridgebunyips.bunyipslib.vision.processors.YCbCrColourThreshold;
 
@@ -22,7 +22,7 @@ import java.util.List;
  * @author Lucas Bubner, 2024
  */
 @Config
-public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask {
+public class AlignToPixelTask<T extends BunyipsSubsystem> extends ForeverTask {
     public static double kP;
     public static double kI;
     public static double kD;
@@ -58,18 +58,21 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends RunForeverTask
 
         Pose2d pose = Controller.makeRobotPose(gamepad.left_stick_x, gamepad.left_stick_y, gamepad.right_stick_x);
         List<ContourData> data = processor.getData();
-        if (data.size() > 0) {
-            // TODO: fix that getData() is returning stale data
-            // Dbg.log("yaw: %", data.get(0).getYaw());
+
+        ContourData biggestContour = data.stream()
+                .max((a, b) -> (int) (a.getArea() - b.getArea()))
+                .orElse(null);
+
+        if (biggestContour != null) {
             drive.setWeightedDrivePower(
                     new Pose2d(
                             pose.getX(),
                             pose.getY(),
-                            -controller.calculate(data.get(0).getCenterX(), 0.5)
+                            -controller.calculate(biggestContour.getYaw(), 0.5)
                     )
             );
         } else {
-            // Consider using FCD once testing is done
+            // TODO: Consider using FCD once testing is done
             drive.setWeightedDrivePower(pose);
         }
     }

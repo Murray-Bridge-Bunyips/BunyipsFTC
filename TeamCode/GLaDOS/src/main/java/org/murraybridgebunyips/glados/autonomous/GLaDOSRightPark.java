@@ -23,12 +23,12 @@ public class GLaDOSRightPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDr
 
     @Override
     protected void onInitialise() {
-        config.init(this);
+        config.init();
     }
 
     @Override
     protected MecanumDrive setDrive() {
-        return new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
+        return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
     }
 
     @Override

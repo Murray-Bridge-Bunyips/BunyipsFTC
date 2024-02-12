@@ -1,13 +1,9 @@
 package org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore;
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.DualClaws;
 import org.murraybridgebunyips.bunyipslib.NullSafety;
@@ -23,7 +19,7 @@ import org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.submodules.
  * @author Lucas Bubner, 2023
  * @noinspection UnusedReturnValue
  */
-@Config
+//@Config
 public class PersonalityCoreArm extends BunyipsSubsystem {
     // Servo values for the dual claw at the front
     public static double LEFT_CLAW_OPEN = 1.0;
@@ -36,18 +32,17 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
     private PersonalityCoreManagementRail managementRail;
     private DualClaws claws;
 
-    public PersonalityCoreArm(@NonNull BunyipsOpMode opMode, CRServo pixelMotion, Servo pixelAlignment, Servo suspenderHook, DcMotorEx suspenderActuator, Servo leftPixel, Servo rightPixel) {
-        super(opMode);
-        if (NullSafety.assertComponentArgs(getOpMode(), PersonalityCoreClawMover.class, pixelMotion))
-            clawMover = new PersonalityCoreClawMover(getOpMode(), pixelMotion);
-        if (NullSafety.assertComponentArgs(getOpMode(), PersonalityCoreClawRotator.class, pixelAlignment))
-            clawRotator = new PersonalityCoreClawRotator(getOpMode(), pixelAlignment);
-        if (NullSafety.assertComponentArgs(getOpMode(), PersonalityCoreHook.class, suspenderHook))
-            hook = new PersonalityCoreHook(getOpMode(), suspenderHook);
-        if (NullSafety.assertComponentArgs(getOpMode(), PersonalityCoreManagementRail.class, suspenderActuator))
-            managementRail = new PersonalityCoreManagementRail(getOpMode(), suspenderActuator);
-        if (NullSafety.assertComponentArgs(getOpMode(), DualClaws.class, leftPixel, rightPixel))
-            claws = new DualClaws(getOpMode(), leftPixel, rightPixel, LEFT_CLAW_CLOSED, LEFT_CLAW_OPEN, RIGHT_CLAW_CLOSED, RIGHT_CLAW_OPEN);
+    public PersonalityCoreArm(CRServo pixelMotion, Servo pixelAlignment, Servo suspenderHook, DcMotorEx suspenderActuator, Servo leftPixel, Servo rightPixel) {
+        if (NullSafety.assertComponentArgs(PersonalityCoreClawMover.class, pixelMotion))
+            clawMover = new PersonalityCoreClawMover(pixelMotion);
+        if (NullSafety.assertComponentArgs(PersonalityCoreClawRotator.class, pixelAlignment))
+            clawRotator = new PersonalityCoreClawRotator(pixelAlignment);
+        if (NullSafety.assertComponentArgs(PersonalityCoreHook.class, suspenderHook))
+            hook = new PersonalityCoreHook(suspenderHook);
+        if (NullSafety.assertComponentArgs(PersonalityCoreManagementRail.class, suspenderActuator))
+            managementRail = new PersonalityCoreManagementRail(suspenderActuator);
+        if (NullSafety.assertComponentArgs(DualClaws.class, leftPixel, rightPixel))
+            claws = new DualClaws(leftPixel, rightPixel, LEFT_CLAW_CLOSED, LEFT_CLAW_OPEN, RIGHT_CLAW_CLOSED, RIGHT_CLAW_OPEN);
     }
 
     /**

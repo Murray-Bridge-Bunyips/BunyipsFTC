@@ -1,9 +1,13 @@
 package org.murraybridgebunyips.bunyipslib.vision.processors;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
+
+import com.acmerobotics.dashboard.config.Config;
 
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.murraybridgebunyips.bunyipslib.vision.Processor;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.data.ContourData;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -20,9 +24,10 @@ import java.util.List;
  *
  * @author Lucas Bubner, 2024
  */
+@Config
 public abstract class YCbCrColourThreshold extends Processor<ContourData> {
-    private final Scalar lower = getLower();
-    private final Scalar upper = getUpper();
+    public static double CONTOUR_AREA_THRESHOLD_PERCENT = 10;
+
     private final Mat ycrcbMat = new Mat();
     private final Mat binaryMat = new Mat();
     private final Mat maskedInputMat = new Mat();
@@ -34,10 +39,10 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
     public abstract Scalar getUpper();
 
     @Override
-    public void update() {
+    public final void update() {
         for (MatOfPoint contour : contours) {
             Rect boundingRect = Imgproc.boundingRect(contour);
-            if (boundingRect.height < 100 && boundingRect.width < 100)
+            if (boundingRect.area() < (CONTOUR_AREA_THRESHOLD_PERCENT / 100) * (Vision.CAMERA_WIDTH * Vision.CAMERA_HEIGHT))
                 continue;
             data.add(new ContourData(boundingRect));
         }
@@ -70,7 +75,7 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
          * 0 represents our pixels that were outside the bounds
          * 255 represents our pixels that are inside the bounds
          */
-        Core.inRange(ycrcbMat, lower, upper, binaryMat);
+        Core.inRange(ycrcbMat, getLower(), getUpper(), binaryMat);
 
         /*
          * Release the reusable Mat so that old data doesn't
@@ -104,14 +109,28 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
         return frame;
     }
 
-    // These methods are optionally overridden by the user
-    // as they are often not used or needed
-
     @Override
-    public void init(int width, int height, CameraCalibration calibration) {
+    public final void onFrameDraw(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+        // Draw borders around the contours
+        synchronized (data) {
+            for (ContourData contour : data) {
+                canvas.drawRect(
+                        contour.getBoundingRect().x * scaleBmpPxToCanvasPx,
+                        contour.getBoundingRect().y * scaleBmpPxToCanvasPx,
+                        (contour.getBoundingRect().x + contour.getBoundingRect().width) * scaleBmpPxToCanvasPx,
+                        (contour.getBoundingRect().y + contour.getBoundingRect().height) * scaleBmpPxToCanvasPx,
+                        new Paint() {{
+                            setColor(0xFF00FF00);
+                            setStyle(Style.STROKE);
+                            setStrokeWidth(5);
+                        }}
+                );
+            }
+        }
     }
 
+    // init() method usually never used, override is optional
     @Override
-    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+    public void init(int width, int height, CameraCalibration calibration) {
     }
 }

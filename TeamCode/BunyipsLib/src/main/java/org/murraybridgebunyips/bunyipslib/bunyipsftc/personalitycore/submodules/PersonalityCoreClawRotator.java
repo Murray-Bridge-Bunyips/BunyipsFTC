@@ -2,12 +2,9 @@ package org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.submodules
 
 import static org.murraybridgebunyips.bunyipslib.Text.round;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 
 /**
@@ -23,8 +20,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
     private final double FACING_BOARD = 1.0;
     private double target;
 
-    public PersonalityCoreClawRotator(@NonNull BunyipsOpMode opMode, Servo rotator) {
-        super(opMode);
+    public PersonalityCoreClawRotator(Servo rotator) {
         this.rotator = rotator;
     }
 
@@ -51,6 +47,6 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     public void update() {
         rotator.setPosition(target);
-        getOpMode().addTelemetry("Claw Alignment: % pos (%)", round(target, 1), target == FACING_BOARD ? "FACING_BOARD" : target == FACING_DOWN ? "FACING_DOWN" : "CUSTOM");
+        opMode.addTelemetry("Claw Alignment: % pos (%)", round(target, 1), target == FACING_BOARD ? "FACING_BOARD" : target == FACING_DOWN ? "FACING_DOWN" : "CUSTOM");
     }
 }

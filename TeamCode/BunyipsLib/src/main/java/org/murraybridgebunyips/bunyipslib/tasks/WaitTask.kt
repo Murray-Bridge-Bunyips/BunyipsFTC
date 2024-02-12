@@ -1,13 +1,12 @@
 package org.murraybridgebunyips.bunyipslib.tasks
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 
 /**
  * Task to wait for a specific amount of time.
  */
-class WaitTask(private val opMode: BunyipsOpMode, time: Double) : Task(time), RobotTask {
+class WaitTask(time: Double) : Task(time), RobotTask {
     override fun init() {
         return
     }

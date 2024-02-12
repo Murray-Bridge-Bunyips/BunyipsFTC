@@ -45,15 +45,15 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
 
     @Override
     protected void onInitialise() {
-        config.init(this);
-        vision = new Vision(this, config.webcam);
-        initTask = new GetTeamPropTask(this, vision);
-        arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
+        config.init();
+        vision = new Vision(config.webcam);
+        initTask = new GetTeamPropTask(vision);
+        arm = new PersonalityCoreArm(config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
     }
 
     @Override
     protected MecanumDrive setDrive() {
-        return new DualDeadwheelMecanumDrive(this, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
+        return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
         initTask.setTeamProp(processor);
 
         addTask(new InstantTask(() -> arm.setClawRotatorDegrees(10).update()));
-        addTask(new GLaDOSRunManagementRailTask(this, 1.0, arm.getManagementRail(), 1.0));
+        addTask(new GLaDOSRunManagementRailTask(1.0, arm.getManagementRail(), 1.0));
         addTask(new InstantTask(() -> arm.openClaw(DualClaws.ServoSide.LEFT).update()));
     }
 

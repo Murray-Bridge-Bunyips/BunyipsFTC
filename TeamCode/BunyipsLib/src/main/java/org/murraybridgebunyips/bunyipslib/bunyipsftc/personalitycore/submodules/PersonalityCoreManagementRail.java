@@ -1,13 +1,10 @@
 package org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.submodules;
 
-import androidx.annotation.NonNull;
-
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 
 /**
@@ -22,8 +19,7 @@ public class PersonalityCoreManagementRail extends BunyipsSubsystem {
     private double currentTimeout;
     private double power;
 
-    public PersonalityCoreManagementRail(@NonNull BunyipsOpMode opMode, DcMotorEx motor) {
-        super(opMode);
+    public PersonalityCoreManagementRail(DcMotorEx motor) {
         this.motor = motor;
         // Assumes arm is down locked upon activation
         // If possible it would be beneficial to integrate limit switches
@@ -65,6 +61,6 @@ public class PersonalityCoreManagementRail extends BunyipsSubsystem {
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             motor.setPower(power);
         }
-        getOpMode().addTelemetry("Management Rail: % at % ticks", power == 0.0 ? "HOLDING" : "MOVING", motor.getCurrentPosition());
+        opMode.addTelemetry("Management Rail: % at % ticks", power == 0.0 ? "HOLDING" : "MOVING", motor.getCurrentPosition());
     }
 }

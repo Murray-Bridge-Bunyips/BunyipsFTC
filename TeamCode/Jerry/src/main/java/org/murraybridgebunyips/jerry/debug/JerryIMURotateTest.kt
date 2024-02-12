@@ -23,10 +23,9 @@ class JerryIMURotateTest : AutonomousBunyipsOpMode() {
     private var drive: CartesianMecanumDrive? = null
 
     override fun onInitialisation() {
-        config.init(this)
-        imu = IMUOp(this, config.imu!!)
+        config.init()
+        imu = IMUOp(config.imu!!)
         drive = CartesianMecanumDrive(
-            this,
             config.fl!!,
             config.fr!!,
             config.bl!!,
@@ -43,6 +42,6 @@ class JerryIMURotateTest : AutonomousBunyipsOpMode() {
     }
 
     override fun onQueueReady(selectedOpMode: OpModeSelection?) {
-        addTask(JerryIMURotationTask(this, 15.0, imu!!, drive!!, -360.0, 0.5))
+        addTask(JerryIMURotationTask(15.0, imu!!, drive!!, -360.0, 0.5))
     }
 }
