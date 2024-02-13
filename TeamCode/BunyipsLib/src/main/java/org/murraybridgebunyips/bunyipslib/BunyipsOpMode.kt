@@ -163,7 +163,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
             opModeStatus = "ready"
             movingAverageTimer.update()
             Dbg.logd("BunyipsOpMode: init cycle completed in ${movingAverageTimer.elapsedTime() / 1000.0} secs")
-            telemetry.addData("BunyipsOpMode: ", "INIT COMPLETE -- PLAY WHEN READY.")
+            createTelemetryItem("BunyipsOpMode: INIT COMPLETE -- PLAY WHEN READY.", false)
             Dbg.logd("BunyipsOpMode: ready.")
             // Set telemetry to an inert state while we wait for start
             pushTelemetry()
@@ -268,11 +268,11 @@ abstract class BunyipsOpMode : LinearOpMode() {
         // FtcDashboard
         val packet = TelemetryPacket()
         packet.put("BOM", overheadStatus + "\n")
-        for (item in telemetryObjects) {
-            packet.put("DS", item.caption)
+        telemetryObjects.forEachIndexed { index, item ->
+            packet.put("DS$index", item.caption)
         }
-        for (item in logItems) {
-            packet.put("LOG", item)
+        logItems.forEachIndexed { index, item ->
+            packet.put("LOG$index", item)
         }
         FtcDashboard.getInstance().sendTelemetryPacket(packet)
 
@@ -313,7 +313,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * Clear all telemetry objects from the management queue just like a telemetry.clear() call.
      */
     private fun clearTelemetryObjects() {
-        val tmp = telemetryObjects.toList()
+        val tmp = telemetryObjects.toTypedArray()
         for (item in tmp) {
             if (item.isRetained)
                 continue
@@ -453,6 +453,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         telemetryQueue = 0
         telemetry.clearAll()
         telemetryObjects.clear()
+        FtcDashboard.getInstance().clearTelemetry()
         // Must reassign the overhead telemetry item
         overheadTelemetry =
             telemetry.addData("", "BOM: unknown | T+?s | ?ms | (?) (?)")
@@ -492,7 +493,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         }
         operationsCompleted = true
         Dbg.logd("BunyipsOpMode: activeLoop() terminated by finish().")
-        telemetry.addData("BunyipsOpMode: ", "activeLoop terminated. All operations completed.")
+        createTelemetryItem("BunyipsOpMode: activeLoop terminated. All operations completed.", false)
         pushTelemetry()
     }
 
@@ -508,7 +509,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         operationsPaused = true
         opModeStatus = "halted"
         Dbg.logd("BunyipsOpMode: activeLoop() halted.")
-        telemetry.addData("BunyipsOpMode: ", "activeLoop halted. Operations paused.")
+        createTelemetryItem("BunyipsOpMode: activeLoop halted. Operations paused.", false)
         pushTelemetry()
     }
 
@@ -522,7 +523,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
         operationsPaused = false
         opModeStatus = "running"
         Dbg.logd("BunyipsOpMode: activeLoop() resumed.")
-        telemetry.addData("BunyipsOpMode: ", "activeLoop resumed. Operations resumed.")
+        createTelemetryItem("BunyipsOpMode: activeLoop resumed. Operations resumed.", false)
         pushTelemetry()
     }
 
