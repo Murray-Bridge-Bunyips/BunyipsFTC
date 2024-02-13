@@ -10,6 +10,7 @@ import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.tasks.AlignToPixelTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
+import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
@@ -52,9 +53,12 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
 
     @Override
     protected void assignCommands() {
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> true));
+        scheduler().whenHeld(Controller.User.ONE, Controller.Y)
+                .run(new InstantTask(() -> drive.resetYaw()))
+                .immediately();
         scheduler().whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
-                .run(new AlignToPixelTask<>(gamepad1, drive, processor, new PIDController(0.0005, 0, 0)))
+                .run(new AlignToPixelTask<>(gamepad1, drive, processor, new PIDController(1.3, 0.03, 0.1)))
                 .finishingWhen(() -> !gamepad1.right_bumper);
     }
 }

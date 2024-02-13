@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Config
 public abstract class YCbCrColourThreshold extends Processor<ContourData> {
-    public static double CONTOUR_AREA_THRESHOLD_PERCENT = 0.5;
+    public static double CONTOUR_AREA_THRESHOLD_PERCENT = 1.2;
 
     private final Mat ycrcbMat = new Mat();
     private final Mat binaryMat = new Mat();
@@ -120,7 +120,7 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
                         (contour.getBoundingRect().x + contour.getBoundingRect().width),
                         (contour.getBoundingRect().y + contour.getBoundingRect().height),
                         new Paint() {{
-                            setColor(contour == biggest ? 0xFFFF0000 : 0xFF00FF00);
+                            setColor(contour == biggest ? 0xFF00FF00 : 0xFFFF0000);
                             setStyle(Style.STROKE);
                             setStrokeWidth(5);
                         }}

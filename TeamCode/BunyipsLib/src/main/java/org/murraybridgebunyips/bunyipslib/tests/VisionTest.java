@@ -63,9 +63,8 @@ public class VisionTest extends BunyipsOpMode {
                 break;
         }
 
-        RawFeed rf = new RawFeed();
-        vision.init(chosenProcessor, rf);
-        vision.start(chosenProcessor, rf);
+        vision.init(chosenProcessor, Vision.raw);
+        vision.start(chosenProcessor, Vision.raw);
         vision.startDashboardSender();
 
         i = addRetainedTelemetry("Camera Stream available.");

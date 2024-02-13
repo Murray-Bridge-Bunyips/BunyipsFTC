@@ -396,6 +396,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      */
     fun removeTelemetryItems(vararg items: Item) {
         for (item in items) {
+            // TODO: Telemetry removes do not work with Multiple Objects, check the same with normal telem
             val res = telem.removeItem(item)
             if (!res) {
                 Dbg.logd("Could not find telemetry item to remove: $item")

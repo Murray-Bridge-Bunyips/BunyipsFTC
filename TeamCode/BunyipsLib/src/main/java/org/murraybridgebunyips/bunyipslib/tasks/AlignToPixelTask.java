@@ -62,16 +62,15 @@ public class AlignToPixelTask<T extends BunyipsSubsystem> extends ForeverTask {
         ContourData biggestContour = ContourData.getLargest(data);
 
         if (biggestContour != null) {
-            drive.setWeightedDrivePower(
+            drive.setWeightedDrivePowerFieldCentric(
                     new Pose2d(
                             pose.getX(),
                             pose.getY(),
-                            -controller.calculate(biggestContour.getYaw(), 0.0)
+                            controller.calculate(biggestContour.getYaw(), 0.0)
                     )
             );
         } else {
-            // TODO: Consider using FCD once testing is done
-            drive.setWeightedDrivePower(pose);
+            drive.setWeightedDrivePowerFieldCentric(pose);
         }
     }
 
