@@ -132,7 +132,7 @@ class UserSelection<T>(
         // - Sorayya, hijacker of laptops
 
         // Clean up telemetry and reset auto clear
-        opMode.removeTelemetryItems(retainedObjects)
+        opMode.removeRetainedTelemetry(retainedObjects)
         opMode.pushTelemetry()
         opMode.setTelemetryAutoClear(true)
 

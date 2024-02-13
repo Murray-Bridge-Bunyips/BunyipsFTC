@@ -108,15 +108,6 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         xPressed = gamepad2.x;
         bPressed = gamepad2.b;
 
-        /*
-         * TODO: Pick out some good Wheatley voice lines for telemetry
-         * Different lines will be displayed depending on different values
-         * They should overwrite each other and NOT stack
-         *
-         * They should also be out of the way of the other actually important telemetry
-         * "Could a moron do THAT?" as wheatley throws 35,000 errors at once
-         */
-
         // Send stateful updates to the hardware
         drive.update();
         arm.update();

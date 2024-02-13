@@ -65,10 +65,10 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
             case STARTING_RED_LEFT:
                 addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 addNewTrajectory()
-                        .forward(180)
+                        .forward(Inches.fromFieldTiles(3))
                         .build();
                 addNewTrajectory()
-                        .strafeRight(200)
+                        .strafeRight(Inches.fromFieldTiles(5.5))
                         .build();
                 break;
 

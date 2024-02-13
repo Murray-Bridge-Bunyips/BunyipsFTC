@@ -24,6 +24,10 @@ public class Inches {
         return inches / 0.75;
     }
 
+    public static double toFootballFields(double inches) {
+        return inches * 3600.0;
+    }
+
     public static double fromCM(double cm) {
         return cm / 2.54;
     }
@@ -42,5 +46,9 @@ public class Inches {
 
     public static double fromHammerUnits(double units) {
         return units * 0.75;
+    }
+
+    public static double fromFootballFields(double ff) {
+        return ff / 3600.0;
     }
 }
