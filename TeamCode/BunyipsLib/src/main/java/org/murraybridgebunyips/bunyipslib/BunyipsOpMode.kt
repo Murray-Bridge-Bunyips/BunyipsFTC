@@ -383,7 +383,7 @@ abstract class BunyipsOpMode : LinearOpMode() {
      * @param message The message to log
      */
     fun log(obj: Class<*>, message: String) {
-        telem.log().add("[${obj.simpleName.toLowerCase()}] $message")
+        telem.log().add("[${obj.simpleName.lowercase()}] $message")
     }
 
     /**
