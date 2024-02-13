@@ -78,7 +78,9 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
     public abstract String getName();
 
     /**
-     * Get the list of vision data
+     * Get the list of vision data. You should use this method as the primary way to access
+     * the latest vision data from the processor, otherwise you run the risk of
+     * concurrent modification exceptions.
      *
      * @return list of all vision data detected since the last stateful update
      */

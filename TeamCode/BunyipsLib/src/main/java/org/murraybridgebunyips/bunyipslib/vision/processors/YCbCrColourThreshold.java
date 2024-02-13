@@ -110,15 +110,16 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
 
     @Override
     public final void onFrameDraw(Canvas canvas) {
-        // Draw borders around the contours, drawing a red rectangle around the biggest one
+        // Draw borders around the contours, drawing a green rectangle around the biggest one
+        // More often than not the biggest contour will be the one we want to track
         synchronized (data) {
             ContourData biggest = ContourData.getLargest(data);
             for (ContourData contour : data) {
                 canvas.drawRect(
                         contour.getBoundingRect().x,
                         contour.getBoundingRect().y,
-                        (contour.getBoundingRect().x + contour.getBoundingRect().width),
-                        (contour.getBoundingRect().y + contour.getBoundingRect().height),
+                        contour.getBoundingRect().x + contour.getBoundingRect().width,
+                        contour.getBoundingRect().y + contour.getBoundingRect().height,
                         new Paint() {{
                             setColor(contour == biggest ? 0xFF00FF00 : 0xFFFF0000);
                             setStyle(Style.STROKE);

@@ -1,6 +1,7 @@
 package org.murraybridgebunyips.bunyipslib.vision;
 
 
+import android.graphics.Canvas;
 import android.util.Size;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -10,7 +11,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.murraybridgebunyips.bunyipslib.BunyipsComponent;
 import org.murraybridgebunyips.bunyipslib.Threads;
 import org.murraybridgebunyips.bunyipslib.vision.data.VisionData;
-import org.murraybridgebunyips.bunyipslib.vision.processors.RawFeed;
+import org.opencv.core.Mat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,8 +39,8 @@ public class Vision extends BunyipsComponent {
      * Useful for debugging and testing, pass Vision.raw to init() and start() to use it.
      */
     public static RawFeed raw = new RawFeed();
-    public static int CAMERA_WIDTH = 1280;
-    public static int CAMERA_HEIGHT = 720;
+    public static int CAMERA_WIDTH = 640;
+    public static int CAMERA_HEIGHT = 480;
     @SuppressWarnings("rawtypes")
     private final List<Processor> processors = new ArrayList<>();
     private final CameraName camera;
@@ -119,7 +120,6 @@ public class Vision extends BunyipsComponent {
                 // Live view needs to be enabled to allow for drawFrame() to work for FtcDashboard
                 // for integrated processors such as TFOD and AprilTag as they don't like to work
                 // outside of the live view environment
-                // TODO: Confirm if this patch still works when used with a Control Hub
                 .enableLiveView(true)
                 // Set any additional VisionPortal settings here
                 .build();
@@ -375,6 +375,32 @@ public class Vision extends BunyipsComponent {
     public void stopDashboardSender() {
         if (visionSender != null) {
             Threads.stop(visionSender);
+        }
+    }
+
+    /**
+     * Raw Feed processor. Will stream an unprocessed feed.
+     * To use this, pass Vision.raw as a processor.
+     */
+    private static class RawFeed extends Processor<VisionData> {
+        @Override
+        public String getName() {
+            return "rawfeed";
+        }
+
+        @Override
+        public void update() {
+            // no-op
+        }
+
+        @Override
+        public Object onProcessFrame(Mat frame, long captureTimeNanos) {
+            return frame;
+        }
+
+        @Override
+        public void onFrameDraw(Canvas canvas) {
+            // no-op
         }
     }
 }
