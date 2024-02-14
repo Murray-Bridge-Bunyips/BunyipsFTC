@@ -27,4 +27,9 @@ public class WhitePixel extends YCbCrColourThreshold {
     public Scalar getUpper() {
         return new Scalar(UPPER_Y, UPPER_CB, UPPER_CR);
     }
+
+    @Override
+    public int getBoxColour() {
+        return 0xFFFFFFFF;
+    }
 }

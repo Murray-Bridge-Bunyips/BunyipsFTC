@@ -37,6 +37,8 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
 
     public abstract Scalar getUpper();
 
+    public abstract int getBoxColour();
+
     @Override
     public final void update() {
         for (MatOfPoint contour : contours) {
@@ -110,8 +112,9 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
 
     @Override
     public final void onFrameDraw(Canvas canvas) {
-        // Draw borders around the contours, drawing a green rectangle around the biggest one
-        // More often than not the biggest contour will be the one we want to track
+        // Draw borders around the contours, drawing a red rectangle around the biggest one
+        // More often than not the biggest contour will be the one we want to track, and we have
+        // to pick red to distinguish it from the green pixel processor
         synchronized (data) {
             ContourData biggest = ContourData.getLargest(data);
             for (ContourData contour : data) {
@@ -121,7 +124,7 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
                         contour.getBoundingRect().x + contour.getBoundingRect().width,
                         contour.getBoundingRect().y + contour.getBoundingRect().height,
                         new Paint() {{
-                            setColor(contour == biggest ? 0xFF00FF00 : 0xFFFF0000);
+                            setColor(contour == biggest ? 0xFFFF0000 : getBoxColour());
                             setStyle(Style.STROKE);
                             setStrokeWidth(5);
                         }}
