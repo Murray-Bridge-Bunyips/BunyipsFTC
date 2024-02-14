@@ -26,12 +26,14 @@ import java.util.List;
 @Config
 public abstract class YCbCrColourThreshold extends Processor<ContourData> {
     public static double CONTOUR_AREA_THRESHOLD_PERCENT = 1.2;
+    public static int BLINKING_FRAMES = 7;
 
     private final Mat ycrcbMat = new Mat();
     private final Mat binaryMat = new Mat();
     private final Mat maskedInputMat = new Mat();
     private final List<MatOfPoint> contours = new ArrayList<>();
     private final Mat hierarchy = new Mat();
+    private int frameCounter;
 
     public abstract Scalar getLower();
 
@@ -110,11 +112,20 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
         return frame;
     }
 
+    private int getBlinkingColour() {
+        if (frameCounter <= BLINKING_FRAMES) {
+            return getBoxColour();
+        }
+        // Black
+        return 0;
+    }
+
     @Override
     public final void onFrameDraw(Canvas canvas) {
         // Draw borders around the contours, drawing a red rectangle around the biggest one
         // More often than not the biggest contour will be the one we want to track, and we have
         // to pick red to distinguish it from the green pixel processor
+        frameCounter++;
         synchronized (data) {
             ContourData biggest = ContourData.getLargest(data);
             for (ContourData contour : data) {
@@ -124,12 +135,14 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
                         contour.getBoundingRect().x + contour.getBoundingRect().width,
                         contour.getBoundingRect().y + contour.getBoundingRect().height,
                         new Paint() {{
-                            setColor(contour == biggest ? 0xFFFF0000 : getBoxColour());
+                            setColor(contour == biggest ? getBlinkingColour() : getBoxColour());
                             setStyle(Style.STROKE);
                             setStrokeWidth(5);
                         }}
                 );
             }
         }
+        if (frameCounter >= BLINKING_FRAMES * 2)
+            frameCounter = 0;
     }
 }
