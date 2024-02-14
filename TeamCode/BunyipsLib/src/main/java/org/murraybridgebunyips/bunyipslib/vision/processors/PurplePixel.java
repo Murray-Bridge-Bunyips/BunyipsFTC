@@ -5,17 +5,17 @@ import com.acmerobotics.dashboard.config.Config;
 import org.opencv.core.Scalar;
 
 @Config
-public class WhitePixel extends YCbCrColourThreshold {
-    public static double LOWER_Y = 192.7;
-    public static double LOWER_CB = 123.3;
-    public static double LOWER_CR = 106.3;
-    public static double UPPER_Y = 255;
-    public static double UPPER_CB = 255;
-    public static double UPPER_CR = 255;
+public class PurplePixel extends YCbCrColourThreshold {
+    public static double LOWER_Y = 89.3;
+    public static double LOWER_CB = 137.4;
+    public static double LOWER_CR = 131.8;
+    public static double UPPER_Y = 255.0;
+    public static double UPPER_CB = 255.0;
+    public static double UPPER_CR = 255.0;
 
     @Override
     public String getName() {
-        return "whitepixel";
+        return "purplepixel";
     }
 
     @Override
@@ -30,6 +30,6 @@ public class WhitePixel extends YCbCrColourThreshold {
 
     @Override
     public int getBoxColour() {
-        return 0xFFFFFFFF;
+        return 0xFF800080;
     }
 }
