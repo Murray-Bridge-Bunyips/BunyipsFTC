@@ -1,16 +1,12 @@
 package org.murraybridgebunyips.brainbot.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.murraybridgebunyips.brainbot.components.BrainbotConfig;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.Dbg;
-import org.murraybridgebunyips.bunyipslib.cameras.C920;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
-import org.murraybridgebunyips.bunyipslib.vision.processors.TeamProp;
-import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
+import org.murraybridgebunyips.bunyipslib.vision.processors.MultiYCbCrThreshold;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
 
 @TeleOp(name = "Vision Test (Brainbot)")
 public class BrainbotVision extends BunyipsOpMode {
@@ -21,9 +17,9 @@ public class BrainbotVision extends BunyipsOpMode {
     protected void onInit() {
         config.init(this);
         vision = new Vision(config.camera);
-        WhitePixel wp = new WhitePixel();
-        vision.init(wp);
-        vision.start(wp);
+        MultiYCbCrThreshold all = new MultiYCbCrThreshold(Pixels.createProcessors());
+        vision.init(all);
+        vision.start(all);
         vision.startDashboardSender();
     }
 
