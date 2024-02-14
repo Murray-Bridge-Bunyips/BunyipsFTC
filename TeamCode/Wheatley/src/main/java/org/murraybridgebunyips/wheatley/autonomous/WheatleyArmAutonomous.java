@@ -22,7 +22,7 @@ import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.PersonalityCoreArm;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
-import org.murraybridgebunyips.bunyipslib.vision.processors.TeamProp;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.TeamProp;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 import java.util.List;

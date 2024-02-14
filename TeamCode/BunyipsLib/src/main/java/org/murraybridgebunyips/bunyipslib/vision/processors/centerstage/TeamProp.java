@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.bunyipslib.vision.processors;
+package org.murraybridgebunyips.bunyipslib.vision.processors.centerstage;
 
 import android.graphics.Canvas;
 

@@ -93,6 +93,15 @@ public abstract class Processor<T extends VisionData> implements VisionProcessor
     }
 
     /**
+     * Manually clear the data list.
+     */
+    public void clearData() {
+        synchronized (data) {
+            data.clear();
+        }
+    }
+
+    /**
      * Called to update new data from the vision system, which involves interpreting,
      * collecting, or otherwise processing new vision data per frame. This method should
      * refresh `this.data` with the latest information from the vision system to be accessed

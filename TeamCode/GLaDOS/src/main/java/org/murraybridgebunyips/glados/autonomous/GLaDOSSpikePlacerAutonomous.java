@@ -25,7 +25,7 @@ import org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.Personality
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
-import org.murraybridgebunyips.bunyipslib.vision.processors.TeamProp;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.TeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 import org.murraybridgebunyips.glados.tasks.GLaDOSRunManagementRailTask;
 

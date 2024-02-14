@@ -1,7 +1,8 @@
-package org.murraybridgebunyips.bunyipslib.vision.processors;
+package org.murraybridgebunyips.bunyipslib.vision.processors.centerstage;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import org.murraybridgebunyips.bunyipslib.vision.processors.YCbCrColourThreshold;
 import org.opencv.core.Scalar;
 
 @Config
@@ -12,6 +13,7 @@ public class PurplePixel extends YCbCrColourThreshold {
     public static double UPPER_Y = 255.0;
     public static double UPPER_CB = 255.0;
     public static double UPPER_CR = 255.0;
+    public static boolean SHOW_MASKED_INPUT = true;
 
     @Override
     public String getName() {
@@ -31,5 +33,10 @@ public class PurplePixel extends YCbCrColourThreshold {
     @Override
     public int getBoxColour() {
         return 0xFF800080;
+    }
+
+    @Override
+    public boolean showMaskedInput() {
+        return SHOW_MASKED_INPUT;
     }
 }

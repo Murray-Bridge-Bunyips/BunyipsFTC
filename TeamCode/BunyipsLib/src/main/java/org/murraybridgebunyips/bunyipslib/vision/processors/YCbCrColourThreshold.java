@@ -26,7 +26,8 @@ import java.util.List;
 @Config
 public abstract class YCbCrColourThreshold extends Processor<ContourData> {
     public static double CONTOUR_AREA_THRESHOLD_PERCENT = 1.2;
-    public static int BLINKING_FRAMES = 7;
+    public static int ACTIVE_THICKNESS = 6;
+    public static int PASSIVE_THICKNESS = 3;
 
     private final Mat ycrcbMat = new Mat();
     private final Mat binaryMat = new Mat();
@@ -40,6 +41,8 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
     public abstract Scalar getUpper();
 
     public abstract int getBoxColour();
+
+    public abstract boolean showMaskedInput();
 
     @Override
     public final void update() {
@@ -104,28 +107,16 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
         contours.clear();
         Imgproc.findContours(binaryMat, contours, hierarchy, Imgproc.RETR_TREE, Imgproc.CHAIN_APPROX_SIMPLE);
 
-        /*
-         * Copy the masked input Mat to the frame
-         * so that we can see the masked input on the preview
-         */
-        maskedInputMat.copyTo(frame);
-        return frame;
-    }
+        // Only show the detection matrix if we need to
+        if (showMaskedInput())
+            maskedInputMat.copyTo(frame);
 
-    private int getBlinkingColour() {
-        if (frameCounter <= BLINKING_FRAMES) {
-            return getBoxColour();
-        }
-        // Black
-        return 0;
+        return frame;
     }
 
     @Override
     public final void onFrameDraw(Canvas canvas) {
-        // Draw borders around the contours, drawing a red rectangle around the biggest one
-        // More often than not the biggest contour will be the one we want to track, and we have
-        // to pick red to distinguish it from the green pixel processor
-        frameCounter++;
+        // Draw borders around the contours, with a thicker border for the largest contour
         synchronized (data) {
             ContourData biggest = ContourData.getLargest(data);
             for (ContourData contour : data) {
@@ -135,14 +126,12 @@ public abstract class YCbCrColourThreshold extends Processor<ContourData> {
                         contour.getBoundingRect().x + contour.getBoundingRect().width,
                         contour.getBoundingRect().y + contour.getBoundingRect().height,
                         new Paint() {{
-                            setColor(contour == biggest ? getBlinkingColour() : getBoxColour());
+                            setColor(getBoxColour());
                             setStyle(Style.STROKE);
-                            setStrokeWidth(5);
+                            setStrokeWidth(contour == biggest ? ACTIVE_THICKNESS : PASSIVE_THICKNESS);
                         }}
                 );
             }
         }
-        if (frameCounter >= BLINKING_FRAMES * 2)
-            frameCounter = 0;
     }
 }

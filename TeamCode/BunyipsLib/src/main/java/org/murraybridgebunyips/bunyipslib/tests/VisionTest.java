@@ -20,8 +20,8 @@ import org.murraybridgebunyips.bunyipslib.vision.Processor;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
 import org.murraybridgebunyips.bunyipslib.vision.processors.TFOD;
-import org.murraybridgebunyips.bunyipslib.vision.processors.TeamProp;
-import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.TeamProp;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.WhitePixel;
 
 import kotlin.Unit;
 
@@ -62,8 +62,8 @@ public class VisionTest extends BunyipsOpMode {
                 break;
         }
 
-        vision.init(chosenProcessor, Vision.raw);
-        vision.start(chosenProcessor, Vision.raw);
+        vision.init(chosenProcessor, vision.raw);
+        vision.start(chosenProcessor, vision.raw);
         vision.startDashboardSender();
 
         cameraStreamNotification = addRetainedTelemetry("Camera Stream available.");

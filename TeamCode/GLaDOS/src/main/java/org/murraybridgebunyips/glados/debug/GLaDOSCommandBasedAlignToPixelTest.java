@@ -12,7 +12,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.AlignToPixelTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.bunyipslib.vision.processors.WhitePixel;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.WhitePixel;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -39,8 +39,8 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
         );
         vision = new Vision(config.webcam);
         processor = new WhitePixel();
-        vision.init(processor, Vision.raw);
-        vision.start(processor, Vision.raw);
+        vision.init(processor, vision.raw);
+        vision.start(processor, vision.raw);
         vision.startDashboardSender();
     }
 
