@@ -80,7 +80,7 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
 
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .forward(Inches.fromCM(180))
+                        .forward(Inches.fromCM(170))
                         .build();
 
                 addNewTrajectory()
@@ -89,11 +89,18 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
                 break;
 
             case STARTING_BLUE_RIGHT:
-                 addNewTrajectory()
-                        .forward(180)
+                addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                addNewTrajectory()
+                        .forward(5)
                         .build();
                 addNewTrajectory()
-                        .strafeLeft(200)
+                        .strafeLeft(Inches.fromCM(180))
+                        .build();
+                addNewTrajectory()
+                        .back(2)
+                        .build();
+                addNewTrajectory()
+                        .strafeLeft(100)
                         .build();
                 break;
         }

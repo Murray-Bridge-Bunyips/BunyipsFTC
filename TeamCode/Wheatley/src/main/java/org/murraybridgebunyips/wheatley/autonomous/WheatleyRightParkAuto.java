@@ -2,8 +2,6 @@ package org.murraybridgebunyips.wheatley.autonomous;
 
 import androidx.annotation.Nullable;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.Inches;
@@ -83,35 +81,27 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
                 break;
 
             case STARTING_BLUE_LEFT:
+                addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 addNewTrajectory()
-                        .forward(Inches.fromCM(116.84))
+                        .forward(Inches.fromFieldTiles(3))
                         .build();
-
                 addNewTrajectory()
-                        .strafeLeft(Inches.fromCM(116.84))
+                        .strafeLeft(Inches.fromFieldTiles(3))
                         .build();
-
-                addNewTrajectory()
-                        .strafeRight(Inches.fromCM(5))
-                        .build();
-                break;
 
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .strafeRight(Inches.fromCM(116.84))
-                        .build();
-
-                addNewTrajectory()
-                        .strafeLeft(Inches.fromCM(10))
+                        .strafeRight(Inches.fromCM(180))
                         .build();
                 break;
 
             case STARTING_BLUE_RIGHT:
-                addNewTrajectory(new Pose2d(-37.39, 66.43, Math.toRadians(90.00)))
-                        .setReversed(true)
-                        .splineTo(new Vector2d(-36.40, 33.41), Math.toRadians(-88.28))
-                        .splineTo(new Vector2d(61.86, 11.73), Math.toRadians(-12.44))
-                        .setReversed(false)
+                addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                addNewTrajectory()
+                        .forward(Inches.fromFieldTiles(3))
+                        .build();
+                addNewTrajectory()
+                        .strafeLeft(Inches.fromFieldTiles(5.5))
                         .build();
                 break;
         }
