@@ -1,0 +1,3 @@
+[submodule "BunyipsLib"]
+	path = BunyipsLib
+	url = https://github.com/Murray-Bridge-Bunyips/BunyipsLib

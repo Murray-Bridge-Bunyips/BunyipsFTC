@@ -9,7 +9,7 @@ import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.NullSafety;
 import org.murraybridgebunyips.bunyipslib.TriSpeed;
-import org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.PersonalityCoreArm;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreArm;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**

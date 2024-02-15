@@ -1,6 +1,6 @@
 package org.murraybridgebunyips.glados.tasks;
 
-import org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.submodules.PersonalityCoreManagementRail;
+import org.murraybridgebunyips.common.personalitycore.submodules.PersonalityCoreManagementRail;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
 public class GLaDOSRunManagementRailTask extends Task {
