@@ -12,6 +12,9 @@ import org.murraybridgebunyips.bunyipslib.tasks.AlignToPixelTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
+import org.murraybridgebunyips.bunyipslib.vision.processors.MultiYCbCrThreshold;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.GreenPixel;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.WhitePixel;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
@@ -26,7 +29,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;
     private Vision vision;
-    private WhitePixel processor;
+    private MultiYCbCrThreshold pixels;
 
     @Override
     protected void onInitialisation() {
@@ -38,9 +41,9 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
                 config.parallelEncoder, config.perpendicularEncoder
         );
         vision = new Vision(config.webcam);
-        processor = new WhitePixel();
-        vision.init(processor, vision.raw);
-        vision.start(processor, vision.raw);
+        pixels = new MultiYCbCrThreshold(Pixels.createProcessors());
+        vision.init(pixels, vision.raw);
+        vision.start(pixels, vision.raw);
         vision.startDashboardSender();
     }
 
@@ -53,12 +56,12 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
 
     @Override
     protected void assignCommands() {
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> true));
+        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
         scheduler().whenHeld(Controller.User.ONE, Controller.Y)
                 .run(new InstantTask(() -> drive.resetYaw()))
                 .immediately();
         scheduler().whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
-                .run(new AlignToPixelTask<>(gamepad1, drive, processor, new PIDController(1.3, 0.03, 0.1)))
+                .run(new AlignToPixelTask<>(gamepad1, drive, pixels, new PIDController(1, 0.25, 0.0)))
                 .finishingWhen(() -> !gamepad1.right_bumper);
     }
 }
