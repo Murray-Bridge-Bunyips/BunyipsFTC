@@ -1,11 +1,11 @@
 package org.murraybridgebunyips.wheatley.autonomous;
 
-import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.BLUE_ELEMENT_B;
-import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.BLUE_ELEMENT_G;
-import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.BLUE_ELEMENT_R;
-import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.RED_ELEMENT_B;
-import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.RED_ELEMENT_G;
-import static org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.CompanionCubeColours.RED_ELEMENT_R;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.BLUE_ELEMENT_B;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.BLUE_ELEMENT_G;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.BLUE_ELEMENT_R;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.RED_ELEMENT_B;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.RED_ELEMENT_G;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.RED_ELEMENT_R;
 
 import androidx.annotation.Nullable;
 
@@ -19,7 +19,7 @@ import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.bunyipslib.bunyipsftc.personalitycore.PersonalityCoreArm;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreArm;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.TeamProp;

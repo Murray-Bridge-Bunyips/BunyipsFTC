@@ -3,7 +3,9 @@ include ':Jerry'
 include ':GLaDOS'
 include ':Wheatley'
 include ':BunyipsLib'
+include ':Common'
 project(":Jerry").projectDir = new File("TeamCode/Jerry")
 project(":GLaDOS").projectDir = new File("TeamCode/GLaDOS")
 project(":Wheatley").projectDir = new File("TeamCode/Wheatley")
 project(":BunyipsLib").projectDir = new File("TeamCode/BunyipsLib")
+project(":Common").projectDir = new File("TeamCode/Common")

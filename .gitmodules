@@ -1,0 +1,3 @@
+[submodule "TeamCode/BunyipsLib"]
+	path = TeamCode/BunyipsLib
+	url = https://github.com/Murray-Bridge-Bunyips/BunyipsLib

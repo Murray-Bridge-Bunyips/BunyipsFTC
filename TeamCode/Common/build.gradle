@@ -1,0 +1,28 @@
+// Common files for BunyipsFTC
+
+plugins {
+    id 'com.android.library' apply false
+}
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply from: "../../build.dependencies.gradle"
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        minSdkVersion 24
+        //noinspection ExpiredTargetSdkVersion
+        targetSdkVersion 28
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    namespace = 'org.murraybridgebunyips.common'
+}
+
+dependencies {
+    implementation project(':FtcRobotController')
+    implementation project(":BunyipsLib")
+    annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
+}
