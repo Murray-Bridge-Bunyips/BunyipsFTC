@@ -1,11 +1,11 @@
 package org.murraybridgebunyips.wheatley.autonomous;
 
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.BLUE_ELEMENT_B;
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.BLUE_ELEMENT_G;
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.BLUE_ELEMENT_R;
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.RED_ELEMENT_B;
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.RED_ELEMENT_G;
-import static org.murraybridgebunyips.bunyipslib.personalitycore.CompanionCubeColours.RED_ELEMENT_R;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.BLUE_ELEMENT_B;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.BLUE_ELEMENT_G;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.BLUE_ELEMENT_R;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.RED_ELEMENT_B;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.RED_ELEMENT_G;
+import static org.murraybridgebunyips.common.personalitycore.CompanionCubeColours.RED_ELEMENT_R;
 
 import androidx.annotation.Nullable;
 
@@ -14,15 +14,15 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.DualClaws;
-import org.murraybridgebunyips.bunyipslib.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
-import org.murraybridgebunyips.bunyipslib.Vision;
-import org.murraybridgebunyips.bunyipslib.personalitycore.PersonalityCoreArm;
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreArm;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
-import org.murraybridgebunyips.bunyipslib.vision.TeamProp;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.TeamProp;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 import java.util.List;
@@ -37,17 +37,21 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
     private TeamProp processor;
 
     @Override
-    protected void onInitialisation() {
-        config.init(this);
-        arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment,
+    protected void onInitialise() {
+        config.init();
+        arm = new PersonalityCoreArm(config.pixelMotion, config.pixelAlignment,
                 config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel
         );
-        drive = new MecanumDrive(
-                this, config.driveConstants, config.mecanumCoefficients,
+        vision = new Vision(config.webcam);
+        initTask = new GetTeamPropTask(vision);
+    }
+
+    @Override
+    protected MecanumDrive setDrive() {
+        return new MecanumDrive(
+                config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
-        vision = new Vision(this, config.webcam);
-        initTask = new GetTeamPropTask(this, vision);
     }
 
     @Override
@@ -56,7 +60,7 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
     }
 
     @Override
-    protected AutoTask setInitTask() {
+    protected RobotTask setInitTask() {
         return initTask;
     }
 
@@ -69,14 +73,15 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
             case STARTING_RED_RIGHT:
-                processor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B, true);
+                processor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);
                 break;
             case STARTING_BLUE_LEFT:
             case STARTING_BLUE_RIGHT:
-                processor = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B, true);
+                processor = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
                 break;
         }
         vision.init(processor);
+        vision.flip();
         initTask.setTeamProp(processor);
     }
 
@@ -95,10 +100,20 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
                 arm.toggleClaw(DualClaws.ServoSide.LEFT);
 
             case RIGHT:
+                addNewTrajectory(new Pose2d(-36.57, -71.24, Math.toRadians(90.00)))
+                        .splineTo(new Vector2d(-32.78, -39.79), Math.toRadians(82.34))
+                        .build();
 
+                arm.faceClawToGround();
+                arm.toggleClaw(DualClaws.ServoSide.LEFT);
 
             case CENTER:
+                addNewTrajectory(new Pose2d(-36.58, -74.71, Math.toRadians(90.00)))
+                        .splineTo(new Vector2d(-36.00, -37.35), Math.toRadians(90.29))
+                        .build();
 
+                arm.faceClawToGround();
+                arm.toggleClaw(DualClaws.ServoSide.LEFT);
 
         }
     }

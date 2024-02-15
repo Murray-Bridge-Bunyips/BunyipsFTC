@@ -1,30 +1,28 @@
 package org.murraybridgebunyips.jerry.tasks
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
-import org.murraybridgebunyips.bunyipslib.tasks.Task
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 
 /**
- * Base drive task which will run XYR speed for a given time
+ * Base drive task which will run Cartesian XYR speed for a given time
  * Only used for tests and as a failsafe, do not use in actual OpMode as field positioning data is lost
  * Use JerryPrecisionDriveTask instead!
  * @see JerryPrecisionDriveTask
  */
 class JerryTimeDriveTask(
-    opMode: BunyipsOpMode,
     time: Double,
     private val drive: CartesianMecanumDrive?,
     private val x: Double,
     private val y: Double,
     private val r: Double
-) : Task(opMode, time), AutoTask {
+) : Task(time), RobotTask {
     override fun init() {
         return
     }
 
-    override fun run() {
-        drive?.setSpeedUsingController(x, -y, r)
+    override fun periodic() {
+        drive?.setSpeedXYR(x, y, r)
         drive?.update()
     }
 

@@ -2,11 +2,12 @@ package org.murraybridgebunyips.jerry.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.CartesianFieldCentricMecanumDrive
-import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.drive.CartesianFieldCentricMecanumDrive
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.RelativePose2d
+import org.murraybridgebunyips.bunyipslib.Threads
 import org.murraybridgebunyips.bunyipslib.UserSelection
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.components.JerryLift
@@ -21,7 +22,7 @@ import org.murraybridgebunyips.jerry.components.JerryLift
  * > gamepad2 A to open claw
  * > gamepad2 B to close claw
  *
- * @author Lucas Bubner, 2022-2023
+ * @author Lucas Bubner, 2022
  */
 @TeleOp(name = "TeleOp")
 class JerryTeleOp : BunyipsOpMode() {
@@ -34,15 +35,14 @@ class JerryTeleOp : BunyipsOpMode() {
 
     override fun onInit() {
         // Configure drive and lift subsystems
-        config.init(this)
-        selector.start()
+        config.init()
+        Threads.start(selector)
         if (NullSafety.assertNotNull(config.imu)) {
-            imu = IMUOp(this, config.imu!!)
+            imu = IMUOp(config.imu!!)
         }
         drive?.setToBrake()
         if (NullSafety.assertNotNull(config.armComponents)) {
             lift = JerryLift(
-                this,
                 JerryLift.ControlMode.MANUAL,
                 config.claw!!,
                 config.arm1!!,
@@ -56,29 +56,27 @@ class JerryTeleOp : BunyipsOpMode() {
         if (NullSafety.assertNotNull(config.driveMotors)) {
             drive = if (selector.result == "FIELD-CENTRIC" || imu == null) {
                 CartesianFieldCentricMecanumDrive(
-                    this,
-                    config.bl!!,
-                    config.br!!,
                     config.fl!!,
                     config.fr!!,
+                    config.bl!!,
+                    config.br!!,
                     imu!!,
                     true,
                     RelativePose2d.FORWARD
                 )
             } else {
                 CartesianMecanumDrive(
-                    this,
-                    config.bl!!,
-                    config.br!!,
                     config.fl!!,
-                    config.fr!!
+                    config.fr!!,
+                    config.bl!!,
+                    config.br!!
                 )
             }
         }
     }
 
     override fun onInitLoop(): Boolean {
-        return !selector.isAlive
+        return !Threads.isRunning(selector)
     }
 
     override fun activeLoop() {

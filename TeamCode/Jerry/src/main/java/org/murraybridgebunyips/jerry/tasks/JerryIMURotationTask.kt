@@ -1,10 +1,9 @@
 package org.murraybridgebunyips.jerry.tasks
 
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
-import org.murraybridgebunyips.bunyipslib.tasks.Task
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 
 // Rotate the robot to a specific degree angle. This cannot be done with deadwheel assistance due to configuration.
 /**
@@ -14,14 +13,13 @@ import org.murraybridgebunyips.bunyipslib.tasks.Task
  * @author Lucas Bubner, 2023
  */
 class JerryIMURotationTask(
-    opMode: BunyipsOpMode,
     time: Double,
     private val imu: IMUOp?,
     private val drive: CartesianMecanumDrive?,
     // Angle information should be a degree of rotation relative to current angle where positive = cw
     private var angle: Double,
     private val speed: Double
-) : Task(opMode, time), AutoTask {
+) : Task(time), RobotTask {
     // Enum to find out which way we need to be turning
     var direction: Direction = Direction.RIGHT
 
@@ -30,7 +28,7 @@ class JerryIMURotationTask(
     }
 
     override fun init() {
-        imu?.tick()
+        imu?.update()
 
         // Find out which way we need to turn based on the information provided
         direction = if (angle < 0.0) {
@@ -61,8 +59,8 @@ class JerryIMURotationTask(
         }
     }
 
-    override fun run() {
-        imu?.tick()
+    override fun periodic() {
+        imu?.update()
     }
 
     override fun onFinish() {

@@ -19,7 +19,7 @@ public class GLaDOSComponentTester extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this);
+        config.init();
     }
 
     @Override

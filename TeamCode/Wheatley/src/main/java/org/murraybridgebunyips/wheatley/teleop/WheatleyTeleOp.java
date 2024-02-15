@@ -5,9 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.DualClaws;
-import org.murraybridgebunyips.bunyipslib.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.NullSafety;
-import org.murraybridgebunyips.bunyipslib.personalitycore.PersonalityCoreArm;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreArm;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -44,14 +44,14 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this);
+        config.init();
         drive = new MecanumDrive(
-                this, config.driveConstants, config.mecanumCoefficients,
+                config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
-        if (NullSafety.assertComponentArgs(this, Cannon.class, config.launcher))
-            cannon = new Cannon(this, config.launcher);
-        arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment,
+        if (NullSafety.assertComponentArgs(Cannon.class, config.launcher))
+            cannon = new Cannon(config.launcher);
+        arm = new PersonalityCoreArm(config.pixelMotion, config.pixelAlignment,
                 config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel
         );
     }
@@ -107,15 +107,6 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         // Register actions only once per press
         xPressed = gamepad2.x;
         bPressed = gamepad2.b;
-
-        /*
-         * TODO: Pick out some good Wheatley voice lines for telemetry
-         * Different lines will be displayed depending on different values
-         * They should overwrite each other and NOT stack
-         *
-         * They should also be out of the way of the other actually important telemetry
-         * "Could a moron do THAT?" as wheatley throws 35,000 errors at once
-         */
 
         // Send stateful updates to the hardware
         drive.update();

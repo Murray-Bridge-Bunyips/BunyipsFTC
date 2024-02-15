@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.Inches;
-import org.murraybridgebunyips.bunyipslib.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 import java.util.List;
@@ -24,11 +24,15 @@ public class WheatleyRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Me
     private final WheatleyConfig config = new WheatleyConfig();
 
     @Override
-    protected void onInitialisation() {
-        config.init(this);
+    protected void onInitialise() {
+        config.init();
         RobotConfig.setLastKnownPosition(null);
-        drive = new MecanumDrive(
-                this, config.driveConstants, config.mecanumCoefficients,
+    }
+
+    @Override
+    protected MecanumDrive setDrive() {
+        return new MecanumDrive(
+                config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
     }
@@ -39,7 +43,7 @@ public class WheatleyRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Me
     }
 
     @Override
-    protected AutoTask setInitTask() {
+    protected RobotTask setInitTask() {
         return null;
     }
 

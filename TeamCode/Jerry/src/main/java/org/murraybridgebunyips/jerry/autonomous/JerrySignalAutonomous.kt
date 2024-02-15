@@ -1,16 +1,16 @@
 package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
-import org.murraybridgebunyips.bunyipslib.OpenCVCam
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
+import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.vision.Vision
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
-import java.util.ArrayDeque
 
 /**
  * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
@@ -20,28 +20,27 @@ import java.util.ArrayDeque
     group = "JERRY",
     preselectTeleOp = "TeleOp"
 )
-class JerrySignalAutonomous : BunyipsOpMode() {
+class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
     private var config = JerryConfig()
-    private var cam: OpenCVCam? = null
+    private var cam: Vision? = null
     private var drive: CartesianMecanumDrive? = null
     private var imu: IMUOp? = null
 
     //    private var x: Odometer? = null
 //    private var y: Odometer? = null
     private var tagtask: GetSignalTask? = null
-    private val tasks = ArrayDeque<AutoTask>()
 
-    override fun onInit() {
+    override fun onInitialisation() {
         // Configuration of camera and drive components
-        config.init(this)
-        cam = OpenCVCam(this, config.webcam, config.monitorID)
+        config.init()
+        cam =
+            Vision(config.webcam)
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
-                this,
-                config.bl!!,
-                config.br!!,
                 config.fl!!,
-                config.fr!!
+                config.fr!!,
+                config.bl!!,
+                config.br!!
             )
 
 //        if (NullSafety.assertNotNull(config.fl))
@@ -51,62 +50,26 @@ class JerrySignalAutonomous : BunyipsOpMode() {
 //            y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
         if (NullSafety.assertNotNull(config.imu))
-            imu = IMUOp(this, config.imu!!)
+            imu = IMUOp(config.imu!!)
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
-        tagtask = cam?.let { GetSignalTask(this, it) }
+        tagtask = cam?.let { GetSignalTask(it) }
     }
 
-    override fun onInitLoop(): Boolean {
-        // Using OpenCV and AprilTags in order to detect the Signal sleeve
-        tagtask?.run()
-        return tagtask?.isFinished() ?: true
+    override fun setOpModes(): MutableList<OpModeSelection>? {
+        return null
     }
 
-    override fun onInitDone() {
-        // Determine our final task based on the parking position from the camera
-        // If on center or NONE, do nothing and just stay in the center
-        val position = tagtask?.position
-        addTelemetry("ParkingPosition set to: $position")
+    override fun setInitTask(): RobotTask? {
+        return tagtask
+    }
 
-        // Add movement tasks based on the signal position
-        if (position == GetSignalTask.ParkingPosition.LEFT) {
-            // Drive forward if the position of the signal is LEFT
-            tasks.add(
-                JerryPrecisionDriveTask(
-                    this,
-                    3.5,
-                    drive,
-                    imu,
-//                    x,
-//                    y,
-//                    400.0,
-                    JerryPrecisionDriveTask.Directions.FORWARD,
-                    0.5
-                )
-            )
-        } else if (position == GetSignalTask.ParkingPosition.RIGHT) {
-            // Drive backward if the position of the signal is RIGHT
-            tasks.add(
-                JerryPrecisionDriveTask(
-                    this,
-                    3.0,
-                    drive,
-                    imu,
-//                    x,
-//                    y,
-//                    400.0,
-                    JerryPrecisionDriveTask.Directions.BACKWARD,
-                    0.5
-                )
-            )
-        }
+    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
         // Use PrecisionDrive to move rightwards for 1.5 seconds
         // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
-        tasks.add(
+        addTask(
             JerryPrecisionDriveTask(
-                this,
                 4.0,
                 drive,
                 imu,
@@ -119,18 +82,41 @@ class JerrySignalAutonomous : BunyipsOpMode() {
         )
     }
 
-    override fun activeLoop() {
-        val currentTask = tasks.peekFirst()
-        if (currentTask == null) {
-            finish()
-            return
-        }
-        currentTask.run()
-        if (currentTask.isFinished()) {
-            tasks.removeFirst()
-        }
-        if (tasks.isEmpty()) {
-            drive?.stop()
+    override fun onInitDone() {
+        // Determine our final task based on the parking position from the camera
+        // If on center or NONE, do nothing and just stay in the center
+        val position = tagtask?.position
+        addTelemetry("ParkingPosition set to: $position")
+
+        // Add movement tasks based on the signal position
+        if (position == GetSignalTask.ParkingPosition.LEFT) {
+            // Drive forward if the position of the signal is LEFT
+            addTaskFirst(
+                JerryPrecisionDriveTask(
+                    3.5,
+                    drive,
+                    imu,
+//                    x,
+//                    y,
+//                    400.0,
+                    JerryPrecisionDriveTask.Directions.FORWARD,
+                    0.5
+                )
+            )
+        } else if (position == GetSignalTask.ParkingPosition.RIGHT) {
+            // Drive backward if the position of the signal is RIGHT
+            addTaskFirst(
+                JerryPrecisionDriveTask(
+                    3.0,
+                    drive,
+                    imu,
+//                    x,
+//                    y,
+//                    400.0,
+                    JerryPrecisionDriveTask.Directions.BACKWARD,
+                    0.5
+                )
+            )
         }
     }
 }

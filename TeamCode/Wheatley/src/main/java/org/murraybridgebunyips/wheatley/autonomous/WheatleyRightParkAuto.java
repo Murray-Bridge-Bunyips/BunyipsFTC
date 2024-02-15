@@ -2,17 +2,16 @@ package org.murraybridgebunyips.wheatley.autonomous;
 
 import androidx.annotation.Nullable;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.Inches;
-import org.murraybridgebunyips.bunyipslib.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask;
+import org.murraybridgebunyips.bunyipslib.tasks.MessageTask;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 import java.util.List;
@@ -35,11 +34,15 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
     private final WheatleyConfig config = new WheatleyConfig();
 
     @Override
-    protected void onInitialisation() {
-        config.init(this);
+    protected void onInitialise() {
+        config.init();
         RobotConfig.setLastKnownPosition(null);
-        drive = new MecanumDrive(
-                this, config.driveConstants, config.mecanumCoefficients,
+    }
+
+    @Override
+    protected MecanumDrive setDrive() {
+        return new MecanumDrive(
+                config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
     }
@@ -50,7 +53,7 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
     }
 
     @Override
-    protected AutoTask setInitTask() {
+    protected RobotTask setInitTask() {
         return null;
     }
 
@@ -62,45 +65,43 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
-                addNewTrajectory(new Pose2d(-36.20, -70.21, Math.toRadians(90.00)))
-                        .splineTo(new Vector2d(-37.79, -20.29), Math.toRadians(92.04))
-                        .splineTo(new Vector2d(31.62, -13.33), Math.toRadians(-29.59))
-                        // TODO: Test this time
-                        .waitSeconds(5)
-                        .splineTo(new Vector2d(61.66, -59.87), Math.toRadians(0.00))
+                addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                addNewTrajectory()
+                        .forward(5)
+                        .build();
+                addNewTrajectory()
+                        .strafeRight(Inches.fromCM(180))
+                        .build();
+                addNewTrajectory()
+                        .back(2)
+                        .build();
+                addNewTrajectory()
+                        .strafeRight(100)
                         .build();
                 break;
 
             case STARTING_BLUE_LEFT:
+                addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 addNewTrajectory()
-                        .forward(Inches.fromCM(116.84))
+                        .forward(Inches.fromFieldTiles(3))
                         .build();
-
                 addNewTrajectory()
-                        .strafeLeft(Inches.fromCM(116.84))
+                        .strafeLeft(Inches.fromFieldTiles(3))
                         .build();
-
-                addNewTrajectory()
-                        .strafeRight(Inches.fromCM(5))
-                        .build();
-                break;
 
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .strafeRight(Inches.fromCM(116.84))
-                        .build();
-
-                addNewTrajectory()
-                        .strafeLeft(Inches.fromCM(10))
+                        .strafeRight(Inches.fromCM(180))
                         .build();
                 break;
 
             case STARTING_BLUE_RIGHT:
-                addNewTrajectory(new Pose2d(-37.39, 66.43, Math.toRadians(90.00)))
-                        .setReversed(true)
-                        .splineTo(new Vector2d(-36.40, 33.41), Math.toRadians(-88.28))
-                        .splineTo(new Vector2d(61.86, 11.73), Math.toRadians(-12.44))
-                        .setReversed(false)
+                addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                addNewTrajectory()
+                        .forward(Inches.fromFieldTiles(3))
+                        .build();
+                addNewTrajectory()
+                        .strafeLeft(Inches.fromFieldTiles(5.5))
                         .build();
                 break;
         }

@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
 import org.murraybridgebunyips.bunyipslib.BunyipsComponent
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.While
 
 /**
@@ -13,13 +12,12 @@ import org.murraybridgebunyips.bunyipslib.While
  * @author Lucas Bubner, 2023
  */
 class JerryLift(
-    opMode: BunyipsOpMode,
     private var mode: ControlMode,
     private var claw: Servo,
     private var arm1: DcMotorEx,
     private var arm2: DcMotorEx,
     private var limit: TouchSensor
-) : BunyipsComponent(opMode) {
+) : BunyipsComponent() {
     var power: Double = POSITIONAL_POWER
         set(power) {
             // Paranoia, ensure the arm doesn't go past the hard limit when taking power commands

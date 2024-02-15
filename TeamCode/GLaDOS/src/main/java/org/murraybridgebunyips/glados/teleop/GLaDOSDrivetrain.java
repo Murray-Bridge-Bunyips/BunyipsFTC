@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.DualDeadwheelMecanumDrive;
-import org.murraybridgebunyips.bunyipslib.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -21,9 +21,9 @@ public class GLaDOSDrivetrain extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this);
+        config.init();
         drive = new DualDeadwheelMecanumDrive(
-                this, config.driveConstants, config.mecanumCoefficients,
+                config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelEncoder, config.perpendicularEncoder

@@ -15,10 +15,9 @@ class JerryArmControl : BunyipsOpMode() {
     private var arm: JerryLift? = null
 
     override fun onInit() {
-        config.init(this)
+        config.init()
         if (NullSafety.assertNotNull(config.armComponents)) {
             arm = JerryLift(
-                this,
                 JerryLift.ControlMode.MANUAL,
                 config.claw!!,
                 config.arm1!!,

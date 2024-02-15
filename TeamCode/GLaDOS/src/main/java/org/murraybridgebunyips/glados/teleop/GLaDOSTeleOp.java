@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.DualClaws;
-import org.murraybridgebunyips.bunyipslib.DualDeadwheelMecanumDrive;
-import org.murraybridgebunyips.bunyipslib.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.NullSafety;
 import org.murraybridgebunyips.bunyipslib.TriSpeed;
-import org.murraybridgebunyips.bunyipslib.personalitycore.PersonalityCoreArm;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreArm;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -46,16 +46,16 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
-        config.init(this);
+        config.init();
         drive = new DualDeadwheelMecanumDrive(
-                this, config.driveConstants, config.mecanumCoefficients,
+                config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelEncoder, config.perpendicularEncoder
         );
-        if (NullSafety.assertComponentArgs(this, Cannon.class, config.launcher))
-            cannon = new Cannon(this, config.launcher);
-        arm = new PersonalityCoreArm(this, config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
+        if (NullSafety.assertComponentArgs(Cannon.class, config.launcher))
+            cannon = new Cannon(config.launcher);
+        arm = new PersonalityCoreArm(config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
     }
 
     @Override

@@ -1,15 +1,14 @@
 package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
-import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
-import org.murraybridgebunyips.bunyipslib.UserSelection
-import org.murraybridgebunyips.bunyipslib.tasks.AutoTask
+import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
-import java.util.ArrayDeque
 
 /**
  * Basic autonomous that guarantees the robot will park in a corner or centre.
@@ -20,36 +19,42 @@ import java.util.ArrayDeque
     group = "JERRY",
     preselectTeleOp = "TeleOp"
 )
-class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
+class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: CartesianMecanumDrive? = null
     private var imu: IMUOp? = null
-    private val tasks = ArrayDeque<AutoTask>()
-    private val selection = UserSelection(this, {}, "Drive Left", "Drive Right")
 
-    override fun onInit() {
-        config.init(this)
+    override fun onInitialisation() {
+        config.init()
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
-                this,
-                config.bl!!,
-                config.br!!,
                 config.fl!!,
-                config.fr!!
+                config.fr!!,
+                config.bl!!,
+                config.br!!
             )
 
         if (NullSafety.assertNotNull(config.imu))
-            imu = IMUOp(this, config.imu!!)
-
-        selection.start()
+            imu = IMUOp(config.imu!!)
     }
 
-    override fun onStart() {
-        when (selection.result) {
-            "Drive Left" ->
-                tasks.add(
+    override fun setOpModes(): MutableList<OpModeSelection> {
+        return listOf(
+            OpModeSelection(Direction.DRIVE_LEFT),
+            OpModeSelection(Direction.DRIVE_RIGHT)
+        ).toMutableList()
+    }
+
+    override fun setInitTask(): RobotTask? {
+        return null
+    }
+
+    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
+        if (selectedOpMode == null) return
+        when (selectedOpMode.obj as Direction) {
+            Direction.DRIVE_LEFT ->
+                addTask(
                     JerryPrecisionDriveTask(
-                        this,
                         1.5,
                         drive,
                         imu,
@@ -59,9 +64,8 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
                 )
 
             else ->
-                tasks.add(
+                addTask(
                     JerryPrecisionDriveTask(
-                        this,
                         1.5,
                         drive,
                         imu,
@@ -72,18 +76,7 @@ class JerryBasicJunctionPushAutonomous : BunyipsOpMode() {
         }
     }
 
-    override fun activeLoop() {
-        val currentTask = tasks.peekFirst()
-        if (currentTask == null) {
-            finish()
-            return
-        }
-        currentTask.run()
-        if (currentTask.isFinished()) {
-            tasks.removeFirst()
-        }
-        if (tasks.isEmpty()) {
-            drive?.stop()
-        }
+    private enum class Direction {
+        DRIVE_LEFT, DRIVE_RIGHT
     }
 }

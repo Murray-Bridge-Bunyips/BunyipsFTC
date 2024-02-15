@@ -14,8 +14,8 @@ class JerryIMUDebug : BunyipsOpMode() {
     private var imu: IMUOp? = null
 
     override fun onInit() {
-        config.init(this)
-        imu = IMUOp(this, config.imu!!)
+        config.init()
+        imu = IMUOp(config.imu!!)
         imu?.startCapture()
     }
 
@@ -26,6 +26,6 @@ class JerryIMUDebug : BunyipsOpMode() {
 //            )?.thirdAngle.toString()
 //        )
         addTelemetry(imu?.heading.toString())
-        imu?.tick()
+        imu?.update()
     }
 }
