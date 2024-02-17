@@ -6,9 +6,11 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 
 public class BrainbotConfig extends RobotConfig {
-    public CameraName camera;
+    public CameraName cameraB;
+    public CameraName cameraF;
     @Override
     protected void configureHardware() {
-        camera = ClassFactory.getInstance().getCameraManager().nameFromCameraDirection(BuiltinCameraDirection.BACK);
+        cameraB = ClassFactory.getInstance().getCameraManager().nameFromCameraDirection(BuiltinCameraDirection.BACK);
+        cameraF = ClassFactory.getInstance().getCameraManager().nameFromCameraDirection(BuiltinCameraDirection.FRONT);
     }
 }
