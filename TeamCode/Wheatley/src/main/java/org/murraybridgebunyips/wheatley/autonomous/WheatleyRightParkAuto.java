@@ -88,6 +88,7 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
                 addNewTrajectory()
                         .strafeLeft(Inches.fromFieldTiles(3))
                         .build();
+                break;
 
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
