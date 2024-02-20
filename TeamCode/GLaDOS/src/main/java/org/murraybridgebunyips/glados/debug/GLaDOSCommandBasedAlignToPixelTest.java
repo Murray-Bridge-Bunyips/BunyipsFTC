@@ -13,9 +13,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.MultiYCbCrThreshold;
-import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.GreenPixel;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
-import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.WhitePixel;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -44,7 +42,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
         pixels = new MultiYCbCrThreshold(Pixels.createProcessors());
         vision.init(pixels, vision.raw);
         vision.start(pixels, vision.raw);
-        vision.startDashboardSender();
+        vision.startPreview();
     }
 
     @Override
