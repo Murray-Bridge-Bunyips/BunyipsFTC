@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
-import org.murraybridgebunyips.bunyipslib.DualClaws;
+import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.NullSafety;
 import org.murraybridgebunyips.common.personalitycore.submodules.PersonalityCoreClawMover;
 import org.murraybridgebunyips.common.personalitycore.submodules.PersonalityCoreClawRotator;
@@ -30,7 +30,7 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
     private PersonalityCoreClawRotator clawRotator;
     private PersonalityCoreHook hook;
     private PersonalityCoreManagementRail managementRail;
-    private DualClaws claws;
+    private DualServos claws;
 
     public PersonalityCoreArm(CRServo pixelMotion, Servo pixelAlignment, Servo suspenderHook, DcMotorEx suspenderActuator, Servo leftPixel, Servo rightPixel) {
         if (NullSafety.assertComponentArgs(PersonalityCoreClawMover.class, pixelMotion))
@@ -41,8 +41,8 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
             hook = new PersonalityCoreHook(suspenderHook);
         if (NullSafety.assertComponentArgs(PersonalityCoreManagementRail.class, suspenderActuator))
             managementRail = new PersonalityCoreManagementRail(suspenderActuator);
-        if (NullSafety.assertComponentArgs(DualClaws.class, leftPixel, rightPixel))
-            claws = new DualClaws(leftPixel, rightPixel, LEFT_CLAW_CLOSED, LEFT_CLAW_OPEN, RIGHT_CLAW_CLOSED, RIGHT_CLAW_OPEN);
+        if (NullSafety.assertComponentArgs(DualServos.class, leftPixel, rightPixel))
+            claws = new DualServos(leftPixel, rightPixel, LEFT_CLAW_CLOSED, LEFT_CLAW_OPEN, RIGHT_CLAW_CLOSED, RIGHT_CLAW_OPEN);
     }
 
     /**
@@ -273,7 +273,7 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
      *
      * @return DualClaws
      */
-    public DualClaws getClaws() {
+    public DualServos getClaws() {
         return claws;
     }
 
@@ -283,7 +283,7 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
      * @param side side to toggle
      * @return DualClaws
      */
-    public DualClaws toggleClaw(DualClaws.ServoSide side) {
+    public DualServos toggleClaw(DualServos.ServoSide side) {
         claws.toggleServo(side);
         return claws;
     }
@@ -294,7 +294,7 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
      * @param side side to open
      * @return DualClaws
      */
-    public DualClaws closeClaw(DualClaws.ServoSide side) {
+    public DualServos closeClaw(DualServos.ServoSide side) {
         claws.closeServo(side);
         return claws;
     }
@@ -305,7 +305,7 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
      * @param side side to close
      * @return DualClaws
      */
-    public DualClaws openClaw(DualClaws.ServoSide side) {
+    public DualServos openClaw(DualServos.ServoSide side) {
         claws.openServo(side);
         return claws;
     }

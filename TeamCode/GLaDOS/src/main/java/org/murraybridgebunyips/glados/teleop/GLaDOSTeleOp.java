@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Cannon;
-import org.murraybridgebunyips.bunyipslib.DualClaws;
+import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.NullSafety;
@@ -77,9 +77,9 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
 
         // Aperture Science Pixel Grabbing Pixel Placing Pixel Claw
         if (gamepad2.x && !x_pressed) {
-            arm.toggleClaw(DualClaws.ServoSide.LEFT);
+            arm.toggleClaw(DualServos.ServoSide.LEFT);
         } else if (gamepad2.b && !b_pressed) {
-            arm.toggleClaw(DualClaws.ServoSide.RIGHT);
+            arm.toggleClaw(DualServos.ServoSide.RIGHT);
         }
 
         // Aperture Science Dynamic Aperture Science Pixel Grabbing Pixel Placing Pixel Claw Angle Aligner

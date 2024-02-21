@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Cannon;
-import org.murraybridgebunyips.bunyipslib.DualClaws;
+import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.NullSafety;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreArm;
@@ -78,9 +78,9 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
         // Claw controls
         if (gamepad2.x && !xPressed) {
-            arm.toggleClaw(DualClaws.ServoSide.LEFT);
+            arm.toggleClaw(DualServos.ServoSide.LEFT);
         } else if (gamepad2.b && !bPressed) {
-            arm.toggleClaw(DualClaws.ServoSide.RIGHT);
+            arm.toggleClaw(DualServos.ServoSide.RIGHT);
         }
 
         // Claw alignment
