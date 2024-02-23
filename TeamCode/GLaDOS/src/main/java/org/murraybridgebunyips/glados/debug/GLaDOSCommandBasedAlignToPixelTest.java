@@ -8,13 +8,12 @@ import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.pid.PIDController;
-import org.murraybridgebunyips.bunyipslib.tasks.AlignToPixelTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.tasks.MoveToPixelTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.MultiYCbCrThreshold;
-import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.WhitePixel;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -40,9 +39,9 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
                 config.parallelEncoder, config.perpendicularEncoder
         );
         vision = new Vision(config.webcam);
-        pixels = new MultiYCbCrThreshold(Pixels.createProcessors());
-        vision.init(pixels, vision.raw);
-        vision.start(pixels, vision.raw);
+        pixels = new MultiYCbCrThreshold(new WhitePixel());
+        vision.init(pixels);
+        vision.start(pixels);
         vision.startPreview();
     }
 
@@ -63,7 +62,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
 //                .run(new AlignToPixelTask<>(gamepad1, drive, pixels, new PIDController(1, 0.25, 0.0)))
 //                .finishingWhen(() -> !gamepad1.right_bumper);
         scheduler().whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
-                .run(new MoveToPixelTask<>(gamepad1, drive, pixels, new PIDController(0.36, 0.6, 0.0), new PIDController(1, 0.25, 0.0), 0.0))
+                .run(new MoveToPixelTask<>(gamepad1, drive, pixels, new PIDController(0.36, 0.6, 0.0), new PIDController(1, 0.25, 0.0)))
                 .finishingWhen(() -> !gamepad1.right_bumper);
     }
 }
