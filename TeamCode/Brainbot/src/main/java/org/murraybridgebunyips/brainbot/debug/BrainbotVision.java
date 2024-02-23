@@ -6,8 +6,10 @@ import org.murraybridgebunyips.brainbot.components.BrainbotConfig;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
-import org.murraybridgebunyips.bunyipslib.vision.processors.MultiYCbCrThreshold;
+import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.WhitePixel;
+import org.opencv.core.Scalar;
 
 @TeleOp(name = "Vision Test (Brainbot)")
 public class BrainbotVision extends BunyipsOpMode {
@@ -19,10 +21,9 @@ public class BrainbotVision extends BunyipsOpMode {
     protected void onInit() {
         config.init(this);
         visionB = new Vision(config.cameraB);
-        MultiYCbCrThreshold all = new MultiYCbCrThreshold(Pixels.createProcessors());
-        AprilTag at = new AprilTag();
-        visionB.init(all, at);
-        visionB.start(all, at);
+        MultiColourThreshold proc = new MultiColourThreshold(Pixels.createProcessors());
+        visionB.init(proc);
+        visionB.start(proc);
         visionB.startPreview();
     }
 
