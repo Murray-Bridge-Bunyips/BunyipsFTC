@@ -12,7 +12,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.tasks.MoveToPixelTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.bunyipslib.vision.processors.MultiYCbCrThreshold;
+import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.WhitePixel;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
@@ -27,7 +27,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;
     private Vision vision;
-    private MultiYCbCrThreshold pixels;
+    private MultiColourThreshold pixels;
 
     @Override
     protected void onInitialisation() {
@@ -39,7 +39,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
                 config.parallelEncoder, config.perpendicularEncoder
         );
         vision = new Vision(config.webcam);
-        pixels = new MultiYCbCrThreshold(new WhitePixel());
+        pixels = new MultiColourThreshold(new WhitePixel());
         vision.init(pixels);
         vision.start(pixels);
         vision.startPreview();
