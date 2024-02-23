@@ -35,11 +35,11 @@ public class WheatleyConfig extends RobotConfig {
     //    left_front = hardwareMap.get(DcMotor.class, "left_front");
     //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
 
-    // Expansion 1: fl
-    public DcMotorEx fl;
-
     // Expansion 0: bl
     public DcMotorEx bl;
+
+    // Expansion 1: fl
+    public DcMotorEx fl;
 
     // Expansion 2: fr
     public DcMotorEx /*Are you*/ fr /*Or jk*/;
@@ -50,11 +50,11 @@ public class WheatleyConfig extends RobotConfig {
     // Control 0: Suspender Actuator "sa"
     public DcMotorEx suspenderActuator;
 
-    // Control Servo 5: Pixel Forward Motion Servo "pm"
-    public CRServo pixelMotion;
+    // Control Servo 0: Plane Launcher "pl"
+    public Servo launcher;
 
-    // Control Servo 4: Pixel Alignment Servo "al"
-    public Servo pixelAlignment;
+    // Control Servo 1: Suspension Hook "sh"
+    public Servo suspenderHook;
 
     // Control Servo 2: Left Servo "ls"
     public Servo leftPixel;
@@ -62,11 +62,11 @@ public class WheatleyConfig extends RobotConfig {
     // Control Servo 3: Right Servo "rs"
     public Servo rightPixel;
 
-    // Control Servo 1: Suspension Hook "sh"
-    public Servo suspenderHook;
+    // Control Servo 4: Pixel Alignment Servo "al"
+    public Servo pixelAlignment;
 
-    // Control Servo 0: Plane Launcher "pl"
-    public Servo launcher;
+    // Control Servo 5: Pixel Forward Motion Servo "pm"
+    public CRServo pixelMotion;
 
     // USB: Webcam "webcam"
     public WebcamName webcam;

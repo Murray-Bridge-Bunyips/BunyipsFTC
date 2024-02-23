@@ -13,7 +13,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.murraybridgebunyips.bunyipslib.DualClaws;
+import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
@@ -91,7 +91,7 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
 
         addTask(new InstantTask(() -> arm.setClawRotatorDegrees(10).update()));
         addTask(new GLaDOSRunManagementRailTask(1.0, arm.getManagementRail(), 1.0));
-        addTask(new InstantTask(() -> arm.openClaw(DualClaws.ServoSide.LEFT).update()));
+        addTask(new InstantTask(() -> arm.openClaw(DualServos.ServoSide.LEFT).update()));
     }
 
     @Override

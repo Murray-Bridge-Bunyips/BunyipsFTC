@@ -17,7 +17,7 @@ public class WheatleyRoadRunnerTuning extends AutomaticFeedforwardTuner {
     public void runOpMode() {
         WheatleyConfig ROBOT_CONFIG = new WheatleyConfig();
         ROBOT_CONFIG.init(this);
-        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(null, ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.fl, ROBOT_CONFIG.fr, ROBOT_CONFIG.bl, ROBOT_CONFIG.br);
+        drive = new MecanumRoadRunnerDrive(null, ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.fl, ROBOT_CONFIG.fr, ROBOT_CONFIG.bl, ROBOT_CONFIG.br);
         super.runOpMode();
     }
 }
