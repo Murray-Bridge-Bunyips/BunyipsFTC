@@ -28,24 +28,28 @@ public class PersonalityCoreManagementRail extends BunyipsSubsystem {
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void actuateUsingController(double y) {
+    public PersonalityCoreManagementRail actuateUsingController(double y) {
         power = Range.clip(-y, -1.0, 1.0);
+        return this;
     }
 
-    public void setPower(double p) {
+    public PersonalityCoreManagementRail setPower(double p) {
         power = Range.clip(p, -1.0, 1.0);
+        return this;
     }
 
-    public void runFor(double seconds, double power) {
+    public PersonalityCoreManagementRail runFor(double seconds, double power) {
         currentTimeout = seconds;
         this.power = power;
         timer.reset();
+        return this;
     }
 
     public boolean isBusy() {
         return currentTimeout != 0;
     }
 
+    @Override
     public void update() {
         if (currentTimeout != 0) {
             if (timer.seconds() >= currentTimeout) currentTimeout = 0;

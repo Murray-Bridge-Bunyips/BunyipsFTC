@@ -25,27 +25,33 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
         update();
     }
 
-    public void actuateUsingController(double y) {
+    public PersonalityCoreHook actuateUsingController(double y) {
         target -= y / 5;
         target = Range.clip(target, 0.0, 1.0);
+        return this;
     }
 
-    public void setPosition(double target) {
+    public PersonalityCoreHook setPosition(double target) {
         this.target = Range.clip(target, 0.0, 1.0);
+        return this;
     }
 
-    public void extend() {
+    public PersonalityCoreHook extend() {
         target = EXTENDED;
+        return this;
     }
 
-    public void retract() {
+    public PersonalityCoreHook retract() {
         target = RETRACTED;
+        return this;
     }
 
-    public void upright() {
+    public PersonalityCoreHook upright() {
         target = UPRIGHT;
+        return this;
     }
 
+    @Override
     public void update() {
         hook.setPosition(target);
         opMode.addTelemetry("Hook: %", target == EXTENDED ? "EXTENDED" : target == RETRACTED ? "RETRACTED" : target == UPRIGHT ? "UPRIGHT" : "CUSTOM_POS");

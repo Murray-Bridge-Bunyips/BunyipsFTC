@@ -17,37 +17,42 @@ public class PersonalityCoreClawMover extends BunyipsSubsystem {
     private final CRServo servo;
     private double power;
     private double currentTimeout;
-    private ElapsedTime timer;
+    private final ElapsedTime timer = new ElapsedTime();
 
     public PersonalityCoreClawMover(CRServo servo) {
         this.servo = servo;
     }
 
-    public void actuateUsingController(double y) {
-        if (currentTimeout != 0) return;
+    public PersonalityCoreClawMover actuateUsingController(double y) {
+        if (currentTimeout != 0) return this;
         power = Range.clip(-y, -1.0, 1.0);
+        return this;
     }
 
-    public void actuateUsingDpad(boolean up, boolean down) {
+    public PersonalityCoreClawMover actuateUsingDpad(boolean up, boolean down) {
         if (!up && !down) {
             power = 0;
-            return;
+            return this;
         }
         power = up ? 1 : -1;
+        return this;
     }
 
-    public void setPower(double power) {
-        if (currentTimeout != 0) return;
+    public PersonalityCoreClawMover setPower(double power) {
+        if (currentTimeout != 0) return this;
         this.power = Range.clip(power, -1.0, 1.0);
+        return this;
     }
 
-    public void runFor(double seconds, double power) {
-        if (currentTimeout != 0) return;
+    public PersonalityCoreClawMover runFor(double seconds, double power) {
+        if (currentTimeout != 0) return this;
         this.power = power;
         currentTimeout = seconds;
         timer.reset();
+        return this;
     }
 
+    @Override
     public void update() {
         servo.setPower(power);
         opMode.addTelemetry("Claw Horizontal: % power", round(servo.getPower(), 1));

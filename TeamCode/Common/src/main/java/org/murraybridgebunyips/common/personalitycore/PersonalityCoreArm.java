@@ -14,7 +14,7 @@ import org.murraybridgebunyips.common.personalitycore.submodules.PersonalityCore
 
 /**
  * Overhead class that handles a single instantiation of other PersonalityCore components.
- * Allows a one-level chain pattern to be used to call methods on the submodules.
+ * Allows a chain pattern to be used to call methods on the submodules.
  *
  * @author Lucas Bubner, 2023
  * @noinspection UnusedReturnValue
@@ -314,6 +314,7 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
      * Send all stateful changes to all hardware and report telemetry.
      * No methods here will do anything unless this is called regularly.
      */
+    @Override
     public void update() {
         if (clawMover != null) clawMover.update();
         if (clawRotator != null) clawRotator.update();

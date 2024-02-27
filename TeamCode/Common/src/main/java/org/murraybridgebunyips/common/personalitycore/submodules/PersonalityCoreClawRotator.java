@@ -24,27 +24,33 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
         this.rotator = rotator;
     }
 
-    public void faceBoard() {
+    public PersonalityCoreClawRotator faceBoard() {
         target = FACING_BOARD;
+        return this;
     }
 
-    public void faceGround() {
+    public PersonalityCoreClawRotator faceGround() {
         target = FACING_DOWN;
+        return this;
     }
 
-    public void actuateUsingController(double y) {
+    public PersonalityCoreClawRotator actuateUsingController(double y) {
         target -= y / 12;
         target = Range.clip(target, 0.0, 1.0);
+        return this;
     }
 
-    public void setPosition(double target) {
+    public PersonalityCoreClawRotator setPosition(double target) {
         this.target = Range.clip(target, 0.0, 1.0);
+        return this;
     }
 
-    public void setDegrees(double degrees) {
+    public PersonalityCoreClawRotator setDegrees(double degrees) {
         target = Range.clip(degrees / 30, 0.0, 1.0);
+        return this;
     }
 
+    @Override
     public void update() {
         rotator.setPosition(target);
         opMode.addTelemetry("Claw Alignment: % pos (%)", round(target, 1), target == FACING_BOARD ? "FACING_BOARD" : target == FACING_DOWN ? "FACING_DOWN" : "CUSTOM");
