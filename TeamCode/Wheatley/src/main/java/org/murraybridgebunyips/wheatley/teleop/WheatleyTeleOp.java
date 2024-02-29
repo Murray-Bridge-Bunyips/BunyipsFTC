@@ -12,21 +12,23 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
  * Primary TeleOp for all of Wheatley's functions.
- * gamepad1:
- *      left_stick_x: strafe
- *      left_stick_y: forward/backward
- *      right_stick_x: turn
- *      right_trigger: fire cannon
- *      options: reset cannon
- * gamepad2:
- *      x: toggle left claw
- *      b: toggle right claw
- *      y: align claw to board
- *      a: align claw to ground
- *      left_stick_y: actuate the management rail
- *      right_stick_y: move claw mover
- *      dpad_up: extend hook one position
- *      dpad_down: retract hook one position
+ * <p></p>
+ * gamepad1:<br>
+ *      left_stick_x: strafe<br>
+ *      left_stick_y: forward/backward<br>
+ *      right_stick_x: turn<br>
+ *      right_trigger: fire cannon<br>
+ *      options: reset cannon<br>
+ *      <p></p>
+ * gamepad2:<br>
+ *      x: toggle left claw<br>
+ *      b: toggle right claw<br>
+ *      y: align claw to board<br>
+ *      a: align claw to ground<br>
+ *      left_stick_y: actuate the management rail<br>
+ *      right_stick_y: move claw mover<br>
+ *      dpad_up: extend hook one position<br>
+ *      dpad_down: retract hook one position<br>
  *
  * @author Lachlan Paul, 2023
  * @author Lucas Bubner, 2023
