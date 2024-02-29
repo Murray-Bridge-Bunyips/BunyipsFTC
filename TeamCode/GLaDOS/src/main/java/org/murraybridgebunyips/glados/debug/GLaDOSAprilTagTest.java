@@ -41,7 +41,8 @@ public class GLaDOSAprilTagTest extends BunyipsOpMode {
                 addDashboardTelemetry(d.getId() + ":centerY", d.getCenter().y);
                 if (d.getCorners() != null) {
                     for (int i = 0; i < d.getCorners().size(); i++) {
-                        addDashboardTelemetry(d.getId() + ":corner" + (i + 1), d.getCorners().get(i));
+                        addDashboardTelemetry(d.getId() + ":cornerX" + (i + 1), d.getCorners().get(i).x);
+                        addDashboardTelemetry(d.getId() + ":cornerY" + (i + 1), d.getCorners().get(i).y);
                     }
                 }
                 addDashboardTelemetry(d.getId() + ":label", d.getLabel());
