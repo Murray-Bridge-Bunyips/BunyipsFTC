@@ -60,7 +60,7 @@ public class GLaDOSConfigCore extends RobotConfig {
     public MecanumCoefficients mecanumCoefficients;
 
     @Override
-    protected void configureHardware() {
+    protected void onRuntime() {
         // Sensors
         webcam = (WebcamName) getHardware("webcam", WebcamName.class);
         imu = (IMU) getHardware("imu", IMU.class);

@@ -41,7 +41,7 @@ class JerryConfig : RobotConfig() {
     val armComponents: List<HardwareDevice?>
         get() = listOf(arm1, arm2, claw, limit)
 
-    override fun configureHardware() {
+    override fun onRuntime() {
         bl = getHardware("Back Left", DcMotorEx::class.java) as? DcMotorEx
         br = getHardware("Back Right", DcMotorEx::class.java) as? DcMotorEx
         fl = getHardware("Front Left", DcMotorEx::class.java) as? DcMotorEx
@@ -53,8 +53,8 @@ class JerryConfig : RobotConfig() {
         imu = getHardware("ch_imu", IMU::class.java) as? IMU
         webcam = getHardware("Webcam", WebcamName::class.java) as? WebcamName
 
-        monitorID = hardwareMap!!.appContext.resources.getIdentifier(
-            "cameraMonitorViewId", "id", hardwareMap!!.appContext.packageName
+        monitorID = hardwareMap.appContext.resources.getIdentifier(
+            "cameraMonitorViewId", "id", hardwareMap.appContext.packageName
         )
 
         // Dead wheels were moved to other robots for future seasons in pairment with RoadRunner

@@ -78,7 +78,7 @@ public class WheatleyConfig extends RobotConfig {
     public MecanumCoefficients mecanumCoefficients;
 
     @Override
-    protected void configureHardware() {
+    protected void onRuntime() {
         webcam = (WebcamName) getHardware("webcame", WebcamName.class);
 
         // Motor directions configured to work with current config
