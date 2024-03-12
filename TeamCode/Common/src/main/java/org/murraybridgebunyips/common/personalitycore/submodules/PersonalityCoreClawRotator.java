@@ -11,6 +11,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
  * Rotation/claw rotational alignment for the GLaDOS/Wheatley robot
  *
  * @author Lucas Bubner, 2023
+ * @noinspection MissingJavadoc
  */
 public class PersonalityCoreClawRotator extends BunyipsSubsystem {
     private final Servo rotator;

@@ -15,6 +15,7 @@ import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
 /**
  * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
  */
+@Suppress("KDocMissingDocumentation")
 @Autonomous(
     name = "PowerPlay Auto Signal Read & Park",
     group = "JERRY",

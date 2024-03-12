@@ -11,9 +11,12 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 import java.util.List;
 
+/**
+ * Test OpMode for AprilTags
+ */
 @TeleOp(name = "AprilTags")
 public class GLaDOSAprilTagTest extends BunyipsOpMode {
-    private GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private Vision vision;
     private AprilTag aprilTag;
     private CartesianMecanumDrive basicDrive;

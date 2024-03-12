@@ -14,6 +14,7 @@ import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
  * Basic autonomous that guarantees the robot will park in a corner or centre.
  * Incredibly simple, uses only time drive.
  */
+@Suppress("KDocMissingDocumentation")
 @Autonomous(
     name = "PowerPlay Left-Right Junction Park",
     group = "JERRY",

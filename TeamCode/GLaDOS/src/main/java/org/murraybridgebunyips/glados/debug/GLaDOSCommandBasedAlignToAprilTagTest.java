@@ -44,7 +44,7 @@ public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOp
 
     @Override
     protected BunyipsSubsystem[] setSubsystems() {
-        return new BunyipsSubsystem[] {
+        return new BunyipsSubsystem[]{
                 drive,
                 vision
         };

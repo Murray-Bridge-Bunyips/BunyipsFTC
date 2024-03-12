@@ -11,6 +11,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
  * Vertical motion motor controller for the GLaDOS/Wheatley robot.
  *
  * @author Lucas Bubner, 2023
+ * @noinspection MissingJavadoc
  */
 public class PersonalityCoreManagementRail extends BunyipsSubsystem {
     private static final double HOLDING_POWER = 0.3;
@@ -38,9 +39,9 @@ public class PersonalityCoreManagementRail extends BunyipsSubsystem {
         return this;
     }
 
-    public PersonalityCoreManagementRail runFor(double seconds, double power) {
+    public PersonalityCoreManagementRail runFor(double seconds, double atPower) {
         currentTimeout = seconds;
-        this.power = power;
+        power = atPower;
         timer.reset();
         return this;
     }

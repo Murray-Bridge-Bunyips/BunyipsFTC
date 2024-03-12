@@ -22,9 +22,21 @@ import org.murraybridgebunyips.common.personalitycore.submodules.PersonalityCore
 //@Config
 public class PersonalityCoreArm extends BunyipsSubsystem {
     // Servo values for the dual claw at the front
+    /**
+     * The position of the left claw when it is open.
+     */
     public static double LEFT_CLAW_OPEN = 1.0;
+    /**
+     * The position of the right claw when it is open.
+     */
     public static double RIGHT_CLAW_OPEN;
+    /**
+     * The position of the left claw when it is closed.
+     */
     public static double LEFT_CLAW_CLOSED;
+    /**
+     * The position of the right claw when it is closed.
+     */
     public static double RIGHT_CLAW_CLOSED = 1.0;
     private PersonalityCoreClawMover clawMover;
     private PersonalityCoreClawRotator clawRotator;
@@ -32,6 +44,15 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
     private PersonalityCoreManagementRail managementRail;
     private DualServos claws;
 
+    /**
+     * Create a new PersonalityCoreArm with the given hardware.
+     * @param pixelMotion the horizontal claw mover
+     * @param pixelAlignment the claw rotator
+     * @param suspenderHook the suspension hook
+     * @param suspenderActuator the management rail
+     * @param leftPixel the left claw
+     * @param rightPixel the right claw
+     */
     public PersonalityCoreArm(CRServo pixelMotion, Servo pixelAlignment, Servo suspenderHook, DcMotorEx suspenderActuator, Servo leftPixel, Servo rightPixel) {
         if (NullSafety.assertComponentArgs(PersonalityCoreClawMover.class, pixelMotion))
             clawMover = new PersonalityCoreClawMover(pixelMotion);
@@ -89,6 +110,12 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
         return clawMover;
     }
 
+    /**
+     * Run the claw mover using the dpad.
+     * @param up gamepad.dpad_up
+     * @param down gamepad.dpad_down
+     * @return PersonalityCoreClawMover
+     */
     public PersonalityCoreClawMover actuateClawMoverUsingDpad(boolean up, boolean down) {
         clawMover.actuateUsingDpad(up, down);
         return clawMover;
@@ -253,6 +280,7 @@ public class PersonalityCoreArm extends BunyipsSubsystem {
      *
      * @param s seconds
      * @param p power
+     * @return PersonalityCoreManagementRail
      */
     public PersonalityCoreManagementRail runManagementRailFor(double s, double p) {
         managementRail.runFor(s, p);

@@ -27,6 +27,9 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 import java.util.List;
 
+/**
+ * Lockland Pull
+ */
 @Autonomous(name = "Arm Autonomous")
 public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final WheatleyConfig config = new WheatleyConfig();

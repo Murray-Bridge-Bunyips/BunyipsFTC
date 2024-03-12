@@ -15,16 +15,59 @@ import kotlin.properties.Delegates
  * Jerry robot configuration and hardware declarations.
  */
 class JerryConfig : RobotConfig() {
+    /**
+     * The monitor ID for the camera.
+     */
     var monitorID by Delegates.notNull<Int>()
+
+    /**
+     * Control Hub "webcam" usb
+     */
     var webcam: WebcamName? = null
+
+    /**
+     * Control Hub "bl" m0
+     */
     var bl: DcMotorEx? = null
+
+    /**
+     * Control Hub "br" m1
+     */
     var br: DcMotorEx? = null
+
+    /**
+     * Control Hub "fl" m2
+     */
     var fl: DcMotorEx? = null
+
+    /**
+     * Control Hub "fr" m3
+     */
     var fr: DcMotorEx? = null
+
+    /**
+     * Expansion Hub "claw" s0
+     */
     var claw: Servo? = null
+
+    /**
+     * Expansion Hub "arm1" m0
+     */
     var arm1: DcMotorEx? = null
+
+    /**
+     * Expansion Hub "arm2" m1
+     */
     var arm2: DcMotorEx? = null
+
+    /**
+     * Expansion Hub "imu" i2c internal
+     */
     var imu: IMU? = null
+
+    /**
+     * Expansion Hub "limit" i0
+     */
     var limit: TouchSensor? = null
 
 //    // Encoder configuration
@@ -35,9 +78,15 @@ class JerryConfig : RobotConfig() {
 //    val yDiameter = xDiameter
 //    val yTicksPerRev = xTicksPerRev
 
+    /**
+     * List of drive motors.
+     */
     val driveMotors: List<DcMotorEx?>
         get() = listOf(bl, br, fl, fr)
 
+    /**
+     * List of arm components.
+     */
     val armComponents: List<HardwareDevice?>
         get() = listOf(arm1, arm2, claw, limit)
 

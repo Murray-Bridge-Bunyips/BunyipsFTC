@@ -15,6 +15,7 @@ import org.murraybridgebunyips.jerry.tasks.JerryIMURotationTask
  * @author Lachlan Paul, 2023
  */
 
+@Suppress("KDocMissingDocumentation")
 @Disabled
 @Autonomous(name = "IMU Rotate Test")
 class JerryIMURotateTest : AutonomousBunyipsOpMode() {

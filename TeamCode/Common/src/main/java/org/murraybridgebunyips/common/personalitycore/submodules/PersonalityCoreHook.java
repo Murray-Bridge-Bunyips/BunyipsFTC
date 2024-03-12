@@ -9,6 +9,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
  * Suspension hook for the GLaDOS/Wheatley robot.
  *
  * @author Lucas Bubner, 2023
+ * @noinspection MissingJavadoc
  */
 public class PersonalityCoreHook extends BunyipsSubsystem {
     private final Servo hook;

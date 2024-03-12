@@ -20,11 +20,24 @@ class JerryIMURotationTask(
     private var angle: Double,
     private val speed: Double
 ) : Task(time), RobotTask {
-    // Enum to find out which way we need to be turning
+    /**
+     * Represents which way we need to turn
+     */
     var direction: Direction = Direction.RIGHT
 
+    /**
+     * Which way we need to be turning
+     */
     enum class Direction {
-        LEFT, RIGHT
+        /**
+         * Rotate left
+         */
+        LEFT,
+
+        /**
+         * Rotate right
+         */
+        RIGHT
     }
 
     override fun init() {

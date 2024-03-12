@@ -18,6 +18,9 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 import java.util.List;
 
+/**
+ * Park on the left side of the backdrop.
+ */
 @Autonomous(name = "Left Park")
 public class GLaDOSLeftPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();

@@ -42,6 +42,13 @@ captures/
 # IntelliJ
 *.iml
 .idea/
+!.idea/kotlinc.xml
+!.idea/workspace.xml
+!.idea/gradle.xml
+!.idea/deploymentTargetDropDown.xml
+!.idea/scopes/
+!.idea/inspectionProfiles/
+
 
 # For Mac users
 .DS_Store

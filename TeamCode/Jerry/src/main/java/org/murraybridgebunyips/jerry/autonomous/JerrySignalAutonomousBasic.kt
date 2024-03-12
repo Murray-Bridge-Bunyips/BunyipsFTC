@@ -16,6 +16,7 @@ import org.murraybridgebunyips.jerry.tasks.JerryTimeDriveTask
  * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
  * Uses TimeDrive (which is deprecated), but works.
  */
+@Suppress("KDocMissingDocumentation")
 @Disabled
 @Autonomous(
     name = "PowerPlay Signal Read & Park w/ TIME DRIVE",

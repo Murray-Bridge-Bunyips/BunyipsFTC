@@ -12,6 +12,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
  * Horizontal CRServo motion for the GLaDOS/Wheatley robot
  *
  * @author Lucas Bubner, 2023
+ * @noinspection MissingJavadoc
  */
 public class PersonalityCoreClawMover extends BunyipsSubsystem {
     private final CRServo servo;
@@ -44,9 +45,9 @@ public class PersonalityCoreClawMover extends BunyipsSubsystem {
         return this;
     }
 
-    public PersonalityCoreClawMover runFor(double seconds, double power) {
+    public PersonalityCoreClawMover runFor(double seconds, double atPower) {
         if (currentTimeout != 0) return this;
-        this.power = power;
+        power = atPower;
         currentTimeout = seconds;
         timer.reset();
         return this;

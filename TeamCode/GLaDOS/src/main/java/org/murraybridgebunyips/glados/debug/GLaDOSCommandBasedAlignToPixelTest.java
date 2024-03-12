@@ -47,7 +47,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
 
     @Override
     protected BunyipsSubsystem[] setSubsystems() {
-        return new BunyipsSubsystem[] {
+        return new BunyipsSubsystem[]{
                 drive,
                 vision
         };
