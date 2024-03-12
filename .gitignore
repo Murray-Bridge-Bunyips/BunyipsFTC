@@ -41,13 +41,11 @@ captures/
 
 # IntelliJ
 *.iml
-.idea/
-!.idea/kotlinc.xml
-!.idea/workspace.xml
-!.idea/gradle.xml
-!.idea/deploymentTargetDropDown.xml
-!.idea/scopes/
-!.idea/inspectionProfiles/
+.idea/copilot/
+.idea/appInsightsSettings.xml
+.idea/discord.xml
+.idea/migrations.xml
+.idea/workspace.xml
 
 
 # For Mac users
