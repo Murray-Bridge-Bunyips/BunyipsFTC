@@ -47,8 +47,12 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
     protected void onInitialise() {
         config.init();
         vision = new Vision(config.webcam);
-        initTask = new GetTeamPropTask(vision);
+        processor = new TeamProp();
+        initTask = new GetTeamPropTask(processor);
         arm = new PersonalityCoreArm(config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
+        vision.init(processor);
+        vision.flip();
+        vision.start(processor);
     }
 
     @Override
@@ -77,17 +81,14 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
         switch (startingPosition) {
             case STARTING_RED_LEFT:
             case STARTING_RED_RIGHT:
-                processor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);
+                processor.setColours(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);
                 break;
 
             case STARTING_BLUE_LEFT:
             case STARTING_BLUE_RIGHT:
-                processor = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
+                processor.setColours(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
                 break;
         }
-        vision.init(processor);
-        vision.flip();
-        initTask.setTeamProp(processor);
 
         addTask(new InstantTask(() -> arm.setClawRotatorDegrees(10).update()));
         addTask(new GLaDOSRunManagementRailTask(1.0, arm.getManagementRail(), 1.0));

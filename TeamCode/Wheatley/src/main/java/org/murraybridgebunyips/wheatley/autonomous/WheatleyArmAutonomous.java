@@ -46,7 +46,11 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
                 config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel
         );
         vision = new Vision(config.webcam);
-        initTask = new GetTeamPropTask(vision);
+        processor = new TeamProp();
+        initTask = new GetTeamPropTask(processor);
+        vision.init(processor);
+        vision.flip();
+        vision.start(processor);
     }
 
     @Override
@@ -76,16 +80,13 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
             case STARTING_RED_RIGHT:
-                processor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);
+                processor.setColours(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);
                 break;
             case STARTING_BLUE_LEFT:
             case STARTING_BLUE_RIGHT:
-                processor = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
+                processor.setColours(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
                 break;
         }
-        vision.init(processor);
-        vision.flip();
-        initTask.setTeamProp(processor);
     }
 
     @Override
