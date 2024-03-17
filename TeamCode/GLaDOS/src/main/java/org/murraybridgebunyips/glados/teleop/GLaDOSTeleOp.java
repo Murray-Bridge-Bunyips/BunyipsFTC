@@ -5,11 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.DualServos;
+import org.murraybridgebunyips.bunyipslib.InputMultiplier;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.NullSafety;
-import org.murraybridgebunyips.bunyipslib.TriSpeed;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreArm;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreClawRotator;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreForwardServo;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreHook;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -34,10 +37,14 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  */
 @TeleOp(name = "TeleOp")
 public class GLaDOSTeleOp extends BunyipsOpMode {
-    private final TriSpeed speed = new TriSpeed(TriSpeed.Speed.NORMAL);
+    private final InputMultiplier speed = new InputMultiplier(0.25, 0.5, 1.0).withDefaultIndex(1);
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;
-    private PersonalityCoreArm arm;
+    private PersonalityCoreClawRotator clawRotator;
+    private PersonalityCoreForwardServo pixelMotion;
+    private PersonalityCoreHook hook;
+    private PersonalityCoreLinearActuator linearActuator;
+    private DualServos claws;
     private Cannon cannon;
     private boolean x_pressed;
     private boolean b_pressed;
@@ -55,7 +62,16 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         );
         if (NullSafety.assertComponentArgs(Cannon.class, config.launcher))
             cannon = new Cannon(config.launcher);
-        arm = new PersonalityCoreArm(config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
+        if (NullSafety.assertComponentArgs(PersonalityCoreClawRotator.class, config.pixelAlignment))
+            clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
+        if (NullSafety.assertComponentArgs(PersonalityCoreForwardServo.class, config.pixelMotion))
+            pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
+        if (NullSafety.assertComponentArgs(PersonalityCoreHook.class, config.suspenderHook))
+            hook = new PersonalityCoreHook(config.suspenderHook);
+        if (NullSafety.assertComponentArgs(PersonalityCoreLinearActuator.class, config.suspenderActuator))
+            linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
+        if (NullSafety.assertComponentArgs(DualServos.class, config.leftPixel, config.rightPixel))
+            claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
     }
 
     @Override
@@ -70,25 +86,24 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         } else if (gamepad1.left_bumper && !dec_pressed) {
             speed.decrement();
         }
-        addTelemetry("TriSpeed: Running at % speed", speed.getSpeed());
 
         // 12 Volt Aperture Science Heavy Duty Super-Colliding Alliance-Destroying Mecanum Drive
         drive.setSpeedUsingController(x * speed.getMultiplier(), y * speed.getMultiplier(), r * speed.getMultiplier());
 
         // Aperture Science Pixel Grabbing Pixel Placing Pixel Claw
         if (gamepad2.x && !x_pressed) {
-            arm.toggleClaw(DualServos.ServoSide.LEFT);
+            claws.toggleServo(DualServos.ServoSide.LEFT);
         } else if (gamepad2.b && !b_pressed) {
-            arm.toggleClaw(DualServos.ServoSide.RIGHT);
+            claws.toggleServo(DualServos.ServoSide.RIGHT);
         }
 
         // Aperture Science Dynamic Aperture Science Pixel Grabbing Pixel Placing Pixel Claw Angle Aligner
         if (gamepad2.y) {
-            arm.faceClawToBoard();
+            clawRotator.faceBoard();
         } else if (gamepad2.a) {
-            arm.faceClawToGround();
+            clawRotator.faceGround();
         }
-        arm.actuateClawRotatorUsingController(gamepad2.right_stick_y);
+        clawRotator.actuateUsingController(gamepad2.right_stick_y);
 
         // Aperture Science High Energy Pellet Launcher
         if (gamepad1.right_trigger == 1.0) {
@@ -99,16 +114,16 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         }
 
         // Aperture Science Multitasking Management Rail
-        arm.actuateManagementRailUsingController(gamepad2.left_stick_y);
+        linearActuator.actuateUsingController(gamepad2.left_stick_y);
 
         // Aperture Science Gamepad-Enhanced Precision Pixel Grabbing Pixel Placing Pixel Claw Mover
-        arm.actuateClawMoverUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);
+        pixelMotion.actuateUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);
 
         // Aperture Science Self-Suspending Suspender Suspension System
         if (gamepad1.dpad_up) {
-            arm.extendHook();
+            hook.extend();
         } else if (gamepad1.dpad_down) {
-            arm.retractHook();
+            hook.retract();
         }
 
         // Ensure that the buttons are only registered once per press
@@ -119,7 +134,12 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
 
         // Dispatch stateful changes
         drive.update();
-        arm.update();
+        speed.update();
+        clawRotator.update();
+        pixelMotion.update();
+        hook.update();
+        linearActuator.update();
+        claws.update();
         cannon.update();
     }
 }
