@@ -29,6 +29,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
      * @param rotator the servo to control as the claw rotator
      */
     public PersonalityCoreClawRotator(Servo rotator) {
+        assertParamsNotNull(rotator);
         this.rotator = rotator;
     }
 
@@ -125,7 +126,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
     }
 
     @Override
-    public void update() {
+    protected void periodic() {
         rotator.setPosition(target);
         opMode.addTelemetry("Claw Alignment: % pos (%)", round(target, 1), target == FACING_BOARD ? "FACING_BOARD" : target == FACING_DOWN ? "FACING_DOWN" : "CUSTOM");
     }

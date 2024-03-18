@@ -8,7 +8,6 @@ import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.InputMultiplier;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.NullSafety;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreClawRotator;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreForwardServo;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreHook;
@@ -60,18 +59,12 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelEncoder, config.perpendicularEncoder
         );
-        if (NullSafety.assertComponentArgs(Cannon.class, config.launcher))
-            cannon = new Cannon(config.launcher);
-        if (NullSafety.assertComponentArgs(PersonalityCoreClawRotator.class, config.pixelAlignment))
-            clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
-        if (NullSafety.assertComponentArgs(PersonalityCoreForwardServo.class, config.pixelMotion))
-            pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
-        if (NullSafety.assertComponentArgs(PersonalityCoreHook.class, config.suspenderHook))
-            hook = new PersonalityCoreHook(config.suspenderHook);
-        if (NullSafety.assertComponentArgs(PersonalityCoreLinearActuator.class, config.suspenderActuator))
-            linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
-        if (NullSafety.assertComponentArgs(DualServos.class, config.leftPixel, config.rightPixel))
-            claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
+        cannon = new Cannon(config.launcher);
+        clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
+        pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
+        hook = new PersonalityCoreHook(config.suspenderHook);
+        linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
+        claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
     }
 
     @Override

@@ -26,6 +26,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
      * @param servo the servo to control as the forward servo
      */
     public PersonalityCoreForwardServo(CRServo servo) {
+        assertParamsNotNull(servo);
         this.servo = servo;
     }
 
@@ -124,7 +125,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
     }
 
     @Override
-    public void update() {
+    protected void periodic() {
         servo.setPower(power);
         opMode.addTelemetry("Forward Servo: % power", round(servo.getPower(), 1));
     }

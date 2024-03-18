@@ -2,7 +2,6 @@ package org.murraybridgebunyips.glados.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
@@ -40,14 +39,7 @@ public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOp
         vision.init(aprilTag);
         vision.start(aprilTag);
         vision.startPreview();
-    }
-
-    @Override
-    protected BunyipsSubsystem[] setSubsystems() {
-        return new BunyipsSubsystem[]{
-                drive,
-                vision
-        };
+        addSubsystems(drive, vision);
     }
 
     @Override

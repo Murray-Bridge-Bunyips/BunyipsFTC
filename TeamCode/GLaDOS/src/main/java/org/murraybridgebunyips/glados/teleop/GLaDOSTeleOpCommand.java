@@ -2,13 +2,11 @@ package org.murraybridgebunyips.glados.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.InputMultiplier;
-import org.murraybridgebunyips.bunyipslib.NullSafety;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
@@ -59,23 +57,13 @@ public class GLaDOSTeleOpCommand extends CommandBasedBunyipsOpMode {
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelEncoder, config.perpendicularEncoder
         );
-        if (NullSafety.assertComponentArgs(Cannon.class, config.launcher))
-            cannon = new Cannon(config.launcher);
-        if (NullSafety.assertComponentArgs(PersonalityCoreClawRotator.class, config.pixelAlignment))
-            clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
-        if (NullSafety.assertComponentArgs(PersonalityCoreForwardServo.class, config.pixelMotion))
-            pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
-        if (NullSafety.assertComponentArgs(PersonalityCoreHook.class, config.suspenderHook))
-            hook = new PersonalityCoreHook(config.suspenderHook);
-        if (NullSafety.assertComponentArgs(PersonalityCoreLinearActuator.class, config.suspenderActuator))
-            linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
-        if (NullSafety.assertComponentArgs(DualServos.class, config.leftPixel, config.rightPixel))
-            claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
-    }
-
-    @Override
-    protected BunyipsSubsystem[] setSubsystems() {
-        return new BunyipsSubsystem[]{drive, clawRotator, pixelMotion, hook, linearActuator, claws, cannon};
+        cannon = new Cannon(config.launcher);
+        clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
+        pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
+        hook = new PersonalityCoreHook(config.suspenderHook);
+        linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
+        claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
+        addSubsystems(drive, clawRotator, pixelMotion, hook, linearActuator, claws, cannon);
     }
 
     @Override

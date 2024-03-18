@@ -14,7 +14,6 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.DualServos;
-import org.murraybridgebunyips.bunyipslib.NullSafety;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
@@ -58,16 +57,11 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
         processor = new TeamProp();
         initTask = new GetTeamPropTask(processor);
 
-        if (NullSafety.assertComponentArgs(PersonalityCoreClawRotator.class, config.pixelAlignment))
-            clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
-        if (NullSafety.assertComponentArgs(PersonalityCoreForwardServo.class, config.pixelMotion))
-            pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
-        if (NullSafety.assertComponentArgs(PersonalityCoreHook.class, config.suspenderHook))
-            hook = new PersonalityCoreHook(config.suspenderHook);
-        if (NullSafety.assertComponentArgs(PersonalityCoreLinearActuator.class, config.suspenderActuator))
-            linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
-        if (NullSafety.assertComponentArgs(DualServos.class, config.leftPixel, config.rightPixel))
-            claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
+        clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
+        pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
+        hook = new PersonalityCoreHook(config.suspenderHook);
+        linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
+        claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
 
         vision.init(processor);
         vision.flip();

@@ -27,6 +27,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
      * @param hook the servo to use
      */
     public PersonalityCoreHook(Servo hook) {
+        assertParamsNotNull(hook);
         this.hook = hook;
         target = RETRACTED;
         update();
@@ -123,7 +124,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
     }
 
     @Override
-    public void update() {
+    protected void periodic() {
         hook.setPosition(target);
         opMode.addTelemetry("Hook: %", target == EXTENDED ? "EXTENDED" : target == RETRACTED ? "RETRACTED" : target == UPRIGHT ? "UPRIGHT" : "CUSTOM_POS");
     }

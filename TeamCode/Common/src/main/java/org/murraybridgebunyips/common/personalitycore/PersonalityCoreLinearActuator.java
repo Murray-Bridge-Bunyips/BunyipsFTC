@@ -28,6 +28,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      * @param motor the motor to control as the linear actuator
      */
     public PersonalityCoreLinearActuator(DcMotorEx motor) {
+        assertParamsNotNull(motor);
         this.motor = motor;
         // Assumes arm is down locked upon activation
         // If possible it would be beneficial to integrate limit switches
@@ -161,7 +162,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
     }
 
     @Override
-    public void update() {
+    protected void periodic() {
         if (lockout) {
             opMode.addTelemetry("Management Rail: % to % ticks", "MOVING", motor.getCurrentPosition());
             return;
