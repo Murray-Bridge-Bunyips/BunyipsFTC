@@ -36,43 +36,69 @@ public class WheatleyConfig extends RobotConfig {
     //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
 
 
-    /** USB: Webcam "webcam" */
+    /**
+     * USB: Webcam "webcam"
+     */
     public WebcamName webcam;
 
-    /** Internally mounted on I2C C0 "imu" */
+    /**
+     * Internally mounted on I2C C0 "imu"
+     */
     public IMU imu;
 
-    /** Expansion 0: bl */
+    /**
+     * Expansion 0: bl
+     */
     public DcMotorEx bl;
 
-    /** Expansion 1: fl */
+    /**
+     * Expansion 1: fl
+     */
     public DcMotorEx fl;
 
-    /** Expansion 2: fr */
+    /**
+     * Expansion 2: fr
+     */
     public DcMotorEx /*Are you*/ fr /*Or jk*/;
 
-    /** Expansion 3: br */
+    /**
+     * Expansion 3: br
+     */
     public DcMotorEx br;
 
-    /** Control 0: Suspender Actuator "sa" */
+    /**
+     * Control 0: Suspender Actuator "sa"
+     */
     public DcMotorEx suspenderActuator;
 
-    /** Control Servo 0: Plane Launcher "pl" */
+    /**
+     * Control Servo 0: Plane Launcher "pl"
+     */
     public Servo launcher;
 
-    /** Control Servo 1: Suspension Hook "sh" */
+    /**
+     * Control Servo 1: Suspension Hook "sh"
+     */
     public Servo suspenderHook;
 
-    /** Control Servo 2: Left Servo "ls" */
+    /**
+     * Control Servo 2: Left Servo "ls"
+     */
     public Servo leftPixel;
 
-    /** Control Servo 3: Right Servo "rs" */
+    /**
+     * Control Servo 3: Right Servo "rs"
+     */
     public Servo rightPixel;
 
-    /** Control Servo 4: Pixel Alignment Servo "al" */
+    /**
+     * Control Servo 4: Pixel Alignment Servo "al"
+     */
     public Servo pixelAlignment;
 
-    /** Control Servo 5: Pixel Forward Motion Servo "pm" */
+    /**
+     * Control Servo 5: Pixel Forward Motion Servo "pm"
+     */
     public CRServo pixelMotion;
 
     /**

@@ -14,13 +14,13 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
-import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
+import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.TeamProp;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
@@ -35,7 +35,7 @@ import java.util.List;
 public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final WheatleyConfig config = new WheatleyConfig();
     private MecanumDrive drive;
-//    private PersonalityCoreArm arm;
+    //    private PersonalityCoreArm arm;
     private GetTeamPropTask initTask;
     private Vision vision;
     private TeamProp processor;
@@ -104,6 +104,7 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
 //                arm.faceClawToGround();
 //                arm.toggleClaw(DualServos.ServoSide.LEFT);
 
+                break;
             case RIGHT:
                 addNewTrajectory(new Pose2d(-36.57, -71.24, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-32.78, -39.79), Math.toRadians(82.34))
@@ -111,6 +112,7 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
 
 //                arm.faceClawToGround();
 //                arm.toggleClaw(DualServos.ServoSide.LEFT);
+                break;
 
             case CENTER:
                 addNewTrajectory(new Pose2d(-36.58, -74.71, Math.toRadians(90.00)))
@@ -119,6 +121,7 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
 
 //                arm.faceClawToGround();
 //                arm.toggleClaw(DualServos.ServoSide.LEFT);
+                break;
 
         }
     }

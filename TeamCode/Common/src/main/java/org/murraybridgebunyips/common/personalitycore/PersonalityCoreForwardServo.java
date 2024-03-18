@@ -32,6 +32,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
 
     /**
      * Actuate the servo using a controller
+     *
      * @param y the y value of the controller
      * @return the forward servo
      */
@@ -42,6 +43,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
 
     /**
      * Actuate the servo using a controller. Should be a default task.
+     *
      * @param y the y value of the controller
      * @return a task to actuate the servo
      */
@@ -51,7 +53,8 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
 
     /**
      * Actuate the servo using the dpad
-     * @param up whether the dpad is up
+     *
+     * @param up   whether the dpad is up
      * @param down whether the dpad is down
      * @return the forward servo
      */
@@ -66,7 +69,8 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
 
     /**
      * Actuate the servo using the dpad. Should be a default task.
-     * @param up whether the dpad is up
+     *
+     * @param up   whether the dpad is up
      * @param down whether the dpad is down
      * @return a task to actuate the servo
      */
@@ -76,6 +80,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
 
     /**
      * Set the power of the servo
+     *
      * @param power the power to set
      * @return the forward servo
      */
@@ -86,6 +91,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
 
     /**
      * Set the power of the servo
+     *
      * @param powerTarget the power to set
      * @return a task to set the power
      */
@@ -95,6 +101,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
 
     /**
      * Run the servo for a certain amount of time
+     *
      * @param seconds the amount of time to run for
      * @param atPower the power to run at
      * @return a task to run the servo

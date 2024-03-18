@@ -35,6 +35,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     /**
      * Face the board
+     *
      * @return the claw rotator
      */
     public PersonalityCoreClawRotator faceBoard() {
@@ -44,6 +45,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     /**
      * Face the board
+     *
      * @return a task to face the board
      */
     public Task faceBoardTask() {
@@ -52,6 +54,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     /**
      * Face the ground
+     *
      * @return the claw rotator
      */
     public PersonalityCoreClawRotator faceGround() {
@@ -61,6 +64,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     /**
      * Face the ground
+     *
      * @return a task to face the ground
      */
     public Task faceGroundTask() {
@@ -69,6 +73,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     /**
      * Control the rotator using a controller.
+     *
      * @param y the y value of the controller
      * @return the claw rotator
      */
@@ -80,6 +85,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     /**
      * Control the rotator using a controller. Should be your default task.
+     *
      * @param y the y value of the controller
      * @return a task to control the rotator
      */
@@ -89,6 +95,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     /**
      * Set the position of the claw
+     *
      * @param target the position to set the claw to
      * @return the claw rotator
      */
@@ -99,6 +106,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     /**
      * Set the position of the claw
+     *
      * @param targetPos the position to set the claw to
      * @return a task to set the position
      */
@@ -108,6 +116,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     /**
      * Set the degrees of the claw rotation
+     *
      * @param degrees the degrees to set the claw to
      * @return the claw rotator
      */
@@ -118,6 +127,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
 
     /**
      * Set the degrees of the claw rotation
+     *
      * @param degrees the degrees to set the claw to
      * @return a task to set the degrees
      */

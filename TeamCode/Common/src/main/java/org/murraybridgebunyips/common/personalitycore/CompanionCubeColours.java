@@ -4,6 +4,7 @@ package org.murraybridgebunyips.common.personalitycore;
 /**
  * Companion Cube Game Element, FTC 2023-2024 CENTERSTAGE
  * FTC 15215, 22407
+ *
  * @noinspection MissingJavadoc
  */
 //@Config

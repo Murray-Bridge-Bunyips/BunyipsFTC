@@ -19,20 +19,20 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 /**
  * TeleOp for GLaDOS robot FTC 15215, command-based
  * gamepad1:
- *      left_stick_x: strafe
- *      left_stick_y: forward/backward
- *      right_stick_x: turn
- *      right_trigger: fire cannon
- *      options: reset cannon
+ * left_stick_x: strafe
+ * left_stick_y: forward/backward
+ * right_stick_x: turn
+ * right_trigger: fire cannon
+ * options: reset cannon
  * gamepad2:
- *      x: toggle left claw
- *      b: toggle right claw
- *      y: align claw to board
- *      a: align claw to ground
- *      left_stick_y: actuate the management rail
- *      right_stick_y: move claw mover
- *      dpad_up: extend hook one position
- *      dpad_down: retract hook one position
+ * x: toggle left claw
+ * b: toggle right claw
+ * y: align claw to board
+ * a: align claw to ground
+ * left_stick_y: actuate the management rail
+ * right_stick_y: move claw mover
+ * dpad_up: extend hook one position
+ * dpad_down: retract hook one position
  *
  * @author Lucas Bubner, 2024
  */

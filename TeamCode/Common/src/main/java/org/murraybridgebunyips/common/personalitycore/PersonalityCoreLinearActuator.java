@@ -39,6 +39,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
 
     /**
      * Move the actuator with the controller joystick.
+     *
      * @param y the y value of the controller
      * @return the linear actuator
      */
@@ -49,6 +50,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
 
     /**
      * Move the actuator with the controller joystick. Should be a default task.
+     *
      * @param y the y value of the controller
      * @return a task to move the actuator
      */
@@ -63,6 +65,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
 
     /**
      * Set the power of the actuator.
+     *
      * @param p the power to set
      * @return a task to set the power
      */
@@ -72,7 +75,8 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
 
     /**
      * Run the actuator for a certain amount of time.
-     * @param p the power to run at
+     *
+     * @param p    the power to run at
      * @param time the time to run for in seconds
      * @return a task to run the actuator
      */
@@ -102,6 +106,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
 
     /**
      * Set the position of the actuator.
+     *
      * @param targetPosition the position to set
      * @return a task to set the position
      */
@@ -133,6 +138,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
 
     /**
      * Home the actuator.
+     *
      * @return a task to home the actuator
      */
     public Task homeTask() {

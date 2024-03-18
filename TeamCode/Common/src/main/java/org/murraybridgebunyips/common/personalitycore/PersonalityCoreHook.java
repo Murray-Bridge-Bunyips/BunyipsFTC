@@ -24,6 +24,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
 
     /**
      * Constructs a new PersonalityCoreHook.
+     *
      * @param hook the servo to use
      */
     public PersonalityCoreHook(Servo hook) {
@@ -35,6 +36,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
 
     /**
      * Actuate the hook using a controller
+     *
      * @param y the y value of the controller
      * @return the hook
      */
@@ -46,6 +48,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
 
     /**
      * Actuate the hook manually using a controller joystick.
+     *
      * @param y the y value of the controller
      * @return a task to actuate the hook
      */
@@ -55,6 +58,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
 
     /**
      * Set the position of the hook
+     *
      * @param target the target position
      * @return the hook
      */
@@ -65,6 +69,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
 
     /**
      * Set the position of the hook
+     *
      * @param targetPos the target position
      * @return a task to set the position of the hook
      */
@@ -74,6 +79,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
 
     /**
      * Extend the hook
+     *
      * @return the hook
      */
     public PersonalityCoreHook extend() {
@@ -83,14 +89,16 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
 
     /**
      * Create a task to extend the hook
+     *
      * @return the task
      */
     public Task extendTask() {
-        return new InstantTask(() -> extend(), this, true).withName("ExtendHookTask");
+        return new InstantTask(this::extend, this, true).withName("ExtendHookTask");
     }
 
     /**
      * Retract the hook
+     *
      * @return the hook
      */
     public PersonalityCoreHook retract() {
@@ -100,6 +108,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
 
     /**
      * Create a task to retract the hook
+     *
      * @return the task
      */
     public Task retractTask() {
@@ -108,6 +117,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
 
     /**
      * Upright the hook
+     *
      * @return the hook
      */
     public PersonalityCoreHook upright() {
@@ -117,6 +127,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
 
     /**
      * Create a task to upright the hook
+     *
      * @return the task
      */
     public Task uprightTask() {
