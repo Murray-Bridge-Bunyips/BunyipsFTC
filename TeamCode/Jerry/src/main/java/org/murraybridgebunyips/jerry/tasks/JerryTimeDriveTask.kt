@@ -18,7 +18,7 @@ class JerryTimeDriveTask(
     private val r: Double
 ) : Task(time), RobotTask {
     override fun init() {
-        return
+        // no-op
     }
 
     override fun periodic() {

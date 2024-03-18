@@ -10,6 +10,9 @@ import org.murraybridgebunyips.bunyipslib.tasks.ContinuousTask;
 import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 /**
  * Horizontal CRServo motion for the GLaDOS/Wheatley robot
  *
@@ -41,8 +44,8 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
      * @param y the y value of the controller
      * @return a task to actuate the servo
      */
-    public Task joystickControlTask(double y) {
-        return new ContinuousTask(() -> actuateUsingController(y).update(), this, false).withName("JoystickControlTask");
+    public Task joystickControlTask(DoubleSupplier y) {
+        return new ContinuousTask(() -> actuateUsingController(y.getAsDouble()).update(), this, false).withName("JoystickControlTask");
     }
 
     /**
@@ -66,8 +69,8 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
      * @param down whether the dpad is down
      * @return a task to actuate the servo
      */
-    public Task dpadControlTask(boolean up, boolean down) {
-        return new ContinuousTask(() -> actuateUsingDpad(up, down).update(), this, false).withName("DpadControlTask");
+    public Task dpadControlTask(BooleanSupplier up, BooleanSupplier down) {
+        return new ContinuousTask(() -> actuateUsingDpad(up.getAsBoolean(), down.getAsBoolean()).update(), this, false).withName("DpadControlTask");
     }
 
     /**

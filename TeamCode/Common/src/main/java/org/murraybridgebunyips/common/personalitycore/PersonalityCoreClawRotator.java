@@ -10,6 +10,8 @@ import org.murraybridgebunyips.bunyipslib.tasks.ContinuousTask;
 import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
+import java.util.function.DoubleSupplier;
+
 /**
  * Rotation/claw rotational alignment for the GLaDOS/Wheatley robot
  *
@@ -80,8 +82,8 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
      * @param y the y value of the controller
      * @return a task to control the rotator
      */
-    public Task controlRotatorTask(double y) {
-        return new ContinuousTask(() -> actuateUsingController(y).update(), this, false).withName("ControlRotatorTask");
+    public Task joystickControlTask(DoubleSupplier y) {
+        return new ContinuousTask(() -> actuateUsingController(y.getAsDouble()).update(), this, false).withName("ControlRotatorTask");
     }
 
     /**

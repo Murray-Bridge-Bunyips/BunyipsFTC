@@ -10,6 +10,8 @@ import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.NoTimeoutTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
+import java.util.function.DoubleSupplier;
+
 /**
  * Vertical motion motor controller for the GLaDOS/Wheatley robot.
  *
@@ -49,8 +51,8 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      * @param y the y value of the controller
      * @return a task to move the actuator
      */
-    public Task joystickControlTask(double y) {
-        return new ContinuousTask(() -> actuateUsingController(y).update(), this, false).withName("JoystickControlTask");
+    public Task joystickControlTask(DoubleSupplier y) {
+        return new ContinuousTask(() -> actuateUsingController(y.getAsDouble()).update(), this, false).withName("JoystickControlTask");
     }
 
     public PersonalityCoreLinearActuator setPower(double p) {
@@ -103,7 +105,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      * @return a task to set the position
      */
     public Task gotoTask(int targetPosition) {
-        return new NoTimeoutTask() {
+        return new NoTimeoutTask(this, true) {
             @Override
             public void init() {
                 lockout = true;
@@ -133,7 +135,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      * @return a task to home the actuator
      */
     public Task homeTask() {
-        return new NoTimeoutTask() {
+        return new NoTimeoutTask(this, true) {
             @Override
             public void init() {
                 lockout = true;
