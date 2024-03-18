@@ -46,7 +46,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
      * @return a task to actuate the servo
      */
     public Task joystickControlTask(DoubleSupplier y) {
-        return new ContinuousTask(() -> actuateUsingController(y.getAsDouble()).update(), this, false).withName("JoystickControlTask");
+        return new ContinuousTask(() -> actuateUsingController(y.getAsDouble()), this, false).withName("JoystickControlTask");
     }
 
     /**
@@ -71,7 +71,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
      * @return a task to actuate the servo
      */
     public Task dpadControlTask(BooleanSupplier up, BooleanSupplier down) {
-        return new ContinuousTask(() -> actuateUsingDpad(up.getAsBoolean(), down.getAsBoolean()).update(), this, false).withName("DpadControlTask");
+        return new ContinuousTask(() -> actuateUsingDpad(up.getAsBoolean(), down.getAsBoolean()), this, false).withName("DpadControlTask");
     }
 
     /**
@@ -90,7 +90,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
      * @return a task to set the power
      */
     public Task setPowerTask(double powerTarget) {
-        return new InstantTask(() -> setPower(powerTarget).update(), this, true).withName("SetPowerTask");
+        return new InstantTask(() -> setPower(powerTarget), this, true).withName("SetPowerTask");
     }
 
     /**

@@ -53,7 +53,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      * @return a task to move the actuator
      */
     public Task joystickControlTask(DoubleSupplier y) {
-        return new ContinuousTask(() -> actuateUsingController(y.getAsDouble()).update(), this, false).withName("JoystickControlTask");
+        return new ContinuousTask(() -> actuateUsingController(y.getAsDouble()), this, false).withName("JoystickControlTask");
     }
 
     public PersonalityCoreLinearActuator setPower(double p) {
@@ -67,7 +67,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      * @return a task to set the power
      */
     public Task setPowerTask(double p) {
-        return new InstantTask(() -> setPower(p).update(), this, false).withName("SetPowerTask");
+        return new InstantTask(() -> setPower(p), this, false).withName("SetPowerTask");
     }
 
     /**

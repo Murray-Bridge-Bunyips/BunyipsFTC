@@ -50,7 +50,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
      * @return a task to actuate the hook
      */
     public Task controlHookTask(double y) {
-        return new ContinuousTask(() -> actuateUsingController(y).update(), this, false).withName("ControlHookTask");
+        return new ContinuousTask(() -> actuateUsingController(y), this, false).withName("ControlHookTask");
     }
 
     /**
@@ -69,7 +69,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
      * @return a task to set the position of the hook
      */
     public Task setPositionTask(double targetPos) {
-        return new InstantTask(() -> setPosition(targetPos).update(), this, true).withName("SetPositionTask");
+        return new InstantTask(() -> setPosition(targetPos), this, true).withName("SetPositionTask");
     }
 
     /**
@@ -86,7 +86,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
      * @return the task
      */
     public Task extendTask() {
-        return new InstantTask(() -> extend().update(), this, true).withName("ExtendHookTask");
+        return new InstantTask(() -> extend(), this, true).withName("ExtendHookTask");
     }
 
     /**
@@ -103,7 +103,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
      * @return the task
      */
     public Task retractTask() {
-        return new InstantTask(() -> retract().update(), this, true).withName("RetractHookTask");
+        return new InstantTask(this::retract, this, true).withName("RetractHookTask");
     }
 
     /**
@@ -120,7 +120,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
      * @return the task
      */
     public Task uprightTask() {
-        return new InstantTask(() -> upright().update(), this, true).withName("UprightHookTask");
+        return new InstantTask(this::upright, this, true).withName("UprightHookTask");
     }
 
     @Override

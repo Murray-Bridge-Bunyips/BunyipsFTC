@@ -38,8 +38,8 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  */
 @TeleOp(name = "TeleOp (Command Based)")
 public class GLaDOSTeleOpCommand extends CommandBasedBunyipsOpMode {
-    private final InputMultiplier speed = new InputMultiplier(0.25, 0.5, 1.0).withDefaultIndex(1);
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private InputMultiplier speed;
     private MecanumDrive drive;
     private PersonalityCoreClawRotator clawRotator;
     private PersonalityCoreForwardServo pixelMotion;
@@ -57,13 +57,14 @@ public class GLaDOSTeleOpCommand extends CommandBasedBunyipsOpMode {
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelEncoder, config.perpendicularEncoder
         );
+        speed = new InputMultiplier(0.25, 0.5, 1.0).withDefaultIndex(1).withName("Drive");
         cannon = new Cannon(config.launcher);
         clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
         pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
         hook = new PersonalityCoreHook(config.suspenderHook);
         linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
         claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
-        addSubsystems(drive, clawRotator, pixelMotion, hook, linearActuator, claws, cannon);
+        addSubsystems(drive, clawRotator, pixelMotion, hook, linearActuator, claws, cannon, speed);
     }
 
     @Override
@@ -87,7 +88,7 @@ public class GLaDOSTeleOpCommand extends CommandBasedBunyipsOpMode {
         scheduler().whenPressed(Controller.User.ONE, Controller.LEFT_BUMPER)
                 .run(speed.decrementTask());
 
-        scheduler().when(() -> gamepad2.right_trigger == 1.0)
+        scheduler().when(() -> gamepad1.right_trigger == 1.0)
                 .run(cannon.fireTask());
         scheduler().whenPressed(Controller.User.ONE, Controller.BACK)
                 .run(cannon.resetTask());
@@ -97,6 +98,6 @@ public class GLaDOSTeleOpCommand extends CommandBasedBunyipsOpMode {
         scheduler().whenPressed(Controller.User.ONE, Controller.DPAD_DOWN)
                 .run(hook.retractTask());
 
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, speed::getMultiplier, () -> false));
     }
 }
