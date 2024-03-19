@@ -25,15 +25,13 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  * gamepad2:<br>
  * x: toggle left claw<br>
  * b: toggle right claw<br>
- * y: align claw to board<br>
- * a: align claw to ground<br>
  * left_stick_y: actuate the management rail<br>
  * right_stick_y: move claw mover<br>
  * dpad_up: extend hook one position<br>
  * dpad_down: retract hook one position<br>
  *
- * @author Lachlan Paul, 2023
- * @author Lucas Bubner, 2023
+ * @author Lachlan Paul, 2024
+ * @author Lucas Bubner, 2024
  */
 
 @TeleOp(name = "TeleOp")
@@ -41,10 +39,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     private final WheatleyConfig config = new WheatleyConfig();
     private MecanumDrive drive;
     private Cannon cannon;
-    private PersonalityCoreClawRotator clawRotator;
-    private PersonalityCoreForwardServo pixelMotion;
     private PersonalityCoreHook hook;
-    private PersonalityCoreLinearActuator linearActuator;
     private DualServos claws;
 
     private boolean xPressed;
@@ -58,10 +53,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
         cannon = new Cannon(config.launcher);
-        clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
-        pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
         hook = new PersonalityCoreHook(config.suspenderHook);
-        linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
         claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
     }
 
@@ -92,23 +84,10 @@ public class WheatleyTeleOp extends BunyipsOpMode {
             claws.toggleServo(DualServos.ServoSide.RIGHT);
         }
 
-        // Claw alignment
-        if (gamepad2.y) {
-            clawRotator.faceBoard();
-        } else if (gamepad2.a) {
-            clawRotator.faceGround();
-        }
-        clawRotator.actuateUsingController(gamepad2.right_stick_y);
-
-        // Management rail controls
-        linearActuator.actuateUsingController(gamepad2.left_stick_y);
-
-        // Claw mover controls
-        pixelMotion.actuateUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);
-
         // Hook controls
         if (gamepad1.dpad_up) {
             hook.extend();
+            addTelemetry("They told me to never, ever, ever detach myself from this rail, or I'd DIE.");
         } else if (gamepad1.dpad_down) {
             hook.retract();
         }
@@ -120,10 +99,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         // Send stateful updates to the hardware
         drive.update();
         claws.update();
-        clawRotator.update();
-        pixelMotion.update();
         hook.update();
-        linearActuator.update();
         cannon.update();
     }
 }

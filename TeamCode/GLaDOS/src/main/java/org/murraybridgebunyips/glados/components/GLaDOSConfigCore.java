@@ -21,7 +21,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.util.Encoder;
 /**
  * FTC 15215 CENTERSTAGE 2023-2024 robot configuration
  *
- * @author Lucas Bubner, 2023
+ * @author Lucas Bubner, 2024
  */
 public class GLaDOSConfigCore extends RobotConfig {
     /**
@@ -128,8 +128,6 @@ public class GLaDOSConfigCore extends RobotConfig {
             suspenderHook.scaleRange(0.25, 1);
 
         // Pixel manipulation system
-        pixelMotion = (CRServo) getHardware("pm", CRServo.class);
-        pixelAlignment = (Servo) getHardware("al", Servo.class);
         leftPixel = (Servo) getHardware("ls", Servo.class);
         rightPixel = (Servo) getHardware("rs", Servo.class);
 

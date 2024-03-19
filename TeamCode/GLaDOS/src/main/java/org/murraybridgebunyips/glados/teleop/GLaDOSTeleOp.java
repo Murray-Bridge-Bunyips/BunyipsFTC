@@ -32,7 +32,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * dpad_up: extend hook one position
  * dpad_down: retract hook one position
  *
- * @author Lucas Bubner, 2023
+ * @author Lucas Bubner, 2024
  */
 @TeleOp(name = "TeleOp")
 public class GLaDOSTeleOp extends BunyipsOpMode {

@@ -26,7 +26,7 @@ import java.util.List;
  * X for Long Red<p></p>
  * Y for Long Blue<p></p>
  *
- * @author Lachlan Paul, 2023
+ * @author Lachlan Paul, 2024
  */
 
 @Autonomous(name = "Right Park Auto")

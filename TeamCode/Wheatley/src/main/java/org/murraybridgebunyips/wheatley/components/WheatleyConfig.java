@@ -19,8 +19,8 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 /**
  * Wheatley robot configuration and hardware declarations
  *
- * @author Lucas Bubner, 2023
- * @author Lachlan Paul, 2023
+ * @author Lucas Bubner, 2024
+ * @author Lachlan Paul, 2024
  */
 
 public class WheatleyConfig extends RobotConfig {
@@ -92,16 +92,6 @@ public class WheatleyConfig extends RobotConfig {
     public Servo rightPixel;
 
     /**
-     * Control Servo 4: Pixel Alignment Servo "al"
-     */
-    public Servo pixelAlignment;
-
-    /**
-     * Control Servo 5: Pixel Forward Motion Servo "pm"
-     */
-    public CRServo pixelMotion;
-
-    /**
      * RoadRunner drive constants
      */
     public DriveConstants driveConstants;
@@ -144,10 +134,6 @@ public class WheatleyConfig extends RobotConfig {
         }
 
         // Pixel manipulation system
-        pixelMotion = (CRServo) getHardware("pm", CRServo.class);
-        pixelAlignment = (Servo) getHardware("al", Servo.class);
-        if (pixelAlignment != null)
-            pixelAlignment.scaleRange(0.37, 1.0);
         leftPixel = (Servo) getHardware("ls", Servo.class);
         rightPixel = (Servo) getHardware("rs", Servo.class);
 
