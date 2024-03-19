@@ -2,7 +2,6 @@ package org.murraybridgebunyips.wheatley.components;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -102,14 +101,14 @@ public class WheatleyConfig extends RobotConfig {
 
     @Override
     protected void onRuntime() {
-        webcam = (WebcamName) getHardware("webcame", WebcamName.class);
+        webcam = getHardware("webcame", WebcamName.class);
 
         // Motor directions configured to work with current config
-        fl = (DcMotorEx) getHardware("fl", DcMotorEx.class);
-        bl = (DcMotorEx) getHardware("bl", DcMotorEx.class);
-        fr = (DcMotorEx) getHardware("fr", DcMotorEx.class);
-        br = (DcMotorEx) getHardware("br", DcMotorEx.class);
-        imu = (IMU) getHardware("imu", IMU.class);
+        fl = getHardware("fl", DcMotorEx.class);
+        bl = getHardware("bl", DcMotorEx.class);
+        fr = getHardware("fr", DcMotorEx.class);
+        br = getHardware("br", DcMotorEx.class);
+        imu = getHardware("imu", IMU.class);
 
         if (fr != null)
             fr.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -124,8 +123,8 @@ public class WheatleyConfig extends RobotConfig {
             bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Suspender/pixel upward motion system
-        suspenderActuator = (DcMotorEx) getHardware("sa", DcMotorEx.class);
-        suspenderHook = (Servo) getHardware("sh", Servo.class);
+        suspenderActuator = getHardware("sa", DcMotorEx.class);
+        suspenderHook = getHardware("sh", Servo.class);
         if (suspenderHook != null)
             suspenderHook.scaleRange(0.6, 1);
         if (suspenderActuator != null) {
@@ -134,11 +133,11 @@ public class WheatleyConfig extends RobotConfig {
         }
 
         // Pixel manipulation system
-        leftPixel = (Servo) getHardware("ls", Servo.class);
-        rightPixel = (Servo) getHardware("rs", Servo.class);
+        leftPixel = getHardware("ls", Servo.class);
+        rightPixel = getHardware("rs", Servo.class);
 
         // Paper Drone launcher system
-        launcher = (Servo) getHardware("pl", Servo.class);
+        launcher = getHardware("pl", Servo.class);
 
         boolean res = imu != null && imu.initialize(
                 new IMU.Parameters(

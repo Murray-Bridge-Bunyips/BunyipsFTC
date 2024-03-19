@@ -101,38 +101,38 @@ public class GLaDOSConfigCore extends RobotConfig {
     @Override
     protected void onRuntime() {
         // Sensors
-        webcam = (WebcamName) getHardware("webcam", WebcamName.class);
-        imu = (IMU) getHardware("imu", IMU.class);
+        webcam = getHardware("webcam", WebcamName.class);
+        imu = getHardware("imu", IMU.class);
 
         // Mecanum system
-        frontLeft = (DcMotorEx) getHardware("fl", DcMotorEx.class);
-        frontRight = (DcMotorEx) getHardware("fr", DcMotorEx.class);
-        backRight = (DcMotorEx) getHardware("br", DcMotorEx.class);
-        backLeft = (DcMotorEx) getHardware("bl", DcMotorEx.class);
-        DcMotorEx pe = (DcMotorEx) getHardware("pe", DcMotorEx.class);
+        frontLeft = getHardware("fl", DcMotorEx.class);
+        frontRight = getHardware("fr", DcMotorEx.class);
+        backRight = getHardware("br", DcMotorEx.class);
+        backLeft = getHardware("bl", DcMotorEx.class);
+        DcMotorEx pe = getHardware("pe", DcMotorEx.class);
         if (pe != null) {
             parallelEncoder = new Encoder(pe);
             parallelEncoder.setDirection(Encoder.Direction.FORWARD);
         }
 
-        DcMotorEx ppe = (DcMotorEx) getHardware("ppe", DcMotorEx.class);
+        DcMotorEx ppe = getHardware("ppe", DcMotorEx.class);
         if (ppe != null) {
             perpendicularEncoder = new Encoder(ppe);
             perpendicularEncoder.setDirection(Encoder.Direction.FORWARD);
         }
 
         // Suspender/pixel upward motion system
-        suspenderActuator = (DcMotorEx) getHardware("sa", DcMotorEx.class);
-        suspenderHook = (Servo) getHardware("sh", Servo.class);
+        suspenderActuator = getHardware("sa", DcMotorEx.class);
+        suspenderHook = getHardware("sh", Servo.class);
         if (suspenderHook != null)
             suspenderHook.scaleRange(0.25, 1);
 
         // Pixel manipulation system
-        leftPixel = (Servo) getHardware("ls", Servo.class);
-        rightPixel = (Servo) getHardware("rs", Servo.class);
+        leftPixel = getHardware("ls", Servo.class);
+        rightPixel = getHardware("rs", Servo.class);
 
         // Paper Drone launcher system
-        launcher = (Servo) getHardware("pl", Servo.class);
+        launcher = getHardware("pl", Servo.class);
 
         // Motor specifics configuration
         if (frontRight != null)
