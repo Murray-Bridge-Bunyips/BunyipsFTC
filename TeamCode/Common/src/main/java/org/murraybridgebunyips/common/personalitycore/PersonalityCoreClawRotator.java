@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.tasks.ContinuousTask;
-import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
+import org.murraybridgebunyips.bunyipslib.tasks.CallbackTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
 import java.util.function.DoubleSupplier;
@@ -49,7 +49,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
      * @return a task to face the board
      */
     public Task faceBoardTask() {
-        return new InstantTask(this::faceBoard, this, true).withName("FaceBoardTask");
+        return new CallbackTask(this::faceBoard, this, true).withName("FaceBoardTask");
     }
 
     /**
@@ -68,7 +68,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
      * @return a task to face the ground
      */
     public Task faceGroundTask() {
-        return new InstantTask(this::faceGround, this, true).withName("FaceGroundTask");
+        return new CallbackTask(this::faceGround, this, true).withName("FaceGroundTask");
     }
 
     /**
@@ -111,7 +111,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
      * @return a task to set the position
      */
     public Task setPositionTask(double targetPos) {
-        return new InstantTask(() -> setPosition(targetPos), this, true).withName("SetPositionTask");
+        return new CallbackTask(() -> setPosition(targetPos), this, true).withName("SetPositionTask");
     }
 
     /**
@@ -132,7 +132,7 @@ public class PersonalityCoreClawRotator extends BunyipsSubsystem {
      * @return a task to set the degrees
      */
     public Task setDegreesTask(double degrees) {
-        return new InstantTask(() -> setDegrees(degrees), this, true).withName("SetDegreesTask");
+        return new CallbackTask(() -> setDegrees(degrees), this, true).withName("SetDegreesTask");
     }
 
     @Override
