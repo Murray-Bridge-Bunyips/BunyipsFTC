@@ -2,10 +2,10 @@ package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
@@ -14,6 +14,7 @@ import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
  * Basic autonomous that guarantees the robot will park in a corner or centre.
  * Incredibly simple, uses only time drive.
  */
+@Suppress("KDocMissingDocumentation")
 @Autonomous(
     name = "PowerPlay Left-Right Junction Park",
     group = "JERRY",

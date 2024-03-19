@@ -31,6 +31,6 @@ class JerryLiftTask(
     }
 
     override fun onFinish() {
-        return
+        // no-op
     }
 }

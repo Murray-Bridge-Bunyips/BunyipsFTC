@@ -1,7 +1,7 @@
 package org.murraybridgebunyips.jerry.tasks
 
-import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 import kotlin.math.abs
@@ -47,9 +47,30 @@ class JerryPrecisionDriveTask(
         this.power = abs(power)
     }
 
+    /**
+     * Defines which directions the robot can travel.
+     * Deprecated in favour of RelativePose2d.
+     */
     enum class Directions {
-        // Use RelativePose2d instead
-        LEFT, RIGHT, FORWARD, BACKWARD
+        /**
+         * Move left
+         */
+        LEFT,
+
+        /**
+         * Move right
+         */
+        RIGHT,
+
+        /**
+         * Move forward
+         */
+        FORWARD,
+
+        /**
+         * Move backward
+         */
+        BACKWARD
     }
 
     override fun isTaskFinished(): Boolean {

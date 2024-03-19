@@ -19,8 +19,8 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 /**
  * Wheatley robot configuration and hardware declarations
  *
- * @author Lucas Bubner, 2023
- * @author Lachlan Paul, 2023
+ * @author Lucas Bubner, 2024
+ * @author Lachlan Paul, 2024
  */
 
 public class WheatleyConfig extends RobotConfig {
@@ -35,50 +35,73 @@ public class WheatleyConfig extends RobotConfig {
     //    left_front = hardwareMap.get(DcMotor.class, "left_front");
     //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
 
-    // Expansion 0: bl
-    public DcMotorEx bl;
 
-    // Expansion 1: fl
-    public DcMotorEx fl;
-
-    // Expansion 2: fr
-    public DcMotorEx /*Are you*/ fr /*Or jk*/;
-
-    // Expansion 3: br
-    public DcMotorEx br;
-
-    // Control 0: Suspender Actuator "sa"
-    public DcMotorEx suspenderActuator;
-
-    // Control Servo 0: Plane Launcher "pl"
-    public Servo launcher;
-
-    // Control Servo 1: Suspension Hook "sh"
-    public Servo suspenderHook;
-
-    // Control Servo 2: Left Servo "ls"
-    public Servo leftPixel;
-
-    // Control Servo 3: Right Servo "rs"
-    public Servo rightPixel;
-
-    // Control Servo 4: Pixel Alignment Servo "al"
-    public Servo pixelAlignment;
-
-    // Control Servo 5: Pixel Forward Motion Servo "pm"
-    public CRServo pixelMotion;
-
-    // USB: Webcam "webcam"
+    /**
+     * USB: Webcam "webcam"
+     */
     public WebcamName webcam;
 
-    // Internally mounted on I2C C0 "imu"
+    /**
+     * Internally mounted on I2C C0 "imu"
+     */
     public IMU imu;
 
+    /**
+     * Expansion 0: bl
+     */
+    public DcMotorEx bl;
+
+    /**
+     * Expansion 1: fl
+     */
+    public DcMotorEx fl;
+
+    /**
+     * Expansion 2: fr
+     */
+    public DcMotorEx /*Are you*/ fr /*Or jk*/;
+
+    /**
+     * Expansion 3: br
+     */
+    public DcMotorEx br;
+
+    /**
+     * Control 0: Suspender Actuator "sa"
+     */
+    public DcMotorEx suspenderActuator;
+
+    /**
+     * Control Servo 0: Plane Launcher "pl"
+     */
+    public Servo launcher;
+
+    /**
+     * Control Servo 1: Suspension Hook "sh"
+     */
+    public Servo suspenderHook;
+
+    /**
+     * Control Servo 2: Left Servo "ls"
+     */
+    public Servo leftPixel;
+
+    /**
+     * Control Servo 3: Right Servo "rs"
+     */
+    public Servo rightPixel;
+
+    /**
+     * RoadRunner drive constants
+     */
     public DriveConstants driveConstants;
+    /**
+     * RoadRunner Mecanum coefficients
+     */
     public MecanumCoefficients mecanumCoefficients;
 
     @Override
-    protected void configureHardware() {
+    protected void onRuntime() {
         webcam = (WebcamName) getHardware("webcame", WebcamName.class);
 
         // Motor directions configured to work with current config
@@ -111,10 +134,6 @@ public class WheatleyConfig extends RobotConfig {
         }
 
         // Pixel manipulation system
-        pixelMotion = (CRServo) getHardware("pm", CRServo.class);
-        pixelAlignment = (Servo) getHardware("al", Servo.class);
-        if (pixelAlignment != null)
-            pixelAlignment.scaleRange(0.37, 1.0);
         leftPixel = (Servo) getHardware("ls", Servo.class);
         rightPixel = (Servo) getHardware("rs", Servo.class);
 

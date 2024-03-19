@@ -21,46 +21,85 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.util.Encoder;
 /**
  * FTC 15215 CENTERSTAGE 2023-2024 robot configuration
  *
- * @author Lucas Bubner, 2023
+ * @author Lucas Bubner, 2024
  */
 public class GLaDOSConfigCore extends RobotConfig {
-    // USB: Webcam "webcam"
+    /**
+     * USB: Webcam "webcam"
+     */
     public WebcamName webcam;
-    // Expansion 0: Front Left "fl"
+    /**
+     * Expansion 0: Front Left "fl"
+     */
     public DcMotorEx frontLeft;
-    // Expansion 1: Front Right "fr"
+    /**
+     * Expansion 1: Front Right "fr"
+     */
     public DcMotorEx frontRight;
-    // Expansion 2: Back Right "br"
+    /**
+     * Expansion 2: Back Right "br"
+     */
     public DcMotorEx backRight;
-    // Expansion 3: Back Left "bl"
+    /**
+     * Expansion 3: Back Left "bl"
+     */
     public DcMotorEx backLeft;
-    // Control 2: Parallel Encoder "pe"
+    /**
+     * Control 2: Parallel Encoder "pe"
+     */
     public Encoder parallelEncoder;
-    // Control 3: Perpendicular Encoder "ppe"
+    /**
+     * Control 3: Perpendicular Encoder "ppe"
+     */
     public Encoder perpendicularEncoder;
-    // Control 0: Suspender Actuator "sa"
+    /**
+     * Control 0: Suspender Actuator "sa"
+     */
     public DcMotorEx suspenderActuator;
-    // Control Servo 5: Pixel Forward Motion Servo "pm"
+    /**
+     * Control Servo 5: Pixel Forward Motion Servo "pm"
+     */
     public CRServo pixelMotion;
-    // Control Servo 4: Pixel Alignment Servo "al"
+    /**
+     * Control Servo 4: Pixel Alignment Servo "al"
+     */
     public Servo pixelAlignment;
-    // Control Servo 2: Left Servo "ls"
+    /**
+     * Control Servo 2: Left Servo "ls"
+     */
     public Servo leftPixel;
-    // Control Servo 3: Right Servo "rs"
+    /**
+     * Control Servo 3: Right Servo "rs"
+     */
     public Servo rightPixel;
-    // Control Servo 1: Suspension Hook "sh"
+    /**
+     * Control Servo 1: Suspension Hook "sh"
+     */
     public Servo suspenderHook;
-    // Control Servo ?: Plane Launcher "pl"
+    /**
+     * Control Servo ?: Plane Launcher "pl"
+     */
     public Servo launcher;
-    // Internally mounted on I2C C0 "imu"
+    /**
+     * Internally mounted on I2C C0 "imu"
+     */
     public IMU imu;
 
+    /**
+     * RoadRunner drive constants
+     */
     public DriveConstants driveConstants;
+    /**
+     * Dual deadwheel intrinsics
+     */
     public TwoWheelTrackingLocalizerCoefficients localizerCoefficients;
+    /**
+     * Mecanum coefficients
+     */
     public MecanumCoefficients mecanumCoefficients;
 
     @Override
-    protected void configureHardware() {
+    protected void onRuntime() {
         // Sensors
         webcam = (WebcamName) getHardware("webcam", WebcamName.class);
         imu = (IMU) getHardware("imu", IMU.class);
@@ -89,8 +128,6 @@ public class GLaDOSConfigCore extends RobotConfig {
             suspenderHook.scaleRange(0.25, 1);
 
         // Pixel manipulation system
-        pixelMotion = (CRServo) getHardware("pm", CRServo.class);
-        pixelAlignment = (Servo) getHardware("al", Servo.class);
         leftPixel = (Servo) getHardware("ls", Servo.class);
         rightPixel = (Servo) getHardware("rs", Servo.class);
 

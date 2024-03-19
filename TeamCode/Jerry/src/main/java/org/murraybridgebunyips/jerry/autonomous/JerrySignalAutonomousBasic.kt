@@ -3,12 +3,12 @@ package org.murraybridgebunyips.jerry.autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
-import org.murraybridgebunyips.bunyipslib.vision.Vision
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryTimeDriveTask
 
@@ -16,6 +16,7 @@ import org.murraybridgebunyips.jerry.tasks.JerryTimeDriveTask
  * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
  * Uses TimeDrive (which is deprecated), but works.
  */
+@Suppress("KDocMissingDocumentation")
 @Disabled
 @Autonomous(
     name = "PowerPlay Signal Read & Park w/ TIME DRIVE",

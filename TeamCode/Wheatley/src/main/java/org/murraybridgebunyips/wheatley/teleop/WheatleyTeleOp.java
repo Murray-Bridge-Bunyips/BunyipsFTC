@@ -6,30 +6,32 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.NullSafety;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreArm;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreClawRotator;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreForwardServo;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreHook;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
  * Primary TeleOp for all of Wheatley's functions.
- * gamepad1:
- *      left_stick_x: strafe
- *      left_stick_y: forward/backward
- *      right_stick_x: turn
- *      right_trigger: fire cannon
- *      options: reset cannon
- * gamepad2:
- *      x: toggle left claw
- *      b: toggle right claw
- *      y: align claw to board
- *      a: align claw to ground
- *      left_stick_y: actuate the management rail
- *      right_stick_y: move claw mover
- *      dpad_up: extend hook one position
- *      dpad_down: retract hook one position
+ * <p></p>
+ * gamepad1:<br>
+ * left_stick_x: strafe<br>
+ * left_stick_y: forward/backward<br>
+ * right_stick_x: turn<br>
+ * right_trigger: fire cannon<br>
+ * options: reset cannon<br>
+ * <p></p>
+ * gamepad2:<br>
+ * x: toggle left claw<br>
+ * b: toggle right claw<br>
+ * left_stick_y: actuate the management rail<br>
+ * right_stick_y: move claw mover<br>
+ * dpad_up: extend hook one position<br>
+ * dpad_down: retract hook one position<br>
  *
- * @author Lachlan Paul, 2023
- * @author Lucas Bubner, 2023
+ * @author Lachlan Paul, 2024
+ * @author Lucas Bubner, 2024
  */
 
 @TeleOp(name = "TeleOp")
@@ -37,7 +39,8 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     private final WheatleyConfig config = new WheatleyConfig();
     private MecanumDrive drive;
     private Cannon cannon;
-    private PersonalityCoreArm arm;
+    private PersonalityCoreHook hook;
+    private DualServos claws;
 
     private boolean xPressed;
     private boolean bPressed;
@@ -49,11 +52,9 @@ public class WheatleyTeleOp extends BunyipsOpMode {
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
-        if (NullSafety.assertComponentArgs(Cannon.class, config.launcher))
-            cannon = new Cannon(config.launcher);
-        arm = new PersonalityCoreArm(config.pixelMotion, config.pixelAlignment,
-                config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel
-        );
+        cannon = new Cannon(config.launcher);
+        hook = new PersonalityCoreHook(config.suspenderHook);
+        claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
     }
 
     @Override
@@ -78,30 +79,17 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
         // Claw controls
         if (gamepad2.x && !xPressed) {
-            arm.toggleClaw(DualServos.ServoSide.LEFT);
+            claws.toggleServo(DualServos.ServoSide.LEFT);
         } else if (gamepad2.b && !bPressed) {
-            arm.toggleClaw(DualServos.ServoSide.RIGHT);
+            claws.toggleServo(DualServos.ServoSide.RIGHT);
         }
-
-        // Claw alignment
-        if (gamepad2.y) {
-            arm.faceClawToBoard();
-        } else if (gamepad2.a) {
-            arm.faceClawToGround();
-        }
-        arm.actuateClawRotatorUsingController(gamepad2.right_stick_y);
-
-        // Management rail controls
-        arm.actuateManagementRailUsingController(gamepad2.left_stick_y);
-
-        // Claw mover controls
-        arm.actuateClawMoverUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);
 
         // Hook controls
         if (gamepad1.dpad_up) {
-            arm.extendHook();
+            hook.extend();
+            addTelemetry("They told me to never, ever, ever detach myself from this rail, or I'd DIE.");
         } else if (gamepad1.dpad_down) {
-            arm.retractHook();
+            hook.retract();
         }
 
         // Register actions only once per press
@@ -110,7 +98,8 @@ public class WheatleyTeleOp extends BunyipsOpMode {
 
         // Send stateful updates to the hardware
         drive.update();
-        arm.update();
+        claws.update();
+        hook.update();
         cannon.update();
     }
 }

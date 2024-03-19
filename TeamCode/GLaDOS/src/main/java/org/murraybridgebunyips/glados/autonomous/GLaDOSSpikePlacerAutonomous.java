@@ -14,20 +14,21 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.DualServos;
-import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.Inches;
-import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
-import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreArm;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
-import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
+import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.TeamProp;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreClawRotator;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreForwardServo;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreHook;
+import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
-import org.murraybridgebunyips.glados.tasks.GLaDOSRunManagementRailTask;
 
 import java.util.List;
 
@@ -37,7 +38,13 @@ import java.util.List;
 @Autonomous(name = "Spike Mark Placer")
 public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
-    private PersonalityCoreArm arm;
+    private PersonalityCoreClawRotator clawRotator;
+    // TODO: test this auton
+    private PersonalityCoreForwardServo pixelMotion;
+    private PersonalityCoreHook hook;
+    private PersonalityCoreLinearActuator linearActuator;
+    private DualServos claws;
+
     private GetTeamPropTask initTask;
     private Vision vision;
     private TeamProp processor;
@@ -47,8 +54,18 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
     protected void onInitialise() {
         config.init();
         vision = new Vision(config.webcam);
-        initTask = new GetTeamPropTask(vision);
-        arm = new PersonalityCoreArm(config.pixelMotion, config.pixelAlignment, config.suspenderHook, config.suspenderActuator, config.leftPixel, config.rightPixel);
+        processor = new TeamProp();
+        initTask = new GetTeamPropTask(processor);
+
+        clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
+        pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
+        hook = new PersonalityCoreHook(config.suspenderHook);
+        linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
+        claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
+
+        vision.init(processor);
+        vision.flip();
+        vision.start(processor);
     }
 
     @Override
@@ -77,21 +94,18 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
         switch (startingPosition) {
             case STARTING_RED_LEFT:
             case STARTING_RED_RIGHT:
-                processor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);
+                processor.setColours(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);
                 break;
 
             case STARTING_BLUE_LEFT:
             case STARTING_BLUE_RIGHT:
-                processor = new TeamProp(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
+                processor.setColours(BLUE_ELEMENT_R, BLUE_ELEMENT_G, BLUE_ELEMENT_B);
                 break;
         }
-        vision.init(processor);
-        vision.flip();
-        initTask.setTeamProp(processor);
 
-        addTask(new InstantTask(() -> arm.setClawRotatorDegrees(10).update()));
-        addTask(new GLaDOSRunManagementRailTask(1.0, arm.getManagementRail(), 1.0));
-        addTask(new InstantTask(() -> arm.openClaw(DualServos.ServoSide.LEFT).update()));
+        addTask(clawRotator.setDegreesTask(10));
+        addTask(linearActuator.gotoTask(100));
+        addTask(claws.openServoTask(DualServos.ServoSide.LEFT));
     }
 
     @Override

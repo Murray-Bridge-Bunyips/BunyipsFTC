@@ -3,9 +3,9 @@ package org.murraybridgebunyips.jerry.debug
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryIMURotationTask
@@ -15,6 +15,7 @@ import org.murraybridgebunyips.jerry.tasks.JerryIMURotationTask
  * @author Lachlan Paul, 2023
  */
 
+@Suppress("KDocMissingDocumentation")
 @Disabled
 @Autonomous(name = "IMU Rotate Test")
 class JerryIMURotateTest : AutonomousBunyipsOpMode() {

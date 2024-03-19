@@ -18,6 +18,9 @@ class JerryLift(
     private var arm2: DcMotorEx,
     private var limit: TouchSensor
 ) : BunyipsComponent() {
+    /**
+     * The power the arm should be set to, automatically clamped between -0.2 and 1.0
+     */
     var power: Double = POSITIONAL_POWER
         set(power) {
             // Paranoia, ensure the arm doesn't go past the hard limit when taking power commands
@@ -95,9 +98,19 @@ class JerryLift(
         5.0
     )
 
-    // Handle both manual and positional control modes
+    /**
+     * The mode of control the arm is currently in
+     */
     enum class ControlMode {
-        MANUAL, POSITIONAL
+        /**
+         * Responds to user input to move the arm
+         */
+        MANUAL,
+
+        /**
+         * Moves the arm to a specific position
+         */
+        POSITIONAL
     }
 
     init {
@@ -245,6 +258,9 @@ class JerryLift(
         releaseLock.engage()
     }
 
+    /**
+     * Propagate changes to the arm system.
+     */
     fun update() {
         // While a reset or release is in progress, do not allow any other operations
         if (resetLock.run()) return
