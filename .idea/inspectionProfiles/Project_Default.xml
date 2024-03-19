@@ -92,7 +92,6 @@
     </inspection_tool>
     <inspection_tool class="HtmlTagCanBeJavadocTag" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="IOStreamConstructor" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="InconsistentLineSeparators" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="IncorrectFormatting" enabled="true" level="INFORMATION" enabled_by_default="true" editorAttributes="INFORMATION_ATTRIBUTES">
       <scope name="UserCode" level="WEAK WARNING" enabled="true" />
     </inspection_tool>

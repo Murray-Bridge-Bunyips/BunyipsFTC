@@ -9,11 +9,15 @@ import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.InputMultiplier;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.tasks.GetRedTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
+import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreClawRotator;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreForwardServo;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreHook;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.RedTeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -46,7 +50,10 @@ public class GLaDOSTeleOpCommand extends CommandBasedBunyipsOpMode {
     private PersonalityCoreHook hook;
     private PersonalityCoreLinearActuator linearActuator;
     private DualServos claws;
+    private Vision vision;
+    private GetRedTeamPropTask get;
     private Cannon cannon;
+    private RedTeamProp p;
 
     @Override
     protected void onInitialisation() {
@@ -63,12 +70,26 @@ public class GLaDOSTeleOpCommand extends CommandBasedBunyipsOpMode {
         pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
         hook = new PersonalityCoreHook(config.suspenderHook);
         linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
+        vision = new Vision(config.webcam);
         claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
+        p = new RedTeamProp();
+        get = new GetRedTeamPropTask(p);
+        vision.init(vision.raw, p);
+        vision.start(vision.raw, p);
+        vision.startPreview();
+        vision.setPreview(p);
         addSubsystems(drive, clawRotator, pixelMotion, hook, linearActuator, claws, cannon, speed);
     }
 
     @Override
     protected void assignCommands() {
+        scheduler().always()
+                .run(get);
+
+        scheduler().always()
+                .run(() -> addTelemetry(get.getPosition()))
+                .muted();
+
         scheduler().whenPressed(Controller.User.TWO, Controller.X)
                 .run(claws.toggleServoTask(DualServos.ServoSide.LEFT));
         scheduler().whenPressed(Controller.User.TWO, Controller.B)
