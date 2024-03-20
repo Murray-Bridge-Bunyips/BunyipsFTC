@@ -6,8 +6,6 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreClawRotator;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreForwardServo;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreHook;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
@@ -40,6 +38,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     private MecanumDrive drive;
     private Cannon cannon;
     private PersonalityCoreHook hook;
+    private PersonalityCoreLinearActuator linearActuator;
     private DualServos claws;
 
     private boolean xPressed;
@@ -54,6 +53,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         );
         cannon = new Cannon(config.launcher);
         hook = new PersonalityCoreHook(config.suspenderHook);
+        linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
         claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
     }
 
@@ -92,6 +92,8 @@ public class WheatleyTeleOp extends BunyipsOpMode {
             hook.retract();
         }
 
+        linearActuator.actuateUsingController(gamepad2.left_stick_y);
+
         // Register actions only once per press
         xPressed = gamepad2.x;
         bPressed = gamepad2.b;
@@ -100,6 +102,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         drive.update();
         claws.update();
         hook.update();
+        linearActuator.update();
         cannon.update();
     }
 }
