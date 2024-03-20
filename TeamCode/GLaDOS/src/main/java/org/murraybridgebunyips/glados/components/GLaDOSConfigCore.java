@@ -121,6 +121,9 @@ public class GLaDOSConfigCore extends RobotConfig {
             perpendicularEncoder.setDirection(Encoder.Direction.FORWARD);
         }
 
+        pixelMotion = getHardware("pm", CRServo.class);
+        pixelAlignment = getHardware("al", Servo.class);
+
         // Suspender/pixel upward motion system
         suspenderActuator = getHardware("sa", DcMotorEx.class);
         suspenderHook = getHardware("sh", Servo.class);
