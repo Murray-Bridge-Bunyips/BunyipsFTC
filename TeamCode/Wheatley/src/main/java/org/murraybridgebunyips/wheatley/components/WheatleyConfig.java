@@ -66,27 +66,27 @@ public class WheatleyConfig extends RobotConfig {
     public DcMotorEx br;
 
     /**
-     * Control 0: Suspender Actuator "sa"
+     * Control 0: Linear Actuator "la"
      */
-    public DcMotorEx suspenderActuator;
+    public DcMotorEx linearActuator;
 
     /**
-     * Control Servo 0: Plane Launcher "pl"
+     * Control 1: Claw Rotator "cr"
      */
-    public Servo launcher;
+    public DcMotorEx clawRotator;
 
     /**
-     * Control Servo 1: Suspension Hook "sh"
-     */
-    public Servo suspenderHook;
-
-    /**
-     * Control Servo 2: Left Servo "ls"
+     * Control Servo 0: Left Servo "ls"
      */
     public Servo leftPixel;
 
     /**
-     * Control Servo 3: Right Servo "rs"
+     * Control Servo 1: Plane Launcher "pl"
+     */
+    public Servo launcher;
+
+    /**
+     * Control Servo 5: Right Servo "rs"
      */
     public Servo rightPixel;
 
@@ -101,7 +101,7 @@ public class WheatleyConfig extends RobotConfig {
 
     @Override
     protected void onRuntime() {
-        webcam = getHardware("webcame", WebcamName.class);
+        webcam = getHardware("webcam", WebcamName.class);
 
         // Motor directions configured to work with current config
         fl = getHardware("fl", DcMotorEx.class);
@@ -123,16 +123,17 @@ public class WheatleyConfig extends RobotConfig {
             bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Suspender/pixel upward motion system
-        suspenderActuator = getHardware("sa", DcMotorEx.class);
-        suspenderHook = getHardware("sh", Servo.class);
-        if (suspenderHook != null)
-            suspenderHook.scaleRange(0.6, 1);
-        if (suspenderActuator != null) {
-            suspenderActuator.setDirection(DcMotorSimple.Direction.REVERSE);
-            suspenderActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linearActuator = getHardware("la", DcMotorEx.class);
+        if (linearActuator != null) {
+            linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
         // Pixel manipulation system
+        clawRotator = getHardware("cr", DcMotorEx.class);
+        if (clawRotator != null) {
+            clawRotator.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+
         leftPixel = getHardware("ls", Servo.class);
         rightPixel = getHardware("rs", Servo.class);
 
