@@ -9,7 +9,7 @@ public class BrainbotConfig extends RobotConfig {
     public CameraName cameraB;
     public CameraName cameraF;
     @Override
-    protected void configureHardware() {
+    protected void onRuntime() {
         cameraB = ClassFactory.getInstance().getCameraManager().nameFromCameraDirection(BuiltinCameraDirection.BACK);
         cameraF = ClassFactory.getInstance().getCameraManager().nameFromCameraDirection(BuiltinCameraDirection.FRONT);
     }
