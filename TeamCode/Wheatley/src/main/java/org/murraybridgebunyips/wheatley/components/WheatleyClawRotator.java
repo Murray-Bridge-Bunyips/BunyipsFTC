@@ -1,6 +1,7 @@
 package org.murraybridgebunyips.wheatley.components;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 
@@ -38,8 +39,10 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
      */
     public WheatleyClawRotator(DcMotorEx motor) {
         assertParamsNotNull(motor);
-        pivot = new PivotMotor(motor, 288, 1);
-        pivot.setup(true);
+        // Core Hex Motor has 288 ticks per revolution, and we are working with no gear reduction
+        pivot = new PivotMotor(motor, 288);
+        pivot.setTargetPosition(0);
+        pivot.track(DcMotor.RunMode.RUN_TO_POSITION);
         pivot.setPower(POWER);
     }
 
@@ -66,6 +69,8 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
 
     @Override
     protected void periodic() {
+        // TODO: change systems to use power only, and manually set power values if getDegrees() exceeds the upper and lower bounds,
+        //  can also use the power == 0.0 RUN_TO_POSITION strategy to ensure the arm does not drop.
         pivot.setDegrees(targetDegrees);
         opMode.addTelemetry("Claw Rotator: % <= % <= % degs", MIN_DEGREES, targetDegrees, MAX_DEGREES);
     }

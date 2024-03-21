@@ -35,7 +35,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
-                config.parallelEncoder, config.perpendicularEncoder
+                config.parallelDeadwheel, config.perpendicularDeadwheel
         );
         vision = new Vision(config.webcam);
         pixels = new MultiColourThreshold(Pixels.createProcessors());

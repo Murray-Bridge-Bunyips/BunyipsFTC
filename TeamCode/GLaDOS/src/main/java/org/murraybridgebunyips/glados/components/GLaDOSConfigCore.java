@@ -16,7 +16,7 @@ import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.TwoWheelTrackingLocalizerCoefficients;
-import org.murraybridgebunyips.bunyipslib.roadrunner.util.Encoder;
+import org.murraybridgebunyips.bunyipslib.roadrunner.util.Deadwheel;
 
 /**
  * FTC 15215 CENTERSTAGE 2023-2024 robot configuration
@@ -47,11 +47,11 @@ public class GLaDOSConfigCore extends RobotConfig {
     /**
      * Control 2: Parallel Encoder "pe"
      */
-    public Encoder parallelEncoder;
+    public Deadwheel parallelDeadwheel;
     /**
      * Control 3: Perpendicular Encoder "ppe"
      */
-    public Encoder perpendicularEncoder;
+    public Deadwheel perpendicularDeadwheel;
     /**
      * Control 0: Suspender Actuator "sa"
      */
@@ -111,14 +111,14 @@ public class GLaDOSConfigCore extends RobotConfig {
         backLeft = getHardware("bl", DcMotorEx.class);
         DcMotorEx pe = getHardware("pe", DcMotorEx.class);
         if (pe != null) {
-            parallelEncoder = new Encoder(pe);
-            parallelEncoder.setDirection(Encoder.Direction.FORWARD);
+            parallelDeadwheel = new Deadwheel(pe);
+            parallelDeadwheel.setDirection(Deadwheel.Direction.FORWARD);
         }
 
         DcMotorEx ppe = getHardware("ppe", DcMotorEx.class);
         if (ppe != null) {
-            perpendicularEncoder = new Encoder(ppe);
-            perpendicularEncoder.setDirection(Encoder.Direction.FORWARD);
+            perpendicularDeadwheel = new Deadwheel(ppe);
+            perpendicularDeadwheel.setDirection(Deadwheel.Direction.FORWARD);
         }
 
         pixelMotion = getHardware("pm", CRServo.class);

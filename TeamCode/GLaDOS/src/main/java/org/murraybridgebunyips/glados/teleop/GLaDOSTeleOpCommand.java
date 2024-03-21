@@ -61,7 +61,7 @@ public class GLaDOSTeleOpCommand extends CommandBasedBunyipsOpMode {
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
-                config.parallelEncoder, config.perpendicularEncoder
+                config.parallelDeadwheel, config.perpendicularDeadwheel
         );
         speed = new InputMultiplier(0.25, 0.5, 1.0).withDefaultIndex(1).withName("Drive");
         cannon = new Cannon(config.launcher);
