@@ -1,11 +1,11 @@
 package org.murraybridgebunyips.wheatley.components;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
+import org.murraybridgebunyips.bunyipslib.PivotMotor;
 
 /**
  * Controls Wheatley's claw arm.
@@ -14,35 +14,59 @@ import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
  */
 @Config
 public class WheatleyClawRotator extends BunyipsSubsystem {
+    /**
+     * The holding power to use
+     */
     public static double POWER = 1.0;
-    public static int MIN_POSITION = 0;
-    public static int MAX_POSITION = 100;
-    private final DcMotorEx motor;
-    private int targetPosition;
 
-    public void setPosition(int position) {
-        targetPosition = Range.clip(position, MIN_POSITION, MAX_POSITION);
-    }
+    /**
+     * Encoder lower limit in degrees
+     */
+    public static int MIN_DEGREES = 0;
 
-    public void setPositionUsingController(double gamepadY) {
-        if ((gamepadY > 0 && targetPosition <= MIN_POSITION) || (gamepadY < 0 && targetPosition >= MAX_POSITION)) {
-            return;
-        }
-        targetPosition -= gamepadY;
-    }
+    /**
+     * Encoder upper limit in degrees
+     */
+    public static int MAX_DEGREES = 30;
+    private final PivotMotor pivot;
+    private int targetDegrees;
 
+    /**
+     * Create a new WheatleyClawRotator
+     *
+     * @param motor the motor to use as the rotator
+     */
     public WheatleyClawRotator(DcMotorEx motor) {
         assertParamsNotNull(motor);
-        this.motor = motor;
-        motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motor.setTargetPosition(0);
-        motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        motor.setPower(POWER);
+        pivot = new PivotMotor(motor, 288, 1);
+        pivot.setup(true);
+        pivot.setPower(POWER);
+    }
+
+    /**
+     * Set a target degrees for the claw rotator.
+     *
+     * @param degrees encoder ticks
+     */
+    public void setDegrees(int degrees) {
+        targetDegrees = Range.clip(degrees, MIN_DEGREES, MAX_DEGREES);
+    }
+
+    /**
+     * Set a target degrees for the claw rotator using a delta.
+     *
+     * @param gamepadY encoder tick delta, negated for gamepad input
+     */
+    public void setDegreesUsingController(double gamepadY) {
+        if ((gamepadY > 0 && targetDegrees <= MIN_DEGREES) || (gamepadY < 0 && targetDegrees >= MAX_DEGREES)) {
+            return;
+        }
+        targetDegrees -= gamepadY;
     }
 
     @Override
     protected void periodic() {
-        motor.setTargetPosition(targetPosition);
-        opMode.addTelemetry("Claw Rotator: % <= % <= % ticks", MIN_POSITION, targetPosition, MAX_POSITION);
+        pivot.setDegrees(targetDegrees);
+        opMode.addTelemetry("Claw Rotator: % <= % <= % degs", MIN_DEGREES, targetDegrees, MAX_DEGREES);
     }
 }

@@ -4,10 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Cannon;
-import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreHook;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
 import org.murraybridgebunyips.wheatley.components.WheatleyClawRotator;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
@@ -87,7 +85,7 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         }
 
         linearActuator.actuateUsingController(gamepad2.left_stick_y);
-        clawRotator.setPositionUsingController(gamepad2.right_stick_y);
+        clawRotator.setDegreesUsingController(gamepad2.right_stick_y);
 
         // Register actions only once per press
         xPressed = gamepad2.x;
