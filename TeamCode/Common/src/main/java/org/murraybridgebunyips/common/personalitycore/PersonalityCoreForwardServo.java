@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.tasks.ContinuousTask;
-import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
+import org.murraybridgebunyips.bunyipslib.tasks.CallbackTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
 import java.util.function.BooleanSupplier;
@@ -96,7 +96,7 @@ public class PersonalityCoreForwardServo extends BunyipsSubsystem {
      * @return a task to set the power
      */
     public Task setPowerTask(double powerTarget) {
-        return new InstantTask(() -> setPower(powerTarget), this, true).withName("SetPowerTask");
+        return new CallbackTask(() -> setPower(powerTarget), this, true).withName("SetPowerTask");
     }
 
     /**

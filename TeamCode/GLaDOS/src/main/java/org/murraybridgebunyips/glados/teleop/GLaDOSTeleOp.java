@@ -36,8 +36,8 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  */
 @TeleOp(name = "TeleOp")
 public class GLaDOSTeleOp extends BunyipsOpMode {
-    private final InputMultiplier speed = new InputMultiplier(0.25, 0.5, 1.0).withDefaultIndex(1);
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private InputMultiplier speed;
     private MecanumDrive drive;
     private PersonalityCoreClawRotator clawRotator;
     private PersonalityCoreForwardServo pixelMotion;
@@ -57,13 +57,14 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
-                config.parallelEncoder, config.perpendicularEncoder
+                config.parallelDeadwheel, config.perpendicularDeadwheel
         );
         cannon = new Cannon(config.launcher);
         clawRotator = new PersonalityCoreClawRotator(config.pixelAlignment);
         pixelMotion = new PersonalityCoreForwardServo(config.pixelMotion);
         hook = new PersonalityCoreHook(config.suspenderHook);
         linearActuator = new PersonalityCoreLinearActuator(config.suspenderActuator);
+        speed = new InputMultiplier(0.25, 0.5, 1.0).withDefaultIndex(1);
         claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
     }
 

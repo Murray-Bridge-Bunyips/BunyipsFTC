@@ -5,8 +5,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
+import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.tasks.ContinuousTask;
-import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
+import org.murraybridgebunyips.bunyipslib.tasks.CallbackTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.NoTimeoutTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
@@ -32,6 +33,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
         this.motor = motor;
         // Assumes arm is down locked upon activation
         // If possible it would be beneficial to integrate limit switches
+        if (motor == null) return;
         motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motor.setTargetPosition(motor.getCurrentPosition());
         motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -70,7 +72,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      * @return a task to set the power
      */
     public Task setPowerTask(double p) {
-        return new InstantTask(() -> setPower(p), this, false).withName("SetPowerTask");
+        return new CallbackTask(() -> setPower(p), this, false).withName("SetPowerTask");
     }
 
     /**

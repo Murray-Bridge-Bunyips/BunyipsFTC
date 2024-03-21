@@ -91,16 +91,16 @@ class JerryConfig : RobotConfig() {
         get() = listOf(arm1, arm2, claw, limit)
 
     override fun onRuntime() {
-        bl = getHardware("Back Left", DcMotorEx::class.java) as? DcMotorEx
-        br = getHardware("Back Right", DcMotorEx::class.java) as? DcMotorEx
-        fl = getHardware("Front Left", DcMotorEx::class.java) as? DcMotorEx
-        fr = getHardware("Front Right", DcMotorEx::class.java) as? DcMotorEx
-        arm1 = getHardware("Arm Motor 1", DcMotorEx::class.java) as? DcMotorEx
-        arm2 = getHardware("Arm Motor 2", DcMotorEx::class.java) as? DcMotorEx
-        claw = getHardware("Claw Servo", Servo::class.java) as? Servo
-        limit = getHardware("Arm Stop", TouchSensor::class.java) as? TouchSensor
-        imu = getHardware("ch_imu", IMU::class.java) as? IMU
-        webcam = getHardware("Webcam", WebcamName::class.java) as? WebcamName
+        bl = getHardware("Back Left", DcMotorEx::class.java)
+        br = getHardware("Back Right", DcMotorEx::class.java)
+        fl = getHardware("Front Left", DcMotorEx::class.java)
+        fr = getHardware("Front Right", DcMotorEx::class.java)
+        arm1 = getHardware("Arm Motor 1", DcMotorEx::class.java)
+        arm2 = getHardware("Arm Motor 2", DcMotorEx::class.java)
+        claw = getHardware("Claw Servo", Servo::class.java)
+        limit = getHardware("Arm Stop", TouchSensor::class.java)
+        imu = getHardware("ch_imu", IMU::class.java)
+        webcam = getHardware("Webcam", WebcamName::class.java)
 
         monitorID = hardwareMap.appContext.resources.getIdentifier(
             "cameraMonitorViewId", "id", hardwareMap.appContext.packageName

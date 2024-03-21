@@ -11,7 +11,6 @@ import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.GetRedTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
-import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreClawRotator;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreForwardServo;
@@ -62,7 +61,7 @@ public class GLaDOSTeleOpCommand extends CommandBasedBunyipsOpMode {
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
-                config.parallelEncoder, config.perpendicularEncoder
+                config.parallelDeadwheel, config.perpendicularDeadwheel
         );
         speed = new InputMultiplier(0.25, 0.5, 1.0).withDefaultIndex(1).withName("Drive");
         cannon = new Cannon(config.launcher);

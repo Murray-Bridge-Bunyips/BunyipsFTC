@@ -6,10 +6,8 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreClawRotator;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreForwardServo;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreHook;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
+import org.murraybridgebunyips.wheatley.components.WheatleyClawRotator;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -28,7 +26,7 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  * left_stick_y: actuate the management rail<br>
  * right_stick_y: move claw mover<br>
  * dpad_up: extend hook one position<br>
- * dpad_down: retract hook one position<br>
+ * dpad_down: retract hook one position<br> 2dew: update
  *
  * @author Lachlan Paul, 2024
  * @author Lucas Bubner, 2024
@@ -39,7 +37,8 @@ public class WheatleyTeleOp extends BunyipsOpMode {
     private final WheatleyConfig config = new WheatleyConfig();
     private MecanumDrive drive;
     private Cannon cannon;
-    private PersonalityCoreHook hook;
+    private PersonalityCoreLinearActuator linearActuator;
+    private WheatleyClawRotator clawRotator;
     private DualServos claws;
 
     private boolean xPressed;
@@ -53,8 +52,9 @@ public class WheatleyTeleOp extends BunyipsOpMode {
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
         cannon = new Cannon(config.launcher);
-        hook = new PersonalityCoreHook(config.suspenderHook);
-        claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
+        linearActuator = new PersonalityCoreLinearActuator(config.linearActuator);
+        clawRotator = new WheatleyClawRotator(config.clawRotator);
+        claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 1.0, 0.0);
     }
 
     @Override
@@ -84,13 +84,8 @@ public class WheatleyTeleOp extends BunyipsOpMode {
             claws.toggleServo(DualServos.ServoSide.RIGHT);
         }
 
-        // Hook controls
-        if (gamepad1.dpad_up) {
-            hook.extend();
-            addTelemetry("They told me to never, ever, ever detach myself from this rail, or I'd DIE.");
-        } else if (gamepad1.dpad_down) {
-            hook.retract();
-        }
+        linearActuator.actuateUsingController(gamepad2.left_stick_y);
+        clawRotator.setDegreesUsingController(gamepad2.right_stick_y);
 
         // Register actions only once per press
         xPressed = gamepad2.x;
@@ -99,7 +94,8 @@ public class WheatleyTeleOp extends BunyipsOpMode {
         // Send stateful updates to the hardware
         drive.update();
         claws.update();
-        hook.update();
+        linearActuator.update();
+        clawRotator.update();
         cannon.update();
     }
 }

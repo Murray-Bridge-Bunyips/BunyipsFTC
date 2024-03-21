@@ -16,7 +16,7 @@ import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.TwoWheelTrackingLocalizerCoefficients;
-import org.murraybridgebunyips.bunyipslib.roadrunner.util.Encoder;
+import org.murraybridgebunyips.bunyipslib.roadrunner.util.Deadwheel;
 
 /**
  * FTC 15215 CENTERSTAGE 2023-2024 robot configuration
@@ -47,11 +47,11 @@ public class GLaDOSConfigCore extends RobotConfig {
     /**
      * Control 2: Parallel Encoder "pe"
      */
-    public Encoder parallelEncoder;
+    public Deadwheel parallelDeadwheel;
     /**
      * Control 3: Perpendicular Encoder "ppe"
      */
-    public Encoder perpendicularEncoder;
+    public Deadwheel perpendicularDeadwheel;
     /**
      * Control 0: Suspender Actuator "sa"
      */
@@ -101,38 +101,41 @@ public class GLaDOSConfigCore extends RobotConfig {
     @Override
     protected void onRuntime() {
         // Sensors
-        webcam = (WebcamName) getHardware("webcam", WebcamName.class);
-        imu = (IMU) getHardware("imu", IMU.class);
+        webcam = getHardware("webcam", WebcamName.class);
+        imu = getHardware("imu", IMU.class);
 
         // Mecanum system
-        frontLeft = (DcMotorEx) getHardware("fl", DcMotorEx.class);
-        frontRight = (DcMotorEx) getHardware("fr", DcMotorEx.class);
-        backRight = (DcMotorEx) getHardware("br", DcMotorEx.class);
-        backLeft = (DcMotorEx) getHardware("bl", DcMotorEx.class);
-        DcMotorEx pe = (DcMotorEx) getHardware("pe", DcMotorEx.class);
+        frontLeft = getHardware("fl", DcMotorEx.class);
+        frontRight = getHardware("fr", DcMotorEx.class);
+        backRight = getHardware("br", DcMotorEx.class);
+        backLeft = getHardware("bl", DcMotorEx.class);
+        DcMotorEx pe = getHardware("pe", DcMotorEx.class);
         if (pe != null) {
-            parallelEncoder = new Encoder(pe);
-            parallelEncoder.setDirection(Encoder.Direction.FORWARD);
+            parallelDeadwheel = new Deadwheel(pe);
+            parallelDeadwheel.setDirection(Deadwheel.Direction.FORWARD);
         }
 
-        DcMotorEx ppe = (DcMotorEx) getHardware("ppe", DcMotorEx.class);
+        DcMotorEx ppe = getHardware("ppe", DcMotorEx.class);
         if (ppe != null) {
-            perpendicularEncoder = new Encoder(ppe);
-            perpendicularEncoder.setDirection(Encoder.Direction.FORWARD);
+            perpendicularDeadwheel = new Deadwheel(ppe);
+            perpendicularDeadwheel.setDirection(Deadwheel.Direction.FORWARD);
         }
+
+        pixelMotion = getHardware("pm", CRServo.class);
+        pixelAlignment = getHardware("al", Servo.class);
 
         // Suspender/pixel upward motion system
-        suspenderActuator = (DcMotorEx) getHardware("sa", DcMotorEx.class);
-        suspenderHook = (Servo) getHardware("sh", Servo.class);
+        suspenderActuator = getHardware("sa", DcMotorEx.class);
+        suspenderHook = getHardware("sh", Servo.class);
         if (suspenderHook != null)
             suspenderHook.scaleRange(0.25, 1);
 
         // Pixel manipulation system
-        leftPixel = (Servo) getHardware("ls", Servo.class);
-        rightPixel = (Servo) getHardware("rs", Servo.class);
+        leftPixel = getHardware("ls", Servo.class);
+        rightPixel = getHardware("rs", Servo.class);
 
         // Paper Drone launcher system
-        launcher = (Servo) getHardware("pl", Servo.class);
+        launcher = getHardware("pl", Servo.class);
 
         // Motor specifics configuration
         if (frontRight != null)

@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.tasks.ContinuousTask;
-import org.murraybridgebunyips.bunyipslib.tasks.InstantTask;
+import org.murraybridgebunyips.bunyipslib.tasks.CallbackTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
 /**
@@ -74,7 +74,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
      * @return a task to set the position of the hook
      */
     public Task setPositionTask(double targetPos) {
-        return new InstantTask(() -> setPosition(targetPos), this, true).withName("SetPositionTask");
+        return new CallbackTask(() -> setPosition(targetPos), this, true).withName("SetPositionTask");
     }
 
     /**
@@ -93,7 +93,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
      * @return the task
      */
     public Task extendTask() {
-        return new InstantTask(this::extend, this, true).withName("ExtendHookTask");
+        return new CallbackTask(this::extend, this, true).withName("ExtendHookTask");
     }
 
     /**
@@ -112,7 +112,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
      * @return the task
      */
     public Task retractTask() {
-        return new InstantTask(this::retract, this, true).withName("RetractHookTask");
+        return new CallbackTask(this::retract, this, true).withName("RetractHookTask");
     }
 
     /**
@@ -131,7 +131,7 @@ public class PersonalityCoreHook extends BunyipsSubsystem {
      * @return the task
      */
     public Task uprightTask() {
-        return new InstantTask(this::upright, this, true).withName("UprightHookTask");
+        return new CallbackTask(this::upright, this, true).withName("UprightHookTask");
     }
 
     @Override
