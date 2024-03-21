@@ -5,9 +5,8 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
-import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.tasks.ContinuousTask;
-import org.murraybridgebunyips.bunyipslib.tasks.CallbackTask;
+import org.murraybridgebunyips.bunyipslib.tasks.RunTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.NoTimeoutTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
@@ -72,7 +71,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      * @return a task to set the power
      */
     public Task setPowerTask(double p) {
-        return new CallbackTask(() -> setPower(p), this, false).withName("SetPowerTask");
+        return new RunTask(() -> setPower(p), this, false).withName("SetPowerTask");
     }
 
     /**
