@@ -99,7 +99,7 @@ public class GLaDOSPushAuto extends RoadRunnerAutonomousBunyipsOpMode<MecanumDri
                         .splineTo(new Vector2d(20.08, -42.44), Math.toRadians(76.94))
                         .build();
                 break;
-            case CENTER:
+            case FORWARD:
                 addNewTrajectory()
                         .forward(Inches.fromFieldTiles(1))
                         .build();

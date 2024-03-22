@@ -117,7 +117,7 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
             case LEFT:
 
                 break;
-            case CENTER:
+            case FORWARD:
 //                addNewTrajectory(new Pose2d(11.40, -62.00, Math.toRadians(180.00)))
 //                        .lineToLinearHeading(new Pose2d(16.40, -48.10, Math.toRadians(90.00)))
 //                        .lineToLinearHeading(new Pose2d(11.71, -34.52, Math.toRadians(90.00)))

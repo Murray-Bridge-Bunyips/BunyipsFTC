@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
@@ -66,10 +67,10 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
         addTelemetry("ParkingPosition set to: $position")
 
         // Add movement tasks based on the signal position
-        if (position == GetSignalTask.ParkingPosition.LEFT) {
+        if (position == Direction.LEFT) {
             // Drive forward if the position of the signal is LEFT
             addTaskFirst(JerryTimeDriveTask(1.5, drive, 0.0, 1.0, 0.0))
-        } else if (position == GetSignalTask.ParkingPosition.RIGHT) {
+        } else if (position == Direction.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
             addTaskFirst(JerryTimeDriveTask(1.5, drive, 0.0, -1.0, 0.0))
         }
