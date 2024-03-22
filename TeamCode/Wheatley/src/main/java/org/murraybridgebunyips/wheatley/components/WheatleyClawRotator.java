@@ -7,6 +7,11 @@ import com.qualcomm.robotcore.util.Range;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.PivotMotor;
+import org.murraybridgebunyips.bunyipslib.tasks.ContinuousTask;
+import org.murraybridgebunyips.bunyipslib.tasks.RunTask;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
+
+import java.util.function.DoubleSupplier;
 
 /**
  * Controls Wheatley's claw arm.
@@ -47,12 +52,30 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
     }
 
     /**
+     * Get the current degrees of the claw rotator.
+     * @param degrees the current degrees
+     * @return the claw rotator
+     */
+    public Task setDegreesTask(int degrees) {
+        return new RunTask(() -> setDegrees(degrees), this, true).withName("SetDegreesTask");
+    }
+
+    /**
      * Set a target degrees for the claw rotator.
      *
      * @param degrees encoder ticks
      */
     public void setDegrees(int degrees) {
         targetDegrees = Range.clip(degrees, MIN_DEGREES, MAX_DEGREES);
+    }
+
+    /**
+     * Set a target degrees for the claw rotator using a delta.
+     * @param gamepadY encoder tick delta, negated for gamepad input
+     * @return a task to set the degrees
+     */
+    public Task setDegreesUsingControllerTask(DoubleSupplier gamepadY) {
+        return new ContinuousTask(() -> setDegreesUsingController(gamepadY.getAsDouble()), this, false).withName("SetDegreesUsingControllerTask");
     }
 
     /**

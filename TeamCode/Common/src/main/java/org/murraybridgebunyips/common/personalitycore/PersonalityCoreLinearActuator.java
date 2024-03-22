@@ -18,7 +18,7 @@ import java.util.function.DoubleSupplier;
  * @author Lucas Bubner, 2023
  */
 public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
-    private static final double HOLDING_POWER = 0.3;
+    private static final double HOLDING_POWER = 1.0;
     private static final double MOVING_POWER = 0.7;
     private final DcMotorEx motor;
     private double power;
