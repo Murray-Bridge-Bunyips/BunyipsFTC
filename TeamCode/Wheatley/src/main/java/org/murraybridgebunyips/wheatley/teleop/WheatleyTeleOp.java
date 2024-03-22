@@ -55,7 +55,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
                 .run(claws.toggleServoTask(DualServos.ServoSide.RIGHT));
 
         linearActuator.setDefaultTask(linearActuator.joystickControlTask(() -> gamepad2.left_stick_y));
-        clawRotator.setDefaultTask(clawRotator.setDegreesUsingControllerTask(() -> gamepad2.right_stick_y));
+        clawRotator.setDefaultTask(clawRotator.setPowerUsingControllerTask(() -> gamepad2.right_stick_y));
 
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
     }

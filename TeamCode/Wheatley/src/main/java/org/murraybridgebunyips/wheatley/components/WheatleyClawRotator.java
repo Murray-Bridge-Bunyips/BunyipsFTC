@@ -23,7 +23,7 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
     /**
      * The holding power to use
      */
-    public static double HOLDING_POWER = 1.0;
+    public static double HOLDING_POWER = 0.3;
 
     /**
      * Encoder lower limit in degrees
@@ -34,8 +34,19 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
      * Encoder upper limit in degrees
      */
     public static int MAX_DEGREES = 30;
+
+    /**
+     * Lower power clamp
+     */
+    public static double LOWER_POWER = -0.2;
+
+    /**
+     * Upper power clamp
+     */
+    public static double UPPER_POWER = 0.2;
+
     private final PivotMotor pivot;
-    private int power;
+    private double power;
 
     /**
      * Create a new WheatleyClawRotator
@@ -53,52 +64,45 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
     }
 
     /**
-     * Get the current degrees of the claw rotator.
-     * @param degrees the current degrees
-     * @return the claw rotator
+     * Set the current power of the claw rotator.
+     * @param targetPower the current targetPower
+     * @return the task
      */
-    public Task setDegreesTask(int degrees) {
-        return new RunTask(() -> setDegrees(degrees), this, true).withName("SetDegreesTask");
+    public Task setPowerTask(double targetPower) {
+        return new RunTask(() -> setPower(targetPower), this, true).withName("SetDegreesTask");
     }
 
     /**
-     * Set a target degrees for the claw rotator.
+     * Set a target power for the claw rotator.
      *
-     * @param degrees encoder ticks
+     * @param targetPower target power
      */
-    public void setDegrees(int degrees) {
-        power = Range.clip(degrees, MIN_DEGREES, MAX_DEGREES);
+    public void setPower(double targetPower) {
+        power = Range.clip(targetPower, LOWER_POWER, UPPER_POWER);
     }
 
     /**
-     * Set a target degrees for the claw rotator using a delta.
-     * @param gamepadY encoder tick delta, negated for gamepad input
-     * @return a task to set the degrees
+     * Set a target power for the claw rotator.
+     * @param gamepadY target power, negated for gamepad input
+     * @return a task to set the power
      */
-    public Task setDegreesUsingControllerTask(DoubleSupplier gamepadY) {
-        return new ContinuousTask(() -> setDegreesUsingController(gamepadY.getAsDouble()), this, false).withName("SetDegreesUsingControllerTask");
+    public Task setPowerUsingControllerTask(DoubleSupplier gamepadY) {
+        return new ContinuousTask(() -> setPowerUsingController(gamepadY.getAsDouble()), this, false).withName("SetDegreesUsingControllerTask");
     }
 
     /**
-     * Set a target degrees for the claw rotator using a delta.
+     * Set a target power for the claw rotator.
      *
-     * @param gamepadY encoder tick delta, negated for gamepad input
+     * @param gamepadY target power, negated for gamepad input
      */
-    public void setDegreesUsingController(double gamepadY) {
-        if ((gamepadY > 0 && power <= MIN_DEGREES) || (gamepadY < 0 && power >= MAX_DEGREES)) {
-            return;
-        }
-        power -= gamepadY;
+    public void setPowerUsingController(double gamepadY) {
+        power = Range.clip(-gamepadY, LOWER_POWER, UPPER_POWER);
     }
 
     @Override
     protected void periodic() {
-        // TODO: change systems to use power only, and manually set power values if getDegrees() exceeds the upper and lower bounds,
-        //  can also use the power == 0.0 RUN_TO_POSITION strategy to ensure the arm does not drop.
-        if (MIN_DEGREES > pivot.getDegrees()) {
-            power = MIN_DEGREES;
-        } else if (pivot.getDegrees() > MAX_DEGREES) {
-            power = MAX_DEGREES;
+        if ((pivot.getDegrees() < MIN_DEGREES && power < 0.0) || (pivot.getDegrees() > MAX_DEGREES && power > 0.0)) {
+            power = 0.0;
         }
 
         if (power == 0.0) {
@@ -111,7 +115,6 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
             pivot.setPower(power);
         }
 
-        pivot.setDegrees(power);
-        opMode.addTelemetry("Claw Rotator: % <= % <= % degs", MIN_DEGREES, power, MAX_DEGREES);
+        opMode.addTelemetry("Claw Rotator: % <= % <= % degs, % pwr", MIN_DEGREES, pivot.getDegrees(), MAX_DEGREES, power);
     }
 }

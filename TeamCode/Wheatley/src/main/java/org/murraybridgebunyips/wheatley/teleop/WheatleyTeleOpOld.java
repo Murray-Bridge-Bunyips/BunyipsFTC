@@ -85,7 +85,7 @@ public class WheatleyTeleOpOld extends BunyipsOpMode {
         }
 
         linearActuator.actuateUsingController(gamepad2.left_stick_y);
-        clawRotator.setDegreesUsingController(gamepad2.right_stick_y);
+        clawRotator.setPowerUsingController(gamepad2.right_stick_y);
 
         // Register actions only once per press
         xPressed = gamepad2.x;
