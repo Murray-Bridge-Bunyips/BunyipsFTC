@@ -132,26 +132,8 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      * @return a task to home the actuator
      */
     public Task homeTask() {
-        return new NoTimeoutTask(this, true) {
-            @Override
-            public void init() {
-                lockout = true;
-            }
-
-            @Override
-            public void periodic() {
-            }
-
-            @Override
-            public void onFinish() {
-                lockout = false;
-            }
-
-            @Override
-            public boolean isTaskFinished() {
-                return motor.getVelocity() == 0.0;
-            }
-        }.withName("HomeTask");
+        // TODO
+        return new RunTask(() -> {});
     }
 
     @Override

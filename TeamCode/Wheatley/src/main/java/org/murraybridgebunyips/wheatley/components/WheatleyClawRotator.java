@@ -9,7 +9,6 @@ import org.murraybridgebunyips.bunyipslib.BunyipsSubsystem;
 import org.murraybridgebunyips.bunyipslib.PivotMotor;
 import org.murraybridgebunyips.bunyipslib.tasks.ContinuousTask;
 import org.murraybridgebunyips.bunyipslib.tasks.RunTask;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.NoTimeoutTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 
 import java.util.function.DoubleSupplier;
@@ -45,11 +44,6 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
      * Upper power clamp
      */
     public static double UPPER_POWER = 0.33;
-
-    /**
-     * Degrees of tolerance for the claw rotator in a setDegrees task
-     */
-    public static double TOLERANCE = 5.0;
 
     private final PivotMotor pivot;
     private double power;
@@ -103,12 +97,13 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
      * @return the task
      */
     public Task setDegreesTask(double degrees) {
-        return new NoTimeoutTask(this, true) {
+        return new Task(2.0, this, true) {
             @Override
             protected void init() {
-                double direction = Math.signum(degrees - pivot.getDegrees());
-                double mul = direction == 1.0 ? UPPER_POWER : LOWER_POWER;
-                pivot.setPower(direction * mul);
+                lockout = true;
+                pivot.setDegrees(degrees);
+                pivot.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                pivot.setPower(1.0);
             }
 
             @Override
@@ -118,12 +113,13 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
 
             @Override
             protected void onFinish() {
+                lockout = false;
                 pivot.holdCurrentPosition(HOLDING_POWER);
             }
 
             @Override
             protected boolean isTaskFinished() {
-                return Math.abs(pivot.getDegrees()) >= Math.abs(degrees) - TOLERANCE;
+                return false;
             }
         }.withName("SetDegreesTask");
     }

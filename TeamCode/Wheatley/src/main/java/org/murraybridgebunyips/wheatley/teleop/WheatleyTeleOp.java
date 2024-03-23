@@ -7,7 +7,12 @@ import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.pid.PIDController;
+import org.murraybridgebunyips.bunyipslib.tasks.AlignToContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
+import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
 import org.murraybridgebunyips.wheatley.components.WheatleyClawRotator;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
@@ -27,6 +32,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     private PersonalityCoreLinearActuator linearActuator;
     private WheatleyClawRotator clawRotator;
     private DualServos claws;
+    private Vision vision;
+    private MultiColourThreshold pixels;
 
     @Override
     protected void onInitialisation() {
@@ -39,7 +46,14 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         linearActuator = new PersonalityCoreLinearActuator(config.linearActuator);
         clawRotator = new WheatleyClawRotator(config.clawRotator);
         claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
-        addSubsystems(drive, cannon, linearActuator, clawRotator, claws);
+
+        vision = new Vision(config.webcam);
+        pixels = new MultiColourThreshold(Pixels.createProcessors());
+        vision.init(pixels);
+        vision.start(pixels);
+//        vision.startPreview();
+
+        addSubsystems(drive, cannon, linearActuator, clawRotator, claws, vision);
     }
 
     @Override
@@ -55,9 +69,13 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
                 .run(claws.toggleServoTask(DualServos.ServoSide.RIGHT));
 
         scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_UP)
-                .run(clawRotator.setDegreesTask(30));
+                .run(clawRotator.setDegreesTask(60));
         scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_DOWN)
                 .run(clawRotator.homeTask());
+
+        scheduler().whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
+                .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
+                .finishingWhen(() -> !gamepad1.right_bumper);
 
         scheduler().whenPressed(Controller.User.TWO, Controller.A)
                 .run(linearActuator.homeTask());

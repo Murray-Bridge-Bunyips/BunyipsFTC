@@ -23,7 +23,6 @@ import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.TeamProp;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreClawRotator;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreForwardServo;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreHook;
