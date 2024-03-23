@@ -39,24 +39,13 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
     }
 
     /**
-     * Move the actuator with the controller joystick.
-     *
-     * @param y the y value of the controller
-     * @return the linear actuator
-     */
-    public PersonalityCoreLinearActuator actuateUsingController(double y) {
-        power = Range.clip(-y, -1.0, 1.0);
-        return this;
-    }
-
-    /**
      * Move the actuator with the controller joystick. Should be a default task.
      *
      * @param y the y value of the controller
      * @return a task to move the actuator
      */
     public Task joystickControlTask(DoubleSupplier y) {
-        return new ContinuousTask(() -> actuateUsingController(y.getAsDouble()), this, false).withName("JoystickControlTask");
+        return new ContinuousTask(() -> setPower(-y.getAsDouble()), this, false).withName("JoystickControlTask");
     }
 
     public PersonalityCoreLinearActuator setPower(double p) {
@@ -151,9 +140,6 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
 
             @Override
             public void periodic() {
-                motor.setTargetPosition(0);
-                motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motor.setPower(MOVING_POWER);
             }
 
             @Override
@@ -163,7 +149,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
 
             @Override
             public boolean isTaskFinished() {
-                return !motor.isBusy();
+                return motor.getVelocity() == 0.0;
             }
         }.withName("HomeTask");
     }
@@ -171,7 +157,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
     @Override
     protected void periodic() {
         if (lockout) {
-            opMode.addTelemetry("Management Rail: % to % ticks", "MOVING", motor.getCurrentPosition());
+            opMode.addTelemetry("Management Rail: MOVING to % ticks", motor.getCurrentPosition());
             return;
         }
         if (power == 0.0) {

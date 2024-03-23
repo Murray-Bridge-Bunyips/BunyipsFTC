@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.wheatley.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
@@ -33,6 +34,7 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  */
 
 @TeleOp(name = "TeleOp Old")
+@Disabled
 public class WheatleyTeleOpOld extends BunyipsOpMode {
     private final WheatleyConfig config = new WheatleyConfig();
     private MecanumDrive drive;
@@ -84,8 +86,8 @@ public class WheatleyTeleOpOld extends BunyipsOpMode {
             claws.toggleServo(DualServos.ServoSide.RIGHT);
         }
 
-        linearActuator.actuateUsingController(gamepad2.left_stick_y);
-        clawRotator.setPowerUsingController(gamepad2.right_stick_y);
+        linearActuator.setPower(-gamepad2.left_stick_y);
+        clawRotator.setPower(-gamepad2.right_stick_y);
 
         // Register actions only once per press
         xPressed = gamepad2.x;

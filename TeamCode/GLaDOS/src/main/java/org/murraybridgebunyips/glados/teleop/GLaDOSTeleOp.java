@@ -108,7 +108,7 @@ public class GLaDOSTeleOp extends BunyipsOpMode {
         }
 
         // Aperture Science Multitasking Management Rail
-        linearActuator.actuateUsingController(gamepad2.left_stick_y);
+        linearActuator.setPower(-gamepad2.left_stick_y);
 
         // Aperture Science Gamepad-Enhanced Precision Pixel Grabbing Pixel Placing Pixel Claw Mover
         pixelMotion.actuateUsingDpad(gamepad2.dpad_up, gamepad2.dpad_down);

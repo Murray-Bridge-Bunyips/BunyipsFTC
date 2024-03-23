@@ -38,7 +38,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         cannon = new Cannon(config.launcher);
         linearActuator = new PersonalityCoreLinearActuator(config.linearActuator);
         clawRotator = new WheatleyClawRotator(config.clawRotator);
-        claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 1.0, 0.0);
+        claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
         addSubsystems(drive, cannon, linearActuator, clawRotator, claws);
     }
 
@@ -46,7 +46,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     protected void assignCommands() {
         scheduler().when(() -> gamepad2.right_trigger == 1.0)
                 .run(cannon.fireTask());
-        scheduler().whenPressed(Controller.User.ONE, Controller.BACK)
+        scheduler().whenPressed(Controller.User.TWO, Controller.BACK)
                 .run(cannon.resetTask());
 
         scheduler().whenPressed(Controller.User.TWO, Controller.X)
@@ -54,9 +54,16 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         scheduler().whenPressed(Controller.User.TWO, Controller.B)
                 .run(claws.toggleServoTask(DualServos.ServoSide.RIGHT));
 
+        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_UP)
+                .run(clawRotator.setDegreesTask(30));
+        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_DOWN)
+                .run(clawRotator.homeTask());
+
+        scheduler().whenPressed(Controller.User.TWO, Controller.A)
+                .run(linearActuator.homeTask());
+
         linearActuator.setDefaultTask(linearActuator.joystickControlTask(() -> gamepad2.left_stick_y));
         clawRotator.setDefaultTask(clawRotator.setPowerUsingControllerTask(() -> gamepad2.right_stick_y));
-
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false).withSquaredInputs());
     }
 }
