@@ -19,6 +19,23 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
  * Primary TeleOp for all of Wheatley's functions.
+ * <p></p>
+ * gamepad1:<br>
+ * left_stick_x: strafe<br>
+ * left_stick_y: forward/backward<br>
+ * right_stick_x: turn<br>
+ * right_trigger: fire cannon<br>
+ * options: reset cannon<br>
+ * <p></p>
+ * gamepad2:<br>
+ * x: toggle left claw<br>
+ * b: toggle right claw<br>
+ * left_stick_y: actuate the management rail<br>
+ * right_stick_y: move claw mover<br>
+ *
+ * 2dew: update
+ * dpad_up: extend hook one position<br>
+ * dpad_down: retract hook one position<br>
  *
  * @author Lachlan Paul, 2024
  * @author Lucas Bubner, 2024
@@ -68,10 +85,15 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         scheduler().whenPressed(Controller.User.TWO, Controller.B)
                 .run(claws.toggleServoTask(DualServos.ServoSide.RIGHT));
 
-        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_UP)
-                .run(clawRotator.setDegreesTask(60));
-        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_DOWN)
-                .run(clawRotator.homeTask());
+        // TODO: When dpad up was pressed, the arm would completely break for the rest of the match and not do anything.
+        //  Pressing dpad down did nothing, and the problem stuck.
+        //  This means there is most likely an issue with setting the home task and the setDegrees task.
+        //  Although there is a good chance the issue is with the class as a whole, not one or two methods.
+        //  This may have been fixed in a recent commit I'm not sure.
+//        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_UP)
+//                .run(clawRotator.setDegreesTask(30));
+//        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_DOWN)
+//                .run(clawRotator.homeTask());
 
         scheduler().whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
                 .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
@@ -83,5 +105,17 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         linearActuator.setDefaultTask(linearActuator.joystickControlTask(() -> gamepad2.left_stick_y));
         clawRotator.setDefaultTask(clawRotator.setPowerUsingControllerTask(() -> gamepad2.right_stick_y));
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false).withSquaredInputs());
+    }
+
+    @Override
+    protected void periodic() {
+        // Some drivers have noted that they sometimes cannot tell whether a claw is open or closed.
+        // Hopefully this helps.
+        addTelemetry("\n---------");
+
+        // The actual string is set to the opposite of what you might expect, by driver request.
+        addTelemetry("Left Claw: " + (claws.isOpen(DualServos.ServoSide.LEFT) ? "Closed" : "Open"));
+        addTelemetry("Right Claw: " + (claws.isOpen(DualServos.ServoSide.RIGHT) ? "Closed" : "Open"));
+        addTelemetry("---------\n");
     }
 }
