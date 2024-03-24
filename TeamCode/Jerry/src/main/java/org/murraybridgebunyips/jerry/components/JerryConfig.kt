@@ -15,16 +15,59 @@ import kotlin.properties.Delegates
  * Jerry robot configuration and hardware declarations.
  */
 class JerryConfig : RobotConfig() {
+    /**
+     * The monitor ID for the camera.
+     */
     var monitorID by Delegates.notNull<Int>()
+
+    /**
+     * Control Hub "webcam" usb
+     */
     var webcam: WebcamName? = null
+
+    /**
+     * Control Hub "bl" m0
+     */
     var bl: DcMotorEx? = null
+
+    /**
+     * Control Hub "br" m1
+     */
     var br: DcMotorEx? = null
+
+    /**
+     * Control Hub "fl" m2
+     */
     var fl: DcMotorEx? = null
+
+    /**
+     * Control Hub "fr" m3
+     */
     var fr: DcMotorEx? = null
+
+    /**
+     * Expansion Hub "claw" s0
+     */
     var claw: Servo? = null
+
+    /**
+     * Expansion Hub "arm1" m0
+     */
     var arm1: DcMotorEx? = null
+
+    /**
+     * Expansion Hub "arm2" m1
+     */
     var arm2: DcMotorEx? = null
+
+    /**
+     * Expansion Hub "imu" i2c internal
+     */
     var imu: IMU? = null
+
+    /**
+     * Expansion Hub "limit" i0
+     */
     var limit: TouchSensor? = null
 
 //    // Encoder configuration
@@ -35,26 +78,32 @@ class JerryConfig : RobotConfig() {
 //    val yDiameter = xDiameter
 //    val yTicksPerRev = xTicksPerRev
 
+    /**
+     * List of drive motors.
+     */
     val driveMotors: List<DcMotorEx?>
         get() = listOf(bl, br, fl, fr)
 
+    /**
+     * List of arm components.
+     */
     val armComponents: List<HardwareDevice?>
         get() = listOf(arm1, arm2, claw, limit)
 
-    override fun configureHardware() {
-        bl = getHardware("Back Left", DcMotorEx::class.java) as? DcMotorEx
-        br = getHardware("Back Right", DcMotorEx::class.java) as? DcMotorEx
-        fl = getHardware("Front Left", DcMotorEx::class.java) as? DcMotorEx
-        fr = getHardware("Front Right", DcMotorEx::class.java) as? DcMotorEx
-        arm1 = getHardware("Arm Motor 1", DcMotorEx::class.java) as? DcMotorEx
-        arm2 = getHardware("Arm Motor 2", DcMotorEx::class.java) as? DcMotorEx
-        claw = getHardware("Claw Servo", Servo::class.java) as? Servo
-        limit = getHardware("Arm Stop", TouchSensor::class.java) as? TouchSensor
-        imu = getHardware("ch_imu", IMU::class.java) as? IMU
-        webcam = getHardware("Webcam", WebcamName::class.java) as? WebcamName
+    override fun onRuntime() {
+        bl = getHardware("Back Left", DcMotorEx::class.java)
+        br = getHardware("Back Right", DcMotorEx::class.java)
+        fl = getHardware("Front Left", DcMotorEx::class.java)
+        fr = getHardware("Front Right", DcMotorEx::class.java)
+        arm1 = getHardware("Arm Motor 1", DcMotorEx::class.java)
+        arm2 = getHardware("Arm Motor 2", DcMotorEx::class.java)
+        claw = getHardware("Claw Servo", Servo::class.java)
+        limit = getHardware("Arm Stop", TouchSensor::class.java)
+        imu = getHardware("ch_imu", IMU::class.java)
+        webcam = getHardware("Webcam", WebcamName::class.java)
 
-        monitorID = hardwareMap!!.appContext.resources.getIdentifier(
-            "cameraMonitorViewId", "id", hardwareMap!!.appContext.packageName
+        monitorID = hardwareMap.appContext.resources.getIdentifier(
+            "cameraMonitorViewId", "id", hardwareMap.appContext.packageName
         )
 
         // Dead wheels were moved to other robots for future seasons in pairment with RoadRunner

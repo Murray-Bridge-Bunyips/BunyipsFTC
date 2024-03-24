@@ -7,11 +7,11 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
-import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
+import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
@@ -35,7 +35,7 @@ public class GLaDOSRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Meca
 
     @Override
     protected MecanumDrive setDrive() {
-        return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelEncoder, config.perpendicularEncoder);
+        return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
     }
 
     @Override

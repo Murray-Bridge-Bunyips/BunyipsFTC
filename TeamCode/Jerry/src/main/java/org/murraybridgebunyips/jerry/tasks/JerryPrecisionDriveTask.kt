@@ -1,7 +1,8 @@
 package org.murraybridgebunyips.jerry.tasks
 
-import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
+import org.murraybridgebunyips.bunyipslib.Direction
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 import kotlin.math.abs
@@ -27,7 +28,7 @@ class JerryPrecisionDriveTask(
 //    private val x: Odometer?,
 //    private val y: Odometer?,
 //    private val distanceMM: Double,
-    private val direction: Directions,
+    private val direction: Direction,
     private var power: Double,
     private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
 ) : Task(time), RobotTask {
@@ -45,11 +46,6 @@ class JerryPrecisionDriveTask(
         // This is because the task will handle the power management and determine whether the value
         // to the motor should be negative or not
         this.power = abs(power)
-    }
-
-    enum class Directions {
-        // Use RelativePose2d instead
-        LEFT, RIGHT, FORWARD, BACKWARD
     }
 
     override fun isTaskFinished(): Boolean {
@@ -76,8 +72,8 @@ class JerryPrecisionDriveTask(
 
     override fun periodic() {
         drive?.setSpeedXYR(
-            if (direction == Directions.LEFT) -power else if (direction == Directions.RIGHT) power else 0.0,
-            if (direction == Directions.FORWARD) power else if (direction == Directions.BACKWARD) power else 0.0,
+            if (direction == Direction.LEFT) -power else if (direction == Direction.RIGHT) power else 0.0,
+            if (direction == Direction.FORWARD) power else if (direction == Direction.BACKWARD) power else 0.0,
             imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0
         )
 

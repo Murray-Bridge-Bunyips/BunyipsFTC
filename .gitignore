@@ -41,7 +41,14 @@ captures/
 
 # IntelliJ
 *.iml
-.idea/
+.idea/copilot/
+.idea/appInsightsSettings.xml
+.idea/discord.xml
+.idea/migrations.xml
+.idea/workspace.xml
+.idea/misc.xml
+.idea/shelf/
+
 
 # For Mac users
 .DS_Store

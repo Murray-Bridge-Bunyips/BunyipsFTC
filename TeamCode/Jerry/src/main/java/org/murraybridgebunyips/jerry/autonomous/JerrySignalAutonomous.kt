@@ -2,19 +2,21 @@ package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
-import org.murraybridgebunyips.bunyipslib.vision.Vision
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.Direction
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
+import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
 
 /**
  * Basic Signal read and park OpMode. Uses camera to read the signal and then drives to the correct square.
  */
+@Suppress("KDocMissingDocumentation")
 @Autonomous(
     name = "PowerPlay Auto Signal Read & Park",
     group = "JERRY",
@@ -76,7 +78,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
 //                x,
 //                y,
 //                600.0,
-                JerryPrecisionDriveTask.Directions.RIGHT,
+                Direction.RIGHT,
                 0.5
             )
         )
@@ -89,7 +91,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
         addTelemetry("ParkingPosition set to: $position")
 
         // Add movement tasks based on the signal position
-        if (position == GetSignalTask.ParkingPosition.LEFT) {
+        if (position == Direction.LEFT) {
             // Drive forward if the position of the signal is LEFT
             addTaskFirst(
                 JerryPrecisionDriveTask(
@@ -99,11 +101,11 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
 //                    x,
 //                    y,
 //                    400.0,
-                    JerryPrecisionDriveTask.Directions.FORWARD,
+                    Direction.FORWARD,
                     0.5
                 )
             )
-        } else if (position == GetSignalTask.ParkingPosition.RIGHT) {
+        } else if (position == Direction.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
             addTaskFirst(
                 JerryPrecisionDriveTask(
@@ -113,7 +115,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
 //                    x,
 //                    y,
 //                    400.0,
-                    JerryPrecisionDriveTask.Directions.BACKWARD,
+                    Direction.BACKWARD,
                     0.5
                 )
             )

@@ -2,7 +2,6 @@ package org.murraybridgebunyips.wheatley.components;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -19,8 +18,8 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 /**
  * Wheatley robot configuration and hardware declarations
  *
- * @author Lucas Bubner, 2023
- * @author Lachlan Paul, 2023
+ * @author Lucas Bubner, 2024
+ * @author Lachlan Paul, 2024
  */
 
 public class WheatleyConfig extends RobotConfig {
@@ -35,58 +34,81 @@ public class WheatleyConfig extends RobotConfig {
     //    left_front = hardwareMap.get(DcMotor.class, "left_front");
     //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
 
-    // Expansion 1: fl
-    public DcMotorEx fl;
 
-    // Expansion 0: bl
-    public DcMotorEx bl;
-
-    // Expansion 2: fr
-    public DcMotorEx /*Are you*/ fr /*Or jk*/;
-
-    // Expansion 3: br
-    public DcMotorEx br;
-
-    // Control 0: Suspender Actuator "sa"
-    public DcMotorEx suspenderActuator;
-
-    // Control Servo 5: Pixel Forward Motion Servo "pm"
-    public CRServo pixelMotion;
-
-    // Control Servo 4: Pixel Alignment Servo "al"
-    public Servo pixelAlignment;
-
-    // Control Servo 2: Left Servo "ls"
-    public Servo leftPixel;
-
-    // Control Servo 3: Right Servo "rs"
-    public Servo rightPixel;
-
-    // Control Servo 1: Suspension Hook "sh"
-    public Servo suspenderHook;
-
-    // Control Servo 0: Plane Launcher "pl"
-    public Servo launcher;
-
-    // USB: Webcam "webcam"
+    /**
+     * USB: Webcam "webcam"
+     */
     public WebcamName webcam;
 
-    // Internally mounted on I2C C0 "imu"
+    /**
+     * Internally mounted on I2C C0 "imu"
+     */
     public IMU imu;
 
+    /**
+     * Expansion 0: bl
+     */
+    public DcMotorEx bl;
+
+    /**
+     * Expansion 1: fl
+     */
+    public DcMotorEx fl;
+
+    /**
+     * Expansion 2: fr
+     */
+    public DcMotorEx /*Are you*/ fr /*Or jk*/;
+
+    /**
+     * Expansion 3: br
+     */
+    public DcMotorEx br;
+
+    /**
+     * Control 0: Linear Actuator "la"
+     */
+    public DcMotorEx linearActuator;
+
+    /**
+     * Control 1: Claw Rotator "cr"
+     */
+    public DcMotorEx clawRotator;
+
+    /**
+     * Control Servo 0: Left Servo "ls"
+     */
+    public Servo leftPixel;
+
+    /**
+     * Control Servo 1: Plane Launcher "pl"
+     */
+    public Servo launcher;
+
+    /**
+     * Control Servo 5: Right Servo "rs"
+     */
+    public Servo rightPixel;
+
+    /**
+     * RoadRunner drive constants
+     */
     public DriveConstants driveConstants;
+    /**
+     * RoadRunner Mecanum coefficients
+     */
     public MecanumCoefficients mecanumCoefficients;
 
     @Override
-    protected void configureHardware() {
-        webcam = (WebcamName) getHardware("webcame", WebcamName.class);
+    protected void onRuntime() {
+        webcam = getHardware("webcam", WebcamName.class);
 
         // Motor directions configured to work with current config
-        fl = (DcMotorEx) getHardware("fl", DcMotorEx.class);
-        bl = (DcMotorEx) getHardware("bl", DcMotorEx.class);
-        fr = (DcMotorEx) getHardware("fr", DcMotorEx.class);
-        br = (DcMotorEx) getHardware("br", DcMotorEx.class);
-        imu = (IMU) getHardware("imu", IMU.class);
+        fl = getHardware("fl", DcMotorEx.class);
+        bl = getHardware("bl", DcMotorEx.class);
+        fr = getHardware("fr", DcMotorEx.class);
+        br = getHardware("br", DcMotorEx.class);
+        imu = getHardware("imu", IMU.class);
 
         if (fr != null)
             fr.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -101,25 +123,25 @@ public class WheatleyConfig extends RobotConfig {
             bl.setDirection(DcMotorSimple.Direction.REVERSE);
 
         // Suspender/pixel upward motion system
-        suspenderActuator = (DcMotorEx) getHardware("sa", DcMotorEx.class);
-        suspenderHook = (Servo) getHardware("sh", Servo.class);
-        if (suspenderHook != null)
-            suspenderHook.scaleRange(0.6, 1);
-        if (suspenderActuator != null) {
-            suspenderActuator.setDirection(DcMotorSimple.Direction.REVERSE);
-            suspenderActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        linearActuator = getHardware("la", DcMotorEx.class);
+        if (linearActuator != null) {
+            linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         }
 
         // Pixel manipulation system
-        pixelMotion = (CRServo) getHardware("pm", CRServo.class);
-        pixelAlignment = (Servo) getHardware("al", Servo.class);
-        if (pixelAlignment != null)
-            pixelAlignment.scaleRange(0.37, 1.0);
-        leftPixel = (Servo) getHardware("ls", Servo.class);
-        rightPixel = (Servo) getHardware("rs", Servo.class);
+        clawRotator = getHardware("cr", DcMotorEx.class);
+        if (clawRotator != null) {
+            clawRotator.setDirection(DcMotorSimple.Direction.REVERSE);
+        }
+
+        leftPixel = getHardware("ls", Servo.class);
+        if (leftPixel != null) {
+            leftPixel.scaleRange(0.2, 1.0);
+        }
+        rightPixel = getHardware("rs", Servo.class);
 
         // Paper Drone launcher system
-        launcher = (Servo) getHardware("pl", Servo.class);
+        launcher = getHardware("pl", Servo.class);
 
         boolean res = imu != null && imu.initialize(
                 new IMU.Parameters(
