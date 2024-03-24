@@ -85,15 +85,10 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         scheduler().whenPressed(Controller.User.TWO, Controller.B)
                 .run(claws.toggleServoTask(DualServos.ServoSide.RIGHT));
 
-        // TODO: When dpad up was pressed, the arm would completely break for the rest of the match and not do anything.
-        //  Pressing dpad down did nothing, and the problem stuck.
-        //  This means there is most likely an issue with setting the home task and the setDegrees task.
-        //  Although there is a good chance the issue is with the class as a whole, not one or two methods.
-        //  This may have been fixed in a recent commit I'm not sure.
-//        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_UP)
-//                .run(clawRotator.setDegreesTask(30));
-//        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_DOWN)
-//                .run(clawRotator.homeTask());
+        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_UP)
+                .run(clawRotator.setDegreesTask(60));
+        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_DOWN)
+                .run(clawRotator.homeTask());
 
         scheduler().whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
                 .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))

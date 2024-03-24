@@ -135,6 +135,9 @@ public class WheatleyConfig extends RobotConfig {
         }
 
         leftPixel = getHardware("ls", Servo.class);
+        if (leftPixel != null) {
+            leftPixel.scaleRange(0.2, 1.0);
+        }
         rightPixel = getHardware("rs", Servo.class);
 
         // Paper Drone launcher system
