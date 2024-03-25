@@ -1,12 +1,14 @@
 package org.murraybridgebunyips.pbody.components;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
@@ -33,24 +35,28 @@ public class PbodyConfig extends RobotConfig {
 
     @Override
     protected void onRuntime() {
-        fl = getHardware("fl", DcMotorEx.class);
-        if (fl != null)
-            fl.setDirection(DcMotorSimple.Direction.REVERSE);
+        // TODO: encoders
+        fl = getHardware("fl", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         fr = getHardware("fr", DcMotorEx.class);
-        bl = getHardware("bl", DcMotorEx.class);
-        if (bl != null)
-            bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        bl = getHardware("bl", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         br = getHardware("br", DcMotorEx.class);
 
         ls = getHardware("left_servo", Servo.class);
         rs = getHardware("right_servo", Servo.class);
 
-        arm = getHardware("arm", DcMotorEx.class);
-        if (arm != null)
-            arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        arm = getHardware("arm", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
 
         pl = getHardware("drone_trigger", Servo.class);
-        imu = getHardware("imu", IMU.class);
+        imu = getHardware("imu", IMU.class, (d) -> {
+            boolean init = d.initialize(new IMU.Parameters(
+                    new RevHubOrientationOnRobot(
+                            // TODO: this is not configured properly
+                            RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                            RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                    )
+            ));
+            if (!init) Dbg.error("imu failed init");
+        });
 
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(288)

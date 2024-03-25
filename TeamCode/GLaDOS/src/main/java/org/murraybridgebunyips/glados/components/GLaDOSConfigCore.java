@@ -102,33 +102,36 @@ public class GLaDOSConfigCore extends RobotConfig {
     protected void onRuntime() {
         // Sensors
         webcam = getHardware("webcam", WebcamName.class);
-        imu = getHardware("imu", IMU.class);
+        imu = getHardware("imu", IMU.class, (d) -> {
+            boolean init = d.initialize(new IMU.Parameters(
+                    new RevHubOrientationOnRobot(
+                            RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                            RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                    )
+            ));
+            if (!init) Dbg.error("imu failed init");
+        });
 
         // Mecanum system
-        frontLeft = getHardware("fl", DcMotorEx.class);
-        frontRight = getHardware("fr", DcMotorEx.class);
-        backRight = getHardware("br", DcMotorEx.class);
-        backLeft = getHardware("bl", DcMotorEx.class);
-        DcMotorEx pe = getHardware("pe", DcMotorEx.class);
-        if (pe != null) {
-            parallelDeadwheel = new Deadwheel(pe);
-            parallelDeadwheel.setDirection(Deadwheel.Direction.FORWARD);
-        }
+        frontLeft = getHardware("fl", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
+        frontRight = getHardware("fr", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        backRight = getHardware("br", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        backLeft = getHardware("bl", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
-        DcMotorEx ppe = getHardware("ppe", DcMotorEx.class);
-        if (ppe != null) {
-            perpendicularDeadwheel = new Deadwheel(ppe);
-            perpendicularDeadwheel.setDirection(Deadwheel.Direction.FORWARD);
-        }
+        parallelDeadwheel = getHardware("pe", Deadwheel.class,
+                (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
+        perpendicularDeadwheel = getHardware("ppe", Deadwheel.class,
+                (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
 
         pixelMotion = getHardware("pm", CRServo.class);
         pixelAlignment = getHardware("al", Servo.class);
 
         // Suspender/pixel upward motion system
-        suspenderActuator = getHardware("sa", DcMotorEx.class);
-        suspenderHook = getHardware("sh", Servo.class);
-        if (suspenderHook != null)
-            suspenderHook.scaleRange(0.25, 1);
+        suspenderActuator = getHardware("sa", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        });
+        suspenderHook = getHardware("sh", Servo.class, (d) -> d.scaleRange(0.25, 1));
 
         // Pixel manipulation system
         leftPixel = getHardware("ls", Servo.class);
@@ -136,37 +139,6 @@ public class GLaDOSConfigCore extends RobotConfig {
 
         // Paper Drone launcher system
         launcher = getHardware("pl", Servo.class);
-
-        // Motor specifics configuration
-        if (frontRight != null)
-            frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        if (frontLeft != null)
-            frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        if (backRight != null)
-            backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        if (backLeft != null)
-            backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        if (suspenderActuator != null) {
-            suspenderActuator.setDirection(DcMotorSimple.Direction.FORWARD);
-            suspenderActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-
-        boolean res = imu != null && imu.initialize(
-                new IMU.Parameters(
-                        new RevHubOrientationOnRobot(
-                                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
-                        )
-                )
-        );
-
-        if (!res) {
-            Dbg.error("IMU failed to initialise!");
-        }
 
         // RoadRunner configuration
         driveConstants = new DriveConstants.Builder()

@@ -20,7 +20,7 @@ import java.util.function.DoubleSupplier;
 public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
     private static final double HOLDING_POWER = 1.0;
     private static final double MOVING_POWER = 0.7;
-    private final DcMotorEx motor;
+    private DcMotorEx motor;
     private double power;
     private boolean lockout;
 
@@ -28,7 +28,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      * @param motor the motor to control as the linear actuator
      */
     public PersonalityCoreLinearActuator(DcMotorEx motor) {
-        assertParamsNotNull(motor);
+        if (!assertParamsNotNull(motor)) return;
         this.motor = motor;
         // Assumes arm is down locked upon activation
         // If possible it would be beneficial to integrate limit switches
@@ -139,7 +139,7 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
     @Override
     protected void periodic() {
         if (lockout) {
-            opMode.addTelemetry("Management Rail: MOVING to % ticks", motor.getCurrentPosition());
+            opMode.addTelemetry("Linear Actuator: MOVING to % ticks", motor.getCurrentPosition());
             return;
         }
         if (power == 0.0) {
@@ -152,6 +152,6 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
             motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             motor.setPower(power);
         }
-        opMode.addTelemetry("Management Rail: % at % ticks", power == 0.0 ? "HOLDING" : "MOVING", motor.getCurrentPosition());
+        opMode.addTelemetry("Linear Actuator: % at % ticks", power == 0.0 ? "HOLDING" : "MOVING", motor.getCurrentPosition());
     }
 }
