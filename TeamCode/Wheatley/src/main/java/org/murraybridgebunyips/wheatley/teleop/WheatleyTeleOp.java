@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
+import org.murraybridgebunyips.bunyipslib.Driver;
 import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.pid.PIDController;
@@ -75,31 +76,31 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        scheduler().when(() -> gamepad2.right_trigger == 1.0)
+        operator().when(Controller.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(cannon.fireTask());
-        scheduler().whenPressed(Controller.User.TWO, Controller.BACK)
+        operator().whenPressed(Controller.BACK)
                 .run(cannon.resetTask());
 
-        scheduler().whenPressed(Controller.User.TWO, Controller.X)
+        operator().whenPressed(Controller.X)
                 .run(claws.toggleServoTask(DualServos.ServoSide.LEFT));
-        scheduler().whenPressed(Controller.User.TWO, Controller.B)
+        operator().whenPressed(Controller.B)
                 .run(claws.toggleServoTask(DualServos.ServoSide.RIGHT));
 
-        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_UP)
+        operator().whenPressed(Controller.DPAD_UP)
                 .run(clawRotator.setDegreesTask(60));
-        scheduler().whenPressed(Controller.User.TWO, Controller.DPAD_DOWN)
+        operator().whenPressed(Controller.DPAD_DOWN)
                 .run(clawRotator.homeTask());
 
-        scheduler().whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
+        driver().whenPressed(Controller.RIGHT_BUMPER)
                 .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
-                .finishingWhen(() -> !gamepad1.right_bumper);
+                .finishingWhen(() -> !driver().get().rb());
 
-        scheduler().whenPressed(Controller.User.TWO, Controller.A)
+        operator().whenPressed(Controller.A)
                 .run(linearActuator.homeTask());
 
-        linearActuator.setDefaultTask(linearActuator.joystickControlTask(() -> gamepad2.left_stick_y));
-        clawRotator.setDefaultTask(clawRotator.setPowerUsingControllerTask(() -> gamepad2.right_stick_y));
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false).withSquaredInputs());
+        linearActuator.setDefaultTask(linearActuator.joystickControlTask(() -> driver().get().ly()));
+        clawRotator.setDefaultTask(clawRotator.setPowerUsingControllerTask(() -> operator().get().ry()));
+        drive.setDefaultTask(new HolonomicDriveTask<>(driver().get(), drive, () -> false));
     }
 
     @Override
