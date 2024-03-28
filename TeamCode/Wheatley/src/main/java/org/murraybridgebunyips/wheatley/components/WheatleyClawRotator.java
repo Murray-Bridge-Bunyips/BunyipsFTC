@@ -45,7 +45,7 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
      */
     public static double UPPER_POWER = 0.33;
 
-    private final PivotMotor pivot;
+    private PivotMotor pivot;
     private double power;
     private boolean lockout;
 
@@ -55,7 +55,7 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
      * @param motor the motor to use as the rotator
      */
     public WheatleyClawRotator(DcMotorEx motor) {
-        assertParamsNotNull(motor);
+        if (!assertParamsNotNull(motor)) return;
         // Core Hex Motor has 288 ticks per revolution, and we are working with no gear reduction
         pivot = new PivotMotor(motor, 288);
         pivot.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
