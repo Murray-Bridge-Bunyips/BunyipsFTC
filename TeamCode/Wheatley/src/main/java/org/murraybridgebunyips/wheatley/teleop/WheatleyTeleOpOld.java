@@ -8,7 +8,7 @@ import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
-import org.murraybridgebunyips.wheatley.components.WheatleyClawRotator;
+import org.murraybridgebunyips.common.ClawRotator;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -40,7 +40,7 @@ public class WheatleyTeleOpOld extends BunyipsOpMode {
     private MecanumDrive drive;
     private Cannon cannon;
     private PersonalityCoreLinearActuator linearActuator;
-    private WheatleyClawRotator clawRotator;
+    private ClawRotator clawRotator;
     private DualServos claws;
 
     private boolean xPressed;
@@ -55,7 +55,7 @@ public class WheatleyTeleOpOld extends BunyipsOpMode {
         );
         cannon = new Cannon(config.launcher);
         linearActuator = new PersonalityCoreLinearActuator(config.linearActuator);
-        clawRotator = new WheatleyClawRotator(config.clawRotator);
+        clawRotator = new ClawRotator(config.clawRotator);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 1.0, 0.0);
     }
 

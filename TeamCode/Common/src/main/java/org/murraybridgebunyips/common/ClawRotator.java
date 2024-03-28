@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.wheatley.components;
+package org.murraybridgebunyips.common;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -14,12 +14,13 @@ import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 import java.util.function.DoubleSupplier;
 
 /**
- * Controls Wheatley's claw arm.
+ * Controls the claw arm.
  *
  * @author Lachlan Paul, 2024
+ * @author Lucas Bubner, 2024
  */
 @Config
-public class WheatleyClawRotator extends BunyipsSubsystem {
+public class ClawRotator extends BunyipsSubsystem {
     /**
      * The holding power to use
      */
@@ -50,11 +51,11 @@ public class WheatleyClawRotator extends BunyipsSubsystem {
     private boolean lockout;
 
     /**
-     * Create a new WheatleyClawRotator
+     * Create a new ClawRotator
      *
      * @param motor the motor to use as the rotator
      */
-    public WheatleyClawRotator(DcMotorEx motor) {
+    public ClawRotator(DcMotorEx motor) {
         if (!assertParamsNotNull(motor)) return;
         // Core Hex Motor has 288 ticks per revolution, and we are working with no gear reduction
         pivot = new PivotMotor(motor, 288);

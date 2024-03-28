@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
-import org.murraybridgebunyips.bunyipslib.Driver;
 import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.pid.PIDController;
@@ -15,7 +14,7 @@ import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
 import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
-import org.murraybridgebunyips.wheatley.components.WheatleyClawRotator;
+import org.murraybridgebunyips.common.ClawRotator;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -48,7 +47,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     private MecanumDrive drive;
     private Cannon cannon;
     private PersonalityCoreLinearActuator linearActuator;
-    private WheatleyClawRotator clawRotator;
+    private ClawRotator clawRotator;
     private DualServos claws;
     private Vision vision;
     private MultiColourThreshold pixels;
@@ -62,7 +61,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         );
         cannon = new Cannon(config.launcher);
         linearActuator = new PersonalityCoreLinearActuator(config.linearActuator);
-        clawRotator = new WheatleyClawRotator(config.clawRotator);
+        clawRotator = new ClawRotator(config.clawRotator);
         claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
 
         vision = new Vision(config.webcam);

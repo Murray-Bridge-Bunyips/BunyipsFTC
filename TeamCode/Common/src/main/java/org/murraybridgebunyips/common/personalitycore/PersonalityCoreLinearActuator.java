@@ -96,6 +96,8 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
 
     /**
      * Set the position of the actuator.
+     * <p></p>
+     * Informally known as the Doinky-Rubber-Bandy Task
      *
      * @param targetPosition the position to set
      * @return a task to set the position
