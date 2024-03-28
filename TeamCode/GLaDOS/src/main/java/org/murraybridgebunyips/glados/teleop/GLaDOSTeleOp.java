@@ -48,16 +48,16 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        scheduler().whenPressed(Controller.User.TWO, Controller.X)
+        operator().whenPressed(Controller.X)
                 .run(claws.toggleServoTask(DualServos.ServoSide.LEFT));
-        scheduler().whenPressed(Controller.User.TWO, Controller.B)
+        operator().whenPressed(Controller.B)
                 .run(claws.toggleServoTask(DualServos.ServoSide.RIGHT));
 
-        scheduler().when(() -> gamepad1.right_trigger == 1.0)
+        driver().when(Controller.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(cannon.fireTask());
-        scheduler().whenPressed(Controller.User.ONE, Controller.B)
+        driver().whenPressed(Controller.B)
                 .run(cannon.resetTask());
 
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask<>(driver().get(), drive, () -> false));
     }
 }

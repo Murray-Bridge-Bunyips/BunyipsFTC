@@ -44,8 +44,8 @@ public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOp
 
     @Override
     protected void assignCommands() {
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
-        scheduler().whenPressed(Controller.User.ONE, Controller.LEFT_BUMPER)
+        drive.setDefaultTask(new HolonomicDriveTask<>(scheduler().driver().get(), drive, () -> false));
+        driver().whenPressed(Controller.LEFT_BUMPER)
                 .run(new MoveToAprilTagTask<>(gamepad1, drive, aprilTag, -1))
                 .finishingWhen(() -> !gamepad1.left_bumper);
     }
