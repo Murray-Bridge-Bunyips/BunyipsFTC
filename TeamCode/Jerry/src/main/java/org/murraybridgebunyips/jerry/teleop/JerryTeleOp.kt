@@ -62,7 +62,7 @@ class JerryTeleOp : BunyipsOpMode() {
                     config.br!!,
                     imu!!,
                     true,
-                    Direction.Rotation.ZERO
+                    Direction.FORWARD
                 )
             } else {
                 CartesianMecanumDrive(

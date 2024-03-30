@@ -3,7 +3,7 @@ package org.murraybridgebunyips.glados.debug;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.Controller;
+import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.pid.PIDController;
@@ -47,14 +47,14 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
 
     @Override
     protected void assignCommands() {
-        drive.setDefaultTask(new HolonomicDriveTask<>(scheduler().driver().get(), drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
 //        scheduler().whenHeld(Controller.User.ONE, Controller.Y)
 //                .run(new RunTask(() -> drive.resetYaw()))
 //                
-        driver().whenPressed(Controller.LEFT_BUMPER)
+        driver().whenPressed(Controls.LEFT_BUMPER)
                 .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
                 .finishingWhen(() -> !gamepad1.left_bumper);
-        driver().whenPressed(Controller.RIGHT_BUMPER)
+        driver().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new MoveToContourTask<>(gamepad1, drive, pixels, new PIDController(0.36, 0.6, 0.0), new PIDController(0.67, 0.25, 0.0)))
                 .finishingWhen(() -> !gamepad1.right_bumper);
     }

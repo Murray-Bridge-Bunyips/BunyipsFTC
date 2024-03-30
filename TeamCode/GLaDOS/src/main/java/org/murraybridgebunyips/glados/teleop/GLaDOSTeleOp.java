@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.Cannon;
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.Controller;
+import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
@@ -48,16 +48,16 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        operator().whenPressed(Controller.X)
+        operator().whenPressed(Controls.X)
                 .run(claws.toggleServoTask(DualServos.ServoSide.LEFT));
-        operator().whenPressed(Controller.B)
+        operator().whenPressed(Controls.B)
                 .run(claws.toggleServoTask(DualServos.ServoSide.RIGHT));
 
-        driver().when(Controller.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
+        driver().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(cannon.fireTask());
-        driver().whenPressed(Controller.B)
+        driver().whenPressed(Controls.B)
                 .run(cannon.resetTask());
 
-        drive.setDefaultTask(new HolonomicDriveTask<>(driver().get(), drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
     }
 }
