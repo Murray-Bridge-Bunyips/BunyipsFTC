@@ -10,6 +10,7 @@ import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.tasks.AlignToContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
+import org.murraybridgebunyips.bunyipslib.tasks.groups.SequentialTaskGroup;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
@@ -97,6 +98,18 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         operator().whenPressed(Controls.A)
                 .run(linearActuator.homeTask());
 
+//        operator().whenPressed(Controls.Y)
+//                        .run(new PickUpPixelTask(linearActuator, claws));
+        operator().whenHeld(Controls.RIGHT_STICK_BUTTON)
+                        .run(new SequentialTaskGroup(
+                                linearActuator.homeTask(),
+                                claws.closeServoTask(DualServos.ServoSide.BOTH),
+                                // TODO: Test the gotoTask values cause I'll be honest I have pulled these numbers from unsavoury places
+                                linearActuator.gotoTask(10),
+                                claws.openServoTask(DualServos.ServoSide.BOTH),
+                                linearActuator.gotoTask(3)
+                        )).finishingWhen(() -> !gamepad2.right_stick_button);
+
         linearActuator.setDefaultTask(linearActuator.joystickControlTask(() -> gamepad1.lsy));
         clawRotator.setDefaultTask(clawRotator.setPowerUsingControllerTask(() -> gamepad2.rsy));
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
@@ -105,7 +118,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     @Override
     protected void periodic() {
         // Some drivers have noted that they sometimes cannot tell whether a claw is open or closed.
-        // Hopefully this helps.
+        // Hopefully this helps. Update: It did :)
         addTelemetry("\n---------");
 
         // The actual string is set to the opposite of what you might expect, by driver request.
