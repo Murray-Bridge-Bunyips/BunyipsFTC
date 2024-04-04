@@ -38,7 +38,6 @@ import java.util.List;
 public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private PersonalityCoreClawRotator clawRotator;
-    // TODO: test this auton
     private PersonalityCoreForwardServo pixelMotion;
     private PersonalityCoreHook hook;
     private PersonalityCoreLinearActuator linearActuator;
