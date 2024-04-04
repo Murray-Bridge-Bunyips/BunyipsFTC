@@ -25,12 +25,11 @@ public class PickUpPixelTask extends SequentialTaskGroup {
         super(
                 // hello I am lachlan paul and this is not lacgkab oayk
                 // dont listen to him he is evil lachlan from evil lachlan world and he writes evil lachlan code in the evil lachlan ide on the evil lachlan laptop in the illegal lachlan chair
-                actuator.homeTask(),
                 servos.closeServoTask(DualServos.ServoSide.BOTH),
                 // TODO: Test the gotoTask values cause I'll be honest I have pulled these numbers from unsavoury places
-                actuator.gotoTask(10),
-                servos.openServoTask(DualServos.ServoSide.BOTH),
-                actuator.gotoTask(3)
+                actuator.setPowerTask(5.0),
+                actuator.gotoTask(5000),
+                servos.openServoTask(DualServos.ServoSide.BOTH)
         );
         // Dota, Dota, Counter-Strike
         // I didn't know what to do, so onwards I went to manually animate the wrangler

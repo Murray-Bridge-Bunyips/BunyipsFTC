@@ -79,7 +79,6 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
             @Override
             public void periodic() {
                 power = p;
-                update();
             }
 
             @Override
