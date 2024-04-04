@@ -16,9 +16,13 @@ import org.murraybridgebunyips.pbody.components.PbodyConfig;
 
 import java.util.List;
 
-@Autonomous(name="Autonomous")
+/**
+ * Primary Autonomous OpMode (WIP)
+ */
+@Autonomous(name = "Autonomous")
 public class PbodyAuton extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
     private final PbodyConfig config = new PbodyConfig();
+
     @Nullable
     @Override
     protected List<OpModeSelection> setOpModes() {
@@ -35,6 +39,7 @@ public class PbodyAuton extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> 
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
         if (selectedOpMode == null) return;
         StartingPositions position = (StartingPositions) selectedOpMode.getObj();
+        // TODO: After RR tuning make paths
         switch (position) {
             case STARTING_RED_LEFT:
                 addNewTrajectory()
@@ -48,6 +53,7 @@ public class PbodyAuton extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> 
                 break;
             case STARTING_BLUE_LEFT:
                 addNewTrajectory(new Pose2d(position.getVector(), Math.toRadians(-90)))
+                        .forward(1)
                         .build();
                 break;
             case STARTING_BLUE_RIGHT:

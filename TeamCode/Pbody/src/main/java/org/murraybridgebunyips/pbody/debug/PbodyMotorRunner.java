@@ -6,10 +6,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.pbody.components.PbodyConfig;
 
-@TeleOp(name="Motor Runner (DEBUG)")
+/**
+ * Tests motor position and direction
+ */
+@TeleOp(name = "Motor Runner (DEBUG)")
 @Disabled
 public class PbodyMotorRunner extends BunyipsOpMode {
     private final PbodyConfig config = new PbodyConfig();
+
     @Override
     protected void onInit() {
         config.init();

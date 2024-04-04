@@ -6,7 +6,11 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive;
 import org.murraybridgebunyips.pbody.components.PbodyConfig;
 
-@TeleOp(name="TeleOp")
+/**
+ * Primary TeleOp, ported from Blocks to BunyipsLib
+ * @author Jeff Rabone, 2023 (original Blocks author)
+ */
+@TeleOp(name = "TeleOp")
 public class PbodyTeleOp extends BunyipsOpMode {
     private final PbodyConfig config = new PbodyConfig();
     private CartesianMecanumDrive drive;

@@ -2,14 +2,14 @@ package org.murraybridgebunyips.pbody.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.AutomaticFeedforwardTuner;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.ManualFeedforwardTuner;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.StraightTest;
 import org.murraybridgebunyips.pbody.components.PbodyConfig;
 
-@TeleOp(name="rr tuning")
+/**
+ * RoadRunner tuning
+ */
+@TeleOp(name = "RRTuner")
 public class PbodyRoadRunnerTuner extends StraightTest {
     private final PbodyConfig config = new PbodyConfig();
 

@@ -9,7 +9,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 /**
  * Debugging OpMode for reading the two deadwheel positions.
  */
-@TeleOp(name="Deadwheel Debug")
+@TeleOp(name = "Deadwheel Debug")
 @Disabled
 public class GLaDOSDeadwheelDebug extends BunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();

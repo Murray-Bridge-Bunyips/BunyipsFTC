@@ -99,7 +99,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
                 .run(linearActuator.homeTask());
 
         operator().whenPressed(Controls.RIGHT_STICK_BUTTON)
-                        .run(new PickUpPixelTask(linearActuator, claws));
+                .run(new PickUpPixelTask(linearActuator, claws));
 
         linearActuator.setDefaultTask(linearActuator.joystickControlTask(() -> gamepad2.lsy));
         clawRotator.setDefaultTask(clawRotator.setPowerUsingControllerTask(() -> gamepad2.rsy));

@@ -14,6 +14,9 @@ import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 
+/**
+ * Configuration for the Pbody robot (FTC-15215-B)
+ */
 public class PbodyConfig extends RobotConfig {
     /**
      * Control 0: fl
@@ -32,16 +35,38 @@ public class PbodyConfig extends RobotConfig {
      */
     public DcMotorEx br;
 
+    /**
+     * ?
+     */
     public Servo ls;
+
+    /**
+     * ?
+     */
     public Servo rs;
 
+    /**
+     * ?
+     */
     public DcMotorEx arm;
 
+    /**
+     * ?
+     */
     public Servo pl;
 
+    /**
+     * "imu"
+     */
     public IMU imu;
 
+    /**
+     * RoadRunner DriveConstants
+     */
     public DriveConstants driveConstants;
+    /**
+     * RoadRunner MecanumCoefficients
+     */
     public MecanumCoefficients mecanumCoefficients;
 
 

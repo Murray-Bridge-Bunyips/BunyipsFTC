@@ -134,7 +134,8 @@ public class PersonalityCoreLinearActuator extends BunyipsSubsystem {
      */
     public Task homeTask() {
         // TODO
-        return new RunTask(() -> {});
+        return new RunTask(() -> {
+        });
     }
 
     @Override

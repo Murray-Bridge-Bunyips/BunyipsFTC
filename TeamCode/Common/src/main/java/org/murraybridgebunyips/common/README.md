@@ -23,5 +23,6 @@ You can make your own robot by copying the `../Template` directory and doing the
 4. Editing the package name src/main/java/org/murraybridgebunyips/template to your robot name
 5. Adding your robot to /settings.gradle
 6. Removing the tmp file and populating the folder with your own code
+7. Consider adding your robot as an Inspection Scope for UserCode if applicable
 
 Ensure to run a Gradle sync (Ctrl + Shift + O) after making these changes.
