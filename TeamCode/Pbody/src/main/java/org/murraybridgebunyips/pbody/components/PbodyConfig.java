@@ -68,26 +68,25 @@ public class PbodyConfig extends RobotConfig {
             if (!init) Dbg.error("imu failed init");
         });
 
-        // TODO: RoadRunner tune
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(288)
                 .setMaxRPM(125)
                 .setRunUsingEncoder(false)
                 .setWheelRadius(Inches.fromMM(75) / 2.0)
-                .setGearRatio(1.0)
+                .setGearRatio(88.0 / 75.72)
                 .setTrackWidth(19)
-                // ((max_rpm / 60) * gear_ratio * wheel_radius * 2 * math.pi) * 0.85
-                .setMaxVel(16.426880878)
-                .setMaxAccel(16.426880878)
+                // inches per second
+                .setMaxVel(8.426880878)
+                .setMaxAccel(8.426880878)
                 .setMaxAngVel(Math.PI / 2)
                 .setMaxAngAccel(Math.PI / 2)
-                .setKV(0.01395)
-                .setKStatic(0.06311)
+                .setKV(0.105)
+                .setKStatic(0.05834)
                 .setKA(0.0015)
                 .build();
         mecanumCoefficients = new MecanumCoefficients.Builder()
-                .setTranslationalPID(new PIDCoefficients(12, 0, 0))
-                .setHeadingPID(new PIDCoefficients(25, 0, 0))
+                .setTranslationalPID(new PIDCoefficients(1, 0, 0))
+                .setHeadingPID(new PIDCoefficients(2, 0, 0))
                 .build();
     }
 }
