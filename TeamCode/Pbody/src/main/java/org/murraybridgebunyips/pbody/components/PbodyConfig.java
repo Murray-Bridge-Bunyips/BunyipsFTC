@@ -1,7 +1,11 @@
 package org.murraybridgebunyips.pbody.components;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.DegreesPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.InchesPerSecond;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.MetersPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.RadiansPerSecond;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -101,19 +105,18 @@ public class PbodyConfig extends RobotConfig {
                 .setRunUsingEncoder(false)
                 .setWheelRadius(Inches.convertFrom(75, Millimeters) / 2.0)
                 .setGearRatio(88.0 / 75.72)
-                .setTrackWidth(19)
-                // inches per second
-                .setMaxVel(8.426880878)
-                .setMaxAccel(8.426880878)
-                .setMaxAngVel(Math.PI / 2)
-                .setMaxAngAccel(Math.PI / 2)
+                .setTrackWidth(18.48)
+                .setMaxVel(InchesPerSecond.convertFrom(0.33, MetersPerSecond))
+                .setMaxAccel(InchesPerSecond.convertFrom(0.33, MetersPerSecond))
+                .setMaxAngVel(RadiansPerSecond.convertFrom(75, DegreesPerSecond))
+                .setMaxAngAccel(RadiansPerSecond.convertFrom(75, DegreesPerSecond))
                 .setKV(0.105)
                 .setKStatic(0.05834)
                 .setKA(0.0015)
                 .build();
         mecanumCoefficients = new MecanumCoefficients.Builder()
                 .setTranslationalPID(new PIDCoefficients(1, 0, 0))
-                .setHeadingPID(new PIDCoefficients(2, 0, 0))
+                .setHeadingPID(new PIDCoefficients(4, 0, 0))
                 .build();
     }
 }

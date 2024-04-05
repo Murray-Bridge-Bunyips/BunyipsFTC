@@ -50,7 +50,7 @@ public class PbodyAuton extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> 
                 break;
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .lineTo(new Vector2d(18, 18))
+                        .lineTo(new Vector2d(18, -18))
                         .build();
                 break;
             case STARTING_BLUE_LEFT:

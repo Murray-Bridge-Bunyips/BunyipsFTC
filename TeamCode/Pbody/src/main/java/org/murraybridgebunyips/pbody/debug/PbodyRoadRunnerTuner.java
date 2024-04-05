@@ -1,16 +1,18 @@
 package org.murraybridgebunyips.pbody.debug;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.StraightTest;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.LocalizationTest;
 import org.murraybridgebunyips.pbody.components.PbodyConfig;
 
 /**
  * RoadRunner tuning
  */
 @TeleOp(name = "RRTuner")
-public class PbodyRoadRunnerTuner extends StraightTest {
+@Disabled
+public class PbodyRoadRunnerTuner extends LocalizationTest {
     private final PbodyConfig config = new PbodyConfig();
 
     @Override
