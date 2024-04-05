@@ -28,8 +28,9 @@ public class PickUpPixelTask extends SequentialTaskGroup {
                 servos.closeServoTask(DualServos.ServoSide.BOTH),
                 // TODO: Test the gotoTask values cause I'll be honest I have pulled these numbers from unsavoury places
                 actuator.setPowerTask(5.0),
-                actuator.gotoTask(5000),
-                servos.openServoTask(DualServos.ServoSide.BOTH)
+                actuator.gotoTask(0),
+                servos.openServoTask(DualServos.ServoSide.BOTH),
+                actuator.gotoTask(100)
         );
         // Dota, Dota, Counter-Strike
         // I didn't know what to do, so onwards I went to manually animate the wrangler
