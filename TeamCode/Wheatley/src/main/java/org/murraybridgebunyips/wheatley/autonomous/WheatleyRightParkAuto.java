@@ -1,10 +1,13 @@
 package org.murraybridgebunyips.wheatley.autonomous;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
@@ -70,7 +73,7 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
                         .forward(5)
                         .build();
                 addNewTrajectory()
-                        .strafeRight(Inches.fromCM(180))
+                        .strafeRight(Inches.convertFrom(180, Centimeters))
                         .build();
                 addNewTrajectory()
                         .back(2)
@@ -83,26 +86,26 @@ public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Mec
             case STARTING_BLUE_LEFT:
                 addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 addNewTrajectory()
-                        .forward(Inches.fromFieldTiles(3))
+                        .forward(Inches.convertFrom(3, FieldTiles))
                         .build();
                 addNewTrajectory()
-                        .strafeLeft(Inches.fromFieldTiles(3))
+                        .strafeLeft(Inches.convertFrom(3, FieldTiles))
                         .build();
                 break;
 
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .strafeRight(Inches.fromCM(180))
+                        .strafeRight(Inches.convertFrom(180, Centimeters))
                         .build();
                 break;
 
             case STARTING_BLUE_RIGHT:
                 addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 addNewTrajectory()
-                        .forward(Inches.fromFieldTiles(3))
+                        .forward(Inches.convertFrom(3, FieldTiles))
                         .build();
                 addNewTrajectory()
-                        .strafeLeft(Inches.fromFieldTiles(5.5))
+                        .strafeLeft(Inches.convertFrom(5.5, FieldTiles))
                         .build();
                 break;
         }

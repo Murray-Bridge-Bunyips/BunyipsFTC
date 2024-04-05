@@ -1,10 +1,13 @@
 package org.murraybridgebunyips.wheatley.autonomous;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
@@ -65,26 +68,26 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
             case STARTING_RED_LEFT:
                 addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 addNewTrajectory()
-                        .forward(Inches.fromFieldTiles(3))
+                        .forward(Inches.convertFrom(3, FieldTiles))
                         .build();
                 addNewTrajectory()
-                        .strafeRight(Inches.fromFieldTiles(5.5))
+                        .strafeRight(Inches.convertFrom(5.5, FieldTiles))
                         .build();
                 break;
 
             case STARTING_BLUE_LEFT:
                 addNewTrajectory()
-                        .strafeLeft(Inches.fromCM(180))
+                        .strafeLeft(Inches.convertFrom(180, Centimeters))
                         .build();
                 break;
 
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .forward(Inches.fromCM(170))
+                        .forward(Inches.convertFrom(170, Centimeters))
                         .build();
 
                 addNewTrajectory()
-                        .strafeRight(Inches.fromCM(180))
+                        .strafeRight(Inches.convertFrom(180, Centimeters))
                         .build();
                 break;
 
@@ -94,7 +97,7 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
                         .forward(5)
                         .build();
                 addNewTrajectory()
-                        .strafeLeft(Inches.fromCM(180))
+                        .strafeLeft(Inches.convertFrom(180, Centimeters))
                         .build();
                 addNewTrajectory()
                         .back(2)

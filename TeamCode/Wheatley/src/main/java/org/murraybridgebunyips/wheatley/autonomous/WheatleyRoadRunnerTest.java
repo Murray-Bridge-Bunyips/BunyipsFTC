@@ -1,11 +1,14 @@
 package org.murraybridgebunyips.wheatley.autonomous;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Meter;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Meters;
+
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Storage;
@@ -51,10 +54,10 @@ public class WheatleyRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Me
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
         addNewTrajectory()
                 .setTimeout(-1)
-                .forward(Inches.fromM(1))
+                .forward(Inches.convertFrom(1, Meter))
                 .turn(Math.toRadians(180))
-                .back(Inches.fromM(1))
-                .forward(Inches.fromM(2))
+                .back(Inches.convertFrom(1, Meter))
+                .forward(Inches.convertFrom(2, Meters))
                 .turn(Math.toRadians(180))
                 .build();
     }

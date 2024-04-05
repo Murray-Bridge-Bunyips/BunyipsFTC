@@ -1,5 +1,8 @@
 package org.murraybridgebunyips.glados.components;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
+
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -11,7 +14,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
@@ -145,7 +147,7 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setTicksPerRev(28)
                 .setMaxRPM(6000)
                 .setRunUsingEncoder(false)
-                .setWheelRadius(Inches.fromMM(75) / 2.0)
+                .setWheelRadius(Inches.convertFrom(75, Millimeters) / 2.0)
                 .setGearRatio(1.0 / 13.1)
                 .setTrackWidth(20.5)
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
@@ -162,7 +164,7 @@ public class GLaDOSConfigCore extends RobotConfig {
         localizerCoefficients = new TwoWheelTrackingLocalizerCoefficients.Builder()
                 .setTicksPerRev(1200)
                 .setGearRatio(1)
-                .setWheelRadius(Inches.fromMM(50) / 2)
+                .setWheelRadius(Inches.convertFrom(50, Millimeters) / 2)
                 .setParallelX(0)
                 .setParallelY(0)
                 .setPerpendicularX(4.2)

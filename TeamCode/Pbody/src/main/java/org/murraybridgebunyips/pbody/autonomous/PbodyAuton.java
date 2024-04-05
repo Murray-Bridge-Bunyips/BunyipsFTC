@@ -1,12 +1,14 @@
 package org.murraybridgebunyips.pbody.autonomous;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Meter;
+
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
@@ -43,7 +45,7 @@ public class PbodyAuton extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> 
         switch (position) {
             case STARTING_RED_LEFT:
                 addNewTrajectory()
-                        .forward(Inches.fromM(1))
+                        .forward(Inches.convertFrom(1, Meter))
                         .build();
                 break;
             case STARTING_RED_RIGHT:

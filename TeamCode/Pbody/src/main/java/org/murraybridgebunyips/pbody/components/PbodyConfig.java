@@ -1,5 +1,8 @@
 package org.murraybridgebunyips.pbody.components;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
+
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -9,7 +12,6 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.murraybridgebunyips.bunyipslib.Dbg;
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
@@ -97,7 +99,7 @@ public class PbodyConfig extends RobotConfig {
                 .setTicksPerRev(288)
                 .setMaxRPM(125)
                 .setRunUsingEncoder(false)
-                .setWheelRadius(Inches.fromMM(75) / 2.0)
+                .setWheelRadius(Inches.convertFrom(75, Millimeters) / 2.0)
                 .setGearRatio(88.0 / 75.72)
                 .setTrackWidth(19)
                 // inches per second

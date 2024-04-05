@@ -1,12 +1,14 @@
 package org.murraybridgebunyips.glados.autonomous;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
@@ -72,7 +74,7 @@ public class GLaDOSLeftPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDri
                 break;
             case STARTING_BLUE_LEFT:
                 addNewTrajectory()
-                        .strafeLeft(Inches.fromCM(80))
+                        .strafeLeft(Inches.convertFrom(80, Centimeters))
                         .build();
                 break;
             case STARTING_BLUE_RIGHT:
