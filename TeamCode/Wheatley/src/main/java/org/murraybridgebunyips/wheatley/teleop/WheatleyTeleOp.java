@@ -1,21 +1,24 @@
 package org.murraybridgebunyips.wheatley.teleop;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.murraybridgebunyips.bunyipslib.Cannon;
+import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controls;
-import org.murraybridgebunyips.bunyipslib.DualServos;
+import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
+import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.AlignToContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
+import org.murraybridgebunyips.bunyipslib.tasks.RunTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
-import org.murraybridgebunyips.common.ClawRotator;
-import org.murraybridgebunyips.common.personalitycore.tasks.PickUpPixelTask;
+import org.murraybridgebunyips.bunyipslib.subsystems.Rotator;
+import org.murraybridgebunyips.common.centerstage.tasks.PickUpPixelTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -47,8 +50,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     private final WheatleyConfig config = new WheatleyConfig();
     private MecanumDrive drive;
     private Cannon cannon;
-    private PersonalityCoreLinearActuator linearActuator;
-    private ClawRotator clawRotator;
+    private HoldableActuator linearActuator;
+    private Rotator rotator;
     private DualServos claws;
     private Vision vision;
     private MultiColourThreshold pixels;
@@ -61,8 +64,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
         cannon = new Cannon(config.launcher);
-        linearActuator = new PersonalityCoreLinearActuator(config.linearActuator);
-        clawRotator = new ClawRotator(config.clawRotator);
+        linearActuator = new HoldableActuator(config.linearActuator);
+        rotator = new Rotator(config.clawRotator, 288, 0, 90, -0.2, 0.33);
         claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
 
         vision = new Vision(config.webcam);
@@ -71,7 +74,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         vision.start(pixels);
 //        vision.startPreview();
 
-        addSubsystems(drive, cannon, linearActuator, clawRotator, claws, vision);
+        addSubsystems(drive, cannon, linearActuator, rotator, claws, vision);
     }
 
     @Override
@@ -82,27 +85,27 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
                 .run(cannon.resetTask());
 
         operator().whenPressed(Controls.X)
-                .run(claws.toggleServoTask(DualServos.ServoSide.LEFT));
+                .run(claws.toggleTask(DualServos.ServoSide.LEFT));
         operator().whenPressed(Controls.B)
-                .run(claws.toggleServoTask(DualServos.ServoSide.RIGHT));
+                .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
 
         operator().whenPressed(Controls.DPAD_UP)
-                .run(clawRotator.setDegreesTask(60));
+                .run(rotator.gotoTimeTask(Degrees.of(60), 2));
         operator().whenPressed(Controls.DPAD_DOWN)
-                .run(clawRotator.homeTask());
+                .run(rotator.runForTask(1, -0.33, true));
 
         driver().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
                 .finishingWhen(() -> !gamepad1.right_bumper);
 
         operator().whenPressed(Controls.A)
-                .run(linearActuator.homeTask());
+                .run(new RunTask());
 
         operator().whenPressed(Controls.RIGHT_STICK_BUTTON)
                 .run(new PickUpPixelTask(linearActuator, claws));
 
-        linearActuator.setDefaultTask(linearActuator.joystickControlTask(() -> gamepad2.lsy));
-        clawRotator.setDefaultTask(clawRotator.setPowerUsingControllerTask(() -> gamepad2.rsy));
+        linearActuator.setDefaultTask(linearActuator.controlTask(() -> -gamepad2.lsy));
+        rotator.setDefaultTask(rotator.controlTask(() -> -gamepad2.rsy));
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
     }
 

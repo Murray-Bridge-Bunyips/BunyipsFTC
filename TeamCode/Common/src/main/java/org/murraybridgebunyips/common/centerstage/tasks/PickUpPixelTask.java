@@ -1,8 +1,8 @@
-package org.murraybridgebunyips.common.personalitycore.tasks;
+package org.murraybridgebunyips.common.centerstage.tasks;
 
-import org.murraybridgebunyips.bunyipslib.DualServos;
+import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
+import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.SequentialTaskGroup;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
 
 /**
  * A task that automates picking up pixels.
@@ -21,15 +21,14 @@ public class PickUpPixelTask extends SequentialTaskGroup {
      * @param actuator the arm
      * @param servos the claws
      */
-    public PickUpPixelTask(PersonalityCoreLinearActuator actuator, DualServos servos) {
+    public PickUpPixelTask(HoldableActuator actuator, DualServos servos) {
         super(
                 // hello I am lachlan paul and this is not lacgkab oayk
                 // dont listen to him he is evil lachlan from evil lachlan world and he writes evil lachlan code in the evil lachlan ide on the evil lachlan laptop in the illegal lachlan chair
-                servos.closeServoTask(DualServos.ServoSide.BOTH),
+                servos.closeTask(DualServos.ServoSide.BOTH),
                 // TODO: Test the gotoTask values cause I'll be honest I have pulled these numbers from unsavoury places
-                actuator.setPowerTask(5.0),
                 actuator.gotoTask(0),
-                servos.openServoTask(DualServos.ServoSide.BOTH),
+                servos.openTask(DualServos.ServoSide.BOTH),
                 actuator.gotoTask(100)
         );
         // Dota, Dota, Counter-Strike

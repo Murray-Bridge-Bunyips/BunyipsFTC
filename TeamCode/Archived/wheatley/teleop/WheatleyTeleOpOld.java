@@ -4,11 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.Cannon;
-import org.murraybridgebunyips.bunyipslib.DualServos;
+import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
+import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.common.personalitycore.PersonalityCoreLinearActuator;
-import org.murraybridgebunyips.common.ClawRotator;
+import org.murraybridgebunyips.bunyipslib.subsystems.Rotator;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -40,7 +39,7 @@ public class WheatleyTeleOpOld extends BunyipsOpMode {
     private MecanumDrive drive;
     private Cannon cannon;
     private PersonalityCoreLinearActuator linearActuator;
-    private ClawRotator clawRotator;
+    private Rotator rotator;
     private DualServos claws;
 
     private boolean xPressed;
@@ -55,7 +54,7 @@ public class WheatleyTeleOpOld extends BunyipsOpMode {
         );
         cannon = new Cannon(config.launcher);
         linearActuator = new PersonalityCoreLinearActuator(config.linearActuator);
-        clawRotator = new ClawRotator(config.clawRotator);
+        rotator = new Rotator(config.clawRotator);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 1.0, 0.0);
     }
 
@@ -87,7 +86,7 @@ public class WheatleyTeleOpOld extends BunyipsOpMode {
         }
 
         linearActuator.setPower(-gamepad2.left_stick_y);
-        clawRotator.setPower(-gamepad2.right_stick_y);
+        rotator.setPower(-gamepad2.right_stick_y);
 
         // Register actions only once per press
         xPressed = gamepad2.x;
@@ -97,7 +96,7 @@ public class WheatleyTeleOpOld extends BunyipsOpMode {
         drive.update();
         claws.update();
         linearActuator.update();
-        clawRotator.update();
+        rotator.update();
         cannon.update();
     }
 }
