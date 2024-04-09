@@ -13,10 +13,7 @@ import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Storage;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
-
-import java.util.List;
 
 /**
  * Test for RoadRunner.
@@ -38,16 +35,6 @@ public class WheatleyRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Me
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
-    }
-
-    @Override
-    protected List<OpModeSelection> setOpModes() {
-        return null;
-    }
-
-    @Override
-    protected RobotTask setInitTask() {
-        return null;
     }
 
     @Override

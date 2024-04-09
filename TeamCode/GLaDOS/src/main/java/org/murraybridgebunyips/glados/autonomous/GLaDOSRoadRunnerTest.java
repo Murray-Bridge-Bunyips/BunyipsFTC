@@ -12,10 +12,7 @@ import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Storage;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
-
-import java.util.List;
 
 /**
  * Test to learn RoadRunner
@@ -36,16 +33,6 @@ public class GLaDOSRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Meca
     @Override
     protected MecanumDrive setDrive() {
         return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
-    }
-
-    @Override
-    protected List<OpModeSelection> setOpModes() {
-        return null;
-    }
-
-    @Override
-    protected RobotTask setInitTask() {
-        return null;
     }
 
     @Override

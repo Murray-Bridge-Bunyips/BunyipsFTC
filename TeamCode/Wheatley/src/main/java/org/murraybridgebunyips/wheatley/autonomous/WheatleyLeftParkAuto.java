@@ -13,10 +13,7 @@ import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.MessageTask;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
-
-import java.util.List;
 
 /**
  * Parking autonomous for Wheatley
@@ -38,6 +35,7 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
     @Override
     protected void onInitialise() {
         config.init();
+        setOpModes(StartingPositions.use());
     }
 
     @Override
@@ -46,16 +44,6 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
-    }
-
-    @Override
-    protected List<OpModeSelection> setOpModes() {
-        return StartingPositions.use();
-    }
-
-    @Override
-    protected RobotTask setInitTask() {
-        return null;
     }
 
     @Override

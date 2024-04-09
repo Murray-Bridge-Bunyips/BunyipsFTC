@@ -15,10 +15,7 @@ import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.MessageTask;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
-
-import java.util.List;
 
 /**
  * Park on the left side of the backdrop.
@@ -30,21 +27,12 @@ public class GLaDOSLeftPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDri
     @Override
     protected void onInitialise() {
         config.init();
+        setOpModes(StartingPositions.use());
     }
 
     @Override
     protected MecanumDrive setDrive() {
         return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
-    }
-
-    @Override
-    protected List<OpModeSelection> setOpModes() {
-        return StartingPositions.use();
-    }
-
-    @Override
-    protected RobotTask setInitTask() {
-        return null;
     }
 
     @Override

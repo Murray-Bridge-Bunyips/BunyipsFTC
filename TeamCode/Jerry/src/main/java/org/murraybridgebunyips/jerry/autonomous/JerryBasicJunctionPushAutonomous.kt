@@ -7,7 +7,6 @@ import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
 import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
 
@@ -38,17 +37,8 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
 
         if (NullSafety.assertNotNull(config.imu))
             imu = IMUOp(config.imu!!)
-    }
 
-    override fun setOpModes(): MutableList<OpModeSelection> {
-        return listOf(
-            OpModeSelection(Direction.LEFT),
-            OpModeSelection(Direction.RIGHT)
-        ).toMutableList()
-    }
-
-    override fun setInitTask(): RobotTask? {
-        return null
+        setOpModes(OpModeSelection(Direction.LEFT), OpModeSelection(Direction.RIGHT))
     }
 
     override fun onQueueReady(selectedOpMode: OpModeSelection?) {

@@ -8,7 +8,6 @@ import org.murraybridgebunyips.bunyipslib.OpModeSelection
 import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
@@ -57,14 +56,8 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
         tagtask = cam?.let { GetSignalTask(it) }
-    }
 
-    override fun setOpModes(): MutableList<OpModeSelection>? {
-        return null
-    }
-
-    override fun setInitTask(): RobotTask? {
-        return tagtask
+        setInitTask(tagtask)
     }
 
     override fun onQueueReady(selectedOpMode: OpModeSelection?) {

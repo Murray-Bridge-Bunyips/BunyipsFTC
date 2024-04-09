@@ -12,13 +12,10 @@ import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.ColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.RedTeamProp;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
-
-import java.util.List;
 
 /**
  * Use Wheatley's arm to place a Purple Pixel (loaded on left) to the Spike Mark detected in Init Phase.
@@ -36,6 +33,8 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
     protected void onInitialise() {
         config.init();
         vision = new Vision(config.webcam);
+        setOpModes(StartingPositions.use());
+        setInitTask(getTeamProp);
     }
 
     @Override
@@ -44,16 +43,6 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
-    }
-
-    @Override
-    protected List<OpModeSelection> setOpModes() {
-        return StartingPositions.use();
-    }
-
-    @Override
-    protected RobotTask setInitTask() {
-        return getTeamProp;
     }
 
     @Override
