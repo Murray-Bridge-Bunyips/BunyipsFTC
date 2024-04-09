@@ -1,8 +1,12 @@
 package org.murraybridgebunyips.pbody.autonomous;
 
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+
 import androidx.annotation.Nullable;
 
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
@@ -31,13 +35,13 @@ public class PbodyAuton extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> 
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
         if (selectedOpMode == null) return;
         StartingPositions position = (StartingPositions) selectedOpMode.getObj();
-        // TODO: After RR tuning make paths
+        // TODO: Make paths (painfully)
         switch (position) {
             case STARTING_RED_LEFT:
                 break;
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-
+                        .splineTo(new Vector2d(Inches.convertFrom(1, FieldTile), -Inches.convertFrom(1, FieldTile)), Math.toRadians(-90.0))
                         .build();
                 break;
             case STARTING_BLUE_LEFT:

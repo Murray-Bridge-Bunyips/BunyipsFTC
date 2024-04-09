@@ -1,5 +1,7 @@
 package org.murraybridgebunyips.pbody.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
@@ -13,6 +15,7 @@ import org.murraybridgebunyips.pbody.components.PbodyConfig;
  * Primary TeleOp for Pbody.
  * @author Lucas Bubner, 2024
  */
+@TeleOp(name = "TeleOp")
 public class PbodyTeleOp extends CommandBasedBunyipsOpMode {
     private final PbodyConfig config = new PbodyConfig();
     private DualServos claws;
@@ -28,7 +31,7 @@ public class PbodyTeleOp extends CommandBasedBunyipsOpMode {
         plane = new Cannon(config.pl, 0.6, 0.0);
         arm = new HoldableActuator(config.arm);
 
-        gamepad2.set(Controls.Analog.RIGHT_STICK_Y, (v) -> v * 0.6f);
+        gamepad2.set(Controls.Analog.LEFT_STICK_Y, (v) -> v * 0.6f);
 
         addSubsystems(claws, drive, plane, arm);
     }

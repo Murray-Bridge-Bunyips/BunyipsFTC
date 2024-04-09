@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.pbody.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
@@ -11,6 +12,7 @@ import org.murraybridgebunyips.pbody.components.PbodyConfig;
  * @author Jeff Rabone, 2023 (original Blocks author)
  */
 @TeleOp(name = "TeleOp(Blocks)")
+@Disabled
 public class PbodyTeleOpBlocks extends BunyipsOpMode {
     private final PbodyConfig config = new PbodyConfig();
     private CartesianMecanumDrive drive;
