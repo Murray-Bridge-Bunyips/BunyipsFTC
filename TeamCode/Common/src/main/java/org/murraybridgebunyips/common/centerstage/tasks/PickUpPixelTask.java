@@ -27,9 +27,8 @@ public class PickUpPixelTask extends SequentialTaskGroup {
                 // dont listen to him he is evil lachlan from evil lachlan world and he writes evil lachlan code in the evil lachlan ide on the evil lachlan laptop in the illegal lachlan chair
                 servos.closeTask(DualServos.ServoSide.BOTH),
                 // TODO: Test the gotoTask values cause I'll be honest I have pulled these numbers from unsavoury places
-                actuator.gotoTask(0),
-                servos.openTask(DualServos.ServoSide.BOTH),
-                actuator.gotoTask(100)
+                actuator.deltaTask(1000),
+                servos.openTask(DualServos.ServoSide.BOTH)
         );
         // Dota, Dota, Counter-Strike
         // I didn't know what to do, so onwards I went to manually animate the wrangler
