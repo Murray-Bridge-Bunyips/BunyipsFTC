@@ -7,6 +7,7 @@ import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
 import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.jerry.components.JerryConfig
@@ -50,7 +51,7 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
     }
 
     override fun onQueueReady(selectedOpMode: OpModeSelection?) {
-        addTask(JerryTimeDriveTask(1.5, drive, 1.0, 0.0, 0.0))
+        addTask(JerryTimeDriveTask(Seconds.of(1.5), drive, 1.0, 0.0, 0.0))
     }
 
     override fun onInitDone() {
@@ -62,10 +63,10 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
         // Add movement tasks based on the signal position
         if (position == Direction.LEFT) {
             // Drive forward if the position of the signal is LEFT
-            addTaskFirst(JerryTimeDriveTask(1.5, drive, 0.0, 1.0, 0.0))
+            addTaskFirst(JerryTimeDriveTask(Seconds.of(1.5), drive, 0.0, 1.0, 0.0))
         } else if (position == Direction.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
-            addTaskFirst(JerryTimeDriveTask(1.5, drive, 0.0, -1.0, 0.0))
+            addTaskFirst(JerryTimeDriveTask(Seconds.of(1.5), drive, 0.0, -1.0, 0.0))
         }
     }
 }

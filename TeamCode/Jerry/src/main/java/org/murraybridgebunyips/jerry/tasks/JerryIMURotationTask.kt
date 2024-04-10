@@ -3,6 +3,8 @@ package org.murraybridgebunyips.jerry.tasks
 import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
 import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.external.units.Measure
+import org.murraybridgebunyips.bunyipslib.external.units.Time
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 
@@ -14,7 +16,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
  * @author Lucas Bubner, 2023
  */
 class JerryIMURotationTask(
-    time: Double,
+    time: Measure<Time>,
     private val imu: IMUOp?,
     private val drive: CartesianMecanumDrive?,
     // Angle information should be a degree of rotation relative to current angle where positive = cw

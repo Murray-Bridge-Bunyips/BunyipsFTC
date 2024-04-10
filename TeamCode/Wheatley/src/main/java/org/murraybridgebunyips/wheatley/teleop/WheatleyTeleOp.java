@@ -1,6 +1,7 @@
 package org.murraybridgebunyips.wheatley.teleop;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -90,9 +91,9 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
                 .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
 
         operator().whenPressed(Controls.DPAD_UP)
-                .run(rotator.gotoTimeTask(Degrees.of(60), 2));
+                .run(rotator.gotoTimeTask(Degrees.of(60), Seconds.of(2)));
         operator().whenPressed(Controls.DPAD_DOWN)
-                .run(rotator.runForTask(1, -0.33, true));
+                .run(rotator.runForTask(Seconds.of(1), -0.33, true));
 
         driver().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))

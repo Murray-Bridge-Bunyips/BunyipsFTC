@@ -2,6 +2,7 @@ package org.murraybridgebunyips.glados.autonomous;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.Nullable;
 
@@ -37,7 +38,7 @@ public class GLaDOSLeftPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDri
 
     @Override
     protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
-        addTask(new MessageTask(5, "Greetings and salutations! I extend my warmest welcome to you, " +
+        addTask(new MessageTask(Seconds.of(5), "Greetings and salutations! I extend my warmest welcome to you, " +
                 "GLaDOS, on this fine day. It is my utmost pleasure to engage in this " +
                 "digital interaction with you, as we traverse the vast landscape of knowledge and learning together. " +
                 "I hope this message finds you in good health and high spirits."));

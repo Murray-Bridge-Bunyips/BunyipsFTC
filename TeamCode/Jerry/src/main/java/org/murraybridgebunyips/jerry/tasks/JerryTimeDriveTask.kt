@@ -1,6 +1,8 @@
 package org.murraybridgebunyips.jerry.tasks
 
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.external.units.Measure
+import org.murraybridgebunyips.bunyipslib.external.units.Time
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 
@@ -11,7 +13,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
  * @see JerryPrecisionDriveTask
  */
 class JerryTimeDriveTask(
-    time: Double,
+    time: Measure<Time>,
     private val drive: CartesianMecanumDrive?,
     private val x: Double,
     private val y: Double,

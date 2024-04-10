@@ -7,6 +7,7 @@ import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
 import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.jerry.components.JerryConfig
@@ -65,7 +66,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
         // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
         addTask(
             JerryPrecisionDriveTask(
-                4.0,
+                Seconds.of(4.0),
                 drive,
                 imu,
 //                x,
@@ -88,7 +89,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
             // Drive forward if the position of the signal is LEFT
             addTaskFirst(
                 JerryPrecisionDriveTask(
-                    3.5,
+                    Seconds.of(3.5),
                     drive,
                     imu,
 //                    x,
@@ -102,7 +103,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
             // Drive backward if the position of the signal is RIGHT
             addTaskFirst(
                 JerryPrecisionDriveTask(
-                    3.0,
+                    Seconds.of(3.0),
                     drive,
                     imu,
 //                    x,

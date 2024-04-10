@@ -7,6 +7,7 @@ import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
 import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
 
@@ -45,7 +46,7 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
         if (selectedOpMode == null) return
         addTask(
             JerryPrecisionDriveTask(
-                1.5,
+                Seconds.of(1.5),
                 drive,
                 imu,
                 selectedOpMode.obj as Direction,
