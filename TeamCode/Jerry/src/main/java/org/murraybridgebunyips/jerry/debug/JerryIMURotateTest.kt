@@ -34,7 +34,7 @@ class JerryIMURotateTest : AutonomousBunyipsOpMode() {
         )
     }
 
-    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
+    override fun onReady(selectedOpMode: OpModeSelection?) {
         addTask(JerryIMURotationTask(Seconds.of(15.0), imu!!, drive!!, -360.0, 0.5))
     }
 }

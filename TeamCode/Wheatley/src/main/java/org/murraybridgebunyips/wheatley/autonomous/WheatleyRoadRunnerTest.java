@@ -38,7 +38,7 @@ public class WheatleyRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Me
     }
 
     @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
         addNewTrajectory()
                 .forward(Inches.convertFrom(1, Meter))
                 .turn(Math.toRadians(180))

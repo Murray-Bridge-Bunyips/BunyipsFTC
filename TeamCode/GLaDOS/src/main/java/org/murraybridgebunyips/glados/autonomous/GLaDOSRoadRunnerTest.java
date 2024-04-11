@@ -36,7 +36,7 @@ public class GLaDOSRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<Meca
     }
 
     @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
         // Start red-left
         addNewTrajectory(new Pose2d(-37.95, -71.22, Math.toRadians(90.00)))
                 .splineTo(new Vector2d(-35.77, -13.74), Math.toRadians(87.16))

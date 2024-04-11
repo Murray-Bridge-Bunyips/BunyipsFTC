@@ -61,7 +61,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
         setInitTask(tagtask)
     }
 
-    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
+    override fun onReady(selectedOpMode: OpModeSelection?) {
         // Use PrecisionDrive to move rightwards for 1.5 seconds
         // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
         addTask(

@@ -48,7 +48,7 @@ public class WheatleyLeftParkAuto extends RoadRunnerAutonomousBunyipsOpMode<Meca
     }
 
     @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
         if (selectedOpMode == null) {
             return;
         }

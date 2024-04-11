@@ -50,7 +50,7 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
         setInitTask(tagtask)
     }
 
-    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
+    override fun onReady(selectedOpMode: OpModeSelection?) {
         addTask(JerryTimeDriveTask(Seconds.of(1.5), drive, 1.0, 0.0, 0.0))
     }
 

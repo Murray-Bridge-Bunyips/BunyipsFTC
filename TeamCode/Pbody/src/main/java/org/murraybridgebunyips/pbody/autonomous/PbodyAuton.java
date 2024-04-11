@@ -32,7 +32,7 @@ public class PbodyAuton extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> 
     }
 
     @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
         if (selectedOpMode == null) return;
         StartingPositions position = (StartingPositions) selectedOpMode.getObj();
         // TODO: Make paths (painfully)
