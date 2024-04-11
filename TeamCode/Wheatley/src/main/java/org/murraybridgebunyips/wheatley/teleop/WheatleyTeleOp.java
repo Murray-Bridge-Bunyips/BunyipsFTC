@@ -91,7 +91,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
                 .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
 
         operator().whenPressed(Controls.DPAD_UP)
-                .run(rotator.gotoTimeTask(Degrees.of(60), Seconds.of(2)));
+//                .run(rotator.gotoTimeTask(Degrees.of(60), Seconds.of(2)));
+                .run(rotator.gotoTask(Degrees.of(60)));
         operator().whenPressed(Controls.DPAD_DOWN)
                 .run(rotator.runForTask(Seconds.of(1), -0.33, true));
 
