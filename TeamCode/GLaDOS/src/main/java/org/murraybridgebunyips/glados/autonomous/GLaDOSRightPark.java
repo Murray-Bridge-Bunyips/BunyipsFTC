@@ -3,14 +3,16 @@ package org.murraybridgebunyips.glados.autonomous;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
-import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
@@ -20,7 +22,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * Park on the right side of the backdrop.
  */
 @Autonomous(name = "Right Park")
-public class GLaDOSRightPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+public class GLaDOSRightPark extends AutonomousBunyipsOpMode implements RoadRunner {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
 
     @Override
@@ -29,8 +31,9 @@ public class GLaDOSRightPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDr
         setOpModes(StartingPositions.use());
     }
 
+    @NonNull
     @Override
-    protected MecanumDrive setDrive() {
+    public MecanumDrive getDrive() {
         return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
     }
 

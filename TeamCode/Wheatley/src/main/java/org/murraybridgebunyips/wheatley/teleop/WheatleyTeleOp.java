@@ -58,7 +58,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     private MultiColourThreshold pixels;
 
     @Override
-    protected void onInitialisation() {
+    protected void onInitialise() {
         config.init();
         drive = new MecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,

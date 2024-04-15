@@ -5,12 +5,14 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
-import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.Storage;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
@@ -31,22 +33,26 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  */
 
 @Autonomous(name = "Right Park Auto")
-public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+public class WheatleyRightParkAuto extends AutonomousBunyipsOpMode implements RoadRunner {
     private final WheatleyConfig config = new WheatleyConfig();
+    private MecanumDrive drive;
 
     @Override
     protected void onInitialise() {
         config.init();
+        drive = new MecanumDrive(
+                config.driveConstants, config.mecanumCoefficients,
+                hardwareMap.voltageSensor, config.imu,
+                config.fl, config.fr, config.bl, config.br
+        );
         Storage.lastKnownPosition = null;
         setOpModes(StartingPositions.use());
     }
 
+    @NonNull
     @Override
-    protected MecanumDrive setDrive() {
-        return new MecanumDrive(
-                config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
-        );
+    public MecanumDrive getDrive() {
+        return drive;
     }
 
     @Override

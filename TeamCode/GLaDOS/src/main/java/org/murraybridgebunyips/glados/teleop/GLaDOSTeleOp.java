@@ -34,7 +34,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
     private Cannon cannon;
 
     @Override
-    protected void onInitialisation() {
+    protected void onInitialise() {
         config.init();
         drive = new DualDeadwheelMecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,

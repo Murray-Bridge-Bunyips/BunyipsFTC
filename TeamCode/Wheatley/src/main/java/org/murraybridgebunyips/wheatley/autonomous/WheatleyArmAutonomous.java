@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.wheatley.autonomous;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -7,8 +8,9 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
-import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
@@ -23,8 +25,9 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  */
 @Autonomous(name = "Arm Autonomous")
 @Disabled
-public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+public class WheatleyArmAutonomous extends AutonomousBunyipsOpMode implements RoadRunner {
     private final WheatleyConfig config = new WheatleyConfig();
+    private MecanumDrive drive;
     private Vision vision;
     private ColourThreshold teamProp;
     private GetTeamPropTask getTeamProp;
@@ -33,16 +36,19 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
     protected void onInitialise() {
         config.init();
         vision = new Vision(config.webcam);
+        drive = new MecanumDrive(
+                config.driveConstants, config.mecanumCoefficients,
+                hardwareMap.voltageSensor, config.imu,
+                config.fl, config.fr, config.bl, config.br
+        );
         setOpModes(StartingPositions.use());
         setInitTask(getTeamProp);
     }
 
+    @NonNull
     @Override
-    protected MecanumDrive setDrive() {
-        return new MecanumDrive(
-                config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
-        );
+    public MecanumDrive getDrive() {
+        return drive;
     }
 
     @Override

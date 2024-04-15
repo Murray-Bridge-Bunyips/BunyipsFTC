@@ -23,7 +23,7 @@ class JerryIMURotateTest : AutonomousBunyipsOpMode() {
     private var imu: IMUOp? = null
     private var drive: CartesianMecanumDrive? = null
 
-    override fun onInitialisation() {
+    override fun onInitialise() {
         config.init()
         imu = IMUOp(config.imu!!)
         drive = CartesianMecanumDrive(

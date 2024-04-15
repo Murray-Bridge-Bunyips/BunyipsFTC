@@ -4,14 +4,16 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeter
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
-import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
@@ -22,18 +24,21 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * Park on the left side of the backdrop.
  */
 @Autonomous(name = "Left Park")
-public class GLaDOSLeftPark extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+public class GLaDOSLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private DualDeadwheelMecanumDrive drive;
 
     @Override
     protected void onInitialise() {
         config.init();
+        drive = new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
         setOpModes(StartingPositions.use());
     }
 
+    @NonNull
     @Override
-    protected MecanumDrive setDrive() {
-        return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
+    public MecanumDrive getDrive() {
+        return drive;
     }
 
     @Override

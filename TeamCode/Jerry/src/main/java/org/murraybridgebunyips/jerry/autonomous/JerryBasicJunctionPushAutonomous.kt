@@ -26,7 +26,7 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
     private var drive: CartesianMecanumDrive? = null
     private var imu: IMUOp? = null
 
-    override fun onInitialisation() {
+    override fun onInitialise() {
         config.init()
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(

@@ -30,7 +30,7 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
     private var drive: CartesianMecanumDrive? = null
     private var tagtask: GetSignalTask? = null
 
-    override fun onInitialisation() {
+    override fun onInitialise() {
         // Configuration of camera and drive components
         config.init()
         cam =

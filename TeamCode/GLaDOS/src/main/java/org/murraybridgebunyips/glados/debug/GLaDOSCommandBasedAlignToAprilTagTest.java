@@ -26,7 +26,7 @@ public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOp
     private AprilTag aprilTag;
 
     @Override
-    protected void onInitialisation() {
+    protected void onInitialise() {
         config.init();
         drive = new DualDeadwheelMecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,

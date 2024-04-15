@@ -4,13 +4,15 @@ package org.murraybridgebunyips.pbody.autonomous;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
-import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
@@ -20,14 +22,16 @@ import org.murraybridgebunyips.pbody.components.PbodyConfig;
  * Primary Autonomous OpMode (WIP)
  */
 @Autonomous(name = "Autonomous")
-public class PbodyAuton extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+public class PbodyAuton extends AutonomousBunyipsOpMode implements RoadRunner {
     private final PbodyConfig config = new PbodyConfig();
+    private MecanumDrive drive;
     private HoldableActuator arm;
 
     @Override
     protected void onInitialise() {
         config.init();
         arm = new HoldableActuator(config.arm);
+        drive = new MecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
         setOpModes(StartingPositions.use());
     }
 
@@ -51,8 +55,9 @@ public class PbodyAuton extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> 
         }
     }
 
+    @NonNull
     @Override
-    protected MecanumDrive setDrive() {
-        return new MecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+    public MecanumDrive getDrive() {
+        return drive;
     }
 }
