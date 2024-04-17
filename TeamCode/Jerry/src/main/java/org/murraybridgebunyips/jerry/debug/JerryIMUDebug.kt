@@ -2,7 +2,7 @@ package org.murraybridgebunyips.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.IMUOp
+import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
 import org.murraybridgebunyips.jerry.components.JerryConfig
 
 /**

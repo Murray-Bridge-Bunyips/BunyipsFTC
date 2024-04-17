@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.RobotConfig;
+import org.murraybridgebunyips.bunyipslib.Storage;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
@@ -20,7 +20,7 @@ public class WheatleyRRMecanum extends BunyipsOpMode {
     @Override
     protected void onInit() {
         config.init();
-        RobotConfig.setLastKnownPosition(null);
+        Storage.lastKnownPosition = null;
         drive = new MecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br

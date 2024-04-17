@@ -3,10 +3,10 @@ package org.murraybridgebunyips.jerry.debug
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.IMUOp
+import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryIMURotationTask
 
@@ -23,7 +23,7 @@ class JerryIMURotateTest : AutonomousBunyipsOpMode() {
     private var imu: IMUOp? = null
     private var drive: CartesianMecanumDrive? = null
 
-    override fun onInitialisation() {
+    override fun onInitialise() {
         config.init()
         imu = IMUOp(config.imu!!)
         drive = CartesianMecanumDrive(
@@ -34,15 +34,7 @@ class JerryIMURotateTest : AutonomousBunyipsOpMode() {
         )
     }
 
-    override fun setOpModes(): MutableList<OpModeSelection>? {
-        return null
-    }
-
-    override fun setInitTask(): RobotTask? {
-        return null
-    }
-
-    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
-        addTask(JerryIMURotationTask(15.0, imu!!, drive!!, -360.0, 0.5))
+    override fun onReady(selectedOpMode: OpModeSelection?) {
+        addTask(JerryIMURotationTask(Seconds.of(15.0), imu!!, drive!!, -360.0, 0.5))
     }
 }

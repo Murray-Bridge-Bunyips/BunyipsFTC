@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.glados.autonomous;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -7,15 +8,13 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
-import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.RobotConfig;
+import org.murraybridgebunyips.bunyipslib.RoadRunner;
+import org.murraybridgebunyips.bunyipslib.Storage;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
-
-import java.util.List;
 
 /**
  * Test to learn RoadRunner
@@ -24,32 +23,25 @@ import java.util.List;
  */
 @Autonomous(name = "RoadRunner Test")
 @Disabled
-public class GLaDOSRoadRunnerTest extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+public class GLaDOSRoadRunnerTest extends AutonomousBunyipsOpMode implements RoadRunner {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private DualDeadwheelMecanumDrive drive;
 
     @Override
     protected void onInitialise() {
         config.init();
-        RobotConfig.setLastKnownPosition(null);
+        drive = new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
+        Storage.lastKnownPosition = null;
+    }
+
+    @NonNull
+    @Override
+    public MecanumDrive getDrive() {
+        return drive;
     }
 
     @Override
-    protected MecanumDrive setDrive() {
-        return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
-    }
-
-    @Override
-    protected List<OpModeSelection> setOpModes() {
-        return null;
-    }
-
-    @Override
-    protected RobotTask setInitTask() {
-        return null;
-    }
-
-    @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
         // Start red-left
         addNewTrajectory(new Pose2d(-37.95, -71.22, Math.toRadians(90.00)))
                 .splineTo(new Vector2d(-35.77, -13.74), Math.toRadians(87.16))

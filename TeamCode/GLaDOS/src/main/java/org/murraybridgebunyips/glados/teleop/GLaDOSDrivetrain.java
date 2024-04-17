@@ -1,9 +1,9 @@
 package org.murraybridgebunyips.glados.teleop;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
@@ -14,7 +14,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * @author Lucas Bubner, 2023
  */
 @TeleOp(name = "Drivetrain")
-@Disabled
+//@Disabled
 public class GLaDOSDrivetrain extends BunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;
@@ -28,6 +28,7 @@ public class GLaDOSDrivetrain extends BunyipsOpMode {
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelDeadwheel, config.perpendicularDeadwheel
         );
+        gamepad1.set(Controls.Analog.LEFT_STICK_Y, (x) -> 0.0f);
     }
 
     @Override

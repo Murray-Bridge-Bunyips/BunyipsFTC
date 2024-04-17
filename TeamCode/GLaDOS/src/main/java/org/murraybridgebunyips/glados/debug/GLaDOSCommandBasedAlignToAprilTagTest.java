@@ -3,7 +3,7 @@ package org.murraybridgebunyips.glados.debug;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.Controller;
+import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
@@ -26,7 +26,7 @@ public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOp
     private AprilTag aprilTag;
 
     @Override
-    protected void onInitialisation() {
+    protected void onInitialise() {
         config.init();
         drive = new DualDeadwheelMecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
@@ -45,7 +45,7 @@ public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOp
     @Override
     protected void assignCommands() {
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
-        scheduler().whenPressed(Controller.User.ONE, Controller.LEFT_BUMPER)
+        driver().whenPressed(Controls.LEFT_BUMPER)
                 .run(new MoveToAprilTagTask<>(gamepad1, drive, aprilTag, -1))
                 .finishingWhen(() -> !gamepad1.left_bumper);
     }

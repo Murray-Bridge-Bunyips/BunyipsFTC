@@ -3,10 +3,10 @@ package org.murraybridgebunyips.glados.debug;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.Controller;
+import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.pid.PIDController;
+import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.tasks.AlignToContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.bunyipslib.tasks.MoveToContourTask;
@@ -29,7 +29,7 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
     private MultiColourThreshold pixels;
 
     @Override
-    protected void onInitialisation() {
+    protected void onInitialise() {
         config.init();
         drive = new DualDeadwheelMecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
@@ -49,12 +49,12 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
     protected void assignCommands() {
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
 //        scheduler().whenHeld(Controller.User.ONE, Controller.Y)
-//                .run(new CallbackTask(() -> drive.resetYaw()))
+//                .run(new RunTask(() -> drive.resetYaw()))
 //                
-        scheduler().whenPressed(Controller.User.ONE, Controller.LEFT_BUMPER)
+        driver().whenPressed(Controls.LEFT_BUMPER)
                 .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
                 .finishingWhen(() -> !gamepad1.left_bumper);
-        scheduler().whenPressed(Controller.User.ONE, Controller.RIGHT_BUMPER)
+        driver().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new MoveToContourTask<>(gamepad1, drive, pixels, new PIDController(0.36, 0.6, 0.0), new PIDController(0.67, 0.25, 0.0)))
                 .finishingWhen(() -> !gamepad1.right_bumper);
     }

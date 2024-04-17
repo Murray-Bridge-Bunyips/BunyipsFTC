@@ -2,9 +2,9 @@ package org.murraybridgebunyips.jerry.teleop
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.IMUOp
+import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
-import org.murraybridgebunyips.bunyipslib.RelativePose2d
+import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.Threads
 import org.murraybridgebunyips.bunyipslib.UserSelection
 import org.murraybridgebunyips.bunyipslib.drive.CartesianFieldCentricMecanumDrive
@@ -62,7 +62,7 @@ class JerryTeleOp : BunyipsOpMode() {
                     config.br!!,
                     imu!!,
                     true,
-                    RelativePose2d.FORWARD
+                    Direction.FORWARD
                 )
             } else {
                 CartesianMecanumDrive(

@@ -77,7 +77,7 @@ class JerryAutoTest : BunyipsOpMode() {
 
     override fun onInitDone() {
         when (tagTask?.position) {
-            GetSignalTask.ParkingPosition.LEFT -> {
+            RelativePose2d.LEFT -> {
                 // Draw a square
                 // Forward
                 tasks.add(JerryTimeDriveTask(this, 3.0, drive!!, 0.0, 0.5, 0.0))
@@ -90,12 +90,12 @@ class JerryAutoTest : BunyipsOpMode() {
                 // i do not care about consistency
             }
 
-            GetSignalTask.ParkingPosition.RIGHT -> {
+            RelativePose2d.RIGHT -> {
                 // Spin 360 degrees right
                 tasks.add(JerryIMURotationTask(this, 10.0, imu!!, drive!!, 360.0, 0.5))
             }
 
-            GetSignalTask.ParkingPosition.CENTER -> {
+            RelativePose2d.CENTER -> {
                 // Insult lucas in the console
                 tasks.add(
                     MessageTask(

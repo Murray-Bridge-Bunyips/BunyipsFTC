@@ -2,12 +2,13 @@ package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.IMUOp
+import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
@@ -31,7 +32,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
 //    private var y: Odometer? = null
     private var tagtask: GetSignalTask? = null
 
-    override fun onInitialisation() {
+    override fun onInitialise() {
         // Configuration of camera and drive components
         config.init()
         cam =
@@ -56,28 +57,22 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
         tagtask = cam?.let { GetSignalTask(it) }
+
+        setInitTask(tagtask)
     }
 
-    override fun setOpModes(): MutableList<OpModeSelection>? {
-        return null
-    }
-
-    override fun setInitTask(): RobotTask? {
-        return tagtask
-    }
-
-    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
+    override fun onReady(selectedOpMode: OpModeSelection?) {
         // Use PrecisionDrive to move rightwards for 1.5 seconds
         // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
         addTask(
             JerryPrecisionDriveTask(
-                4.0,
+                Seconds.of(4.0),
                 drive,
                 imu,
 //                x,
 //                y,
 //                600.0,
-                JerryPrecisionDriveTask.Directions.RIGHT,
+                Direction.RIGHT,
                 0.5
             )
         )
@@ -90,31 +85,31 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
         addTelemetry("ParkingPosition set to: $position")
 
         // Add movement tasks based on the signal position
-        if (position == GetSignalTask.ParkingPosition.LEFT) {
+        if (position == Direction.LEFT) {
             // Drive forward if the position of the signal is LEFT
             addTaskFirst(
                 JerryPrecisionDriveTask(
-                    3.5,
+                    Seconds.of(3.5),
                     drive,
                     imu,
 //                    x,
 //                    y,
 //                    400.0,
-                    JerryPrecisionDriveTask.Directions.FORWARD,
+                    Direction.FORWARD,
                     0.5
                 )
             )
-        } else if (position == GetSignalTask.ParkingPosition.RIGHT) {
+        } else if (position == Direction.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
             addTaskFirst(
                 JerryPrecisionDriveTask(
-                    3.0,
+                    Seconds.of(3.0),
                     drive,
                     imu,
 //                    x,
 //                    y,
 //                    400.0,
-                    JerryPrecisionDriveTask.Directions.BACKWARD,
+                    Direction.BACKWARD,
                     0.5
                 )
             )

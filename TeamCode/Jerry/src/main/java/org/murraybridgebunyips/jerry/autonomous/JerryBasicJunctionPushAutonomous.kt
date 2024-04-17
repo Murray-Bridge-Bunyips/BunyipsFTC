@@ -2,11 +2,12 @@ package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.IMUOp
+import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
 
@@ -25,7 +26,7 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
     private var drive: CartesianMecanumDrive? = null
     private var imu: IMUOp? = null
 
-    override fun onInitialisation() {
+    override fun onInitialise() {
         config.init()
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
@@ -37,47 +38,20 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
 
         if (NullSafety.assertNotNull(config.imu))
             imu = IMUOp(config.imu!!)
+
+        setOpModes(OpModeSelection(Direction.LEFT), OpModeSelection(Direction.RIGHT))
     }
 
-    override fun setOpModes(): MutableList<OpModeSelection> {
-        return listOf(
-            OpModeSelection(Direction.DRIVE_LEFT),
-            OpModeSelection(Direction.DRIVE_RIGHT)
-        ).toMutableList()
-    }
-
-    override fun setInitTask(): RobotTask? {
-        return null
-    }
-
-    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
+    override fun onReady(selectedOpMode: OpModeSelection?) {
         if (selectedOpMode == null) return
-        when (selectedOpMode.obj as Direction) {
-            Direction.DRIVE_LEFT ->
-                addTask(
-                    JerryPrecisionDriveTask(
-                        1.5,
-                        drive,
-                        imu,
-                        JerryPrecisionDriveTask.Directions.LEFT,
-                        1.0
-                    )
-                )
-
-            else ->
-                addTask(
-                    JerryPrecisionDriveTask(
-                        1.5,
-                        drive,
-                        imu,
-                        JerryPrecisionDriveTask.Directions.RIGHT,
-                        1.0
-                    )
-                )
-        }
-    }
-
-    private enum class Direction {
-        DRIVE_LEFT, DRIVE_RIGHT
+        addTask(
+            JerryPrecisionDriveTask(
+                Seconds.of(1.5),
+                drive,
+                imu,
+                selectedOpMode.obj as Direction,
+                1.0
+            )
+        )
     }
 }

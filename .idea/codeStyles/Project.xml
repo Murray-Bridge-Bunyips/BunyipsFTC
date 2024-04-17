@@ -2,6 +2,11 @@
   <code_scheme name="Project" version="173">
     <option name="LINE_SEPARATOR" />
     <option name="RIGHT_MARGIN" value="120" />
+    <option name="DO_NOT_FORMAT">
+      <list>
+        <fileSet type="globPattern" pattern="Units.java" />
+      </list>
+    </option>
     <JetCodeStyleSettings>
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
