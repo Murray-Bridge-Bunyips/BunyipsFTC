@@ -5,8 +5,17 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 
+/**
+ * Cellphone
+ */
 public class CellphoneConfig extends RobotConfig {
+    /**
+     * Back camera
+     */
     public CameraName cameraB;
+    /**
+     * Front camera
+     */
     public CameraName cameraF;
     @Override
     protected void onRuntime() {

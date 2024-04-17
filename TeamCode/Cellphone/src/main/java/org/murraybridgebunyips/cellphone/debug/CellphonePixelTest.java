@@ -8,6 +8,9 @@ import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
 
+/**
+ * Test all 2023-2024 CENTERSTAGE pixel detections.
+ */
 @TeleOp(name = "Pixel Vision Test (Cellphone)")
 public class CellphonePixelTest extends BunyipsOpMode {
     private final CellphoneConfig config = new CellphoneConfig();
