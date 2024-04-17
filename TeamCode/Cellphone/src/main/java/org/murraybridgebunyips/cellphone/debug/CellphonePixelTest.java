@@ -1,16 +1,16 @@
-package org.murraybridgebunyips.brainbot.debug;
+package org.murraybridgebunyips.cellphone.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.murraybridgebunyips.brainbot.components.BrainbotConfig;
+import org.murraybridgebunyips.cellphone.components.CellphoneConfig;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
 
-@TeleOp(name = "Vision Test (Brainbot)")
-public class BrainbotVision extends BunyipsOpMode {
-    private final BrainbotConfig config = new BrainbotConfig();
+@TeleOp(name = "Pixel Vision Test (Cellphone)")
+public class CellphonePixelTest extends BunyipsOpMode {
+    private final CellphoneConfig config = new CellphoneConfig();
     private Vision visionB;
 //    private Vision visionF;
 
