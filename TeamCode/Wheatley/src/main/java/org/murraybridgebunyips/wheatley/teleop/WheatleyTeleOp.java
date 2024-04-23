@@ -83,7 +83,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        operator().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
+        driver().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(cannon.fireTask());
         operator().whenPressed(Controls.BACK)
                 .run(cannon.resetTask());
@@ -106,7 +106,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         operator().whenPressed(Controls.A)
                 .run(new RunTask());
 
-        operator().whenPressed(Controls.RIGHT_STICK_BUTTON)
+        operator().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(new PickUpPixelTask(linearActuator, claws));
 
         linearActuator.setDefaultTask(linearActuator.controlTask(() -> -gamepad2.lsy));
@@ -118,6 +118,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     protected void periodic() {
         // Some drivers have noted that they sometimes cannot tell whether a claw is open or closed.
         // Hopefully this helps. Update: It did :)
+        addTelemetry("Ticks Per-Second: %", config.linearActuator.getVelocity());
+
         addTelemetry("\n---------");
 
         // The actual string is set to the opposite of what you might expect, by driver request.
