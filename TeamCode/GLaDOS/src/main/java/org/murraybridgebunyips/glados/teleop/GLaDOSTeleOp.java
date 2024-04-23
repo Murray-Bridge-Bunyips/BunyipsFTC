@@ -1,7 +1,6 @@
 package org.murraybridgebunyips.glados.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.external.Mathf;
@@ -22,15 +21,6 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
  * TeleOp for GLaDOS robot FTC 15215
- * gamepad1:
- * left_stick_x: strafe
- * left_stick_y: forward/backward
- * right_stick_x: turn
- * right_trigger: fire cannon
- * b: reset cannon
- * gamepad2:
- * x: toggle left claw
- * b: toggle right claw
  *
  * @author Lucas Bubner, 2024
  * @author Lachlan Paul, 2024
@@ -38,7 +28,6 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 @TeleOp(name = "TeleOp")
 public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
-    private final ElapsedTime timer = new ElapsedTime();
     private MecanumDrive drive;
     private HoldableActuator arm;
     private DualServos claws;
@@ -46,15 +35,8 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
     private Vision vision;
     private MultiColourThreshold pixels;
 
-    private float tick() {
-        float s = (float) timer.seconds();
-        timer.reset();
-        return s;
-    }
-
     @Override
     protected void onInitialise() {
-        timer.reset();
         config.init();
         vision = new Vision(config.webcam);
         drive = new DualDeadwheelMecanumDrive(
@@ -68,7 +50,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 /*giulio*/
         gamepad2.set(Controls.Analog.LEFT_STICK_Y, (v) ->
-                Mathf.clamp(Mathf.moveTowards(gamepad2.lsy, v, v == 0.0 ? 0.0002f : 0.00008f), -0.5f, 0.5f)
+            Mathf.clamp(Mathf.moveTowards(gamepad2.lsy, v, v == 0.0 ? 0.0002f : 0.00008f), -0.5f, 0.5f)
         );
         gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
 
