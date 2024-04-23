@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.glados.debug;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
@@ -18,7 +19,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * @author Lucas Bubner, 2024
  */
 @TeleOp(name = "Align To AprilTag (Command Based)")
-//@Disabled
+@Disabled
 public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;

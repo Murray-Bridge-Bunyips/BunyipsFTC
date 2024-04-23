@@ -5,8 +5,6 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeter
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -55,31 +53,19 @@ public class GLaDOSConfigCore extends RobotConfig {
      */
     public Deadwheel perpendicularDeadwheel;
     /**
-     * Control 0: Suspender Actuator "sa"
+     * Control 0: Arm "arm"
      */
-    public DcMotorEx suspenderActuator;
+    public DcMotorEx arm;
     /**
-     * Control Servo 5: Pixel Forward Motion Servo "pm"
-     */
-    public CRServo pixelMotion;
-    /**
-     * Control Servo 4: Pixel Alignment Servo "al"
-     */
-    public Servo pixelAlignment;
-    /**
-     * Control Servo 2: Left Servo "ls"
+     * Control Servo 1: Left Servo "ls"
      */
     public Servo leftPixel;
     /**
-     * Control Servo 3: Right Servo "rs"
+     * Control Servo 2: Right Servo "rs"
      */
     public Servo rightPixel;
     /**
-     * Control Servo 1: Suspension Hook "sh"
-     */
-    public Servo suspenderHook;
-    /**
-     * Control Servo ?: Plane Launcher "pl"
+     * Control Servo 0: Plane Launcher "pl"
      */
     public Servo launcher;
     /**
@@ -125,19 +111,11 @@ public class GLaDOSConfigCore extends RobotConfig {
         perpendicularDeadwheel = getHardware("ppe", Deadwheel.class,
                 (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
 
-        pixelMotion = getHardware("pm", CRServo.class);
-        pixelAlignment = getHardware("al", Servo.class);
-
-        // Suspender/pixel upward motion system
-        suspenderActuator = getHardware("sa", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.FORWARD);
-            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        });
-        suspenderHook = getHardware("sh", Servo.class, (d) -> d.scaleRange(0.25, 1));
-
         // Pixel manipulation system
-        leftPixel = getHardware("ls", Servo.class);
-        rightPixel = getHardware("rs", Servo.class);
+        arm = getHardware("arm", DcMotorEx.class);
+        double LIM = 0.7;
+        leftPixel = getHardware("ls", Servo.class, (d) -> d.scaleRange(LIM, 1.0));
+        rightPixel = getHardware("rs", Servo.class, (d) -> d.scaleRange(0.0, 1 - LIM));
 
         // Paper Drone launcher system
         launcher = getHardware("pl", Servo.class);

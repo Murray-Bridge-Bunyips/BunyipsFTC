@@ -5,6 +5,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controls;
@@ -77,6 +78,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         vision.init(pixels);
         vision.start(pixels);
 //        vision.startPreview();
+
+        gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
 
         addSubsystems(drive, cannon, linearActuator, rotator, claws, vision);
     }
