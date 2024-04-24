@@ -1,13 +1,13 @@
 package org.murraybridgebunyips.glados.autonomous;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
@@ -16,6 +16,7 @@ import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.tasks.MessageTask;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -44,32 +45,46 @@ public class GLaDOSRightPark extends AutonomousBunyipsOpMode implements RoadRunn
         }
 
         StartingPositions startingPosition = (StartingPositions) selectedOpMode.getObj();
-
         switch (startingPosition) {
             case STARTING_RED_LEFT:
-                addNewTrajectory(new Pose2d(-38.58, -62.79, Math.toRadians(90.00)))
-                        .lineToLinearHeading(new Pose2d(-38.73, -6.09, Math.toRadians(360.00)))
-                        .splineTo(new Vector2d(18.43, -6.56), Math.toRadians(0.00))
-                        .splineTo(new Vector2d(49.67, -52.32), Math.toRadians(298.64))
-                        .splineTo(new Vector2d(64.66, -65.91), Math.toRadians(299.20))
+                addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                addNewTrajectory()
+                        .forward(5)
+                        .build();
+                addNewTrajectory()
+                        .strafeRight(Inches.convertFrom(180, Centimeters))
+                        .build();
+                addNewTrajectory()
+                        .back(2)
+                        .build();
+                addNewTrajectory()
+                        .strafeRight(100)
                         .build();
                 break;
+
+            case STARTING_BLUE_LEFT:
+                addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                addNewTrajectory()
+                        .forward(Inches.convertFrom(3, FieldTiles))
+                        .build();
+                addNewTrajectory()
+                        .strafeLeft(Inches.convertFrom(3, FieldTiles))
+                        .build();
+                break;
+
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .strafeRight(Inches.convertFrom(80, Centimeters))
+                        .strafeRight(Inches.convertFrom(180, Centimeters))
                         .build();
                 break;
-            case STARTING_BLUE_LEFT:
-                // worlds worst autonomous on blue right
-//                addNewTrajectory(new Pose2d(14.68, 65.13, Math.toRadians(270.00)))
-//                        .splineToLinearHeading(new Pose2d(37.64, 34.36, Math.toRadians(-90.00)), Math.toRadians(-90.00))
-//                        .splineTo(new Vector2d(72.78, 11.25), Math.toRadians(0.00))
-//                        .build();
-                break;
+
             case STARTING_BLUE_RIGHT:
-                addNewTrajectory(new Pose2d(-38.89, 63.10, Math.toRadians(270.00)))
-                        .lineToLinearHeading(new Pose2d(-38.73, 9.21, Math.toRadians(360.00)))
-                        .lineTo(new Vector2d(72.62, 11.09))
+                addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                addNewTrajectory()
+                        .forward(Inches.convertFrom(3, FieldTiles))
+                        .build();
+                addNewTrajectory()
+                        .strafeLeft(Inches.convertFrom(5.5, FieldTiles))
                         .build();
                 break;
         }

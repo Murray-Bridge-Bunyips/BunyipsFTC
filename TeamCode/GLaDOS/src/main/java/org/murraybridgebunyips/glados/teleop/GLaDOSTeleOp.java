@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.glados.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.Controller;
@@ -14,6 +15,7 @@ import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.AlignToContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
+import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
@@ -25,8 +27,13 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * @author Lucas Bubner, 2024
  * @author Lachlan Paul, 2024
  */
+@Config
 @TeleOp(name = "TeleOp")
 public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
+    /**
+     * The amount to raise the arm on init.
+     */
+    public static int ARM_DELTA_POSITION_ON_INIT = 200;
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;
     private HoldableActuator arm;
@@ -34,6 +41,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
     private Cannon cannon;
     private Vision vision;
     private MultiColourThreshold pixels;
+    private Task raiseOnInitTask;
 
     @Override
     protected void onInitialise() {
@@ -59,7 +67,19 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         vision.start(pixels);
         vision.startPreview();
 
+        raiseOnInitTask = arm.deltaTask(ARM_DELTA_POSITION_ON_INIT);
         addSubsystems(drive, cannon, claws, arm);
+    }
+
+    @Override
+    protected boolean onInitLoop() {
+        raiseOnInitTask.run();
+        return raiseOnInitTask.pollFinished();
+    }
+
+    @Override
+    protected void onStart() {
+        raiseOnInitTask.finishNow();
     }
 
     @Override
@@ -77,8 +97,8 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 .run(cannon.resetTask());
 
         driver().whenPressed(Controls.RIGHT_BUMPER)
-                .run(new AlignToContourTask<>(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsy, drive, pixels, new PIDController(0.67, 0.25, 0)))
-                .finishingWhen(() -> !gamepad2.rb);
+                .run(new AlignToContourTask<>(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsx, drive, pixels, new PIDController(0.67, 0.25, 0)))
+                .finishingWhen(() -> !gamepad1.rb);
 
         arm.setDefaultTask(arm.controlTask(() -> gamepad2.lsy));
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));

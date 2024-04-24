@@ -14,7 +14,6 @@ import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
-import org.murraybridgebunyips.bunyipslib.Storage;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.MessageTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
@@ -45,7 +44,6 @@ public class WheatleyRightParkAuto extends AutonomousBunyipsOpMode implements Ro
                 hardwareMap.voltageSensor, config.imu,
                 config.fl, config.fr, config.bl, config.br
         );
-        Storage.lastKnownPosition = null;
         setOpModes(StartingPositions.use());
     }
 
