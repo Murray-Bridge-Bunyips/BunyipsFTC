@@ -21,6 +21,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
+import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -84,11 +85,13 @@ public class GLaDOSBackboardPlacer extends AutonomousBunyipsOpMode implements Ro
         addTask(arm.deltaTask(1500));
         addTask(claws.openTask(DualServos.ServoSide.BOTH));
         addTask(new WaitTask(Seconds.of(1)));
-        addTask(arm.deltaTask(-1500));
+        addTask(new ParallelTaskGroup(
+                addNewTrajectory()
+                        .strafeLeft(0.95 * FIELD_TILE_SCALE, FieldTile)
+                        .buildOnlyTask(),
+                arm.deltaTask(-1500)
+        ));
 
-        addNewTrajectory()
-                .strafeLeft(0.95 * FIELD_TILE_SCALE, FieldTile)
-                .build();
         addNewTrajectory()
                 .forward(1.1 * FIELD_TILE_SCALE, FieldTiles)
                 .build();
