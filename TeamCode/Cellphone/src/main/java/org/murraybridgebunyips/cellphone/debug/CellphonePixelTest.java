@@ -2,11 +2,11 @@ package org.murraybridgebunyips.cellphone.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.murraybridgebunyips.cellphone.components.CellphoneConfig;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
+import org.murraybridgebunyips.cellphone.components.CellphoneConfig;
 
 /**
  * Test all 2023-2024 CENTERSTAGE pixel detections.

@@ -1,8 +1,8 @@
 package org.murraybridgebunyips.pbody.autonomous;
 
 
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,7 +45,7 @@ public class PbodyAuton extends AutonomousBunyipsOpMode implements RoadRunner {
                 break;
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .splineTo(new Vector2d(Inches.convertFrom(1, FieldTile), -Inches.convertFrom(1, FieldTile)), Math.toRadians(-90.0))
+                        .splineTo(new Vector2d(1.0, -1.0), FieldTiles, -90.0, Degrees)
                         .build();
                 break;
             case STARTING_BLUE_LEFT:

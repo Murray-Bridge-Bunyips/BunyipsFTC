@@ -1,7 +1,10 @@
 package org.murraybridgebunyips.wheatley.components;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.DegreesPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.InchesPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -162,15 +165,14 @@ public class WheatleyConfig extends RobotConfig {
                 .setTicksPerRev(28)
                 .setMaxRPM(6000)
                 .setRunUsingEncoder(false)
-                .setWheelRadius(Inches.convertFrom(75, Millimeters) / 2.0)
+                .setWheelRadius(Millimeters.of(75).divide(2))
                 .setGearRatio(1.0 / 13.1)
-                .setTrackWidth(20.5)
+                .setTrackWidth(Inches.of(20.5))
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
-                .setMaxVel(41.065033847087705)
-                .setMaxAccel(41.065033847087705)
-                // 179.687013 in degrees
-                .setMaxAngVel(3.13613)
-                .setMaxAngAccel(3.13613)
+                .setMaxVel(InchesPerSecond.of(1.065033847087705))
+                .setMaxAccel(InchesPerSecond.per(Second).of(41.065033847087705))
+                .setMaxAngVel(DegreesPerSecond.of(175))
+                .setMaxAngAccel(DegreesPerSecond.per(Second).of(175))
                 .setKV(0.0145)
                 .setKStatic(0.06422)
                 .setKA(0.001)

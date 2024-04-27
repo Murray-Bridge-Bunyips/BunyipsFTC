@@ -2,7 +2,6 @@ package org.murraybridgebunyips.wheatley.autonomous;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.NonNull;
@@ -66,7 +65,7 @@ public class WheatleyRightParkAuto extends AutonomousBunyipsOpMode implements Ro
                         .forward(5)
                         .build();
                 addNewTrajectory()
-                        .strafeRight(Inches.convertFrom(180, Centimeters))
+                        .strafeRight(180, Centimeters)
                         .build();
                 addNewTrajectory()
                         .back(2)
@@ -79,26 +78,26 @@ public class WheatleyRightParkAuto extends AutonomousBunyipsOpMode implements Ro
             case STARTING_BLUE_LEFT:
                 addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 addNewTrajectory()
-                        .forward(Inches.convertFrom(3, FieldTiles))
+                        .forward(3, FieldTiles)
                         .build();
                 addNewTrajectory()
-                        .strafeLeft(Inches.convertFrom(3, FieldTiles))
+                        .strafeLeft(3, FieldTiles)
                         .build();
                 break;
 
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .strafeRight(Inches.convertFrom(180, Centimeters))
+                        .strafeRight(180, Centimeters)
                         .build();
                 break;
 
             case STARTING_BLUE_RIGHT:
                 addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 addNewTrajectory()
-                        .forward(Inches.convertFrom(3, FieldTiles))
+                        .forward(3, FieldTiles)
                         .build();
                 addNewTrajectory()
-                        .strafeLeft(Inches.convertFrom(5.5, FieldTiles))
+                        .strafeLeft(5.5, FieldTiles)
                         .build();
                 break;
         }

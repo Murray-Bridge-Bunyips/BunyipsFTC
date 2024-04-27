@@ -2,12 +2,12 @@ package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
+import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.OpModeSelection
-import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
+import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
 import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.jerry.components.JerryConfig

@@ -1,6 +1,6 @@
 package org.murraybridgebunyips.wheatley.autonomous;
 
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Meter;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Meters;
 
@@ -46,11 +46,11 @@ public class WheatleyRoadRunnerTest extends AutonomousBunyipsOpMode implements R
     @Override
     protected void onReady(@Nullable OpModeSelection selectedOpMode) {
         addNewTrajectory()
-                .forward(Inches.convertFrom(1, Meter))
-                .turn(Math.toRadians(180))
-                .back(Inches.convertFrom(1, Meter))
-                .forward(Inches.convertFrom(2, Meters))
-                .turn(Math.toRadians(180))
+                .forward(1, Meter)
+                .turn(180, Degrees)
+                .back(1, Meter)
+                .forward(2, Meters)
+                .turn(180, Degrees)
                 .build();
     }
 }

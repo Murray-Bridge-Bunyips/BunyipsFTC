@@ -1,8 +1,8 @@
 package org.murraybridgebunyips.glados.autonomous;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.NonNull;
@@ -64,19 +64,19 @@ public class GLaDOSBackboardPlacer extends AutonomousBunyipsOpMode implements Ro
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
                 addNewTrajectory()
-                        .forward(Inches.convertFrom(1.8 * FIELD_TILE_SCALE, FieldTiles))
+                        .forward(1.8 * FIELD_TILE_SCALE, FieldTiles)
                         .build();
                 addNewTrajectory()
-                        .strafeRight(Inches.convertFrom(2.8 * FIELD_TILE_SCALE, FieldTiles))
+                        .strafeRight(2.8 * FIELD_TILE_SCALE, FieldTiles)
                         .turn(-Math.PI / 2)
                         .build();
                 addNewTrajectory()
-                        .strafeRight(Inches.convertFrom(1 * FIELD_TILE_SCALE, FieldTile))
+                        .strafeRight(1 * FIELD_TILE_SCALE, FieldTile)
                         .build();
                 break;
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .lineToLinearHeading(new Pose2d(Inches.convertFrom(1 * FIELD_TILE_SCALE, FieldTiles), Inches.convertFrom(-1 * FIELD_TILE_SCALE, FieldTiles), Math.toRadians(-90.0)))
+                        .lineToLinearHeading(new Pose2d(1 * FIELD_TILE_SCALE, -1 * FIELD_TILE_SCALE, -90.0), FieldTiles, Degrees)
                         .build();
                 break;
         }
@@ -87,10 +87,10 @@ public class GLaDOSBackboardPlacer extends AutonomousBunyipsOpMode implements Ro
         addTask(arm.deltaTask(-1500));
 
         addNewTrajectory()
-                .strafeLeft(Inches.convertFrom(0.95 * FIELD_TILE_SCALE, FieldTile))
+                .strafeLeft(0.95 * FIELD_TILE_SCALE, FieldTile)
                 .build();
         addNewTrajectory()
-                .forward(Inches.convertFrom(1.1 * FIELD_TILE_SCALE, FieldTiles))
+                .forward(1.1 * FIELD_TILE_SCALE, FieldTiles)
                 .build();
     }
 }

@@ -2,7 +2,6 @@ package org.murraybridgebunyips.wheatley.autonomous;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.NonNull;
@@ -63,26 +62,26 @@ public class WheatleyLeftParkAuto extends AutonomousBunyipsOpMode implements Roa
             case STARTING_RED_LEFT:
                 addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 addNewTrajectory()
-                        .forward(Inches.convertFrom(3, FieldTiles))
+                        .forward(3, FieldTiles)
                         .build();
                 addNewTrajectory()
-                        .strafeRight(Inches.convertFrom(5.5, FieldTiles))
+                        .strafeRight(5.5, FieldTiles)
                         .build();
                 break;
 
             case STARTING_BLUE_LEFT:
                 addNewTrajectory()
-                        .strafeLeft(Inches.convertFrom(180, Centimeters))
+                        .strafeLeft(180, Centimeters)
                         .build();
                 break;
 
             case STARTING_RED_RIGHT:
                 addNewTrajectory()
-                        .forward(Inches.convertFrom(170, Centimeters))
+                        .forward(170, Centimeters)
                         .build();
 
                 addNewTrajectory()
-                        .strafeRight(Inches.convertFrom(180, Centimeters))
+                        .strafeRight(180, Centimeters)
                         .build();
                 break;
 
@@ -92,7 +91,7 @@ public class WheatleyLeftParkAuto extends AutonomousBunyipsOpMode implements Roa
                         .forward(5)
                         .build();
                 addNewTrajectory()
-                        .strafeLeft(Inches.convertFrom(180, Centimeters))
+                        .strafeLeft(180, Centimeters)
                         .build();
                 addNewTrajectory()
                         .back(2)
