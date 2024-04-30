@@ -1,11 +1,15 @@
 package org.murraybridgebunyips.glados.teleop;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Amps;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.external.Mathf;
@@ -53,7 +57,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelDeadwheel, config.perpendicularDeadwheel
         );
-        arm = new HoldableActuator(config.arm);
+        arm = new HoldableActuator(config.arm).withHomingOvercurrent(Amps.of(2));
         cannon = new Cannon(config.launcher);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 /*giulio*/
@@ -95,12 +99,18 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 /*print("Hello, World!")
                         class MY=yclass             - lachlan paul*/
                 .run(cannon.resetTask());
-
         driver().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new AlignToContourTask<>(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsx, drive, pixels, new PIDController(0.67, 0.25, 0)))
                 .finishingWhen(() -> !gamepad1.rb);
+        driver().whenPressed(Controls.A)
+                .run(arm.homeTask());
 
         arm.setDefaultTask(arm.controlTask(() -> gamepad2.lsy));
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
+    }
+
+    @Override
+    protected void periodic() {
+        Dbg.log("v: %, c: %", config.arm.getVelocity(), config.arm.getCurrent(CurrentUnit.AMPS));
     }
 }
