@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
@@ -91,6 +92,11 @@ public class WheatleyConfig extends RobotConfig {
     public Servo launcher;
 
     /**
+     * Control Digital 0: Touch Sensor/Limit Switch "bottom"
+     */
+    public TouchSensor bottomLimit;
+
+    /**
      * Control Servo 5: Right Servo "rs"
      */
     public Servo rightPixel;
@@ -109,10 +115,10 @@ public class WheatleyConfig extends RobotConfig {
         webcam = getHardware("webcam", WebcamName.class);
 
         // Motor directions configured to work with current config
-        fl = getHardware("fl", DcMotorEx.class);
-        bl = getHardware("bl", DcMotorEx.class);
-        fr = getHardware("fr", DcMotorEx.class);
-        br = getHardware("br", DcMotorEx.class);
+        fl = getHardware("fl", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+        bl = getHardware("bl", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+        fr = getHardware("fr", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+        br = getHardware("br", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         imu = getHardware("imu", IMU.class);
 
         if (fr != null)
@@ -147,6 +153,8 @@ public class WheatleyConfig extends RobotConfig {
 
         // Paper Drone launcher system
         launcher = getHardware("pl", Servo.class);
+
+        bottomLimit = getHardware("bottom", TouchSensor.class);
 
         boolean res = imu != null && imu.initialize(
                 new IMU.Parameters(

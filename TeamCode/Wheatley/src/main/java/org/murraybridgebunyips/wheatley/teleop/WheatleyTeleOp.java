@@ -66,7 +66,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
                 hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
         );
         cannon = new Cannon(config.launcher);
-        linearActuator = new HoldableActuator(config.linearActuator);
+        linearActuator = new HoldableActuator(config.linearActuator)
+                .withBottomSwitch(config.bottomLimit);
         rotator = new Rotator(config.clawRotator, 288)
                 .withName("Claw Rotator")
                 .withAngleLimits(Degrees.zero(), Degrees.of(90))
@@ -82,6 +83,9 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
 
         addSubsystems(drive, cannon, linearActuator, rotator, claws, vision);
+
+        // Set motor to lowest point and set ticks to 0 before starting
+        linearActuator.homeTask();
     }
 
     @Override
@@ -119,10 +123,11 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void periodic() {
+        addTelemetry("Ticks Per-Second: %", config.linearActuator.getVelocity());
+        addTelemetry("Bottom Switch Is %", config.bottomLimit.isPressed() ? "Pressed" : "Not Pressed");
+
         // Some drivers have noted that they sometimes cannot tell whether a claw is open or closed.
         // Hopefully this helps. Update: It did :)
-        addTelemetry("Ticks Per-Second: %", config.linearActuator.getVelocity());
-
         addTelemetry("\n---------");
 
         // The actual string is set to the opposite of what you might expect, by driver request.
