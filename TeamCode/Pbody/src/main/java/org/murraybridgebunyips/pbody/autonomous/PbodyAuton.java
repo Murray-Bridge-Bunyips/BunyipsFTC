@@ -44,9 +44,9 @@ public class PbodyAuton extends AutonomousBunyipsOpMode implements RoadRunner {
             case STARTING_RED_LEFT:
                 break;
             case STARTING_RED_RIGHT:
-                addNewTrajectory()
+                makeTrajectory()
                         .splineTo(new Vector2d(1.0, -1.0), FieldTiles, -90.0, Degrees)
-                        .build();
+                        .addTask();
                 break;
             case STARTING_BLUE_LEFT:
                 break;

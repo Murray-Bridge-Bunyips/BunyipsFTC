@@ -79,19 +79,19 @@ public class WheatleyArmAutonomous extends AutonomousBunyipsOpMode implements Ro
 
         switch (getTeamProp.getPosition()) {
             case LEFT:
-                addNewTrajectory(new Pose2d(-36.43, -71.81, Math.toRadians(90.00)))
+                makeTrajectory(new Pose2d(-36.43, -71.81, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-47.21, -45.13), Math.toRadians(90.00))
-                        .build();
+                        .addTask();
                 break;
             case RIGHT:
-                addNewTrajectory(new Pose2d(-36.57, -71.24, Math.toRadians(90.00)))
+                makeTrajectory(new Pose2d(-36.57, -71.24, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-32.78, -39.79), Math.toRadians(82.34))
-                        .build();
+                        .addTask();
                 break;
             case FORWARD:
-                addNewTrajectory(new Pose2d(-36.58, -74.71, Math.toRadians(90.00)))
+                makeTrajectory(new Pose2d(-36.58, -74.71, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-36.00, -37.35), Math.toRadians(90.29))
-                        .build();
+                        .addTask();
                 break;
         }
     }

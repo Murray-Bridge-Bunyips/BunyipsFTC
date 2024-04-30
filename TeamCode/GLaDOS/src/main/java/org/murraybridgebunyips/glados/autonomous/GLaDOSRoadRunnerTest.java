@@ -43,7 +43,7 @@ public class GLaDOSRoadRunnerTest extends AutonomousBunyipsOpMode implements Roa
     @Override
     protected void onReady(@Nullable OpModeSelection selectedOpMode) {
         // Start red-left
-        addNewTrajectory(new Pose2d(-37.95, -71.22, Math.toRadians(90.00)))
+        makeTrajectory(new Pose2d(-37.95, -71.22, Math.toRadians(90.00)))
                 .splineTo(new Vector2d(-35.77, -13.74), Math.toRadians(87.16))
                 .splineTo(new Vector2d(3.44, 3.12), Math.toRadians(27.30))
                 .splineTo(new Vector2d(45.61, 58.10), Math.toRadians(52.51))
@@ -51,7 +51,7 @@ public class GLaDOSRoadRunnerTest extends AutonomousBunyipsOpMode implements Roa
                 .splineTo(new Vector2d(37.02, -40.76), Math.toRadians(181.15))
                 .splineTo(new Vector2d(-49.20, -36.23), Math.toRadians(180.18))
                 .splineTo(new Vector2d(-37.95, -61.07), Math.toRadians(-87.75))
-                .build();
+                .addTask();
 
     }
 }

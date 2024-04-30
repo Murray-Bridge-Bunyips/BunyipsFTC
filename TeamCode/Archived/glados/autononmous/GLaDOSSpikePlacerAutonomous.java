@@ -116,25 +116,25 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
 
                 break;
             case FORWARD:
-//                addNewTrajectory(new Pose2d(11.40, -62.00, Math.toRadians(180.00)))
+//                makeTrajectory(new Pose2d(11.40, -62.00, Math.toRadians(180.00)))
 //                        .lineToLinearHeading(new Pose2d(16.40, -48.10, Math.toRadians(90.00)))
 //                        .lineToLinearHeading(new Pose2d(11.71, -34.52, Math.toRadians(90.00)))
 //                        .buildWithPriority();
-                addNewTrajectory()
+                makeTrajectory()
                         .turn(Math.toRadians(-90.0))
                         .buildWithPriority();
                 break;
             case RIGHT:
-//                addNewTrajectory(new Pose2d(11.40, -62.00, Math.toRadians(180.00)))
+//                makeTrajectory(new Pose2d(11.40, -62.00, Math.toRadians(180.00)))
 //                        .lineToSplineHeading(new Pose2d(24.99, -43.42, Math.toRadians(90.00)))
 //                        .buildWithPriority();
-                addNewTrajectory()
+                makeTrajectory()
                         .turn(Math.toRadians(-180.0))
                         .buildWithPriority();
                 break;
         }
 
-        addNewTrajectory(new Pose2d(0, 0, Math.toRadians(180.00)))
+        makeTrajectory(new Pose2d(0, 0, Math.toRadians(180.00)))
                 .lineTo(new Vector2d(0, Inches.fromCM(-83)))
                 .buildWithPriority();
     }

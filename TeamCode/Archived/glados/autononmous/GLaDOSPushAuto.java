@@ -90,17 +90,17 @@ public class GLaDOSPushAuto extends RoadRunnerAutonomousBunyipsOpMode<MecanumDri
 
         switch (initTask.getPosition()) {
             case LEFT:
-                addNewTrajectory(new Pose2d(11.75, -70.29, Math.toRadians(90.00)))
+                makeTrajectory(new Pose2d(11.75, -70.29, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(9.28, -42.25), Math.toRadians(98.29))
                         .build();
                 break;
             case RIGHT:
-                addNewTrajectory(new Pose2d(11.94, -70.11, Math.toRadians(90.00)))
+                makeTrajectory(new Pose2d(11.94, -70.11, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(20.08, -42.44), Math.toRadians(76.94))
                         .build();
                 break;
             case FORWARD:
-                addNewTrajectory()
+                makeTrajectory()
                         .forward(Inches.fromFieldTiles(1))
                         .build();
                 break;

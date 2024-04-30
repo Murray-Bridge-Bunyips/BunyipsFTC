@@ -45,12 +45,12 @@ public class WheatleyRoadRunnerTest extends AutonomousBunyipsOpMode implements R
 
     @Override
     protected void onReady(@Nullable OpModeSelection selectedOpMode) {
-        addNewTrajectory()
+        makeTrajectory()
                 .forward(1, Meter)
                 .turn(180, Degrees)
                 .back(1, Meter)
                 .forward(2, Meters)
                 .turn(180, Degrees)
-                .build();
+                .addTask();
     }
 }

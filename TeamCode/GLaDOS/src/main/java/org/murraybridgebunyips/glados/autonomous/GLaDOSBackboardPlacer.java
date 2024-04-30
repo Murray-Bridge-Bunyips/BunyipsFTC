@@ -64,21 +64,21 @@ public class GLaDOSBackboardPlacer extends AutonomousBunyipsOpMode implements Ro
 
         switch ((StartingPositions) selectedOpMode.getObj()) {
             case STARTING_RED_LEFT:
-                addNewTrajectory()
+                makeTrajectory()
                         .forward(1.8 * FIELD_TILE_SCALE, FieldTiles)
-                        .build();
-                addNewTrajectory()
+                        .addTask();
+                makeTrajectory()
                         .strafeRight(2.8 * FIELD_TILE_SCALE, FieldTiles)
                         .turn(-Math.PI / 2)
-                        .build();
-                addNewTrajectory()
+                        .addTask();
+                makeTrajectory()
                         .strafeRight(1 * FIELD_TILE_SCALE, FieldTile)
-                        .build();
+                        .addTask();
                 break;
             case STARTING_RED_RIGHT:
-                addNewTrajectory()
+                makeTrajectory()
                         .lineToLinearHeading(new Pose2d(1 * FIELD_TILE_SCALE, -1 * FIELD_TILE_SCALE, -90.0), FieldTiles, Degrees)
-                        .build();
+                        .addTask();
                 break;
         }
 
@@ -86,14 +86,14 @@ public class GLaDOSBackboardPlacer extends AutonomousBunyipsOpMode implements Ro
         addTask(claws.openTask(DualServos.ServoSide.BOTH));
         addTask(new WaitTask(Seconds.of(1)));
         addTask(new ParallelTaskGroup(
-                addNewTrajectory()
+                makeTrajectory()
                         .strafeLeft(0.95 * FIELD_TILE_SCALE, FieldTile)
-                        .buildOnlyTask(),
+                        .buildTask(),
                 arm.deltaTask(-1500)
         ));
 
-        addNewTrajectory()
+        makeTrajectory()
                 .forward(1.1 * FIELD_TILE_SCALE, FieldTiles)
-                .build();
+                .addTask();
     }
 }

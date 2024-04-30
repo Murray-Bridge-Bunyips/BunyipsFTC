@@ -53,44 +53,44 @@ public class GLaDOSLeftPark extends AutonomousBunyipsOpMode implements RoadRunne
         switch (startingPosition) {
             case STARTING_RED_LEFT:
                 addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
-                addNewTrajectory()
+                makeTrajectory()
                         .forward(3, FieldTiles)
-                        .build();
-                addNewTrajectory()
+                        .addTask();
+                makeTrajectory()
                         .strafeRight(5.5, FieldTiles)
-                        .build();
+                        .addTask();
                 break;
 
             case STARTING_BLUE_LEFT:
-                addNewTrajectory()
+                makeTrajectory()
                         .strafeLeft(180, Centimeters)
-                        .build();
+                        .addTask();
                 break;
 
             case STARTING_RED_RIGHT:
-                addNewTrajectory()
+                makeTrajectory()
                         .forward(170, Centimeters)
-                        .build();
+                        .addTask();
 
-                addNewTrajectory()
+                makeTrajectory()
                         .strafeRight(180, Centimeters)
-                        .build();
+                        .addTask();
                 break;
 
             case STARTING_BLUE_RIGHT:
                 addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
-                addNewTrajectory()
+                makeTrajectory()
                         .forward(5)
-                        .build();
-                addNewTrajectory()
+                        .addTask();
+                makeTrajectory()
                         .strafeLeft(180, Centimeters)
-                        .build();
-                addNewTrajectory()
+                        .addTask();
+                makeTrajectory()
                         .back(2)
-                        .build();
-                addNewTrajectory()
+                        .addTask();
+                makeTrajectory()
                         .strafeLeft(100)
-                        .build();
+                        .addTask();
                 break;
         }
     }
