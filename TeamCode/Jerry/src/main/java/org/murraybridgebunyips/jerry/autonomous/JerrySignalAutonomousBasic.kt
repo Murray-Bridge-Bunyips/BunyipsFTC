@@ -47,7 +47,7 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
         // CPU cycles to the init-loop and find the Signal position.
         tagtask = cam?.let { GetSignalTask(it) }
 
-        setInitTask(tagtask)
+        tagtask?.let { setInitTask(it) }
     }
 
     override fun onReady(selectedOpMode: OpModeSelection?) {
