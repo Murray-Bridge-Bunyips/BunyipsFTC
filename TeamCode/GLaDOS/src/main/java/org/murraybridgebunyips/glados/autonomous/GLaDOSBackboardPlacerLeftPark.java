@@ -14,10 +14,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.OpModeSelection;
+import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
@@ -25,12 +27,13 @@ import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
- * Backboard Placer Autonomous
+ * Backboard Placer Autonomous for Left Parking
+ *
  * @author Lucas Bubner, 2024
  */
 @Config
 @Autonomous(name = "Backboard Placer (Left Park)")
-public class GLaDOSBackboardPlacer extends AutonomousBunyipsOpMode implements RoadRunner {
+public class GLaDOSBackboardPlacerLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     /**
      * Multiplicative scale for all RoadRunner distances.
      */
@@ -62,38 +65,57 @@ public class GLaDOSBackboardPlacer extends AutonomousBunyipsOpMode implements Ro
         if (selectedOpMode == null)
             return;
 
-        switch ((StartingPositions) selectedOpMode.getObj()) {
+        // Go to backboard
+        Reference<TrajectorySequence> blueLeft = Reference.empty();
+        Reference<TrajectorySequence> blueRight = Reference.empty();
+        TrajectorySequence redLeft = makeTrajectory()
+                .forward(1.8 * FIELD_TILE_SCALE, FieldTiles)
+                .strafeRight(2.8 * FIELD_TILE_SCALE, FieldTiles)
+                .turn(-Math.PI / 2)
+                .strafeRight(1 * FIELD_TILE_SCALE, FieldTile)
+                .mirrorToRef(blueRight)
+                .build();
+        TrajectorySequence redRight = makeTrajectory()
+                .lineToLinearHeading(new Pose2d(1 * FIELD_TILE_SCALE, -1 * FIELD_TILE_SCALE, -90.0), FieldTiles, Degrees)
+                .mirrorToRef(blueLeft)
+                .build();
+
+        StartingPositions startingPosition = (StartingPositions) selectedOpMode.getObj();
+        TrajectorySequence targetSequence = null;
+        switch (startingPosition) {
             case STARTING_RED_LEFT:
-                makeTrajectory()
-                        .forward(1.8 * FIELD_TILE_SCALE, FieldTiles)
-                        .addTask();
-                makeTrajectory()
-                        .strafeRight(2.8 * FIELD_TILE_SCALE, FieldTiles)
-                        .turn(-Math.PI / 2)
-                        .addTask();
-                makeTrajectory()
-                        .strafeRight(1 * FIELD_TILE_SCALE, FieldTile)
-                        .addTask();
+                targetSequence = redLeft;
                 break;
             case STARTING_RED_RIGHT:
-                makeTrajectory()
-                        .lineToLinearHeading(new Pose2d(1 * FIELD_TILE_SCALE, -1 * FIELD_TILE_SCALE, -90.0), FieldTiles, Degrees)
-                        .addTask();
+                targetSequence = redRight;
+                break;
+            case STARTING_BLUE_LEFT:
+                targetSequence = blueLeft.require();
+                break;
+            case STARTING_BLUE_RIGHT:
+                targetSequence = blueRight.require();
                 break;
         }
+        assert targetSequence != null;
+        makeTrajectory()
+                .runSequence(targetSequence)
+                .withName("Navigate to Backboard")
+                .addTask();
 
-        addTask(arm.deltaTask(1500));
-        addTask(claws.openTask(DualServos.ServoSide.BOTH));
-        addTask(new WaitTask(Seconds.of(1)));
+        // Place pixels and park to the left of the backboard
+        addTask(arm.deltaTask(1500).withName("Deploy Arm"));
+        addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
+        addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
                 makeTrajectory()
                         .strafeLeft(0.95 * FIELD_TILE_SCALE, FieldTile)
                         .buildTask(),
                 arm.deltaTask(-1500)
-        ));
+        ).withName("Stow and Move to Park"));
 
         makeTrajectory()
                 .forward(1.1 * FIELD_TILE_SCALE, FieldTiles)
+                .withName("Finish Park")
                 .addTask();
     }
 }
