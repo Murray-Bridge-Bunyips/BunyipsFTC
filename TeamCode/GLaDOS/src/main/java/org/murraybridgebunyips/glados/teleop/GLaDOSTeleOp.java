@@ -1,6 +1,7 @@
 package org.murraybridgebunyips.glados.teleop;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Amps;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -57,10 +58,12 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelDeadwheel, config.perpendicularDeadwheel
         );
-        arm = new HoldableActuator(config.arm).withHomingOvercurrent(Amps.of(2));
+        arm = new HoldableActuator(config.arm)
+                .withHomingOvercurrent(Amps.of(2), Seconds.of(0.7));
         cannon = new Cannon(config.launcher);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 /*giulio*/
+
         gamepad2.set(Controls.Analog.LEFT_STICK_Y, (v) ->
             Mathf.clamp(Mathf.moveTowards(gamepad2.lsy, v, v == 0.0 ? 0.0002f : 0.00008f), -0.5f, 0.5f)
         );
