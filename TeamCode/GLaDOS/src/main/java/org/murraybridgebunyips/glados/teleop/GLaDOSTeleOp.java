@@ -44,7 +44,6 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
     private Cannon cannon;
     private Vision vision;
     private MultiColourThreshold pixels;
-    private Task raiseOnInitTask;
 
     @Override
     protected void onInitialise() {
@@ -72,19 +71,8 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         vision.start(pixels);
         vision.startPreview();
 
-        raiseOnInitTask = arm.deltaTask(ARM_DELTA_POSITION_ON_INIT);
         addSubsystems(drive, cannon, claws, arm);
-    }
-
-    @Override
-    protected boolean onInitLoop() {
-        raiseOnInitTask.run();
-        return raiseOnInitTask.pollFinished();
-    }
-
-    @Override
-    protected void onStart() {
-        raiseOnInitTask.finishNow();
+        setInitTask(arm.deltaTask(ARM_DELTA_POSITION_ON_INIT));
     }
 
     @Override
