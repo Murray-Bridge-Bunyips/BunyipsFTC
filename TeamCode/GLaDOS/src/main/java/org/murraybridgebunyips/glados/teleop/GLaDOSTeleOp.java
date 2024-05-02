@@ -59,7 +59,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 config.parallelDeadwheel, config.perpendicularDeadwheel
         );
         arm = new HoldableActuator(config.arm)
-                .withHomingOvercurrent(Amps.of(2), Seconds.of(0.7));
+                .withHomingOvercurrent(Amps.of(1), Seconds.of(0.5));
         cannon = new Cannon(config.launcher);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 /*giulio*/
@@ -110,10 +110,5 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
 
         arm.setDefaultTask(arm.controlTask(() -> gamepad2.lsy));
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
-    }
-
-    @Override
-    protected void periodic() {
-        Dbg.log("v: %, c: %", config.arm.getVelocity(), config.arm.getCurrent(CurrentUnit.AMPS));
     }
 }
