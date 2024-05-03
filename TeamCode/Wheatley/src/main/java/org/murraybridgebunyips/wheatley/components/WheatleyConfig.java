@@ -102,11 +102,6 @@ public class WheatleyConfig extends RobotConfig {
     public Servo rightPixel;
 
     /**
-     * Control Servo ?: Suspension Hook Servo "ss"
-     */
-    public Servo suspensionServo;
-
-    /**
      * RoadRunner drive constants
      */
     public DriveConstants driveConstants;
@@ -146,9 +141,6 @@ public class WheatleyConfig extends RobotConfig {
 
         // Pixel manipulation system
         clawRotator = getHardware("cr", DcMotorEx.class);
-        if (clawRotator != null) {
-            clawRotator.setDirection(DcMotorSimple.Direction.REVERSE);
-        }
 
         leftPixel = getHardware("ls", Servo.class);
         if (leftPixel != null) {
@@ -158,11 +150,6 @@ public class WheatleyConfig extends RobotConfig {
 
         // Paper Drone launcher system
         launcher = getHardware("pl", Servo.class);
-
-        suspensionServo = getHardware("ss", Servo.class);
-        if (suspensionServo != null) {
-            suspensionServo.scaleRange(0.0, 1.0);
-        }
 
         bottomLimit = getHardware("bottom", TouchSensor.class);
 

@@ -69,9 +69,9 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         linearActuator = new HoldableActuator(config.linearActuator)
                 .withBottomSwitch(config.bottomLimit);
         rotator = new Rotator(config.clawRotator, 288)
-                .withName("Claw Rotator")
-                .withAngleLimits(Degrees.zero(), Degrees.of(90))
-                .withPowerClamps(-0.2, 0.33);
+                .withName("Claw Rotator");
+        // TODO: add power clamping
+//                .withPowerClamps(-0.2, 0.33);
         claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
 
         vision = new Vision(config.webcam);
@@ -83,9 +83,6 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
 
         addSubsystems(drive, cannon, linearActuator, rotator, claws, vision);
-
-        // Set motor to lowest point and set ticks to 0 before starting
-        linearActuator.homeTask();
     }
 
     @Override
