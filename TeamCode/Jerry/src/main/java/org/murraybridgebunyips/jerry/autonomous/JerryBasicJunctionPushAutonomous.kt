@@ -2,9 +2,10 @@ package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
+import org.murraybridgebunyips.bunyipslib.Controls
 import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.NullSafety
-import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
@@ -39,17 +40,17 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
         if (NullSafety.assertNotNull(config.imu))
             imu = IMUOp(config.imu!!)
 
-        setOpModes(OpModeSelection(Direction.LEFT), OpModeSelection(Direction.RIGHT))
+        setOpModes(Direction.LEFT, Direction.RIGHT)
     }
 
-    override fun onReady(selectedOpMode: OpModeSelection?) {
+    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         if (selectedOpMode == null) return
         addTask(
             JerryPrecisionDriveTask(
                 Seconds.of(1.5),
                 drive,
                 imu,
-                selectedOpMode.obj as Direction,
+                selectedOpMode.require() as Direction,
                 1.0
             )
         )

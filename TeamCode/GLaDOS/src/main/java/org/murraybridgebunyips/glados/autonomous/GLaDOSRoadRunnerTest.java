@@ -9,7 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.OpModeSelection;
+import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.Storage;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
@@ -41,7 +42,7 @@ public class GLaDOSRoadRunnerTest extends AutonomousBunyipsOpMode implements Roa
     }
 
     @Override
-    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         // Start red-left
         makeTrajectory(new Pose2d(-37.95, -71.22, Math.toRadians(90.00)))
                 .splineTo(new Vector2d(-35.77, -13.74), Math.toRadians(87.16))

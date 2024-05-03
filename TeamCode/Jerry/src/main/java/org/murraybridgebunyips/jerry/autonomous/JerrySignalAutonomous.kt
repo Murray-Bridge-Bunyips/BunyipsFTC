@@ -2,9 +2,10 @@ package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
+import org.murraybridgebunyips.bunyipslib.Controls
 import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.NullSafety
-import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
@@ -61,7 +62,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
         tagtask?.let { setInitTask(it) }
     }
 
-    override fun onReady(selectedOpMode: OpModeSelection?) {
+    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         // Use PrecisionDrive to move rightwards for 1.5 seconds
         // PrecisionDrive will take into account what components we are using and what it can do to achieve this goal.
         addTask(

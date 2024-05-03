@@ -10,7 +10,8 @@ import androidx.annotation.Nullable;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.OpModeSelection;
+import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
@@ -53,12 +54,12 @@ public class WheatleyRightParkAuto extends AutonomousBunyipsOpMode implements Ro
     }
 
     @Override
-    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) {
             return;
         }
 
-        switch ((StartingPositions) selectedOpMode.getObj()) {
+        switch ((StartingPositions) selectedOpMode.require()) {
             case STARTING_RED_LEFT:
                 addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 makeTrajectory()

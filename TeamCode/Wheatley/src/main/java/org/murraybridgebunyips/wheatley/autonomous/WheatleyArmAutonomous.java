@@ -9,14 +9,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.OpModeSelection;
+import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
+import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.ColourThreshold;
-import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.RedTeamProp;
+import org.murraybridgebunyips.common.centerstage.vision.RedTeamProp;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -30,7 +31,7 @@ public class WheatleyArmAutonomous extends AutonomousBunyipsOpMode implements Ro
     private MecanumDrive drive;
     private Vision vision;
     private ColourThreshold teamProp;
-    private GetTeamPropTask getTeamProp;
+    private GetTriPositionContourTask getTeamProp;
 
     @Override
     protected void onInitialise() {
@@ -52,12 +53,12 @@ public class WheatleyArmAutonomous extends AutonomousBunyipsOpMode implements Ro
     }
 
     @Override
-    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) {
             return;
         }
 
-        switch ((StartingPositions) selectedOpMode.getObj()) {
+        switch ((StartingPositions) selectedOpMode.require()) {
             case STARTING_RED_LEFT:
             case STARTING_RED_RIGHT:
                 teamProp = new RedTeamProp();
@@ -69,7 +70,7 @@ public class WheatleyArmAutonomous extends AutonomousBunyipsOpMode implements Ro
 
         vision.init(teamProp);
         vision.start(teamProp);
-        getTeamProp = new GetTeamPropTask(teamProp);
+        getTeamProp = new GetTriPositionContourTask(teamProp);
     }
 
     @Override

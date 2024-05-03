@@ -11,7 +11,8 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.OpModeSelection;
+import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
@@ -36,9 +37,9 @@ public class PbodyAuton extends AutonomousBunyipsOpMode implements RoadRunner {
     }
 
     @Override
-    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) return;
-        StartingPositions position = (StartingPositions) selectedOpMode.getObj();
+        StartingPositions position = (StartingPositions) selectedOpMode.require();
         // TODO: Make paths (painfully)
         switch (position) {
             case STARTING_RED_LEFT:

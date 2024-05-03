@@ -82,12 +82,12 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
     }
 
     @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onQueueReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) {
             return;
         }
 
-        startingPosition = (StartingPositions) selectedOpMode.getObj();
+        startingPosition = (StartingPositions) selectedOpMode.require();
 
         switch (startingPosition) {
             case STARTING_RED_LEFT:

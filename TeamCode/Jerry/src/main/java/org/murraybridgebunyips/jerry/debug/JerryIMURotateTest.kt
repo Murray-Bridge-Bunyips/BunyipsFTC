@@ -3,7 +3,8 @@ package org.murraybridgebunyips.jerry.debug
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.Controls
+import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
@@ -34,7 +35,7 @@ class JerryIMURotateTest : AutonomousBunyipsOpMode() {
         )
     }
 
-    override fun onReady(selectedOpMode: OpModeSelection?) {
+    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         addTask(JerryIMURotationTask(Seconds.of(15.0), imu!!, drive!!, -360.0, 0.5))
     }
 }

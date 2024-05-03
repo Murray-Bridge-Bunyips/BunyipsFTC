@@ -64,12 +64,12 @@ public class GLaDOSPushAuto extends RoadRunnerAutonomousBunyipsOpMode<MecanumDri
     }
 
     @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onQueueReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) {
             return;
         }
 
-        StartingPositions startingPosition = (StartingPositions) selectedOpMode.getObj();
+        StartingPositions startingPosition = (StartingPositions) selectedOpMode.require();
 
         switch (startingPosition) {
             case STARTING_RED_LEFT:

@@ -47,11 +47,11 @@ public class WheatleyTeamPropAutoTest extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onQueueReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) {
             return;
         }
-        switch ((StartingPositions) selectedOpMode.getObj()) {
+        switch ((StartingPositions) selectedOpMode.require()) {
             case RED_LEFT:
             case RED_RIGHT:
                 processor = new TeamProp(RED_ELEMENT_R, RED_ELEMENT_G, RED_ELEMENT_B);

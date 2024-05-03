@@ -44,13 +44,13 @@ public class GLaDOSParkRightBackstageAuto extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onQueueReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) {
             // Will bail out if the user does not select an OpMode, this is in case the robot
             // is started and cannot perform any useful action without disrupting the alliance.
             return;
         }
-        StartingPositions selected = (StartingPositions) selectedOpMode.getObj();
+        StartingPositions selected = (StartingPositions) selectedOpMode.require();
         switch (selected) {
             case RED_LEFT:
                 addTask(new GLaDOSTimeDriveTask(this, 4, drive, 0.75, 0, 0));

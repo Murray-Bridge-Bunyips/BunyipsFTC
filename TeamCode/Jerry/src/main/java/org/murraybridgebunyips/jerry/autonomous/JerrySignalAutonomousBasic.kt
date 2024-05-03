@@ -3,9 +3,10 @@ package org.murraybridgebunyips.jerry.autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
+import org.murraybridgebunyips.bunyipslib.Controls
 import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.NullSafety
-import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
@@ -50,7 +51,7 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
         tagtask?.let { setInitTask(it) }
     }
 
-    override fun onReady(selectedOpMode: OpModeSelection?) {
+    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         addTask(JerryTimeDriveTask(Seconds.of(1.5), drive, 1.0, 0.0, 0.0))
     }
 

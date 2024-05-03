@@ -13,7 +13,7 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.OpModeSelection;
+import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
@@ -22,18 +22,19 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
+import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
- * Backboard Placer Autonomous for Left Parking
+ * Backdrop Placer Autonomous for Left Parking
  *
  * @author Lucas Bubner, 2024
  */
 @Config
-@Autonomous(name = "Backboard Placer (Left Park)")
-public class GLaDOSBackboardPlacerLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
+@Autonomous(name = "Backdrop Placer (Left Park)")
+public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     /**
      * Multiplicative scale for all RoadRunner distances.
      */
@@ -60,12 +61,19 @@ public class GLaDOSBackboardPlacerLeftPark extends AutonomousBunyipsOpMode imple
         return drive;
     }
 
+    // Set which direction the robot will strafe at the backdrop. Overridden in the right park variant.
+    protected RoadRunnerTask afterPixelDropDriveAction(RoadRunnerTrajectoryTaskBuilder builder) {
+        return builder
+                .strafeLeft(0.95 * FIELD_TILE_SCALE, FieldTile)
+                .buildTask();
+    }
+
     @Override
-    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null)
             return;
 
-        // Go to backboard
+        // Go to backdrop
         Reference<TrajectorySequence> blueLeft = Reference.empty();
         Reference<TrajectorySequence> blueRight = Reference.empty();
         TrajectorySequence redLeft = makeTrajectory()
@@ -80,7 +88,7 @@ public class GLaDOSBackboardPlacerLeftPark extends AutonomousBunyipsOpMode imple
                 .mirrorToRef(blueLeft)
                 .build();
 
-        StartingPositions startingPosition = (StartingPositions) selectedOpMode.getObj();
+        StartingPositions startingPosition = (StartingPositions) selectedOpMode.require();
         TrajectorySequence targetSequence = null;
         switch (startingPosition) {
             case STARTING_RED_LEFT:
@@ -99,17 +107,15 @@ public class GLaDOSBackboardPlacerLeftPark extends AutonomousBunyipsOpMode imple
         assert targetSequence != null;
         makeTrajectory()
                 .runSequence(targetSequence)
-                .withName("Navigate to Backboard")
+                .withName("Navigate to Backdrop")
                 .addTask();
 
-        // Place pixels and park to the left of the backboard
+        // Place pixels and park to the left of the backdrop
         addTask(arm.deltaTask(1500).withName("Deploy Arm"));
         addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
-                makeTrajectory()
-                        .strafeLeft(0.95 * FIELD_TILE_SCALE, FieldTile)
-                        .buildTask(),
+                afterPixelDropDriveAction(makeTrajectory()),
                 arm.deltaTask(-1500)
         ).withName("Stow and Move to Park"));
 

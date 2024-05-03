@@ -55,7 +55,7 @@ public class WheatleyLeftParkAuto extends AutonomousBunyipsOpMode {
     }
 
     @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onQueueReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         // This is gonna end up looking pretty similar to GlaDOS's ParkAuto
         if (selectedOpMode == null) {
             // In case something messes up and we end up without an autonomous to do

@@ -10,7 +10,8 @@ import androidx.annotation.Nullable;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.OpModeSelection;
+import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
@@ -40,7 +41,7 @@ public class GLaDOSLeftPark extends AutonomousBunyipsOpMode implements RoadRunne
     }
 
     @Override
-    protected void onReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
 //        addTask(new MessageTask(Seconds.of(5), "Greetings and salutations! I extend my warmest welcome to you, " +
 //                "GLaDOS, on this fine day. It is my utmost pleasure to engage in this " +
 //                "digital interaction with you, as we traverse the vast landscape of knowledge and learning together. " +
@@ -49,7 +50,7 @@ public class GLaDOSLeftPark extends AutonomousBunyipsOpMode implements RoadRunne
             return;
         }
 
-        StartingPositions startingPosition = (StartingPositions) selectedOpMode.getObj();
+        StartingPositions startingPosition = (StartingPositions) selectedOpMode.require();
         switch (startingPosition) {
             case STARTING_RED_LEFT:
                 addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
