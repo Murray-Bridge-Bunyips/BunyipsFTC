@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.EmergencyStop;
 import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
@@ -36,7 +37,7 @@ public class WheatleyArmAutonomous extends AutonomousBunyipsOpMode implements Ro
     @Override
     protected void onInitialise() {
         config.init();
-        vision = new Vision(config.webcam);
+//        vision = new Vision(config.webcam);
         drive = new MecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu,
@@ -44,6 +45,7 @@ public class WheatleyArmAutonomous extends AutonomousBunyipsOpMode implements Ro
         );
         setOpModes(StartingPositions.use());
         setInitTask(getTeamProp);
+        throw new EmergencyStop("webcam NOT configured");
     }
 
     @NonNull

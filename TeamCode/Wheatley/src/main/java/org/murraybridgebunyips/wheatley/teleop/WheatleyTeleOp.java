@@ -9,17 +9,11 @@ import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.subsystems.Rotator;
-import org.murraybridgebunyips.bunyipslib.tasks.AlignToContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
-import org.murraybridgebunyips.bunyipslib.tasks.RunTask;
-import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.bunyipslib.vision.processors.MultiColourThreshold;
-import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.Pixels;
 import org.murraybridgebunyips.common.centerstage.tasks.PickUpPixelTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
@@ -55,8 +49,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     private HoldableActuator linearActuator;
     private Rotator rotator;
     private DualServos claws;
-    private Vision vision;
-    private MultiColourThreshold pixels;
+//    private Vision vision;
+//    private MultiColourThreshold pixels;
 
     @Override
     protected void onInitialise() {
@@ -69,20 +63,20 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         linearActuator = new HoldableActuator(config.linearActuator)
                 .withBottomSwitch(config.bottomLimit);
         rotator = new Rotator(config.clawRotator, 288)
-                .withName("Claw Rotator");
-        // TODO: add power clamping
-//                .withPowerClamps(-0.2, 0.33);
+                .withName("Claw Rotator")
+//                .withAngleLimits(Degrees.zero(), Degrees.of(180))
+                .withPowerClamps(-0.33, 0.33);
         claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
 
-        vision = new Vision(config.webcam);
-        pixels = new MultiColourThreshold(Pixels.createProcessors());
-        vision.init(pixels);
-        vision.start(pixels);
+//        vision = new Vision(config.webcam);
+//        pixels = new MultiColourThreshold(Pixels.createProcessors());
+//        vision.init(pixels);
+//        vision.start(pixels);
 //        vision.startPreview();
 
         gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
 
-        addSubsystems(drive, cannon, linearActuator, rotator, claws, vision);
+        addSubsystems(drive, cannon, linearActuator, rotator, claws);
     }
 
     @Override
@@ -103,12 +97,13 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         operator().whenPressed(Controls.DPAD_DOWN)
                 .run(rotator.runForTask(Seconds.of(1), -0.33, true));
 
-        driver().whenPressed(Controls.RIGHT_BUMPER)
-                .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
-                .finishingWhen(() -> !gamepad1.right_bumper);
+//        driver().whenPressed(Controls.RIGHT_BUMPER)
+//                .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
+//                .finishingWhen(() -> !gamepad1.right_bumper);
 
         operator().whenPressed(Controls.A)
-                .run(new RunTask());
+                .run(linearActuator.homeTask())
+                .finishingWhen(() -> gamepad2.lsy != 0.0f);
 
         operator().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(new PickUpPixelTask(linearActuator, claws));
@@ -120,7 +115,6 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void periodic() {
-        addTelemetry("Ticks Per-Second: %", config.linearActuator.getVelocity());
         addTelemetry("Bottom Switch Is %", config.bottomLimit.isPressed() ? "Pressed" : "Not Pressed");
 
         // Some drivers have noted that they sometimes cannot tell whether a claw is open or closed.
