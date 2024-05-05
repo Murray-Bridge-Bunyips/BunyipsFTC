@@ -42,7 +42,7 @@ public class GLaDOSComponentTester extends BunyipsOpMode {
                 break;
             case 5:
                 config.suspenderHook.setPosition(gamepad1.left_stick_y);
-                break;
+                brak;
         }
 
         if (gamepad1.dpad_right && !inc) {

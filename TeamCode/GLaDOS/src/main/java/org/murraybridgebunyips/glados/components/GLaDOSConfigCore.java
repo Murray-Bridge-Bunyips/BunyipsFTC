@@ -1,9 +1,13 @@
 package org.murraybridgebunyips.glados.components;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.DegreesPerSecond;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.InchesPerSecond;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
+
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -11,7 +15,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
@@ -53,31 +56,19 @@ public class GLaDOSConfigCore extends RobotConfig {
      */
     public Deadwheel perpendicularDeadwheel;
     /**
-     * Control 0: Suspender Actuator "sa"
+     * Control 0: Arm "arm"
      */
-    public DcMotorEx suspenderActuator;
+    public DcMotorEx arm;
     /**
-     * Control Servo 5: Pixel Forward Motion Servo "pm"
-     */
-    public CRServo pixelMotion;
-    /**
-     * Control Servo 4: Pixel Alignment Servo "al"
-     */
-    public Servo pixelAlignment;
-    /**
-     * Control Servo 2: Left Servo "ls"
+     * Control Servo 1: Left Servo "ls"
      */
     public Servo leftPixel;
     /**
-     * Control Servo 3: Right Servo "rs"
+     * Control Servo 2: Right Servo "rs"
      */
     public Servo rightPixel;
     /**
-     * Control Servo 1: Suspension Hook "sh"
-     */
-    public Servo suspenderHook;
-    /**
-     * Control Servo ?: Plane Launcher "pl"
+     * Control Servo 0: Plane Launcher "pl"
      */
     public Servo launcher;
     /**
@@ -102,86 +93,49 @@ public class GLaDOSConfigCore extends RobotConfig {
     protected void onRuntime() {
         // Sensors
         webcam = getHardware("webcam", WebcamName.class);
-        imu = getHardware("imu", IMU.class);
+        imu = getHardware("imu", IMU.class, (d) -> {
+            boolean init = d.initialize(new IMU.Parameters(
+                    new RevHubOrientationOnRobot(
+                            RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                            RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                    )
+            ));
+            if (!init) Dbg.error("imu failed init");
+        });
 
         // Mecanum system
-        frontLeft = getHardware("fl", DcMotorEx.class);
-        frontRight = getHardware("fr", DcMotorEx.class);
-        backRight = getHardware("br", DcMotorEx.class);
-        backLeft = getHardware("bl", DcMotorEx.class);
-        DcMotorEx pe = getHardware("pe", DcMotorEx.class);
-        if (pe != null) {
-            parallelDeadwheel = new Deadwheel(pe);
-            parallelDeadwheel.setDirection(Deadwheel.Direction.FORWARD);
-        }
+        frontLeft = getHardware("fl", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
+        frontRight = getHardware("fr", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        backRight = getHardware("br", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        backLeft = getHardware("bl", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
-        DcMotorEx ppe = getHardware("ppe", DcMotorEx.class);
-        if (ppe != null) {
-            perpendicularDeadwheel = new Deadwheel(ppe);
-            perpendicularDeadwheel.setDirection(Deadwheel.Direction.FORWARD);
-        }
-
-        pixelMotion = getHardware("pm", CRServo.class);
-        pixelAlignment = getHardware("al", Servo.class);
-
-        // Suspender/pixel upward motion system
-        suspenderActuator = getHardware("sa", DcMotorEx.class);
-        suspenderHook = getHardware("sh", Servo.class);
-        if (suspenderHook != null)
-            suspenderHook.scaleRange(0.25, 1);
+        parallelDeadwheel = getHardware("pe", Deadwheel.class,
+                (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
+        perpendicularDeadwheel = getHardware("ppe", Deadwheel.class,
+                (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
 
         // Pixel manipulation system
-        leftPixel = getHardware("ls", Servo.class);
-        rightPixel = getHardware("rs", Servo.class);
+        arm = getHardware("arm", DcMotorEx.class);
+        double LIM = 0.7;
+        leftPixel = getHardware("ls", Servo.class, (d) -> d.scaleRange(LIM, 1.0));
+        rightPixel = getHardware("rs", Servo.class, (d) -> d.scaleRange(0.0, 1 - LIM));
 
         // Paper Drone launcher system
         launcher = getHardware("pl", Servo.class);
-
-        // Motor specifics configuration
-        if (frontRight != null)
-            frontRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        if (frontLeft != null)
-            frontLeft.setDirection(DcMotorSimple.Direction.FORWARD);
-
-        if (backRight != null)
-            backRight.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        if (backLeft != null)
-            backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        if (suspenderActuator != null) {
-            suspenderActuator.setDirection(DcMotorSimple.Direction.FORWARD);
-            suspenderActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-
-        boolean res = imu != null && imu.initialize(
-                new IMU.Parameters(
-                        new RevHubOrientationOnRobot(
-                                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
-                        )
-                )
-        );
-
-        if (!res) {
-            Dbg.error("IMU failed to initialise!");
-        }
 
         // RoadRunner configuration
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(28)
                 .setMaxRPM(6000)
                 .setRunUsingEncoder(false)
-                .setWheelRadius(Inches.fromMM(75) / 2.0)
+                .setWheelRadius(Millimeters.of(75).divide(2))
                 .setGearRatio(1.0 / 13.1)
-                .setTrackWidth(20.5)
+                .setTrackWidth(Inches.of(20.5))
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
-                .setMaxVel(41.065033847087705)
-                .setMaxAccel(41.065033847087705)
-                // 179.687013 in degrees
-                .setMaxAngVel(3.13613)
-                .setMaxAngAccel(3.13613)
+                .setMaxVel(InchesPerSecond.of(41.065033847087705))
+                .setMaxAccel(InchesPerSecond.per(Second).of(41.065033847087705))
+                .setMaxAngVel(DegreesPerSecond.of(175))
+                .setMaxAngAccel(DegreesPerSecond.per(Second).of(175))
                 .setKV(0.01395)
                 .setKStatic(0.06311)
                 .setKA(0.0015)
@@ -190,11 +144,11 @@ public class GLaDOSConfigCore extends RobotConfig {
         localizerCoefficients = new TwoWheelTrackingLocalizerCoefficients.Builder()
                 .setTicksPerRev(1200)
                 .setGearRatio(1)
-                .setWheelRadius(Inches.fromMM(50) / 2)
-                .setParallelX(0)
-                .setParallelY(0)
-                .setPerpendicularX(4.2)
-                .setPerpendicularY(3.5)
+                .setWheelRadius(Millimeters.of(50).divide(2))
+                .setParallelX(Inches.zero())
+                .setParallelY(Inches.zero())
+                .setPerpendicularX(Inches.of(4.2))
+                .setPerpendicularY(Inches.of(3.5))
                 .build();
 
         mecanumCoefficients = new MecanumCoefficients.Builder()

@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.glados.debug;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
@@ -15,6 +16,7 @@ import java.util.List;
  * Test OpMode for AprilTags
  */
 @TeleOp(name = "AprilTags")
+@Disabled
 public class GLaDOSAprilTagTest extends BunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private Vision vision;

@@ -1,5 +1,11 @@
 package org.murraybridgebunyips.wheatley.components;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.DegreesPerSecond;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.InchesPerSecond;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
+
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -7,10 +13,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
-import org.murraybridgebunyips.bunyipslib.Inches;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
@@ -35,10 +40,10 @@ public class WheatleyConfig extends RobotConfig {
     //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
 
 
-    /**
-     * USB: Webcam "webcam"
-     */
-    public WebcamName webcam;
+//    /**
+//     * USB: Webcam "webcam"
+//     */
+//    public WebcamName webcam;
 
     /**
      * Internally mounted on I2C C0 "imu"
@@ -86,6 +91,11 @@ public class WheatleyConfig extends RobotConfig {
     public Servo launcher;
 
     /**
+     * Control Digital 0: Touch Sensor/Limit Switch "bottom"
+     */
+    public TouchSensor bottomLimit;
+
+    /**
      * Control Servo 5: Right Servo "rs"
      */
     public Servo rightPixel;
@@ -101,74 +111,67 @@ public class WheatleyConfig extends RobotConfig {
 
     @Override
     protected void onRuntime() {
-        webcam = getHardware("webcam", WebcamName.class);
+//        webcam = getHardware("webcam", WebcamName.class);
 
         // Motor directions configured to work with current config
-        fl = getHardware("fl", DcMotorEx.class);
-        bl = getHardware("bl", DcMotorEx.class);
-        fr = getHardware("fr", DcMotorEx.class);
-        br = getHardware("br", DcMotorEx.class);
-        imu = getHardware("imu", IMU.class);
-
-        if (fr != null)
-            fr.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        if (fl != null)
-            fl.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        if (br != null)
-            br.setDirection(DcMotorSimple.Direction.REVERSE);
-
-        if (bl != null)
-            bl.setDirection(DcMotorSimple.Direction.REVERSE);
+        fl = getHardware("fl", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        });
+        bl = getHardware("bl", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        });
+        fr = getHardware("fr", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        });
+        br = getHardware("br", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        });
+        imu = getHardware("imu", IMU.class, (d) -> {
+            boolean res = imu != null && imu.initialize(
+                    new IMU.Parameters(
+                            new RevHubOrientationOnRobot(
+                                    RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                                    RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                            )
+                    )
+            );
+            if (!res) {
+                Dbg.error("IMU failed to initialise!");
+            }
+        });
 
         // Suspender/pixel upward motion system
-        linearActuator = getHardware("la", DcMotorEx.class);
-        if (linearActuator != null) {
-            linearActuator.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
+        linearActuator = getHardware("la", DcMotorEx.class, (d) -> {
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+        });
+        bottomLimit = getHardware("bottom", TouchSensor.class);
 
         // Pixel manipulation system
         clawRotator = getHardware("cr", DcMotorEx.class);
-        if (clawRotator != null) {
-            clawRotator.setDirection(DcMotorSimple.Direction.REVERSE);
-        }
 
-        leftPixel = getHardware("ls", Servo.class);
-        if (leftPixel != null) {
-            leftPixel.scaleRange(0.2, 1.0);
-        }
+        leftPixel = getHardware("ls", Servo.class, (d) -> d.scaleRange(0.2, 1.0));
         rightPixel = getHardware("rs", Servo.class);
 
         // Paper Drone launcher system
         launcher = getHardware("pl", Servo.class);
 
-        boolean res = imu != null && imu.initialize(
-                new IMU.Parameters(
-                        new RevHubOrientationOnRobot(
-                                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
-                        )
-                )
-        );
-
-        if (!res) {
-            Dbg.error("IMU failed to initialise!");
-        }
-
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(28)
                 .setMaxRPM(6000)
                 .setRunUsingEncoder(false)
-                .setWheelRadius(Inches.fromMM(75) / 2.0)
+                .setWheelRadius(Millimeters.of(75).divide(2))
                 .setGearRatio(1.0 / 13.1)
-                .setTrackWidth(20.5)
+                .setTrackWidth(Inches.of(20.5))
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
-                .setMaxVel(41.065033847087705)
-                .setMaxAccel(41.065033847087705)
-                // 179.687013 in degrees
-                .setMaxAngVel(3.13613)
-                .setMaxAngAccel(3.13613)
+                .setMaxVel(InchesPerSecond.of(41.065033847087705))
+                .setMaxAccel(InchesPerSecond.per(Second).of(41.065033847087705))
+                .setMaxAngVel(DegreesPerSecond.of(175))
+                .setMaxAngAccel(DegreesPerSecond.per(Second).of(175))
                 .setKV(0.0145)
                 .setKStatic(0.06422)
                 .setKA(0.001)

@@ -1,20 +1,22 @@
 package org.murraybridgebunyips.wheatley.autonomous;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.murraybridgebunyips.bunyipslib.Inches;
-import org.murraybridgebunyips.bunyipslib.OpModeSelection;
-import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.RobotConfig;
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.Reference;
+import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.MessageTask;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
-
-import java.util.List;
 
 /**
  * Parking autonomous for Wheatley
@@ -30,80 +32,74 @@ import java.util.List;
  */
 
 @Autonomous(name = "Right Park Auto")
-public class WheatleyRightParkAuto extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+public class WheatleyRightParkAuto extends AutonomousBunyipsOpMode implements RoadRunner {
     private final WheatleyConfig config = new WheatleyConfig();
+    private MecanumDrive drive;
 
     @Override
     protected void onInitialise() {
         config.init();
-        RobotConfig.setLastKnownPosition(null);
-    }
-
-    @Override
-    protected MecanumDrive setDrive() {
-        return new MecanumDrive(
+        drive = new MecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
+                hardwareMap.voltageSensor, config.imu,
+                config.fl, config.fr, config.bl, config.br
         );
+        setOpModes(StartingPositions.use());
+    }
+
+    @NonNull
+    @Override
+    public MecanumDrive getDrive() {
+        return drive;
     }
 
     @Override
-    protected List<OpModeSelection> setOpModes() {
-        return StartingPositions.use();
-    }
-
-    @Override
-    protected RobotTask setInitTask() {
-        return null;
-    }
-
-    @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) {
             return;
         }
 
-        switch ((StartingPositions) selectedOpMode.getObj()) {
+        switch ((StartingPositions) selectedOpMode.require()) {
             case STARTING_RED_LEFT:
-                addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
-                addNewTrajectory()
+                addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                makeTrajectory()
                         .forward(5)
-                        .build();
-                addNewTrajectory()
-                        .strafeRight(Inches.fromCM(180))
-                        .build();
-                addNewTrajectory()
+                        .addTask();
+                makeTrajectory()
+                        .strafeRight(180, Centimeters)
+                        .addTask();
+                makeTrajectory()
                         .back(2)
-                        .build();
-                addNewTrajectory()
+                        .addTask();
+                makeTrajectory()
                         .strafeRight(100)
-                        .build();
+                        .addTask();
                 break;
 
             case STARTING_BLUE_LEFT:
-                addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
-                addNewTrajectory()
-                        .forward(Inches.fromFieldTiles(3))
-                        .build();
-                addNewTrajectory()
-                        .strafeLeft(Inches.fromFieldTiles(3))
-                        .build();
+                addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                makeTrajectory()
+                        .forward(3, FieldTiles)
+                        .addTask();
+                makeTrajectory()
+                        .strafeLeft(3, FieldTiles)
+                        .addTask();
                 break;
 
             case STARTING_RED_RIGHT:
-                addNewTrajectory()
-                        .strafeRight(Inches.fromCM(180))
-                        .build();
+                makeTrajectory()
+                        .strafeRight(180, Centimeters)
+                        .addTask();
                 break;
 
             case STARTING_BLUE_RIGHT:
-                addTask(new MessageTask(15, "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
-                addNewTrajectory()
-                        .forward(Inches.fromFieldTiles(3))
-                        .build();
-                addNewTrajectory()
-                        .strafeLeft(Inches.fromFieldTiles(5.5))
-                        .build();
+                addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
+                makeTrajectory()
+                        .forward(3, FieldTiles)
+                        .addTask();
+                makeTrajectory()
+                        .strafeLeft(5.5, FieldTiles)
+                        .addTask();
                 break;
         }
     }

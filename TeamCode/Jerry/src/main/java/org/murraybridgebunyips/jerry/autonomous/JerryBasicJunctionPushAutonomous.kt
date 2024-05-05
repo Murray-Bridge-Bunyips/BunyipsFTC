@@ -2,12 +2,13 @@ package org.murraybridgebunyips.jerry.autonomous
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.IMUOp
-import org.murraybridgebunyips.bunyipslib.NullSafety
-import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.Controls
 import org.murraybridgebunyips.bunyipslib.Direction
+import org.murraybridgebunyips.bunyipslib.NullSafety
+import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
+import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
+import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
 
@@ -26,7 +27,7 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
     private var drive: CartesianMecanumDrive? = null
     private var imu: IMUOp? = null
 
-    override fun onInitialisation() {
+    override fun onInitialise() {
         config.init()
         if (NullSafety.assertNotNull(config.driveMotors))
             drive = CartesianMecanumDrive(
@@ -38,27 +39,18 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
 
         if (NullSafety.assertNotNull(config.imu))
             imu = IMUOp(config.imu!!)
+
+        setOpModes(Direction.LEFT, Direction.RIGHT)
     }
 
-    override fun setOpModes(): MutableList<OpModeSelection> {
-        return listOf(
-            OpModeSelection(Direction.LEFT),
-            OpModeSelection(Direction.RIGHT)
-        ).toMutableList()
-    }
-
-    override fun setInitTask(): RobotTask? {
-        return null
-    }
-
-    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
+    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
         if (selectedOpMode == null) return
         addTask(
             JerryPrecisionDriveTask(
-                1.5,
+                Seconds.of(1.5),
                 drive,
                 imu,
-                selectedOpMode.obj as Direction,
+                selectedOpMode.require() as Direction,
                 1.0
             )
         )

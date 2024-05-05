@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.wheatley.autonomous;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -7,18 +8,18 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
-import org.murraybridgebunyips.bunyipslib.OpModeSelection;
-import org.murraybridgebunyips.bunyipslib.RoadRunnerAutonomousBunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.EmergencyStop;
+import org.murraybridgebunyips.bunyipslib.Reference;
+import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.tasks.GetTeamPropTask;
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask;
+import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.ColourThreshold;
-import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.RedTeamProp;
+import org.murraybridgebunyips.common.centerstage.vision.RedTeamProp;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
-
-import java.util.List;
 
 /**
  * Use Wheatley's arm to place a Purple Pixel (loaded on left) to the Spike Mark detected in Init Phase.
@@ -26,43 +27,40 @@ import java.util.List;
  */
 @Autonomous(name = "Arm Autonomous")
 @Disabled
-public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<MecanumDrive> {
+public class WheatleyArmAutonomous extends AutonomousBunyipsOpMode implements RoadRunner {
     private final WheatleyConfig config = new WheatleyConfig();
+    private MecanumDrive drive;
     private Vision vision;
     private ColourThreshold teamProp;
-    private GetTeamPropTask getTeamProp;
+    private GetTriPositionContourTask getTeamProp;
 
     @Override
     protected void onInitialise() {
         config.init();
-        vision = new Vision(config.webcam);
-    }
-
-    @Override
-    protected MecanumDrive setDrive() {
-        return new MecanumDrive(
+//        vision = new Vision(config.webcam);
+        drive = new MecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
+                hardwareMap.voltageSensor, config.imu,
+                config.fl, config.fr, config.bl, config.br
         );
+        setOpModes(StartingPositions.use());
+        setInitTask(getTeamProp);
+        throw new EmergencyStop("webcam NOT configured");
+    }
+
+    @NonNull
+    @Override
+    public MecanumDrive getDrive() {
+        return drive;
     }
 
     @Override
-    protected List<OpModeSelection> setOpModes() {
-        return StartingPositions.use();
-    }
-
-    @Override
-    protected RobotTask setInitTask() {
-        return getTeamProp;
-    }
-
-    @Override
-    protected void onQueueReady(@Nullable OpModeSelection selectedOpMode) {
+    protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) {
             return;
         }
 
-        switch ((StartingPositions) selectedOpMode.getObj()) {
+        switch ((StartingPositions) selectedOpMode.require()) {
             case STARTING_RED_LEFT:
             case STARTING_RED_RIGHT:
                 teamProp = new RedTeamProp();
@@ -74,7 +72,7 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
 
         vision.init(teamProp);
         vision.start(teamProp);
-        getTeamProp = new GetTeamPropTask(teamProp);
+        getTeamProp = new GetTriPositionContourTask(teamProp);
     }
 
     @Override
@@ -84,19 +82,19 @@ public class WheatleyArmAutonomous extends RoadRunnerAutonomousBunyipsOpMode<Mec
 
         switch (getTeamProp.getPosition()) {
             case LEFT:
-                addNewTrajectory(new Pose2d(-36.43, -71.81, Math.toRadians(90.00)))
+                makeTrajectory(new Pose2d(-36.43, -71.81, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-47.21, -45.13), Math.toRadians(90.00))
-                        .build();
+                        .addTask();
                 break;
             case RIGHT:
-                addNewTrajectory(new Pose2d(-36.57, -71.24, Math.toRadians(90.00)))
+                makeTrajectory(new Pose2d(-36.57, -71.24, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-32.78, -39.79), Math.toRadians(82.34))
-                        .build();
+                        .addTask();
                 break;
             case FORWARD:
-                addNewTrajectory(new Pose2d(-36.58, -74.71, Math.toRadians(90.00)))
+                makeTrajectory(new Pose2d(-36.58, -74.71, Math.toRadians(90.00)))
                         .splineTo(new Vector2d(-36.00, -37.35), Math.toRadians(90.29))
-                        .build();
+                        .addTask();
                 break;
         }
     }

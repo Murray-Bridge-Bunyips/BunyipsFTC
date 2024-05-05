@@ -3,12 +3,13 @@ package org.murraybridgebunyips.jerry.autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.NullSafety
-import org.murraybridgebunyips.bunyipslib.OpModeSelection
+import org.murraybridgebunyips.bunyipslib.Controls
 import org.murraybridgebunyips.bunyipslib.Direction
+import org.murraybridgebunyips.bunyipslib.NullSafety
+import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
+import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryTimeDriveTask
@@ -30,7 +31,7 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
     private var drive: CartesianMecanumDrive? = null
     private var tagtask: GetSignalTask? = null
 
-    override fun onInitialisation() {
+    override fun onInitialise() {
         // Configuration of camera and drive components
         config.init()
         cam =
@@ -46,18 +47,12 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.
         tagtask = cam?.let { GetSignalTask(it) }
+
+        tagtask?.let { setInitTask(it) }
     }
 
-    override fun setOpModes(): MutableList<OpModeSelection>? {
-        return null
-    }
-
-    override fun setInitTask(): RobotTask? {
-        return tagtask
-    }
-
-    override fun onQueueReady(selectedOpMode: OpModeSelection?) {
-        addTask(JerryTimeDriveTask(1.5, drive, 1.0, 0.0, 0.0))
+    override fun onReady(selectedOpMode: Reference<*>?, selectedButton: Controls) {
+        addTask(JerryTimeDriveTask(Seconds.of(1.5), drive, 1.0, 0.0, 0.0))
     }
 
     override fun onInitDone() {
@@ -69,10 +64,10 @@ class JerrySignalAutonomousBasic : AutonomousBunyipsOpMode() {
         // Add movement tasks based on the signal position
         if (position == Direction.LEFT) {
             // Drive forward if the position of the signal is LEFT
-            addTaskFirst(JerryTimeDriveTask(1.5, drive, 0.0, 1.0, 0.0))
+            addTaskFirst(JerryTimeDriveTask(Seconds.of(1.5), drive, 0.0, 1.0, 0.0))
         } else if (position == Direction.RIGHT) {
             // Drive backward if the position of the signal is RIGHT
-            addTaskFirst(JerryTimeDriveTask(1.5, drive, 0.0, -1.0, 0.0))
+            addTaskFirst(JerryTimeDriveTask(Seconds.of(1.5), drive, 0.0, -1.0, 0.0))
         }
     }
 }

@@ -1,5 +1,7 @@
 package org.murraybridgebunyips.jerry.tasks
 
+import org.murraybridgebunyips.bunyipslib.external.units.Measure
+import org.murraybridgebunyips.bunyipslib.external.units.Time
 import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 import org.murraybridgebunyips.jerry.components.JerryLift
@@ -9,7 +11,7 @@ import org.murraybridgebunyips.jerry.components.JerryLift
  * Takes in a desired percentage of arm extension.
  */
 class JerryLiftTask(
-    time: Double,
+    time: Measure<Time>,
     private val lift: JerryLift?,
     private val percent: Int,
     private val power: Double? = null,
