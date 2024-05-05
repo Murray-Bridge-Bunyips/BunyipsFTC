@@ -21,7 +21,7 @@ public class RedTeamProp extends ColourThreshold {
     /**
      * The upper YCrCb bounds for the red team prop.
      */
-    public static Scalar UPPER = new Scalar(200, 255, 102);
+    public static Scalar UPPER = new Scalar(150, 255, 102);
     /**
      * The minimum contour area percentages for the red team prop.
      */

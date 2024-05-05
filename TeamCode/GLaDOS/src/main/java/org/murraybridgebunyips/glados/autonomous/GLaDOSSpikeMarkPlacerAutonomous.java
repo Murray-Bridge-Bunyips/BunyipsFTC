@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.Direction;
 import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
@@ -14,8 +15,11 @@ import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
+import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.ColourThreshold;
+import org.murraybridgebunyips.common.centerstage.vision.BlueTeamProp;
+import org.murraybridgebunyips.common.centerstage.vision.RedTeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -29,6 +33,9 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     private DualServos claws;
     private Vision vision;
     private ColourThreshold teamProp;
+    private GetTriPositionContourTask getTeamProp;
+    private StartingPositions startingPosition;
+    private int targetTagId;
 
     @Override
     protected void onInitialise() {
@@ -39,12 +46,65 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
         vision = new Vision(config.webcam);
 
         setOpModes(StartingPositions.use());
-        setOpModes("a", "b", "c");
-        addSubsystems(drive, arm, claws);
+        addSubsystems(drive, arm, claws, vision);
     }
 
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
+        if (selectedOpMode == null) return;
+        startingPosition = (StartingPositions) selectedOpMode.require();
+        switch (startingPosition) {
+            case STARTING_RED_LEFT:
+            case STARTING_RED_RIGHT:
+                teamProp = new RedTeamProp();
+                break;
+            case STARTING_BLUE_LEFT:
+            case STARTING_BLUE_RIGHT:
+                teamProp = new BlueTeamProp();
+                break;
+        }
+
+        vision.init(teamProp);
+        vision.start(teamProp);
+        vision.startPreview();
+
+        getTeamProp = new GetTriPositionContourTask(teamProp);
+        setInitTask(getTeamProp);
+    }
+
+    @Override
+    protected void onStart() {
+        Direction spikeMark = getTeamProp.getPosition();
+        switch (startingPosition) {
+            case STARTING_RED_LEFT:
+            case STARTING_RED_RIGHT:
+                switch (spikeMark) {
+                    case LEFT:
+                        targetTagId = 4;
+                        break;
+                    case FORWARD:
+                        targetTagId = 5;
+                        break;
+                    case RIGHT:
+                        targetTagId = 6;
+                        break;
+                }
+                break;
+            case STARTING_BLUE_LEFT:
+            case STARTING_BLUE_RIGHT:
+                switch (spikeMark) {
+                    case LEFT:
+                        targetTagId = 1;
+                        break;
+                    case FORWARD:
+                        targetTagId = 2;
+                        break;
+                    case RIGHT:
+                        targetTagId = 3;
+                        break;
+                }
+                break;
+        }
     }
 
     @NonNull

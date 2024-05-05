@@ -1,4 +1,5 @@
-package org.murraybridgebunyips.glados.autonomous;
+package org.murraybridgebunyips.pbody.autonomous;
+
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
@@ -10,7 +11,6 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -19,48 +19,37 @@ import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
-import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
-import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
+import org.murraybridgebunyips.pbody.components.PbodyConfig;
 
 /**
- * Backdrop Placer Autonomous for Left Parking
- *
- * @author Lucas Bubner, 2024
+ * Primary Autonomous OpMode (Left Park)
  */
-@Config
 @Autonomous(name = "Backdrop Placer (Left Park)")
-public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
+public class PbodyBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     /**
-     * Multiplicative scale for all RoadRunner distances.
+     * Scaling
      */
-    public static double FIELD_TILE_SCALE = 1.5;
-    private final GLaDOSConfigCore config = new GLaDOSConfigCore();
-    private DualDeadwheelMecanumDrive drive;
+    public static double FIELD_TILE_SCALE = 1;
+    private final PbodyConfig config = new PbodyConfig();
+    private MecanumDrive drive;
     private HoldableActuator arm;
     private DualServos claws;
 
     @Override
     protected void onInitialise() {
         config.init();
-        drive = new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
-        arm = new HoldableActuator(config.arm).withMovingPower(0.5);
-        claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
-
+        arm = new HoldableActuator(config.arm);
+        drive = new MecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+        claws = new DualServos(config.ls, config.rs, 0.6, 0.9, 0.7, 0.4);
         setOpModes(StartingPositions.use());
-        addSubsystems(drive, arm, claws);
-    }
-
-    @NonNull
-    @Override
-    public RoadRunnerDrive getDrive() {
-        return drive;
+        addSubsystems(arm, drive, claws);
     }
 
     // Set which direction the robot will strafe at the backdrop. Overridden in the right park variant.
@@ -118,12 +107,12 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
                 .addTask();
 
         // Place pixels and park to the left of the backdrop
-        addTask(arm.deltaTask(1500).withName("Deploy Arm"));
+        addTask(arm.deltaTask(-2600).withName("Deploy Arm"));
         addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
                 afterPixelDropDriveAction(makeTrajectory()),
-                arm.deltaTask(-1500)
+                arm.deltaTask(2600)
         ).withName("Stow and Move to Park"));
 
         makeTrajectory()
@@ -131,5 +120,11 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
                 .setAccelConstraint(atAcceleration(0.1, FieldTiles.per(Second).per(Second)))
                 .withName("Finish Park")
                 .addTask();
+    }
+
+    @NonNull
+    @Override
+    public MecanumDrive getDrive() {
+        return drive;
     }
 }

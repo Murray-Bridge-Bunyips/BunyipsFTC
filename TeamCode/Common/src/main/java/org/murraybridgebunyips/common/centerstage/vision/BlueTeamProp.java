@@ -14,16 +14,14 @@ import org.opencv.core.Scalar;
  */
 @Config
 public class BlueTeamProp extends ColourThreshold {
-    // TODO: Implement bounds
-
     /**
      * The lower YCrCb bounds for the blue team prop.
      */
-    public static Scalar LOWER = new Scalar(0, 190, 0);
+    public static Scalar LOWER = new Scalar(0, 100, 150);
     /**
      * The upper YCrCb bounds for the blue team prop.
      */
-    public static Scalar UPPER = new Scalar(200, 255, 102);
+    public static Scalar UPPER = new Scalar(100, 255, 255);
     /**
      * The minimum contour area percentages for the blue team prop.
      */

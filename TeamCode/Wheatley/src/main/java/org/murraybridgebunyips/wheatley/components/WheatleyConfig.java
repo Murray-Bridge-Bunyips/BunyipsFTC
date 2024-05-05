@@ -168,7 +168,7 @@ public class WheatleyConfig extends RobotConfig {
                 .setGearRatio(1.0 / 13.1)
                 .setTrackWidth(Inches.of(20.5))
                 // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
-                .setMaxVel(InchesPerSecond.of(1.065033847087705))
+                .setMaxVel(InchesPerSecond.of(41.065033847087705))
                 .setMaxAccel(InchesPerSecond.per(Second).of(41.065033847087705))
                 .setMaxAngVel(DegreesPerSecond.of(175))
                 .setMaxAngAccel(DegreesPerSecond.per(Second).of(175))
