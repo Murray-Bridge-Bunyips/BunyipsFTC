@@ -1,8 +1,5 @@
 package org.murraybridgebunyips.wheatley.teleop;
 
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
-
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
@@ -12,7 +9,6 @@ import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
-import org.murraybridgebunyips.bunyipslib.subsystems.Rotator;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.common.centerstage.tasks.PickUpPixelTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
@@ -47,7 +43,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     private MecanumDrive drive;
     private Cannon cannon;
     private HoldableActuator linearActuator;
-    private Rotator rotator;
+    private HoldableActuator rotator;
     private DualServos claws;
 //    private Vision vision;
 //    private MultiColourThreshold pixels;
@@ -62,7 +58,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         cannon = new Cannon(config.launcher);
         linearActuator = new HoldableActuator(config.linearActuator)
                 .withBottomSwitch(config.bottomLimit);
-        rotator = new Rotator(config.clawRotator, 288)
+        rotator = new HoldableActuator(config.clawRotator)
                 .withName("Claw Rotator")
 //                .withAngleLimits(Degrees.zero(), Degrees.of(180))
                 .withPowerClamps(-0.33, 0.33);
@@ -93,9 +89,9 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 
         operator().whenPressed(Controls.DPAD_UP)
 //                .run(rotator.gotoTimeTask(Degrees.of(60), Seconds.of(2)));
-                .run(rotator.gotoTask(Degrees.of(60)));
+                .run(rotator.gotoTask(100));
         operator().whenPressed(Controls.DPAD_DOWN)
-                .run(rotator.runForTask(Seconds.of(1), -0.33, true));
+                .run(rotator.homeTask());
 
 //        driver().whenPressed(Controls.RIGHT_BUMPER)
 //                .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
