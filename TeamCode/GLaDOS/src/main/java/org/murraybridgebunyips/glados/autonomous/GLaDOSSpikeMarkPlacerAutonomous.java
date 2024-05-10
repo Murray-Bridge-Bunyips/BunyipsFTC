@@ -34,8 +34,6 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     private Vision vision;
     private ColourThreshold teamProp;
     private GetTriPositionContourTask getTeamProp;
-    private StartingPositions startingPosition;
-    private int targetTagId;
 
     @Override
     protected void onInitialise() {
@@ -52,7 +50,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) return;
-        startingPosition = (StartingPositions) selectedOpMode.require();
+        StartingPositions startingPosition = (StartingPositions) selectedOpMode.require();
         switch (startingPosition) {
             case STARTING_RED_LEFT:
             case STARTING_RED_RIGHT:
@@ -75,36 +73,6 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     @Override
     protected void onStart() {
         Direction spikeMark = getTeamProp.getPosition();
-        switch (startingPosition) {
-            case STARTING_RED_LEFT:
-            case STARTING_RED_RIGHT:
-                switch (spikeMark) {
-                    case LEFT:
-                        targetTagId = 4;
-                        break;
-                    case FORWARD:
-                        targetTagId = 5;
-                        break;
-                    case RIGHT:
-                        targetTagId = 6;
-                        break;
-                }
-                break;
-            case STARTING_BLUE_LEFT:
-            case STARTING_BLUE_RIGHT:
-                switch (spikeMark) {
-                    case LEFT:
-                        targetTagId = 1;
-                        break;
-                    case FORWARD:
-                        targetTagId = 2;
-                        break;
-                    case RIGHT:
-                        targetTagId = 3;
-                        break;
-                }
-                break;
-        }
     }
 
     @NonNull

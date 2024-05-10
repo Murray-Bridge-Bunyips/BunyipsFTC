@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -119,7 +118,7 @@ public class GLaDOSConfigCore extends RobotConfig {
 
         // Pixel manipulation system
         arm = getHardware("arm", DcMotorEx.class, (d) ->
-                d.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(8, 0.06, 0.0, 0.0, MotorControlAlgorithm.LegacyPID)));
+                d.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(8, 0.06, 0.0, 0.0, arm.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).algorithm)));
         double LIM = 0.7;
         leftPixel = getHardware("ls", Servo.class, (d) -> d.scaleRange(LIM, 1.0));
         rightPixel = getHardware("rs", Servo.class, (d) -> d.scaleRange(0.0, 1 - LIM));
