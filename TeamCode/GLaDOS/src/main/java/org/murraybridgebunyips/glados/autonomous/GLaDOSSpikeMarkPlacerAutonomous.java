@@ -18,6 +18,7 @@ import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.ColourThreshold;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.SpikeMarkBackdropId;
 import org.murraybridgebunyips.common.centerstage.vision.BlueTeamProp;
 import org.murraybridgebunyips.common.centerstage.vision.RedTeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
@@ -34,6 +35,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     private Vision vision;
     private ColourThreshold teamProp;
     private GetTriPositionContourTask getTeamProp;
+    private StartingPositions startingPosition;
 
     @Override
     protected void onInitialise() {
@@ -50,7 +52,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) return;
-        StartingPositions startingPosition = (StartingPositions) selectedOpMode.require();
+        startingPosition = (StartingPositions) selectedOpMode.require();
         switch (startingPosition) {
             case STARTING_RED_LEFT:
             case STARTING_RED_RIGHT:
@@ -73,6 +75,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     @Override
     protected void onStart() {
         Direction spikeMark = getTeamProp.getPosition();
+        log("planning to go to id: %", SpikeMarkBackdropId.get(spikeMark, startingPosition));
     }
 
     @NonNull

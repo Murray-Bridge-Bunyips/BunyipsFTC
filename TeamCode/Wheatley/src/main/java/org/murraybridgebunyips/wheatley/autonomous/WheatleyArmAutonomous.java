@@ -77,8 +77,7 @@ public class WheatleyArmAutonomous extends AutonomousBunyipsOpMode implements Ro
 
     @Override
     protected void onStart() {
-        if (getTeamProp.getPosition() != null)
-            addRetainedTelemetry("Spike mark locked: %", getTeamProp.getPosition().toString());
+        addRetainedTelemetry("Spike mark locked: %", getTeamProp.getPosition().toString());
 
         switch (getTeamProp.getPosition()) {
             case LEFT:
