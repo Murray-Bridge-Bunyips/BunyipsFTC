@@ -75,7 +75,8 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     @Override
     protected void onStart() {
         Direction spikeMark = getTeamProp.getPosition();
-        log("planning to go to id: %", SpikeMarkBackdropId.get(spikeMark, startingPosition));
+        int targetId = SpikeMarkBackdropId.get(spikeMark, startingPosition);
+        // TODO
     }
 
     @NonNull

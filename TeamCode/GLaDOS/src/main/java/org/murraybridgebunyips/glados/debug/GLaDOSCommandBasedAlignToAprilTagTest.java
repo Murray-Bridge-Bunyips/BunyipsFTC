@@ -1,6 +1,7 @@
 package org.murraybridgebunyips.glados.debug;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
@@ -19,7 +20,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * @author Lucas Bubner, 2024
  */
 @TeleOp(name = "Align To AprilTag (Command Based)")
-@Disabled
+//@Disabled
 public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;
@@ -47,7 +48,7 @@ public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOp
     protected void assignCommands() {
         drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
         driver().whenPressed(Controls.LEFT_BUMPER)
-                .run(new MoveToAprilTagTask<>(gamepad1, drive, aprilTag, -1))
+                .run(new MoveToAprilTagTask(gamepad1, drive, aprilTag, 2).withDesiredDistance(Inches.of(10)))
                 .finishingWhen(() -> !gamepad1.left_bumper);
     }
 }
