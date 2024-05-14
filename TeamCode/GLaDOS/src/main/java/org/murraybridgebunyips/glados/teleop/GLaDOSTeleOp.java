@@ -76,7 +76,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
         driver().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(cannon.fireTask());
         driver().whenPressed(Controls.BACK)
@@ -84,8 +84,8 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                         class MY=yclass             - lachlan paul*/
                 .run(cannon.resetTask());
         driver().whenPressed(Controls.RIGHT_BUMPER)
-                .run(new AlignToContourTask<>(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsx, drive, pixels, new PIDController(0.67, 0.25, 0)))
-                .finishingWhen(() -> !gamepad1.rb);
+                .run(new AlignToContourTask(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsx, drive, pixels, new PIDController(0.67, 0.25, 0)))
+                .finishingIf(() -> !gamepad1.rb);
 
         operator().whenPressed(Controls.B)
                 .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
@@ -93,7 +93,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 .run(claws.toggleTask(DualServos.ServoSide.LEFT));
         operator().whenPressed(Controls.A)
                 .run(arm.homeTask())
-                .finishingWhen(() -> gamepad2.lsy != 0.0f);
+                .finishingIf(() -> gamepad2.lsy != 0.0f);
         arm.setDefaultTask(arm.controlTask(() -> gamepad2.lsy));
     }
 }

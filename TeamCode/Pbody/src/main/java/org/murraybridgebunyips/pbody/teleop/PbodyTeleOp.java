@@ -54,6 +54,6 @@ public class PbodyTeleOp extends CommandBasedBunyipsOpMode {
                 .run(plane.resetTask());
 
         arm.setDefaultTask(arm.controlTask(() -> -gamepad2.lsy));
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
     }
 }

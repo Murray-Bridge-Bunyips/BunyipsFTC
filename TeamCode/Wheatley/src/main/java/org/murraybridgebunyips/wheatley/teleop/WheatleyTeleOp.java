@@ -95,11 +95,11 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 
 //        driver().whenPressed(Controls.RIGHT_BUMPER)
 //                .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
-//                .finishingWhen(() -> !gamepad1.right_bumper);
+//                .finishingIf(() -> !gamepad1.right_bumper);
 
         operator().whenPressed(Controls.A)
                 .run(linearActuator.homeTask())
-                .finishingWhen(() -> gamepad2.lsy != 0.0f);
+                .finishingIf(() -> gamepad2.lsy != 0.0f);
 
         operator().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(new PickUpPixelTask(linearActuator, claws));
@@ -109,7 +109,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 
         linearActuator.setDefaultTask(linearActuator.controlTask(() -> -gamepad2.lsy));
         rotator.setDefaultTask(rotator.controlTask(() -> -gamepad2.rsy));
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
     }
 
     @Override
