@@ -114,7 +114,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void periodic() {
-        addTelemetry("Bottom Switch Is %", config.bottomLimit.isPressed() ? "Pressed" : "Not Pressed").setSize(96);
+        addTelemetry("Bottom Switch Is %", config.bottomLimit.isPressed() ? "Pressed" : "Not Pressed").big();
 
         // Some drivers have noted that they sometimes cannot tell whether a claw is open or closed.
         // Hopefully this helps. Update: It did :)
