@@ -147,6 +147,7 @@ public class WheatleyConfig extends RobotConfig {
         // Suspender upward motion system
         linearActuator = getHardware("la", DcMotorEx.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            d.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(0.8, 0, 1000000000000000000));
 //            d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
         bottomLimit = getHardware("bottom", TouchSensor.class);
