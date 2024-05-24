@@ -16,10 +16,19 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  * @author Lachlan Paul, 2024
  */
 @Config
-@TeleOp(name = "WheatleyPIDDebug")
+@TeleOp
 public class WheatleyPIDDebug extends CommandBasedBunyipsOpMode {
+    /**
+     * proportional
+     */
     public static double kP;
+    /**
+     * integral
+     */
     public static double kI;
+    /**
+     * derivative
+     */
     public static double kD;
 
     private HoldableActuator clawRotator;
@@ -43,9 +52,8 @@ public class WheatleyPIDDebug extends CommandBasedBunyipsOpMode {
     }
 
     @Override
-    protected void periodic(){
-        // holdableActuator.setPower(gamepad1.left_stick_y);
+    @SuppressWarnings("deprecation")
+    protected void periodic() {
         config.clawRotator.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(kP, kI, kD, 0, MotorControlAlgorithm.LegacyPID));
-        clawRotator.update();
     }
 }
