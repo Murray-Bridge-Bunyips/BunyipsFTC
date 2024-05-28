@@ -11,6 +11,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -31,6 +32,7 @@ import org.murraybridgebunyips.pbody.components.PbodyConfig;
 /**
  * Primary Autonomous OpMode (Left Park)
  */
+@Config
 @Autonomous(name = "Backdrop Placer (Left Park)")
 public class PbodyBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     /**
