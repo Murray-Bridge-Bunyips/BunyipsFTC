@@ -16,6 +16,7 @@ import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
+import org.murraybridgebunyips.bunyipslib.subsystems.Switch;
 import org.murraybridgebunyips.bunyipslib.tasks.AlignToContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
@@ -35,12 +36,15 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
     /**
      * The amount to raise the arm on init.
      */
+    // TODO: could install a hard stop instead
     public static int ARM_DELTA_POSITION_ON_INIT = 200;
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;
     private HoldableActuator arm;
     private DualServos claws;
     private Cannon cannon;
+    private HoldableActuator suspender;
+    private Switch suspenderLatch;
     private Vision vision;
     private MultiColourThreshold pixels;
 
@@ -57,9 +61,14 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         arm = new HoldableActuator(config.arm)
                 .withHomingOvercurrent(Amps.of(1), Seconds.of(0.5));
         cannon = new Cannon(config.launcher);
+        suspender = new HoldableActuator(config.suspenderActuator);
+        // Suspender will only be able to be controlled after suspenderLatch is opened
+        suspender.disable();
+        suspenderLatch = new Switch(config.suspenderLatch);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 /*giulio*/
 
+        // TODO: change with a veloc ramper (or even DcMotorRamping) instead of a loop based one
         gamepad2.set(Controls.Analog.LEFT_STICK_Y, (v) ->
             Mathf.clamp(Mathf.moveTowards(gamepad2.lsy, v, v == 0.0 ? 0.0002f : 0.00008f), -0.5f, 0.5f)
         );
@@ -77,20 +86,28 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
     @Override
     protected void assignCommands() {
         drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
+        driver().whenPressed(Controls.RIGHT_BUMPER)
+                .run(new AlignToContourTask(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsx, drive, pixels, new PIDController(0.67, 0.25, 0)))
+                .finishingIf(() -> !gamepad1.rb);
         driver().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(cannon.fireTask());
         driver().whenPressed(Controls.BACK)
                 /*print("Hello, World!")
                         class MY=yclass             - lachlan paul*/
                 .run(cannon.resetTask());
-        driver().whenPressed(Controls.RIGHT_BUMPER)
-                .run(new AlignToContourTask(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsx, drive, pixels, new PIDController(0.67, 0.25, 0)))
-                .finishingIf(() -> !gamepad1.rb);
+
+        scheduler().when(suspenderLatch::isOpen)
+                .runDebounced(suspender::enable);
+        operator().whenHeld(Controls.Y)
+                .run(suspenderLatch.openTask())
+                .in(Seconds.of(1));
+        suspender.setDefaultTask(suspender.controlTask(() -> -gamepad2.rsy));
 
         operator().whenPressed(Controls.B)
                 .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
         operator().whenPressed(Controls.X)
                 .run(claws.toggleTask(DualServos.ServoSide.LEFT));
+
         operator().whenPressed(Controls.A)
                 .run(arm.homeTask())
                 .finishingIf(() -> gamepad2.lsy != 0.0f);

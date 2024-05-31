@@ -74,6 +74,14 @@ public class GLaDOSConfigCore extends RobotConfig {
      */
     public Servo launcher;
     /**
+     * ?: Suspender Actuator "sa"
+     */
+    public DcMotorEx suspenderActuator;
+    /**
+     * ?: Suspender Latch "sl"
+     */
+    public Servo suspenderLatch;
+    /**
      * Internally mounted on I2C C0 "imu"
      */
     public IMU imu;
@@ -125,6 +133,10 @@ public class GLaDOSConfigCore extends RobotConfig {
 
         // Paper Drone launcher system
         launcher = getHardware("pl", Servo.class);
+
+        // Suspension system
+        suspenderActuator = getHardware("sa", DcMotorEx.class);
+        suspenderLatch = getHardware("sl", Servo.class);
 
         // RoadRunner configuration
         driveConstants = new DriveConstants.Builder()
