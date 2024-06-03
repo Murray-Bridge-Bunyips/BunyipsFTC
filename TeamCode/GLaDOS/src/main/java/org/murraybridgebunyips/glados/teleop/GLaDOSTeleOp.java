@@ -95,7 +95,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 .run(cannon.resetTask());
 
         scheduler().when(suspenderLatch::isOpen)
-                .runDebounced(suspender::enable);
+                .runOnce(suspender::enable);
         operator().whenHeld(Controls.Y)
                 .run(suspenderLatch.openTask())
                 .in(Seconds.of(1));
