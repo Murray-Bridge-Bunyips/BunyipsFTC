@@ -15,6 +15,8 @@ public class CellphoneHtmlTest extends BunyipsOpMode {
     @Override
     protected void onInit() {
         setInitTask(new WaitTask(Seconds.of(1), false));
+        setLoopSpeed(Seconds.of(0.1));
+        throw new RuntimeException("oops");
     }
 
     @Override
