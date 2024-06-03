@@ -9,9 +9,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.RampingSupplier;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.external.Mathf;
 import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
@@ -68,10 +68,8 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 /*giulio*/
 
-        // TODO: change with a veloc ramper (or even DcMotorRamping) instead of a loop based one
-        gamepad2.set(Controls.Analog.LEFT_STICK_Y, (v) ->
-            Mathf.clamp(Mathf.moveTowards(gamepad2.lsy, v, v == 0.0 ? 0.0002f : 0.00008f), -0.5f, 0.5f)
-        );
+        RampingSupplier armRamping = new RampingSupplier(() -> gamepad2.lsy);
+        gamepad2.set(Controls.Analog.LEFT_STICK_Y, armRamping::get);
         gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
 
         pixels = new MultiColourThreshold(Pixels.createProcessors());
