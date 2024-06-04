@@ -19,7 +19,7 @@ class TFODDetectionTask(opMode: BunyipsOpMode, time: Double, private val cam: Ca
         while (cam.determineTFOD() == null) {
             // If we hit the time constraint, stop TFOD detections and select a default.
             if (isFinished()) {
-                opMode.addTelemetry("No TFOD label found. Defaulting to 1 (LEFT).")
+                opMode.telemetry.add("No TFOD label found. Defaulting to 1 (LEFT).")
                 cam.seeingTfod = CameraOp.LABELS[0]
                 cam.stopTFOD()
                 return

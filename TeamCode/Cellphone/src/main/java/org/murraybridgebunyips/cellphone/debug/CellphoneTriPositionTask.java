@@ -32,7 +32,7 @@ public class CellphoneTriPositionTask extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        addTelemetry(task.getPosition());
-        addTelemetry(visionB.getAllData());
+        telemetry.add(task.getPosition());
+        telemetry.add(visionB.getAllData());
     }
 }

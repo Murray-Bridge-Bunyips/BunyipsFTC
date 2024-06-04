@@ -24,7 +24,7 @@ public class PbodyEncoderTest extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        addTelemetry("fl:% fr:% bl:% br:%", config.fl.getCurrentPosition(), config.fr.getCurrentPosition(), config.bl.getCurrentPosition(), config.br.getCurrentPosition());
+        telemetry.add("fl:% fr:% bl:% br:%", config.fl.getCurrentPosition(), config.fr.getCurrentPosition(), config.bl.getCurrentPosition(), config.br.getCurrentPosition());
         drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x).update();
     }
 }

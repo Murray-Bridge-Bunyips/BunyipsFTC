@@ -24,7 +24,7 @@ public class WheatleyManualTarget extends BunyipsOpMode {
         config.clawRotator.setTargetPosition((int)pos);
         config.clawRotator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         config.clawRotator.setPower(1);
-        addTelemetry("current:%", config.clawRotator.getCurrentPosition());
-        addTelemetry("target:%", (int)pos);
+        telemetry.add("current:%", config.clawRotator.getCurrentPosition());
+        telemetry.add("target:%", (int)pos);
     }
 }

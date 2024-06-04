@@ -40,49 +40,49 @@ public class GLaDOSAprilTagTest extends BunyipsOpMode {
         if (!data.isEmpty()) {
 //            addTelemetry(data);
             data.forEach(d -> {
-                addDashboardTelemetry(d.getId() + ":hamming", d.getHamming());
-                addDashboardTelemetry(d.getId() + ":decisionMargin", d.getDecisionMargin());
-                addDashboardTelemetry(d.getId() + ":centerX", d.getCenter().x);
-                addDashboardTelemetry(d.getId() + ":centerY", d.getCenter().y);
+                telemetry.addDashboard(d.getId() + ":hamming", d.getHamming());
+                telemetry.addDashboard(d.getId() + ":decisionMargin", d.getDecisionMargin());
+                telemetry.addDashboard(d.getId() + ":centerX", d.getCenter().x);
+                telemetry.addDashboard(d.getId() + ":centerY", d.getCenter().y);
                 if (d.getCorners() != null) {
                     for (int i = 0; i < d.getCorners().size(); i++) {
-                        addDashboardTelemetry(d.getId() + ":cornerX" + (i + 1), d.getCorners().get(i).x);
-                        addDashboardTelemetry(d.getId() + ":cornerY" + (i + 1), d.getCorners().get(i).y);
+                        telemetry.addDashboard(d.getId() + ":cornerX" + (i + 1), d.getCorners().get(i).x);
+                        telemetry.addDashboard(d.getId() + ":cornerY" + (i + 1), d.getCorners().get(i).y);
                     }
                 }
-                addDashboardTelemetry(d.getId() + ":label", d.getLabel());
-                addDashboardTelemetry(d.getId() + ":tagsize", d.getTagsize());
+                telemetry.addDashboard(d.getId() + ":label", d.getLabel());
+                telemetry.addDashboard(d.getId() + ":tagsize", d.getTagsize());
                 if (d.getFieldPosition() != null) {
-                    addDashboardTelemetry(d.getId() + ":fieldPositionX", d.getFieldPosition().get(0));
-                    addDashboardTelemetry(d.getId() + ":fieldPositionY", d.getFieldPosition().get(1));
-                    addDashboardTelemetry(d.getId() + ":fieldPositionZ", d.getFieldPosition().get(2));
+                    telemetry.addDashboard(d.getId() + ":fieldPositionX", d.getFieldPosition().get(0));
+                    telemetry.addDashboard(d.getId() + ":fieldPositionY", d.getFieldPosition().get(1));
+                    telemetry.addDashboard(d.getId() + ":fieldPositionZ", d.getFieldPosition().get(2));
                 }
                 if (d.getFieldOrientation() != null) {
-                    addDashboardTelemetry(d.getId() + ":fieldOrientationX", d.getFieldOrientation().x);
-                    addDashboardTelemetry(d.getId() + ":fieldOrientationY", d.getFieldOrientation().y);
-                    addDashboardTelemetry(d.getId() + ":fieldOrientationZ", d.getFieldOrientation().z);
-                    addDashboardTelemetry(d.getId() + ":fieldOrientationW", d.getFieldOrientation().w);
+                    telemetry.addDashboard(d.getId() + ":fieldOrientationX", d.getFieldOrientation().x);
+                    telemetry.addDashboard(d.getId() + ":fieldOrientationY", d.getFieldOrientation().y);
+                    telemetry.addDashboard(d.getId() + ":fieldOrientationZ", d.getFieldOrientation().z);
+                    telemetry.addDashboard(d.getId() + ":fieldOrientationW", d.getFieldOrientation().w);
                 }
-                addDashboardTelemetry(d.getId() + ":distanceUnit", d.getDistanceUnit());
-                addDashboardTelemetry(d.getId() + ":x", d.getX());
-                addDashboardTelemetry(d.getId() + ":y", d.getY());
-                addDashboardTelemetry(d.getId() + ":z", d.getZ());
-                addDashboardTelemetry(d.getId() + ":pitch", d.getPitch());
-                addDashboardTelemetry(d.getId() + ":roll", d.getRoll());
-                addDashboardTelemetry(d.getId() + ":yaw", d.getYaw());
-                addDashboardTelemetry(d.getId() + ":range", d.getRange());
-                addDashboardTelemetry(d.getId() + ":bearing", d.getBearing());
-                addDashboardTelemetry(d.getId() + ":elevation", d.getElevation());
-                addDashboardTelemetry(d.getId() + ":frameAcquisitionNanoTime", d.getFrameAcquisitionNanoTime());
+                telemetry.addDashboard(d.getId() + ":distanceUnit", d.getDistanceUnit());
+                telemetry.addDashboard(d.getId() + ":x", d.getX());
+                telemetry.addDashboard(d.getId() + ":y", d.getY());
+                telemetry.addDashboard(d.getId() + ":z", d.getZ());
+                telemetry.addDashboard(d.getId() + ":pitch", d.getPitch());
+                telemetry.addDashboard(d.getId() + ":roll", d.getRoll());
+                telemetry.addDashboard(d.getId() + ":yaw", d.getYaw());
+                telemetry.addDashboard(d.getId() + ":range", d.getRange());
+                telemetry.addDashboard(d.getId() + ":bearing", d.getBearing());
+                telemetry.addDashboard(d.getId() + ":elevation", d.getElevation());
+                telemetry.addDashboard(d.getId() + ":frameAcquisitionNanoTime", d.getFrameAcquisitionNanoTime());
                 if (d.getRawPose() != null) {
-                    addDashboardTelemetry(d.getId() + ":rawPoseX", d.getRawPose().x);
-                    addDashboardTelemetry(d.getId() + ":rawPoseY", d.getRawPose().y);
-                    addDashboardTelemetry(d.getId() + ":rawPoseZ", d.getRawPose().z);
-                    addDashboardTelemetry(d.getId() + ":rawPoseRotationMatrix", d.getRawPose().R);
+                    telemetry.addDashboard(d.getId() + ":rawPoseX", d.getRawPose().x);
+                    telemetry.addDashboard(d.getId() + ":rawPoseY", d.getRawPose().y);
+                    telemetry.addDashboard(d.getId() + ":rawPoseZ", d.getRawPose().z);
+                    telemetry.addDashboard(d.getId() + ":rawPoseRotationMatrix", d.getRawPose().R);
                 }
             });
         } else {
-            addTelemetry("No AprilTag data at % ns", System.nanoTime());
+            telemetry.add("No AprilTag data at % ns", System.nanoTime());
         }
 
         basicDrive

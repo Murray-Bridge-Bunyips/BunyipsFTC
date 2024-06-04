@@ -103,7 +103,7 @@ class JerryArm(
         // then return arm control permission back to the instance.
         liftIndex = 0
         isCalibrating = false
-        opMode.addTelemetry("Arm has been calibrated.")
+        opMode.telemetry.add("Arm has been calibrated.")
     }
 
     /**
@@ -111,7 +111,7 @@ class JerryArm(
      */
     fun clawOpen() {
         claw.position = 0.0
-        opMode.addTelemetry("Claws are opening...")
+        opMode.telemetry.add("Claws are opening...")
     }
 
     /**
@@ -120,7 +120,7 @@ class JerryArm(
      */
     fun clawClose() {
         claw.position = 1.0
-        opMode.addTelemetry("Claws are closing...")
+        opMode.telemetry.add("Claws are closing...")
     }
 
     /**

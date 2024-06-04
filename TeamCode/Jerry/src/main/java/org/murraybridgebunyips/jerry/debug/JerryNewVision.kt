@@ -27,8 +27,8 @@ class JerryNewVision : BunyipsOpMode() {
 
     override fun activeLoop() {
         // Vision is updated automatically by the SDK on another thread
-        addTelemetry("FPS: ${vision?.fps}")
-        addTelemetry("Status: ${vision?.status}")
-        addTelemetry("AprilTag: ${aprilTag.data}")
+        telemetry.add("FPS: ${vision?.fps}")
+        telemetry.add("Status: ${vision?.status}")
+        telemetry.add("AprilTag: ${aprilTag.data}")
     }
 }

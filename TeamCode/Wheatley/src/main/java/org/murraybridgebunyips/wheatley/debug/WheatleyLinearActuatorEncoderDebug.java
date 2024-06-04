@@ -10,7 +10,7 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  * Debugging OpMode for reading the linear actuator encoder position.
  */
 @Disabled
-@TeleOp(name = "WheatleyLinearActuatorEncoderDebug")
+@TeleOp
 public class WheatleyLinearActuatorEncoderDebug extends BunyipsOpMode {
     private final WheatleyConfig config = new WheatleyConfig();
 
@@ -21,7 +21,7 @@ public class WheatleyLinearActuatorEncoderDebug extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        addTelemetry(config.linearActuator.getCurrentPosition());
+        telemetry.add(config.linearActuator.getCurrentPosition());
         config.linearActuator.setPower(-gamepad2.lsy);
     }
 }
