@@ -25,7 +25,7 @@ class JerryIMUDebug : BunyipsOpMode() {
 //                AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES
 //            )?.thirdAngle.toString()
 //        )
-        addTelemetry(imu?.heading.toString())
+        telemetry.add(imu?.heading.toString())
         imu?.update()
     }
 }

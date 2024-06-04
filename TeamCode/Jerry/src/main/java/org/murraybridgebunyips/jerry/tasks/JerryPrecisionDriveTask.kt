@@ -39,7 +39,7 @@ class JerryPrecisionDriveTask(
         try {
             assert(drive != null)
         } catch (e: AssertionError) {
-            opMode.addTelemetry(
+            opMode.telemetry.add(
                 "Failed to initialise a drive task as the drive system is unavailable.",
                 true
             )
@@ -93,7 +93,7 @@ class JerryPrecisionDriveTask(
 //            }/$distanceMM"
 //        )
 
-        opMode.addTelemetry(
+        opMode.telemetry.add(
             "Axis correction: ${
                 String.format("%.2f", imu?.capture?.minus(tolerance))
             } <= ${
