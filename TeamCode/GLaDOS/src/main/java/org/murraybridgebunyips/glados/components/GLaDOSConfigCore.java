@@ -74,11 +74,11 @@ public class GLaDOSConfigCore extends RobotConfig {
      */
     public Servo launcher;
     /**
-     * ?: Suspender Actuator "sa"
+     * Control 1: Suspender Actuator "sa"
      */
     public DcMotorEx suspenderActuator;
     /**
-     * ?: Suspender Latch "sl"
+     * Control Servo 3: Suspender Latch "sl"
      */
     public Servo suspenderLatch;
     /**
@@ -135,7 +135,7 @@ public class GLaDOSConfigCore extends RobotConfig {
         launcher = getHardware("pl", Servo.class);
 
         // Suspension system
-        suspenderActuator = getHardware("sa", DcMotorEx.class);
+        suspenderActuator = getHardware("sa", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         suspenderLatch = getHardware("sl", Servo.class);
 
         // RoadRunner configuration

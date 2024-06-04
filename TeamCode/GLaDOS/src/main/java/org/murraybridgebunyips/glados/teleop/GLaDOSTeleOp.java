@@ -64,12 +64,12 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         suspender = new HoldableActuator(config.suspenderActuator);
         // Suspender will only be able to be controlled after suspenderLatch is opened
         suspender.disable();
-        suspenderLatch = new Switch(config.suspenderLatch);
+        suspenderLatch = new Switch(config.suspenderLatch, 0, 1);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 /*giulio*/
 
-        RampingSupplier armRamping = new RampingSupplier(() -> gamepad2.lsy);
-        gamepad2.set(Controls.Analog.LEFT_STICK_Y, armRamping::get);
+//        RampingSupplier armRamping = new RampingSupplier(() -> gamepad2.lsy);
+//        gamepad2.set(Controls.Analog.LEFT_STICK_Y, armRamping::get);
         gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
 
         pixels = new MultiColourThreshold(Pixels.createProcessors());
@@ -77,7 +77,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         vision.start(pixels);
         vision.startPreview();
 
-        addSubsystems(drive, cannon, claws, arm);
+        addSubsystems(drive, cannon, claws, arm, suspender, suspenderLatch, vision);
         setInitTask(arm.deltaTask(ARM_DELTA_POSITION_ON_INIT));
     }
 
