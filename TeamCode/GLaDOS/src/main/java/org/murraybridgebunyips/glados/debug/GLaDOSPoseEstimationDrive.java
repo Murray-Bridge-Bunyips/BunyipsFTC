@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.AprilTagPoseEstimator;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
@@ -39,7 +38,8 @@ public class GLaDOSPoseEstimationDrive extends BunyipsOpMode {
         aprilTag = new AprilTag();
         vision.init(aprilTag);
         vision.start(aprilTag);
-        drive.setPoseEstimate(new Pose2d(StartingPositions.STARTING_RED_RIGHT.getVector(), Math.PI / 2));
+        // TODO: field pose positioning systems normalisation
+        drive.setPoseEstimate(new Pose2d(-62, 27, Math.PI / 2));
 
         poseEstimator = new AprilTagPoseEstimator(aprilTag, drive);
     }
