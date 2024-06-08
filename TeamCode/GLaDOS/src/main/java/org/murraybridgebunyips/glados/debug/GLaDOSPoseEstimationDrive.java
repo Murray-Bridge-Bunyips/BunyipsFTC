@@ -1,9 +1,8 @@
 package org.murraybridgebunyips.glados.debug;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.murraybridgebunyips.bunyipslib.AprilTagPoseEstimator;
+import org.murraybridgebunyips.bunyipslib.vision.AprilTagPoseEstimator;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
@@ -38,8 +37,6 @@ public class GLaDOSPoseEstimationDrive extends BunyipsOpMode {
         aprilTag = new AprilTag();
         vision.init(aprilTag);
         vision.start(aprilTag);
-        // TODO: field pose positioning systems normalisation
-        drive.setPoseEstimate(new Pose2d(-62, 27, Math.PI / 2));
 
         poseEstimator = new AprilTagPoseEstimator(aprilTag, drive);
     }

@@ -35,7 +35,7 @@ public class WheatleyRoadRunnerTest extends AutonomousBunyipsOpMode implements R
                 hardwareMap.voltageSensor, config.imu,
                 config.fl, config.fr, config.bl, config.br
         );
-        Storage.lastKnownPosition = null;
+        Storage.memory().lastKnownPosition = null;
     }
 
     @NonNull
