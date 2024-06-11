@@ -62,7 +62,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
                 .withName("Claw Rotator")
 //                .withAngleLimits(Degrees.zero(), Degrees.of(180))
                 .withPowerClamps(-0.33, 0.33);
-        claws = new DualServos(config.leftPixel, config.rightPixel, 0.0, 1.0, 1.0, 0.0);
+        claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 
 //        vision = new Vision(config.webcam);
 //        pixels = new MultiColourThreshold(Pixels.createProcessors());
