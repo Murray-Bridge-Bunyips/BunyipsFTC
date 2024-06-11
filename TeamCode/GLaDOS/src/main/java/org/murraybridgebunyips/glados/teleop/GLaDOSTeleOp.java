@@ -32,11 +32,6 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 @Config
 @TeleOp(name = "TeleOp")
 public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
-    /**
-     * The amount to raise the arm on init.
-     */
-    // TODO: could install a hard stop instead
-    public static int ARM_DELTA_POSITION_ON_INIT = 200;
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private MecanumDrive drive;
     private HoldableActuator arm;
@@ -77,7 +72,6 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         vision.startPreview();
 
         addSubsystems(drive, cannon, claws, arm, suspender, suspenderLatch, vision);
-        setInitTask(arm.deltaTask(ARM_DELTA_POSITION_ON_INIT));
     }
 
     @Override

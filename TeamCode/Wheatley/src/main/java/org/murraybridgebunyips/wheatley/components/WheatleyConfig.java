@@ -131,7 +131,7 @@ public class WheatleyConfig extends RobotConfig {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         imu = getHardware("imu", IMU.class, (d) -> {
-            boolean res = imu != null && imu.initialize(
+            boolean res = d.initialize(
                     new IMU.Parameters(
                             new RevHubOrientationOnRobot(
                                     RevHubOrientationOnRobot.LogoFacingDirection.UP,
