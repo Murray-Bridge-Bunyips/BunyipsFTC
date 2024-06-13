@@ -14,19 +14,28 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
+import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
+import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
+import org.murraybridgebunyips.bunyipslib.tasks.DriveToPoseTask;
+import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
+import org.murraybridgebunyips.bunyipslib.vision.Vision;
+import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.SpikeMarkBackdropId;
+import org.murraybridgebunyips.common.centerstage.vision.RedTeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -44,6 +53,9 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private DualDeadwheelMecanumDrive drive;
     private HoldableActuator arm;
+    private Vision vision;
+    private GetTriPositionContourTask getTeamProp;
+    private StartingPositions startingPosition;
     private DualServos claws;
 
     @Override
@@ -52,9 +64,16 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
         drive = new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
         arm = new HoldableActuator(config.arm).withMovingPower(0.5);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
+        vision = new Vision(config.webcam);
+
+        RedTeamProp rtp = new RedTeamProp();
+        vision.init(rtp);
+        vision.start(rtp);
+        getTeamProp = new GetTriPositionContourTask(rtp);
 
         setOpModes(StartingPositions.use());
         addSubsystems(drive, arm, claws);
+        setInitTask(getTeamProp);
     }
 
     @NonNull
@@ -90,7 +109,7 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
                 .mirrorToRef(blueLeft)
                 .build();
 
-        StartingPositions startingPosition = (StartingPositions) selectedOpMode.require();
+        startingPosition = (StartingPositions) selectedOpMode.require();
         TrajectorySequence targetSequence = null;
         switch (startingPosition) {
             case STARTING_RED_LEFT:
@@ -131,5 +150,21 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
                 .setAccelConstraint(atAcceleration(0.1, FieldTiles.per(Second).per(Second)))
                 .withName("Finish Park")
                 .addTask();
+    }
+
+    @Override
+    protected void onStart() {
+        int id = SpikeMarkBackdropId.get(getTeamProp.getPosition(), startingPosition);
+        AprilTagMetadata aprilTag = AprilTagGameDatabase.getCenterStageTagLibrary().lookupTag(id);
+        VectorF targetPos = aprilTag.fieldPosition;
+        // TODO: Pose thingo
+//        targetPos.add(new VectorF(-5, 0, 0));
+
+        addTaskAtIndex(1, new DriveToPoseTask(Seconds.of(5), drive,
+                new Pose2d(targetPos.get(0), targetPos.get(1), 0),
+                new PIDController(8, 0, 0),
+                new PIDController(8, 0, 0),
+                new PIDController(8, 0, 0)
+        ));
     }
 }
