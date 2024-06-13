@@ -108,7 +108,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
                 .run(() -> config.imu.resetYaw());
 
         linearActuator.setDefaultTask(linearActuator.controlTask(() -> -gamepad2.lsy));
-        rotator.setDefaultTask(rotator.controlTask(() -> -gamepad2.rsy));
+        rotator.setDefaultTask(rotator.controlTask(() -> gamepad2.rsy));
         drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
     }
 

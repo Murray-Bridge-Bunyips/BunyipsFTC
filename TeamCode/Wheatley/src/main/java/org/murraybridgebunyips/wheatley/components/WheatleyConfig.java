@@ -153,7 +153,7 @@ public class WheatleyConfig extends RobotConfig {
         bottomLimit = getHardware("bottom", TouchSensor.class);
 
         // Pixel manipulation system
-        clawRotator = getHardware("cr", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        clawRotator = getHardware("cr", DcMotorEx.class);
 
         leftPixel = getHardware("ls", Servo.class, (d) -> d.scaleRange(0.2, 1.0));
         rightPixel = getHardware("rs", Servo.class);
