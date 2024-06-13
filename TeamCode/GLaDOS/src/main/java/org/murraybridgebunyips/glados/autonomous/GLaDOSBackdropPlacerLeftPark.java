@@ -156,6 +156,10 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
     protected void onStart() {
         int id = SpikeMarkBackdropId.get(getTeamProp.getPosition(), startingPosition);
         AprilTagMetadata aprilTag = AprilTagGameDatabase.getCenterStageTagLibrary().lookupTag(id);
+        if (aprilTag == null) {
+            telemetry.log("apriltag not found, seeing tag: %", id);
+            return;
+        }
         VectorF targetPos = aprilTag.fieldPosition;
         // TODO: Pose thingo
 //        targetPos.add(new VectorF(-5, 0, 0));
