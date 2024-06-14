@@ -94,6 +94,10 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
         if (selectedOpMode == null)
             return;
 
+        startingPosition = (StartingPositions) selectedOpMode.require();
+        // Facing FORWARD from the starting position as selected
+        setPose(startingPosition.getPose());
+
         // Go to backdrop
         Reference<TrajectorySequence> blueLeft = Reference.empty();
         Reference<TrajectorySequence> blueRight = Reference.empty();
@@ -105,11 +109,10 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
                 .mirrorToRef(blueRight)
                 .build();
         TrajectorySequence redRight = makeTrajectory()
-                .lineToLinearHeading(new Pose2d(1 * FIELD_TILE_SCALE, -1 * FIELD_TILE_SCALE, -90.0), FieldTiles, Degrees)
+                .lineToLinearHeading(new Pose2d(1 * FIELD_TILE_SCALE, -1 * FIELD_TILE_SCALE, 0.0), FieldTiles, Degrees)
                 .mirrorToRef(blueLeft)
                 .build();
 
-        startingPosition = (StartingPositions) selectedOpMode.require();
         TrajectorySequence targetSequence = null;
         switch (startingPosition) {
             case STARTING_RED_LEFT:
@@ -147,7 +150,7 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
 
         makeTrajectory()
                 .forward(0.98 * FIELD_TILE_SCALE, FieldTiles)
-                .setAccelConstraint(atAcceleration(0.1, FieldTiles.per(Second).per(Second)))
+                .setVelConstraint(atVelocity(0.1, FieldTiles.per(Second)))
                 .withName("Finish Park")
                 .addTask();
     }
@@ -161,8 +164,8 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
             return;
         }
         VectorF targetPos = aprilTag.fieldPosition;
-        // TODO: Pose thingo
-//        targetPos.add(new VectorF(-5, 0, 0));
+        // Offset from the tag to the backdrop to not drive directly into the board
+        targetPos.add(new VectorF(-10, 0, 0));
 
         addTaskAtIndex(1, new DriveToPoseTask(Seconds.of(5), drive,
                 new Pose2d(targetPos.get(0), targetPos.get(1), 0),
