@@ -24,5 +24,4 @@ android {
 dependencies {
     implementation project(':FtcRobotController')
     implementation project(":BunyipsLib")
-    annotationProcessor files('lib/OpModeAnnotationProcessor.jar')
 }
