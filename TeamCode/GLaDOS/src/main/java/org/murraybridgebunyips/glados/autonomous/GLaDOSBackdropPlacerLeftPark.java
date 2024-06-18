@@ -1,6 +1,5 @@
 package org.murraybridgebunyips.glados.autonomous;
 
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
@@ -135,11 +134,6 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
                 .withName("Navigate to Backdrop")
                 .addTask();
 
-        makeTrajectory()
-                .forward(30, Centimeters)
-                .withName("Forward Align Backdrop")
-                .addTask();
-
         // Place pixels and park to the left of the backdrop
         addTask(arm.deltaTask(1500).withName("Deploy Arm"));
         addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
@@ -166,13 +160,13 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
         }
         VectorF targetPos = aprilTag.fieldPosition;
         // Offset from the tag to the backdrop to not drive directly into the board
-        targetPos.add(new VectorF(-10, 0, 0));
+        targetPos.add(new VectorF(-10, -5, 0));
 
         addTaskAtIndex(1, new DriveToPoseTask(Seconds.of(5), drive,
                 new Pose2d(targetPos.get(0), targetPos.get(1), 0),
-                new PIDController(8, 0, 0),
-                new PIDController(8, 0, 0),
-                new PIDController(8, 0, 0)
+                new PIDController(0.1, 0, 0),
+                new PIDController(0.1, 0, 0),
+                new PIDController(4, 0, 0)
         ));
     }
 }
