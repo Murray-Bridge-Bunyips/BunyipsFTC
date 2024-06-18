@@ -47,7 +47,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
                 hardwareMap.voltageSensor, config.imu,
                 config.fl, config.fr, config.bl, config.br
         );
-        rotator = new HoldableActuator(config.clawRotator);
+        rotator = new HoldableActuator(config.clawRotator).withMovingPower(1);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 
         addSubsystems(drive, rotator, claws);
@@ -67,9 +67,9 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
      * Place pixel and return to home position
      */
     public void placePixel() {
-        addTask(rotator.gotoTask(PLACING_POSITION));
+        addTask(rotator.deltaTask(PLACING_POSITION));
         addTask(claws.openTask(DualServos.ServoSide.BOTH));
-        addTask(rotator.homeTask());
+        addTask(rotator.deltaTask(-PLACING_POSITION));
     }
 
     /**
@@ -91,7 +91,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
         switch ((StartingPositions) selectedOpMode.require()) {
             // TODO: THIS HAS NOT BEEN TESTED DO NOT USE
             case STARTING_RED_LEFT:
-                addTask(waitMessage);
+//                addTask(waitMessage);
                 makeTrajectory()
                         .forward(FORWARD_DISTANCE, Centimeters)
                         .turn(-90, Degrees)
