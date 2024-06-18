@@ -98,7 +98,6 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
         setPose(startingPosition.getPose());
 
         // Go to backdrop
-        Reference<TrajectorySequence> blueLeft = Reference.empty();
         Reference<TrajectorySequence> blueRight = Reference.empty();
         TrajectorySequence redLeft = makeTrajectory()
                 .forward(1.8 * FIELD_TILE_SCALE, FieldTiles)
@@ -110,7 +109,10 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
         TrajectorySequence redRight = makeTrajectory()
                 .lineToLinearHeading(startingPosition.getPose()
                         .plus(unitPose(new Pose2d(1 * FIELD_TILE_SCALE, 1 * FIELD_TILE_SCALE, -90), FieldTiles, Degrees)))
-                .mirrorToRef(blueLeft)
+                .build();
+        TrajectorySequence blueLeft = makeTrajectory()
+                .lineToLinearHeading(startingPosition.getPose()
+                        .plus(unitPose(new Pose2d(1 * FIELD_TILE_SCALE, -1 * FIELD_TILE_SCALE, 90), FieldTiles, Degrees)))
                 .build();
 
         TrajectorySequence targetSequence = null;
@@ -122,7 +124,7 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
                 targetSequence = redRight;
                 break;
             case STARTING_BLUE_LEFT:
-                targetSequence = blueLeft.require();
+                targetSequence = blueLeft;
                 break;
             case STARTING_BLUE_RIGHT:
                 targetSequence = blueRight.require();
