@@ -32,8 +32,12 @@ import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
+import org.murraybridgebunyips.bunyipslib.vision.AprilTagPoseEstimator;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
+import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
+import org.murraybridgebunyips.bunyipslib.vision.processors.ColourThreshold;
 import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.SpikeMarkBackdropId;
+import org.murraybridgebunyips.common.centerstage.vision.BlueTeamProp;
 import org.murraybridgebunyips.common.centerstage.vision.RedTeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
@@ -49,10 +53,21 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
      * Multiplicative scale for all RoadRunner distances.
      */
     public static double FIELD_TILE_SCALE = 1.5;
+    /**
+     * X offset to DriveToPose AprilTag
+     */
+    public static float APRILTAG_FORWARD_OFFSET = -10.0f;
+    /**
+     * Y offset to DriveToPose AprilTag
+     */
+    public static float APRILTAG_SIDE_OFFSET = -5.0f;
+
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private DualDeadwheelMecanumDrive drive;
     private HoldableActuator arm;
     private Vision vision;
+    private AprilTag aprilTag;
+    private ColourThreshold teamProp;
     private GetTriPositionContourTask getTeamProp;
     private StartingPositions startingPosition;
     private DualServos claws;
@@ -65,13 +80,14 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
         vision = new Vision(config.webcam);
 
-        RedTeamProp rtp = new RedTeamProp();
-        vision.init(rtp);
-        vision.start(rtp);
-        getTeamProp = new GetTriPositionContourTask(rtp);
+        aprilTag = new AprilTag();
+        AprilTagPoseEstimator atpe = new AprilTagPoseEstimator(aprilTag, drive);
+        onActiveLoop(atpe::update);
 
         setOpModes(StartingPositions.use());
         addSubsystems(drive, arm, claws);
+
+        getTeamProp = new GetTriPositionContourTask();
         setInitTask(getTeamProp);
     }
 
@@ -118,18 +134,25 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
         TrajectorySequence targetSequence = null;
         switch (startingPosition) {
             case STARTING_RED_LEFT:
+                teamProp = new RedTeamProp();
                 targetSequence = redLeft;
                 break;
             case STARTING_RED_RIGHT:
+                teamProp = new RedTeamProp();
                 targetSequence = redRight;
                 break;
             case STARTING_BLUE_LEFT:
+                teamProp = new BlueTeamProp();
                 targetSequence = blueLeft;
                 break;
             case STARTING_BLUE_RIGHT:
+                teamProp = new BlueTeamProp();
                 targetSequence = blueRight.require();
                 break;
         }
+        vision.init(aprilTag, teamProp);
+        vision.start(teamProp);
+        getTeamProp.setProcessor(teamProp);
         assert targetSequence != null;
         makeTrajectory()
                 .runSequence(targetSequence)
@@ -155,14 +178,14 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
     @Override
     protected void onStart() {
         int id = SpikeMarkBackdropId.get(getTeamProp.getPosition(), startingPosition);
-        AprilTagMetadata aprilTag = AprilTagGameDatabase.getCenterStageTagLibrary().lookupTag(id);
-        if (aprilTag == null) {
+        AprilTagMetadata aprilTagDetection = AprilTagGameDatabase.getCenterStageTagLibrary().lookupTag(id);
+        if (aprilTagDetection == null) {
             telemetry.log("apriltag not found, seeing tag: %", id);
             return;
         }
-        VectorF targetPos = aprilTag.fieldPosition;
+        VectorF targetPos = aprilTagDetection.fieldPosition;
         // Offset from the tag to the backdrop to not drive directly into the board
-        targetPos.add(new VectorF(-10, -5, 0));
+        targetPos.add(new VectorF(APRILTAG_FORWARD_OFFSET, APRILTAG_SIDE_OFFSET, 0));
 
         addTaskAtIndex(1, new DriveToPoseTask(Seconds.of(5), drive,
                 new Pose2d(targetPos.get(0), targetPos.get(1), 0),
@@ -170,5 +193,8 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
                 new PIDController(0.1, 0, 0),
                 new PIDController(4, 0, 0)
         ));
+
+        vision.stop(teamProp);
+        vision.start(aprilTag);
     }
 }
