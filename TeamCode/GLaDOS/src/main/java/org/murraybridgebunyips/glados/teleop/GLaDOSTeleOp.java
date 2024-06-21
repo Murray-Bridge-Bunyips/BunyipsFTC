@@ -69,7 +69,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         pixels = new MultiColourThreshold(Pixels.createProcessors());
         vision.init(pixels);
         vision.start(pixels);
-        vision.startPreview();
+//        vision.startPreview();
 
         addSubsystems(drive, cannon, claws, arm, suspender, suspenderLatch, vision);
     }

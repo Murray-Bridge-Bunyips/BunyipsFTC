@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.glados.autonomous;
+package org.murraybridgebunyips.glados.debug;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

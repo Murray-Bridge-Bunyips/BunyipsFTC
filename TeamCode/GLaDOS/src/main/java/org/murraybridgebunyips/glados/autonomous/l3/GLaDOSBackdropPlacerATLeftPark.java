@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.glados.autonomous;
+package org.murraybridgebunyips.glados.autonomous.l3;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
@@ -42,13 +42,13 @@ import org.murraybridgebunyips.common.centerstage.vision.RedTeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
- * Backdrop Placer Autonomous for Left Parking
+ * Backdrop Placer Autonomous for Left Parking with AprilTag Detection
  *
  * @author Lucas Bubner, 2024
  */
 @Config
-@Autonomous(name = "Backdrop Placer (Left Park)")
-public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
+@Autonomous(name = "Backdrop Placer (Left Park, Vision)", group = "L3")
+public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     /**
      * Multiplicative scale for all RoadRunner distances.
      */

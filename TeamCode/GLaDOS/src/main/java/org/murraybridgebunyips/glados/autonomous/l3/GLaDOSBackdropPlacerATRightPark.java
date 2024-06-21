@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.glados.autonomous;
+package org.murraybridgebunyips.glados.autonomous.l3;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
 
@@ -7,12 +7,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 
 /**
- * Backdrop Placer Autonomous for Right Parking
+ * Backdrop Placer Autonomous for Right Parking with AprilTag detection
  *
  * @author Lucas Bubner, 2024
  */
-@Autonomous(name = "Backdrop Placer (Right Park)")
-public class GLaDOSBackdropPlacerRightPark extends GLaDOSBackdropPlacerLeftPark {
+@Autonomous(name = "Backdrop Placer (Right Park, Vision)", group = "L3")
+public class GLaDOSBackdropPlacerATRightPark extends GLaDOSBackdropPlacerATLeftPark {
     @Override
     protected RoadRunnerTask afterPixelDropDriveAction(RoadRunnerTrajectoryTaskBuilder builder) {
         return builder

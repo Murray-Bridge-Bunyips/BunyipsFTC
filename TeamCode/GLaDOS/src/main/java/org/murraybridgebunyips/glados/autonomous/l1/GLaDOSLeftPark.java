@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.glados.autonomous;
+package org.murraybridgebunyips.glados.autonomous.l1;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
@@ -20,26 +20,32 @@ import org.murraybridgebunyips.bunyipslib.tasks.MessageTask;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
- * Park on the right side of the backdrop.
+ * Park on the left side of the backdrop.
  */
-@Autonomous(name = "Right Park")
-public class GLaDOSRightPark extends AutonomousBunyipsOpMode implements RoadRunner {
+@Autonomous(name = "Left Park", group="L1")
+public class GLaDOSLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private DualDeadwheelMecanumDrive drive;
 
     @Override
     protected void onInitialise() {
         config.init();
+        drive = new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
         setOpModes(StartingPositions.use());
     }
 
     @NonNull
     @Override
     public MecanumDrive getDrive() {
-        return new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
+        return drive;
     }
 
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
+//        addTask(new MessageTask(Seconds.of(5), "Greetings and salutations! I extend my warmest welcome to you, " +
+//                "GLaDOS, on this fine day. It is my utmost pleasure to engage in this " +
+//                "digital interaction with you, as we traverse the vast landscape of knowledge and learning together. " +
+//                "I hope this message finds you in good health and high spirits."));
         if (selectedOpMode == null) {
             return;
         }
@@ -49,30 +55,24 @@ public class GLaDOSRightPark extends AutonomousBunyipsOpMode implements RoadRunn
             case STARTING_RED_LEFT:
                 addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 makeTrajectory()
-                        .forward(5)
+                        .forward(3, FieldTiles)
                         .addTask();
                 makeTrajectory()
-                        .strafeRight(180, Centimeters)
-                        .addTask();
-                makeTrajectory()
-                        .back(2)
-                        .addTask();
-                makeTrajectory()
-                        .strafeRight(100)
+                        .strafeRight(5.5, FieldTiles)
                         .addTask();
                 break;
 
             case STARTING_BLUE_LEFT:
-                addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 makeTrajectory()
-                        .forward(3, FieldTiles)
-                        .addTask();
-                makeTrajectory()
-                        .strafeLeft(3, FieldTiles)
+                        .strafeLeft(180, Centimeters)
                         .addTask();
                 break;
 
             case STARTING_RED_RIGHT:
+                makeTrajectory()
+                        .forward(170, Centimeters)
+                        .addTask();
+
                 makeTrajectory()
                         .strafeRight(180, Centimeters)
                         .addTask();
@@ -81,10 +81,16 @@ public class GLaDOSRightPark extends AutonomousBunyipsOpMode implements RoadRunn
             case STARTING_BLUE_RIGHT:
                 addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 makeTrajectory()
-                        .forward(3, FieldTiles)
+                        .forward(5)
                         .addTask();
                 makeTrajectory()
-                        .strafeLeft(5.5, FieldTiles)
+                        .strafeLeft(180, Centimeters)
+                        .addTask();
+                makeTrajectory()
+                        .back(2)
+                        .addTask();
+                makeTrajectory()
+                        .strafeLeft(100)
                         .addTask();
                 break;
         }

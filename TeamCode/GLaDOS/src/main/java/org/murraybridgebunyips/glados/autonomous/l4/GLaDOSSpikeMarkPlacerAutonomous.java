@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.glados.autonomous;
+package org.murraybridgebunyips.glados.autonomous.l4;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,15 +18,14 @@ import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.ColourThreshold;
-import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.SpikeMarkBackdropId;
 import org.murraybridgebunyips.common.centerstage.vision.BlueTeamProp;
 import org.murraybridgebunyips.common.centerstage.vision.RedTeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
- * Place a purple pixel loaded on the right side onto the scanned Spike Mark.
+ * Place a purple pixel loaded on the right side of the arm onto the scanned Spike Mark and remain in place.
  */
-@Autonomous(name = "Spike Mark Placer")
+@Autonomous(name = "Spike Mark Placer (Purple on Right)")
 public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode implements RoadRunner {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private DualDeadwheelMecanumDrive drive;
@@ -45,8 +44,10 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
         vision = new Vision(config.webcam);
 
+        getTeamProp = new GetTriPositionContourTask();
         setOpModes(StartingPositions.use());
         addSubsystems(drive, arm, claws, vision);
+        setInitTask(getTeamProp);
     }
 
     @Override
@@ -66,17 +67,22 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
 
         vision.init(teamProp);
         vision.start(teamProp);
+        // TODO: remove debugging statements
         vision.startPreview();
-
-        getTeamProp = new GetTriPositionContourTask(teamProp);
-        setInitTask(getTeamProp);
     }
 
     @Override
     protected void onStart() {
         Direction spikeMark = getTeamProp.getPosition();
-        int targetId = SpikeMarkBackdropId.get(spikeMark, startingPosition);
         // TODO
+        switch (spikeMark) {
+            case LEFT:
+                break;
+            case FORWARD:
+                break;
+            case RIGHT:
+                break;
+        }
     }
 
     @NonNull
