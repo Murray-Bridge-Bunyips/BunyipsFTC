@@ -56,11 +56,15 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
     /**
      * X offset to DriveToPose AprilTag
      */
-    public static float APRILTAG_FORWARD_OFFSET = -10.0f;
+    public static float APRILTAG_FORWARD_OFFSET = -9.0f;
     /**
      * Y offset to DriveToPose AprilTag
      */
-    public static float APRILTAG_SIDE_OFFSET = -5.0f;
+    public static float APRILTAG_SIDE_OFFSET = 7.0f;
+    /**
+     * Position delta (in ticks) of the arm extension at backboard
+     */
+    public static int ARM_DELTA = 1600;
 
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private DualDeadwheelMecanumDrive drive;
@@ -160,12 +164,12 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
                 .addTask();
 
         // Place pixels and park to the left of the backdrop
-        addTask(arm.deltaTask(1500).withName("Deploy Arm"));
+        addTask(arm.deltaTask(ARM_DELTA).withName("Deploy Arm"));
         addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
                 afterPixelDropDriveAction(makeTrajectory()),
-                arm.deltaTask(-1500)
+                arm.deltaTask(-ARM_DELTA)
         ).withName("Stow and Move to Park"));
 
         makeTrajectory()
