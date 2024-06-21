@@ -1,5 +1,8 @@
 package org.murraybridgebunyips.glados.autonomous.l4;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -25,8 +28,21 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 /**
  * Place a purple pixel loaded on the right side of the arm onto the scanned Spike Mark and remain in place.
  */
-@Autonomous(name = "Spike Mark Placer (Purple on Right)")
+@Autonomous(name = "Spike Mark Placer (Purple on Right, No Park)")
 public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode implements RoadRunner {
+    /**
+     * Arm delta position from stow to ground.
+     */
+    public static int ARM_DELTA = 1800;
+    /**
+     * Number of field tiles to move forward as the first step.
+     */
+    public static double FORWARD_FIELD_TILES = 1;
+    /**
+     * Rotation factor in degrees to align with the Spike Mark.
+     */
+    public static double TURN_ANGLE_DEG = 45;
+
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private DualDeadwheelMecanumDrive drive;
     private HoldableActuator arm;
@@ -54,16 +70,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         if (selectedOpMode == null) return;
         startingPosition = (StartingPositions) selectedOpMode.require();
-        switch (startingPosition) {
-            case STARTING_RED_LEFT:
-            case STARTING_RED_RIGHT:
-                teamProp = new RedTeamProp();
-                break;
-            case STARTING_BLUE_LEFT:
-            case STARTING_BLUE_RIGHT:
-                teamProp = new BlueTeamProp();
-                break;
-        }
+        teamProp = startingPosition.isRed() ? new RedTeamProp() : new BlueTeamProp();
 
         vision.init(teamProp);
         vision.start(teamProp);
@@ -74,15 +81,24 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     @Override
     protected void onStart() {
         Direction spikeMark = getTeamProp.getPosition();
-        // TODO
-        switch (spikeMark) {
-            case LEFT:
-                break;
-            case FORWARD:
-                break;
-            case RIGHT:
-                break;
-        }
+
+        // TODO: test alignment and if vision is required
+        addTask(vision::terminate, "End Vision");
+
+        makeTrajectory()
+                .forward(FORWARD_FIELD_TILES, FieldTile)
+                .withName("Move Forward to Spike Marks")
+                .addTask();
+
+        double mul = spikeMark == Direction.FORWARD ? 0 : spikeMark == Direction.LEFT ? 1 : -1;
+        makeTrajectory()
+                .turn(TURN_ANGLE_DEG * mul, Degrees)
+                .withName("Rotate to Spike Mark")
+                .addTask();
+
+        addTask(arm.deltaTask(ARM_DELTA));
+        addTask(claws.openTask(DualServos.ServoSide.RIGHT));
+        addTask(arm.deltaTask(-ARM_DELTA));
     }
 
     @NonNull
