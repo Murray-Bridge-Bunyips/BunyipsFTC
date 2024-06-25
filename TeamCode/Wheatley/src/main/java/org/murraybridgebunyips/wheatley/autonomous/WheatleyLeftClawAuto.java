@@ -2,6 +2,7 @@ package org.murraybridgebunyips.wheatley.autonomous;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Milliseconds;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.MessageTask;
+import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -37,6 +39,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
     protected final int TO_BOARD_FAR_DISTANCE = 300;
     protected final int TO_BOARD_CLOSE_DISTANCE = 120;
     protected final int PLACING_POSITION = 2500;
+    protected int TURN_ANGLE = 90;
     protected MessageTask waitMessage;
 
     @Override
@@ -69,13 +72,14 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
     public void placePixel() {
         addTask(rotator.deltaTask(PLACING_POSITION));
         addTask(claws.openTask(DualServos.ServoSide.BOTH));
+        addTask(new WaitTask(Milliseconds.of(500)));
         addTask(rotator.deltaTask(-PLACING_POSITION));
     }
 
     /**
      * Parks to the left of the backboard
      */
-    public void parkLeft() {
+    public void park() {
         makeTrajectory()
                 .strafeLeft(70, Centimeters)
                 .forward(30, Centimeters)
@@ -89,64 +93,29 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
         }
 
         switch ((StartingPositions) selectedOpMode.require()) {
-            // TODO: THIS HAS NOT BEEN TESTED DO NOT USE
+            // Since all positions have an almost identical path, we can just swap variables around or run wait tasks
+            // based on the chosen direction, instead of four nearly identical auto paths.
             case STARTING_RED_LEFT:
-//                addTask(waitMessage);
-                makeTrajectory()
-                        .forward(FORWARD_DISTANCE, Centimeters)
-                        .turn(-90, Degrees)
-                        .addTask();
-                makeTrajectory()
-                        .forward(TO_BOARD_FAR_DISTANCE, Centimeters)
-                        .addTask();
-
-                placePixel();
-                parkLeft();
-
+                addTask(waitMessage);
+                TURN_ANGLE = -TURN_ANGLE;
                 break;
-
-            case STARTING_BLUE_LEFT:
-                makeTrajectory()
-                        .forward(FORWARD_DISTANCE, Centimeters)
-                        .turn(90, Degrees)
-                        .addTask();
-                makeTrajectory()
-                        .forward(TO_BOARD_CLOSE_DISTANCE, Centimeters)
-                        .addTask();
-
-                placePixel();
-                parkLeft();
-
-                break;
-
             case STARTING_RED_RIGHT:
-                makeTrajectory()
-                        .forward(FORWARD_DISTANCE, Centimeters)
-                        .turn(-90, Degrees)
-                        .addTask();
-                makeTrajectory()
-                        .forward(TO_BOARD_CLOSE_DISTANCE, Centimeters)
-                        .addTask();
-
-                placePixel();
-                parkLeft();
-
+                TURN_ANGLE = -TURN_ANGLE;
                 break;
-
             case STARTING_BLUE_RIGHT:
                 addTask(waitMessage);
-                makeTrajectory()
-                        .forward(FORWARD_DISTANCE, Centimeters)
-                        .turn(90, Degrees)
-                        .addTask();
-                makeTrajectory()
-                        .forward(TO_BOARD_FAR_DISTANCE, Centimeters)
-                        .addTask();
-
-                placePixel();
-                parkLeft();
-
                 break;
         }
+
+        // TODO: THIS HAS NOT BEEN TESTED DO NOT USE
+        makeTrajectory()
+                .forward(FORWARD_DISTANCE, Centimeters)
+                .turn(TURN_ANGLE, Degrees)
+                .addTask();
+        makeTrajectory()
+                .forward(TO_BOARD_FAR_DISTANCE, Centimeters)
+                .addTask();
+        placePixel();
+        park();
     }
 }
