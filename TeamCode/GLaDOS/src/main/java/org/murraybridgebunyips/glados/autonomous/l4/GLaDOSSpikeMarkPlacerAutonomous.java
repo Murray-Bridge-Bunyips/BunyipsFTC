@@ -2,6 +2,7 @@ package org.murraybridgebunyips.glados.autonomous.l4;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -15,9 +16,11 @@ import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
+import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
+import org.murraybridgebunyips.bunyipslib.tasks.AlignToContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.ColourThreshold;
@@ -82,9 +85,6 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     protected void onStart() {
         Direction spikeMark = getTeamProp.getPosition();
 
-        // TODO: test alignment and if vision is required
-        addTask(vision::terminate, "End Vision");
-
         makeTrajectory()
                 .forward(FORWARD_FIELD_TILES, FieldTile)
                 .withName("Move Forward to Spike Marks")
@@ -95,6 +95,8 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
                 .turn(TURN_ANGLE_DEG * mul, Degrees)
                 .withName("Rotate to Spike Mark")
                 .addTask();
+
+        addTask(new AlignToContourTask(Seconds.of(3), drive, teamProp, new PIDController(0.25, 0, 0)));
 
         addTask(arm.deltaTask(ARM_DELTA));
         addTask(claws.openTask(DualServos.ServoSide.RIGHT));

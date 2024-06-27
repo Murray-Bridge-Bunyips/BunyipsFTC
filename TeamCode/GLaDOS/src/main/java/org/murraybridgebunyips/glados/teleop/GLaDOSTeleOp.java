@@ -15,7 +15,6 @@ import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
-import org.murraybridgebunyips.bunyipslib.subsystems.Switch;
 import org.murraybridgebunyips.bunyipslib.tasks.AlignToContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
@@ -38,7 +37,6 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
     private DualServos claws;
     private Cannon cannon;
     private HoldableActuator suspender;
-    private Switch suspenderLatch;
     private Vision vision;
     private MultiColourThreshold pixels;
 
@@ -53,12 +51,10 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 config.parallelDeadwheel, config.perpendicularDeadwheel
         );
         arm = new HoldableActuator(config.arm)
+                .withPowerClamps(-0.3, 0.3)
                 .withHomingOvercurrent(Amps.of(1), Seconds.of(0.5));
         cannon = new Cannon(config.launcher);
         suspender = new HoldableActuator(config.suspenderActuator);
-        // Suspender will only be able to be controlled after suspenderLatch is opened
-        suspender.disable();
-        suspenderLatch = new Switch(config.suspenderLatch, 0, 1);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 /*giulio*/
 
@@ -71,7 +67,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         vision.start(pixels);
 //        vision.startPreview();
 
-        addSubsystems(drive, cannon, claws, arm, suspender, suspenderLatch, vision);
+        addSubsystems(drive, cannon, claws, arm, suspender, vision);
     }
 
     @Override
@@ -87,11 +83,6 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                         class MY=yclass             - lachlan paul*/
                 .run(cannon.resetTask());
 
-        scheduler().when(suspenderLatch::isOpen)
-                .runOnce(suspender::enable);
-        operator().whenHeld(Controls.Y)
-                .run(suspenderLatch.openTask())
-                .in(Seconds.of(1));
         suspender.setDefaultTask(suspender.controlTask(() -> -gamepad2.rsy));
 
         operator().whenPressed(Controls.B)
