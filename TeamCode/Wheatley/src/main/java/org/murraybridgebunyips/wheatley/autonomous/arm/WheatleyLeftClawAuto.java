@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.wheatley.autonomous;
+package org.murraybridgebunyips.wheatley.autonomous.arm;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
@@ -19,7 +19,9 @@ import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.MessageTask;
+import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
+import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -34,11 +36,10 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
     private HoldableActuator rotator;
     private DualServos claws;
 
-    // TODO: Test this
     protected final int FORWARD_DISTANCE = 100;
     protected final int TO_BOARD_FAR_DISTANCE = 300;
     protected final int TO_BOARD_CLOSE_DISTANCE = 120;
-    protected final int PLACING_POSITION = 2500;
+    protected final int ARM_PLACING_POSITION = 2700;
     protected int TURN_ANGLE = 90;
     protected MessageTask waitMessage;
 
@@ -55,7 +56,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
 
         addSubsystems(drive, rotator, claws);
 
-        waitMessage = new MessageTask(Seconds.of(15), "<style=\"color:red;\">If the robot is not moving DO NOT PANIC, it is waiting for others to move</>");
+        waitMessage = new MessageTask(Seconds.of(10), "<style=\"color:red;\">If the robot is not moving DO NOT PANIC, it is waiting for others to move</>");
 
         setOpModes(StartingPositions.use());
     }
@@ -67,27 +68,21 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
     }
 
     /**
-     * Place pixel and return to home position
-     */
-    public void placePixel() {
-        addTask(rotator.deltaTask(PLACING_POSITION));
-        addTask(claws.openTask(DualServos.ServoSide.BOTH));
-        addTask(new WaitTask(Milliseconds.of(500)));
-        addTask(rotator.deltaTask(-PLACING_POSITION));
-    }
-
-    /**
      * Parks to the left of the backboard
+     * @param builder builds the path
+     * @return the path
      */
-    public void park() {
-        makeTrajectory()
+    public RoadRunnerTask park(RoadRunnerTrajectoryTaskBuilder builder) {
+        return builder
                 .strafeLeft(70, Centimeters)
-                .forward(30, Centimeters)
-                .addTask();
+                .forward(60, Centimeters)
+                .buildTask();
     }
 
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
+        int distanceToGoGoGo = TO_BOARD_FAR_DISTANCE;
+
         if (selectedOpMode == null) {
             return;
         }
@@ -99,23 +94,32 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
                 addTask(waitMessage);
                 TURN_ANGLE = -TURN_ANGLE;
                 break;
+            case STARTING_BLUE_LEFT:
+                distanceToGoGoGo = TO_BOARD_CLOSE_DISTANCE;
+                break;
             case STARTING_RED_RIGHT:
                 TURN_ANGLE = -TURN_ANGLE;
+                distanceToGoGoGo = TO_BOARD_CLOSE_DISTANCE;
                 break;
             case STARTING_BLUE_RIGHT:
                 addTask(waitMessage);
                 break;
         }
 
-        // TODO: THIS HAS NOT BEEN TESTED DO NOT USE
         makeTrajectory()
                 .forward(FORWARD_DISTANCE, Centimeters)
                 .turn(TURN_ANGLE, Degrees)
                 .addTask();
         makeTrajectory()
-                .forward(TO_BOARD_FAR_DISTANCE, Centimeters)
+                .forward(distanceToGoGoGo, Centimeters)
                 .addTask();
-        placePixel();
-        park();
+
+        addTask(rotator.deltaTask(ARM_PLACING_POSITION));
+        addTask(claws.openTask(DualServos.ServoSide.BOTH));
+        addTask(new WaitTask(Milliseconds.of(500)));
+        addTask(new ParallelTaskGroup(
+                park(makeTrajectory()),
+                rotator.deltaTask(-ARM_PLACING_POSITION)
+        ));
     }
 }

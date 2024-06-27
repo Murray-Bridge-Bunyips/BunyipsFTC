@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.wheatley.autonomous;
+package org.murraybridgebunyips.wheatley.autonomous.arm;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

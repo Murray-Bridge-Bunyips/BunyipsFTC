@@ -1,8 +1,10 @@
-package org.murraybridgebunyips.wheatley.autonomous;
+package org.murraybridgebunyips.wheatley.autonomous.arm;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 
 /**
  * Places pixels on the backboard and parks on the right side of the backboard.
@@ -13,10 +15,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 @Autonomous(name = "Right Claw Auto")
 public class WheatleyRightClawAuto extends WheatleyLeftClawAuto {
     @Override
-    public void park() {
-        makeTrajectory()
+    public RoadRunnerTask park(RoadRunnerTrajectoryTaskBuilder builder) {
+        return builder
                 .strafeRight(70, Centimeters)
-                .forward(30, Centimeters)
-                .addTask();
+                .forward(60, Centimeters)
+                .buildTask();
     }
 }
