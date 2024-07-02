@@ -45,6 +45,7 @@ public class WheatleyRightParkAuto extends AutonomousBunyipsOpMode implements Ro
                 config.fl, config.fr, config.bl, config.br
         );
         setOpModes(StartingPositions.use());
+        addSubsystems(drive);
     }
 
     @NonNull
@@ -77,7 +78,6 @@ public class WheatleyRightParkAuto extends AutonomousBunyipsOpMode implements Ro
                 break;
 
             case STARTING_BLUE_LEFT:
-                addTask(new MessageTask(Seconds.of(15), "If the robot is not moving DO NOT PANIC, it is waiting for others to move"));
                 makeTrajectory()
                         .forward(3, FieldTiles)
                         .addTask();

@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.wheatley.autonomous;
+package org.murraybridgebunyips.wheatley.debug;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Meter;

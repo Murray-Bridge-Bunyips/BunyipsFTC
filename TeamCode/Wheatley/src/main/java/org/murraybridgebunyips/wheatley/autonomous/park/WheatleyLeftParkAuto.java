@@ -45,6 +45,7 @@ public class WheatleyLeftParkAuto extends AutonomousBunyipsOpMode implements Roa
                 config.fl, config.fr, config.bl, config.br
         );
         setOpModes(StartingPositions.use());
+        addSubsystems(drive);
     }
 
     @NonNull

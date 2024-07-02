@@ -1,6 +1,7 @@
 package org.murraybridgebunyips.wheatley.debug;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
@@ -17,6 +18,7 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  */
 @Config
 @TeleOp
+@Disabled
 public class WheatleyPIDDebug extends CommandBasedBunyipsOpMode {
     /**
      * proportional
