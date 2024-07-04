@@ -128,8 +128,7 @@ public class GLaDOSConfigCore extends RobotConfig {
         rightPixel = getHardware("rs", Servo.class, (d) -> d.scaleRange(0.0, 1 - LIM));
 
         // Paper Drone launcher system
-        launcher = getHardware("pl", Servo.class);
-
+        launcher = getHardware("pl", Servo.class, (d) -> d.setDirection(Servo.Direction.REVERSE));
         // Suspension system
         suspenderActuator = getHardware("sa", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
