@@ -129,8 +129,9 @@ public class GLaDOSConfigCore extends RobotConfig {
 
         // Paper Drone launcher system
         launcher = getHardware("pl", Servo.class, (d) -> d.setDirection(Servo.Direction.REVERSE));
+
         // Suspension system
-        suspenderActuator = getHardware("sa", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        suspenderActuator = getHardware("sa", DcMotorEx.class);
 
         // RoadRunner configuration
         driveConstants = new DriveConstants.Builder()
