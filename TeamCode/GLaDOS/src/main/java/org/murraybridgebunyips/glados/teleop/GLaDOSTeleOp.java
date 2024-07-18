@@ -54,7 +54,8 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 .withPowerClamps(-0.3, 0.3)
                 .withHomingOvercurrent(Amps.of(1), Seconds.of(0.5));
         cannon = new Cannon(config.launcher);
-        suspender = new HoldableActuator(config.suspenderActuator);
+        suspender = new HoldableActuator(config.suspenderActuator)
+                .withBottomSwitch(config.bottomLimit);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 /*giulio*/
 
@@ -91,8 +92,8 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 .run(claws.toggleTask(DualServos.ServoSide.LEFT));
 
         operator().whenPressed(Controls.A)
-                .run(arm.homeTask())
-                .finishingIf(() -> gamepad2.lsy != 0.0f);
+                .run(suspender.homeTask())
+                .finishingIf(() -> gamepad2.rsy != 0.0f);
         arm.setDefaultTask(arm.controlTask(() -> gamepad2.lsy));
     }
 }

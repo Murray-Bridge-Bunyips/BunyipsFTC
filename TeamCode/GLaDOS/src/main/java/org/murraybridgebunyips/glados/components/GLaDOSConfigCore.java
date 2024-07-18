@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
@@ -78,6 +79,10 @@ public class GLaDOSConfigCore extends RobotConfig {
      */
     public DcMotorEx suspenderActuator;
     /**
+     * Control Digital 1: Touch Sensor/Limit Switch "bottom"
+     */
+    public TouchSensor bottomLimit;
+    /**
      * Internally mounted on I2C C0 "imu"
      */
     public IMU imu;
@@ -132,6 +137,7 @@ public class GLaDOSConfigCore extends RobotConfig {
 
         // Suspension system
         suspenderActuator = getHardware("sa", DcMotorEx.class);
+        bottomLimit = getHardware("bottom", TouchSensor.class);
 
         // RoadRunner configuration
         driveConstants = new DriveConstants.Builder()
