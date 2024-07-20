@@ -31,7 +31,7 @@ class JerryTeleOp : BunyipsOpMode() {
     private var imu: IMUOp? = null
     private var lift: JerryLift? = null
     private val selector: UserSelection<String> =
-        UserSelection(this, { initDrive() }, "POV", "FIELD-CENTRIC")
+        UserSelection({ initDrive() }, "POV", "FIELD-CENTRIC")
 
     override fun onInit() {
         // Configure drive and lift subsystems
