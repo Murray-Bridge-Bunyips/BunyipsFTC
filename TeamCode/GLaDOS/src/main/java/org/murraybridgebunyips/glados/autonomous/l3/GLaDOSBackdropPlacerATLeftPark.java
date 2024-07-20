@@ -89,7 +89,6 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
         onActiveLoop(atpe::update);
 
         setOpModes(StartingPositions.use());
-        addSubsystems(drive, arm, claws);
 
         getTeamProp = new GetTriPositionContourTask();
         setInitTask(getTeamProp);

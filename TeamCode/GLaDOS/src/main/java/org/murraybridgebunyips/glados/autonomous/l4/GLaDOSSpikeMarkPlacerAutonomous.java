@@ -65,7 +65,6 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
 
         getTeamProp = new GetTriPositionContourTask();
         setOpModes(StartingPositions.use());
-        addSubsystems(drive, arm, claws, vision);
         setInitTask(getTeamProp);
     }
 

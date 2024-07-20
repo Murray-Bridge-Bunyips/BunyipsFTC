@@ -67,8 +67,6 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
         vision.init(pixels);
         vision.start(pixels);
 //        vision.startPreview();
-
-        addSubsystems(drive, cannon, claws, arm, suspender, vision);
     }
 
     @Override

@@ -59,7 +59,6 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 
         setOpModes(StartingPositions.use());
-        addSubsystems(drive, arm, claws);
     }
 
     @NonNull

@@ -23,7 +23,6 @@ public class CellphoneWithAnAbnormallyLongName extends CommandBasedBunyipsOpMode
     protected void onInitialise() {
         config.init();
         s = new TestSubsystem();
-        addSubsystems(s);
 //        try (Storage.Filesystem f = Storage.filesystem()) {
 //        }
 

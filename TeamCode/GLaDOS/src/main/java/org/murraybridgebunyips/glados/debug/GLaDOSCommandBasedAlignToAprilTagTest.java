@@ -41,7 +41,6 @@ public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOp
         vision.init(aprilTag);
         vision.start(aprilTag);
         vision.startPreview();
-        addSubsystems(drive, vision);
     }
 
     @Override

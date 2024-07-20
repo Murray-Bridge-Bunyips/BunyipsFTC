@@ -54,8 +54,6 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
         rotator = new HoldableActuator(config.clawRotator).withMovingPower(1);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 
-        addSubsystems(drive, rotator, claws);
-
         waitMessage = new MessageTask(Seconds.of(10), "<style=\"color:red;\">If the robot is not moving DO NOT PANIC, it is waiting for others to move</>");
 
         setOpModes(StartingPositions.use());

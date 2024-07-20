@@ -45,7 +45,7 @@ public class WheatleyPIDDebug extends CommandBasedBunyipsOpMode {
         kI = coefficients.i;
         kD = coefficients.d;
 
-        addSubsystems(clawRotator);
+        useSubsystems(clawRotator);
     }
 
     @Override

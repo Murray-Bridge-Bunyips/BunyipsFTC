@@ -43,7 +43,6 @@ public class GLaDOSCommandBasedAlignToPixelTest extends CommandBasedBunyipsOpMod
         vision.init(pixels);
         vision.start(pixels);
         vision.startPreview();
-        addSubsystems(drive, vision);
     }
 
     @Override

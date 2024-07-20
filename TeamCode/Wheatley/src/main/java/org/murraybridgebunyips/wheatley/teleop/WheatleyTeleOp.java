@@ -71,8 +71,6 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 //        vision.startPreview();
 
         gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
-
-        addSubsystems(drive, cannon, linearActuator, rotator, claws);
     }
 
     @Override

@@ -32,8 +32,6 @@ public class PbodyTeleOp extends CommandBasedBunyipsOpMode {
         arm = new HoldableActuator(config.arm);
 
         gamepad2.set(Controls.Analog.LEFT_STICK_Y, (v) -> v * 0.6f);
-
-        addSubsystems(claws, drive, plane, arm);
     }
 
     @Override
