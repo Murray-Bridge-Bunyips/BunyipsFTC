@@ -1,4 +1,4 @@
-package org.murraybridgebunyips.glados.teleop;
+package org.murraybridgebunyips.glados.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
