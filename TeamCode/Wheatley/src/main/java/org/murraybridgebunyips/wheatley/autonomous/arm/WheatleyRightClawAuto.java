@@ -14,6 +14,8 @@ import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
  */
 @Autonomous(name = "Right Claw Auto")
 public class WheatleyRightClawAuto extends WheatleyLeftClawAuto {
+    protected int STRAFE_TO_BACKBOARD = -50;
+
     @Override
     public RoadRunnerTask park(RoadRunnerTrajectoryTaskBuilder builder) {
         return builder

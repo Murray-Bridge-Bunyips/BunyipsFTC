@@ -35,13 +35,15 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
     private MecanumDrive drive;
     private HoldableActuator rotator;
     private DualServos claws;
-
-    protected final int FORWARD_DISTANCE = 100;
-    protected final int TO_BOARD_FAR_DISTANCE = 300;
-    protected final int TO_BOARD_CLOSE_DISTANCE = 120;
-    protected final int ARM_PLACING_POSITION = 2700;
-    protected int TURN_ANGLE = 90;
     protected MessageTask waitMessage;
+
+    // All of these values are read in CM
+    protected final int FORWARD_DISTANCE = 170;  // This is used when taking the long path, to get under the gate
+    protected final int TO_BOARD_FAR_DISTANCE = 300;  // The distance to the board when on the other side of the truss
+    protected final int TO_BOARD_CLOSE_DISTANCE = 50;  // The distance to the board when on the close side of the truss
+    protected final int ARM_PLACING_POSITION = 2700;  // The position the arm goes to from 0 when placing pixels
+    protected int STRAFE_TO_BACKBOARD = 30;  // The distance to strafe when getting back to the backboard
+    protected int TURN_ANGLE = 90;  // Angle to turn, is turned to negative when needed
 
     @Override
     protected void onInitialise() {
@@ -79,7 +81,8 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
 
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
-        int distanceToGoGoGo = TO_BOARD_FAR_DISTANCE;
+        int distanceToGoGoGo = TO_BOARD_FAR_DISTANCE;  // The distance to move when we go(go go) towards the backboard
+        boolean takeLongPath = false;
 
         if (selectedOpMode == null) {
             return;
@@ -90,6 +93,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
             // based on the chosen direction, instead of four nearly identical auto paths.
             case STARTING_RED_LEFT:
                 addTask(waitMessage);
+                takeLongPath = true;
                 TURN_ANGLE = -TURN_ANGLE;
                 break;
             case STARTING_BLUE_LEFT:
@@ -101,23 +105,37 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
                 break;
             case STARTING_BLUE_RIGHT:
                 addTask(waitMessage);
+                takeLongPath = true;
                 break;
         }
 
-        makeTrajectory()
-                .forward(FORWARD_DISTANCE, Centimeters)
-                .turn(TURN_ANGLE, Degrees)
-                .addTask();
-        makeTrajectory()
-                .forward(distanceToGoGoGo, Centimeters)
-                .addTask();
+        if (takeLongPath) {
+            // Used when starting in the position furthest from the backboard, (red left, blue right)
+            makeTrajectory()
+                    .forward(FORWARD_DISTANCE, Centimeters)
+                    .turn(TURN_ANGLE, Degrees)
+                    .forward(distanceToGoGoGo, Centimeters)
+                    .strafeRight(-STRAFE_TO_BACKBOARD)
+                    .addTask();
+        } else {
+            // Used everywhere else
+            makeTrajectory()
+                    .forward(1)  // This is so we are out of the way of the truss' legs.
+                    .turn(TURN_ANGLE, Degrees)
+                    .forward(distanceToGoGoGo)
+                    // This will always be strafe right, but depending on the auto, will be negative so we can strafe right.
+                    .strafeRight(STRAFE_TO_BACKBOARD)
+                    .addTask();
+        }
 
+        // Places the pixels and then parks
         addTask(rotator.deltaTask(ARM_PLACING_POSITION));
         addTask(claws.openTask(DualServos.ServoSide.BOTH));
         addTask(new WaitTask(Milliseconds.of(500)));
         addTask(new ParallelTaskGroup(
                 park(makeTrajectory()),
-                rotator.deltaTask(-ARM_PLACING_POSITION)
+                rotator.deltaTask(-ARM_PLACING_POSITION),
+                claws.closeTask(DualServos.ServoSide.BOTH)
         ));
     }
 }
