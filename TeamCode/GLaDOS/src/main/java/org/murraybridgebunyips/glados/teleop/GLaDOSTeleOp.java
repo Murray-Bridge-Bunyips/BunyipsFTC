@@ -48,7 +48,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelDeadwheel, config.perpendicularDeadwheel
-        );
+        ).withName("Drive");
         vision = new Vision(config.webcam)
                 .withName("Forward Camera");
         arm = new HoldableActuator(config.arm)

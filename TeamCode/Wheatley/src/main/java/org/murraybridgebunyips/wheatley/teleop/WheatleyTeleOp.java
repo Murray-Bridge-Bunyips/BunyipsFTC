@@ -59,9 +59,9 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         linearActuator = new HoldableActuator(config.linearActuator)
                 .withBottomSwitch(config.bottomLimit);
         rotator = new HoldableActuator(config.clawRotator)
-                .withName("Claw Rotator")
 //                .withAngleLimits(Degrees.zero(), Degrees.of(180))
-                .withPowerClamps(-0.33, 0.33);
+                .withPowerClamps(-0.33, 0.33)
+                .withName("Claw Rotator");
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
 
 //        vision = new Vision(config.webcam);

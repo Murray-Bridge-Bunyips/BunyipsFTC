@@ -33,7 +33,7 @@ public class GLaDOSAugmentedDrive extends GLaDOSTeleOp implements RoadRunner {
     /**
      * Forward displacement from a known backdrop position.
      */
-    public static double BACKDROP_FORWARD_OFFSET_CM = 5;
+    public static double BACKDROP_FORWARD_OFFSET_CM = 20;
 
     private volatile StartingPositions lastKnownAlliance;
 
@@ -67,16 +67,16 @@ public class GLaDOSAugmentedDrive extends GLaDOSTeleOp implements RoadRunner {
         }
         double x = 60.25 - Inches.convertFrom(BACKDROP_FORWARD_OFFSET_CM, Centimeters);
         if (lastKnownAlliance.isRed()) {
-            return new Vector2d(x, -35.41);
+            return new Vector2d(x, 35.41);
         }
         // Blue
-        return new Vector2d(x, 35.41);
+        return new Vector2d(x, -35.41);
     }
 
     @Override
     protected void assignCommands() {
         super.assignCommands();
-        driver().whenHeld(Controls.A)
+        driver().whenPressed(Controls.A)
                 .run(new DynamicTask(() ->
                         makeTrajectory(drive.getPoseEstimate())
                                 // Drive in a line to the backdrop and align to it

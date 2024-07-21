@@ -25,7 +25,7 @@ public class RedTeamProp extends ColourThreshold {
     /**
      * The minimum contour area percentages for the red team prop.
      */
-    public static double MIN = 5;
+    public static double MIN = 3;
     /**
      * The maximum contour area percentages for the red team prop.
      */

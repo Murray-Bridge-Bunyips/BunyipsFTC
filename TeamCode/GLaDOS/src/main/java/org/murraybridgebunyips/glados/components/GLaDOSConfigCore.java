@@ -51,11 +51,11 @@ public class GLaDOSConfigCore extends RobotConfig {
      */
     public DcMotorEx backLeft;
     /**
-     * Control 2: Parallel Encoder "pe"
+     * Control 3: Parallel Encoder "pe"
      */
     public Deadwheel parallelDeadwheel;
     /**
-     * Control 3: Perpendicular Encoder "ppe"
+     * Control 2: Perpendicular Encoder "ppe"
      */
     public Deadwheel perpendicularDeadwheel;
     /**
