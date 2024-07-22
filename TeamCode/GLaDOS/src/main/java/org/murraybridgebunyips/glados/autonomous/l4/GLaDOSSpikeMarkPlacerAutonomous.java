@@ -36,10 +36,12 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode implements RoadRunner {
     /** extension/retraction ticks */
     public static int ARM_DELTA = 2000;
-    /** move forward initially, field tiles */
-    public static double INITIAL_FORWARD_DIST_FT = 0.8;
+    /** angled spike mark, move forward initially, field tiles */
+    public static double ANGLED_INITIAL_FORWARD_DIST_FT = 0.8;
+    /** forward spike mark, move forward initially, field tiles */
+    public static double M_FORWARD_INITIAL_FORWARD_DIST_FT = 0.7;
     /** forward spike mark, forward centimeters */
-    public static double M_FORWARD_DIST_CM = 15;
+    public static double M_FORWARD_DIST_CM = 20;
     /** left spike mark, degrees turn */
     public static double M_LEFT_TURN_DEG = 40;
     /** right spike mark, degrees turn */
@@ -86,7 +88,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
         addTask(new ParallelTaskGroup(
             arm.deltaTask(ARM_DELTA).withName("Extend Arm"),
             makeTrajectory()
-                    .forward(INITIAL_FORWARD_DIST_FT, FieldTile)
+                    .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
                     .withName("Move Forward to Spike Marks")
                     .buildTask()
         ));
