@@ -25,7 +25,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
- * Places pixels on the backboard and parks on the left side of the backboard.
+ * Places two pixels on the backboard and parks on the left side of the backboard.
  *
  * @author Lachlan Paul, 2024
  */
@@ -37,12 +37,12 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
     private DualServos claws;
     protected MessageTask waitMessage;
 
-    // All of these values are read in CM
+    // All of these values are in CM (except ARM_PLACING_POSITION and TURN_ANGLE)
     protected final int FORWARD_DISTANCE = 170;  // This is used when taking the long path, to get under the gate
-    protected final int TO_BOARD_FAR_DISTANCE = 300;  // The distance to the board when on the other side of the truss
-    protected final int TO_BOARD_CLOSE_DISTANCE = 50;  // The distance to the board when on the close side of the truss
+    protected final int TO_BOARD_FAR_DISTANCE = 299;  // The distance to the board when on the other side of the truss
+    protected final int TO_BOARD_CLOSE_DISTANCE = 120;  // The distance to the board when on the close side of the truss
+    protected int STRAFE_TO_BACKBOARD = 34;  // The distance to strafe when getting back to the backboard
     protected final int ARM_PLACING_POSITION = 2700;  // The position the arm goes to from 0 when placing pixels
-    protected int STRAFE_TO_BACKBOARD = 30;  // The distance to strafe when getting back to the backboard
     protected int TURN_ANGLE = 90;  // Angle to turn, is turned to negative when needed
 
     @Override
@@ -68,20 +68,19 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
     }
 
     /**
-     * Parks to the left of the backboard
+     * Parks to the left of the backboard.
      * @param builder builds the path
-     * @return the path
+     * @return the path as a task
      */
     public RoadRunnerTask park(RoadRunnerTrajectoryTaskBuilder builder) {
         return builder
-                .strafeLeft(70, Centimeters)
-                .forward(60, Centimeters)
+                .strafeLeft(72, Centimeters)
+                .forward(50, Centimeters)
                 .buildTask();
     }
 
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
-        int distanceToGoGoGo = TO_BOARD_FAR_DISTANCE;  // The distance to move when we go(go go) towards the backboard
         boolean takeLongPath = false;
 
         if (selectedOpMode == null) {
@@ -91,46 +90,49 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
         switch ((StartingPositions) selectedOpMode.require()) {
             // Since all positions have an almost identical path, we can just swap variables around or run wait tasks
             // based on the chosen direction, instead of four nearly identical auto paths.
+            // I could mash some of these together but then that sacrifices readability.
             case STARTING_RED_LEFT:
                 addTask(waitMessage);
                 takeLongPath = true;
+                STRAFE_TO_BACKBOARD = -STRAFE_TO_BACKBOARD;
                 TURN_ANGLE = -TURN_ANGLE;
                 break;
             case STARTING_BLUE_LEFT:
-                distanceToGoGoGo = TO_BOARD_CLOSE_DISTANCE;
                 break;
             case STARTING_RED_RIGHT:
                 TURN_ANGLE = -TURN_ANGLE;
-                distanceToGoGoGo = TO_BOARD_CLOSE_DISTANCE;
                 break;
             case STARTING_BLUE_RIGHT:
                 addTask(waitMessage);
                 takeLongPath = true;
+                STRAFE_TO_BACKBOARD = -STRAFE_TO_BACKBOARD;
                 break;
         }
 
+        // TODO: Fix values to always use CM. Not changing rn because I'm prioritising just getting it working first
         if (takeLongPath) {
             // Used when starting in the position furthest from the backboard, (red left, blue right)
             makeTrajectory()
                     .forward(FORWARD_DISTANCE, Centimeters)
                     .turn(TURN_ANGLE, Degrees)
-                    .forward(distanceToGoGoGo, Centimeters)
-                    .strafeRight(-STRAFE_TO_BACKBOARD)
+                    .forward(TO_BOARD_FAR_DISTANCE, Centimeters)
+                    // This will always be strafe left, but depending on the auto, will be negative so we can strafe right.
+                    .strafeLeft(STRAFE_TO_BACKBOARD)
                     .addTask();
         } else {
             // Used everywhere else
             makeTrajectory()
-                    .forward(1)  // This is so we are out of the way of the truss' legs.
+                    .forward(2)  // This is so we are out of the way of the truss' legs.
                     .turn(TURN_ANGLE, Degrees)
-                    .forward(distanceToGoGoGo)
-                    // This will always be strafe right, but depending on the auto, will be negative so we can strafe right.
-                    .strafeRight(STRAFE_TO_BACKBOARD)
+                    .forward(TO_BOARD_CLOSE_DISTANCE, Centimeters)
+                    .strafeLeft(STRAFE_TO_BACKBOARD)
                     .addTask();
         }
 
         // Places the pixels and then parks
         addTask(rotator.deltaTask(ARM_PLACING_POSITION));
         addTask(claws.openTask(DualServos.ServoSide.BOTH));
+        // Wait half a second so that we don't mess up the pixel's fall by moving too fast
         addTask(new WaitTask(Milliseconds.of(500)));
         addTask(new ParallelTaskGroup(
                 park(makeTrajectory()),
