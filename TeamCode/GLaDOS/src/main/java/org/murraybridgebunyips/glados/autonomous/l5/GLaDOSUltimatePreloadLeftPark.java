@@ -31,7 +31,7 @@ public class GLaDOSUltimatePreloadLeftPark extends GLaDOSBackdropPlacerATLeftPar
     protected void onStart() {
         super.onStart();
 
-        RoadRunnerTask taskOneDrive = makeTrajectory()
+        RoadRunnerTask taskOneDrive = makeTrajectory(startingPosition.getPose())
                 .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
                 .withName("Move Forward to Spike Marks")
                 .buildTask();

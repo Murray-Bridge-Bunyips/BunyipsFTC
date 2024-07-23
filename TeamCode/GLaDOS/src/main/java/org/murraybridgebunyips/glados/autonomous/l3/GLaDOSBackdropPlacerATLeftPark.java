@@ -71,12 +71,12 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
     protected HoldableActuator arm;
     protected DualServos claws;
     protected Direction spikeMark;
+    protected StartingPositions startingPosition;
     private DualDeadwheelMecanumDrive drive;
     private Vision vision;
     private AprilTag aprilTag;
     private ColourThreshold teamProp;
     private GetTriPositionContourTask getTeamProp;
-    private StartingPositions startingPosition;
 
     @Override
     protected void onInitialise() {
