@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.Direction;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
+import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
 import org.murraybridgebunyips.glados.autonomous.l3.GLaDOSBackdropPlacerATLeftPark;
@@ -30,30 +31,32 @@ public class GLaDOSUltimatePreloadLeftPark extends GLaDOSBackdropPlacerATLeftPar
     protected void onStart() {
         super.onStart();
 
+        RoadRunnerTask taskOneDrive = makeTrajectory()
+                .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
+                .withName("Move Forward to Spike Marks")
+                .buildTask();
+
         Task taskOne = new ParallelTaskGroup(
                 arm.deltaTask(ARM_DELTA).withName("Extend Arm"),
-                makeTrajectory()
-                        .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
-                        .withName("Move Forward to Spike Marks")
-                        .buildTask()
+                taskOneDrive
         ).withName("Move to Spike Marks");
 
         Task taskTwo = null;
         switch (spikeMark) {
             case FORWARD:
-                taskTwo = makeTrajectory()
+                taskTwo = makeTrajectory(taskOneDrive.getEndPose())
                         .forward(M_FORWARD_DIST_CM, Centimeters)
                         .withName("Align to Center Mark")
                         .buildTask();
                 break;
             case LEFT:
-                taskTwo = makeTrajectory()
+                taskTwo = makeTrajectory(taskOneDrive.getEndPose())
                         .turn(M_LEFT_TURN_DEG, Degrees)
                         .withName("Rotate to Left Mark")
                         .buildTask();
                 break;
             case RIGHT:
-                taskTwo = makeTrajectory()
+                taskTwo = makeTrajectory(taskOneDrive.getEndPose())
                         .turn(M_RIGHT_TURN_DEG, Degrees)
                         .withName("Rotate to Right Mark")
                         .buildTask();

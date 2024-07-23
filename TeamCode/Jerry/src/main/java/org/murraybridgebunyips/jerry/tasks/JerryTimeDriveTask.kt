@@ -3,7 +3,6 @@ package org.murraybridgebunyips.jerry.tasks
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Measure
 import org.murraybridgebunyips.bunyipslib.external.units.Time
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 
 /**
@@ -18,11 +17,7 @@ class JerryTimeDriveTask(
     private val x: Double,
     private val y: Double,
     private val r: Double
-) : Task(time), RobotTask {
-    override fun init() {
-        // no-op
-    }
-
+) : Task(time) {
     override fun periodic() {
         drive?.setSpeedXYR(x, y, r)
         drive?.update()
