@@ -41,7 +41,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
     protected final int FORWARD_DISTANCE = 170;  // This is used when taking the long path, to get under the gate
     protected final int TO_BOARD_FAR_DISTANCE = 299;  // The distance to the board when on the other side of the truss
     protected final int TO_BOARD_CLOSE_DISTANCE = 120;  // The distance to the board when on the close side of the truss
-    protected int STRAFE_TO_BACKBOARD = 34;  // The distance to strafe when getting back to the backboard
+    protected int STRAFE_TO_BACKBOARD = 86;  // The distance to strafe when getting back to the backboard
     protected final int ARM_PLACING_POSITION = 2700;  // The position the arm goes to from 0 when placing pixels
     protected int TURN_ANGLE = 90;  // Angle to turn, is turned to negative when needed
 
@@ -109,7 +109,9 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
                 break;
         }
 
-        // TODO: Fix values to always use CM. Not changing rn because I'm prioritising just getting it working first
+        // I actually tried abstracting this, but realised it did the opposite of what I wanted, which was to make it simpler
+        // So before someone thinks that this if statement could be removed and to just do things in the switch case,
+        // have it be known I did try it, and it made it more complicated
         if (takeLongPath) {
             // Used when starting in the position furthest from the backboard, (red left, blue right)
             makeTrajectory()
@@ -117,7 +119,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
                     .turn(TURN_ANGLE, Degrees)
                     .forward(TO_BOARD_FAR_DISTANCE, Centimeters)
                     // This will always be strafe left, but depending on the auto, will be negative so we can strafe right.
-                    .strafeLeft(STRAFE_TO_BACKBOARD)
+                    .strafeLeft(STRAFE_TO_BACKBOARD, Centimeters)
                     .addTask();
         } else {
             // Used everywhere else
@@ -125,7 +127,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
                     .forward(2)  // This is so we are out of the way of the truss' legs.
                     .turn(TURN_ANGLE, Degrees)
                     .forward(TO_BOARD_CLOSE_DISTANCE, Centimeters)
-                    .strafeLeft(STRAFE_TO_BACKBOARD)
+                    .strafeLeft(STRAFE_TO_BACKBOARD, Centimeters)
                     .addTask();
         }
 
