@@ -32,7 +32,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * Place a purple pixel loaded on the left side of the arm onto the scanned Spike Mark and remain in place.
  */
 @Config
-@Autonomous(name = "Spike Mark Placer (Purple on Left, No Park)")
+@Autonomous(name = "Spike Mark Placer (Purple on Left, No Park)", group = "L4")
 public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode implements RoadRunner {
     /** extension/retraction ticks */
     public static int ARM_DELTA = 2000;
@@ -91,7 +91,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
                     .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
                     .withName("Move Forward to Spike Marks")
                     .buildTask()
-        ));
+        ).withName("Move to Spike Marks"));
 
         switch (spikeMark) {
             case FORWARD:

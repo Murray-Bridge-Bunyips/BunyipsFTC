@@ -18,6 +18,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
 import org.firstinspires.ftc.vision.apriltag.AprilTagMetadata;
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.Direction;
 import org.murraybridgebunyips.bunyipslib.Reference;
 import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.StartingPositions;
@@ -67,14 +68,15 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
     public static int ARM_DELTA = 1600;
 
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    protected HoldableActuator arm;
+    protected DualServos claws;
+    protected Direction spikeMark;
     private DualDeadwheelMecanumDrive drive;
-    private HoldableActuator arm;
     private Vision vision;
     private AprilTag aprilTag;
     private ColourThreshold teamProp;
     private GetTriPositionContourTask getTeamProp;
     private StartingPositions startingPosition;
-    private DualServos claws;
 
     @Override
     protected void onInitialise() {
@@ -86,8 +88,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
 
         aprilTag = new AprilTag();
         AprilTagPoseEstimator atpe = new AprilTagPoseEstimator(aprilTag, drive);
-        // FIXME: bugged
-//        onActiveLoop(atpe::update);
+        onActiveLoop(atpe::update);
 
         setOpModes(StartingPositions.use());
 
@@ -181,7 +182,8 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
 
     @Override
     protected void onStart() {
-        int id = SpikeMarkBackdropId.get(getTeamProp.getPosition(), startingPosition);
+        spikeMark = getTeamProp.getPosition();
+        int id = SpikeMarkBackdropId.get(spikeMark, startingPosition);
         AprilTagMetadata aprilTagDetection = AprilTagGameDatabase.getCenterStageTagLibrary().lookupTag(id);
         if (aprilTagDetection == null) {
             telemetry.log("apriltag not found, seeing tag: %", id);
