@@ -47,6 +47,6 @@ public class GLaDOSPoseEstimationDrive extends BunyipsOpMode {
         drive.update();
 
         vision.update();
-        poseEstimator.update();
+        poseEstimator.run();
     }
 }

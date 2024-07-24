@@ -1,5 +1,8 @@
 package org.murraybridgebunyips.cellphone.debug;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -75,17 +78,17 @@ public class CellphoneAprilTagTest extends BunyipsOpMode {
 
         for (int i = 0; i < data.size(); i++) {
             AprilTagData aprilTag = data.get(i);
-            if (aprilTag.getMetadata() == null) {
+            if (!aprilTag.getMetadata().isPresent() || !aprilTag.getFtcPose().isPresent()) {
                 // No luck with this ID
                 continue;
             }
 
-            VectorF tagPos = aprilTag.getMetadata().fieldPosition;
-            Orientation tagOri = aprilTag.getMetadata().fieldOrientation
+            VectorF tagPos = aprilTag.getMetadata().get().fieldPosition;
+            Orientation tagOri = aprilTag.getMetadata().get().fieldOrientation
                     .toOrientation(AxesReference.EXTRINSIC, AxesOrder.XYZ, AngleUnit.RADIANS);
 
-            double camX = aprilTag.getFtcPose().x;
-            double camY = aprilTag.getFtcPose().y;
+            double camX = aprilTag.getFtcPose().get().x;
+            double camY = aprilTag.getFtcPose().get().y;
             double tagX = tagPos.get(0);
             double tagY = tagPos.get(1);
             double tagRotation = tagOri.thirdAngle;
@@ -97,11 +100,13 @@ public class CellphoneAprilTagTest extends BunyipsOpMode {
                     tagX - relativeOffsetX,
                     tagY - relativeOffsetY
             );
+            Pose2d o = new Pose2d(9, 0, 0);
+            pos = pos.minus(o.vec());
 
-            double heading = Math.PI / 2.0 + tagRotation - Math.toRadians(aprilTag.getFtcPose().yaw);
+            double heading = Math.PI / 2.0 + tagRotation - Math.toRadians(aprilTag.getFtcPose().get().yaw) + o.getHeading();
             Pose2d estimatedPose = new Pose2d(pos.getX(), pos.getY(), heading);
 
-            telemetry.add("Pose estimate based on AprilTagPoseEstimator: %", estimatedPose);
+            telemetry.add("Pose estimate based on AprilTagPoseEstimator: (% cm, % cm, % deg)", Centimeters.convertFrom(estimatedPose.getX(), Inches), Centimeters.convertFrom(estimatedPose.getY(), Inches), Math.toDegrees(estimatedPose.getHeading()));
 
             telemetry.dashboardFieldOverlay().setStroke("#FF0000");
             DashboardUtil.drawRobot(telemetry.dashboardFieldOverlay(), estimatedPose);

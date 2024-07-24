@@ -88,7 +88,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
 
         aprilTag = new AprilTag();
         AprilTagPoseEstimator atpe = new AprilTagPoseEstimator(aprilTag, drive);
-        onActiveLoop(atpe::update);
+        onActiveLoop(atpe);
 
         setOpModes(StartingPositions.use());
 

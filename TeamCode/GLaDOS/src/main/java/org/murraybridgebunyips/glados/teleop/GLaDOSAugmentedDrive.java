@@ -41,7 +41,7 @@ public class GLaDOSAugmentedDrive extends GLaDOSTeleOp implements RoadRunner {
     protected void configureVision() {
         AprilTag aprilTag = new AprilTag();
         AprilTagPoseEstimator atpe = new AprilTagPoseEstimator(aprilTag, drive);
-        onActiveLoop(atpe::update);
+        onActiveLoop(atpe);
 
         vision.init(pixels, aprilTag);
         vision.start(pixels, aprilTag);
