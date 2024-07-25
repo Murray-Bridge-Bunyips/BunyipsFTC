@@ -1,6 +1,7 @@
 package org.murraybridgebunyips.glados.teleop;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 
 import androidx.annotation.NonNull;
@@ -40,7 +41,9 @@ public class GLaDOSAugmentedDrive extends GLaDOSTeleOp implements RoadRunner {
     @Override
     protected void configureVision() {
         AprilTag aprilTag = new AprilTag();
-        AprilTagPoseEstimator atpe = new AprilTagPoseEstimator(aprilTag, drive);
+        AprilTagPoseEstimator atpe = new AprilTagPoseEstimator(aprilTag, drive)
+                .setHeadingEstimate(true)
+                .setCameraOffset(Inches.of(9), Inches.of(-1), Degrees.of(-10));
         onActiveLoop(atpe);
 
         vision.init(pixels, aprilTag);

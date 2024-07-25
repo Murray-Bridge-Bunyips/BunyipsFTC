@@ -25,8 +25,11 @@ import java.util.Objects;
  *
  * @author Lucas Bubner, 2024
  */
-@Autonomous(name = "Ultimate Preload (Purple on Left, Placing Yellow, Left Park)", group = "L5")
+@Autonomous(name = "Ultimate Preload (Purple on Left, Yellow on Right, Left Park)", group = "L5")
 public class GLaDOSUltimatePreloadLeftPark extends GLaDOSBackdropPlacerATLeftPark {
+    /** arm to ground from stow */
+    public static int ARM_DELTA_GROUND = 2000;
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -37,7 +40,7 @@ public class GLaDOSUltimatePreloadLeftPark extends GLaDOSBackdropPlacerATLeftPar
                 .buildTask();
 
         Task taskOne = new ParallelTaskGroup(
-                arm.deltaTask(ARM_DELTA).withName("Extend Arm"),
+                arm.gotoTask(ARM_DELTA_GROUND).withName("Extend Arm"),
                 taskOneDrive
         ).withName("Move to Spike Marks");
 
@@ -65,13 +68,8 @@ public class GLaDOSUltimatePreloadLeftPark extends GLaDOSBackdropPlacerATLeftPar
 
         Task taskThree = claws.openTask(DualServos.ServoSide.LEFT).withName("Open Left Claw");
         Task taskFour = arm.deltaTask(-ARM_DELTA).withName("Retract Arm");
-        // TODO: correction?
-//        Task taskFive = makeTrajectory()
-//
-//                .buildTask();
 
         // Add backwards to queue
-//        addTaskFirst(taskFive);
         addTaskFirst(taskFour);
         addTaskFirst(taskThree);
         addTaskFirst(Objects.requireNonNull(taskTwo));

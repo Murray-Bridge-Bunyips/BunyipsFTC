@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.glados.autonomous.l3;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
@@ -61,7 +62,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
     /**
      * Y offset to DriveToPose AprilTag
      */
-    public static float APRILTAG_SIDE_OFFSET = 7.0f;
+    public static float APRILTAG_SIDE_OFFSET = 0;
     /**
      * Position delta (in ticks) of the arm extension at backboard
      */
@@ -105,7 +106,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
     // Set which direction the robot will strafe at the backdrop. Overridden in the right park variant.
     protected RoadRunnerTask afterPixelDropDriveAction(RoadRunnerTrajectoryTaskBuilder builder) {
         return builder
-                .strafeLeft(0.95 * FIELD_TILE_SCALE, FieldTile)
+                .strafeLeft(0.85 * FIELD_TILE_SCALE, FieldTile)
                 .buildTask();
     }
 
@@ -120,6 +121,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
 
         // Go to backdrop
         Reference<TrajectorySequence> blueRight = Reference.empty();
+        // TODO: far trajectory to not intercept the spike marks
         TrajectorySequence redLeft = makeTrajectory()
                 .forward(1.8 * FIELD_TILE_SCALE, FieldTiles)
                 .strafeRight(2.8 * FIELD_TILE_SCALE, FieldTiles)
@@ -165,12 +167,14 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
                 .addTask();
 
         // Place pixels and park to the left of the backdrop
-        addTask(arm.deltaTask(ARM_DELTA).withName("Deploy Arm"));
+        addTask(arm.gotoTask(ARM_DELTA).withName("Deploy Arm"));
         addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
-                afterPixelDropDriveAction(makeTrajectory()),
-                arm.deltaTask(-ARM_DELTA)
+                afterPixelDropDriveAction(makeTrajectory(startingPosition.isRed() ?
+                        unitPose(new Pose2d(123.23, -92.22, -0.90), Centimeters, Degrees)
+                        : unitPose(new Pose2d(123.23, 90.66, 0.00), Centimeters, Degrees))),
+                arm.gotoTask(0)
         ).withName("Stow and Move to Park"));
 
         makeTrajectory()
