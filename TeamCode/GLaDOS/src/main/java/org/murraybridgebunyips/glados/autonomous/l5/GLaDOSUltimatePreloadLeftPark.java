@@ -18,8 +18,6 @@ import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
 import org.murraybridgebunyips.glados.autonomous.l3.GLaDOSBackdropPlacerATLeftPark;
 
-import java.util.Objects;
-
 /**
  * Composite OpMode of l4, l3, and l1 OpModes.
  *
@@ -44,7 +42,7 @@ public class GLaDOSUltimatePreloadLeftPark extends GLaDOSBackdropPlacerATLeftPar
                 taskOneDrive
         ).withName("Move to Spike Marks");
 
-        Task taskTwo = null;
+        RoadRunnerTask taskTwo;
         switch (spikeMark) {
             case FORWARD:
                 taskTwo = makeTrajectory(taskOneDrive.getEndPose())
@@ -64,15 +62,17 @@ public class GLaDOSUltimatePreloadLeftPark extends GLaDOSBackdropPlacerATLeftPar
                         .withName("Rotate to Right Mark")
                         .buildTask();
                 break;
+            default:
+                throw new IllegalStateException("should never happen");
         }
 
         Task taskThree = claws.openTask(DualServos.ServoSide.LEFT).withName("Open Left Claw");
-        Task taskFour = arm.deltaTask(-ARM_DELTA).withName("Retract Arm");
+        Task taskFour = arm.deltaTask(-ARM_DELTA_GROUND).withName("Retract Arm");
 
         // Add backwards to queue
         addTaskFirst(taskFour);
         addTaskFirst(taskThree);
-        addTaskFirst(Objects.requireNonNull(taskTwo));
+        addTaskFirst(taskTwo);
         addTaskFirst(taskOne);
     }
 }

@@ -4,6 +4,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeter
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
@@ -66,7 +67,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
     /**
      * Position delta (in ticks) of the arm extension at backboard
      */
-    public static int ARM_DELTA = 1600;
+    public static int ARM_DELTA_BACKDROP = 1600;
 
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     protected HoldableActuator arm;
@@ -121,21 +122,23 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
 
         // Go to backdrop
         Reference<TrajectorySequence> blueRight = Reference.empty();
-        // TODO: far trajectory to not intercept the spike marks
         TrajectorySequence redLeft = makeTrajectory()
-                .forward(1.8 * FIELD_TILE_SCALE, FieldTiles)
-                .strafeRight(2.8 * FIELD_TILE_SCALE, FieldTiles)
+                .setScale(FIELD_TILE_SCALE)
+                .forward(1.8, FieldTiles)
+                .strafeRight(2.8, FieldTiles)
                 .turn(-Math.PI / 2)
-                .strafeRight(1 * FIELD_TILE_SCALE, FieldTile)
+                .strafeRight(1, FieldTile)
                 .mirrorToRef(blueRight)
                 .build();
         TrajectorySequence redRight = makeTrajectory()
+                .setScale(Inches.convertFrom(FIELD_TILE_SCALE, FieldTiles))
                 .lineToLinearHeading(startingPosition.getPose()
-                        .plus(unitPose(new Pose2d(1 * FIELD_TILE_SCALE, 1 * FIELD_TILE_SCALE, -90), FieldTiles, Degrees)))
+                        .plus(unitPose(new Pose2d(1, 1, -90), FieldTiles, Degrees)))
                 .build();
         TrajectorySequence blueLeft = makeTrajectory()
+                .setScale(Inches.convertFrom(FIELD_TILE_SCALE, FieldTiles))
                 .lineToLinearHeading(startingPosition.getPose()
-                        .plus(unitPose(new Pose2d(1 * FIELD_TILE_SCALE, -1 * FIELD_TILE_SCALE, 90), FieldTiles, Degrees)))
+                        .plus(unitPose(new Pose2d(1, -1, 90), FieldTiles, Degrees)))
                 .build();
 
         TrajectorySequence targetSequence = null;
@@ -167,14 +170,14 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
                 .addTask();
 
         // Place pixels and park to the left of the backdrop
-        addTask(arm.gotoTask(ARM_DELTA).withName("Deploy Arm"));
+        addTask(arm.deltaTask(ARM_DELTA_BACKDROP).withName("Deploy Arm"));
         addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
-                afterPixelDropDriveAction(makeTrajectory(startingPosition.isRed() ?
-                        unitPose(new Pose2d(123.23, -92.22, -0.90), Centimeters, Degrees)
-                        : unitPose(new Pose2d(123.23, 90.66, 0.00), Centimeters, Degrees))),
-                arm.gotoTask(0)
+                afterPixelDropDriveAction(makeTrajectory(unitPose(
+                        new Pose2d(123, 90 * (startingPosition.isRed() ? -1 : 1), 0), Centimeters, Degrees
+                ))),
+                arm.deltaTask(-ARM_DELTA_BACKDROP)
         ).withName("Stow and Move to Park"));
 
         makeTrajectory()
