@@ -45,6 +45,8 @@ import org.murraybridgebunyips.common.centerstage.vision.RedTeamProp;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
+ * 45 Point CENTERSTAGE Autonomous
+ * <p>
  * Non-composite refined Ultimate Preload OpMode. This is to fix the shortcomings of the composite OpModes which was
  * developed rapidly in order to fit within limited testing time. Compared to the composite OpModes, this OpMode will
  * be more aware of where the Spike Mark is, adding extra routes to avoid displacing a placed Purple Pixel.
@@ -145,7 +147,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         addTask(new DynamicTask(
                 () -> new ParallelTaskGroup(
                         arm.deltaTask(ARM_DELTA_GROUND).withName("Extend Arm"),
-                        makeTrajectory()
+                        makeTrajectory(startingPosition.getPose())
                                 .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INIT_FWD_TILES : ANGLED_INIT_FWD_TILES, FieldTile)
                                 .withName("Move Forward to Spike Marks")
                                 .buildTask()
@@ -179,7 +181,15 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
             RoadRunnerTrajectoryTaskBuilder redBuilder = makeTrajectory().mirrorToRef(blue);
 
             // Recenter to facing forward to restore a known state
-            redBuilder.splineTo(drive.getPoseEstimate().vec(), startingPosition.getPose().getHeading());
+            Pose2d currentPos = drive.getPoseEstimate();
+            int inversion = startingPosition.isBlue() ? -1 : 1;
+            redBuilder.splineTo(
+                    // Need to invert this vector's y component for blue as the mirrored configuration will also
+                    // mirror a global field coordinate. Not ideal to have a trajectory that switches teams.
+                    // This is due to us using relative positions in an assumed global coordinate system.
+                    new Vector2d(currentPos.getX(), currentPos.getY() * inversion),
+                    startingPosition.getPose().getHeading() * inversion
+            );
 
             // Far side backdrop navigation
             if (startingPosition == StartingPositions.STARTING_RED_LEFT || startingPosition == StartingPositions.STARTING_BLUE_RIGHT) {
@@ -208,7 +218,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                 // Will need to attach a short circumnavigation by moving backwards and strafing right -- the lineTo
                 // will then move to the correct position.
                 if (onRedWithMarkInterception || onBlueWithMarkInterception) {
-                    redBuilder.back(1 * FIELD_TILE_SCALE, FieldTiles);
+                    redBuilder.back(0.7 * FIELD_TILE_SCALE, FieldTiles);
                     redBuilder.strafeRight(0.5 * FIELD_TILE_SCALE, FieldTiles);
                 }
                 // Move to the backdrop directly in one motion
@@ -239,11 +249,11 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
 
         // Park
-        double parkDistance = getParkingDirection() == Direction.LEFT
-                ? PARK_LEFT_TILES * FIELD_TILE_SCALE
-                : -PARK_RIGHT_TILES * FIELD_TILE_SCALE;
+        double parkDistance = getParkingDirection() == Direction.LEFT ? PARK_LEFT_TILES : -PARK_RIGHT_TILES;
         addTask(new ParallelTaskGroup(
-                makeTrajectory().strafeLeft(parkDistance).buildTask(),
+                makeTrajectory(new Pose2d(48, 36 * (startingPosition.isRed() ? -1 : 1), 0))
+                        .strafeLeft(parkDistance * FIELD_TILE_SCALE, FieldTiles)
+                        .buildTask(),
                 claws.closeTask(DualServos.ServoSide.BOTH),
                 arm.deltaTask(-ARM_DELTA_BACKDROP)
         ).withName("Stow and Move to Park"));
@@ -251,7 +261,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         makeTrajectory()
                 // Avoid destroying the field wall
                 .setVelConstraint(atVelocity(0.4, FieldTiles.per(Second)))
-                .forward(0.98 * FIELD_TILE_SCALE, FieldTiles)
+                .forward(0.6 * FIELD_TILE_SCALE, FieldTiles)
                 .withName("Finish Park")
                 .addTask();
 

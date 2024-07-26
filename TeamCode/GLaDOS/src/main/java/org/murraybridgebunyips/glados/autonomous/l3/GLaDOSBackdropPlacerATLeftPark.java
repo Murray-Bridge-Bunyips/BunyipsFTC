@@ -137,11 +137,11 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
                 .build();
         TrajectorySequence redRight = makeTrajectory()
                 .lineToLinearHeading(startingPosition.getPose()
-                        .plus(unitPose(new Pose2d(1, 1, -90), FieldTiles, Degrees, FIELD_TILE_SCALE)))
+                        .plus(RoadRunner.unitPose(new Pose2d(1, 1, -90), FieldTiles, Degrees, FIELD_TILE_SCALE)))
                 .build();
         TrajectorySequence blueLeft = makeTrajectory()
                 .lineToLinearHeading(startingPosition.getPose()
-                        .plus(unitPose(new Pose2d(1, -1, 90), FieldTiles, Degrees, FIELD_TILE_SCALE)))
+                        .plus(RoadRunner.unitPose(new Pose2d(1, -1, 90), FieldTiles, Degrees, FIELD_TILE_SCALE)))
                 .build();
 
         TrajectorySequence targetSequence = null;
@@ -177,7 +177,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
         addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
-                afterPixelDropDriveAction(makeTrajectory(unitPose(
+                afterPixelDropDriveAction(makeTrajectory(RoadRunner.unitPose(
                         new Pose2d(123, 90 * (startingPosition.isRed() ? -1 : 1), 0), Centimeters, Degrees
                 ))),
                 arm.deltaTask(-ARM_DELTA_BACKDROP)
