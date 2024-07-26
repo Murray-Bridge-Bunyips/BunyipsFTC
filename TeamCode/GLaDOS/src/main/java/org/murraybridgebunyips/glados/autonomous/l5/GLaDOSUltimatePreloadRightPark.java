@@ -1,23 +1,16 @@
 package org.murraybridgebunyips.glados.autonomous.l5;
 
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
-
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
+import org.murraybridgebunyips.bunyipslib.Direction;
 
 /**
- * Composite OpMode of l4, l3, and l1 OpModes.
- * Park right instead of left.
- *
- * @author Lucas Bubner, 2024
+ * @see GLaDOSUltimatePreloadLeftPark
  */
 @Autonomous(name = "Ultimate Preload (Purple on Left, Yellow on Right, Right Park)", group = "L5")
 public class GLaDOSUltimatePreloadRightPark extends GLaDOSUltimatePreloadLeftPark {
     @Override
-    protected RoadRunnerTask afterPixelDropDriveAction(RoadRunnerTrajectoryTaskBuilder builder) {
-        return builder
-                .strafeRight(0.95 * FIELD_TILE_SCALE, FieldTile)
-                .buildTask();
+    protected Direction getParkingDirection() {
+        return Direction.RIGHT;
     }
 }
