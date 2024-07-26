@@ -6,11 +6,6 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
-import static org.murraybridgebunyips.glados.autonomous.l4.GLaDOSSpikeMarkPlacerAutonomous.ANGLED_INITIAL_FORWARD_DIST_FT;
-import static org.murraybridgebunyips.glados.autonomous.l4.GLaDOSSpikeMarkPlacerAutonomous.M_FORWARD_DIST_CM;
-import static org.murraybridgebunyips.glados.autonomous.l4.GLaDOSSpikeMarkPlacerAutonomous.M_FORWARD_INITIAL_FORWARD_DIST_FT;
-import static org.murraybridgebunyips.glados.autonomous.l4.GLaDOSSpikeMarkPlacerAutonomous.M_LEFT_TURN_DEG;
-import static org.murraybridgebunyips.glados.autonomous.l4.GLaDOSSpikeMarkPlacerAutonomous.M_RIGHT_TURN_DEG;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -64,56 +59,55 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  */
 @Autonomous(name = "Ultimate Preload (Purple on Left, Yellow on Right, Left Park)", group = "L5")
 public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
-    /**
-     * Multiplicative scale for all RoadRunner distances.
-     */
+    /** Multiplicative scale for all RoadRunner distances. */
     public static double FIELD_TILE_SCALE = 1.5;
-    /**
-     * X offset to DriveToPose AprilTag in inches
-     */
+    /** X offset to DriveToPose AprilTag in inches */
     public static float APRILTAG_FORWARD_OFFSET = -9.0f;
-    /**
-     * Y offset to DriveToPose AprilTag in inches
-     */
+    /** Y offset to DriveToPose AprilTag in inches */
     public static float APRILTAG_SIDE_OFFSET = 0;
-    /**
-     * Position delta (in ticks) of the arm extension at backboard
-     */
+    /** Position delta (in ticks) of the arm extension at backboard */
     public static int ARM_DELTA_BACKDROP = 1600;
-    /**
-     * Whether a heading estimate is also used from AprilTag data.
-     */
+    /** Whether a heading estimate is also used from AprilTag data. */
     public static boolean USING_HEADING_ESTIMATE = true;
-    /**
-     * Arm to ground from stow in ticks.
-     */
+    /** Arm to ground from stow in ticks. */
     public static int ARM_DELTA_GROUND = 2000;
-    /**
-     * Strafe left distance for left park.
-     */
+    /** Strafe left distance for left park, field tiles. */
     public static double PARK_LEFT_DISTANCE_FIELD_TILES = 0.85;
-    /**
-     * Strafe right distance for right park. Although this constant is unused in this particular OpMode, the override
-     * will set it to use this constant instead. These constants are different as they seem to be scaled strangely.
-     */
+    /** Strafe right distance for right park, field tiles. Used in the Right Park override. */
     public static double PARK_RIGHT_DISTANCE_FIELD_TILES = 0.9;
+    /** Angled spike mark, move forward initially, field tiles */
+    public static double ANGLED_INITIAL_FORWARD_DIST_FT = 0.8;
+    /** Forward spike mark, move forward initially, field tiles */
+    public static double M_FORWARD_INITIAL_FORWARD_DIST_FT = 0.7;
+    /** Forward spike mark, forward centimeters */
+    public static double M_FORWARD_DIST_CM = 20;
+    /** Left spike mark, degrees turn */
+    public static double M_LEFT_TURN_DEG = 40;
+    /** Right spike mark, degrees turn */
+    public static double M_RIGHT_TURN_DEG = -40;
 
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    private DualDeadwheelMecanumDrive drive;
     private HoldableActuator arm;
     private DualServos claws;
-    private Direction spikeMark;
-    private VectorF backdropPose;
-    private StartingPositions startingPosition;
-    private DualDeadwheelMecanumDrive drive;
+
     private Vision vision;
     private AprilTag aprilTag;
     private ColourThreshold teamProp;
     private GetTriPositionContourTask getTeamProp;
 
+    private Direction spikeMark;
+    private VectorF backdropPose;
+    private StartingPositions startingPosition;
+
     @Override
     protected void onInitialise() {
         config.init();
-        drive = new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
+        drive = new DualDeadwheelMecanumDrive(
+                config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu,
+                config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients,
+                config.parallelDeadwheel, config.perpendicularDeadwheel
+        );
         arm = new HoldableActuator(config.arm).withMovingPower(0.5);
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
         vision = new Vision(config.webcam);
@@ -122,18 +116,13 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         AprilTagPoseEstimator atpe = new AprilTagPoseEstimator(aprilTag, drive)
                 .setHeadingEstimate(USING_HEADING_ESTIMATE)
                 .setCameraOffset(config.robotCameraOffset);
+        // Will run in the background updating the robot pose depending on AprilTag detection
         onActiveLoop(atpe);
 
         setOpModes(StartingPositions.use());
 
         getTeamProp = new GetTriPositionContourTask();
         setInitTask(getTeamProp);
-    }
-
-    @NonNull
-    @Override
-    public RoadRunnerDrive getDrive() {
-        return drive;
     }
 
     // Set which direction the robot will strafe at the backdrop. Overridden in the right park variant.
@@ -275,6 +264,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
 
     @Override
     protected void onStart() {
+        // Capture results when PLAY is pressed
         spikeMark = getTeamProp.getPosition();
         int id = SpikeMarkBackdropId.get(spikeMark, startingPosition);
         AprilTagMetadata aprilTagDetection = AprilTagGameDatabase.getCenterStageTagLibrary().lookupTag(id);
@@ -289,5 +279,11 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
 
         vision.stop(teamProp);
         vision.start(aprilTag);
+    }
+
+    @NonNull
+    @Override
+    public RoadRunnerDrive getDrive() {
+        return drive;
     }
 }
