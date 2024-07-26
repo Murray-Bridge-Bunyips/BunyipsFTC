@@ -10,6 +10,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -57,12 +58,13 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  *
  * @author Lucas Bubner, 2024
  */
+@Config
 @Autonomous(name = "Ultimate Preload (Purple on Left, Yellow on Right, Left Park)", group = "L5")
 public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     /** Multiplicative scale for all RoadRunner distances. */
     public static double FIELD_TILE_SCALE = 1.5;
     /** X offset to DriveToPose AprilTag in inches */
-    public static float APRILTAG_FORWARD_OFFSET = -9.0f;
+    public static float APRILTAG_FORWARD_OFFSET = 9.0f;
     /** Y offset to DriveToPose AprilTag in inches */
     public static float APRILTAG_SIDE_OFFSET = 0;
     /** Position delta (in ticks) of the arm extension at backboard */
@@ -72,19 +74,19 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
     /** Arm to ground from stow in ticks. */
     public static int ARM_DELTA_GROUND = 2000;
     /** Strafe left distance for left park, field tiles. */
-    public static double PARK_LEFT_DISTANCE_FIELD_TILES = 0.85;
+    public static double PARK_LEFT_TILES = 0.85;
     /** Strafe right distance for right park, field tiles. Used in the Right Park override. */
-    public static double PARK_RIGHT_DISTANCE_FIELD_TILES = 0.9;
+    public static double PARK_RIGHT_TILES = 0.9;
     /** Angled spike mark, move forward initially, field tiles */
-    public static double ANGLED_INITIAL_FORWARD_DIST_FT = 0.8;
+    public static double ANGLED_INIT_FWD_TILES = 0.8;
     /** Forward spike mark, move forward initially, field tiles */
-    public static double M_FORWARD_INITIAL_FORWARD_DIST_FT = 0.7;
+    public static double M_FORWARD_INIT_FWD_TILES = 0.7;
     /** Forward spike mark, forward centimeters */
-    public static double M_FORWARD_DIST_CM = 20;
+    public static double M_FORWARD_ALIGN_FWD_CM = 20;
     /** Left spike mark, degrees turn */
-    public static double M_LEFT_TURN_DEG = 40;
+    public static double M_LEFT_ALIGN_TURN_DEG = 40;
     /** Right spike mark, degrees turn */
-    public static double M_RIGHT_TURN_DEG = -40;
+    public static double M_RIGHT_ALIGN_TURN_DEG = -40;
 
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     private DualDeadwheelMecanumDrive drive;
@@ -144,7 +146,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                 () -> new ParallelTaskGroup(
                         arm.gotoTask(ARM_DELTA_GROUND).withName("Extend Arm"),
                         makeTrajectory()
-                                .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
+                                .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INIT_FWD_TILES : ANGLED_INIT_FWD_TILES, FieldTile)
                                 .withName("Move Forward to Spike Marks")
                                 .buildTask()
                 )
@@ -155,13 +157,13 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
             switch (spikeMark) {
                 case FORWARD:
                     return makeTrajectory()
-                            .forward(M_FORWARD_DIST_CM, Centimeters)
+                            .forward(M_FORWARD_ALIGN_FWD_CM, Centimeters)
                             .withName("Push to Spike Mark")
                             .buildTask();
                 case LEFT:
                 case RIGHT:
                     return makeTrajectory()
-                            .turn(spikeMark == Direction.LEFT ? M_LEFT_TURN_DEG : M_RIGHT_TURN_DEG, Degrees)
+                            .turn(spikeMark == Direction.LEFT ? M_LEFT_ALIGN_TURN_DEG : M_RIGHT_ALIGN_TURN_DEG, Degrees)
                             .withName("Rotate to Spike Mark")
                             .buildTask();
                 default:
@@ -242,8 +244,8 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
 
         // Park
         double parkDistance = getParkingDirection() == Direction.LEFT
-                ? PARK_LEFT_DISTANCE_FIELD_TILES * FIELD_TILE_SCALE
-                : -PARK_RIGHT_DISTANCE_FIELD_TILES * FIELD_TILE_SCALE;
+                ? PARK_LEFT_TILES * FIELD_TILE_SCALE
+                : -PARK_RIGHT_TILES * FIELD_TILE_SCALE;
         addTask(new ParallelTaskGroup(
                 makeTrajectory().strafeLeft(parkDistance).buildTask(),
                 arm.deltaTask(-ARM_DELTA_BACKDROP)
@@ -275,7 +277,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         // Supply dynamic constructed information for AprilTag alignment tasks
         backdropPose = aprilTagDetection.fieldPosition;
         // Offset from the tag to the backdrop to not drive directly into the board
-        backdropPose.add(new VectorF(APRILTAG_FORWARD_OFFSET, APRILTAG_SIDE_OFFSET, 0));
+        backdropPose.subtract(new VectorF(APRILTAG_FORWARD_OFFSET, APRILTAG_SIDE_OFFSET, 0));
 
         vision.stop(teamProp);
         vision.start(aprilTag);
