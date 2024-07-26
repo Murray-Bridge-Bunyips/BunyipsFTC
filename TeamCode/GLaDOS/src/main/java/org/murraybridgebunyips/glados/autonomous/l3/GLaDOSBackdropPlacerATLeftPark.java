@@ -4,7 +4,6 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeter
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
@@ -68,6 +67,10 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
      * Position delta (in ticks) of the arm extension at backboard
      */
     public static int ARM_DELTA_BACKDROP = 1600;
+    /**
+     * Whether a heading estimate is also used from AprilTag data.
+     */
+    public static boolean USING_HEADING_ESTIMATE = true;
 
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
     protected HoldableActuator arm;
@@ -89,7 +92,9 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
         vision = new Vision(config.webcam);
 
         aprilTag = new AprilTag();
-        AprilTagPoseEstimator atpe = new AprilTagPoseEstimator(aprilTag, drive);
+        AprilTagPoseEstimator atpe = new AprilTagPoseEstimator(aprilTag, drive)
+                .setHeadingEstimate(USING_HEADING_ESTIMATE)
+                .setCameraOffset(config.robotCameraOffset);
         onActiveLoop(atpe);
 
         setOpModes(StartingPositions.use());
@@ -131,14 +136,12 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
                 .mirrorToRef(blueRight)
                 .build();
         TrajectorySequence redRight = makeTrajectory()
-                .setScale(Inches.convertFrom(FIELD_TILE_SCALE, FieldTiles))
                 .lineToLinearHeading(startingPosition.getPose()
-                        .plus(unitPose(new Pose2d(1, 1, -90), FieldTiles, Degrees)))
+                        .plus(unitPose(new Pose2d(1, 1, -90), FieldTiles, Degrees, FIELD_TILE_SCALE)))
                 .build();
         TrajectorySequence blueLeft = makeTrajectory()
-                .setScale(Inches.convertFrom(FIELD_TILE_SCALE, FieldTiles))
                 .lineToLinearHeading(startingPosition.getPose()
-                        .plus(unitPose(new Pose2d(1, -1, 90), FieldTiles, Degrees)))
+                        .plus(unitPose(new Pose2d(1, -1, 90), FieldTiles, Degrees, FIELD_TILE_SCALE)))
                 .build();
 
         TrajectorySequence targetSequence = null;

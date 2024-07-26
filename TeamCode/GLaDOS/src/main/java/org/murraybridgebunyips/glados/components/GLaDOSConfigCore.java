@@ -7,6 +7,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeter
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -99,6 +100,10 @@ public class GLaDOSConfigCore extends RobotConfig {
      * Mecanum coefficients
      */
     public MecanumCoefficients mecanumCoefficients;
+    /**
+     * AprilTagPoseEstimator robot to camera offset (inch, rad)
+     */
+    public Pose2d robotCameraOffset = new Pose2d(9, -1, Math.toRadians(-10));
 
     @Override
     protected void onRuntime() {
