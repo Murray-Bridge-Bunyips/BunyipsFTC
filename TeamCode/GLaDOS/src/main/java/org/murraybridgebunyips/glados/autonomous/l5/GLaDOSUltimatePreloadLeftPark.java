@@ -141,10 +141,10 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         // Facing FORWARD from the starting position as selected
         setPose(startingPosition.getPose());
 
-        // Approach Spike Marks
+        // Approach Spike Marks, lazy loaded as this is can only be calculated at runtime
         addTask(new DynamicTask(
                 () -> new ParallelTaskGroup(
-                        arm.gotoTask(ARM_DELTA_GROUND).withName("Extend Arm"),
+                        arm.deltaTask(ARM_DELTA_GROUND).withName("Extend Arm"),
                         makeTrajectory()
                                 .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INIT_FWD_TILES : ANGLED_INIT_FWD_TILES, FieldTile)
                                 .withName("Move Forward to Spike Marks")
@@ -154,21 +154,17 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
 
         // Align arm to Spike Mark, need to defer this task until runtime as this data is not available until then
         addTask(new DynamicTask(() -> {
-            switch (spikeMark) {
-                case FORWARD:
-                    return makeTrajectory()
-                            .forward(M_FORWARD_ALIGN_FWD_CM, Centimeters)
-                            .withName("Push to Spike Mark")
-                            .buildTask();
-                case LEFT:
-                case RIGHT:
-                    return makeTrajectory()
-                            .turn(spikeMark == Direction.LEFT ? M_LEFT_ALIGN_TURN_DEG : M_RIGHT_ALIGN_TURN_DEG, Degrees)
-                            .withName("Rotate to Spike Mark")
-                            .buildTask();
-                default:
-                    throw new IllegalStateException("impossible state");
+            if (spikeMark == Direction.FORWARD) {
+                // No rotation required
+                return makeTrajectory()
+                        .forward(M_FORWARD_ALIGN_FWD_CM, Centimeters)
+                        .withName("Push to Spike Mark")
+                        .buildTask();
             }
+            return makeTrajectory()
+                    .turn(spikeMark == Direction.LEFT ? M_LEFT_ALIGN_TURN_DEG : M_RIGHT_ALIGN_TURN_DEG, Degrees)
+                    .withName("Rotate to Spike Mark")
+                    .buildTask();
         }));
 
         // Place Purple Pixel (loaded left)
@@ -239,7 +235,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
 
         // Place pixels and park to the left of the backdrop
         addTask(arm.deltaTask(ARM_DELTA_BACKDROP).withName("Deploy Arm"));
-        addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
+        addTask(claws.openTask(DualServos.ServoSide.RIGHT).withName("Drop Pixel"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
 
         // Park
@@ -248,12 +244,14 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                 : -PARK_RIGHT_TILES * FIELD_TILE_SCALE;
         addTask(new ParallelTaskGroup(
                 makeTrajectory().strafeLeft(parkDistance).buildTask(),
+                claws.closeTask(DualServos.ServoSide.BOTH),
                 arm.deltaTask(-ARM_DELTA_BACKDROP)
         ).withName("Stow and Move to Park"));
 
         makeTrajectory()
+                // Avoid destroying the field wall
+                .setVelConstraint(atVelocity(0.4, FieldTiles.per(Second)))
                 .forward(0.98 * FIELD_TILE_SCALE, FieldTiles)
-                .setVelConstraint(atVelocity(0.1, FieldTiles.per(Second)))
                 .withName("Finish Park")
                 .addTask();
 
@@ -279,6 +277,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         // Offset from the tag to the backdrop to not drive directly into the board
         backdropPose.subtract(new VectorF(APRILTAG_FORWARD_OFFSET, APRILTAG_SIDE_OFFSET, 0));
 
+        // Team prop detections are done, switch over to AprilTag now for the rest of the match
         vision.stop(teamProp);
         vision.start(aprilTag);
     }
