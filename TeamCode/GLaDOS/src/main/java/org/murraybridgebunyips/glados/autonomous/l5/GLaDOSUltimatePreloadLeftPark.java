@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
@@ -30,6 +31,7 @@ import org.murraybridgebunyips.bunyipslib.StartingPositions;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.DriveToPoseTask;
@@ -84,7 +86,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
     public static boolean USING_HEADING_ESTIMATE = true;
     /**
      * Arm to ground from stow in ticks.
-     * */
+     */
     public static int ARM_DELTA_GROUND = 2000;
     /**
      * Strafe left distance for left park.
@@ -151,11 +153,11 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         // Approach Spike Marks
         addTask(new DynamicTask(
                 () -> new ParallelTaskGroup(
-                    arm.gotoTask(ARM_DELTA_GROUND).withName("Extend Arm"),
-                    makeTrajectory()
-                            .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
-                            .withName("Move Forward to Spike Marks")
-                            .buildTask()
+                        arm.gotoTask(ARM_DELTA_GROUND).withName("Extend Arm"),
+                        makeTrajectory()
+                                .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
+                                .withName("Move Forward to Spike Marks")
+                                .buildTask()
                 )
         ).withName("Move to Spike Marks"));
 
@@ -185,27 +187,54 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         // Go to backdrop from current position
         // We do not know where the robot is in terms of a relative space, so these pathways need to be
         // in a global inferred context, accomplished by deferring construction to runtime
-
-//        Reference<TrajectorySequence> blueRight = Reference.empty();
-//        TrajectorySequence redLeft = makeTrajectory()
-//                .setScale(FIELD_TILE_SCALE)
-//                .forward(1.8, FieldTiles)
-//                .strafeRight(2.8, FieldTiles)
-//                .turn(-Math.PI / 2)
-//                .strafeRight(1, FieldTile)
-//                .mirrorToRef(blueRight)
-//                .build();
-//        TrajectorySequence redRight = makeTrajectory()
-//                .lineToLinearHeading(startingPosition.getPose()
-//                        .plus(unitPose(new Pose2d(1, 1, -90), FieldTiles, Degrees, FIELD_TILE_SCALE)))
-//                .build();
-//        TrajectorySequence blueLeft = makeTrajectory()
-//                .lineToLinearHeading(startingPosition.getPose()
-//                        .plus(unitPose(new Pose2d(1, -1, 90), FieldTiles, Degrees, FIELD_TILE_SCALE)))
-//                .build();
         addTask(new DynamicTask(() -> {
-            // TODO: backdrop global pose trajectory to also avoid spike mark placed
-            return null;
+            Reference<TrajectorySequence> blue = Reference.empty();
+            RoadRunnerTrajectoryTaskBuilder redBuilder = makeTrajectory().mirrorToRef(blue);
+
+            // Recenter to facing forward to restore a known state
+            redBuilder.splineTo(drive.getPoseEstimate().vec(), startingPosition.getPose().getHeading());
+
+            // Far side backdrop navigation
+            if (startingPosition == StartingPositions.STARTING_RED_LEFT || startingPosition == StartingPositions.STARTING_BLUE_RIGHT) {
+                if (spikeMark == Direction.FORWARD) {
+                    // The Spike Mark is in front of the robot and we are on the far alliance.
+                    // Take the route that goes under the Truss, rotate now as we have time too
+                    redBuilder.lineToLinearHeading(new Pose2d(-36, -36, 0));
+                    // We are 3 field tiles away from the tile before the backdrop
+                    redBuilder.forward(3 * FIELD_TILE_SCALE, FieldTiles);
+                } else {
+                    // We do not have to worry about crashing into the Spike Mark (left or right), take the long way to ensure no collisions.
+                    // This ensures the right partner does not have a barreling robot removing their Spike Mark
+                    redBuilder.lineTo(new Vector2d(-36, -11.5));
+                    // Follow the original path from the L3 OpMode
+                    redBuilder
+                            .setScale(FIELD_TILE_SCALE)
+                            .strafeRight(2.8, FieldTiles)
+                            .turn(-Math.PI / 2)
+                            .strafeRight(1, FieldTile);
+                }
+            } else {
+                // Close side backdrop navigation
+                boolean onRedWithMarkInterception = startingPosition == StartingPositions.STARTING_RED_RIGHT && spikeMark == Direction.RIGHT;
+                boolean onBlueWithMarkInterception = startingPosition == StartingPositions.STARTING_BLUE_LEFT && spikeMark == Direction.LEFT;
+                // We're in a dubious position where moving towards the backdrop will push the Spike Mark.
+                // Will need to attach a short circumnavigation by moving backwards and strafing right -- the lineTo
+                // will then move to the correct position.
+                if (onRedWithMarkInterception || onBlueWithMarkInterception) {
+                    redBuilder.back(1 * FIELD_TILE_SCALE, FieldTiles);
+                    redBuilder.strafeRight(0.5 * FIELD_TILE_SCALE, FieldTiles);
+                }
+                // Move to the backdrop directly in one motion
+                redBuilder.lineToLinearHeading(new Pose2d(49, -36, 0));
+            }
+
+            // Build and mirror to blue
+            TrajectorySequence red = redBuilder.build();
+
+            // Go!
+            return makeTrajectory()
+                    .runSequence(startingPosition.isRed() ? red : blue.require())
+                    .buildTask();
         }).withName("Navigate to Backdrop"));
 
         // Backdrop pose will be provided after onStart() and has been deferred until runtime
