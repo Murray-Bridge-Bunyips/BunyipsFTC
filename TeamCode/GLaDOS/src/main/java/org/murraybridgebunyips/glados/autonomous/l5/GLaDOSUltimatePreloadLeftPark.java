@@ -181,15 +181,13 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
             RoadRunnerTrajectoryTaskBuilder redBuilder = makeTrajectory().mirrorToRef(blue);
 
             // Recenter to facing forward to restore a known state
-            Pose2d currentPos = drive.getPoseEstimate();
-            int inversion = startingPosition.isBlue() ? -1 : 1;
-            redBuilder.splineTo(
-                    // Need to invert this vector's y component for blue as the mirrored configuration will also
-                    // mirror a global field coordinate. Not ideal to have a trajectory that switches teams.
-                    // This is due to us using relative positions in an assumed global coordinate system.
-                    new Vector2d(currentPos.getX(), currentPos.getY() * inversion),
-                    startingPosition.getPose().getHeading() * inversion
-            );
+            // Need to turn off the mirror function for this segment as the mirrored configuration will also
+            // mirror a global field coordinate. Not ideal to have a trajectory that switches teams.
+            // This is due to us using relative positions in an assumed global coordinate system.
+            redBuilder
+                    .disableMirroring()
+                    .splineTo(drive.getPoseEstimate().vec(), startingPosition.getPose().getHeading())
+                    .enableMirroring();
 
             // Far side backdrop navigation
             if (startingPosition == StartingPositions.STARTING_RED_LEFT || startingPosition == StartingPositions.STARTING_BLUE_RIGHT) {
