@@ -178,7 +178,6 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
             return makeTrajectory(drive.getPoseEstimate())
                     // Try to align
                     .turn(turn, Degrees)
-                    .forward(spikeMark == Direction.FORWARD ? 4 : 0)
                     .buildTask();
         }));
 
@@ -196,6 +195,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                 if (spikeMark == Direction.FORWARD) {
                     // The Spike Mark is in front of the robot and we are on the far alliance.
                     // Take the route that goes under the Truss, rotate now as we have time too
+                    redBuilder.forward(4);
                     redBuilder.turn(-90, Degrees);
                     // We are 3 field tiles away from the tile before the backdrop
                     redBuilder.forward(2 * FIELD_TILE_SCALE, FieldTiles);
@@ -241,9 +241,9 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         addTask(new DynamicTask(
                 () -> new DriveToPoseTask(Seconds.of(5), drive,
                         new Pose2d(backdropPose.get(0), backdropPose.get(1), 0),
-                        new PIDController(0.09, 0, 0),
-                        new PIDController(0.09, 0, 0),
-                        new PIDController(2, 0, 0))
+                        new PIDController(0.1, 0, 0),
+                        new PIDController(0.1, 0, 0),
+                        new PIDController(2, 0, 0)).withMaxForwardSpeed(0.2).withMaxStrafeSpeed(0.2)
         ));
 
         // Place pixels and park to the left of the backdrop

@@ -7,6 +7,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeter
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -96,9 +97,19 @@ public class WheatleyConfig extends RobotConfig {
     public TouchSensor bottomLimit;
 
     /**
+     * Control Digital 1: Touch Sensor/Limit Switch "top"
+     */
+    public TouchSensor topLimit;
+
+    /**
      * Control Servo 5: Right Servo "rs"
      */
     public Servo rightPixel;
+
+    /**
+     * Control Servo ?: Blinkin Driver
+     */
+    public RevBlinkinLedDriver lights;
 
     /**
      * RoadRunner drive constants
@@ -151,6 +162,7 @@ public class WheatleyConfig extends RobotConfig {
 //            d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
         bottomLimit = getHardware("bottom", TouchSensor.class);
+        topLimit = getHardware("top", TouchSensor.class);
 
         // Pixel manipulation system
         clawRotator = getHardware("cr", DcMotorEx.class);
@@ -160,6 +172,9 @@ public class WheatleyConfig extends RobotConfig {
 
         // Paper Drone launcher system
         launcher = getHardware("pl", Servo.class);
+
+        // Fancy lights
+        lights = getHardware("lights", RevBlinkinLedDriver.class);
 
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(28)

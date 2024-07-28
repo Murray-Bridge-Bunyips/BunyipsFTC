@@ -57,7 +57,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         );
         cannon = new Cannon(config.launcher);
         linearActuator = new HoldableActuator(config.linearActuator)
-                .withBottomSwitch(config.bottomLimit);
+                .withBottomSwitch(config.bottomLimit)
+                .withTopSwitch(config.topLimit);
         rotator = new HoldableActuator(config.clawRotator)
 //                .withAngleLimits(Degrees.zero(), Degrees.of(180))
                 .withPowerClamps(-0.33, 0.33)
