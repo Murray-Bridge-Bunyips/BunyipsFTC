@@ -178,6 +178,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
             return makeTrajectory(drive.getPoseEstimate())
                     // Try to align
                     .turn(turn, Degrees)
+                    .forward(spikeMark == Direction.FORWARD ? 4 : 0)
                     .buildTask();
         }));
 
