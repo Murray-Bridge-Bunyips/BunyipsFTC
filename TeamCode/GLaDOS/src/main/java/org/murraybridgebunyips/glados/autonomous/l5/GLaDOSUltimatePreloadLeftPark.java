@@ -66,17 +66,17 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
     /** Multiplicative scale for all RoadRunner distances. */
     public static double FIELD_TILE_SCALE = 1.5;
     /** X offset to DriveToPose AprilTag in inches */
-    public static float APRILTAG_FORWARD_OFFSET = 9.0f;
+    public static float APRILTAG_FORWARD_OFFSET = 13.0f;
     /** Y offset to DriveToPose AprilTag in inches */
     public static float APRILTAG_SIDE_OFFSET = 0;
     /** Position delta (in ticks) of the arm extension at backboard */
-    public static int ARM_DELTA_BACKDROP = 1600;
+    public static int ARM_DELTA_BACKDROP = 1500;
     /** Whether a heading estimate is also used from AprilTag data. */
-    public static boolean USING_HEADING_ESTIMATE = true;
+    public static boolean USING_HEADING_ESTIMATE = false;
     /** Arm to ground from stow in ticks. */
     public static int ARM_DELTA_GROUND = 2000;
     /** Strafe left distance for left park, field tiles. */
-    public static double PARK_LEFT_TILES = 0.85;
+    public static double PARK_LEFT_TILES = 0.79;
     /** Strafe right distance for right park, field tiles. Used in the Right Park override. */
     public static double PARK_RIGHT_TILES = 0.9;
     /** Angled spike mark, move forward initially, field tiles */
@@ -173,6 +173,16 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         addTask(claws.openTask(DualServos.ServoSide.LEFT).withName("Open Left Claw"));
         addTask(arm.deltaTask(-ARM_DELTA_GROUND).withName("Retract Arm"));
 
+        addTask(new DynamicTask(() -> {
+            double turn = spikeMark == Direction.FORWARD ? 0 : spikeMark == Direction.LEFT ? -M_LEFT_ALIGN_TURN_DEG : -M_RIGHT_ALIGN_TURN_DEG;
+            return makeTrajectory(drive.getPoseEstimate())
+                    // Try to align
+                    .turn(turn, Degrees)
+                    .buildTask();
+        }));
+
+//        addTask(() -> setPose(new Pose2d(-36, 36 * (startingPosition.isRed() ? -1 : 1), Math.toRadians(-90) * (startingPosition.isRed() ? -1 : 1))));
+
         // Go to backdrop from current position
         // We do not know where the robot is in terms of a relative space, so these pathways need to be
         // in a global inferred context, accomplished by deferring construction to runtime
@@ -180,23 +190,14 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
             Reference<TrajectorySequence> blue = Reference.empty();
             RoadRunnerTrajectoryTaskBuilder redBuilder = makeTrajectory().mirrorToRef(blue);
 
-            // Recenter to facing forward to restore a known state
-            // Need to turn off the mirror function for this segment as the mirrored configuration will also
-            // mirror a global field coordinate. Not ideal to have a trajectory that switches teams.
-            // This is due to us using relative positions in an assumed global coordinate system.
-            redBuilder
-                    .disableMirroring()
-                    .splineTo(drive.getPoseEstimate().vec(), startingPosition.getPose().getHeading())
-                    .enableMirroring();
-
             // Far side backdrop navigation
             if (startingPosition == StartingPositions.STARTING_RED_LEFT || startingPosition == StartingPositions.STARTING_BLUE_RIGHT) {
                 if (spikeMark == Direction.FORWARD) {
                     // The Spike Mark is in front of the robot and we are on the far alliance.
                     // Take the route that goes under the Truss, rotate now as we have time too
-                    redBuilder.lineToLinearHeading(new Pose2d(-36, -36, 0));
+                    redBuilder.turn(-90, Degrees);
                     // We are 3 field tiles away from the tile before the backdrop
-                    redBuilder.forward(3 * FIELD_TILE_SCALE, FieldTiles);
+                    redBuilder.forward(2 * FIELD_TILE_SCALE, FieldTiles);
                 } else {
                     // We do not have to worry about crashing into the Spike Mark (left or right), take the long way to ensure no collisions.
                     // This ensures the right partner does not have a barreling robot removing their Spike Mark
@@ -206,7 +207,8 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                             .setScale(FIELD_TILE_SCALE)
                             .strafeRight(2.8, FieldTiles)
                             .turn(-Math.PI / 2)
-                            .strafeRight(1, FieldTile);
+                            .strafeRight(1, FieldTile)
+                            .setScale(1);
                 }
             } else {
                 // Close side backdrop navigation
@@ -220,8 +222,10 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                     redBuilder.strafeRight(0.5 * FIELD_TILE_SCALE, FieldTiles);
                 }
                 // Move to the backdrop directly in one motion
-                redBuilder.lineToLinearHeading(new Pose2d(49, -36, 0));
+                redBuilder.lineToLinearHeading(new Pose2d(46, -35, 0));
             }
+
+            redBuilder.waitFor(1, Seconds);
 
             // Build and mirror to blue
             TrajectorySequence red = redBuilder.build();
@@ -236,9 +240,9 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         addTask(new DynamicTask(
                 () -> new DriveToPoseTask(Seconds.of(5), drive,
                         new Pose2d(backdropPose.get(0), backdropPose.get(1), 0),
-                        new PIDController(0.1, 0, 0),
-                        new PIDController(0.1, 0, 0),
-                        new PIDController(4, 0, 0))
+                        new PIDController(0.09, 0, 0),
+                        new PIDController(0.09, 0, 0),
+                        new PIDController(2, 0, 0))
         ));
 
         // Place pixels and park to the left of the backdrop
@@ -264,9 +268,11 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                 .addTask();
 
         // Tasks created, run vision initialisation
+        teamProp = startingPosition.isRed() ? new RedTeamProp() : new BlueTeamProp();
         vision.init(aprilTag, teamProp);
         vision.start(teamProp);
-        teamProp = startingPosition.isRed() ? new RedTeamProp() : new BlueTeamProp();
+        vision.startPreview();
+        vision.setPreview(aprilTag);
         getTeamProp.setProcessor(teamProp);
     }
 
