@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.TwoWheelTrackingLocalizer;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.StraightTest;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.LocalizationTest;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
@@ -13,7 +13,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  */
 @Autonomous(name = "RoadRunner Tuning")
 @Disabled
-public class GLaDOSRoadRunnerTuning extends StraightTest {
+public class GLaDOSRoadRunnerTuning extends LocalizationTest {
     @Override
     public void runOpMode() {
         GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();

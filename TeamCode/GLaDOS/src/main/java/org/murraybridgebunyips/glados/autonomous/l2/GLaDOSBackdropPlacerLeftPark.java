@@ -40,7 +40,7 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
     /**
      * Multiplicative scale for all RoadRunner distances.
      */
-    public static double FIELD_TILE_SCALE = 1.5;
+    public static double FIELD_TILE_SCALE = 1;
     /**
      * Position delta (in ticks) of the arm extension at backboard
      */

@@ -54,7 +54,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
     /**
      * Multiplicative scale for all RoadRunner distances.
      */
-    public static double FIELD_TILE_SCALE = 1.5;
+    public static double FIELD_TILE_SCALE = 1;
     /**
      * X offset to DriveToPose AprilTag
      */

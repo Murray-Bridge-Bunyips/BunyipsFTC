@@ -4,6 +4,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeter
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.MetersPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
@@ -63,8 +64,6 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 @Config
 @Autonomous(name = "Ultimate Preload (Purple on Left, Yellow on Right, Left Park)", group = "L5")
 public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
-    /** Multiplicative scale for all RoadRunner distances. */
-    public static double FIELD_TILE_SCALE = 1.5;
     /** X offset to DriveToPose AprilTag in inches */
     public static float APRILTAG_FORWARD_OFFSET = 13.0f;
     /** Y offset to DriveToPose AprilTag in inches */
@@ -76,15 +75,15 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
     /** Arm to ground from stow in ticks. */
     public static int ARM_DELTA_GROUND = 2000;
     /** Strafe left distance for left park, field tiles. */
-    public static double PARK_LEFT_TILES = 0.79;
+    public static double PARK_LEFT_TILES = 0.9;
     /** Strafe right distance for right park, field tiles. Used in the Right Park override. */
     public static double PARK_RIGHT_TILES = 0.9;
     /** Angled spike mark, move forward initially, field tiles */
-    public static double ANGLED_INIT_FWD_TILES = 0.8;
+    public static double ANGLED_INIT_FWD_TILES = 0.65;
     /** Forward spike mark, move forward initially, field tiles */
-    public static double M_FORWARD_INIT_FWD_TILES = 0.7;
+    public static double M_FORWARD_INIT_FWD_TILES = 0.5;
     /** Forward spike mark, forward centimeters */
-    public static double M_FORWARD_ALIGN_FWD_CM = 20;
+    public static double M_FORWARD_ALIGN_FWD_CM = 15;
     /** Left spike mark, degrees turn */
     public static double M_LEFT_ALIGN_TURN_DEG = 40;
     /** Right spike mark, degrees turn */
@@ -146,7 +145,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         // Approach Spike Marks, lazy loaded as this is can only be calculated at runtime
         addTask(new DynamicTask(
                 () -> new ParallelTaskGroup(
-                        arm.deltaTask(ARM_DELTA_GROUND).withName("Extend Arm"),
+                        arm.deltaTask(ARM_DELTA_GROUND).withName("Extend Arm").withTimeout(Seconds.of(4)),
                         makeTrajectory(startingPosition.getPose())
                                 .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INIT_FWD_TILES : ANGLED_INIT_FWD_TILES, FieldTile)
                                 .withName("Move Forward to Spike Marks")
@@ -171,7 +170,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
 
         // Place Purple Pixel (loaded left)
         addTask(claws.openTask(DualServos.ServoSide.LEFT).withName("Open Left Claw"));
-        addTask(arm.deltaTask(-ARM_DELTA_GROUND).withName("Retract Arm"));
+        addTask(arm.deltaTask(-ARM_DELTA_GROUND).withName("Retract Arm").withTimeout(Seconds.of(4)));
 
         addTask(new DynamicTask(() -> {
             double turn = spikeMark == Direction.FORWARD ? 0 : spikeMark == Direction.LEFT ? -M_LEFT_ALIGN_TURN_DEG : -M_RIGHT_ALIGN_TURN_DEG;
@@ -198,18 +197,16 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                     redBuilder.forward(4);
                     redBuilder.turn(-90, Degrees);
                     // We are 3 field tiles away from the tile before the backdrop
-                    redBuilder.forward(2 * FIELD_TILE_SCALE, FieldTiles);
+                    redBuilder.forward(2, FieldTiles);
                 } else {
                     // We do not have to worry about crashing into the Spike Mark (left or right), take the long way to ensure no collisions.
                     // This ensures the right partner does not have a barreling robot removing their Spike Mark
                     redBuilder.lineTo(new Vector2d(-36, -11.5));
                     // Follow the original path from the L3 OpMode
                     redBuilder
-                            .setScale(FIELD_TILE_SCALE)
-                            .strafeRight(2.8, FieldTiles)
+                            .strafeRight(3.14, FieldTiles)
                             .turn(-Math.PI / 2)
-                            .strafeRight(1, FieldTile)
-                            .setScale(1);
+                            .strafeRight(1, FieldTile);
                 }
             } else {
                 // Close side backdrop navigation
@@ -219,11 +216,14 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                 // Will need to attach a short circumnavigation by moving backwards and strafing right -- the lineTo
                 // will then move to the correct position.
                 if (onRedWithMarkInterception || onBlueWithMarkInterception) {
-                    redBuilder.back(0.7 * FIELD_TILE_SCALE, FieldTiles);
-                    redBuilder.strafeRight(0.5 * FIELD_TILE_SCALE, FieldTiles);
+                    redBuilder.back(0.5, FieldTiles);
+                    redBuilder.strafeRight(0.5, FieldTiles);
                 }
                 // Move to the backdrop directly in one motion
-                redBuilder.lineToLinearHeading(new Pose2d(46, -35, 0));
+                redBuilder.lineToLinearHeading(new Pose2d(35, -35, 0));
+                redBuilder.setVelConstraint(atVelocity(0.1, MetersPerSecond));
+                redBuilder.forward(6);
+                redBuilder.resetConstraints();
             }
 
             redBuilder.waitFor(1, Seconds);
@@ -243,11 +243,15 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                         new Pose2d(backdropPose.get(0), backdropPose.get(1), 0),
                         new PIDController(0.1, 0, 0),
                         new PIDController(0.1, 0, 0),
-                        new PIDController(2, 0, 0)).withMaxForwardSpeed(0.2).withMaxStrafeSpeed(0.2)
+                        new PIDController(0.1, 0, 0)
+                )
+                        .withMaxForwardSpeed(0.2)
+                        .withMaxStrafeSpeed(0.2)
+                        .withMaxRotationSpeed(0.1)
         ));
 
         // Place pixels and park to the left of the backdrop
-        addTask(arm.deltaTask(ARM_DELTA_BACKDROP).withName("Deploy Arm"));
+        addTask(arm.deltaTask(ARM_DELTA_BACKDROP).withName("Deploy Arm").withTimeout(Seconds.of(4)));
         addTask(claws.openTask(DualServos.ServoSide.RIGHT).withName("Drop Pixel"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
 
@@ -255,16 +259,17 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         double parkDistance = getParkingDirection() == Direction.LEFT ? PARK_LEFT_TILES : -PARK_RIGHT_TILES;
         addTask(new ParallelTaskGroup(
                 makeTrajectory(new Pose2d(48, 36 * (startingPosition.isRed() ? -1 : 1), 0))
-                        .strafeLeft(parkDistance * FIELD_TILE_SCALE, FieldTiles)
+                        .back(7)
+                        .strafeLeft(parkDistance, FieldTiles)
                         .buildTask(),
                 claws.closeTask(DualServos.ServoSide.BOTH),
-                arm.deltaTask(-ARM_DELTA_BACKDROP)
+                arm.deltaTask(-ARM_DELTA_BACKDROP).withTimeout(Seconds.of(4))
         ).withName("Stow and Move to Park"));
 
         makeTrajectory()
                 // Avoid destroying the field wall
                 .setVelConstraint(atVelocity(0.4, FieldTiles.per(Second)))
-                .forward(0.6 * FIELD_TILE_SCALE, FieldTiles)
+                .forward(0.8, FieldTiles)
                 .withName("Finish Park")
                 .addTask();
 

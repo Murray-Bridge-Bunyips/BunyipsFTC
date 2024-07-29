@@ -2,6 +2,7 @@ package org.murraybridgebunyips.glados.debug;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -15,6 +16,7 @@ import org.murraybridgebunyips.bunyipslib.vision.processors.centerstage.WhitePix
  * ContourTuner testing
  */
 @TeleOp
+@Disabled
 public class GLaDOSCTTest extends ColourTuner {
     @NonNull
     @Override

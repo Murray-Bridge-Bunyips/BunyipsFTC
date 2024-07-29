@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.glados.debug;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
@@ -13,6 +14,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * Pose estimation drive for GLaDOS robot FTC 15215, debug
  */
 @TeleOp
+@Disabled
 public class GLaDOSPoseEstimationDrive extends BunyipsOpMode {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
 

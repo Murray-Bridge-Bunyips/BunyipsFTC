@@ -166,11 +166,12 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setTicksPerRev(1200)
                 .setGearRatio(1)
                 .setWheelRadius(Millimeters.of(50).divide(2))
-                // TODO: this is not accurate
-                .setParallelX(Inches.zero())
+                .setXMultiplier(100.0 / 134.5)
+                .setYMultiplier(100.0 / 133.7)
+                .setParallelX(Inches.of(2))
                 .setParallelY(Inches.zero())
-                .setPerpendicularX(Inches.of(4.2))
-                .setPerpendicularY(Inches.of(3.5))
+                .setPerpendicularX(Inches.of(6.5))
+                .setPerpendicularY(Inches.of(2.5))
                 .build();
 
         mecanumCoefficients = new MecanumCoefficients.Builder()
