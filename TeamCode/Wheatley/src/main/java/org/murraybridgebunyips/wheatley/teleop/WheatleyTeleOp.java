@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.wheatley.teleop;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
@@ -28,10 +29,9 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  * b: toggle right claw<br>
  * left_stick_y: actuate the management rail<br>
  * right_stick_y: move claw mover<br>
- *
- * 2dew: update
+ * <p></p>
  * dpad_up: extend hook one position<br>
- * dpad_down: retract hook one position<br>
+ * dpad_down: retract hook to absolute bottom<br>
  *
  * @author Lachlan Paul, 2024
  * @author Lucas Bubner, 2024
@@ -57,8 +57,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         );
         cannon = new Cannon(config.launcher);
         linearActuator = new HoldableActuator(config.linearActuator)
-                .withBottomSwitch(config.bottomLimit)
-                .withTopSwitch(config.topLimit);
+                .withBottomSwitch(config.bottomLimit);
+//                .withTopSwitch(config.topLimit);
         rotator = new HoldableActuator(config.clawRotator)
 //                .withAngleLimits(Degrees.zero(), Degrees.of(180))
                 .withPowerClamps(-0.33, 0.33)
@@ -113,6 +113,14 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void periodic() {
+        // LED Management
+        if (config.bottomLimit.isPressed()) { // Make an && for the top limit when it's reinstated
+            config.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
+        } else {
+            config.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);  // The default
+        }
+
+//        telemetry.add("Top Switch Is %", config.topLimit.isPressed() ? "Pressed" : "Not Pressed").big();
         telemetry.add("Bottom Switch Is %", config.bottomLimit.isPressed() ? "Pressed" : "Not Pressed").big();
 
         // Some drivers have noted that they sometimes cannot tell whether a claw is open or closed.

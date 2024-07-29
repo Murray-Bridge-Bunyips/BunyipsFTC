@@ -96,10 +96,10 @@ public class WheatleyConfig extends RobotConfig {
      */
     public TouchSensor bottomLimit;
 
-    /**
-     * Control Digital 1: Touch Sensor/Limit Switch "top"
-     */
-    public TouchSensor topLimit;
+//    /**
+//     * Control Digital 1: Touch Sensor/Limit Switch "top"
+//     */
+//    public TouchSensor topLimit;
 
     /**
      * Control Servo 5: Right Servo "rs"
@@ -162,7 +162,7 @@ public class WheatleyConfig extends RobotConfig {
 //            d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
         bottomLimit = getHardware("bottom", TouchSensor.class);
-        topLimit = getHardware("top", TouchSensor.class);
+//        topLimit = getHardware("top", TouchSensor.class);
 
         // Pixel manipulation system
         clawRotator = getHardware("cr", DcMotorEx.class);

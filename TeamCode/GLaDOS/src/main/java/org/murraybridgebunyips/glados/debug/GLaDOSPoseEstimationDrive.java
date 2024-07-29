@@ -2,9 +2,9 @@ package org.murraybridgebunyips.glados.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.murraybridgebunyips.bunyipslib.vision.AprilTagPoseEstimator;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
+import org.murraybridgebunyips.bunyipslib.vision.AprilTagPoseEstimator;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
