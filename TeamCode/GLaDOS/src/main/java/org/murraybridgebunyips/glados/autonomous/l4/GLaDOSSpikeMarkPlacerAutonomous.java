@@ -37,11 +37,11 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     /** extension/retraction ticks */
     public static int ARM_DELTA = 2000;
     /** angled spike mark, move forward initially, field tiles */
-    public static double ANGLED_INITIAL_FORWARD_DIST_FT = 0.8;
+    public static double ANGLED_INITIAL_FORWARD_DIST_FT = 0.65;
     /** forward spike mark, move forward initially, field tiles */
-    public static double M_FORWARD_INITIAL_FORWARD_DIST_FT = 0.7;
+    public static double M_FORWARD_INITIAL_FORWARD_DIST_FT = 0.5;
     /** forward spike mark, forward centimeters */
-    public static double M_FORWARD_DIST_CM = 20;
+    public static double M_FORWARD_DIST_CM = 15;
     /** left spike mark, degrees turn */
     public static double M_LEFT_TURN_DEG = 40;
     /** right spike mark, degrees turn */

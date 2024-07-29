@@ -38,10 +38,6 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 @Autonomous(name = "Backdrop Placer (Left Park, NO VISION)", group = "L2")
 public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     /**
-     * Multiplicative scale for all RoadRunner distances.
-     */
-    public static double FIELD_TILE_SCALE = 1;
-    /**
      * Position delta (in ticks) of the arm extension at backboard
      */
     public static int ARM_DELTA = 1500;
@@ -70,7 +66,7 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
     // Set which direction the robot will strafe at the backdrop. Overridden in the right park variant.
     protected RoadRunnerTask afterPixelDropDriveAction(RoadRunnerTrajectoryTaskBuilder builder) {
         return builder
-                .strafeLeft(0.95 * FIELD_TILE_SCALE, FieldTile)
+                .strafeLeft(0.95, FieldTile)
                 .buildTask();
     }
 
@@ -86,19 +82,19 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
         // Go to backdrop
         Reference<TrajectorySequence> blueRight = Reference.empty();
         TrajectorySequence redLeft = makeTrajectory()
-                .forward(1.8 * FIELD_TILE_SCALE, FieldTiles)
-                .strafeRight(2.8 * FIELD_TILE_SCALE, FieldTiles)
+                .forward(2, FieldTiles)
+                .strafeRight(3, FieldTiles)
                 .turn(-Math.PI / 2)
-                .strafeRight(1 * FIELD_TILE_SCALE, FieldTile)
+                .strafeRight(1, FieldTile)
                 .mirrorToRef(blueRight)
                 .build();
         TrajectorySequence redRight = makeTrajectory()
                 .lineToLinearHeading(startingPosition.getPose()
-                        .plus(RoadRunner.unitPose(new Pose2d(1 * FIELD_TILE_SCALE, 1 * FIELD_TILE_SCALE, -90), FieldTiles, Degrees)))
+                        .plus(RoadRunner.unitPose(new Pose2d(1, 1, -90), FieldTiles, Degrees)))
                 .build();
         TrajectorySequence blueLeft = makeTrajectory()
                 .lineToLinearHeading(startingPosition.getPose()
-                        .plus(RoadRunner.unitPose(new Pose2d(1 * FIELD_TILE_SCALE, -1 * FIELD_TILE_SCALE, 90), FieldTiles, Degrees)))
+                        .plus(RoadRunner.unitPose(new Pose2d(1, -1, 90), FieldTiles, Degrees)))
                 .build();
 
         TrajectorySequence targetSequence = null;
@@ -123,7 +119,7 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
                 .addTask();
 
         makeTrajectory()
-                .forward(30, Centimeters)
+                .forward(40, Centimeters)
                 .withName("Forward Align Backdrop")
                 .addTask();
 
@@ -137,7 +133,7 @@ public class GLaDOSBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implem
         ).withName("Stow and Move to Park"));
 
         makeTrajectory()
-                .forward(0.98 * FIELD_TILE_SCALE, FieldTiles)
+                .forward(0.98, FieldTiles)
                 .setVelConstraint(atVelocity(0.1, FieldTiles.per(Second)))
                 .withName("Finish Park")
                 .addTask();

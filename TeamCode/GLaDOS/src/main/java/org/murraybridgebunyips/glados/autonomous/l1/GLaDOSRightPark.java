@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controls;
@@ -23,6 +24,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  * Park on the right side of the backdrop.
  */
 @Autonomous(name = "Right Park", group="L1")
+@Disabled
 public class GLaDOSRightPark extends AutonomousBunyipsOpMode implements RoadRunner {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
 

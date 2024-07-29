@@ -34,6 +34,7 @@ import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.DriveToPoseTask;
 import org.murraybridgebunyips.bunyipslib.tasks.DynamicTask;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
+import org.murraybridgebunyips.bunyipslib.tasks.RunTask;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
 import org.murraybridgebunyips.bunyipslib.vision.AprilTagPoseEstimator;
@@ -170,6 +171,17 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
 
         // Place Purple Pixel (loaded left)
         addTask(claws.openTask(DualServos.ServoSide.LEFT).withName("Open Left Claw"));
+        addTask(new DynamicTask(() -> {
+            boolean armWillHitTrussOnRed = spikeMark == Direction.RIGHT && startingPosition == StartingPositions.STARTING_RED_LEFT;
+            boolean armWillHitTrussOnBlue = spikeMark == Direction.LEFT && startingPosition == StartingPositions.STARTING_BLUE_RIGHT;
+            if (armWillHitTrussOnRed || armWillHitTrussOnBlue) {
+                // Retracting the arm will cause it to get caught on the Truss, we need to back up
+                return makeTrajectory()
+                        .back(10)
+                        .buildTask();
+            }
+            return new RunTask();
+        }));
         addTask(arm.deltaTask(-ARM_DELTA_GROUND).withName("Retract Arm").withTimeout(Seconds.of(4)));
 
         addTask(new DynamicTask(() -> {

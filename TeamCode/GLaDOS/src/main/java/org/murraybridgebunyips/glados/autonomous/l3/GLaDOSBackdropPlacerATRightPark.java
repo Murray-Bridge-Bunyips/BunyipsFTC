@@ -3,6 +3,7 @@ package org.murraybridgebunyips.glados.autonomous.l3;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTile;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 
@@ -12,6 +13,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
  * @author Lucas Bubner, 2024
  */
 @Autonomous(name = "Backdrop Placer (Right Park, Vision)", group = "L3")
+@Disabled
 public class GLaDOSBackdropPlacerATRightPark extends GLaDOSBackdropPlacerATLeftPark {
     @Override
     protected RoadRunnerTask afterPixelDropDriveAction(RoadRunnerTrajectoryTaskBuilder builder) {

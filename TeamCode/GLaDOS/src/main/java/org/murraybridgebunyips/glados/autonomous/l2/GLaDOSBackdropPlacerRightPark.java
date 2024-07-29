@@ -16,7 +16,7 @@ public class GLaDOSBackdropPlacerRightPark extends GLaDOSBackdropPlacerLeftPark 
     @Override
     protected RoadRunnerTask afterPixelDropDriveAction(RoadRunnerTrajectoryTaskBuilder builder) {
         return builder
-                .strafeRight(0.95 * FIELD_TILE_SCALE, FieldTile)
+                .strafeRight(0.95, FieldTile)
                 .buildTask();
     }
 }

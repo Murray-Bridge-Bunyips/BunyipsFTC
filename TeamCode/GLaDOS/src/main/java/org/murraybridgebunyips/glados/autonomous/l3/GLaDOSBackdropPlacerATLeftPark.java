@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.vision.apriltag.AprilTagGameDatabase;
@@ -50,6 +51,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
  */
 @Config
 @Autonomous(name = "Backdrop Placer (Left Park, Vision)", group = "L3")
+@Disabled
 public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     /**
      * Multiplicative scale for all RoadRunner distances.
