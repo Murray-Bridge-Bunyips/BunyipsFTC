@@ -68,7 +68,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
     /** X offset to DriveToPose AprilTag in inches */
     public static float APRILTAG_FORWARD_OFFSET = 13.0f;
     /** Y offset to DriveToPose AprilTag in inches */
-    public static float APRILTAG_SIDE_OFFSET = 0;
+    public static float APRILTAG_SIDE_OFFSET = -3.0f;
     /** Position delta (in ticks) of the arm extension at backboard */
     public static int ARM_DELTA_BACKDROP = 1500;
     /** Whether a heading estimate is also used from AprilTag data. */
