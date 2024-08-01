@@ -98,6 +98,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
                 TURN_ANGLE = -TURN_ANGLE;
                 break;
             case STARTING_BLUE_LEFT:
+                STRAFE_TO_BACKBOARD = -STRAFE_TO_BACKBOARD;
                 break;
             case STARTING_RED_RIGHT:
                 TURN_ANGLE = -TURN_ANGLE;
@@ -105,7 +106,6 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
             case STARTING_BLUE_RIGHT:
                 addTask(waitMessage);
                 takeLongPath = true;
-                STRAFE_TO_BACKBOARD = -STRAFE_TO_BACKBOARD;
                 break;
         }
 
