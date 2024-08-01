@@ -29,7 +29,6 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  * b: toggle right claw<br>
  * left_stick_y: actuate the management rail<br>
  * right_stick_y: move claw mover<br>
- * <p></p>
  * dpad_up: extend hook one position<br>
  * dpad_down: retract hook to absolute bottom<br>
  *
@@ -120,16 +119,16 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
             config.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);  // The default
         }
 
-//        telemetry.add("Top Switch Is %", config.topLimit.isPressed() ? "Pressed" : "Not Pressed").big();
-        telemetry.add("Bottom Switch Is %", config.bottomLimit.isPressed() ? "Pressed" : "Not Pressed").big();
-
         // Some drivers have noted that they sometimes cannot tell whether a claw is open or closed.
         // Hopefully this helps. Update: It did :)
         telemetry.add("\n---------");
 
         // The actual string is set to the opposite of what you might expect, by driver request.
-        telemetry.add("Left Claw: " + (claws.isOpen(DualServos.ServoSide.LEFT) ? "Closed" : "Open"));
-        telemetry.add("Right Claw: " + (claws.isOpen(DualServos.ServoSide.RIGHT) ? "Closed" : "Open"));
+        telemetry.add("Left Claw: " + (claws.isOpen(DualServos.ServoSide.LEFT) ? "Closed" : "Open")).big();
+        telemetry.add("Right Claw: " + (claws.isOpen(DualServos.ServoSide.RIGHT) ? "Closed" : "Open")).big();
         telemetry.add("---------\n");
+
+//        telemetry.add("Top Switch Is %", config.topLimit.isPressed() ? "Pressed" : "Not Pressed");
+        telemetry.add("Bottom Switch Is %", config.bottomLimit.isPressed() ? "Pressed" : "Not Pressed");
     }
 }

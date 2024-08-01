@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
@@ -29,22 +30,10 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
  */
 
 public class WheatleyConfig extends RobotConfig {
-
-    // I'm not sure if this comment actually makes sense here but I'm keeping it here anyway
-    //    front_servo = hardwareMap.get(Servo.class, "front_servo");
-    //    back_servo = hardwareMap.get(Servo.class, "back_servo");
-    //    gripper = hardwareMap.get(Servo.class, "gripper");
-    //    right_front = hardwareMap.get(DcMotor.class, "right_front");
-    //    right_rear = hardwareMap.get(DcMotor.class, "right_rear");
-    //    arm = hardwareMap.get(DcMotor.class, "arm");
-    //    left_front = hardwareMap.get(DcMotor.class, "left_front");
-    //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
-
-
-//    /**
-//     * USB: Webcam "webcam"
-//     */
-//    public WebcamName webcam;
+    /**
+     * USB: Webcam "webcam"
+     */
+    public WebcamName webcam;
 
     /**
      * Internally mounted on I2C C0 "imu"
@@ -122,7 +111,7 @@ public class WheatleyConfig extends RobotConfig {
 
     @Override
     protected void onRuntime() {
-//        webcam = getHardware("webcam", WebcamName.class);
+        webcam = getHardware("webcam", WebcamName.class);
 
         // Motor directions configured to work with current config
         fl = getHardware("fl", DcMotorEx.class, (d) -> {
