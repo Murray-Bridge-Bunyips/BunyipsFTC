@@ -115,7 +115,7 @@ public class PbodyConfig extends RobotConfig {
                 .setKA(0.0015)
                 .build();
         mecanumCoefficients = new MecanumCoefficients.Builder()
-                .setTranslationalPID(new PIDCoefficients(2, 0, 0))
+                .setTranslationalPID(new PIDCoefficients(6, 0, 0))
                 .setHeadingPID(new PIDCoefficients(4, 0, 0))
                 .build();
     }

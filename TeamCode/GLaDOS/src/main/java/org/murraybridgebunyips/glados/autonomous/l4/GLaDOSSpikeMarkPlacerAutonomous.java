@@ -93,26 +93,23 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
                     .buildTask()
         ).withName("Move to Spike Marks"));
 
+        RoadRunnerTrajectoryTaskBuilder align = makeTrajectory();
         switch (spikeMark) {
             case FORWARD:
-                makeTrajectory()
-                        .forward(M_FORWARD_DIST_CM, Centimeters)
-                        .withName("Align to Center Mark")
-                        .addTask();
+                align.forward(M_FORWARD_DIST_CM, Centimeters)
+                    .withName("Align to Center Mark");
                 break;
             case LEFT:
-                makeTrajectory()
-                        .turn(M_LEFT_TURN_DEG, Degrees)
-                        .withName("Rotate to Left Mark")
-                        .addTask();
+                align.turn(M_LEFT_TURN_DEG, Degrees)
+                    .withName("Rotate to Left Mark");
                 break;
             case RIGHT:
-                makeTrajectory()
-                        .turn(M_RIGHT_TURN_DEG, Degrees)
-                        .withName("Rotate to Right Mark")
-                        .addTask();
+                align.turn(M_RIGHT_TURN_DEG, Degrees)
+                    .withName("Rotate to Right Mark");
                 break;
         }
+        align.back(10)
+            .addTask();
 
         addTask(claws.openTask(DualServos.ServoSide.LEFT).withName("Open Left Claw"));
         addTask(arm.deltaTask(-ARM_DELTA).withName("Retract Arm"));

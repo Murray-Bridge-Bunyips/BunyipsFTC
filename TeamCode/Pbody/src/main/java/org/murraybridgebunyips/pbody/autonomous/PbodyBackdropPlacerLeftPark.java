@@ -69,7 +69,7 @@ public class PbodyBackdropPlacerLeftPark extends AutonomousBunyipsOpMode impleme
         Reference<TrajectorySequence> blueLeft = Reference.empty();
         Reference<TrajectorySequence> blueRight = Reference.empty();
         TrajectorySequence redLeft = makeTrajectory()
-                .forward(1.8 * FIELD_TILE_SCALE, FieldTiles)
+                .forward(1.7 * FIELD_TILE_SCALE, FieldTiles)
                 .strafeRight(2.8 * FIELD_TILE_SCALE, FieldTiles)
                 .turn(-Math.PI / 2)
                 .strafeRight(1 * FIELD_TILE_SCALE, FieldTile)
@@ -112,7 +112,7 @@ public class PbodyBackdropPlacerLeftPark extends AutonomousBunyipsOpMode impleme
         addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
-                afterPixelDropDriveAction(makeTrajectory()),
+                afterPixelDropDriveAction(makeTrajectory().back(10)),
                 arm.deltaTask(2600)
         ).withName("Stow and Move to Park"));
 
