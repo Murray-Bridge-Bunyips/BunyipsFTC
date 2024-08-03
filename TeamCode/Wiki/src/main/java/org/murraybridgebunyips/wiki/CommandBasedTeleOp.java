@@ -44,6 +44,4 @@ public class CommandBasedTeleOp extends CommandBasedBunyipsOpMode {
         arm.setDefaultTask(linearActuator.controlTask(() -> -gamepad2.lsy));
         drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
     }
-
-    // TODO: Periodic
 }
