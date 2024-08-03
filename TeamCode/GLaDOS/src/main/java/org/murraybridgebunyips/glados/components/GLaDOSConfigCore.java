@@ -7,11 +7,15 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeter
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
@@ -48,11 +52,11 @@ public class GLaDOSConfigCore extends RobotConfig {
      */
     public DcMotorEx backLeft;
     /**
-     * Control 2: Parallel Encoder "pe"
+     * Control 3: Parallel Encoder "pe"
      */
     public Deadwheel parallelDeadwheel;
     /**
-     * Control 3: Perpendicular Encoder "ppe"
+     * Control 2: Perpendicular Encoder "ppe"
      */
     public Deadwheel perpendicularDeadwheel;
     /**
@@ -72,6 +76,14 @@ public class GLaDOSConfigCore extends RobotConfig {
      */
     public Servo launcher;
     /**
+     * Control 1: Suspender Actuator "sa"
+     */
+    public DcMotorEx suspenderActuator;
+    /**
+     * Control Digital 1: Touch Sensor/Limit Switch "bottom"
+     */
+    public TouchSensor bottomLimit;
+    /**
      * Internally mounted on I2C C0 "imu"
      */
     public IMU imu;
@@ -88,6 +100,10 @@ public class GLaDOSConfigCore extends RobotConfig {
      * Mecanum coefficients
      */
     public MecanumCoefficients mecanumCoefficients;
+    /**
+     * AprilTagPoseEstimator robot to camera offset (inch, rad)
+     */
+    public Pose2d robotCameraOffset = new Pose2d(9, -1, Math.toRadians(-10));
 
     @Override
     protected void onRuntime() {
@@ -115,13 +131,18 @@ public class GLaDOSConfigCore extends RobotConfig {
                 (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
 
         // Pixel manipulation system
-        arm = getHardware("arm", DcMotorEx.class);
+        arm = getHardware("arm", DcMotorEx.class, (d) ->
+                d.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(8, 0.06, 0.0, 0.0, d.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).algorithm)));
         double LIM = 0.7;
         leftPixel = getHardware("ls", Servo.class, (d) -> d.scaleRange(LIM, 1.0));
         rightPixel = getHardware("rs", Servo.class, (d) -> d.scaleRange(0.0, 1 - LIM));
 
         // Paper Drone launcher system
-        launcher = getHardware("pl", Servo.class);
+        launcher = getHardware("pl", Servo.class, (d) -> d.setDirection(Servo.Direction.REVERSE));
+
+        // Suspension system
+        suspenderActuator = getHardware("sa", DcMotorEx.class);
+        bottomLimit = getHardware("bottom", TouchSensor.class);
 
         // RoadRunner configuration
         driveConstants = new DriveConstants.Builder()
@@ -145,10 +166,12 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setTicksPerRev(1200)
                 .setGearRatio(1)
                 .setWheelRadius(Millimeters.of(50).divide(2))
-                .setParallelX(Inches.zero())
+                .setXMultiplier(100.0 / 134.5)
+                .setYMultiplier(70.0 / 98.0)
+                .setParallelX(Inches.of(2))
                 .setParallelY(Inches.zero())
-                .setPerpendicularX(Inches.of(4.2))
-                .setPerpendicularY(Inches.of(3.5))
+                .setPerpendicularX(Inches.of(6.5))
+                .setPerpendicularY(Inches.of(2.5))
                 .build();
 
         mecanumCoefficients = new MecanumCoefficients.Builder()

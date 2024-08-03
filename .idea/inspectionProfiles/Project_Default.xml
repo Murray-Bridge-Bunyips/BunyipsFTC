@@ -19,9 +19,6 @@
       <option name="m_checkForeachParameters" value="true" />
     </inspection_tool>
     <inspection_tool class="AssignmentToLambdaParameter" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="AssignmentToMethodParameter" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="ignoreTransformationOfOriginalParameter" value="false" />
-    </inspection_tool>
     <inspection_tool class="BigDecimalEquals" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="BlockMarkerComments" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="BooleanMethodIsAlwaysInverted" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -148,6 +145,7 @@
     <inspection_tool class="ProhibitTypeParametersForLocalVariablesMigration" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ProhibitUseSiteTargetAnnotationsOnSuperTypesMigration" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="RandomDoubleForRandomInteger" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="ReassignedVariable" enabled="false" level="TEXT ATTRIBUTES" enabled_by_default="false" />
     <inspection_tool class="RedundantImplements" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreSerializable" value="false" />
       <option name="ignoreCloneable" value="false" />
@@ -159,7 +157,6 @@
     <inspection_tool class="SameReturnValue" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="SimplifiableAnnotation" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="SimplifiableEqualsExpression" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="SizeReplaceableByIsEmpty" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StaticCallOnSubclass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StaticFieldReferenceOnSubclass" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="StaticGuardedByInstance" enabled="true" level="WARNING" enabled_by_default="true" />

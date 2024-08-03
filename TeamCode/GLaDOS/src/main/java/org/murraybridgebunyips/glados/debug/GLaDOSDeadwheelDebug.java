@@ -21,6 +21,6 @@ public class GLaDOSDeadwheelDebug extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        addTelemetry("L:% R:%", config.parallelDeadwheel.getCurrentPosition(), config.perpendicularDeadwheel.getCurrentPosition());
+        telemetry.add("L:% R:%", config.parallelDeadwheel.getCurrentPosition(), config.perpendicularDeadwheel.getCurrentPosition());
     }
 }

@@ -5,7 +5,6 @@ import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Measure
 import org.murraybridgebunyips.bunyipslib.external.units.Time
 import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 import kotlin.math.abs
 
@@ -33,13 +32,13 @@ class JerryPrecisionDriveTask(
     private val direction: Direction,
     private var power: Double,
     private val tolerance: Double = 3.0 // Optional tolerance can be specified if 3 degrees is inadequate
-) : Task(time), RobotTask {
+) : Task(time) {
 
     init {
         try {
             assert(drive != null)
         } catch (e: AssertionError) {
-            opMode.addTelemetry(
+            opMode.telemetry.add(
                 "Failed to initialise a drive task as the drive system is unavailable.",
                 true
             )
@@ -93,7 +92,7 @@ class JerryPrecisionDriveTask(
 //            }/$distanceMM"
 //        )
 
-        opMode.addTelemetry(
+        opMode.telemetry.add(
             "Axis correction: ${
                 String.format("%.2f", imu?.capture?.minus(tolerance))
             } <= ${

@@ -2,7 +2,6 @@ package org.murraybridgebunyips.jerry.tasks
 
 import org.murraybridgebunyips.bunyipslib.external.units.Measure
 import org.murraybridgebunyips.bunyipslib.external.units.Time
-import org.murraybridgebunyips.bunyipslib.tasks.bases.RobotTask
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 import org.murraybridgebunyips.jerry.components.JerryLift
 
@@ -15,7 +14,7 @@ class JerryLiftTask(
     private val lift: JerryLift?,
     private val percent: Int,
     private val power: Double? = null,
-) : Task(time), RobotTask {
+) : Task(time) {
 
     override fun init() {
         if (power != null) {
@@ -30,9 +29,5 @@ class JerryLiftTask(
 
     override fun periodic() {
         lift?.update()
-    }
-
-    override fun onFinish() {
-        // no-op
     }
 }

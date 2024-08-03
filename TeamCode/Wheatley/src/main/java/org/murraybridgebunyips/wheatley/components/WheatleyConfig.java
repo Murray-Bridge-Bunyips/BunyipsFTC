@@ -7,6 +7,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeter
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -15,6 +16,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
@@ -28,22 +30,10 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
  */
 
 public class WheatleyConfig extends RobotConfig {
-
-    // I'm not sure if this comment actually makes sense here but I'm keeping it here anyway
-    //    front_servo = hardwareMap.get(Servo.class, "front_servo");
-    //    back_servo = hardwareMap.get(Servo.class, "back_servo");
-    //    gripper = hardwareMap.get(Servo.class, "gripper");
-    //    right_front = hardwareMap.get(DcMotor.class, "right_front");
-    //    right_rear = hardwareMap.get(DcMotor.class, "right_rear");
-    //    arm = hardwareMap.get(DcMotor.class, "arm");
-    //    left_front = hardwareMap.get(DcMotor.class, "left_front");
-    //    left_rear = hardwareMap.get(DcMotor.class, "left_rear");
-
-
-//    /**
-//     * USB: Webcam "webcam"
-//     */
-//    public WebcamName webcam;
+    /**
+     * USB: Webcam "webcam"
+     */
+    public WebcamName webcam;
 
     /**
      * Internally mounted on I2C C0 "imu"
@@ -95,10 +85,20 @@ public class WheatleyConfig extends RobotConfig {
      */
     public TouchSensor bottomLimit;
 
+//    /**
+//     * Control Digital 1: Touch Sensor/Limit Switch "top"
+//     */
+//    public TouchSensor topLimit;
+
     /**
      * Control Servo 5: Right Servo "rs"
      */
     public Servo rightPixel;
+
+    /**
+     * Control Servo ?: Blinkin Driver
+     */
+    public RevBlinkinLedDriver lights;
 
     /**
      * RoadRunner drive constants
@@ -111,7 +111,7 @@ public class WheatleyConfig extends RobotConfig {
 
     @Override
     protected void onRuntime() {
-//        webcam = getHardware("webcam", WebcamName.class);
+        webcam = getHardware("webcam", WebcamName.class);
 
         // Motor directions configured to work with current config
         fl = getHardware("fl", DcMotorEx.class, (d) -> {
@@ -131,7 +131,7 @@ public class WheatleyConfig extends RobotConfig {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         imu = getHardware("imu", IMU.class, (d) -> {
-            boolean res = imu != null && imu.initialize(
+            boolean res = d.initialize(
                     new IMU.Parameters(
                             new RevHubOrientationOnRobot(
                                     RevHubOrientationOnRobot.LogoFacingDirection.UP,
@@ -144,12 +144,14 @@ public class WheatleyConfig extends RobotConfig {
             }
         });
 
-        // Suspender/pixel upward motion system
+        // Suspender upward motion system
         linearActuator = getHardware("la", DcMotorEx.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            d.setDirection(DcMotorSimple.Direction.REVERSE);
+//            d.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(0.8, 0, 1000000000000000000));
+//            d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
         bottomLimit = getHardware("bottom", TouchSensor.class);
+//        topLimit = getHardware("top", TouchSensor.class);
 
         // Pixel manipulation system
         clawRotator = getHardware("cr", DcMotorEx.class);
@@ -159,6 +161,9 @@ public class WheatleyConfig extends RobotConfig {
 
         // Paper Drone launcher system
         launcher = getHardware("pl", Servo.class);
+
+        // Fancy lights
+        lights = getHardware("lights", RevBlinkinLedDriver.class);
 
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(28)

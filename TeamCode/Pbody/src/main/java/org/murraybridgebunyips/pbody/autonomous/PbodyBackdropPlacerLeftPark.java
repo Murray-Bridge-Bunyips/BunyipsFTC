@@ -11,6 +11,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -31,6 +32,7 @@ import org.murraybridgebunyips.pbody.components.PbodyConfig;
 /**
  * Primary Autonomous OpMode (Left Park)
  */
+@Config
 @Autonomous(name = "Backdrop Placer (Left Park)")
 public class PbodyBackdropPlacerLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
     /**
@@ -49,7 +51,6 @@ public class PbodyBackdropPlacerLeftPark extends AutonomousBunyipsOpMode impleme
         drive = new MecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
         claws = new DualServos(config.ls, config.rs, 0.6, 0.9, 0.7, 0.4);
         setOpModes(StartingPositions.use());
-        addSubsystems(arm, drive, claws);
     }
 
     // Set which direction the robot will strafe at the backdrop. Overridden in the right park variant.
@@ -68,7 +69,7 @@ public class PbodyBackdropPlacerLeftPark extends AutonomousBunyipsOpMode impleme
         Reference<TrajectorySequence> blueLeft = Reference.empty();
         Reference<TrajectorySequence> blueRight = Reference.empty();
         TrajectorySequence redLeft = makeTrajectory()
-                .forward(1.8 * FIELD_TILE_SCALE, FieldTiles)
+                .forward(1.7 * FIELD_TILE_SCALE, FieldTiles)
                 .strafeRight(2.8 * FIELD_TILE_SCALE, FieldTiles)
                 .turn(-Math.PI / 2)
                 .strafeRight(1 * FIELD_TILE_SCALE, FieldTile)
@@ -111,7 +112,7 @@ public class PbodyBackdropPlacerLeftPark extends AutonomousBunyipsOpMode impleme
         addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
-                afterPixelDropDriveAction(makeTrajectory()),
+                afterPixelDropDriveAction(makeTrajectory().back(10)),
                 arm.deltaTask(2600)
         ).withName("Stow and Move to Park"));
 

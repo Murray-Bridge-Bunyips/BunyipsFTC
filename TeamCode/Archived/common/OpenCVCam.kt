@@ -50,9 +50,9 @@ class OpenCVCam(
 
     private fun errorHandler(code: Int? = null) {
         if (code != null) {
-            opMode.addTelemetry("An error occurred in initialising OpenCV. Error code: $code")
+            opMode.telemetry.add("An error occurred in initialising OpenCV. Error code: $code")
         } else {
-            opMode.addTelemetry("An error occurred in initialising OpenCV.")
+            opMode.telemetry.add("An error occurred in initialising OpenCV.")
         }
         instance = null
     }

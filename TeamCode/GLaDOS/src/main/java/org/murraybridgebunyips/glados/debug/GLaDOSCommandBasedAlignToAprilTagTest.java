@@ -1,5 +1,7 @@
 package org.murraybridgebunyips.glados.debug;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -40,15 +42,14 @@ public class GLaDOSCommandBasedAlignToAprilTagTest extends CommandBasedBunyipsOp
         vision.init(aprilTag);
         vision.start(aprilTag);
         vision.startPreview();
-        addSubsystems(drive, vision);
     }
 
     @Override
     protected void assignCommands() {
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
         driver().whenPressed(Controls.LEFT_BUMPER)
-                .run(new MoveToAprilTagTask<>(gamepad1, drive, aprilTag, -1))
-                .finishingWhen(() -> !gamepad1.left_bumper);
+                .run(new MoveToAprilTagTask(gamepad1, drive, aprilTag, 2).withDesiredDistance(Inches.of(10)))
+                .finishingIf(() -> !gamepad1.left_bumper);
     }
 }
 

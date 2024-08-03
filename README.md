@@ -1,24 +1,35 @@
-## BunyipsFTC
+# BunyipsFTC
 [![View TeamCode - Stable](https://img.shields.io/static/v1?label=View+TeamCode&message=Stable&color=2ea44f)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/stable/TeamCode/)
 [![CodeFactor](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc/badge)](https://www.codefactor.io/repository/github/murray-bridge-bunyips/bunyipsftc)<br>
 [![View TeamCode - Development](https://img.shields.io/static/v1?label=View+TeamCode&message=Development&color=informational)](https://github.com/Murray-Bridge-Bunyips/BunyipsFTC/tree/devid-heath/TeamCode/)<br>
 [![View TeamCode - Archived](https://img.shields.io/static/v1?label=View+TeamCode&message=Archived&color=inactive)](TeamCode/Archived)<br><br>
-This repository contains all maintained code for our FTC robots constructed after 2021 using Java and Kotlin.  
-We also use **[BunyipsLib](https://github.com/Murray-Bridge-Bunyips/BunyipsLib)**, our own hybrid FTC library we use to program robots with efficiency and ease.
+This repository contains all code for our FTC robots constructed after 2021 using Java and Kotlin.  
+>[!NOTE]
+> TeamCode modules here utilise **[BunyipsLib](https://github.com/Murray-Bridge-Bunyips/BunyipsLib)**, our own hybrid FTC library we use to program robots with efficiency and ease. Read more about BunyipsLib [here](https://github.com/Murray-Bridge-Bunyips/BunyipsLib).
 
-	MAINTAINED ROBOT CODE in this repository (under TeamCode/*):
-            ⭐ GLaDOS: Mecanum-drive CenterStage robot, 2023-2024, BUNYIPS 15215
-            ⭐ WHEATLEY: Mecanum-drive CenterStage robot, 2023-2024, MULYAWONKS 22407
-            P-BODY: Mecanum-drive CenterStage robot, Backup robot for BUNYIPS 15215
-	     	JERRY: Mecanum-drive PowerPlay robot, 2022-2023, BUNYIPS 15215
+## Maintained robots in this repo
+###### Maintained robots are modules that are attributed to an existing and usable robot controller. These robots are using the latest versions of BunyipsLib.<br>These modules can be found under TeamCode/
+| Robot Name | Description | Season | Team |
+| --- | --- | --- | --- |
+| GLaDOS    | Mecanum-drive with odometry pods and vision capabilities | CENTERSTAGE (2023-2024) | 15215 Murray Bridge Bunyips |
+| Wheatley  | Mecanum-drive with 3D printed components | CENTERSTAGE (2023-2024) | 22407 Murray Bridge Mulyawonks |
+| P-body    | Mecanum-drive Core Hex backup robot | CENTERSTAGE (2023-2024) | 99999 (Off Season Demo) Murray Cods |
+| Jerry     | goBILDA Mecanum-drive with previous vision capabilities and basic odometry pods | POWERPLAY (2022-2023) | 15215 Murray Bridge Bunyips |
 
-	Unmaintained robot code in this repository (under TeamCode/Archived/):
-            DINOMIGHTY: Mecanum-drive PowerPlay robot, 2022-2023, MULYAWONKS 22407
-		BERTIE: Mecanum-drive FreightFrenzy robot, 2021-2022, BUNYIPS 15215
-        	LISA: Two-wheel-drive minibot for high-speed performance
-	
-	Robot code not in this repository (written in Blocks by other members of the club):
-		ATLAS: Tank-drive CenterStage robot, 2023-2024, LIZARDS 24736
+## Unmaintained robots in this repo
+###### Unmaintained robots used to be attributed to a robot controller but have been decommissioned. They may be using outdated/deprecated versions of BunyipsLib.<br>These modules can be found under TeamCode/Archived/
+| Robot Name | Description | Season | Team |
+| --- | --- | --- | --- |
+| Dinomighty    | Mecanum-drive with pivot arm | POWERPLAY (2022-2023) | 22407 Murray Bridge Mulyawonks |
+| Bertie  | Mecanum-drive bucket-lift and spinner collector bot | FREIGHT FRENZY (2021-2022) | 15215 Murray Bridge Bunyips |
+| Lisa    | Differential drive high-speed minibot for testing | No Season | No Team |
+
+## Unmanaged robots
+###### Unmanaged robots are current MBHS Student Robotics Club robots not managed by the primary software maintainers. These robots are usually written with Blocks.
+| Robot Name | Description | Season | Team |
+| --- | --- | --- | --- |
+| Atlas    | Differential drive Core Hex simple bot | CENTERSTAGE (2023-2024) | 24736 Murray Bridge Lizards |
+
 ___
 
 ## NOTICE
@@ -81,6 +92,30 @@ Samples Folder: &nbsp;&nbsp; [/FtcRobotController/src/main/java/org/firstinspire
 The readme.md file located in the [/TeamCode/src/main/java/org/firstinspires/ftc/teamcode](TeamCode/src/main/java/org/firstinspires/ftc/teamcode) folder contains an explanation of the sample naming convention, and instructions on how to copy them to your own project space.
 
 # Release Information
+
+## Version 9.2 (20240701-085519)
+
+### Important Notes
+* Java classes and Blocks for TensorFlow Object Detection have been deprecated and will be removed in Version 10.0.
+* The samples that use TensorFlow Object Detection have been removed.
+
+### Enhancements
+* Adds explanatory text to failed items on the inspection activities.  To view the explanatory text tap the red warning icon for a failed item.
+* In the Blocks editor: added a new kind of variable set block that sets the variable and also returns the new value.
+* Changes the way that camera controls behave for a SwitchableCamera. Now, each method (such as getExposure, getMinExposure, getMaxExposure, setExposure for ExposureControl) acts on the currently active camera.
+* Adds support for the REV USB PS4 Compatible Gamepad (REV-31-2983)
+* Adds ConceptAprilTagMultiPortal OpMode
+* Adds support for OctoQuad Quadrature Encoder & Pulse Width Interface Module
+* Adds the ExportAprilTagLibraryToBlocks annotation that indicates that a static method that returns an AprilTagLibrary is exported to the Blocks programming environment. The corresponding block will appear in the Blocks toolbox along with the built-in tag libraries.
+* Adds Blocks OpMode ConceptAprilTagOptimizeExposure.
+* Adds support for the SparkFun Optical Tracking Odometry sensor.
+
+### Bug Fixes
+* Fixes https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/942 where visionPortal.close() can cause an IndexOutOfBoundsError.
+* Fixes a bug in the blocks editor where collapsed function blocks show a warning "Collapsed blocks contain warnings." when the Blocks OpMode is reopened.
+* Fixes a bug where the blocks editor wouldn't warn you that you have unsaved changes when you try to leave. This bug was introduced due to a behavior change in Chrome 119.
+* [Issue #764](https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/764) - Get gain control returns a null pointer for a switchable camera
+* Fixes a bug where the correct deadzone for certain gamepads was not applied when Advanced Gamepad Features was enabled
 
 ## Version 9.1 (20240215-115542)
 

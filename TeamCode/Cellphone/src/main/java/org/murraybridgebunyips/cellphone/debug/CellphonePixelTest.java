@@ -29,6 +29,6 @@ public class CellphonePixelTest extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        addTelemetry(visionB.getAllData());
+        telemetry.add(visionB.getAllData());
     }
 }

@@ -86,7 +86,7 @@ class JerryConeParkAutonomous : BunyipsOpMode() {
         // Determine our final task based on the parking position from the camera
         // If on center or NONE, do nothing and just stay in the center
         val position = tagtask?.position
-        addTelemetry("ParkingPosition set to: $position")
+        telemetry.add("ParkingPosition set to: $position")
 
         // Determine route back to parking position based on the origin vector
         originVector.vector.flip()

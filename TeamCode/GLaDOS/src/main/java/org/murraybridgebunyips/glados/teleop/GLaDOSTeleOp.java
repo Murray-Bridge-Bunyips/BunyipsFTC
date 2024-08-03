@@ -11,7 +11,6 @@ import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
-import org.murraybridgebunyips.bunyipslib.external.Mathf;
 import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
@@ -32,68 +31,76 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 @Config
 @TeleOp(name = "TeleOp")
 public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
-    /**
-     * The amount to raise the arm on init.
-     */
-    public static int ARM_DELTA_POSITION_ON_INIT = 200;
-    private final GLaDOSConfigCore config = new GLaDOSConfigCore();
-    private MecanumDrive drive;
-    private HoldableActuator arm;
-    private DualServos claws;
-    private Cannon cannon;
-    private Vision vision;
-    private MultiColourThreshold pixels;
+    protected final GLaDOSConfigCore config = new GLaDOSConfigCore();
+    protected MecanumDrive drive;
+    protected HoldableActuator arm;
+    protected DualServos claws;
+    protected Cannon cannon;
+    protected HoldableActuator suspender;
+    protected Vision vision;
+    protected MultiColourThreshold pixels;
 
     @Override
     protected void onInitialise() {
         config.init();
-        vision = new Vision(config.webcam);
         drive = new DualDeadwheelMecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
                 hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelDeadwheel, config.perpendicularDeadwheel
-        );
+        ).withName("Drive");
+        vision = new Vision(config.webcam)
+                .withName("Forward Camera");
         arm = new HoldableActuator(config.arm)
-                .withHomingOvercurrent(Amps.of(1), Seconds.of(0.5));
+                .withPowerClamps(-0.3, 0.3)
+                .withHomingOvercurrent(Amps.of(1), Seconds.of(0.5))
+                .withName("Pixel Arm");
         cannon = new Cannon(config.launcher);
-        claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
+        suspender = new HoldableActuator(config.suspenderActuator)
+                .withBottomSwitch(config.bottomLimit)
+                .withName("Suspender");
+        claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0)
+                .withName("Pixel Claws");
 /*giulio*/
 
-        gamepad2.set(Controls.Analog.LEFT_STICK_Y, (v) ->
-            Mathf.clamp(Mathf.moveTowards(gamepad2.lsy, v, v == 0.0 ? 0.0002f : 0.00008f), -0.5f, 0.5f)
-        );
-        gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
+        telemetry.add("Robot is assumed to be facing angle: % deg", Math.toDegrees(drive.getPoseEstimate().getHeading()));
 
+//        RampingSupplier armRamping = new RampingSupplier(() -> gamepad2.lsy);
+//        gamepad2.set(Controls.Analog.LEFT_STICK_Y, armRamping::get);
+        gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
         pixels = new MultiColourThreshold(Pixels.createProcessors());
+
+        configureVision();
+    }
+
+    protected void configureVision() {
         vision.init(pixels);
         vision.start(pixels);
-        vision.startPreview();
-
-        addSubsystems(drive, cannon, claws, arm);
-        setInitTask(arm.deltaTask(ARM_DELTA_POSITION_ON_INIT));
     }
 
     @Override
     protected void assignCommands() {
-        drive.setDefaultTask(new HolonomicDriveTask<>(gamepad1, drive, () -> false));
+        drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
+        driver().whenPressed(Controls.RIGHT_BUMPER)
+                .run(new AlignToContourTask(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsx, drive, pixels, new PIDController(0.67, 0.25, 0)))
+                .finishingIf(() -> !gamepad1.rb);
         driver().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(cannon.fireTask());
         driver().whenPressed(Controls.BACK)
                 /*print("Hello, World!")
                         class MY=yclass             - lachlan paul*/
                 .run(cannon.resetTask());
-        driver().whenPressed(Controls.RIGHT_BUMPER)
-                .run(new AlignToContourTask<>(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsx, drive, pixels, new PIDController(0.67, 0.25, 0)))
-                .finishingWhen(() -> !gamepad1.rb);
+
+        suspender.setDefaultTask(suspender.controlTask(() -> -gamepad2.rsy));
 
         operator().whenPressed(Controls.B)
                 .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
         operator().whenPressed(Controls.X)
                 .run(claws.toggleTask(DualServos.ServoSide.LEFT));
+
         operator().whenPressed(Controls.A)
-                .run(arm.homeTask())
-                .finishingWhen(() -> gamepad2.lsy != 0.0f);
+                .run(suspender.homeTask())
+                .finishingIf(() -> gamepad2.rsy != 0.0f);
         arm.setDefaultTask(arm.controlTask(() -> gamepad2.lsy));
     }
 }
