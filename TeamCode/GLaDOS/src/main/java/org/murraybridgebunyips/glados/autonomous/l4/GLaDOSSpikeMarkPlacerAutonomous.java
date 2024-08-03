@@ -21,6 +21,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
+import org.murraybridgebunyips.bunyipslib.tasks.RepeatTask;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.ColourThreshold;
@@ -108,11 +109,18 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
                     .withName("Rotate to Right Mark");
                 break;
         }
-        align.back(10)
+        align.addTask();
+
+        addTask(claws.openTask(DualServos.ServoSide.LEFT)
+                .withName("Open Left Claw"));
+
+        makeTrajectory().back(10)
             .addTask();
 
-        addTask(claws.openTask(DualServos.ServoSide.LEFT).withName("Open Left Claw"));
-        addTask(arm.deltaTask(-ARM_DELTA).withName("Retract Arm"));
+        addTask(arm.deltaTask(-ARM_DELTA)
+                .withName("Retract Arm"));
+
+        addTask(new RepeatTask(claws.closeTask(DualServos.ServoSide.RIGHT)));
     }
 
     @Override

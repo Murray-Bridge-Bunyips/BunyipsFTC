@@ -36,19 +36,24 @@ public class PbodyTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        operator().whenPressed(Controls.Y)
-                .run(claws.closeTask(DualServos.ServoSide.RIGHT));
-        operator().whenPressed(Controls.B)
-                .run(claws.openTask(DualServos.ServoSide.RIGHT));
+//        operator().whenPressed(Controls.Y)
+//                .run(claws.closeTask(DualServos.ServoSide.RIGHT));
+//        operator().whenPressed(Controls.B)
+//                .run(claws.openTask(DualServos.ServoSide.RIGHT));
+//
+//        operator().whenPressed(Controls.A)
+//                .run(claws.closeTask(DualServos.ServoSide.LEFT));
+//        operator().whenPressed(Controls.X)
+//                .run(claws.openTask(DualServos.ServoSide.LEFT));
 
-        operator().whenPressed(Controls.A)
-                .run(claws.closeTask(DualServos.ServoSide.LEFT));
         operator().whenPressed(Controls.X)
-                .run(claws.openTask(DualServos.ServoSide.LEFT));
+                .run(claws.toggleTask(DualServos.ServoSide.LEFT));
+        operator().whenPressed(Controls.B)
+                .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
 
-        driver().whenPressed(Controls.Y)
+        driver().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(plane.fireTask());
-        driver().whenPressed(Controls.B)
+        driver().whenPressed(Controls.BACK)
                 .run(plane.resetTask());
 
         arm.setDefaultTask(arm.controlTask(() -> -gamepad2.lsy));
