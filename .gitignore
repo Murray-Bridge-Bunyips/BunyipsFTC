@@ -40,7 +40,6 @@ proguard/
 captures/
 
 # IntelliJ
-*.iml
 .idea/copilot/
 .idea/appInsightsSettings.xml
 .idea/discord.xml
