@@ -8,7 +8,6 @@ import org.murraybridgebunyips.bunyipslib.Threads
 import org.murraybridgebunyips.bunyipslib.UserSelection
 import org.murraybridgebunyips.bunyipslib.drive.CartesianFieldCentricMecanumDrive
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
-import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.components.JerryLift
 
@@ -28,7 +27,6 @@ import org.murraybridgebunyips.jerry.components.JerryLift
 class JerryTeleOp : BunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: CartesianMecanumDrive? = null
-    private var imu: IMUOp? = null
     private var lift: JerryLift? = null
     private val selector: UserSelection<String> =
         UserSelection({ initDrive() }, "POV", "FIELD-CENTRIC")
@@ -37,9 +35,6 @@ class JerryTeleOp : BunyipsOpMode() {
         // Configure drive and lift subsystems
         config.init()
         Threads.start(selector)
-        if (NullSafety.assertNotNull(config.imu)) {
-            imu = IMUOp(config.imu!!)
-        }
         drive?.setToBrake()
         if (NullSafety.assertNotNull(config.armComponents)) {
             lift = JerryLift(
@@ -54,13 +49,13 @@ class JerryTeleOp : BunyipsOpMode() {
 
     private fun initDrive() {
         if (NullSafety.assertNotNull(config.driveMotors)) {
-            drive = if (selector.result == "FIELD-CENTRIC" || imu == null) {
+            drive = if (selector.result == "FIELD-CENTRIC" || config.imu == null) {
                 CartesianFieldCentricMecanumDrive(
                     config.fl!!,
                     config.fr!!,
                     config.bl!!,
                     config.br!!,
-                    imu!!,
+                    config.imu!!,
                     true,
                     Direction.FORWARD
                 )
