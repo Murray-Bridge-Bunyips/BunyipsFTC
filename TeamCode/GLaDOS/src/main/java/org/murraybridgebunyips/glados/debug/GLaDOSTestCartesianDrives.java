@@ -40,7 +40,7 @@ public class GLaDOSTestCartesianDrives extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-        drive.setSpeedUsingController(gamepad1.lsx, gamepad1.lsy, gamepad1.lsx);
+        drive.setSpeedUsingController(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x);
         drive.update();
     }
 }

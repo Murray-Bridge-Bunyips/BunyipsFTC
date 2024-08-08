@@ -1,5 +1,7 @@
 package org.murraybridgebunyips.glados.debug;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -31,6 +33,10 @@ public class GLaDOSTestIMU extends BunyipsOpMode {
         imu.setYawDomain(YAW_DOMAIN);
         imu.update();
 
-        telemetry.add(imu.yaw);
+        telemetry.add(imu.yaw.in(Degrees));
+        config.backLeft.setPower(0.5);
+        config.frontLeft.setPower(0.5);
+        config.backRight.setPower(-0.5);
+        config.frontRight.setPower(-0.5);
     }
 }
