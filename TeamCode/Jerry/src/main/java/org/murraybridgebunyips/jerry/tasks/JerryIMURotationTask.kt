@@ -4,6 +4,7 @@ import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Measure
 import org.murraybridgebunyips.bunyipslib.external.units.Time
+import org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees
 import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 
@@ -28,6 +29,7 @@ class JerryIMURotationTask(
     var direction: Direction.Rotation = Direction.Rotation.CLOCKWISE
 
     override fun init() {
+        imu?.yawDomain = IMUOp.YawDomain.UNSIGNED
         imu?.update()
 
         // Find out which way we need to turn based on the information provided
@@ -49,13 +51,13 @@ class JerryIMURotationTask(
 
     // Stop turning when we reach the target angle
     override fun isTaskFinished(): Boolean {
-        val heading = imu?.heading
+        val heading = imu?.yaw
         return if (direction == Direction.Rotation.ANTICLOCKWISE) {
             // Angle will be decreasing
-            heading != null && heading <= angle
+            heading != null && heading.inUnit(Degrees) <= angle
         } else {
             // Angle will be increasing
-            heading != null && heading >= angle
+            heading != null && heading.inUnit(Degrees) >= angle
         }
     }
 
@@ -65,5 +67,6 @@ class JerryIMURotationTask(
 
     override fun onFinish() {
         drive?.stop()
+        imu?.yawDomain = IMUOp.YawDomain.SIGNED
     }
 }

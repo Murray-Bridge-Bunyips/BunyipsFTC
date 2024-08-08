@@ -167,7 +167,7 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setGearRatio(1)
                 .setWheelRadius(Millimeters.of(50).divide(2))
                 .setXMultiplier(100.0 / 134.5)
-                .setYMultiplier(70.0 / 98.0)
+                .setYMultiplier(100.0 / 134.5)
                 .setParallelX(Inches.of(2))
                 .setParallelY(Inches.zero())
                 .setPerpendicularX(Inches.of(6.5))

@@ -63,19 +63,20 @@ class JerryPrecisionDriveTask(
         return false
     }
 
-    override fun init() {
+//    override fun init() {
         // Capture vectors and start tracking
-        imu?.startCapture()
+//        imu?.startCapture()
         // Deadwheels removed
 //        x?.track()
 //        y?.track()
-    }
+//    }
 
     override fun periodic() {
         drive?.setSpeedXYR(
             if (direction == Direction.LEFT) -power else if (direction == Direction.RIGHT) power else 0.0,
             if (direction == Direction.FORWARD) power else if (direction == Direction.BACKWARD) power else 0.0,
-            imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0
+            0.0
+//            imu?.getRPrecisionSpeed(0.0, tolerance) ?: 0.0
         )
 
         drive?.update()
@@ -92,15 +93,15 @@ class JerryPrecisionDriveTask(
 //            }/$distanceMM"
 //        )
 
-        opMode.telemetry.add(
-            "Axis correction: ${
-                String.format("%.2f", imu?.capture?.minus(tolerance))
-            } <= ${
-                String.format("%.2f", imu?.heading)
-            } <= ${
-                String.format("%.2f", imu?.capture?.plus(tolerance))
-            }"
-        )
+//        opMode.telemetry.add(
+//            "Axis correction: ${
+//                String.format("%.2f", imu?.capture?.minus(tolerance))
+//            } <= ${
+//                String.format("%.2f", imu?.heading)
+//            } <= ${
+//                String.format("%.2f", imu?.capture?.plus(tolerance))
+//            }"
+//        )
 
     }
 

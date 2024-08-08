@@ -16,7 +16,7 @@ class JerryIMUDebug : BunyipsOpMode() {
     override fun onInit() {
         config.init()
         imu = IMUOp(config.imu!!)
-        imu?.startCapture()
+//        imu?.startCapture()
     }
 
     override fun activeLoop() {
@@ -25,7 +25,7 @@ class JerryIMUDebug : BunyipsOpMode() {
 //                AxesReference.INTRINSIC, AxesOrder.XYZ, AngleUnit.DEGREES
 //            )?.thirdAngle.toString()
 //        )
-        telemetry.add(imu?.heading.toString())
+//        telemetry.add(imu?.heading.toString())
         imu?.update()
     }
 }
