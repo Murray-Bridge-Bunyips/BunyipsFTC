@@ -7,6 +7,7 @@ import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.subsystems.BlinkinLights;
 import org.murraybridgebunyips.bunyipslib.subsystems.Cannon;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
@@ -46,6 +47,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     private DualServos claws;
 //    private Vision vision;
 //    private MultiColourThreshold pixels;
+    private BlinkinLights lights;
 
     @Override
     protected void onInitialise() {
@@ -69,6 +71,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
 //        vision.init(pixels);
 //        vision.start(pixels);
 //        vision.startPreview();
+
+        lights = new BlinkinLights(config.lights, RevBlinkinLedDriver.BlinkinPattern.RAINBOW_FOREST_PALETTE);
 
         gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
     }
@@ -114,9 +118,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     protected void periodic() {
         // LED Management
         if (config.bottomLimit.isPressed()) { // Make an && for the top limit when it's reinstated
-            config.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
-        } else {
-            config.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);  // The default
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
         }
 
         // Some drivers have noted that they sometimes cannot tell whether a claw is open or closed.
