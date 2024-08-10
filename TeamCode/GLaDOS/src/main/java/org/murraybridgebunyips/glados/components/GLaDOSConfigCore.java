@@ -22,7 +22,7 @@ import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.TwoWheelTrackingLocalizerCoefficients;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.TwoWheelLocalizer;
 import org.murraybridgebunyips.bunyipslib.roadrunner.util.Deadwheel;
 
 /**
@@ -95,7 +95,7 @@ public class GLaDOSConfigCore extends RobotConfig {
     /**
      * Dual deadwheel intrinsics
      */
-    public TwoWheelTrackingLocalizerCoefficients localizerCoefficients;
+    public TwoWheelLocalizer.Coefficients localizerCoefficients;
     /**
      * Mecanum coefficients
      */
@@ -162,7 +162,7 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setKA(0.0015)
                 .build();
 
-        localizerCoefficients = new TwoWheelTrackingLocalizerCoefficients.Builder()
+        localizerCoefficients = new TwoWheelLocalizer.Coefficients.Builder()
                 .setTicksPerRev(1200)
                 .setGearRatio(1)
                 .setWheelRadius(Millimeters.of(50).divide(2))
