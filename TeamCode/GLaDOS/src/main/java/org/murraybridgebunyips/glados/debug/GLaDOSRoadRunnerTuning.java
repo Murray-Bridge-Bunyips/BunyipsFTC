@@ -1,24 +1,28 @@
 package org.murraybridgebunyips.glados.debug;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import androidx.annotation.NonNull;
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.TwoWheelLocalizer;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.LocalizationTest;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.RoadRunnerTuning;
 import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 
 /**
  * Tuning wrapper for RoadRunner.
  */
-@Autonomous(name = "RoadRunner Tuning")
+@TeleOp(name = "RoadRunner Tuning")
 //@Disabled
-public class GLaDOSRoadRunnerTuning extends LocalizationTest {
+public class GLaDOSRoadRunnerTuning extends RoadRunnerTuning {
+    @NonNull
     @Override
-    public void runOpMode() {
-        GLaDOSConfigCore ROBOT_CONFIG = new GLaDOSConfigCore();
-        ROBOT_CONFIG.init(this);
-        drive = new MecanumRoadRunnerDrive(null, ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.frontLeft, ROBOT_CONFIG.frontRight, ROBOT_CONFIG.backLeft, ROBOT_CONFIG.backRight);
-        drive.setLocalizer(new TwoWheelLocalizer(ROBOT_CONFIG.localizerCoefficients, ROBOT_CONFIG.parallelDeadwheel, ROBOT_CONFIG.perpendicularDeadwheel, drive));
-        super.runOpMode();
+    protected RoadRunnerDrive getBaseRoadRunnerDrive() {
+        GLaDOSConfigCore config = new GLaDOSConfigCore();
+        config.init(this);
+        MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(null, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight);
+        drive.setLocalizer(new TwoWheelLocalizer(config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel, drive));
+        return drive;
     }
 }

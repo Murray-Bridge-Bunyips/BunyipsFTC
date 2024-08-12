@@ -1,10 +1,13 @@
 package org.murraybridgebunyips.pbody.debug;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.LocalizationTest;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.RoadRunnerTuning;
 import org.murraybridgebunyips.pbody.components.PbodyConfig;
 
 /**
@@ -12,13 +15,13 @@ import org.murraybridgebunyips.pbody.components.PbodyConfig;
  */
 @TeleOp(name = "RRTuner")
 @Disabled
-public class PbodyRoadRunnerTuner extends LocalizationTest {
+public class PbodyRoadRunnerTuner extends RoadRunnerTuning {
     private final PbodyConfig config = new PbodyConfig();
 
+    @NonNull
     @Override
-    public void runOpMode() {
+    public RoadRunnerDrive getBaseRoadRunnerDrive() {
         config.init(this);
-        drive = new MecanumRoadRunnerDrive(null, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
-        super.runOpMode();
+        return new MecanumRoadRunnerDrive(null, config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
     }
 }

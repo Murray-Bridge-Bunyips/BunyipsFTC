@@ -1,10 +1,13 @@
 package org.murraybridgebunyips.wheatley.debug;
 
+import androidx.annotation.NonNull;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.AutomaticFeedforwardTuner;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.RoadRunnerTuning;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -12,12 +15,12 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  */
 @Autonomous(name = "RoadRunner Test")
 @Disabled
-public class WheatleyRoadRunnerTuning extends AutomaticFeedforwardTuner {
+public class WheatleyRoadRunnerTuning extends RoadRunnerTuning {
+    @NonNull
     @Override
-    public void runOpMode() {
+    public RoadRunnerDrive getBaseRoadRunnerDrive() {
         WheatleyConfig ROBOT_CONFIG = new WheatleyConfig();
         ROBOT_CONFIG.init(this);
-        drive = new MecanumRoadRunnerDrive(null, ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.fl, ROBOT_CONFIG.fr, ROBOT_CONFIG.bl, ROBOT_CONFIG.br);
-        super.runOpMode();
+        return new MecanumRoadRunnerDrive(null, ROBOT_CONFIG.driveConstants, ROBOT_CONFIG.mecanumCoefficients, hardwareMap.voltageSensor, ROBOT_CONFIG.imu, ROBOT_CONFIG.fl, ROBOT_CONFIG.fr, ROBOT_CONFIG.bl, ROBOT_CONFIG.br);
     }
 }
