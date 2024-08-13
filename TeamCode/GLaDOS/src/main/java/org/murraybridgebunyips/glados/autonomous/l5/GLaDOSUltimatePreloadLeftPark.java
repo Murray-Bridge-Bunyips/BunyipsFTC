@@ -146,7 +146,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         // Approach Spike Marks, lazy loaded as this is can only be calculated at runtime
         addTask(new DynamicTask(
                 () -> new ParallelTaskGroup(
-                        arm.deltaTask(ARM_DELTA_GROUND).withName("Extend Arm").withTimeout(Seconds.of(4)),
+                        arm.tasks.delta(ARM_DELTA_GROUND).withName("Extend Arm").withTimeout(Seconds.of(4)),
                         makeTrajectory(startingPosition.getPose())
                                 .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INIT_FWD_TILES : ANGLED_INIT_FWD_TILES, FieldTile)
                                 .withName("Move Forward to Spike Marks")
@@ -170,7 +170,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         }));
 
         // Place Purple Pixel (loaded left)
-        addTask(claws.openTask(DualServos.ServoSide.LEFT).withName("Open Left Claw"));
+        addTask(claws.tasks.openLeft().withName("Open Left Claw"));
         addTask(new DynamicTask(() -> {
             boolean armWillHitTrussOnRed = spikeMark == Direction.RIGHT && startingPosition == StartingPositions.STARTING_RED_LEFT;
             boolean armWillHitTrussOnBlue = spikeMark == Direction.LEFT && startingPosition == StartingPositions.STARTING_BLUE_RIGHT;
@@ -182,7 +182,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
             }
             return new RunTask();
         }));
-        addTask(arm.deltaTask(-ARM_DELTA_GROUND).withName("Retract Arm").withTimeout(Seconds.of(4)));
+        addTask(arm.tasks.delta(-ARM_DELTA_GROUND).withName("Retract Arm").withTimeout(Seconds.of(4)));
 
         addTask(new DynamicTask(() -> {
             double turn = spikeMark == Direction.FORWARD ? 0 : spikeMark == Direction.LEFT ? -M_LEFT_ALIGN_TURN_DEG : -M_RIGHT_ALIGN_TURN_DEG;
@@ -263,8 +263,8 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
         ));
 
         // Place pixels and park to the left of the backdrop
-        addTask(arm.deltaTask(ARM_DELTA_BACKDROP).withName("Deploy Arm").withTimeout(Seconds.of(4)));
-        addTask(claws.openTask(DualServos.ServoSide.RIGHT).withName("Drop Pixel"));
+        addTask(arm.tasks.delta(ARM_DELTA_BACKDROP).withName("Deploy Arm").withTimeout(Seconds.of(4)));
+        addTask(claws.tasks.openRight().withName("Drop Pixel"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
 
         // Park
@@ -274,8 +274,8 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
                         .back(7)
                         .strafeLeft(parkDistance, FieldTiles)
                         .buildTask(),
-                claws.closeTask(DualServos.ServoSide.BOTH),
-                arm.deltaTask(-ARM_DELTA_BACKDROP).withTimeout(Seconds.of(4))
+                claws.tasks.closeBoth(),
+                arm.tasks.delta(-ARM_DELTA_BACKDROP).withTimeout(Seconds.of(4))
         ).withName("Stow and Move to Park"));
 
         makeTrajectory()

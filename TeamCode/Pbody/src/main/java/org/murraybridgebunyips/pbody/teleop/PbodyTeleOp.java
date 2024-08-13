@@ -47,16 +47,16 @@ public class PbodyTeleOp extends CommandBasedBunyipsOpMode {
 //                .run(claws.openTask(DualServos.ServoSide.LEFT));
 
         operator().whenPressed(Controls.X)
-                .run(claws.toggleTask(DualServos.ServoSide.LEFT));
+                .run(claws.tasks.toggleLeft());
         operator().whenPressed(Controls.B)
-                .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
+                .run(claws.tasks.toggleRight());
 
         driver().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
-                .run(plane.fireTask());
+                .run(plane.tasks.fire());
         driver().whenPressed(Controls.BACK)
-                .run(plane.resetTask());
+                .run(plane.tasks.reset());
 
-        arm.setDefaultTask(arm.controlTask(() -> -gamepad2.lsy));
+        arm.setDefaultTask(arm.tasks.control(() -> -gamepad2.lsy));
         drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
     }
 }

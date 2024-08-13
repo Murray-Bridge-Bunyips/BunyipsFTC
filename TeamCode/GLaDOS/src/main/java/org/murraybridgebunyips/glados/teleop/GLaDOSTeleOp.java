@@ -85,22 +85,22 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 .run(new AlignToContourTask(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsx, drive, pixels, new PIDController(0.67, 0.25, 0)))
                 .finishingIf(() -> !gamepad1.rb);
         driver().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
-                .run(cannon.fireTask());
+                .run(cannon.tasks.fire());
         driver().whenPressed(Controls.BACK)
                 /*print("Hello, World!")
                         class MY=yclass             - lachlan paul*/
-                .run(cannon.resetTask());
+                .run(cannon.tasks.fire());
 
-        suspender.setDefaultTask(suspender.controlTask(() -> -gamepad2.rsy));
+        suspender.setDefaultTask(suspender.tasks.control(() -> -gamepad2.rsy));
 
         operator().whenPressed(Controls.B)
-                .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
+                .run(claws.tasks.toggleRight());
         operator().whenPressed(Controls.X)
-                .run(claws.toggleTask(DualServos.ServoSide.LEFT));
+                .run(claws.tasks.toggleLeft());
 
         operator().whenPressed(Controls.A)
-                .run(suspender.homeTask())
+                .run(suspender.tasks.home())
                 .finishingIf(() -> gamepad2.rsy != 0.0f);
-        arm.setDefaultTask(arm.controlTask(() -> gamepad2.lsy));
+        arm.setDefaultTask(arm.tasks.control(() -> gamepad2.lsy));
     }
 }

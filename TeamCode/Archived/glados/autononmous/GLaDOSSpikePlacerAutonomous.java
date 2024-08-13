@@ -102,7 +102,7 @@ public class GLaDOSSpikePlacerAutonomous extends RoadRunnerAutonomousBunyipsOpMo
         }
 
         addTask(clawRotator.setDegreesTask(10));
-        addTask(linearActuator.gotoTask(100));
+        addTask(linearActuator.tasks.goTo(100));
         addTask(claws.openServoTask(DualServos.ServoSide.LEFT));
     }
 

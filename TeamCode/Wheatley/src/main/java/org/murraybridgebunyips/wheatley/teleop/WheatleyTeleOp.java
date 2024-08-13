@@ -76,27 +76,27 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     @Override
     protected void assignCommands() {
         driver().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
-                .run(cannon.fireTask());
+                .run(cannon.tasks.fire());
         operator().whenPressed(Controls.BACK)
-                .run(cannon.resetTask());
+                .run(cannon.tasks.reset());
 
         operator().whenPressed(Controls.X)
-                .run(claws.toggleTask(DualServos.ServoSide.LEFT));
+                .run(claws.tasks.toggleLeft());
         operator().whenPressed(Controls.B)
-                .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
+                .run(claws.tasks.toggleRight());
 
         operator().whenPressed(Controls.DPAD_UP)
 //                .run(rotator.gotoTimeTask(Degrees.of(60), Seconds.of(2)));
-                .run(rotator.gotoTask(100));
+                .run(rotator.tasks.goTo(100));
         operator().whenPressed(Controls.DPAD_DOWN)
-                .run(rotator.homeTask());
+                .run(rotator.tasks.home());
 
 //        driver().whenPressed(Controls.RIGHT_BUMPER)
 //                .run(new AlignToContourTask<>(gamepad1, drive, pixels, new PIDController(0.67, 0.25, 0.0)))
 //                .finishingIf(() -> !gamepad1.right_bumper);
 
         operator().whenPressed(Controls.A)
-                .run(linearActuator.homeTask())
+                .run(linearActuator.tasks.home())
                 .finishingIf(() -> gamepad2.lsy != 0.0f);
 
         operator().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
@@ -105,8 +105,8 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         driver().whenPressed(Controls.Y)
                 .run(() -> config.imu.resetYaw());
 
-        linearActuator.setDefaultTask(linearActuator.controlTask(() -> -gamepad2.lsy));
-        rotator.setDefaultTask(rotator.controlTask(() -> gamepad2.rsy));
+        linearActuator.setDefaultTask(linearActuator.tasks.control(() -> -gamepad2.lsy));
+        rotator.setDefaultTask(rotator.tasks.control(() -> gamepad2.rsy));
         drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
     }
 

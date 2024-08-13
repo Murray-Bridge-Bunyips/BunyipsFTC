@@ -50,7 +50,7 @@ public class WheatleyPIDDebug extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        clawRotator.setDefaultTask(clawRotator.controlTask(() -> -gamepad2.rsy));
+        clawRotator.setDefaultTask(clawRotator.tasks.control(() -> -gamepad2.rsy));
     }
 
     @Override

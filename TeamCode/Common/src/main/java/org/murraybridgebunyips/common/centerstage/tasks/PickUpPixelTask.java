@@ -28,11 +28,11 @@ public class PickUpPixelTask extends SequentialTaskGroup {
         super(
                 // hello I am lachlan paul and this is not lacgkab oayk
                 // dont listen to him he is evil lachlan from evil lachlan world and he writes evil lachlan code in the evil lachlan ide on the evil lachlan laptop in the illegal lachlan chair
-                servos.openTask(DualServos.ServoSide.BOTH),
-                actuator.homeTask(),
-                servos.closeTask(DualServos.ServoSide.BOTH),
+                servos.tasks.openBoth(),
+                actuator.tasks.home(),
+                servos.tasks.closeBoth(),
                 new WaitTask(Seconds.of(1), false),
-                actuator.deltaTask(1500)
+                actuator.tasks.delta(1500)
         );
         // Dota, Dota, Counter-Strike
         // I didn't know what to do, so onwards I went to manually animate the wrangler

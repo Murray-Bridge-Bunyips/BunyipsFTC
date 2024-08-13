@@ -175,14 +175,14 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
                 .addTask();
 
         // Place pixels and park to the left of the backdrop
-        addTask(arm.deltaTask(ARM_DELTA_BACKDROP).withName("Deploy Arm"));
-        addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
+        addTask(arm.tasks.delta(ARM_DELTA_BACKDROP).withName("Deploy Arm"));
+        addTask(claws.tasks.openBoth().withName("Drop Pixels"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
                 afterPixelDropDriveAction(makeTrajectory(RoadRunner.unitPose(
                         new Pose2d(123, 90 * (startingPosition.isRed() ? -1 : 1), 0), Centimeters, Degrees
                 ))),
-                arm.deltaTask(-ARM_DELTA_BACKDROP)
+                arm.tasks.delta(-ARM_DELTA_BACKDROP)
         ).withName("Stow and Move to Park"));
 
         makeTrajectory()

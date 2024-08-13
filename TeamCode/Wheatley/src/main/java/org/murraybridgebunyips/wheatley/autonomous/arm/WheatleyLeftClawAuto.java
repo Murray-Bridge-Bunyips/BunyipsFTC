@@ -132,14 +132,14 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
         }
 
         // Places the pixels and then parks
-        addTask(rotator.deltaTask(ARM_PLACING_POSITION));
-        addTask(claws.openTask(DualServos.ServoSide.BOTH));
+        addTask(rotator.tasks.delta(ARM_PLACING_POSITION));
+        addTask(claws.tasks.openBoth());
         // Wait half a second so that we don't mess up the pixel's fall by moving too fast
         addTask(new WaitTask(Milliseconds.of(500)));
         addTask(new ParallelTaskGroup(
                 park(makeTrajectory()),
-                rotator.deltaTask(-ARM_PLACING_POSITION),
-                claws.closeTask(DualServos.ServoSide.BOTH)
+                rotator.tasks.delta(-ARM_PLACING_POSITION),
+                claws.tasks.closeBoth()
         ));
     }
 }

@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.Direction;
-import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
@@ -40,7 +39,7 @@ public class GLaDOSUltimatePreloadLeftPark extends GLaDOSBackdropPlacerATLeftPar
                 .buildTask();
 
         Task taskOne = new ParallelTaskGroup(
-                arm.gotoTask(ARM_DELTA_GROUND).withName("Extend Arm"),
+                arm.tasks.goTo(ARM_DELTA_GROUND).withName("Extend Arm"),
                 taskOneDrive
         ).withName("Move to Spike Marks");
 
@@ -68,8 +67,8 @@ public class GLaDOSUltimatePreloadLeftPark extends GLaDOSBackdropPlacerATLeftPar
                 throw new IllegalStateException("should never happen");
         }
 
-        Task taskThree = claws.openTask(DualServos.ServoSide.LEFT).withName("Open Left Claw");
-        Task taskFour = arm.deltaTask(-ARM_DELTA_GROUND).withName("Retract Arm");
+        Task taskThree = claws.tasks.openLeft().withName("Open Left Claw");
+        Task taskFour = arm.tasks.delta(-ARM_DELTA_GROUND).withName("Retract Arm");
 
         // Add backwards to queue
         addTaskFirst(taskFour);

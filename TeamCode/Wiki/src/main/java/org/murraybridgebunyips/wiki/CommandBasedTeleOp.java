@@ -37,11 +37,11 @@ public class CommandBasedTeleOp extends CommandBasedBunyipsOpMode {
         // Command-Based TeleOp uses tasks. Most functions, unless they're explicitly tasks, have task and non task variants,
         // allowing for use in both kinds of TeleOp.
         operator().whenPressed(Controls.X)
-                .run(claws.toggleTask(DualServos.ServoSide.LEFT));
+                .run(claws.tasks.toggleLeft());
         operator().whenPressed(Controls.B)
                 .run(claws.toggleTask(DualServos.ServoSide.RIGHT));
 
-        arm.setDefaultTask(linearActuator.controlTask(() -> -gamepad2.lsy));
+        arm.setDefaultTask(linearActuator.tasks.control(() -> -gamepad2.lsy));
         drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
     }
 }

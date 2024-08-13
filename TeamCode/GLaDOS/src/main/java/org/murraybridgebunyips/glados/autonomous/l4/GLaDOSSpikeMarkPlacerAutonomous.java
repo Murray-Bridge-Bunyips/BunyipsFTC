@@ -87,7 +87,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
         vision.stop(teamProp);
 
         addTask(new ParallelTaskGroup(
-            arm.deltaTask(ARM_DELTA).withName("Extend Arm"),
+            arm.tasks.delta(ARM_DELTA).withName("Extend Arm"),
             makeTrajectory()
                     .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
                     .withName("Move Forward to Spike Marks")
@@ -111,16 +111,16 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
         }
         align.addTask();
 
-        addTask(claws.openTask(DualServos.ServoSide.LEFT)
+        addTask(claws.tasks.openLeft()
                 .withName("Open Left Claw"));
 
         makeTrajectory().back(10)
             .addTask();
 
-        addTask(arm.deltaTask(-ARM_DELTA)
+        addTask(arm.tasks.delta(-ARM_DELTA)
                 .withName("Retract Arm"));
 
-        addTask(new RepeatTask(claws.closeTask(DualServos.ServoSide.RIGHT)));
+        addTask(new RepeatTask(claws.tasks.closeRight()));
     }
 
     @Override

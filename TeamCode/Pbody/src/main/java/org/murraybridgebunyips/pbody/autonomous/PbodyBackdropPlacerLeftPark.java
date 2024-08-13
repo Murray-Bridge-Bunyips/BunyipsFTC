@@ -108,12 +108,12 @@ public class PbodyBackdropPlacerLeftPark extends AutonomousBunyipsOpMode impleme
                 .addTask();
 
         // Place pixels and park to the left of the backdrop
-        addTask(arm.deltaTask(-2600).withName("Deploy Arm"));
-        addTask(claws.openTask(DualServos.ServoSide.BOTH).withName("Drop Pixels"));
+        addTask(arm.tasks.delta(-2600).withName("Deploy Arm"));
+        addTask(claws.tasks.openBoth().withName("Drop Pixels"));
         addTask(new WaitTask(Seconds.of(1)).withName("Wait for Pixels"));
         addTask(new ParallelTaskGroup(
                 afterPixelDropDriveAction(makeTrajectory().back(10)),
-                arm.deltaTask(2600)
+                arm.tasks.delta(2600)
         ).withName("Stow and Move to Park"));
 
         makeTrajectory()
