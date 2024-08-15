@@ -61,7 +61,7 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
                 .withName("Suspender");
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0)
                 .withName("Pixel Claws");
-/*giulio*/
+        /*giulio*/
 
         telemetry.add("Robot is assumed to be facing angle: % deg", Math.toDegrees(drive.getPoseEstimate().getHeading()));
 

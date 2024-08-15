@@ -23,7 +23,7 @@ public class TuneProps extends ColourTuner {
     @NonNull
     @Override
     protected CameraName setCamera() {
-        return hardwareMap.get(CameraName.class,"webcam");
+        return hardwareMap.get(CameraName.class, "webcam");
     }
 
     /**
@@ -34,7 +34,7 @@ public class TuneProps extends ColourTuner {
     @NonNull
     @Override
     protected ColourThreshold[] setThresholdsToTune() {
-        return new ColourThreshold[] {
+        return new ColourThreshold[]{
                 new RedTeamProp(),
                 new BlueTeamProp()
         };

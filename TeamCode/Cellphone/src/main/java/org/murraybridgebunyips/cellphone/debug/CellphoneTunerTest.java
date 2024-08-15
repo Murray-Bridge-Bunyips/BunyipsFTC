@@ -26,7 +26,7 @@ public class CellphoneTunerTest extends ColourTuner {
     @NonNull
     @Override
     protected ColourThreshold[] setThresholdsToTune() {
-        return new ColourThreshold[] {
+        return new ColourThreshold[]{
                 new WhitePixel(),
                 new PurplePixel()
         };

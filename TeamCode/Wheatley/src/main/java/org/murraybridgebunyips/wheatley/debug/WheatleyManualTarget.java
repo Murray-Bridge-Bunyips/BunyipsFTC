@@ -15,6 +15,7 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 public class WheatleyManualTarget extends BunyipsOpMode {
     private final WheatleyConfig config = new WheatleyConfig();
     private double pos;
+
     @Override
     protected void onInit() {
         config.init();
@@ -23,10 +24,10 @@ public class WheatleyManualTarget extends BunyipsOpMode {
     @Override
     protected void activeLoop() {
         pos -= gamepad2.lsy;
-        config.clawRotator.setTargetPosition((int)pos);
+        config.clawRotator.setTargetPosition((int) pos);
         config.clawRotator.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         config.clawRotator.setPower(1);
         telemetry.add("current:%", config.clawRotator.getCurrentPosition());
-        telemetry.add("target:%", (int)pos);
+        telemetry.add("target:%", (int) pos);
     }
 }

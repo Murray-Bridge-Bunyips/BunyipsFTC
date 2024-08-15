@@ -17,6 +17,7 @@ public class CellphoneConfig extends RobotConfig {
      * Front camera
      */
     public CameraName cameraF;
+
     @Override
     protected void onRuntime() {
         cameraB = ClassFactory.getInstance().getCameraManager().nameFromCameraDirection(BuiltinCameraDirection.BACK);

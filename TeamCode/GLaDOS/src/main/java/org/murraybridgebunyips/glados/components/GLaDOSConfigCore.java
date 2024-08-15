@@ -9,17 +9,18 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
+import org.murraybridgebunyips.bunyipslib.Motor;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
+import org.murraybridgebunyips.bunyipslib.external.PIDFFController;
+import org.murraybridgebunyips.bunyipslib.external.ff.ElevatorFeedforward;
+import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.TwoWheelLocalizer;
@@ -38,19 +39,19 @@ public class GLaDOSConfigCore extends RobotConfig {
     /**
      * Expansion 0: Front Left "fl"
      */
-    public DcMotorEx frontLeft;
+    public Motor frontLeft;
     /**
      * Expansion 1: Front Right "fr"
      */
-    public DcMotorEx frontRight;
+    public Motor frontRight;
     /**
      * Expansion 2: Back Right "br"
      */
-    public DcMotorEx backRight;
+    public Motor backRight;
     /**
      * Expansion 3: Back Left "bl"
      */
-    public DcMotorEx backLeft;
+    public Motor backLeft;
     /**
      * Control 3: Parallel Encoder "pe"
      */
@@ -62,7 +63,7 @@ public class GLaDOSConfigCore extends RobotConfig {
     /**
      * Control 0: Arm "arm"
      */
-    public DcMotorEx arm;
+    public Motor arm;
     /**
      * Control Servo 1: Left Servo "ls"
      */
@@ -78,7 +79,7 @@ public class GLaDOSConfigCore extends RobotConfig {
     /**
      * Control 1: Suspender Actuator "sa"
      */
-    public DcMotorEx suspenderActuator;
+    public Motor suspenderActuator;
     /**
      * Control Digital 1: Touch Sensor/Limit Switch "bottom"
      */
@@ -120,10 +121,10 @@ public class GLaDOSConfigCore extends RobotConfig {
         });
 
         // Mecanum system
-        frontLeft = getHardware("fl", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
-        frontRight = getHardware("fr", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
-        backRight = getHardware("br", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
-        backLeft = getHardware("bl", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        frontLeft = getHardware("fl", Motor.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
+        frontRight = getHardware("fr", Motor.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        backRight = getHardware("br", Motor.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        backLeft = getHardware("bl", Motor.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         parallelDeadwheel = getHardware("pe", Deadwheel.class,
                 (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
@@ -131,8 +132,13 @@ public class GLaDOSConfigCore extends RobotConfig {
                 (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
 
         // Pixel manipulation system
-        arm = getHardware("arm", DcMotorEx.class, (d) ->
-                d.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, new PIDFCoefficients(8, 0.06, 0.0, 0.0, d.getPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION).algorithm)));
+        arm = getHardware("arm", Motor.class, (d) ->
+                d.setRunToPositionController(new PIDFFController(
+                        new PIDController(0.02, 0, 0.0012),
+                        new ElevatorFeedforward(0, 0.1, 0.00001),
+                        d.getEncoder()
+                )));
+
         double LIM = 0.7;
         leftPixel = getHardware("ls", Servo.class, (d) -> d.scaleRange(LIM, 1.0));
         rightPixel = getHardware("rs", Servo.class, (d) -> d.scaleRange(0.0, 1 - LIM));
@@ -141,7 +147,9 @@ public class GLaDOSConfigCore extends RobotConfig {
         launcher = getHardware("pl", Servo.class, (d) -> d.setDirection(Servo.Direction.REVERSE));
 
         // Suspension system
-        suspenderActuator = getHardware("sa", DcMotorEx.class);
+        // TODO: tune better, currently using kP guess
+        suspenderActuator = getHardware("sa", Motor.class, (d) ->
+                d.setRunToPositionController(new PIDController(0.2, 0, 0)));
         bottomLimit = getHardware("bottom", TouchSensor.class);
 
         // RoadRunner configuration

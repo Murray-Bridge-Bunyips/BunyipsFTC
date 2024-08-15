@@ -65,29 +65,53 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 @Config
 @Autonomous(name = "Ultimate Preload (Purple on Left, Yellow on Right, Left Park)", group = "L5")
 public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode implements RoadRunner {
-    /** X offset to DriveToPose AprilTag in inches */
+    /**
+     * X offset to DriveToPose AprilTag in inches
+     */
     public static float APRILTAG_FORWARD_OFFSET = 13.0f;
-    /** Y offset to DriveToPose AprilTag in inches */
+    /**
+     * Y offset to DriveToPose AprilTag in inches
+     */
     public static float APRILTAG_SIDE_OFFSET = -3.0f;
-    /** Position delta (in ticks) of the arm extension at backboard */
+    /**
+     * Position delta (in ticks) of the arm extension at backboard
+     */
     public static int ARM_DELTA_BACKDROP = 1500;
-    /** Whether a heading estimate is also used from AprilTag data. */
+    /**
+     * Whether a heading estimate is also used from AprilTag data.
+     */
     public static boolean USING_HEADING_ESTIMATE = false;
-    /** Arm to ground from stow in ticks. */
+    /**
+     * Arm to ground from stow in ticks.
+     */
     public static int ARM_DELTA_GROUND = 2000;
-    /** Strafe left distance for left park, field tiles. */
+    /**
+     * Strafe left distance for left park, field tiles.
+     */
     public static double PARK_LEFT_TILES = 0.9;
-    /** Strafe right distance for right park, field tiles. Used in the Right Park override. */
+    /**
+     * Strafe right distance for right park, field tiles. Used in the Right Park override.
+     */
     public static double PARK_RIGHT_TILES = 0.9;
-    /** Angled spike mark, move forward initially, field tiles */
+    /**
+     * Angled spike mark, move forward initially, field tiles
+     */
     public static double ANGLED_INIT_FWD_TILES = 0.65;
-    /** Forward spike mark, move forward initially, field tiles */
+    /**
+     * Forward spike mark, move forward initially, field tiles
+     */
     public static double M_FORWARD_INIT_FWD_TILES = 0.5;
-    /** Forward spike mark, forward centimeters */
+    /**
+     * Forward spike mark, forward centimeters
+     */
     public static double M_FORWARD_ALIGN_FWD_CM = 15;
-    /** Left spike mark, degrees turn */
+    /**
+     * Left spike mark, degrees turn
+     */
     public static double M_LEFT_ALIGN_TURN_DEG = 40;
-    /** Right spike mark, degrees turn */
+    /**
+     * Right spike mark, degrees turn
+     */
     public static double M_RIGHT_ALIGN_TURN_DEG = -40;
 
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();

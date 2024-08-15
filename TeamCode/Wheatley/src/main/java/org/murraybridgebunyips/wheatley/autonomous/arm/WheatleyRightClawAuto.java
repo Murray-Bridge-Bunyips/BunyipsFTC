@@ -18,6 +18,7 @@ public class WheatleyRightClawAuto extends WheatleyLeftClawAuto {
 
     /**
      * Parks to the right of the backboard.
+     *
      * @param builder builds the path
      * @return the path as a task
      */

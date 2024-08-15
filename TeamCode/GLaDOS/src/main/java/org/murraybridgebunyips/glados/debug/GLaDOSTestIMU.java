@@ -15,7 +15,9 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 @Config
 @TeleOp
 public class GLaDOSTestIMU extends BunyipsOpMode {
-    /** yaw domain for imu readings */
+    /**
+     * yaw domain for imu readings
+     */
     public static IMUOp.YawDomain YAW_DOMAIN = IMUOp.YawDomain.SIGNED;
 
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();

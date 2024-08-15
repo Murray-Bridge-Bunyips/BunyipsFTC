@@ -23,7 +23,7 @@ public class WheatleyVisionTest extends CommandBasedBunyipsOpMode {
     private MecanumDrive drive;
     private Vision vision;
     private RedTeamProp redProp;
-   // var robit;
+    // var robit;
 
     @Override
     protected void onInitialise() {

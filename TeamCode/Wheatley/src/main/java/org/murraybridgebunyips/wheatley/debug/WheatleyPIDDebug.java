@@ -32,9 +32,8 @@ public class WheatleyPIDDebug extends CommandBasedBunyipsOpMode {
      * derivative
      */
     public static double kD;
-
-    private HoldableActuator clawRotator;
     private final WheatleyConfig config = new WheatleyConfig();
+    private HoldableActuator clawRotator;
 
     @Override
     protected void onInitialise() {

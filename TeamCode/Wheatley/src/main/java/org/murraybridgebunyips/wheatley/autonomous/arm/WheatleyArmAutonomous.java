@@ -23,6 +23,7 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
  * Use Wheatley's arm to place a Purple Pixel (loaded on left) to the Spike Mark detected in Init Phase.
+ *
  * @author Lucas Bubner, 2024
  */
 @Autonomous(name = "Arm Autonomous")

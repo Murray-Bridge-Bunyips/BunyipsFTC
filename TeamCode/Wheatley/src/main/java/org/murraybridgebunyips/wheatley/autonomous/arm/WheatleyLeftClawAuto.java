@@ -31,19 +31,18 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  */
 @Autonomous(name = "Left Claw Auto")
 public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements RoadRunner {
-    private final WheatleyConfig config = new WheatleyConfig();
-    private MecanumDrive drive;
-    private HoldableActuator rotator;
-    private DualServos claws;
-    protected MessageTask waitMessage;
-
     // All of these values are in CM (except ARM_PLACING_POSITION and TURN_ANGLE)
     protected final int FORWARD_DISTANCE = 170;  // This is used when taking the long path, to get under the gate
     protected final int TO_BOARD_FAR_DISTANCE = 299;  // The distance to the board when on the other side of the truss
     protected final int TO_BOARD_CLOSE_DISTANCE = 120;  // The distance to the board when on the close side of the truss
-    protected int STRAFE_TO_BACKBOARD = 86;  // The distance to strafe when getting back to the backboard
     protected final int ARM_PLACING_POSITION = 2700;  // The position the arm goes to from 0 when placing pixels
+    private final WheatleyConfig config = new WheatleyConfig();
+    protected MessageTask waitMessage;
+    protected int STRAFE_TO_BACKBOARD = 86;  // The distance to strafe when getting back to the backboard
     protected int TURN_ANGLE = 90;  // Angle to turn, is turned to negative when needed
+    private MecanumDrive drive;
+    private HoldableActuator rotator;
+    private DualServos claws;
 
     @Override
     protected void onInitialise() {
@@ -69,6 +68,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
 
     /**
      * Parks to the left of the backboard.
+     *
      * @param builder builds the path
      * @return the path as a task
      */

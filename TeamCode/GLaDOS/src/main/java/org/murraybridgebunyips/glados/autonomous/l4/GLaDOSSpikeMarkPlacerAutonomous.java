@@ -35,17 +35,29 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 @Config
 @Autonomous(name = "Spike Mark Placer (Purple on Left, No Park)", group = "L4")
 public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode implements RoadRunner {
-    /** extension/retraction ticks */
+    /**
+     * extension/retraction ticks
+     */
     public static int ARM_DELTA = 2000;
-    /** angled spike mark, move forward initially, field tiles */
+    /**
+     * angled spike mark, move forward initially, field tiles
+     */
     public static double ANGLED_INITIAL_FORWARD_DIST_FT = 0.65;
-    /** forward spike mark, move forward initially, field tiles */
+    /**
+     * forward spike mark, move forward initially, field tiles
+     */
     public static double M_FORWARD_INITIAL_FORWARD_DIST_FT = 0.5;
-    /** forward spike mark, forward centimeters */
+    /**
+     * forward spike mark, forward centimeters
+     */
     public static double M_FORWARD_DIST_CM = 15;
-    /** left spike mark, degrees turn */
+    /**
+     * left spike mark, degrees turn
+     */
     public static double M_LEFT_TURN_DEG = 40;
-    /** right spike mark, degrees turn */
+    /**
+     * right spike mark, degrees turn
+     */
     public static double M_RIGHT_TURN_DEG = -40;
 
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();
@@ -87,26 +99,26 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
         vision.stop(teamProp);
 
         addTask(new ParallelTaskGroup(
-            arm.tasks.delta(ARM_DELTA).withName("Extend Arm"),
-            makeTrajectory()
-                    .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
-                    .withName("Move Forward to Spike Marks")
-                    .buildTask()
+                arm.tasks.delta(ARM_DELTA).withName("Extend Arm"),
+                makeTrajectory()
+                        .forward(spikeMark == Direction.FORWARD ? M_FORWARD_INITIAL_FORWARD_DIST_FT : ANGLED_INITIAL_FORWARD_DIST_FT, FieldTile)
+                        .withName("Move Forward to Spike Marks")
+                        .buildTask()
         ).withName("Move to Spike Marks"));
 
         RoadRunnerTrajectoryTaskBuilder align = makeTrajectory();
         switch (spikeMark) {
             case FORWARD:
                 align.forward(M_FORWARD_DIST_CM, Centimeters)
-                    .withName("Align to Center Mark");
+                        .withName("Align to Center Mark");
                 break;
             case LEFT:
                 align.turn(M_LEFT_TURN_DEG, Degrees)
-                    .withName("Rotate to Left Mark");
+                        .withName("Rotate to Left Mark");
                 break;
             case RIGHT:
                 align.turn(M_RIGHT_TURN_DEG, Degrees)
-                    .withName("Rotate to Right Mark");
+                        .withName("Rotate to Right Mark");
                 break;
         }
         align.addTask();
@@ -115,7 +127,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
                 .withName("Open Left Claw"));
 
         makeTrajectory().back(10)
-            .addTask();
+                .addTask();
 
         addTask(arm.tasks.delta(-ARM_DELTA)
                 .withName("Retract Arm"));

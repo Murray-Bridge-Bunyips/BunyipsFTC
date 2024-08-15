@@ -23,7 +23,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 /**
  * Park on the right side of the backdrop.
  */
-@Autonomous(name = "Right Park", group="L1")
+@Autonomous(name = "Right Park", group = "L1")
 @Disabled
 public class GLaDOSRightPark extends AutonomousBunyipsOpMode implements RoadRunner {
     private final GLaDOSConfigCore config = new GLaDOSConfigCore();

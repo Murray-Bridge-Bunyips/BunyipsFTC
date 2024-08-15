@@ -64,9 +64,9 @@ class JerryPrecisionDriveTask(
     }
 
 //    override fun init() {
-        // Capture vectors and start tracking
+    // Capture vectors and start tracking
 //        imu?.startCapture()
-        // Deadwheels removed
+    // Deadwheels removed
 //        x?.track()
 //        y?.track()
 //    }

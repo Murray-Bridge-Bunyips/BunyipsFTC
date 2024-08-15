@@ -26,37 +26,13 @@ import org.murraybridgebunyips.cellphone.components.CellphoneConfig;
 
 import java.util.ArrayList;
 
-/** test for AprilTagPoseEstimator sanity checking */
+/**
+ * test for AprilTagPoseEstimator sanity checking
+ */
 @TeleOp
 public class CellphoneAprilTagTest extends BunyipsOpMode {
     private final CellphoneConfig config = new CellphoneConfig();
     private AprilTag aprilTag;
-
-    static class QuaternionMaker {
-        public double w, x, y, z;
-
-        public QuaternionMaker(double rollDegrees, double pitchDegrees, double yawDegrees) {
-            double roll = Math.toRadians(rollDegrees);
-            double pitch = Math.toRadians(pitchDegrees);
-            double yaw = Math.toRadians(yawDegrees);
-
-            double cy = Math.cos(yaw * 0.5);
-            double sy = Math.sin(yaw * 0.5);
-            double cp = Math.cos(pitch * 0.5);
-            double sp = Math.sin(pitch * 0.5);
-            double cr = Math.cos(roll * 0.5);
-            double sr = Math.sin(roll * 0.5);
-
-            w = cr * cp * cy + sr * sp * sy;
-            x = sr * cp * cy - cr * sp * sy;
-            y = cr * sp * cy + sr * cp * sy;
-            z = cr * cp * sy - sr * sp * cy;
-        }
-
-        public Quaternion make() {
-            return new Quaternion((float)w, (float)x, (float)y, (float)z, 0);
-        }
-    }
 
     @Override
     protected void onInit() {
@@ -111,6 +87,32 @@ public class CellphoneAprilTagTest extends BunyipsOpMode {
             telemetry.dashboardFieldOverlay().setStroke("#FF0000");
             DashboardUtil.drawRobot(telemetry.dashboardFieldOverlay(), estimatedPose);
             break;
+        }
+    }
+
+    static class QuaternionMaker {
+        public double w, x, y, z;
+
+        public QuaternionMaker(double rollDegrees, double pitchDegrees, double yawDegrees) {
+            double roll = Math.toRadians(rollDegrees);
+            double pitch = Math.toRadians(pitchDegrees);
+            double yaw = Math.toRadians(yawDegrees);
+
+            double cy = Math.cos(yaw * 0.5);
+            double sy = Math.sin(yaw * 0.5);
+            double cp = Math.cos(pitch * 0.5);
+            double sp = Math.sin(pitch * 0.5);
+            double cr = Math.cos(roll * 0.5);
+            double sr = Math.sin(roll * 0.5);
+
+            w = cr * cp * cy + sr * sp * sy;
+            x = sr * cp * cy - cr * sp * sy;
+            y = cr * sp * cy + sr * cp * sy;
+            z = cr * cp * sy - sr * sp * cy;
+        }
+
+        public Quaternion make() {
+            return new Quaternion((float) w, (float) x, (float) y, (float) z, 0);
         }
     }
 }

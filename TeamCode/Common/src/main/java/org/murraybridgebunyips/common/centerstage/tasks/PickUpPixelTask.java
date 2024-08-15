@@ -17,12 +17,13 @@ import org.murraybridgebunyips.bunyipslib.tasks.groups.SequentialTaskGroup;
 public class PickUpPixelTask extends SequentialTaskGroup {
     /**
      * Sequence of events:<br>
-     *   Shuts the claws<br>
-     *   Moves the arm downwards to a point it should fit in any pixels below it<br>
-     *   Opens the claws<br>
-     *   Moves the arm up a few cms or so<br>
+     * Shuts the claws<br>
+     * Moves the arm downwards to a point it should fit in any pixels below it<br>
+     * Opens the claws<br>
+     * Moves the arm up a few cms or so<br>
+     *
      * @param actuator the arm
-     * @param servos the claws
+     * @param servos   the claws
      */
     public PickUpPixelTask(HoldableActuator actuator, DualServos servos) {
         super(
