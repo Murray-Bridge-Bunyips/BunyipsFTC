@@ -18,8 +18,6 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.Motor;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
-import org.murraybridgebunyips.bunyipslib.external.PIDFFController;
-import org.murraybridgebunyips.bunyipslib.external.ff.ElevatorFeedforward;
 import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
@@ -133,11 +131,7 @@ public class GLaDOSConfigCore extends RobotConfig {
 
         // Pixel manipulation system
         arm = getHardware("arm", Motor.class, (d) ->
-                d.setRunToPositionController(new PIDFFController(
-                        new PIDController(0.02, 0, 0.0012),
-                        new ElevatorFeedforward(0, 0.1, 0.00001),
-                        d.getEncoder()
-                )));
+                d.setRunToPositionController(new PIDController(0.02, 0, 0.002)));
 
         double LIM = 0.7;
         leftPixel = getHardware("ls", Servo.class, (d) -> d.scaleRange(LIM, 1.0));
@@ -147,9 +141,8 @@ public class GLaDOSConfigCore extends RobotConfig {
         launcher = getHardware("pl", Servo.class, (d) -> d.setDirection(Servo.Direction.REVERSE));
 
         // Suspension system
-        // TODO: tune better, currently using kP guess
         suspenderActuator = getHardware("sa", Motor.class, (d) ->
-                d.setRunToPositionController(new PIDController(0.2, 0, 0)));
+                d.setRunToPositionController(new PIDController(0.0001, 0, 0)));
         bottomLimit = getHardware("bottom", TouchSensor.class);
 
         // RoadRunner configuration
