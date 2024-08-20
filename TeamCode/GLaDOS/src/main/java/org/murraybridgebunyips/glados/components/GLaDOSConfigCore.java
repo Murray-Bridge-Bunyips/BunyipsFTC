@@ -16,8 +16,11 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Dbg;
+import org.murraybridgebunyips.bunyipslib.EncoderTicks;
 import org.murraybridgebunyips.bunyipslib.Motor;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
+import org.murraybridgebunyips.bunyipslib.external.ArmController;
+import org.murraybridgebunyips.bunyipslib.external.ff.ArmFeedforward;
 import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
@@ -130,8 +133,14 @@ public class GLaDOSConfigCore extends RobotConfig {
                 (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
 
         // Pixel manipulation system
-        arm = getHardware("arm", Motor.class, (d) ->
-                d.setRunToPositionController(new PIDController(0.02, 0, 0.002)));
+        arm = getHardware("arm", Motor.class, (d) -> {
+            EncoderTicks.Generator gen = EncoderTicks.createGenerator(d, (int) d.getMotorType().getTicksPerRev(), 1);
+            d.setRunToPositionController(new ArmController(
+                    new PIDController(0.02, 0, 0.00012),
+                    new ArmFeedforward(0, 0.1, 0.0001, 0),
+                    () -> gen.angle(d.getTargetPosition()), gen::getAngularVelocity, gen::getAngularAcceleration
+            ));
+        });
 
         double LIM = 0.7;
         leftPixel = getHardware("ls", Servo.class, (d) -> d.scaleRange(LIM, 1.0));

@@ -80,8 +80,11 @@ public class GLaDOSTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        // Vector drive coefficients: tkp=0.1,rkp=1,rkd=0.0001
+//        drive.setDefaultTask(new HolonomicVectorDriveTask(gamepad1, drive, () -> false)
+//                .withTranslationalPID(0.1, 0, 0)
+//                .withRotationalPID(1, 0, 0.0001));
         drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
+
         driver().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new AlignToContourTask(() -> gamepad2.lsx, () -> gamepad1.lsy, () -> gamepad1.rsx, drive, pixels, new PIDController(0.67, 0.25, 0)))
                 .finishingIf(() -> !gamepad1.rb);

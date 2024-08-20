@@ -21,7 +21,7 @@ import org.murraybridgebunyips.glados.components.GLaDOSConfigCore;
 public class GLaDOSArmControllerTuning extends BunyipsOpMode {
     public static double kP = 0.02;
     public static double kI;
-    public static double kD = 0.0012;
+    public static double kD = 0.00012;
     public static double kS;
     public static double kCos = 0.1;
     public static double kV = 0.00001;
@@ -37,7 +37,7 @@ public class GLaDOSArmControllerTuning extends BunyipsOpMode {
     protected void onInit() {
         config.init();
         motor = new Motor(config.arm);
-        EncoderTicks.EncoderTickGenerator g = EncoderTicks.createGenerator(config.arm, (int) motor.getMotorType().getTicksPerRev(), 1);
+        EncoderTicks.Generator g = EncoderTicks.createGenerator(config.arm, (int) motor.getMotorType().getTicksPerRev(), 1);
         controller = new ArmController(new PIDController(kP, kI, kD), new ArmFeedforward(kS, kCos, kV, kA), () -> g.angle(SET_POINT_TICKS), g::getAngularVelocity, g::getAngularAcceleration);
         motor.setRunToPositionController(controller);
         motor.resetEncoder();
@@ -51,5 +51,6 @@ public class GLaDOSArmControllerTuning extends BunyipsOpMode {
         motor.setPower(1);
         telemetry.addDashboard("setpoint", SET_POINT_TICKS);
         telemetry.addDashboard("current", motor.getCurrentPosition());
+        if (gamepad1.b) exit();
     }
 }
