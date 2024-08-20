@@ -28,7 +28,6 @@ public class CommandBasedTeleOp extends CommandBasedBunyipsOpMode {
         // but most use cases will just need them to be 0.0 and 1.0.
         claws = new DualServos(config.left_claw, config.right_claw, 0.0, 1.0, 0.0, 1.0);
 
-        // This sets gamepad1 and gamepad2 as driver and operator respectively. REQUIRED for Command-Based TeleOp.
         gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);
     }
 
@@ -43,5 +42,12 @@ public class CommandBasedTeleOp extends CommandBasedBunyipsOpMode {
 
         arm.setDefaultTask(linearActuator.tasks.control(() -> -gamepad2.lsy));
         drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
+    }
+
+    @Override
+    protected void periodic() {
+        // Uses .big() for HTML formatting.
+        telemetry.add("Left Claw: " + (claws.isOpen(DualServos.ServoSide.LEFT) ? "Open" : "Closed")).big();
+        telemetry.add("Right Claw: " + (claws.isOpen(DualServos.ServoSide.RIGHT) ? "Open" : "Closed")).big();
     }
 }
