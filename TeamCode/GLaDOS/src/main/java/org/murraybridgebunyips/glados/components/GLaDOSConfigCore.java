@@ -135,11 +135,13 @@ public class GLaDOSConfigCore extends RobotConfig {
         // Pixel manipulation system
         arm = getHardware("arm", Motor.class, (d) -> {
             EncoderTicks.Generator gen = EncoderTicks.createGenerator(d, (int) d.getMotorType().getTicksPerRev(), 1);
-            d.setRunToPositionController(new ArmController(
+            ArmController controller = new ArmController(
                     new PIDController(0.02, 0, 0.00012),
                     new ArmFeedforward(0, 0.1, 0.0001, 0),
                     () -> gen.angle(d.getTargetPosition()), gen::getAngularVelocity, gen::getAngularAcceleration
-            ));
+            );
+            controller.getPIDFController().setTolerance(5);
+            d.setRunToPositionController(controller);
         });
 
         double LIM = 0.7;
