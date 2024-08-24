@@ -24,7 +24,7 @@ public class GLaDOSDrivetrain extends BunyipsOpMode {
         config.init();
         drive = new DualDeadwheelMecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight,
+                config.imu, config.frontLeft, config.frontRight,
                 config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelDeadwheel, config.perpendicularDeadwheel
         );

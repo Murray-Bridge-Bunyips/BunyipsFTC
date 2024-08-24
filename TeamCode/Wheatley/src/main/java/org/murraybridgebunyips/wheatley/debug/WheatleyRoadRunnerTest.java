@@ -32,7 +32,7 @@ public class WheatleyRoadRunnerTest extends AutonomousBunyipsOpMode implements R
         config.init();
         drive = new MecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu,
+                config.imu,
                 config.fl, config.fr, config.bl, config.br
         );
         Storage.memory().lastKnownPosition = null;

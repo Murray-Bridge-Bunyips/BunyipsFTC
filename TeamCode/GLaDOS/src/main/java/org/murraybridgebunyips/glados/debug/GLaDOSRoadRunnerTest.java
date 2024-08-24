@@ -31,7 +31,7 @@ public class GLaDOSRoadRunnerTest extends AutonomousBunyipsOpMode implements Roa
     @Override
     protected void onInitialise() {
         config.init();
-        drive = new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
+        drive = new DualDeadwheelMecanumDrive(config.driveConstants, config.mecanumCoefficients, config.imu, config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients, config.parallelDeadwheel, config.perpendicularDeadwheel);
         Storage.memory().lastKnownPosition = null;
     }
 

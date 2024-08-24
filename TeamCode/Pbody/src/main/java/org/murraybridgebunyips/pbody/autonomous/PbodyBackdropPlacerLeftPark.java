@@ -48,7 +48,7 @@ public class PbodyBackdropPlacerLeftPark extends AutonomousBunyipsOpMode impleme
     protected void onInitialise() {
         config.init();
         arm = new HoldableActuator(config.arm);
-        drive = new MecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+        drive = new MecanumDrive(config.driveConstants, config.mecanumCoefficients, config.imu, config.fl, config.fr, config.bl, config.br);
         claws = new DualServos(config.ls, config.rs, 0.6, 0.9, 0.7, 0.4);
         setOpModes(StartingPositions.use());
     }

@@ -54,7 +54,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
         config.init();
         drive = new MecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
+                config.imu, config.fl, config.fr, config.bl, config.br
         );
         cannon = new Cannon(config.launcher);
         linearActuator = new HoldableActuator(config.linearActuator)

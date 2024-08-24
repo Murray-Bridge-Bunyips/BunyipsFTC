@@ -23,7 +23,7 @@ public class WheatleyRRMecanum extends BunyipsOpMode {
         Storage.memory().lastKnownPosition = null;
         drive = new MecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br
+                config.imu, config.fl, config.fr, config.bl, config.br
         );
     }
 

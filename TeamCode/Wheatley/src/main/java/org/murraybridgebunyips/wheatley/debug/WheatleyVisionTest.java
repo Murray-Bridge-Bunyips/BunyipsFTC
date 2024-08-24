@@ -29,7 +29,7 @@ public class WheatleyVisionTest extends CommandBasedBunyipsOpMode {
     protected void onInitialise() {
         config.init();
         drive = new MecanumDrive(config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+                config.imu, config.fl, config.fr, config.bl, config.br);
         vision = new Vision(config.webcam);
         redProp = new RedTeamProp();
 

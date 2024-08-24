@@ -28,7 +28,7 @@ public class PbodyTeleOp extends CommandBasedBunyipsOpMode {
     protected void onInitialise() {
         config.init();
         claws = new DualServos(config.ls, config.rs, 0.6, 0.9, 0.7, 0.4);
-        drive = new MecanumDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu, config.fl, config.fr, config.bl, config.br);
+        drive = new MecanumDrive(config.driveConstants, config.mecanumCoefficients, config.imu, config.fl, config.fr, config.bl, config.br);
         plane = new Cannon(config.pl, 0.0, 0.6);
         arm = new HoldableActuator(config.arm);
 

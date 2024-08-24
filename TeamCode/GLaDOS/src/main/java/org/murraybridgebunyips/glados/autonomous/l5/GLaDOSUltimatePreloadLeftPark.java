@@ -132,7 +132,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
     protected void onInitialise() {
         config.init();
         drive = new DualDeadwheelMecanumDrive(
-                config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor, config.imu,
+                config.driveConstants, config.mecanumCoefficients, config.imu,
                 config.frontLeft, config.frontRight, config.backLeft, config.backRight, config.localizerCoefficients,
                 config.parallelDeadwheel, config.perpendicularDeadwheel
         );

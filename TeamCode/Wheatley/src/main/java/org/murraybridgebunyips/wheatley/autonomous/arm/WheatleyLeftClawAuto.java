@@ -49,7 +49,7 @@ public class WheatleyLeftClawAuto extends AutonomousBunyipsOpMode implements Roa
         config.init();
         drive = new MecanumDrive(
                 config.driveConstants, config.mecanumCoefficients,
-                hardwareMap.voltageSensor, config.imu,
+                config.imu,
                 config.fl, config.fr, config.bl, config.br
         );
         rotator = new HoldableActuator(config.clawRotator).withMovingPower(1);
