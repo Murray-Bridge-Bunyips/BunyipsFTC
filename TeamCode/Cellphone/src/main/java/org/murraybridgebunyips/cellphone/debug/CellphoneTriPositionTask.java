@@ -3,7 +3,7 @@ package org.murraybridgebunyips.cellphone.debug;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
+import org.murraybridgebunyips.bunyipslib.tasks.GetDualSplitContourTask;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.cellphone.components.CellphoneConfig;
 import org.murraybridgebunyips.common.centerstage.vision.RedTeamProp;
@@ -16,7 +16,7 @@ public class CellphoneTriPositionTask extends BunyipsOpMode {
     private final CellphoneConfig config = new CellphoneConfig();
     private Vision visionB;
     //    private Vision visionF;
-    private GetTriPositionContourTask task;
+    private GetDualSplitContourTask task;
 
     @Override
     protected void onInit() {
@@ -26,7 +26,7 @@ public class CellphoneTriPositionTask extends BunyipsOpMode {
         visionB.init(proc);
         visionB.start(proc);
         visionB.startPreview();
-        task = new GetTriPositionContourTask(proc);
+        task = new GetDualSplitContourTask(proc);
         setInitTask(task);
     }
 

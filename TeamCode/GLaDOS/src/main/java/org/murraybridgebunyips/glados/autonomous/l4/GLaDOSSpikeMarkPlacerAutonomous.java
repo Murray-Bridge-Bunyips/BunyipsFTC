@@ -20,7 +20,7 @@ import org.murraybridgebunyips.bunyipslib.drive.DualDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
-import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
+import org.murraybridgebunyips.bunyipslib.tasks.GetDualSplitContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.RepeatTask;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
@@ -66,7 +66,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
     private DualServos claws;
     private Vision vision;
     private ColourThreshold teamProp;
-    private GetTriPositionContourTask getTeamProp;
+    private GetDualSplitContourTask getTeamProp;
     private StartingPositions startingPosition;
 
     @Override
@@ -77,7 +77,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
         claws = new DualServos(config.leftPixel, config.rightPixel, 1.0, 0.0, 0.0, 1.0);
         vision = new Vision(config.webcam);
 
-        getTeamProp = new GetTriPositionContourTask();
+        getTeamProp = new GetDualSplitContourTask();
         setOpModes(StartingPositions.use());
         setInitTask(getTeamProp);
     }
@@ -95,7 +95,7 @@ public class GLaDOSSpikeMarkPlacerAutonomous extends AutonomousBunyipsOpMode imp
 
     @Override
     protected void onStart() {
-        Direction spikeMark = getTeamProp.getPosition();
+        Direction spikeMark = getTeamProp.getMappedPosition(Direction.FORWARD, Direction.RIGHT, Direction.LEFT);
         vision.stop(teamProp);
 
         addTask(new ParallelTaskGroup(

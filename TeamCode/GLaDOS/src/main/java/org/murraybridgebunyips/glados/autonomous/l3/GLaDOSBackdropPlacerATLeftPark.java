@@ -31,7 +31,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.Trajecto
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.DriveToPoseTask;
-import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
+import org.murraybridgebunyips.bunyipslib.tasks.GetDualSplitContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.RoadRunnerTask;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
@@ -83,7 +83,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
     private Vision vision;
     private AprilTag aprilTag;
     private ColourThreshold teamProp;
-    private GetTriPositionContourTask getTeamProp;
+    private GetDualSplitContourTask getTeamProp;
 
     @Override
     protected void onInitialise() {
@@ -101,7 +101,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
 
         setOpModes(StartingPositions.use());
 
-        getTeamProp = new GetTriPositionContourTask();
+        getTeamProp = new GetDualSplitContourTask();
         setInitTask(getTeamProp);
     }
 
@@ -194,7 +194,7 @@ public class GLaDOSBackdropPlacerATLeftPark extends AutonomousBunyipsOpMode impl
 
     @Override
     protected void onStart() {
-        spikeMark = getTeamProp.getPosition();
+        spikeMark = getTeamProp.getMappedPosition(Direction.FORWARD, Direction.RIGHT, Direction.LEFT);
         int id = SpikeMarkBackdropId.get(spikeMark, startingPosition);
         AprilTagMetadata aprilTagDetection = AprilTagGameDatabase.getCenterStageTagLibrary().lookupTag(id);
         if (aprilTagDetection == null) {

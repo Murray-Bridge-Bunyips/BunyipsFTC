@@ -33,7 +33,7 @@ import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.tasks.DriveToPoseTask;
 import org.murraybridgebunyips.bunyipslib.tasks.DynamicTask;
-import org.murraybridgebunyips.bunyipslib.tasks.GetTriPositionContourTask;
+import org.murraybridgebunyips.bunyipslib.tasks.GetDualSplitContourTask;
 import org.murraybridgebunyips.bunyipslib.tasks.RunTask;
 import org.murraybridgebunyips.bunyipslib.tasks.WaitTask;
 import org.murraybridgebunyips.bunyipslib.tasks.groups.ParallelTaskGroup;
@@ -122,7 +122,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
     private Vision vision;
     private AprilTag aprilTag;
     private ColourThreshold teamProp;
-    private GetTriPositionContourTask getTeamProp;
+    private GetDualSplitContourTask getTeamProp;
 
     private Direction spikeMark;
     private VectorF backdropPose;
@@ -149,7 +149,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
 
         setOpModes(StartingPositions.use());
 
-        getTeamProp = new GetTriPositionContourTask();
+        getTeamProp = new GetDualSplitContourTask();
         setInitTask(getTeamProp);
     }
 
@@ -321,7 +321,7 @@ public class GLaDOSUltimatePreloadLeftPark extends AutonomousBunyipsOpMode imple
     @Override
     protected void onStart() {
         // Capture results when PLAY is pressed
-        spikeMark = getTeamProp.getPosition();
+        spikeMark = getTeamProp.getMappedPosition(Direction.FORWARD, Direction.RIGHT, Direction.LEFT);
         int id = SpikeMarkBackdropId.get(spikeMark, startingPosition);
         AprilTagMetadata aprilTagDetection = AprilTagGameDatabase.getCenterStageTagLibrary().lookupTag(id);
         if (aprilTagDetection == null) {
