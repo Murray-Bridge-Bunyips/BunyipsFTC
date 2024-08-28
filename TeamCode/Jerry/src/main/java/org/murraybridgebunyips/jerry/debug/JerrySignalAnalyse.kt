@@ -2,7 +2,7 @@ package org.murraybridgebunyips.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.tasks.GetSignalTask
+import org.murraybridgebunyips.common.powerplay.GetSignalTask
 import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.jerry.components.JerryConfig
 
