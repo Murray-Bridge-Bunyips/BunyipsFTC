@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
 import org.murraybridgebunyips.bunyipslib.BunyipsComponent
 import org.murraybridgebunyips.bunyipslib.While
+import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
 
 /**
  * Improved and refactored arm control system for Jerry robot, using relative capture instead of index-based movement
@@ -68,7 +69,7 @@ class JerryLift(
             targetPosition = 0.0
             deltaTimeout = 0
         },
-        5.0
+        Seconds.of(5.0)
     )
 
     private val releaseLock = While(
@@ -95,7 +96,7 @@ class JerryLift(
             opMode.telemetry.log("lift released to $holdPosition")
             holdPosition = null
         },
-        5.0
+        Seconds.of(5.0)
     )
 
     /**
