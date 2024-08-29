@@ -8,7 +8,7 @@ import org.murraybridgebunyips.proto.Proto;
 /**
  * No-op to init hardware and print timer status.
  */
-@TeleOp
+@TeleOp(name = "No-op", group = "debug")
 public class Noop extends BunyipsOpMode {
     private final Proto robot = new Proto();
 

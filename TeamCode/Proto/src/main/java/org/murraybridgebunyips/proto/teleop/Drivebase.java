@@ -10,7 +10,7 @@ import org.murraybridgebunyips.proto.Proto;
 /**
  * Drivebase and localizer only TeleOp with auto-lock.
  */
-@TeleOp(name = "Drivebase and Localizer Auto-Lock")
+@TeleOp(name = "Drivebase Control and Localizer Auto-Lock")
 public class Drivebase extends CommandBasedBunyipsOpMode {
     private final Proto robot = new Proto();
     private DualDeadwheelMecanumDrive drive;
