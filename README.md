@@ -9,22 +9,22 @@ This repository contains all code for our FTC robots constructed after 2021 usin
 
 ## Maintained robots in this repo
 ###### Maintained robots are modules that are attributed to an existing and usable robot controller. These robots are using the latest versions of BunyipsLib.<br>These modules can be found under TeamCode/
-| Robot Name | Description                                                                    | Season                    | Team                                |
-|------------|--------------------------------------------------------------------------------|---------------------------|-------------------------------------|
-| Proto      | REV Mecanum-drive with odometry pods                                           | INTO THE DEEP (2024-2025) | 15215 Murray Bridge Bunyips         |
-| Vance      | goBILDA Mecanum-drive                                                          | INTO THE DEEP (2024-2025) | 22407 Murray Bridge Mulyawonks      |
-| GLaDOS     | Mecanum-drive with odometry pods and vision capabilities                       | CENTERSTAGE (2023-2024)   | 15215 Murray Bridge Bunyips         |
-| Wheatley   | Mecanum-drive with 3D printed components                                       | CENTERSTAGE (2023-2024)   | 22407 Murray Bridge Mulyawonks      |
-| P-body     | Mecanum-drive Core Hex backup robot                                            | CENTERSTAGE (2023-2024)   | 99999 (Off Season Demo) Murray Cods |
+| Robot Name | Description                                                                    | Season                    | Team                                 |
+|------------|--------------------------------------------------------------------------------|---------------------------|--------------------------------------|
+| Proto      | REV Mecanum-drive with odometry pods                                            | INTO THE DEEP (2024-2025) | 15215 Murray Bridge Bunyips         |
+| Vance      | goBILDA Mecanum-drive                                                           | INTO THE DEEP (2024-2025) | 22407 Murray Bridge Mulyawonks      |
+| Wheatley   | Mecanum-drive with 3D printed components                                        | CENTERSTAGE (2023-2024)   | 22407 Murray Bridge Mulyawonks      |
+| P-body     | Mecanum-drive Core Hex backup robot                                             | CENTERSTAGE (2023-2024)   | 99999 (Off Season Demo) Murray Cods |
 | Jerry      | goBILDA Mecanum-drive with previous vision capabilities and basic odometry pods | POWERPLAY (2022-2023)     | 15215 Murray Bridge Bunyips         |
 
 ## Unmaintained robots in this repo
 ###### Unmaintained robots used to be attributed to a robot controller but have been decommissioned. They may be using outdated/deprecated versions of BunyipsLib.<br>These modules can be found under TeamCode/Archived/
 | Robot Name | Description | Season | Team |
 | --- | --- | --- | --- |
-| Dinomighty    | Mecanum-drive with pivot arm | POWERPLAY (2022-2023) | 22407 Murray Bridge Mulyawonks |
-| Bertie  | Mecanum-drive bucket-lift and spinner collector bot | FREIGHT FRENZY (2021-2022) | 15215 Murray Bridge Bunyips |
-| Lisa    | Differential drive high-speed minibot for testing | No Season | No Team |
+| GLaDOS     | Mecanum-drive with odometry pods and vision capabilities | CENTERSTAGE (2023-2024) | 15215 Murray Bridge Bunyips |
+| Dinomighty | Mecanum-drive with pivot arm | POWERPLAY (2022-2023) | 22407 Murray Bridge Mulyawonks |
+| Bertie     | Mecanum-drive bucket-lift and spinner collector bot | FREIGHT FRENZY (2021-2022) | 15215 Murray Bridge Bunyips |
+| Lisa       | Differential drive high-speed minibot for testing | No Season | No Team |
 
 ## Unmanaged robots
 ###### Unmanaged robots are current MBHS Student Robotics Club robots not managed by the primary software maintainers. These robots are usually written with Blocks.
