@@ -101,6 +101,7 @@ public class Proto extends RobotConfig {
                 .setParallelY(Inches.of(-2))
                 .setPerpendicularX(Inches.one())
                 .setPerpendicularY(Inches.of(2.5))
+                .setOverflowCompensation(true)
                 .build();
 
         // RoadRunner configuration
