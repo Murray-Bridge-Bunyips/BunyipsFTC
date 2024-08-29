@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.RoadRunnerTuning;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.RoadRunnerTuningOpMode;
 import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
 
 /**
@@ -15,7 +15,7 @@ import org.murraybridgebunyips.wheatley.components.WheatleyConfig;
  */
 @Autonomous(name = "RoadRunner Test")
 @Disabled
-public class WheatleyRoadRunnerTuning extends RoadRunnerTuning {
+public class WheatleyRoadRunnerTuning extends RoadRunnerTuningOpMode {
     @NonNull
     @Override
     public RoadRunnerDrive getBaseRoadRunnerDrive() {

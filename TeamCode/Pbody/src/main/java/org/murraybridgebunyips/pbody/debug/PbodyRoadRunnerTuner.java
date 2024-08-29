@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.RoadRunnerTuning;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.RoadRunnerTuningOpMode;
 import org.murraybridgebunyips.pbody.components.PbodyConfig;
 
 /**
@@ -15,7 +15,7 @@ import org.murraybridgebunyips.pbody.components.PbodyConfig;
  */
 @TeleOp(name = "RRTuner")
 @Disabled
-public class PbodyRoadRunnerTuner extends RoadRunnerTuning {
+public class PbodyRoadRunnerTuner extends RoadRunnerTuningOpMode {
     private final PbodyConfig config = new PbodyConfig();
 
     @NonNull

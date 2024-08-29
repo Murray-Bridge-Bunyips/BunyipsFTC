@@ -7,14 +7,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.TwoWheelLocalizer;
-import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.RoadRunnerTuning;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.RoadRunnerTuningOpMode;
 import org.murraybridgebunyips.proto.Proto;
 
 /**
  * For RoadRunner tuning.
  */
 @TeleOp(name = "RoadRunner Tuning", group = "debug")
-public class RRTuning extends RoadRunnerTuning {
+public class Tuning extends RoadRunnerTuningOpMode {
     @NonNull
     @Override
     protected RoadRunnerDrive getBaseRoadRunnerDrive() {
