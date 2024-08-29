@@ -128,9 +128,9 @@ public class GLaDOSConfigCore extends RobotConfig {
         backLeft = getHardware("bl", Motor.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         parallelDeadwheel = getHardware("pe", Deadwheel.class,
-                (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
+                (d) -> d.setDirection(Deadwheel.Direction.REVERSE));
         perpendicularDeadwheel = getHardware("ppe", Deadwheel.class,
-                (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
+                (d) -> d.setDirection(Deadwheel.Direction.REVERSE));
 
         // Pixel manipulation system
         arm = getHardware("arm", Motor.class, (d) -> {
@@ -174,16 +174,17 @@ public class GLaDOSConfigCore extends RobotConfig {
                 .setKA(0.0015)
                 .build();
 
+        // Through Bore config
         localizerCoefficients = new TwoWheelLocalizer.Coefficients.Builder()
-                .setTicksPerRev(1200)
+                .setTicksPerRev(8192)
                 .setGearRatio(1)
-                .setWheelRadius(Millimeters.of(50).divide(2))
-                .setXMultiplier(100.0 / 134.5)
-                .setYMultiplier(100.0 / 134.5)
+                .setWheelRadius(Millimeters.of(60).divide(2))
+//                .setXMultiplier(100.0 / 134.5)
+//                .setYMultiplier(100.0 / 134.5)
                 .setParallelX(Inches.of(2))
-                .setParallelY(Inches.zero())
-                .setPerpendicularX(Inches.of(6.5))
-                .setPerpendicularY(Inches.of(2.5))
+                .setParallelY(Inches.of(2))
+                .setPerpendicularX(Inches.of(-10.5))
+                .setPerpendicularY(Inches.of(2))
                 .build();
 
         mecanumCoefficients = new MecanumCoefficients.Builder()
