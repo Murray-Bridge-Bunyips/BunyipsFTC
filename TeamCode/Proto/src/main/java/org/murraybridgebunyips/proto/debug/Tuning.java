@@ -13,7 +13,7 @@ import org.murraybridgebunyips.proto.Proto;
 /**
  * For RoadRunner tuning.
  */
-@TeleOp(name = "RoadRunner Tuning", group = "debug")
+@TeleOp(name = "RoadRunner Tuning", group = "a")
 public class Tuning extends RoadRunnerTuningOpMode {
     @NonNull
     @Override
