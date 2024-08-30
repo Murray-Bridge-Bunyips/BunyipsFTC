@@ -87,25 +87,24 @@ public class Proto extends RobotConfig {
 
         // REV Through Bore Encoders
         parallelDeadwheel = getHardware("pe", Deadwheel.class,
-                (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
+                (d) -> d.setDirection(Deadwheel.Direction.REVERSE));
         perpendicularDeadwheel = getHardware("ppe", Deadwheel.class,
                 (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
         localizerCoefficients = new TwoWheelLocalizer.Coefficients.Builder()
                 .setTicksPerRev(8192)
                 .setGearRatio(1)
                 .setWheelRadius(Millimeters.of(60).divide(2))
-                // TODO: calibrate
-//                .setXMultiplier(100.0 / 134.5)
-//                .setYMultiplier(100.0 / 134.5)
+                .setXMultiplier(70.0 / 69.1)
+                .setYMultiplier(70.0 / 69.1)
                 .setParallelX(Inches.zero())
-                .setParallelY(Inches.of(-2))
+                .setParallelY(Inches.of(-1.8))
                 .setPerpendicularX(Inches.one())
-                .setPerpendicularY(Inches.of(2.5))
+                .setPerpendicularY(Inches.of(1.7))
                 .setOverflowCompensation(true)
                 .build();
 
         // RoadRunner configuration
-        // TODO: not tuned for robot construction due to weight
+        // TODO: tune all these constants and coefficients again
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(28)
                 .setMaxRPM(458)
@@ -122,7 +121,6 @@ public class Proto extends RobotConfig {
                 .setKA(0.0015)
                 .build();
         mecanumCoefficients = new MecanumCoefficients.Builder()
-                // TODO: calibrate
                 .setLateralMultiplier(60.0 / 59.846666)
                 .setTranslationalPID(new PIDCoefficients(8, 0, 0))
                 .setHeadingPID(new PIDCoefficients(10, 0, 0))

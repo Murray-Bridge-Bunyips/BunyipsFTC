@@ -18,7 +18,7 @@ public class Tuning extends RoadRunnerTuningOpMode {
     @NonNull
     @Override
     protected RoadRunnerDrive getBaseRoadRunnerDrive() {
-        Proto robot = new Proto();
+        Proto robot = new Proto().init(this);
         MecanumRoadRunnerDrive drive = new MecanumRoadRunnerDrive(
                 robot.driveConstants, robot.mecanumCoefficients, hardwareMap.voltageSensor,
                 robot.imu, robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight
