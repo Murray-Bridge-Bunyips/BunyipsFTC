@@ -7,7 +7,7 @@ import org.murraybridgebunyips.bunyipslib.Controls
 import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
-import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
+import org.murraybridgebunyips.bunyipslib.IMUEx
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryIMURotationTask
 
@@ -21,12 +21,12 @@ import org.murraybridgebunyips.jerry.tasks.JerryIMURotationTask
 @Autonomous(name = "IMU Rotate Test")
 class JerryIMURotateTest : AutonomousBunyipsOpMode() {
     private var config = JerryConfig()
-    private var imu: IMUOp? = null
+    private var imu: IMUEx? = null
     private var drive: CartesianMecanumDrive? = null
 
     override fun onInitialise() {
         config.init()
-        imu = IMUOp(config.imu!!)
+        imu = IMUEx(config.imu!!)
         drive = CartesianMecanumDrive(
             config.fl!!,
             config.fr!!,

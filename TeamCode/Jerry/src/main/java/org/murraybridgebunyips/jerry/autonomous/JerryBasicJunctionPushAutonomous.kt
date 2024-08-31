@@ -8,7 +8,7 @@ import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
-import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
+import org.murraybridgebunyips.bunyipslib.IMUEx
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
 
@@ -25,7 +25,7 @@ import org.murraybridgebunyips.jerry.tasks.JerryPrecisionDriveTask
 class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
     private var config = JerryConfig()
     private var drive: CartesianMecanumDrive? = null
-    private var imu: IMUOp? = null
+    private var imu: IMUEx? = null
 
     override fun onInitialise() {
         config.init()
@@ -38,7 +38,7 @@ class JerryBasicJunctionPushAutonomous : AutonomousBunyipsOpMode() {
             )
 
         if (NullSafety.assertNotNull(config.imu))
-            imu = IMUOp(config.imu!!)
+            imu = IMUEx(config.imu!!)
 
         setOpModes(Direction.LEFT, Direction.RIGHT)
     }

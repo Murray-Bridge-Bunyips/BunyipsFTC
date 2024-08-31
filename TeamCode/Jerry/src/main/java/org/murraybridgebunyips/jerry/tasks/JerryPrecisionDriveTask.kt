@@ -4,7 +4,7 @@ import org.murraybridgebunyips.bunyipslib.Direction
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Measure
 import org.murraybridgebunyips.bunyipslib.external.units.Time
-import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
+import org.murraybridgebunyips.bunyipslib.IMUEx
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 import kotlin.math.abs
 
@@ -24,7 +24,7 @@ import kotlin.math.abs
 class JerryPrecisionDriveTask(
     time: Measure<Time>,
     private val drive: CartesianMecanumDrive?,
-    private val imu: IMUOp?,
+    private val imu: IMUEx?,
     // Odometry moved to other robots, removed from Jerry
 //    private val x: Odometer?,
 //    private val y: Odometer?,
@@ -80,7 +80,7 @@ class JerryPrecisionDriveTask(
         )
 
         drive?.update()
-        imu?.update()
+        imu?.run()
 
         // Add telemetry of current operation
 //        opMode.addTelemetry(

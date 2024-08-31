@@ -8,7 +8,7 @@ import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
-import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
+import org.murraybridgebunyips.bunyipslib.IMUEx
 import org.murraybridgebunyips.common.powerplay.GetSignalTask
 import org.murraybridgebunyips.bunyipslib.vision.Vision
 import org.murraybridgebunyips.jerry.components.JerryConfig
@@ -27,7 +27,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
     private var config = JerryConfig()
     private var cam: Vision? = null
     private var drive: CartesianMecanumDrive? = null
-    private var imu: IMUOp? = null
+    private var imu: IMUEx? = null
 
     //    private var x: Odometer? = null
 //    private var y: Odometer? = null
@@ -53,7 +53,7 @@ class JerrySignalAutonomous : AutonomousBunyipsOpMode() {
 //            y = Odometer(this, config.fr!!, config.yDiameter, config.yTicksPerRev)
 
         if (NullSafety.assertNotNull(config.imu))
-            imu = IMUOp(config.imu!!)
+            imu = IMUEx(config.imu!!)
 
         // Initialisation of guaranteed task loading completed. We can now dedicate our
         // CPU cycles to the init-loop and find the Signal position.

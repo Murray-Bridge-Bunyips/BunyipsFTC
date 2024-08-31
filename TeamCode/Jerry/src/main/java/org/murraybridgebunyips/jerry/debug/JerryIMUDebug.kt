@@ -2,7 +2,7 @@ package org.murraybridgebunyips.jerry.debug
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode
-import org.murraybridgebunyips.bunyipslib.subsystems.IMUOp
+import org.murraybridgebunyips.bunyipslib.IMUEx
 import org.murraybridgebunyips.jerry.components.JerryConfig
 
 /**
@@ -11,11 +11,11 @@ import org.murraybridgebunyips.jerry.components.JerryConfig
 @TeleOp(name = "IMU Debug")
 class JerryIMUDebug : BunyipsOpMode() {
     private var config = JerryConfig()
-    private var imu: IMUOp? = null
+    private var imu: IMUEx? = null
 
     override fun onInit() {
         config.init()
-        imu = IMUOp(config.imu!!)
+        imu = IMUEx(config.imu!!)
 //        imu?.startCapture()
     }
 
@@ -26,6 +26,6 @@ class JerryIMUDebug : BunyipsOpMode() {
 //            )?.thirdAngle.toString()
 //        )
 //        telemetry.add(imu?.heading.toString())
-        imu?.update()
+        imu?.run()
     }
 }
