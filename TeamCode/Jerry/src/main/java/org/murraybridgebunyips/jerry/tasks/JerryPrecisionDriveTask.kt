@@ -1,10 +1,10 @@
 package org.murraybridgebunyips.jerry.tasks
 
 import org.murraybridgebunyips.bunyipslib.Direction
+import org.murraybridgebunyips.bunyipslib.IMUEx
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Measure
 import org.murraybridgebunyips.bunyipslib.external.units.Time
-import org.murraybridgebunyips.bunyipslib.IMUEx
 import org.murraybridgebunyips.bunyipslib.tasks.bases.Task
 import kotlin.math.abs
 

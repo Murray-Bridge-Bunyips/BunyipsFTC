@@ -9,8 +9,8 @@ import org.murraybridgebunyips.bunyipslib.NullSafety
 import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
-import org.murraybridgebunyips.common.powerplay.GetSignalTask
 import org.murraybridgebunyips.bunyipslib.vision.Vision
+import org.murraybridgebunyips.common.powerplay.GetSignalTask
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryTimeDriveTask
 

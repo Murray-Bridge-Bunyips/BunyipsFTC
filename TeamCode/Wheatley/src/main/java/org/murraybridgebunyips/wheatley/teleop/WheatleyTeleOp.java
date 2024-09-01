@@ -45,7 +45,7 @@ public class WheatleyTeleOp extends CommandBasedBunyipsOpMode {
     private HoldableActuator linearActuator;
     private HoldableActuator rotator;
     private DualServos claws;
-//    private Vision vision;
+    //    private Vision vision;
 //    private MultiColourThreshold pixels;
     private BlinkinLights lights;
 

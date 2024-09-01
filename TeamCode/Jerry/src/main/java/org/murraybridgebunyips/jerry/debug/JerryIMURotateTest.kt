@@ -4,10 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode
 import org.murraybridgebunyips.bunyipslib.Controls
+import org.murraybridgebunyips.bunyipslib.IMUEx
 import org.murraybridgebunyips.bunyipslib.Reference
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive
 import org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds
-import org.murraybridgebunyips.bunyipslib.IMUEx
 import org.murraybridgebunyips.jerry.components.JerryConfig
 import org.murraybridgebunyips.jerry.tasks.JerryIMURotationTask
 

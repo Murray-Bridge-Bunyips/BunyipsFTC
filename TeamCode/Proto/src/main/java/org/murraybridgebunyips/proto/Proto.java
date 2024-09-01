@@ -1,6 +1,5 @@
 package org.murraybridgebunyips.proto;
 
-import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.DegreesPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.MetersPerSecond;
@@ -15,6 +14,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.Motor;
+import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.TwoWheelLocalizer;
@@ -107,7 +107,7 @@ public class Proto extends RobotConfig {
         // TODO: tune all these constants and coefficients again
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(28)
-                .setMaxRPM(458)
+                .setMaxRPM(6000)
                 .setRunUsingEncoder(false)
                 .setWheelRadius(Millimeters.of(75).divide(2))
                 .setGearRatio(1.0 / 13.1)

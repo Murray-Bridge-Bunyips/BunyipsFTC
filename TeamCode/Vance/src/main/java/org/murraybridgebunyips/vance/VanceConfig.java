@@ -14,6 +14,7 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 
 /**
  * Vance's config file
+ *
  * @author Lachlan Paul, 2024
  */
 public class VanceConfig extends RobotConfig {
