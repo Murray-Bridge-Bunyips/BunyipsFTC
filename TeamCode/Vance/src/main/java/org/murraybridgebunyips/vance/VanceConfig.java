@@ -1,5 +1,12 @@
 package org.murraybridgebunyips.vance;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.DegreesPerSecond;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.InchesPerSecond;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
+
+import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -24,22 +31,22 @@ public class VanceConfig extends RobotConfig {
     public IMU imu;
 
     /**
-     * Expansion 0: bl
-     */
-    public DcMotorEx bl;
-
-    /**
-     * Expansion 1: fl
-     */
-    public DcMotorEx fl;
-
-    /**
-     * Expansion 2: fr
+     * Control 0: fr
      */
     public DcMotorEx /*Are you*/ fr /*Or jk*/;
 
     /**
-     * Expansion 3: br
+     * Control 1: fl
+     */
+    public DcMotorEx fl;
+
+    /**
+     * Control 2: bl
+     */
+    public DcMotorEx bl;
+
+    /**
+     * Control 3: br
      */
     public DcMotorEx br;
 
@@ -81,7 +88,7 @@ public class VanceConfig extends RobotConfig {
                     new IMU.Parameters(
                             new RevHubOrientationOnRobot(
                                     RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                                    RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                                    RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
                             )
                     )
             );
@@ -93,28 +100,27 @@ public class VanceConfig extends RobotConfig {
 
         // Fancy lights
         lights = getHardware("lights", RevBlinkinLedDriver.class);
-//todo: roadrunner
-//        driveConstants = new DriveConstants.Builder()
-//                .setTicksPerRev(28)
-//                .setMaxRPM(6000)
-//                .setRunUsingEncoder(false)
-//                .setWheelRadius(Millimeters.of(75).divide(2))
-//                .setGearRatio(1.0 / 13.1)
-//                .setTrackWidth(Inches.of(20.5))
-//                // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
-//                .setMaxVel(InchesPerSecond.of(41.065033847087705))
-//                .setMaxAccel(InchesPerSecond.per(Second).of(41.065033847087705))
-//                .setMaxAngVel(DegreesPerSecond.of(175))
-//                .setMaxAngAccel(DegreesPerSecond.per(Second).of(175))
-//                .setKV(0.0145)
-//                .setKStatic(0.06422)
-//                .setKA(0.001)
-//                .build();
-//
-//        mecanumCoefficients = new MecanumCoefficients.Builder()
-//                .setLateralMultiplier(60.0 / 54.07)
-//                .setTranslationalPID(new PIDCoefficients(8, 0, 0))
-//                .setHeadingPID(new PIDCoefficients(10, 0, 0))
-//                .build();
+        driveConstants = new DriveConstants.Builder()
+                .setTicksPerRev(28)
+                .setMaxRPM(6000)
+                .setRunUsingEncoder(false)
+                .setWheelRadius(Millimeters.of(75).divide(2))
+                .setGearRatio(1.0 / 13.1)
+                .setTrackWidth(Inches.of(20.5))
+                // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
+                .setMaxVel(InchesPerSecond.of(41.065033847087705))
+                .setMaxAccel(InchesPerSecond.per(Second).of(41.065033847087705))
+                .setMaxAngVel(DegreesPerSecond.of(175))
+                .setMaxAngAccel(DegreesPerSecond.per(Second).of(175))
+                .setKV(0.0145)
+                .setKStatic(0.06422)
+                .setKA(0.001)
+                .build();
+
+        mecanumCoefficients = new MecanumCoefficients.Builder()
+                .setLateralMultiplier(60.0 / 54.07)
+                .setTranslationalPID(new PIDCoefficients(8, 0, 0))
+                .setHeadingPID(new PIDCoefficients(10, 0, 0))
+                .build();
     }
 }
