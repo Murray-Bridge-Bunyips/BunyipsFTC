@@ -22,7 +22,7 @@ public class Drivebase extends CommandBasedBunyipsOpMode {
                 robot.driveConstants, robot.mecanumCoefficients, robot.imu,
                 robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight,
                 robot.localizerCoefficients, robot.parallelDeadwheel, robot.perpendicularDeadwheel
-        );
+        ).withName("Drive");
     }
 
     @Override

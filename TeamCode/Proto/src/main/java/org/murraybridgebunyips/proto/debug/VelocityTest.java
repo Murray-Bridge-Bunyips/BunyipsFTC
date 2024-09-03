@@ -3,6 +3,7 @@ package org.murraybridgebunyips.proto.debug;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 
@@ -11,6 +12,9 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.EncoderTicks;
 import org.murraybridgebunyips.bunyipslib.Motor;
+import org.murraybridgebunyips.bunyipslib.external.PIDFFController;
+import org.murraybridgebunyips.bunyipslib.external.ff.SimpleMotorFeedforward;
+import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 import org.murraybridgebunyips.proto.Proto;
 
 /**
@@ -18,6 +22,7 @@ import org.murraybridgebunyips.proto.Proto;
  */
 @Config
 @TeleOp
+@Disabled
 public class VelocityTest extends BunyipsOpMode {
     /**
      * Velocity target (deg/s)
@@ -31,8 +36,15 @@ public class VelocityTest extends BunyipsOpMode {
     @Override
     protected void onInit() {
         robot.init();
-        // TODO: assign motor to test
-        motor = robot.backLeft;
+        motor = new Motor(hardwareMap.dcMotor.get("test"));
+        motor.setRunUsingEncoderController(
+                new PIDFFController(
+                        new PIDController(0.2, 0, 0),
+                        new SimpleMotorFeedforward(0, 0, 0), motor.getEncoder()
+                ),
+                1,
+                motor.getMotorType().getTicksPerRev()
+        );
         MotorConfigurationType mConf = motor.getMotorType();
         tpr = (int) mConf.getTicksPerRev();
         Dbg.log("[Motor Intrinsics] TPR:%, MAX_TPS:%, MAX_RPM_BUFF:%", tpr, mConf.getAchieveableMaxTicksPerSecond(), mConf.getAchieveableMaxRPMFraction());
