@@ -11,6 +11,10 @@ import org.murraybridgebunyips.bunyipslib.subsystems.BlinkinLights;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.vance.VanceConfig;
 
+/**
+ * TeleOp for Vance
+ * @author Lachlan Paul, 2024
+ */
 @TeleOp
 public class VanceTeleOp extends CommandBasedBunyipsOpMode {
     private final VanceConfig config = new VanceConfig();
