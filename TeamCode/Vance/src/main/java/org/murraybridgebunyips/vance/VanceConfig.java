@@ -76,11 +76,9 @@ public class VanceConfig extends RobotConfig {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         fr = getHardware("fr", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         br = getHardware("br", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         imu = getHardware("imu", IMU.class, (d) -> {
