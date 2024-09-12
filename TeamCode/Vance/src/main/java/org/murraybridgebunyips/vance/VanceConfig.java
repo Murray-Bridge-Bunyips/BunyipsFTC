@@ -99,15 +99,14 @@ public class VanceConfig extends RobotConfig {
         // Fancy lights
         lights = getHardware("lights", RevBlinkinLedDriver.class);
         driveConstants = new DriveConstants.Builder()
-                .setTicksPerRev(28)
-                .setMaxRPM(6000)
+                .setTicksPerRev(537.6)
+                .setMaxRPM(312)
                 .setRunUsingEncoder(false)
-                .setWheelRadius(Millimeters.of(75).divide(2))
-                .setGearRatio(1.0 / 13.1)
-                .setTrackWidth(Inches.of(20.5))
-                // ((MAX_RPM / 60) * GEAR_RATIO * WHEEL_RADIUS * 2 * Math.PI) * 0.85
-                .setMaxVel(InchesPerSecond.of(41.065033847087705))
-                .setMaxAccel(InchesPerSecond.per(Second).of(41.065033847087705))
+                .setWheelRadius(Inches.of(2))
+                .setGearRatio(1.0)
+                .setTrackWidth(Inches.of(17))
+                .setMaxVel(InchesPerSecond.of(31))
+                .setMaxAccel(InchesPerSecond.per(Second).of(31))
                 .setMaxAngVel(DegreesPerSecond.of(175))
                 .setMaxAngAccel(DegreesPerSecond.per(Second).of(175))
                 .setKV(0.0145)
@@ -116,7 +115,7 @@ public class VanceConfig extends RobotConfig {
                 .build();
 
         mecanumCoefficients = new MecanumCoefficients.Builder()
-                .setLateralMultiplier(60.0 / 54.07)
+                .setLateralMultiplier(1.0)
                 .setTranslationalPID(new PIDCoefficients(8, 0, 0))
                 .setHeadingPID(new PIDCoefficients(10, 0, 0))
                 .build();
