@@ -105,12 +105,12 @@ public class VanceConfig extends RobotConfig {
                 .setRunUsingEncoder(false)
                 .setWheelRadius(Inches.of(2))
                 .setGearRatio(1.0)
-                .setTrackWidth(Inches.of(17))
-                .setMaxVel(InchesPerSecond.of(31))
-                .setMaxAccel(InchesPerSecond.per(Second).of(31))
-                .setMaxAngVel(DegreesPerSecond.of(175))
-                .setMaxAngAccel(DegreesPerSecond.per(Second).of(175))
-                .setKV(0.0145)
+                .setTrackWidth(Inches.of(16.89))
+                .setMaxVel(InchesPerSecond.of(53)) // ~1.34 m/s
+                .setMaxAccel(InchesPerSecond.per(Second).of(53))
+                .setMaxAngVel(DegreesPerSecond.of(180))
+                .setMaxAngAccel(DegreesPerSecond.per(Second).of(180))
+                .setKV(0.015)
                 .setKStatic(0.06422)
                 .setKA(0.001)
                 .build();
