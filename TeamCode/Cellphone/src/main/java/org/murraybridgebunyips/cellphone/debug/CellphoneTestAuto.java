@@ -37,7 +37,7 @@ public class CellphoneTestAuto extends AutonomousBunyipsOpMode {
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
         assert selectedOpMode != null;
-        telemetry.log(((StartingConfiguration.Position)selectedOpMode.require()).toFieldPose());
+        telemetry.log(((StartingConfiguration.Position) selectedOpMode.require()).toFieldPose());
 //        for (int i = 0; i < 100; i++) {
 //            addTask(new WaitTask(Milliseconds.of(100)).withName("WaitTask no. " + i));
 //        }

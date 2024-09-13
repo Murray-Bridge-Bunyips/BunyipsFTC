@@ -104,7 +104,6 @@ public class Proto extends RobotConfig {
                 .build();
 
         // RoadRunner configuration
-        // TODO: tune all these constants and coefficients again
         driveConstants = new DriveConstants.Builder()
                 .setTicksPerRev(28)
                 .setMaxRPM(6000)

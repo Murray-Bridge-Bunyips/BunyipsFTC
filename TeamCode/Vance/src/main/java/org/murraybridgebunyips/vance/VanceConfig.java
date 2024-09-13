@@ -3,7 +3,6 @@ package org.murraybridgebunyips.vance;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.DegreesPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.InchesPerSecond;
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
@@ -76,9 +75,11 @@ public class VanceConfig extends RobotConfig {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         fr = getHardware("fr", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         br = getHardware("br", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         imu = getHardware("imu", IMU.class, (d) -> {
