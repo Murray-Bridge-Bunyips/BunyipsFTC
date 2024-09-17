@@ -40,7 +40,8 @@ public class SpecimenPath extends AutonomousBunyipsOpMode implements RoadRunner 
 
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
-        makeTrajectory(new Pose2d(24.10, -62.82, 90.00), Inches, Degrees)
+        setPose(new Pose2d(24.10, -62.82, 90.00), Inches, Degrees);
+        makeTrajectory()
                 .lineTo(new Vector2d(0.23, -33.59), Inches)
                 .lineTo(new Vector2d(48.89, -38.33), Inches)
                 .lineTo(new Vector2d(-0.23, -33.59), Inches)

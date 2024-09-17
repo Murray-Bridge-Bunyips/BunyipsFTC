@@ -2,8 +2,6 @@ package org.murraybridgebunyips.common.centerstage.vision;
 
 import androidx.annotation.NonNull;
 
-import com.acmerobotics.dashboard.config.Config;
-
 import org.murraybridgebunyips.bunyipslib.vision.processors.ColourThreshold;
 import org.opencv.core.Scalar;
 
@@ -12,7 +10,7 @@ import org.opencv.core.Scalar;
  *
  * @author Lucas Bubner, 2024
  */
-@Config
+//@Config
 public class RedTeamProp extends ColourThreshold {
     /**
      * The lower YCrCb bounds for the red team prop.

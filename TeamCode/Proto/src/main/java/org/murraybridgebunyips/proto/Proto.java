@@ -2,8 +2,7 @@ package org.murraybridgebunyips.proto;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.DegreesPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.MetersPerSecond;
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.MetersPerSecondPerSecond;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.InchesPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
 
@@ -111,8 +110,8 @@ public class Proto extends RobotConfig {
                 .setWheelRadius(Millimeters.of(75).divide(2))
                 .setGearRatio(1.0 / 13.1)
                 .setTrackWidth(Inches.of(20.5))
-                .setMaxVel(MetersPerSecond.of(1.04))
-                .setMaxAccel(MetersPerSecondPerSecond.of(1.04))
+                .setMaxVel(InchesPerSecond.of(48))
+                .setMaxAccel(InchesPerSecond.per(Second).of(96))
                 .setMaxAngVel(DegreesPerSecond.of(175))
                 .setMaxAngAccel(DegreesPerSecond.per(Second).of(175))
                 .setKV(0.01395)
