@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumRoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.tuning.RoadRunnerTuningOpMode;
-import org.murraybridgebunyips.vance.VanceConfig;
+import org.murraybridgebunyips.vance.Vance;
 
 /**
  * brrrrrrrrrrrrrm, brrrrrrrrrrrrrrm, brrrrrrrrrrrrrrrrrrrm
@@ -16,15 +16,15 @@ import org.murraybridgebunyips.vance.VanceConfig;
  */
 @TeleOp
 public class VanceRoadRunnerTuning extends RoadRunnerTuningOpMode {
-    private final VanceConfig config = new VanceConfig();
+    private final Vance robot = new Vance();
     private MecanumRoadRunnerDrive drive;
 
     @NonNull
     @Override
     protected RoadRunnerDrive getBaseRoadRunnerDrive() {
-        config.init(this);
-        drive = new MecanumRoadRunnerDrive(config.driveConstants, config.mecanumCoefficients, hardwareMap.voltageSensor,
-                config.imu, config.fl, config.fr, config.bl, config.br);
+        robot.init(this);
+        drive = new MecanumRoadRunnerDrive(robot.driveConstants, robot.mecanumCoefficients, hardwareMap.voltageSensor,
+                robot.imu, robot.fl, robot.fr, robot.bl, robot.br);
         return drive;
     }
 }

@@ -19,11 +19,11 @@ import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 
 /**
- * Vance's config file
+ * FTC 22407 INTO THE DEEP 2024-2025 robot configuration
  *
  * @author Lachlan Paul, 2024
  */
-public class VanceConfig extends RobotConfig {
+public class Vance extends RobotConfig {
     /**
      * Internally mounted on I2C C0 "imu"
      */
