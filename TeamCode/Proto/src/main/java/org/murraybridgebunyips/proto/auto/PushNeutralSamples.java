@@ -4,6 +4,7 @@ import static org.murraybridgebunyips.bunyipslib.StartingConfiguration.blueLeft;
 import static org.murraybridgebunyips.bunyipslib.StartingConfiguration.redLeft;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.FieldTiles;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 
 import androidx.annotation.NonNull;
@@ -59,6 +60,7 @@ public class PushNeutralSamples extends AutonomousBunyipsOpMode implements RoadR
         TrajectorySequence red = makeTrajectory()
                 .setRefMirroring(MirrorMap.SYMMETRIC_MIRROR)
                 .mirrorToRef(blue)
+                .forward(0.8, FieldTiles)
                 .lineToSplineHeading(new Pose2d(-31.14, -26.09, 180.00), Inches, Degrees)
                 .lineToSplineHeading(new Pose2d(-44.91, -13.08, 250.00), Inches, Degrees)
                 .splineToLinearHeading(new Pose2d(-56.24, -51.49, 233), Inches, Degrees, 233, Degrees)
