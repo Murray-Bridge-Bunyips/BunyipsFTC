@@ -3,14 +3,12 @@ include ':BunyipsLib'
 include ':Common'
 include ':Cellphone'
 include ':Jerry'
-include ':Wheatley'
 include ':Pbody'
 include ':Proto'
 include ':Vance'
 project(":Common").projectDir = new File("TeamCode/Common")
 project(":Cellphone").projectDir = new File("TeamCode/Cellphone")
 project(":Jerry").projectDir = new File("TeamCode/Jerry")
-project(":Wheatley").projectDir = new File("TeamCode/Wheatley")
 project(":Pbody").projectDir = new File("TeamCode/Pbody")
 project(":Proto").projectDir = new File("TeamCode/Proto")
 project(":Vance").projectDir = new File("TeamCode/Vance")
