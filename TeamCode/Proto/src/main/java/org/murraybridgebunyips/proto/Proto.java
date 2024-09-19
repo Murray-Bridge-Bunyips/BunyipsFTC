@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 
 import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.Motor;
+import org.murraybridgebunyips.bunyipslib.RoadRunner;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
@@ -111,7 +112,7 @@ public class Proto extends RobotConfig {
                 .setGearRatio(1.0 / 13.1)
                 .setTrackWidth(Inches.of(20.5))
                 .setMaxVel(InchesPerSecond.of(48))
-                .setMaxAccel(InchesPerSecond.per(Second).of(96))
+                .setMaxAccel(InchesPerSecond.per(Second).of(60))
                 .setMaxAngVel(DegreesPerSecond.of(175))
                 .setMaxAngAccel(DegreesPerSecond.per(Second).of(175))
                 .setKV(0.01395)
@@ -123,5 +124,7 @@ public class Proto extends RobotConfig {
                 .setTranslationalPID(new PIDCoefficients(8, 0, 0))
                 .setHeadingPID(new PIDCoefficients(10, 0, 0))
                 .build();
+
+        RoadRunner.noTimeouts.set(true);
     }
 }
