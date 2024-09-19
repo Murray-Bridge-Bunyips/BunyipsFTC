@@ -13,7 +13,6 @@ This repository contains all code for our FTC robots constructed after 2021 usin
 |------------|--------------------------------------------------------------------------------|---------------------------|--------------------------------------|
 | Proto      | REV Mecanum-drive with odometry pods                                            | INTO THE DEEP (2024-2025) | 15215 Murray Bridge Bunyips         |
 | Vance      | goBILDA Mecanum-drive                                                           | INTO THE DEEP (2024-2025) | 22407 Murray Bridge Mulyawonks      |
-| Wheatley   | Mecanum-drive with 3D printed components                                        | CENTERSTAGE (2023-2024)   | 22407 Murray Bridge Mulyawonks      |
 | P-body     | Mecanum-drive Core Hex backup robot                                             | CENTERSTAGE (2023-2024)   | 99999 (Off Season Demo) Murray Cods |
 | Jerry      | goBILDA Mecanum-drive with previous vision capabilities and basic odometry pods | POWERPLAY (2022-2023)     | 15215 Murray Bridge Bunyips         |
 
@@ -21,6 +20,7 @@ This repository contains all code for our FTC robots constructed after 2021 usin
 ###### Unmaintained robots used to be attributed to a robot controller but have been decommissioned. They may be using outdated/deprecated versions of BunyipsLib.<br>These modules can be found under TeamCode/Archived/
 | Robot Name | Description | Season | Team |
 | --- | --- | --- | --- |
+| Wheatley   | Mecanum-drive with 3D printed components | CENTERSTAGE (2023-2024) | 22407 Murray Bridge Mulyawonks |
 | GLaDOS     | Mecanum-drive with odometry pods and vision capabilities | CENTERSTAGE (2023-2024) | 15215 Murray Bridge Bunyips |
 | Dinomighty | Mecanum-drive with pivot arm | POWERPLAY (2022-2023) | 22407 Murray Bridge Mulyawonks |
 | Bertie     | Mecanum-drive bucket-lift and spinner collector bot | FREIGHT FRENZY (2021-2022) | 15215 Murray Bridge Bunyips |
