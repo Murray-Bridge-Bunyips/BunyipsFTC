@@ -17,6 +17,7 @@ import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.ThreeWheelLocalizer;
 
 /**
  * FTC 22407 INTO THE DEEP 2024-2025 robot configuration
@@ -58,10 +59,16 @@ public class Vance extends RobotConfig {
      * RoadRunner drive constants
      */
     public DriveConstants driveConstants;
+
     /**
      * RoadRunner Mecanum coefficients
      */
     public MecanumCoefficients mecanumCoefficients;
+
+    /**
+     * Roadrunner Tri-Wheel Localiser Coefficients
+     */
+    public ThreeWheelLocalizer.Coefficients localiserCoefficients;
 
     @Override
     protected void onRuntime() {
