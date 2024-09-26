@@ -8,11 +8,12 @@ This repository contains all code for our FTC robots constructed after 2021 usin
 > TeamCode modules here utilise **[BunyipsLib](https://github.com/Murray-Bridge-Bunyips/BunyipsLib)**, our own hybrid FTC library we use to program robots with efficiency and ease. Read more about BunyipsLib [here](https://github.com/Murray-Bridge-Bunyips/BunyipsLib).
 
 ## Maintained robots in this repo
-###### Maintained robots are modules that are attributed to an existing and usable robot controller. These robots are using the latest versions of BunyipsLib.<br>These modules can be found under TeamCode/
+###### Maintained robots are modules that are attributed to an existing and usable robot controller and Gradle config. These robots are using the latest versions of BunyipsLib.<br>These modules can be found under TeamCode/
 | Robot Name | Description                                                                    | Season                    | Team                                 |
 |------------|--------------------------------------------------------------------------------|---------------------------|--------------------------------------|
 | Proto      | REV Mecanum-drive with odometry pods                                            | INTO THE DEEP (2024-2025) | 15215 Murray Bridge Bunyips         |
 | Vance      | goBILDA Mecanum-drive                                                           | INTO THE DEEP (2024-2025) | 22407 Murray Bridge Mulyawonks      |
+| Joker      | REV Mecanum-drive with swinging arm                                             | INTO THE DEEP (2024-2025) | 24736 Murray Bridge Lizards         |
 | P-body     | Mecanum-drive Core Hex backup robot                                             | CENTERSTAGE (2023-2024)   | 99999 (Off Season Demo) Murray Cods |
 | Jerry      | goBILDA Mecanum-drive with previous vision capabilities and basic odometry pods | POWERPLAY (2022-2023)     | 15215 Murray Bridge Bunyips         |
 
@@ -26,12 +27,13 @@ This repository contains all code for our FTC robots constructed after 2021 usin
 | Bertie     | Mecanum-drive bucket-lift and spinner collector bot | FREIGHT FRENZY (2021-2022) | 15215 Murray Bridge Bunyips |
 | Lisa       | Differential drive high-speed minibot for testing | No Season | No Team |
 
+<!--
 ## Unmanaged robots
 ###### Unmanaged robots are current MBHS Student Robotics Club robots not managed by the primary software maintainers. These robots are usually written with Blocks.
 | Robot Name | Description | Season | Team |
 | --- | --- | --- | --- |
 | Atlas    | Differential drive Core Hex simple bot | CENTERSTAGE (2023-2024) | 24736 Murray Bridge Lizards |
-
+-->
 ___
 
 ## NOTICE
