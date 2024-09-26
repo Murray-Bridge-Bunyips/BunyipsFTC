@@ -6,9 +6,11 @@ include ':Jerry'
 include ':Pbody'
 include ':Proto'
 include ':Vance'
+include ':Joker'
 project(":Common").projectDir = new File("TeamCode/Common")
 project(":Cellphone").projectDir = new File("TeamCode/Cellphone")
 project(":Jerry").projectDir = new File("TeamCode/Jerry")
 project(":Pbody").projectDir = new File("TeamCode/Pbody")
 project(":Proto").projectDir = new File("TeamCode/Proto")
 project(":Vance").projectDir = new File("TeamCode/Vance")
+project(":Joker").projectDir = new File("TeamCode/Joker")
