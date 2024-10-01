@@ -1,11 +1,14 @@
 package org.murraybridgebunyips.cellphone.debug;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
@@ -14,15 +17,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
+import org.murraybridgebunyips.bunyipslib.Controls;
+import org.murraybridgebunyips.bunyipslib.PurePursuit;
+import org.murraybridgebunyips.bunyipslib.StartingConfiguration;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceRunner;
 import org.murraybridgebunyips.bunyipslib.roadrunner.util.DashboardUtil;
-import org.murraybridgebunyips.bunyipslib.vision.AprilTagPoseEstimator;
-import org.murraybridgebunyips.bunyipslib.vision.Vision;
-import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
 import org.murraybridgebunyips.cellphone.components.CellphoneConfig;
 
 import java.util.Collections;
@@ -150,7 +153,7 @@ public class CellphoneMeccanumDroive extends BunyipsOpMode {
 
         @Override
         public void setRotationPriorityWeightedDrivePower(Pose2d drivePowerRotationPriority) {
-
+            setDrivePower(drivePowerRotationPriority);
         }
 
         @Override
@@ -231,35 +234,41 @@ public class CellphoneMeccanumDroive extends BunyipsOpMode {
 
         @Override
         public void setDrivePower(Pose2d drivePower) {
-
+            drivePower = new Pose2d(drivePower.vec().rotated(pose.getHeading()), drivePower.getHeading());
+            pose = new Pose2d(
+                    pose.getX() + drivePower.getX() * 23 * timer.deltaTime().in(Seconds),
+                    pose.getY() + drivePower.getY() * 23 * timer.deltaTime().in(Seconds),
+                    pose.getHeading() + drivePower.getHeading() * 2 * timer.deltaTime().in(Seconds)
+            );
         }
     }
+
+    PurePursuit pp;
+    DummyDrive d;
 
     @Override
     protected void onInit() {
         config.init();
-        Vision vision = new Vision(config.cameraB);
-        AprilTag at = new AprilTag();
-        vision.init(at);
-        vision.start(at);
-        vision.startPreview();
-        DummyDrive dummyDrive = new DummyDrive();
-        onActiveLoop(new AprilTagPoseEstimator(at, dummyDrive).setCameraOffset(new Pose2d(9, 0, 0)));
+//        Vision vision = new Vision(config.cameraB);
+//        AprilTag at = new AprilTag();
+//        vision.init(at);
+//        vision.start(at);
+//        vision.startPreview();
+        d = new DummyDrive();
+        pp = new PurePursuit(d).withLookaheadRadius(Inches.of(36));
+//        onActiveLoop(new AprilTagPoseEstimator(at, dummyDrive).setCameraOffset(new Pose2d(9, 0, 0)));
+        d.setPoseEstimate(StartingConfiguration.redRight().tile(2.3).build().toFieldPose());
+        pp.followPath(pp.makePath().splineTo(new Vector2d(40, 40), Inches, 180, Degrees).splineTo(new Vector2d(-30, 30), Inches, 270, Degrees).splineTo(new Vector2d(-30, -20), Inches, 270, Degrees).buildPath());
     }
 
     @Override
     protected void activeLoop() {
-        // field centric because i cant be bothered slapping a rot matrix here
-        pose = new Pose2d(
-                pose.getX() - gamepad1.lsy * 30 * timer.deltaTime().in(Seconds),
-                pose.getY() - gamepad1.lsx * 30 * timer.deltaTime().in(Seconds),
-                pose.getHeading() - gamepad1.rsx * 1.57 * timer.deltaTime().in(Seconds)
-        );
+        d.setDrivePower(Controls.makeRobotPose(gamepad1.lsx, gamepad1.lsy, gamepad1.rsx));
 
         telemetry.addData("x", pose.getX());
         telemetry.addData("y", pose.getY());
         telemetry.addData("r", pose.getHeading());
 
-        DashboardUtil.drawRobot(telemetry.dashboardFieldOverlay(), pose);
+        DashboardUtil.drawRobot(telemetry.dashboardFieldOverlay().setStroke("#3F51B5"), pose);
     }
 }
