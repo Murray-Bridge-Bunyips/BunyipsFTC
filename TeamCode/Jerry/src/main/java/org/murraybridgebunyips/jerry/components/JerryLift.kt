@@ -47,10 +47,10 @@ class JerryLift(
                 deltaTimeout = 0
             }
             // Reset lock when limit is pressed, delta is stagnant, or when manually interrupted
-            !limit.isPressed && !opMode.gamepad2.right_bumper && deltaTimeout < 30
+            !limit.isPressed && !require(opMode).gamepad2.right_bumper && deltaTimeout < 30
         },
         {
-            opMode.telemetry.add(
+            opMode?.telemetry?.add(
                 String.format(
                     "LIFT IS RESETTING... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
                     arm1.currentPosition,
@@ -75,10 +75,10 @@ class JerryLift(
     private val releaseLock = While(
         {
             // Release lock when motors have reached the target or manually interrupted
-            arm1.isBusy && arm2.isBusy && !opMode.gamepad2.right_bumper
+            arm1.isBusy && arm2.isBusy && !require(opMode).gamepad2.right_bumper
         },
         {
-            opMode.telemetry.add(
+            opMode?.telemetry?.add(
                 String.format(
                     "LIFT IS RECALLING TO HOLD POSITION %d... PRESS GAMEPAD2.RIGHT_BUMPER TO CANCEL! ENCODER VALUES: %d, %d",
                     holdPosition,
@@ -93,7 +93,7 @@ class JerryLift(
                 motor.mode = DcMotor.RunMode.RUN_WITHOUT_ENCODER
             }
 
-            opMode.telemetry.log("lift released to $holdPosition")
+            opMode?.telemetry?.log("lift released to $holdPosition")
             holdPosition = null
         },
         Seconds.of(5.0)
@@ -166,7 +166,7 @@ class JerryLift(
      */
     fun open() {
         claw.position = 0.0
-        opMode.telemetry.add("Claws are opening...")
+        opMode?.telemetry?.add("Claws are opening...")
     }
 
     /**
@@ -175,7 +175,7 @@ class JerryLift(
      */
     fun close() {
         claw.position = 1.0
-        opMode.telemetry.add("Claws are closing...")
+        opMode?.telemetry?.add("Claws are closing...")
     }
 
     /**
@@ -232,7 +232,7 @@ class JerryLift(
         }
         val armPos = (arm1.currentPosition + arm2.currentPosition) / 2
         holdPosition = minOf(armPos, HARD_LIMIT)
-        opMode.telemetry.log("lift captured at $holdPosition")
+        opMode?.telemetry?.log("lift captured at $holdPosition")
     }
 
     /**
@@ -243,11 +243,11 @@ class JerryLift(
             throw IllegalStateException("JerryLift: release() method can only be used in manual mode")
         }
         if (holdPosition == null) {
-            opMode.telemetry.log("lift released but no capture was found")
+            opMode?.telemetry?.log("lift released but no capture was found")
             return
         }
 
-        opMode.telemetry.log("lift releasing to $holdPosition...")
+        opMode?.telemetry?.log("lift releasing to $holdPosition...")
 
         // Configure motors for positional control
         for (motor in motors) {
@@ -267,7 +267,7 @@ class JerryLift(
         if (resetLock.run()) return
         if (releaseLock.run()) return
 
-        opMode.telemetry.add(
+        opMode?.telemetry?.add(
             String.format(
                 "Lift (pos1, pos2, target, capture): %d, %d, %s, %s",
                 arm1.currentPosition,

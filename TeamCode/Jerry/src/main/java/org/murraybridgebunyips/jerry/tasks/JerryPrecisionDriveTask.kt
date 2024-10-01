@@ -38,7 +38,7 @@ class JerryPrecisionDriveTask(
         try {
             assert(drive != null)
         } catch (e: AssertionError) {
-            opMode.telemetry.add(
+            opMode?.telemetry?.add(
                 "Failed to initialise a drive task as the drive system is unavailable.",
                 true
             )
