@@ -1,6 +1,5 @@
 package org.murraybridgebunyips.cellphone.debug;
 
-import static org.murraybridgebunyips.bunyipslib.external.units.Units.Degrees;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
@@ -8,7 +7,6 @@ import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.drive.DriveSignal;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.localization.Localizer;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
@@ -18,10 +16,10 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controls;
-import org.murraybridgebunyips.bunyipslib.PurePursuit;
-import org.murraybridgebunyips.bunyipslib.StartingConfiguration;
+import org.murraybridgebunyips.bunyipslib.Field;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.RoadRunnerDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.BoundedLocalization;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequence;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.murraybridgebunyips.bunyipslib.roadrunner.trajectorysequence.TrajectorySequenceRunner;
@@ -243,7 +241,7 @@ public class CellphoneMeccanumDroive extends BunyipsOpMode {
         }
     }
 
-    PurePursuit pp;
+//    PurePursuit pp;
     DummyDrive d;
 
     @Override
@@ -255,10 +253,12 @@ public class CellphoneMeccanumDroive extends BunyipsOpMode {
 //        vision.start(at);
 //        vision.startPreview();
         d = new DummyDrive();
-        pp = new PurePursuit(d).withLookaheadRadius(Inches.of(36));
+        BoundedLocalization.enable(Inches.of(9), d::getPoseEstimate, d::setPoseEstimate)
+                .setRestrictedAreas(Field.Season.INTO_THE_DEEP);
+//        pp = new PurePursuit(d).withLookaheadRadius(Inches.of(36));
 //        onActiveLoop(new AprilTagPoseEstimator(at, dummyDrive).setCameraOffset(new Pose2d(9, 0, 0)));
-        d.setPoseEstimate(StartingConfiguration.redRight().tile(2.3).build().toFieldPose());
-        pp.followPath(pp.makePath().splineTo(new Vector2d(40, 40), Inches, 180, Degrees).splineTo(new Vector2d(-30, 30), Inches, 270, Degrees).splineTo(new Vector2d(-30, -20), Inches, 270, Degrees).buildPath());
+//        d.setPoseEstimate(StartingConfiguration.redRight().tile(2.3).build().toFieldPose());
+//        pp.followPath(pp.makePath().splineTo(new Vector2d(40, 40), Inches, 180, Degrees).splineTo(new Vector2d(-30, 30), Inches, 270, Degrees).splineTo(new Vector2d(-30, -20), Inches, 270, Degrees).buildPath());
     }
 
     @Override
