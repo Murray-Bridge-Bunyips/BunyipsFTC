@@ -1,10 +1,12 @@
 package org.murraybridgebunyips.joker.teleop;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive;
+import org.murraybridgebunyips.bunyipslib.subsystems.BlinkinLights;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.joker.Joker;
 
@@ -14,6 +16,7 @@ public class TeleOperation extends BunyipsOpMode {
     private CartesianMecanumDrive drive;
     private HoldableActuator intake;
     private HoldableActuator lift;
+    private BlinkinLights lights;
 
     @Override
     protected void onInit() {
@@ -25,6 +28,7 @@ public class TeleOperation extends BunyipsOpMode {
         drive = new CartesianMecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
         lift = new HoldableActuator(robot.liftMotor)
                 .withBottomSwitch(robot.liftBotStop);
+        lights = new BlinkinLights(robot.lights, RevBlinkinLedDriver.BlinkinPattern.WHITE);
         robot.intakeGrip.setPosition(Joker.INTAKE_GRIP_OPEN_POSITION);
         robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_CLOSED_POSITION);
         robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_IN_POSITION);
@@ -43,11 +47,18 @@ public class TeleOperation extends BunyipsOpMode {
         if (gamepad2.getDebounced(Controls.X)) {
             robot.toggleOuttake();
         }
+        if (robot.handoverPoint.isPressed()) {
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
+        }
+        else {
+            lights.resetPattern();
+        }
         drive.setSpeedUsingController(leftStickX, leftStickY, rightStickX);
         intake.setPower(gp2LeftStickY);
         lift.setPower(gp2RightStickY);
         drive.update();
         intake.update();
         lift.update();
+        lights.update();
     }
 }

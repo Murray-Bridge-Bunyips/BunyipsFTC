@@ -1,11 +1,11 @@
 package org.murraybridgebunyips.joker;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
-import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 
 public class Joker extends RobotConfig {
@@ -47,6 +47,11 @@ public class Joker extends RobotConfig {
      */
     public Servo intakeGrip;
     /**
+     * Control Hub 3: lights
+     */
+    public RevBlinkinLedDriver lights;
+
+    /**
      * Control Hub 0-1 (1 used): liftLimiter
      */
     public TouchSensor liftBotStop;
@@ -86,6 +91,7 @@ public class Joker extends RobotConfig {
         outtakeAlign = getHardware("outtakeAlign", Servo.class);
         outtakeGrip = getHardware("outtakeGrip", Servo.class);
         intakeGrip = getHardware("intakeGrip", Servo.class);
+        lights = getHardware("lights", RevBlinkinLedDriver.class);
         liftBotStop = getHardware("liftLimiter", TouchSensor.class);
         intakeInStop = getHardware("intakeInStop", TouchSensor.class);
         intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
