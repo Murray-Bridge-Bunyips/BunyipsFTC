@@ -45,6 +45,7 @@ public class CellphoneConfig extends RobotConfig {
         BunyipsOpMode.ifRunning(o -> o.onActiveLoop(m::update));
     }
 
+    @SuppressWarnings({"all", "deprecation"})
     private static class DummyMotor implements DcMotorControllerEx {
         private double power;
         private double pos;
