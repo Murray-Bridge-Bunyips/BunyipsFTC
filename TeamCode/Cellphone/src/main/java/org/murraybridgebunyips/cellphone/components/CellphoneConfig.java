@@ -16,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Motor;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
+import org.murraybridgebunyips.bunyipslib.external.Mathf;
 
 /**
  * Cellphone
@@ -55,13 +56,14 @@ public class CellphoneConfig extends RobotConfig {
         private DcMotor.RunMode mode;
 
         private final int TPS = 600;
+        private final int ACCEL = 1200;
 
         private double velo;
 
         public void update() {
             // update this dummy motor by feeding power into pos, delta time approach
-            velo = power * TPS * timer.seconds();
-            pos += velo;
+            velo = Mathf.moveTowards(velo, power * TPS, ACCEL * timer.seconds());
+            pos += velo * timer.seconds();
             timer.reset();
         }
 
