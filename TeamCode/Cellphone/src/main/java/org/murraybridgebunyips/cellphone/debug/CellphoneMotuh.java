@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
-import org.murraybridgebunyips.bunyipslib.external.pid.PController;
+import org.murraybridgebunyips.bunyipslib.external.TrapezoidProfile;
+import org.murraybridgebunyips.bunyipslib.external.pid.ProfiledPIDController;
 import org.murraybridgebunyips.cellphone.components.CellphoneConfig;
 
 /**
@@ -23,6 +24,14 @@ public class CellphoneMotuh extends BunyipsOpMode {
     public static DcMotorSimple.Direction DIRECTION = DcMotorSimple.Direction.FORWARD;
     /** the un-guhening */
     public static double ACC_LP_GAIN = 0.95;
+    /**
+     * vroom
+     */
+    public static double mVelo = 15;
+    /**
+     * vroom vroom
+     */
+    public static double mAccel = 8;
 
     private final CellphoneConfig phone = new CellphoneConfig();
 
@@ -30,7 +39,7 @@ public class CellphoneMotuh extends BunyipsOpMode {
     protected void onInit() {
         phone.init();
         phone.dummy.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        phone.dummy.setRunToPositionController(new PController(kP));
+        phone.dummy.setRunToPositionController(new ProfiledPIDController(kP, 0, 0, new TrapezoidProfile.Constraints(mVelo, mAccel)));
         phone.dummy.getEncoder().setAccelLowPassGain(ACC_LP_GAIN);
         t.setMsTransmissionInterval(10);
     }
