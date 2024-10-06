@@ -45,6 +45,7 @@ captures/
 .idea/discord.xml
 .idea/migrations.xml
 .idea/workspace.xml
+.idea/gradle.xml
 .idea/misc.xml
 .idea/shelf/
 .idea/other.xml
