@@ -48,16 +48,14 @@ public class CellphoneConfig extends RobotConfig {
 
     @SuppressWarnings({"all", "deprecation"})
     private static class DummyMotor implements DcMotorControllerEx {
+        private final ElapsedTime timer = new ElapsedTime();
+        private final int TPS = 600;
+        private final int ACCEL = 1200;
         private double power;
         private double pos;
         private int target;
-        private final ElapsedTime timer = new ElapsedTime();
         private MotorConfigurationType conf = MotorConfigurationType.getUnspecifiedMotorType();
         private DcMotor.RunMode mode;
-
-        private final int TPS = 600;
-        private final int ACCEL = 1200;
-
         private double velo;
 
         public void update() {

@@ -35,7 +35,37 @@ import java.util.List;
 @TeleOp
 public class CellphoneMeccanumDroive extends BunyipsOpMode {
     private final CellphoneConfig config = new CellphoneConfig();
+    //    PurePursuit pp;
+    DummyDrive d;
     private Pose2d pose = new Pose2d();
+
+    @Override
+    protected void onInit() {
+        config.init();
+//        Vision vision = new Vision(config.cameraB);
+//        AprilTag at = new AprilTag();
+//        vision.init(at);
+//        vision.start(at);
+//        vision.startPreview();
+        d = new DummyDrive();
+        BoundedLocalization.enable(Inches.of(9), d::getPoseEstimate, d::setPoseEstimate)
+                .setRestrictedAreas(Field.Season.INTO_THE_DEEP);
+//        pp = new PurePursuit(d).withLookaheadRadius(Inches.of(36));
+//        onActiveLoop(new AprilTagPoseEstimator(at, dummyDrive).setCameraOffset(new Pose2d(9, 0, 0)));
+//        d.setPoseEstimate(StartingConfiguration.redRight().tile(2.3).build().toFieldPose());
+//        pp.followPath(pp.makePath().splineTo(new Vector2d(40, 40), Inches, 180, Degrees).splineTo(new Vector2d(-30, 30), Inches, 270, Degrees).splineTo(new Vector2d(-30, -20), Inches, 270, Degrees).buildPath());
+    }
+
+    @Override
+    protected void activeLoop() {
+        d.setDrivePower(Controls.makeRobotPose(gamepad1.lsx, gamepad1.lsy, gamepad1.rsx));
+
+        telemetry.addData("x", pose.getX());
+        telemetry.addData("y", pose.getY());
+        telemetry.addData("r", pose.getHeading());
+
+        DashboardUtil.drawRobot(telemetry.dashboardFieldOverlay().setStroke("#3F51B5"), pose);
+    }
 
     private class DummyDrive implements RoadRunnerDrive {
 
@@ -239,36 +269,5 @@ public class CellphoneMeccanumDroive extends BunyipsOpMode {
                     pose.getHeading() + drivePower.getHeading() * 2 * timer.deltaTime().in(Seconds)
             );
         }
-    }
-
-//    PurePursuit pp;
-    DummyDrive d;
-
-    @Override
-    protected void onInit() {
-        config.init();
-//        Vision vision = new Vision(config.cameraB);
-//        AprilTag at = new AprilTag();
-//        vision.init(at);
-//        vision.start(at);
-//        vision.startPreview();
-        d = new DummyDrive();
-        BoundedLocalization.enable(Inches.of(9), d::getPoseEstimate, d::setPoseEstimate)
-                .setRestrictedAreas(Field.Season.INTO_THE_DEEP);
-//        pp = new PurePursuit(d).withLookaheadRadius(Inches.of(36));
-//        onActiveLoop(new AprilTagPoseEstimator(at, dummyDrive).setCameraOffset(new Pose2d(9, 0, 0)));
-//        d.setPoseEstimate(StartingConfiguration.redRight().tile(2.3).build().toFieldPose());
-//        pp.followPath(pp.makePath().splineTo(new Vector2d(40, 40), Inches, 180, Degrees).splineTo(new Vector2d(-30, 30), Inches, 270, Degrees).splineTo(new Vector2d(-30, -20), Inches, 270, Degrees).buildPath());
-    }
-
-    @Override
-    protected void activeLoop() {
-        d.setDrivePower(Controls.makeRobotPose(gamepad1.lsx, gamepad1.lsy, gamepad1.rsx));
-
-        telemetry.addData("x", pose.getX());
-        telemetry.addData("y", pose.getY());
-        telemetry.addData("r", pose.getHeading());
-
-        DashboardUtil.drawRobot(telemetry.dashboardFieldOverlay().setStroke("#3F51B5"), pose);
     }
 }
