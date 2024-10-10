@@ -37,7 +37,7 @@ public class Auto extends AutonomousBunyipsOpMode {
         intake = new HoldableActuator(robot.intakeMotor)
                 .withBottomSwitch(robot.intakeInStop)
                 .withTopSwitch(robot.intakeOutStop)
-                .withPowerClamps(-0.3, 0.3);
+                .withPowerClamps(Joker.INTAKE_ARM_LOWER_POWER_CLAMP, Joker.INTAKE_ARM_UPPER_POWER_CLAMP);
         lift = new HoldableActuator(robot.liftMotor)
                 .withBottomSwitch(robot.liftBotStop);
         lights = new BlinkinLights(robot.lights, RevBlinkinLedDriver.BlinkinPattern.RED);

@@ -86,6 +86,9 @@ public class Joker extends RobotConfig {
     public static int OUTTAKE_ALIGN_IN_POSITION = 1;
     public static int OUTTAKE_ALIGN_OUT_POSITION = 0;
 
+    public static double INTAKE_ARM_LOWER_POWER_CLAMP = -0.35;
+    public static double INTAKE_ARM_UPPER_POWER_CLAMP = 0.35;
+
     private boolean intakeGripClosed = false;
     private boolean outtakeFacingOut = false;
 

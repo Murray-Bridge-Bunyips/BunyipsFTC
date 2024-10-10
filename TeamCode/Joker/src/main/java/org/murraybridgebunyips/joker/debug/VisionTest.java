@@ -26,7 +26,7 @@ public class VisionTest extends BunyipsOpMode {
         intake = new HoldableActuator(robot.intakeMotor)
                 .withBottomSwitch(robot.intakeInStop)
                 .withTopSwitch(robot.intakeOutStop)
-                .withPowerClamps(-0.3, 0.3);
+                .withPowerClamps(Joker.INTAKE_ARM_LOWER_POWER_CLAMP, Joker.INTAKE_ARM_UPPER_POWER_CLAMP);
         drive = new CartesianMecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
         lift = new HoldableActuator(robot.liftMotor)
                 .withBottomSwitch(robot.liftBotStop);
