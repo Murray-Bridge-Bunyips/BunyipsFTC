@@ -1,0 +1,16 @@
+*
+!inspectionProfiles/
+!inspectionProfiles/**
+!runConfigurations/
+!runConfigurations/**
+!scopes/
+!scopes/**
+!codeStyles/
+!codeStyles/**
+!.gitignore
+!deploymentTargetDropDown.xml
+!deploymentTargetSelector.xml
+!gradle.xml
+!jarRepositories.xml
+!kotlinc.xml
+!runConfigurations.xml
