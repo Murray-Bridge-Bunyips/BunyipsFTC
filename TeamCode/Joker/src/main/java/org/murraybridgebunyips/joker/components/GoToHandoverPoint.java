@@ -8,7 +8,7 @@ import org.murraybridgebunyips.bunyipslib.tasks.groups.RaceTaskGroup;
 
 public class GoToHandoverPoint extends RaceTaskGroup {
     /**
-     * Does a home task until a touch sensor is pressed
+     * Does a home task until a touch sensor is pressed.
      */
     public GoToHandoverPoint(HoldableActuator actuator, TouchSensor sensor) {
         super(actuator.tasks.home(), new WaitUntilTask(sensor::isPressed));
