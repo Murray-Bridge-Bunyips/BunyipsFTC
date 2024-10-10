@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.murraybridgebunyips.bunyipslib.Motor;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
@@ -71,6 +72,10 @@ public class Joker extends RobotConfig {
      * Control Hub 6-7 (7 used): handoverPoint
      */
     public TouchSensor handoverPoint;
+    /**
+     * Control Hub USB-3.0: webcam
+     */
+    public WebcamName camera;
 
     public static double INTAKE_GRIP_OPEN_POSITION = 0.5;
     public static int INTAKE_GRIP_CLOSED_POSITION = 0;
@@ -103,6 +108,7 @@ public class Joker extends RobotConfig {
         intakeInStop = getHardware("intakeInStop", TouchSensor.class);
         intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
         handoverPoint = getHardware("handoverPoint", TouchSensor.class);
+        camera = getHardware("webcam", WebcamName.class);
     }
 
     public void toggleGrips() {
