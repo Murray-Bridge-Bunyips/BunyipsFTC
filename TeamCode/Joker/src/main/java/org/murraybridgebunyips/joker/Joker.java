@@ -75,7 +75,7 @@ public class Joker extends RobotConfig {
     public static double INTAKE_GRIP_OPEN_POSITION = 0.5;
     public static int INTAKE_GRIP_CLOSED_POSITION = 0;
 
-    public static int OUTTAKE_GRIP_OPEN_POSITION = 0;
+    public static int OUTTAKE_GRIP_OPEN_POSITION = 1;
     public static int OUTTAKE_GRIP_CLOSED_POSITION = 0;
 
     public static int OUTTAKE_ALIGN_IN_POSITION = 1;
@@ -96,8 +96,8 @@ public class Joker extends RobotConfig {
         });
         liftMotor = getHardware("liftMotor", DcMotor.class);
         outtakeAlign = getHardware("outtakeAlign", Servo.class);
-        outtakeGrip = getHardware("outtakeGrip", Servo.class);
-        intakeGrip = getHardware("intakeGrip", Servo.class);
+        outtakeGrip = getHardware("outtakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
+        intakeGrip = getHardware("intakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
         lights = getHardware("lights", RevBlinkinLedDriver.class);
         liftBotStop = getHardware("liftLimiter", TouchSensor.class);
         intakeInStop = getHardware("intakeInStop", TouchSensor.class);
