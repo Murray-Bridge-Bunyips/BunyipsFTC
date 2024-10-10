@@ -28,7 +28,7 @@ public class TeleOperation extends BunyipsOpMode {
         drive = new CartesianMecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
         lift = new HoldableActuator(robot.liftMotor)
                 .withBottomSwitch(robot.liftBotStop);
-        lights = new BlinkinLights(robot.lights, RevBlinkinLedDriver.BlinkinPattern.WHITE);
+        lights = new BlinkinLights(robot.lights, RevBlinkinLedDriver.BlinkinPattern.RED);
         robot.intakeGrip.setPosition(Joker.INTAKE_GRIP_OPEN_POSITION);
         robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_CLOSED_POSITION);
         robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_IN_POSITION);
@@ -48,7 +48,7 @@ public class TeleOperation extends BunyipsOpMode {
             robot.toggleOuttake();
         }
         if (robot.handoverPoint.isPressed()) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
+            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
         }
         else {
             lights.resetPattern();
@@ -60,5 +60,7 @@ public class TeleOperation extends BunyipsOpMode {
         intake.update();
         lift.update();
         lights.update();
+        telemetry.addData("currentPosition", robot.intakeMotor.getCurrentPosition());
+        telemetry.addData("targetPosition", robot.intakeMotor.getTargetPosition());
     }
 }

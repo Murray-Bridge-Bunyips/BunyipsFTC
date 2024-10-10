@@ -1,13 +1,17 @@
 package org.murraybridgebunyips.joker;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import org.murraybridgebunyips.bunyipslib.Motor;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
+import org.murraybridgebunyips.bunyipslib.external.pid.PIDController;
 
+@Config
 public class Joker extends RobotConfig {
     /**
      * Expansion 1: front_left
@@ -28,7 +32,7 @@ public class Joker extends RobotConfig {
     /**
      * Control Hub 0: intakeMotor
      */
-    public DcMotor intakeMotor;
+    public Motor intakeMotor;
     /**
      * Control Hub 1: liftMotor
      */
@@ -68,10 +72,10 @@ public class Joker extends RobotConfig {
      */
     public TouchSensor handoverPoint;
 
-    public static int INTAKE_GRIP_OPEN_POSITION = 1;
+    public static double INTAKE_GRIP_OPEN_POSITION = 0.5;
     public static int INTAKE_GRIP_CLOSED_POSITION = 0;
 
-    public static int OUTTAKE_GRIP_OPEN_POSITION = 1;
+    public static int OUTTAKE_GRIP_OPEN_POSITION = 0;
     public static int OUTTAKE_GRIP_CLOSED_POSITION = 0;
 
     public static int OUTTAKE_ALIGN_IN_POSITION = 1;
@@ -86,7 +90,10 @@ public class Joker extends RobotConfig {
         frontRight = getHardware("front_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         backLeft = getHardware("back_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
-        intakeMotor = getHardware("intakeMotor", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+            d.setRunToPositionController(new PIDController(0.02, 0, 0));
+        });
         liftMotor = getHardware("liftMotor", DcMotor.class);
         outtakeAlign = getHardware("outtakeAlign", Servo.class);
         outtakeGrip = getHardware("outtakeGrip", Servo.class);
