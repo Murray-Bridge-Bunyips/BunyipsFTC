@@ -7,7 +7,7 @@ import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.TriDeadwheelMecanumDrive;
-import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
+import org.murraybridgebunyips.bunyipslib.tasks.HolonomicVectorDriveTask;
 import org.murraybridgebunyips.vance.Vance;
 
 /**
@@ -35,7 +35,9 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        drive.setDefaultTask(new HolonomicDriveTask(gamepad1, drive, () -> false));
+        drive.setDefaultTask(new HolonomicVectorDriveTask(gamepad1, drive, () -> false)
+                    .withTranslationalPID(0.1, 0, 0)
+                    .withRotationalPID(1, 0, 0.0001));
     }
 
     @Override
