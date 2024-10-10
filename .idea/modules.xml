@@ -3,42 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/BunyipsFTC.iml" filepath="$PROJECT_DIR$/.idea/modules/BunyipsFTC.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BunyipsLib/BunyipsFTC.BunyipsLib.iml" filepath="$PROJECT_DIR$/.idea/modules/BunyipsLib/BunyipsFTC.BunyipsLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/BunyipsLib/BunyipsFTC.BunyipsLib.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/BunyipsLib/BunyipsFTC.BunyipsLib.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/BunyipsLib/BunyipsFTC.BunyipsLib.main.iml" filepath="$PROJECT_DIR$/.idea/modules/BunyipsLib/BunyipsFTC.BunyipsLib.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/BunyipsLib/BunyipsFTC.BunyipsLib.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/BunyipsLib/BunyipsFTC.BunyipsLib.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Cellphone/BunyipsFTC.Cellphone.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Cellphone/BunyipsFTC.Cellphone.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Cellphone/BunyipsFTC.Cellphone.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Cellphone/BunyipsFTC.Cellphone.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Cellphone/BunyipsFTC.Cellphone.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Cellphone/BunyipsFTC.Cellphone.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Cellphone/BunyipsFTC.Cellphone.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Cellphone/BunyipsFTC.Cellphone.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Common/BunyipsFTC.Common.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Common/BunyipsFTC.Common.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Common/BunyipsFTC.Common.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Common/BunyipsFTC.Common.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Common/BunyipsFTC.Common.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Common/BunyipsFTC.Common.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Common/BunyipsFTC.Common.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Common/BunyipsFTC.Common.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/BunyipsFTC.FtcRobotController.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/BunyipsFTC.FtcRobotController.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/BunyipsFTC.FtcRobotController.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/BunyipsFTC.FtcRobotController.androidTest.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/BunyipsFTC.FtcRobotController.main.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/BunyipsFTC.FtcRobotController.main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/FtcRobotController/BunyipsFTC.FtcRobotController.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/FtcRobotController/BunyipsFTC.FtcRobotController.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Jerry/BunyipsFTC.Jerry.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Jerry/BunyipsFTC.Jerry.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Jerry/BunyipsFTC.Jerry.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Jerry/BunyipsFTC.Jerry.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Jerry/BunyipsFTC.Jerry.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Jerry/BunyipsFTC.Jerry.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Jerry/BunyipsFTC.Jerry.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Jerry/BunyipsFTC.Jerry.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Joker/BunyipsFTC.Joker.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Joker/BunyipsFTC.Joker.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Joker/BunyipsFTC.Joker.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Joker/BunyipsFTC.Joker.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Joker/BunyipsFTC.Joker.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Joker/BunyipsFTC.Joker.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Joker/BunyipsFTC.Joker.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Joker/BunyipsFTC.Joker.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Pbody/BunyipsFTC.Pbody.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Pbody/BunyipsFTC.Pbody.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Pbody/BunyipsFTC.Pbody.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Pbody/BunyipsFTC.Pbody.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Pbody/BunyipsFTC.Pbody.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Pbody/BunyipsFTC.Pbody.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Pbody/BunyipsFTC.Pbody.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Pbody/BunyipsFTC.Pbody.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Proto/BunyipsFTC.Proto.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Proto/BunyipsFTC.Proto.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Proto/BunyipsFTC.Proto.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Proto/BunyipsFTC.Proto.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Proto/BunyipsFTC.Proto.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Proto/BunyipsFTC.Proto.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Proto/BunyipsFTC.Proto.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Proto/BunyipsFTC.Proto.unitTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Vance/BunyipsFTC.Vance.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Vance/BunyipsFTC.Vance.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Vance/BunyipsFTC.Vance.androidTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Vance/BunyipsFTC.Vance.androidTest.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Vance/BunyipsFTC.Vance.main.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Vance/BunyipsFTC.Vance.main.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/TeamCode/Vance/BunyipsFTC.Vance.unitTest.iml" filepath="$PROJECT_DIR$/.idea/modules/TeamCode/Vance/BunyipsFTC.Vance.unitTest.iml" />
     </modules>
   </component>
 </project>
