@@ -119,10 +119,10 @@ public class Vance extends RobotConfig {
                 Dbg.error("IMU failed to initialise!");
             }
         });
-        // TODO: Set the actual directions. They're only placeholders for now
+
         dwleft = getHardware("br", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
         dwright = getHardware("fr", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
-        dwx = getHardware("fl", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
+        dwx = getHardware("bl", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.REVERSE));
 
 
         // Fancy lights
@@ -150,11 +150,11 @@ public class Vance extends RobotConfig {
                 .build();
 
         localiserCoefficients = new ThreeWheelLocalizer.Coefficients.Builder()
-                .setLateralDistance(Inches.of(5.5))
-                .setForwardOffset(Inches.of(-8))
-                .setGearRatio(1)  // if this is wrong it is lucas's fault btw
-                .setWheelRadius(Centimeters.of(1.6))  // TODO: double check this
-                .setTicksPerRev(2000)  // TODO: double check, based on encoder resolution
+                .setLateralDistance(Inches.of(5.3868))
+                .setForwardOffset(Inches.of(-7.88))
+                .setGearRatio(1)
+                .setWheelRadius(Centimeters.of(1.6))
+                .setTicksPerRev(2000)
                 .build();
     }
 }
