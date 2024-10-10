@@ -6,6 +6,7 @@ import org.murraybridgebunyips.bunyipslib.CommandBasedBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controller;
 import org.murraybridgebunyips.bunyipslib.Controls;
 import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.TriDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicDriveTask;
 import org.murraybridgebunyips.vance.Vance;
 
@@ -24,7 +25,9 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
     @Override
     protected void onInitialise() {
         robot.init();
-        drive = new MecanumDrive(robot.driveConstants, robot.mecanumCoefficients, robot.imu, robot.fl, robot.fr, robot.bl, robot.br);
+        drive = new TriDeadwheelMecanumDrive(
+                robot.driveConstants, robot.mecanumCoefficients, robot.imu, robot.fl, robot.fr, robot.bl, robot.br,
+                robot.localiserCoefficients, robot.dwleft, robot.dwright, robot.dwx).withName("Drive");
 //        lights = new BlinkinLights(config.lights, RevBlinkinLedDriver.BlinkinPattern.RAINBOW_FOREST_PALETTE);
 
         gamepad1.set(Controls.AnalogGroup.STICKS, Controller.SQUARE);

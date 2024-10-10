@@ -1,5 +1,6 @@
 package org.murraybridgebunyips.vance;
 
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.DegreesPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.InchesPerSecond;
@@ -18,6 +19,7 @@ import org.murraybridgebunyips.bunyipslib.RobotConfig;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.DriveConstants;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.MecanumCoefficients;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.ThreeWheelLocalizer;
+import org.murraybridgebunyips.bunyipslib.roadrunner.util.Deadwheel;
 
 /**
  * FTC 22407 INTO THE DEEP 2024-2025 robot configuration
@@ -49,6 +51,21 @@ public class Vance extends RobotConfig {
      * Control 3: br
      */
     public DcMotorEx br;
+
+    /**
+     * Control 3: br
+     */
+    public Deadwheel dwleft;
+
+    /**
+     * Control 0: fr
+     */
+    public Deadwheel dwright;
+
+    /**
+     * Control 1: fl
+     */
+    public Deadwheel dwx;
 
     /**
      * Control Servo ?: Blinkin Driver
@@ -102,6 +119,10 @@ public class Vance extends RobotConfig {
                 Dbg.error("IMU failed to initialise!");
             }
         });
+        // TODO: Set the actual directions. They're only placeholders for now
+        dwleft = getHardware("br", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
+        dwright = getHardware("fr", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
+        dwx = getHardware("fl", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
 
 
         // Fancy lights
@@ -126,6 +147,14 @@ public class Vance extends RobotConfig {
                 .setLateralMultiplier(1.0)
                 .setTranslationalPID(new PIDCoefficients(8, 0, 0))
                 .setHeadingPID(new PIDCoefficients(10, 0, 0))
+                .build();
+
+        localiserCoefficients = new ThreeWheelLocalizer.Coefficients.Builder()
+                .setLateralDistance(Inches.of(5.5))
+                .setForwardOffset(Inches.of(-8))
+                .setGearRatio(1)  // if this is wrong it is lucas's fault btw
+                .setWheelRadius(Centimeters.of(1.6))  // TODO: double check this
+                .setTicksPerRev(2000)  // TODO: double check, based on encoder resolution
                 .build();
     }
 }
