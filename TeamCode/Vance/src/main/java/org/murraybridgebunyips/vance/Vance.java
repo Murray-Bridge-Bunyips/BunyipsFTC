@@ -5,6 +5,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.DegreesPer
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.InchesPerSecond;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Second;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.roadrunner.control.PIDCoefficients;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -155,6 +156,7 @@ public class Vance extends RobotConfig {
                 .setGearRatio(1)
                 .setWheelRadius(Centimeters.of(1.6))
                 .setTicksPerRev(2000)
+                .setImuRelocalizationInterval(Seconds.of(3))
                 .build();
     }
 }
