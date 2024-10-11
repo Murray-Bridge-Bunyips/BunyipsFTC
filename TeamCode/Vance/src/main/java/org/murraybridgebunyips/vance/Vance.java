@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
@@ -67,6 +68,26 @@ public class Vance extends RobotConfig {
      * Control 1: fl
      */
     public Deadwheel dwx;
+
+    /**
+     * ???: va
+     */
+    public DcMotorEx verticalArm;
+
+    /**
+     * ???: ha
+     */
+    public DcMotorEx horizontalArm;
+
+    /**
+     * ???: lc
+     */
+    public Servo leftClaw;
+
+    /**
+     * ???: rc
+     */
+    public Servo rightClaw;
 
     /**
      * Control Servo ?: Blinkin Driver
