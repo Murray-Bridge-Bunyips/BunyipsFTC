@@ -9,6 +9,7 @@ import org.murraybridgebunyips.bunyipslib.drive.MecanumDrive;
 import org.murraybridgebunyips.bunyipslib.drive.TriDeadwheelMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
+import org.murraybridgebunyips.bunyipslib.subsystems.Switch;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicVectorDriveTask;
 import org.murraybridgebunyips.vance.Vance;
 
@@ -22,10 +23,10 @@ import org.murraybridgebunyips.vance.Vance;
  * <b>gamepad2:</b><br>
  * Left Stick Y: Vertical Arm<br>
  * Right Stick Y: Horizontal Arm<br>
- * X: Toggle Left Claw<br>
- * B: Toggle Right Claw<br>
- * Y: Open Both Claws<br>
- * A: Close Both Claws<br>
+ * X: Open Both Claws<br>
+ * B: Close Both Claws<br>
+ * A: Toggle Claw Rotator<br>
+ * Y: Toggle Basket Rotator<br>
  *
  * @author Lachlan Paul, 2024
  */
@@ -35,6 +36,8 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
     private MecanumDrive drive;
     private HoldableActuator verticalArm;
     private HoldableActuator horizontalArm;
+    private Switch clawRotator;
+    private Switch basketRotator;
     private DualServos claws;
 
     //    private BlinkinLights lights;
@@ -47,6 +50,10 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 robot.localiserCoefficients, robot.dwleft, robot.dwright, robot.dwx).withName("Drive");
         verticalArm = new HoldableActuator(robot.verticalArm);
         horizontalArm = new HoldableActuator(robot.horizontalArm);
+
+        clawRotator = new Switch(robot.clawRotator);
+        basketRotator = new Switch(robot.basketRotator);
+
         // TODO: check open/close values
         claws = new DualServos(robot.leftClaw, robot.rightClaw, 0.0, 1.0, 0.0, 1.0);
 //        lights = new BlinkinLights(config.lights, RevBlinkinLedDriver.BlinkinPattern.RAINBOW_FOREST_PALETTE);
@@ -57,16 +64,16 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
     @Override
     protected void assignCommands() {
         operator().whenPressed(Controls.X)
-                        .run(claws.tasks.toggleLeft());
-        operator().whenPressed(Controls.B)
-                        .run(claws.tasks.toggleRight());
-        operator().whenPressed(Controls.Y)
                         .run(claws.tasks.openBoth());
-        operator().whenPressed(Controls.A)
+        operator().whenPressed(Controls.B)
                         .run(claws.tasks.closeBoth());
+        operator().whenPressed(Controls.A)
+                        .run(clawRotator.tasks.toggle());
+        operator().whenPressed(Controls.Y)
+                        .run(basketRotator.tasks.toggle());
 
         verticalArm.setDefaultTask(verticalArm.tasks.control(() -> gamepad2.lsy));
-        horizontalArm.setDefaultTask(verticalArm.tasks.control(() -> gamepad2.rsy));
+        horizontalArm.setDefaultTask(horizontalArm.tasks.control(() -> gamepad2.rsy));
         drive.setDefaultTask(new HolonomicVectorDriveTask(gamepad1, drive, () -> false)
                     .withTranslationalPID(0.1, 0, 0)
                     .withRotationalPID(1, 0, 0.0001));
@@ -83,8 +90,9 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         // Hopefully this helps. Update: It did :)
         // The actual string is set to the opposite of what you might expect, by driver request.
         telemetry.add("\n---------");
-        telemetry.add("Left Claw: " + (claws.isOpen(DualServos.ServoSide.LEFT) ? "Closed" : "Open")).big();
-        telemetry.add("Right Claw: " + (claws.isOpen(DualServos.ServoSide.RIGHT) ? "Closed" : "Open")).big();
+        telemetry.add("Claws: " + (claws.isOpen(DualServos.ServoSide.BOTH) ? "Closed" : "Open")).big();
+        telemetry.add("Claw Rotator: " + (clawRotator.isOpen() ? "Closed" : "Open")).big();
+        telemetry.add("Basket Rotator: " + (basketRotator.isOpen() ? "Closed" : "Open")).big();
         telemetry.add("---------\n");
 //
 //        telemetry.add("Top Switch Is %", config.topLimit.isPressed() ? "Pressed" : "Not Pressed");
