@@ -70,27 +70,37 @@ public class Vance extends RobotConfig {
     public Deadwheel dwx;
 
     /**
-     * ???: va
+     * Expansion 1: va
      */
     public DcMotorEx verticalArm;
 
     /**
-     * ???: ha
+     * Expansion 0: ha
      */
     public DcMotorEx horizontalArm;
 
     /**
-     * ???: lc
+     * Control Servo 2: lc
      */
     public Servo leftClaw;
 
     /**
-     * ???: rc
+     * Control Servo 1: rc
      */
     public Servo rightClaw;
 
     /**
-     * Control Servo ?: Blinkin Driver
+     * Control Servo 0: cr
+     */
+    public Servo clawRotator;
+
+    /**
+     * Control Servo 3: bk
+     */
+    public Servo basketRotator;
+
+    /**
+     * Control Servo 5: Blinkin Lights "lights"
      */
     public RevBlinkinLedDriver lights;
 
@@ -146,6 +156,14 @@ public class Vance extends RobotConfig {
         dwright = getHardware("fr", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
         dwx = getHardware("bl", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.REVERSE));
 
+        verticalArm = getHardware("va", DcMotorEx.class);
+        horizontalArm = getHardware("ha", DcMotorEx.class);
+
+        leftClaw = getHardware("lc", Servo.class);
+        rightClaw = getHardware("rc", Servo.class);
+
+        clawRotator = getHardware("cr", Servo.class);
+        basketRotator = getHardware("bk", Servo.class);
 
         // Fancy lights
         lights = getHardware("lights", RevBlinkinLedDriver.class);
