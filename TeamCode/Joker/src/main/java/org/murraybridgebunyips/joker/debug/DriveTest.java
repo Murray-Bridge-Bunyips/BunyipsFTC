@@ -4,6 +4,7 @@ import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
 
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -11,6 +12,7 @@ import org.murraybridgebunyips.bunyipslib.BunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.EncoderTicks;
 import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive;
 import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.MecanumLocalizer;
+import org.murraybridgebunyips.bunyipslib.vision.AprilTagPoseEstimator;
 import org.murraybridgebunyips.bunyipslib.vision.Vision;
 import org.murraybridgebunyips.bunyipslib.vision.processors.AprilTag;
 import org.murraybridgebunyips.joker.Joker;
@@ -36,11 +38,11 @@ public class DriveTest extends BunyipsOpMode {
         drive.setLocalizer(localizer);
         webcam = new Vision(robot.camera);
         AprilTag at = new AprilTag();
-        at.getInstance().setDecimation(3);
+        at.getInstance().setDecimation(8);
         webcam.init(at);
         webcam.start(at);
         webcam.startPreview();
-//        AprilTagPoseEstimator.enable(at, localizer).setCameraOffset(new Pose2d(8.5, 0, 0)).setHeadingEstimate(false);
+        AprilTagPoseEstimator.enable(at, localizer).setCameraOffset(new Pose2d(8.5, 0, 0)).setKalmanGains(4, 1.0e-5);
     }
 
     @Override
@@ -51,6 +53,6 @@ public class DriveTest extends BunyipsOpMode {
         drive.setSpeedUsingController(leftStickX, leftStickY, rightStickX);
         drive.update();
 
-        telemetry.addData("lateral", localizer.getPoseEstimate().getY());
+        telemetry.addData("pose", localizer.getPoseEstimate());
     }
 }
