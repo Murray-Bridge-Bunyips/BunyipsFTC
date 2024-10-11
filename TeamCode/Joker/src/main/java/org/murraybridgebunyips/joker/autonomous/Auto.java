@@ -1,29 +1,32 @@
 package org.murraybridgebunyips.joker.autonomous;
 
-//import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
 
 import androidx.annotation.Nullable;
 
-//import com.acmerobotics.roadrunner.drive.MecanumDrive;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.murraybridgebunyips.bunyipslib.AutonomousBunyipsOpMode;
 import org.murraybridgebunyips.bunyipslib.Controls;
-//import org.murraybridgebunyips.bunyipslib.PurePursuit;
+import org.murraybridgebunyips.bunyipslib.EncoderTicks;
+import org.murraybridgebunyips.bunyipslib.PurePursuit;
 import org.murraybridgebunyips.bunyipslib.Reference;
-//import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive;
+import org.murraybridgebunyips.bunyipslib.drive.CartesianMecanumDrive;
+import org.murraybridgebunyips.bunyipslib.roadrunner.drive.localizers.MecanumLocalizer;
 import org.murraybridgebunyips.bunyipslib.subsystems.BlinkinLights;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.joker.Joker;
 import org.murraybridgebunyips.joker.components.GoToHandoverPoint;
 
+import java.util.Arrays;
+
 @Autonomous(name = "Autonomous")
 public class Auto extends AutonomousBunyipsOpMode {
     private final Joker robot = new Joker();
-//    private CartesianMecanumDrive drive;
-//    private MecanumDrive.MecanumLocalizer localizer;
-//    private PurePursuit pp;
+    private CartesianMecanumDrive drive;
+    private MecanumLocalizer localizer;
+    private PurePursuit pp;
     private HoldableActuator intake;
     private HoldableActuator lift;
     private BlinkinLights lights;
@@ -31,12 +34,14 @@ public class Auto extends AutonomousBunyipsOpMode {
     @Override
     protected void onInitialise() {
         robot.init();
-//        drive = new CartesianMecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
-//        localizer = new MecanumDrive.MecanumLocalizer();
-//        pp = new PurePursuit((p) -> drive.setSpeedXYR(p.getX(), p.getY(), p.getHeading()), localizer::getPoseEstimate);
+        drive = new CartesianMecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
+        localizer = new MecanumLocalizer(15.25, (ticks) -> EncoderTicks.toInches(ticks, 1.5, 0.45, 28),
+                () -> Arrays.asList(robot.frontLeft.getCurrentPosition(), robot.backLeft.getCurrentPosition(), robot.backRight.getCurrentPosition(), robot.frontRight.getCurrentPosition()));
+        pp = new PurePursuit(drive::setPower, localizer::getPoseEstimate);
         intake = new HoldableActuator(robot.intakeMotor)
                 .withBottomSwitch(robot.intakeInStop)
                 .withTopSwitch(robot.intakeOutStop)
+                .enableUserSetpointControl(() -> 8)
                 .withPowerClamps(Joker.INTAKE_ARM_LOWER_POWER_CLAMP, Joker.INTAKE_ARM_UPPER_POWER_CLAMP);
         lift = new HoldableActuator(robot.liftMotor)
                 .withBottomSwitch(robot.liftBotStop);
@@ -48,9 +53,9 @@ public class Auto extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onReady(@Nullable Reference<?> selectedOpMode, Controls selectedButton) {
-//        pp.makePath()
-//                .forward(10, Centimeters)
-//                .addTask();
+        pp.makePath()
+                .forward(10, Centimeters)
+                .addTask();
 
         addTask(new GoToHandoverPoint(lift, robot.handoverPoint));
     }

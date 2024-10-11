@@ -2,8 +2,10 @@ package org.murraybridgebunyips.joker;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -76,6 +78,10 @@ public class Joker extends RobotConfig {
      * Control Hub USB-3.0: webcam
      */
     public WebcamName camera;
+    /**
+     * Internally connected
+     */
+    public IMU imu;
 
     public static double INTAKE_GRIP_OPEN_POSITION = 0.5;
     public static int INTAKE_GRIP_CLOSED_POSITION = 0;
@@ -112,6 +118,9 @@ public class Joker extends RobotConfig {
         intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
         handoverPoint = getHardware("handoverPoint", TouchSensor.class);
         camera = getHardware("webcam", WebcamName.class);
+        imu = getHardware("imu", IMU.class,
+                (d) -> d.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD))));
     }
 
     public void toggleGrips() {
