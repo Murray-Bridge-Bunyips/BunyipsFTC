@@ -195,7 +195,7 @@ public class Vance extends RobotConfig {
                 .setGearRatio(1)
                 .setWheelRadius(Centimeters.of(1.6))
                 .setTicksPerRev(2000)
-                .setImuRelocalizationInterval(Seconds.of(3))
+                .setIMURelocalizationInterval(Seconds.of(3))
                 .build();
     }
 }
