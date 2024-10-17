@@ -125,13 +125,13 @@ public class Joker extends RobotConfig {
 
     public void toggleGrips() {
         if (intakeGripClosed) {
-            intakeGrip.setPosition(INTAKE_GRIP_CLOSED_POSITION);
-            outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
+            intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
+            outtakeGrip.setPosition(OUTTAKE_GRIP_CLOSED_POSITION);
             intakeGripClosed = false;
         }
         else {
-            intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
-            outtakeGrip.setPosition(OUTTAKE_GRIP_CLOSED_POSITION);
+            intakeGrip.setPosition(INTAKE_GRIP_CLOSED_POSITION);
+            outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
             intakeGripClosed = true;
         }
     }
