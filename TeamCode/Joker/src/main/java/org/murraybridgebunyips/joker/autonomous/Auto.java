@@ -1,6 +1,8 @@
 package org.murraybridgebunyips.joker.autonomous;
 
 import static org.murraybridgebunyips.bunyipslib.external.units.Units.Centimeters;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Inches;
+import static org.murraybridgebunyips.bunyipslib.external.units.Units.Millimeters;
 
 import androidx.annotation.Nullable;
 
@@ -35,7 +37,7 @@ public class Auto extends AutonomousBunyipsOpMode {
     protected void onInitialise() {
         robot.init();
         drive = new CartesianMecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
-        localizer = new MecanumLocalizer(15.25, (ticks) -> EncoderTicks.toInches(ticks, 1.5, 0.45, 28),
+        localizer = new MecanumLocalizer(15.25, (ticks) -> EncoderTicks.toInches(ticks, Inches.convertFrom(37.5, Millimeters), 0.05, 28),
                 () -> Arrays.asList(robot.frontLeft.getCurrentPosition(), robot.backLeft.getCurrentPosition(), robot.backRight.getCurrentPosition(), robot.frontRight.getCurrentPosition()));
         pp = new PurePursuit(drive::setPower, localizer::getPoseEstimate);
         intake = new HoldableActuator(robot.intakeMotor)
