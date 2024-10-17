@@ -16,6 +16,7 @@ import org.murraybridgebunyips.bunyipslib.subsystems.DualServos;
 import org.murraybridgebunyips.bunyipslib.subsystems.HoldableActuator;
 import org.murraybridgebunyips.bunyipslib.subsystems.Switch;
 import org.murraybridgebunyips.bunyipslib.tasks.HolonomicVectorDriveTask;
+import org.murraybridgebunyips.common.intothedeep.tasks.SampleToBasket;
 import org.murraybridgebunyips.vance.Vance;
 
 import java.util.Objects;
@@ -53,8 +54,8 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         drive = new TriDeadwheelMecanumDrive(
                 robot.driveConstants, robot.mecanumCoefficients, robot.imu, robot.fl, robot.fr, robot.bl, robot.br,
                 robot.localiserCoefficients, robot.dwleft, robot.dwright, robot.dwx).withName("Drive");
-        verticalArm = new HoldableActuator(robot.verticalArm).withName("Vertical Arm");
-        horizontalArm = new HoldableActuator(robot.horizontalArm).withName("Horizontal Arm");
+        verticalArm = new HoldableActuator(robot.verticalArm).withUpperPowerClamp(0.5).enableUserSetpointControl(() -> 100 * timer.deltaTime().in(Seconds)).withName("Vertical Arm");
+        horizontalArm = new HoldableActuator(robot.horizontalArm).withUpperPowerClamp(0.5).withName("Horizontal Arm");
 
         clawRotator = new Switch(robot.clawRotator).withName("Claw Rotator");
         basketRotator = new Switch(robot.basketRotator).withName("Basket Rotator");
@@ -75,8 +76,11 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         operator().whenPressed(Controls.Y)
                         .run(basketRotator.tasks.toggle());
 
-        verticalArm.setDefaultTask(verticalArm.tasks.control(() -> -gamepad2.lsy));
-        horizontalArm.setDefaultTask(horizontalArm.tasks.control(() -> -gamepad2.rsy));
+//        operator().whenPressed(Controls.RIGHT_BUMPER)
+//                .run(new SampleToBasket(verticalArm, horizontalArm, clawRotator, claws));
+
+        verticalArm.setDefaultTask(verticalArm.tasks.control(() -> gamepad2.lsy));
+        horizontalArm.setDefaultTask(horizontalArm.tasks.control(() -> gamepad2.rsy));
         drive.setDefaultTask(new HolonomicVectorDriveTask(gamepad1, drive, () -> false)
                     .withTranslationalPID(0.1, 0, 0)
                     .withRotationalPID(1, 0, 0.0001));
@@ -84,12 +88,15 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void periodic() {
-        Pose2d vel = Objects.requireNonNull(drive.getPoseVelocity());
-        boolean robotIsMoving = !vel.epsilonEquals(new Pose2d());
+        Pose2d vel = drive.getPoseVelocity();
+        boolean robotIsMoving = false; // default
+        if (vel != null) {
+            robotIsMoving = !vel.epsilonEquals(new Pose2d());
+        }
 
         // LED Management
-        if (timer.elapsedTime().inUnit(Seconds) <= 150) {
-            // Endgame
+        if (timer.elapsedTime().inUnit(Seconds) <= 145) {
+            // Activates 5 seconds before endgame
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.STROBE_RED);
         } else if (robotIsMoving) {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
@@ -106,7 +113,6 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         telemetry.add("Basket Rotator: " + (basketRotator.isOpen() ? "Closed" : "Open")).big();
         telemetry.add("---------\n");
 
-//        telemetry.add("Top Switch Is %", config.topLimit.isPressed() ? "Pressed" : "Not Pressed");
-//        telemetry.add("Bottom Switch Is %", config.bottomLimit.isPressed() ? "Pressed" : "Not Pressed");
+        telemetry.add("Bottom Switch Is %", robot.bottomLimit.isPressed() ? "Pressed" : "Not Pressed");
     }
 }

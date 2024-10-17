@@ -15,6 +15,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.murraybridgebunyips.bunyipslib.Dbg;
 import org.murraybridgebunyips.bunyipslib.RobotConfig;
@@ -103,6 +104,11 @@ public class Vance extends RobotConfig {
      * Control Servo 5: Blinkin Lights "lights"
      */
     public RevBlinkinLedDriver lights;
+
+    /**
+     * Control Digital 1: Limit Switch "bottom"
+     */
+    public TouchSensor bottomLimit;
 
     /**
      * RoadRunner drive constants
