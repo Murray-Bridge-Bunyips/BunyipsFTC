@@ -162,8 +162,8 @@ public class Vance extends RobotConfig {
         dwright = getHardware("fr", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.FORWARD));
         dwx = getHardware("bl", Deadwheel.class, (d) -> d.setDirection(Deadwheel.Direction.REVERSE));
 
-        verticalArm = getHardware("va", DcMotorEx.class);
-        horizontalArm = getHardware("ha", DcMotorEx.class);
+        verticalArm = getHardware("va", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        horizontalArm = getHardware("ha", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         leftClaw = getHardware("lc", Servo.class);
         rightClaw = getHardware("rc", Servo.class);
