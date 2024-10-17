@@ -38,11 +38,13 @@ public class DriveTest extends BunyipsOpMode {
         drive.setLocalizer(localizer);
         webcam = new Vision(robot.camera);
         AprilTag at = new AprilTag();
-        at.getInstance().setDecimation(8);
         webcam.init(at);
         webcam.start(at);
         webcam.startPreview();
-        AprilTagPoseEstimator.enable(at, localizer).setCameraOffset(new Pose2d(8.5, 0, 0)).setKalmanGains(4, 1.0e-5);
+        AprilTagPoseEstimator.enable(at, localizer)
+                .setCameraOffset(new Pose2d(8.5, 0, 0))
+                .setHeadingEstimate(false)
+                .setKalmanGains(4, 0.1);
     }
 
     @Override
