@@ -44,7 +44,7 @@ public class Auto extends AutonomousBunyipsOpMode {
                 .withPowerClamps(Joker.INTAKE_ARM_LOWER_POWER_CLAMP, Joker.INTAKE_ARM_UPPER_POWER_CLAMP);
         lift = new HoldableActuator(robot.liftMotor)
                 .withBottomSwitch(robot.liftBotStop);
-        lights = new BlinkinLights(robot.lights, RevBlinkinLedDriver.BlinkinPattern.RED);
+        lights = new BlinkinLights(robot.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
         robot.intakeGrip.setPosition(Joker.INTAKE_GRIP_OPEN_POSITION);
         robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_CLOSED_POSITION);
         robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_IN_POSITION);

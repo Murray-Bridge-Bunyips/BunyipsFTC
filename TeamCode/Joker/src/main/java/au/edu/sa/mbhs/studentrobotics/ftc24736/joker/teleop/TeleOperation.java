@@ -26,9 +26,10 @@ public class TeleOperation extends BunyipsOpMode {
                 .withTopSwitch(robot.intakeOutStop)
                 .enableUserSetpointControl(() -> 8)
                 .withPowerClamps(Joker.INTAKE_ARM_LOWER_POWER_CLAMP, Joker.INTAKE_ARM_UPPER_POWER_CLAMP);
-        drive = new SimpleMecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight);
+        drive = new SimpleMecanumDrive(robot.frontLeft, robot.backLeft, robot.backRight, robot.frontRight);
         lift = new HoldableActuator(robot.liftMotor)
-                .withBottomSwitch(robot.liftBotStop);
+              .withBottomSwitch(robot.liftBotStop)
+              .withPowerClamps(-1, 1);
         lights = new BlinkinLights(robot.lights, RevBlinkinLedDriver.BlinkinPattern.RED);
         robot.intakeGrip.setPosition(Joker.INTAKE_GRIP_OPEN_POSITION);
         robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_CLOSED_POSITION);
@@ -50,9 +51,11 @@ public class TeleOperation extends BunyipsOpMode {
         }
         if (robot.handoverPoint.isPressed()) {
             lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            lift.withPowerClamps(-0.2, 0.2);
         }
         else {
             lights.resetPattern();
+            lift.withPowerClamps(-1, 1);
         }
         drive.setPower(Controls.makeRobotVel(leftStickX, leftStickY, rightStickX));
         intake.setPower(gp2LeftStickY);
