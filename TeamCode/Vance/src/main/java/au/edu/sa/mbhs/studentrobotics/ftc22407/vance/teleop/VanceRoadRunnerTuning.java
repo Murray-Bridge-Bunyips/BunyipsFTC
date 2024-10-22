@@ -22,7 +22,7 @@ public class VanceRoadRunnerTuning extends RoadRunnerTuningOpMode {
     protected RoadRunnerDrive getDrive() {
         Vance robot = new Vance();
         robot.init(this);
-        return new MecanumDrive(robot.driveModel, robot.motionProfile, robot.mecanumGains, robot.fl, robot.fr, robot.bl, robot.br, robot.imu, hardwareMap.voltageSensor)
+        return new MecanumDrive(robot.driveModel, robot.motionProfile, robot.mecanumGains, robot.fl, robot.bl, robot.br, robot.fr, robot.imu, hardwareMap.voltageSensor)
                 .withLocalizer(new ThreeWheelLocalizer(robot.driveModel, robot.localiserParams, robot.dwleft, robot.dwright, robot.dwx));
     }
 }

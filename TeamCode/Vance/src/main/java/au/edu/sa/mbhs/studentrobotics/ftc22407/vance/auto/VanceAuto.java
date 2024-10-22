@@ -34,7 +34,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
     @Override
     protected void onInitialise() {
         robot.init();
-        drive = new MecanumDrive(robot.driveModel, robot.motionProfile, robot.mecanumGains, robot.fl, robot.fr, robot.bl, robot.br, robot.imu, hardwareMap.voltageSensor)
+        drive = new MecanumDrive(robot.driveModel, robot.motionProfile, robot.mecanumGains, robot.fl, robot.bl, robot.br, robot.fr, robot.imu, hardwareMap.voltageSensor)
                 .withLocalizer(new ThreeWheelLocalizer(robot.driveModel, robot.localiserParams, robot.dwleft, robot.dwright, robot.dwx))
                 .withAccumulator(new PeriodicIMUAccumulator(robot.imu.get(), Seconds.of(5)));
 
