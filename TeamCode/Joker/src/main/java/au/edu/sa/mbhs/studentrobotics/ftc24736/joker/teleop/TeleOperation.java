@@ -57,7 +57,7 @@ public class TeleOperation extends BunyipsOpMode {
             lights.resetPattern();
             lift.withPowerClamps(-1, 1);
         }
-        drive.setPower(Controls.makeRobotVel(leftStickX, leftStickY, rightStickX));
+        drive.setPower(Controls.vel(leftStickX, leftStickY, rightStickX));
         intake.setPower(gp2LeftStickY);
         lift.setPower(gp2RightStickY);
         drive.update();

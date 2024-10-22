@@ -41,7 +41,7 @@ public class DriveTest extends BunyipsOpMode {
         double leftStickX = gamepad1.left_stick_x;
         double leftStickY = gamepad1.left_stick_y;
         double rightStickX = gamepad1.right_stick_x;
-        drive.setPower(Controls.makeRobotVel(leftStickX, leftStickY, rightStickX));
+        drive.setPower(Controls.vel(leftStickX, leftStickY, rightStickX));
         drive.update();
 
         telemetry.addData("pose", drive.getPose());

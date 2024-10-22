@@ -102,8 +102,8 @@ public class Joker extends RobotConfig {
     @Override
     protected void onRuntime() {
         frontLeft = getHardware("front_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
-        frontRight = getHardware("front_right", DcMotor.class);
-        backLeft = getHardware("back_left", DcMotor.class);
+        frontRight = getHardware("front_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        backLeft = getHardware("back_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
