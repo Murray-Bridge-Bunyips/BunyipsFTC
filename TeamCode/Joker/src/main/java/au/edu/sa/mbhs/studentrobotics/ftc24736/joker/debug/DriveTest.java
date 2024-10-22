@@ -1,0 +1,49 @@
+package au.edu.sa.mbhs.studentrobotics.ftc24736.joker.debug;
+
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag;
+import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
+
+@TeleOp(name = "DriveTest")
+public class DriveTest extends BunyipsOpMode {
+    private final Joker robot = new Joker();
+    private SimpleMecanumDrive drive;
+    private Vision webcam;
+
+    @Override
+    protected void onInit() {
+        robot.init();
+        DriveModel dm = new DriveModel.Builder()
+
+                .build();
+        drive = new SimpleMecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight)
+                .withLocalizer(new MecanumLocalizer(dm, robot.frontLeft, robot.backLeft, robot.backRight, robot.frontRight, robot.imu));
+        webcam = new Vision(robot.camera);
+        AprilTag at = new AprilTag();
+        webcam.init(at);
+        webcam.start(at);
+        webcam.startPreview();
+//        AprilTagPoseEstimator.enable(at, localizer)
+//                .setCameraOffset(new Pose2d(8.5, 0, 0))
+//                .setHeadingEstimate(false)
+//                .setKalmanGains(4, 0.1);
+    }
+
+    @Override
+    protected void activeLoop() {
+        double leftStickX = gamepad1.left_stick_x;
+        double leftStickY = gamepad1.left_stick_y;
+        double rightStickX = gamepad1.right_stick_x;
+        drive.setPower(Controls.makeRobotVel(leftStickX, leftStickY, rightStickX));
+        drive.update();
+
+        telemetry.addData("pose", drive.getPose());
+    }
+}

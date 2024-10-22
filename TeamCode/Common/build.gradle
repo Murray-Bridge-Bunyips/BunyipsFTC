@@ -18,7 +18,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    namespace = 'org.murraybridgebunyips.common'
+    namespace = 'au.edu.sa.mbhs.studentrobotics.common'
 }
 
 dependencies {

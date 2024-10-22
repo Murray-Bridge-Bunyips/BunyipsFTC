@@ -1,6 +1,6 @@
 apply from: "../build.common.gradle"
 android {
-    namespace = 'org.murraybridgebunyips.vance'
+    namespace = 'au.edu.sa.mbhs.studentrobotics.ftc22407.vance'
 }
 
 // https://gist.github.com/MatthewOates36/84b46e749f814f8386cc5b67719fdbff/revisions
