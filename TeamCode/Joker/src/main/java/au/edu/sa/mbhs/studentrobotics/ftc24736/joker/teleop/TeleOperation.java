@@ -4,36 +4,16 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 
 @TeleOp(name = "TeleOp")
 public class TeleOperation extends BunyipsOpMode {
     private final Joker robot = new Joker();
-    private SimpleMecanumDrive drive;
-    private HoldableActuator intake;
-    private HoldableActuator lift;
-    private BlinkinLights lights;
 
     @Override
     protected void onInit() {
         robot.init();
-        intake = new HoldableActuator(robot.intakeMotor)
-                .withBottomSwitch(robot.intakeInStop)
-                .withTopSwitch(robot.intakeOutStop)
-                .enableUserSetpointControl(() -> 8)
-                .withPowerClamps(Joker.INTAKE_ARM_LOWER_POWER_CLAMP, Joker.INTAKE_ARM_UPPER_POWER_CLAMP);
-        drive = new SimpleMecanumDrive(robot.frontLeft, robot.backLeft, robot.backRight, robot.frontRight);
-        lift = new HoldableActuator(robot.liftMotor)
-              .withBottomSwitch(robot.liftBotStop)
-              .withPowerClamps(-1, 1);
-        lights = new BlinkinLights(robot.lights, RevBlinkinLedDriver.BlinkinPattern.RED);
-        robot.intakeGrip.setPosition(Joker.INTAKE_GRIP_OPEN_POSITION);
-        robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_CLOSED_POSITION);
-        robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_IN_POSITION);
     }
 
     @Override
@@ -50,20 +30,22 @@ public class TeleOperation extends BunyipsOpMode {
             robot.toggleOuttake();
         }
         if (robot.handoverPoint.isPressed()) {
-            lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
-            lift.withPowerClamps(-0.2, 0.2);
+            robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);
+            robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT,
+                    Joker.LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT);
         }
         else {
-            lights.resetPattern();
-            lift.withPowerClamps(-1, 1);
+            robot.lights.resetPattern();
+            robot.lift.withPowerClamps(Joker.LIFT_LOWER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT,
+                    Joker.LIFT_UPPER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT);
         }
-        drive.setPower(Controls.vel(leftStickX, leftStickY, rightStickX));
-        intake.setPower(gp2LeftStickY);
-        lift.setPower(gp2RightStickY);
-        drive.update();
-        intake.update();
-        lift.update();
-        lights.update();
+        robot.drive.setPower(Controls.vel(leftStickX, leftStickY, rightStickX));
+        robot.intake.setPower(gp2LeftStickY);
+        robot.lift.setPower(gp2RightStickY);
+        robot.drive.update();
+        robot.intake.update();
+        robot.lift.update();
+        robot.lights.update();
         telemetry.addData("currentPosition", robot.intakeMotor.getCurrentPosition());
         telemetry.addData("targetPosition", robot.intakeMotor.getTargetPosition());
     }

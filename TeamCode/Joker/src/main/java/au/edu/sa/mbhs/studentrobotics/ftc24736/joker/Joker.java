@@ -14,6 +14,9 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
 
 @Config
 public class Joker extends RobotConfig {
@@ -57,7 +60,7 @@ public class Joker extends RobotConfig {
     /**
      * Control Hub 3: lights
      */
-    public RevBlinkinLedDriver lights;
+    public RevBlinkinLedDriver lightsHardware;
 
     /**
      * Control Hub 0-1 (1 used): liftLimiter
@@ -84,6 +87,25 @@ public class Joker extends RobotConfig {
      */
     public IMU imu;
 
+    /**
+     * Intake Arm HoldableActuator
+     */
+    public HoldableActuator intake;
+    /**
+     * 4-Wheels SimpleMecanumDrive
+     */
+    public SimpleMecanumDrive drive;
+    /**
+     * Outtake Lift HoldableActuator
+     */
+    public HoldableActuator lift;
+    /**
+     * Light Strips HoldableActuator
+     */
+    public BlinkinLights lights;
+
+
+
     public static double INTAKE_GRIP_OPEN_POSITION = 0.5;
     public static int INTAKE_GRIP_CLOSED_POSITION = 0;
 
@@ -95,6 +117,11 @@ public class Joker extends RobotConfig {
 
     public static double INTAKE_ARM_LOWER_POWER_CLAMP = -0.35;
     public static double INTAKE_ARM_UPPER_POWER_CLAMP = 0.35;
+
+    public static int LIFT_LOWER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT = -1;
+    public static int LIFT_UPPER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT = 1;
+    public static double LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT = -0.2;
+    public static double LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT = 0.2;
 
     private boolean intakeGripClosed = false;
     private boolean outtakeFacingOut = false;
@@ -113,7 +140,7 @@ public class Joker extends RobotConfig {
         outtakeAlign = getHardware("outtakeAlign", Servo.class);
         outtakeGrip = getHardware("outtakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
         intakeGrip = getHardware("intakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
-        lights = getHardware("lights", RevBlinkinLedDriver.class);
+        lightsHardware = getHardware("lights", RevBlinkinLedDriver.class);
         liftBotStop = getHardware("liftLimiter", TouchSensor.class);
         intakeInStop = getHardware("intakeInStop", TouchSensor.class);
         intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
@@ -122,6 +149,21 @@ public class Joker extends RobotConfig {
         imu = getHardware("imu", IMU.class,
                 (d) -> d.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD))));
+
+        intake = new HoldableActuator(intakeMotor)
+                .withBottomSwitch(intakeInStop)
+                .withTopSwitch(intakeOutStop)
+                .enableUserSetpointControl(() -> 8)
+                .withPowerClamps(INTAKE_ARM_LOWER_POWER_CLAMP, INTAKE_ARM_UPPER_POWER_CLAMP);
+        drive = new SimpleMecanumDrive(frontLeft, backLeft, backRight, frontRight);
+        lift = new HoldableActuator(liftMotor)
+                .withBottomSwitch(liftBotStop)
+                .withPowerClamps(LIFT_LOWER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT,
+                        LIFT_UPPER_POWER_CLAMP_WHEN_NOT_HANDOVER_POINT);
+        lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.RED);
+        intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
+        outtakeGrip.setPosition(OUTTAKE_GRIP_CLOSED_POSITION);
+        outtakeAlign.setPosition(OUTTAKE_ALIGN_IN_POSITION);
     }
 
     public void toggleGrips() {

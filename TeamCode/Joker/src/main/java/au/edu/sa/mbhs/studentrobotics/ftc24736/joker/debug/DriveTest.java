@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag;
@@ -14,7 +13,6 @@ import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 @TeleOp(name = "DriveTest")
 public class DriveTest extends BunyipsOpMode {
     private final Joker robot = new Joker();
-    private SimpleMecanumDrive drive;
     private Vision webcam;
 
     @Override
@@ -23,7 +21,7 @@ public class DriveTest extends BunyipsOpMode {
         DriveModel dm = new DriveModel.Builder()
 
                 .build();
-        drive = new SimpleMecanumDrive(robot.frontLeft, robot.frontRight, robot.backLeft, robot.backRight)
+        robot.drive
                 .withLocalizer(new MecanumLocalizer(dm, robot.frontLeft, robot.backLeft, robot.backRight, robot.frontRight, robot.imu));
         webcam = new Vision(robot.camera);
         AprilTag at = new AprilTag();
@@ -41,9 +39,9 @@ public class DriveTest extends BunyipsOpMode {
         double leftStickX = gamepad1.left_stick_x;
         double leftStickY = gamepad1.left_stick_y;
         double rightStickX = gamepad1.right_stick_x;
-        drive.setPower(Controls.vel(leftStickX, leftStickY, rightStickX));
-        drive.update();
+        robot.drive.setPower(Controls.vel(leftStickX, leftStickY, rightStickX));
+        robot.drive.update();
 
-        telemetry.addData("pose", drive.getPose());
+        telemetry.addData("pose", robot.drive.getPose());
     }
 }
