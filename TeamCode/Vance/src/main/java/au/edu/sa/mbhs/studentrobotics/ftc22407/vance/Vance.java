@@ -145,7 +145,7 @@ public class Vance extends RobotConfig {
                 RevHubOrientationOnRobot.UsbFacingDirection.RIGHT));
 
         dwleft = getHardware("br", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
-        dwright = getHardware("fr", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
+        dwright = getHardware("fl", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
         dwx = getHardware("bl", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         verticalArm = getHardware("va", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
@@ -160,14 +160,21 @@ public class Vance extends RobotConfig {
         // Fancy lights
         lights = getHardware("lights", RevBlinkinLedDriver.class);
 
-        // TODO: tune
+        // TODO: tune from ManualFeedforwardTuner
         driveModel = new DriveModel.Builder()
+                .setInPerTick(122.5 / 61697.0)
+                .setTrackWidthTicks(7670.3069265030135)
                 .build();
         motionProfile = new MotionProfile.Builder()
+                .setKv(0.00036598312090223767)
+                .setKs(1.0174842402300985)
                 .build();
         mecanumGains = new MecanumGains.Builder()
                 .build();
         localiserParams = new ThreeWheelLocalizer.Params.Builder()
+                .setPar0YTicks(-1274.4310945248199)
+                .setPar1YTicks(1355.6339929262751)
+                .setPerpXTicks(-3361.673151430961)
                 .build();
     }
 }
