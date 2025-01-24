@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Vance" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
-    <module name="TeamCode.BunyipsFTC.Vance" />
+    <module name="BunyipsFTC.Vance" />
     <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
     <option name="DEPLOY" value="true" />
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
