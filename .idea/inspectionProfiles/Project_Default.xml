@@ -39,6 +39,14 @@
     <inspection_tool class="ConfusingFloatingPointLiteral" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="DoubleLiteralMayBeFloatLiteral" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="EmptyDirectory" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="EmptyMethod" enabled="true" level="TEXT ATTRIBUTES" enabled_by_default="true" editorAttributes="NOT_USED_ELEMENT_ATTRIBUTES">
+      <option name="EXCLUDE_ANNOS">
+        <value>
+          <list size="0" />
+        </value>
+      </option>
+      <option name="commentsAreContent" value="true" />
+    </inspection_tool>
     <inspection_tool class="EmptyStatementBody" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_reportEmptyBlocks" value="true" />
       <option name="commentsAreContent" value="true" />
