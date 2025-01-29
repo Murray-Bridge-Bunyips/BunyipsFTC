@@ -18,7 +18,7 @@ import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.TransferSample;
 /**
  * TeleOp for Vance.
  *
- * @author Lachlan Paul, 2024
+ * @author Lachlan Paul, 2025
  */
 @TeleOp(name = "TeleOp")
 @Config
@@ -64,7 +64,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
 
         operator().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true))
-                .finishIf(() -> gamepad2.getDebounced(Controls.RIGHT_BUMPER));
+                /*.finishIf(() -> gamepad2.getDebounced(Controls.RIGHT_BUMPER))*/;
 
         robot.drive.setDefaultTask(new HolonomicTrackingDriveTask(gamepad1, robot.drive).withFieldCentric(() -> FC));
         driver().whenPressed(Controls.BACK)

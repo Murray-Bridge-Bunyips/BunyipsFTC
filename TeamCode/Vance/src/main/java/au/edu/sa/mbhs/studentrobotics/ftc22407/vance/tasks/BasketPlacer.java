@@ -13,7 +13,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGrou
 /**
  * Places sample in basket. Intended for use in Autonomous pathing
  *
- * @author Lachlan Paul, 2024
+ * @author Lachlan Paul, 2025
  */
 public class BasketPlacer extends SequentialTaskGroup {
     /**
@@ -36,10 +36,12 @@ public class BasketPlacer extends SequentialTaskGroup {
 //                        .onFinish(() -> drive.setMotorPowers(0, 0, 0, 0))
 //                        .timeout(Milliseconds.of(100)),
 //                new ParallelTaskGroup(verticalArm.tasks.home().timeout(Seconds.of(1)), basketRotator.tasks.close())
-                new ParallelTaskGroup(verticalArm.tasks.home().timeout(Seconds.of(1)), basketRotator.tasks.close(),
+                new ParallelTaskGroup(basketRotator.tasks.close(),
                         task().init(() -> drive.setMotorPowers(-1, -1, -1, -1))
                         .onFinish(() -> drive.setMotorPowers(0, 0, 0, 0))
-                        .timeout(Milliseconds.of(100)))
+                        .timeout(Milliseconds.of(100))),
+                new WaitTask(Milliseconds.of(800)),
+                verticalArm.tasks.home().timeout(Seconds.of(1))
         );
     }
 }
