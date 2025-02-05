@@ -9,6 +9,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.o
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx
@@ -105,12 +106,14 @@ object Proto : RobotConfig() {
             it.direction = Servo.Direction.REVERSE
             it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.6, 1.0)
+            it.endToEndTime = 400 of Milliseconds
         }
         hw.rightClaw = getHardware("rc", ServoEx::class.java) {
             it.direction = Servo.Direction.FORWARD
             // play halfway through
             it.setPositionDeltaThreshold(0.02)
             it.scaleRange(0.0, 0.4)
+            it.endToEndTime = 400 of Milliseconds
         }
         hw.clawRotator = getHardware("cr", ServoEx::class.java) {
             it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
