@@ -2,6 +2,7 @@ package au.edu.sa.mbhs.studentrobotics.ftc24736.joker.teleop;
 
 import com.acmerobotics.roadrunner.Rotation2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
@@ -11,7 +12,8 @@ import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 /**
  * "Whoooaaa! Looking cool, Joker!"
  */
-@TeleOp(name = "TeleOp")
+@TeleOp(name = "TeleOp Non-Command Based")
+@Disabled
 public class TeleOperation extends BunyipsOpMode {
     private final Joker robot = new Joker();
     private Rotation2d origin = Rotation2d.exp(0);

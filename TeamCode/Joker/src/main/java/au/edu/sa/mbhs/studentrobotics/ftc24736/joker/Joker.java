@@ -25,6 +25,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGa
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 /**
@@ -38,78 +39,80 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
  */
 @Config
 public class Joker extends RobotConfig {
-    /**
-     * Expansion 1: front_left
-     */
-    public DcMotor frontLeft;
-    /**
-     * Expansion 2: front_right
-     */
-    public DcMotor frontRight;
-    /**
-     * Expansion 0: back_left
-     */
-    public DcMotor backLeft;
-    /**
-     * Expansion 3: back_right
-     */
+    public static class Hardware {
+        /**
+         * Expansion 1: front_left
+         */
+        public DcMotor frontLeft;
+        /**
+         * Expansion 2: front_right
+         */
+        public DcMotor frontRight;
+        /**
+         * Expansion 0: back_left
+         */
+        public DcMotor backLeft;
+        /**
+         * Expansion 3: back_right
+         */
+        public DcMotor backRight;
 
-    public DcMotor backRight;
-    /**
-     * Control Hub 0: intakeMotor
-     */
-    public Motor intakeMotor;
-    /**
-     * Control Hub 1: liftMotor
-     */
-    public DcMotor liftMotor;
-    /**
-     * Control Hub 2: hook
-     */
-    public DcMotor hook;
-    /**
-     * Control Hub 3: arm
-     */
-    public DcMotor ascentMotor;
+        /**
+         * Control Hub 0: intakeMotor
+         */
+        public Motor intakeMotor;
+        /**
+         * Control Hub 1: liftMotor
+         */
+        public DcMotor liftMotor;
+        /**
+         * Control Hub 2: hook
+         */
+        public DcMotor hook;
+        /**
+         * Control Hub 3: arm
+         */
+        public DcMotor ascentArm;
 
-    /**
-     * Control Hub 0: spintake
-     */
-    public CRServo spintake;
-    /**
-     * Control Hub 1: outtakeGrip
-     */
-    public Servo outtakeGrip;
-    /**
-     * Control Hub 2: lights
-     */
-    public RevBlinkinLedDriver lightsHardware;
-    //**
-    //* Control Hub 2: intakeGrip
-    //*/
-    //public Servo intakeGrip;
+        /**
+         * Control Hub 0: spintake
+         */
+        public CRServo spintake;
+        /**
+         * Control Hub 1: outtakeGrip
+         */
+        public Servo outtakeGrip;
+        /**
+         * Control Hub 2: lights
+         */
+        public RevBlinkinLedDriver lights;
+        //**
+        //* Control Hub 2: intakeGrip
+        //*/
+        //public Servo intakeGrip;
 
-    /**
-     * Control Hub 0-1 (1 used): liftLimiter
-     */
-    public TouchSensor liftBotStop;
-    /**
-     * Control Hub 2-3 (3 used): intakeInStop
-     */
-    public TouchSensor intakeInStop;
-    /**
-     * Control Hub 4-5 (5 used): intakeOutStop
-     */
-    public TouchSensor intakeOutStop;
-    //**
-     //* Control Hub 6-7 (7 used): handoverPoint
-     //*/
-    //public TouchSensor handoverPoint;
+        /**
+         * Control Hub 0-1 (1 used): liftLimiter
+         */
+        public TouchSensor liftBotStop;
+        /**
+         * Control Hub 2-3 (3 used): intakeInStop
+         */
+        public TouchSensor intakeInStop;
+        /**
+         * Control Hub 4-5 (5 used): intakeOutStop
+         */
+        public TouchSensor intakeOutStop;
+        //**
+        //* Control Hub 6-7 (7 used): handoverPoint
+        //*/
+        //public TouchSensor handoverPoint;
 
-    /**
-     * Internally connected
-     */
-    public LazyImu imu;
+        /**
+         * Internally connected
+         */
+        public LazyImu imu;
+    }
 
     /**
      * 4-Wheels MecanumDrive
@@ -134,61 +137,47 @@ public class Joker extends RobotConfig {
      */
     public BlinkinLights lights;
 
-    public static double INTAKE_GRIP_OPEN_POSITION = 0.5;
-    public static int INTAKE_GRIP_CLOSED_POSITION = 0;
+    /**
+     * Outtake Grip Switch
+     */
+    public Switch outtakeGrip;
 
-    public static int OUTTAKE_GRIP_OPEN_POSITION = 1;
-    public static int OUTTAKE_GRIP_CLOSED_POSITION = 0;
-
-    //public static int OUTTAKE_ALIGN_IN_POSITION = 1;
-    //public static int OUTTAKE_ALIGN_OUT_POSITION = 0;
-
-    public static double INTAKE_ARM_LOWER_POWER_CLAMP = -0.35;
-    public static double INTAKE_ARM_UPPER_POWER_CLAMP = 0.35;
-
-    public static int LIFT_LOWER_POWER_CLAMP = -1;
-    public static int LIFT_UPPER_POWER_CLAMP = 1;
-    //public static double LIFT_LOWER_POWER_CLAMP_WHEN_HANDOVER_POINT = -0.2;
-    //public static double LIFT_UPPER_POWER_CLAMP_WHEN_HANDOVER_POINT = 0.2;
-
-    //private boolean intakeGripClosed = false;
-    private boolean outtakeGripClosed = false;
-    //private boolean outtakeFacingOut = false;
+    public final Hardware hw = new Hardware();
 
     //live mecanum wheel rolling on keyboard reaction:
     //Zzzzzzzzzzzzzzzzzzzzzzzzzzzssxccfvgbhnjk,l.....;///'/'
 
     @Override
     protected void onRuntime() {
-        frontLeft = getHardware("front_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
-        frontRight = getHardware("front_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
-        backLeft = getHardware("back_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
-        backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        hw.frontLeft = getHardware("front_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        hw.frontRight = getHardware("front_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        hw.backLeft = getHardware("back_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        hw.backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
-        intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
+        hw.intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
             EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, 0.333);
             PIDController pid = new PIDController(0.005, 0, 0.00001);
             ArmFeedforward ff = new ArmFeedforward(0, 0.1, 0, 0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
             CompositeController c = new CompositeController(pid, ff, Double::sum);
             d.setRunToPositionController(c);
         });
-        liftMotor = getHardware("liftMotor", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
-        hook = getHardware("hook", DcMotor.class);
-        ascentMotor = getHardware("arm", Motor.class,
+        hw.liftMotor = getHardware("liftMotor", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        hw.hook = getHardware("hook", DcMotor.class);
+        hw.ascentArm = getHardware("arm", Motor.class,
                 d -> d.setRunToPositionController(new PIDController(0.01, 0, 0.00001)));
 
         //outtakeAlign = getHardware("outtakeAlign", Servo.class);
-        spintake = getHardware("spintake", CRServo.class);
-        outtakeGrip = getHardware("outtakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
+        hw.spintake = getHardware("spintake", CRServo.class);
+        hw.outtakeGrip = getHardware("outtakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
         //intakeGrip = getHardware("intakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
-        lightsHardware = getHardware("lights", RevBlinkinLedDriver.class);
+        hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
 
-        liftBotStop = getHardware("liftLimiter", TouchSensor.class);
-        intakeInStop = getHardware("intakeInStop", TouchSensor.class);
-        intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
+        hw.liftBotStop = getHardware("liftLimiter", TouchSensor.class);
+        hw.intakeInStop = getHardware("intakeInStop", TouchSensor.class);
+        hw.intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
         //handoverPoint = getHardware("handoverPoint", TouchSensor.class);
 
-        imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
+        hw.imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
 
         DriveModel driveModel = new DriveModel.Builder()
@@ -228,7 +217,7 @@ public class Joker extends RobotConfig {
                 .build();
         */
 
-        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, frontLeft, backLeft, backRight, frontRight, imu, hardwareMap.voltageSensor)
+        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, hw.imu, hardwareMap.voltageSensor)
                 .withName("drive");
 
         MecanumLocalizer localizer = (MecanumLocalizer) drive.getLocalizer();
@@ -237,45 +226,36 @@ public class Joker extends RobotConfig {
         localizer.rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
         localizer.rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        intake = new HoldableActuator(intakeMotor)
-                .withBottomSwitch(intakeInStop)
-                .withTopSwitch(intakeOutStop)
+        intake = new HoldableActuator(hw.intakeMotor)
+                .withBottomSwitch(hw.intakeInStop)
+                .withTopSwitch(hw.intakeOutStop)
                 .withUserSetpointControl((dt) -> 300 * dt)
                 .withName("intake");
 
-        lift = new HoldableActuator(liftMotor)
-                .withBottomSwitch(liftBotStop)
+        lift = new HoldableActuator(hw.liftMotor)
+                .withBottomSwitch(hw.liftBotStop)
                 //.map(handoverPoint, 1500)
-                .withPowerClamps(LIFT_LOWER_POWER_CLAMP,
-                        LIFT_UPPER_POWER_CLAMP)
+                .withPowerClamps(-1, 1)
                 .withUpperLimit(6000)
                 .withUserSetpointControl((dt) -> 1800 * dt)
                 .withName("lift");
 
         //can be replaced w/ pid controller if hook motor gets an encoder (not really needed though)
-        hook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        hw.hook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        ascentArm = new HoldableActuator(ascentMotor)
+        ascentArm = new HoldableActuator(hw.ascentArm)
                 .withName("ascent");
 
-        lights = new BlinkinLights(lightsHardware, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
+        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
                 .withName("lights");
+
+        outtakeGrip = new Switch(hw.outtakeGrip, 0, 1);
+
 
         //intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
 
         //BELOW IS THE EVIL YELLOW-CARD GIVING LINE OF CODE!!1
         //outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
-    }
-
-    public void toggleOuttakeGrip() {
-        if (outtakeGripClosed) {
-            outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
-            outtakeGripClosed = false;
-        }
-        else {
-            outtakeGrip.setPosition(OUTTAKE_GRIP_CLOSED_POSITION);
-            outtakeGripClosed = true;
-        }
     }
 
     /*
