@@ -4,7 +4,6 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag;
@@ -19,10 +18,7 @@ public class DriveTest extends BunyipsOpMode {
         robot.init();
         //robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_IN_POSITION);
         DriveModel dm = new DriveModel.Builder()
-
                 .build();
-        robot.drive
-                .withLocalizer(new MecanumLocalizer(dm, robot.frontLeft, robot.backLeft, robot.backRight, robot.frontRight, robot.imu.get()));
         AprilTag at = new AprilTag();
 //        AprilTagPoseEstimator.enable(at, localizer)
 //                .setCameraOffset(new Pose2d(8.5, 0, 0))

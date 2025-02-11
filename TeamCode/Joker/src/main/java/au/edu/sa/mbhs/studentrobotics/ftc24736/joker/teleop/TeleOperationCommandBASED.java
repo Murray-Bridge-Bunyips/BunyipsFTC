@@ -35,7 +35,6 @@ public class TeleOperationCommandBASED extends CommandBasedBunyipsOpMode {
         robot.drive.setDefaultTask(driveTask);
         robot.intake.setDefaultTask(robot.intake.tasks.control(() -> gamepad2.lsy));
         robot.lift.setDefaultTask(robot.lift.tasks.control(() -> gamepad2.rsy));
-
     }
 
     @Override
