@@ -9,15 +9,14 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.o
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.SimpleRotator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
@@ -47,11 +46,6 @@ object Proto : RobotConfig() {
      * RoadRunner Mecanum Drive with Two-Wheel Localization.
      */
     lateinit var drive: MecanumDrive
-
-    /**
-     * Dual servos for the claw mechanism.
-     */
-    lateinit var claws: DualServos
 
     /**
      * `claws` rotation mechanism.
@@ -102,18 +96,8 @@ object Proto : RobotConfig() {
         }
 
         // End effectors
-        hw.leftClaw = getHardware("lc", ServoEx::class.java) {
-            it.direction = Servo.Direction.REVERSE
-            it.setPositionDeltaThreshold(0.02)
-            it.scaleRange(0.6, 1.0)
-            it.endToEndTime = 400 of Milliseconds
-        }
-        hw.rightClaw = getHardware("rc", ServoEx::class.java) {
-            it.direction = Servo.Direction.FORWARD
-            // play halfway through
-            it.setPositionDeltaThreshold(0.02)
-            it.scaleRange(0.0, 0.4)
-            it.endToEndTime = 400 of Milliseconds
+        hw.clawIntake = getHardware("cs", SimpleRotator::class.java) {
+            it.setPowerDeltaThreshold(0.02)
         }
         hw.clawRotator = getHardware("cr", ServoEx::class.java) {
             it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
@@ -182,8 +166,6 @@ object Proto : RobotConfig() {
         drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
             .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe, hw.ppe, hw.imu?.get()))
             .withName("Drive")
-        claws = DualServos(hw.leftClaw, hw.rightClaw)
-            .withName("Claws")
         clawRotator = Switch(hw.clawRotator)
             .withName("Claw Rotator")
         clawLift = HoldableActuator(hw.clawLift)
@@ -240,14 +222,9 @@ object Proto : RobotConfig() {
         var imu: LazyImu? = null
 
         /**
-         * Control S1: Left Claw "lc"
+         * Control S1: Claw Spinny "cs"
          */
-        var leftClaw: Servo? = null
-
-        /**
-         * Control S0: Right Claw "rc"
-         */
-        var rightClaw: Servo? = null
+        var clawIntake: SimpleRotator? = null
 
         /**
          * Control S2: Claw Rotator "cr"
