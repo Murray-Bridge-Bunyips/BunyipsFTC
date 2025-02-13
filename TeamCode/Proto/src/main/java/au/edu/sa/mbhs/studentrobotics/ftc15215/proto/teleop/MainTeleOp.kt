@@ -27,6 +27,6 @@ open class MainTeleOp : CommandBasedBunyipsOpMode() {
     }
 
     override fun periodic() {
-        Proto.hw.clawIntake?.power = if (gamepad2.du) 1.0 else if (gamepad2.dd) -1.0 else 0.0
+        Proto.hw.clawIntake?.power = if (gamepad2.x) 1.0 else if (gamepad2.y) -1.0 else 0.0
     }
 }
