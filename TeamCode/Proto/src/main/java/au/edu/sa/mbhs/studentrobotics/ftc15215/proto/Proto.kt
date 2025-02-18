@@ -10,6 +10,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.SimpleRotator
@@ -21,11 +22,11 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
-import com.acmerobotics.roadrunner.ftc.LazyImu
 import com.acmerobotics.roadrunner.ftc.RawEncoder
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
+import com.qualcomm.robotcore.hardware.IMU
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
@@ -64,12 +65,12 @@ object Proto : RobotConfig() {
 
     override fun onRuntime() {
         // Base is from GLaDOS
-        hw.imu = getLazyImu(
-            orientationOnRobot = RevHubOrientationOnRobot(
+        hw.imu = getHardware("imu", IMUEx::class.java) {
+            it.lazyInitialize(IMU.Parameters(RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.UP,
                 RevHubOrientationOnRobot.UsbFacingDirection.LEFT
-            )
-        )
+            )))
+        }
         hw.fl = getHardware("fl", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
             it.setPowerDeltaThreshold(0.02)
@@ -219,7 +220,7 @@ object Proto : RobotConfig() {
         /**
          * Internally mounted on I2C C0 "imu"
          */
-        var imu: LazyImu? = null
+        var imu: IMUEx? = null
 
         /**
          * Control S1: Claw Spinny "cs"

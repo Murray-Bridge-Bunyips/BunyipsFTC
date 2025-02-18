@@ -4,12 +4,12 @@ package au.edu.sa.mbhs.studentrobotics.ftc24736.joker;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -18,6 +18,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforward;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
@@ -111,7 +112,7 @@ public class Joker extends RobotConfig {
         /**
          * Internally connected
          */
-        public LazyImu imu;
+        public IMUEx imu;
     }
 
     /**
@@ -177,8 +178,11 @@ public class Joker extends RobotConfig {
         hw.intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
         //handoverPoint = getHardware("handoverPoint", TouchSensor.class);
 
-        hw.imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+        hw.imu = getHardware("imu", IMUEx.class, d ->
+                d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                ))));
 
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(123.5 / 6454.75)

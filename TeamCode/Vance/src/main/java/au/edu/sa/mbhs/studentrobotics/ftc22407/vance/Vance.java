@@ -3,12 +3,12 @@ package au.edu.sa.mbhs.studentrobotics.ftc22407.vance;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.ftc.LazyImu;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -18,6 +18,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeContr
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.ThreeWheelLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.PeriodicIMUAccumulator;
@@ -102,8 +103,11 @@ public class Vance extends RobotConfig {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
-        hw.imu = getLazyImu(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT));
+        hw.imu = getHardware("imu", IMUEx.class, (d) ->
+                d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.RIGHT
+                ))));
 
         hw.dwleft = getHardware("br", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
         hw.dwright = getHardware("fl", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
@@ -193,7 +197,7 @@ public class Vance extends RobotConfig {
         /**
          * Internally mounted on I2C C0 "imu"
          */
-        public LazyImu imu;
+        public IMUEx imu;
 
         /**
          * Control 0: fr
