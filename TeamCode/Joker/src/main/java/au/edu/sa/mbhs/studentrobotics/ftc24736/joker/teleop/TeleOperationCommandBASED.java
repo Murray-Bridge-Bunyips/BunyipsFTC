@@ -33,13 +33,13 @@ public class TeleOperationCommandBASED extends CommandBasedBunyipsOpMode {
         driver().whenPressed(Controls.A)
             .run(driveTask::resetFieldCentricOrigin);
         robot.drive.setDefaultTask(driveTask);
-        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> gamepad2.lsy));
-        robot.lift.setDefaultTask(robot.lift.tasks.control(() -> gamepad2.rsy));
+        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.lsy));
+        robot.lift.setDefaultTask(robot.lift.tasks.control(() -> -gamepad2.rsy));
     }
 
     @Override
     protected void periodic() {
         robot.hw.hook.setPower(gamepad2.dpad_up ? 1 : gamepad2.dpad_down ? -1 : 0);
-        robot.hw.spintake.setPower(gamepad2.right_trigger - gamepad2.left_trigger);
+        robot.hw.spintake.setPower(gamepad2.left_trigger - gamepad2.right_trigger);
     }
 }

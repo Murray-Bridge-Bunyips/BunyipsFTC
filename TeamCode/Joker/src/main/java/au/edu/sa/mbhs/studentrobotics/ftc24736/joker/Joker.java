@@ -236,8 +236,8 @@ public class Joker extends RobotConfig {
                 .withBottomSwitch(hw.liftBotStop)
                 //.map(handoverPoint, 1500)
                 .withPowerClamps(-1, 1)
-                .withUpperLimit(6000)
-                .withUserSetpointControl((dt) -> 1800 * dt)
+                .withUpperLimit(850)
+                .withUserSetpointControl((dt) -> 600 * dt)
                 .withName("lift");
 
         //can be replaced w/ pid controller if hook motor gets an encoder (not really needed though)
@@ -249,7 +249,8 @@ public class Joker extends RobotConfig {
         lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
                 .withName("lights");
 
-        outtakeGrip = new Switch(hw.outtakeGrip, 0, 1);
+        //TODO: make it fully open on init
+        outtakeGrip = new Switch(hw.outtakeGrip, 0, 0.6);
 
 
         //intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
