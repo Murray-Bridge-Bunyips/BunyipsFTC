@@ -13,13 +13,18 @@ import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
  * "Whoooaaa! Looking cool, Joker!"
  */
 @TeleOp(name = "TeleOp")
-public class TeleOperationCommandBASED extends CommandBasedBunyipsOpMode {
+public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
     private final Joker robot = new Joker();
 
     @Override
     protected void onInitialise() {
         robot.init();
         robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
+    }
+
+    @Override
+    protected void onStart() {
+        robot.outtakeGrip.open();
     }
 
     @Override

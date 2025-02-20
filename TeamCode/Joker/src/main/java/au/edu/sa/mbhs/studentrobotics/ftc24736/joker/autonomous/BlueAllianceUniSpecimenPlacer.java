@@ -9,26 +9,25 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 import dev.frozenmilk.util.cell.RefCell;
 
 @Autonomous(name = "Blue Uni Specimen Placer", preselectTeleOp = "TeleOp")
-@Disabled
 public class BlueAllianceUniSpecimenPlacer extends AutonomousBunyipsOpMode {
     private final Joker robot = new Joker();
 
     @Override
     protected void onInitialise() {
         robot.init();
-        robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);
+        robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);
         //robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
+        robot.outtakeGrip.open();
 
         robot.drive.setPose(new Pose2d(-24, 24*3+9, Math.toRadians(270)));
 
@@ -42,19 +41,19 @@ public class BlueAllianceUniSpecimenPlacer extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(-24*2.1, 24*3-9), Inches)
                 .addTask();
 
-        run(robot::toggleOuttakeGrip);
+        robot.outtakeGrip.close();
 
-        add(robot.lift.tasks.goTo(500));
+        add(robot.lift.tasks.goTo(71));
 
         add(robot.drive.makeTrajectory(new Pose2d(-24*2.1, 24*3-9, Math.toRadians(90)))
                 .strafeTo(new Vector2d(-24*2.1, 24*2.5), Inches)
                 .strafeToLinearHeading(new Vector2d(0, 24+9), Inches, 270, Degrees)
                 .build()
-                .with(robot.lift.tasks.goTo(5000)));
+                .with(robot.lift.tasks.goTo(708)));
 
-        add(robot.lift.tasks.goTo(4500));
+        add(robot.lift.tasks.goTo(638));
 
-        run(robot::toggleOuttakeGrip);
+        robot.outtakeGrip.open();
 
         add(robot.drive.makeTrajectory(new Pose2d(0, 24+9, Math.toRadians(270)))
                 .strafeTo(new Vector2d(-24*1.5, 24*2.5), Inches)

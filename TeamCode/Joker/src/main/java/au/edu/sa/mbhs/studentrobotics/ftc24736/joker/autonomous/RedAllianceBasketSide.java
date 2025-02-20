@@ -43,15 +43,15 @@ public class RedAllianceBasketSide extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(-24*3.1+6, -24*2+2+6), Inches)
                 .addTask();
 
-        add(robot.outtakeGrip.tasks.toggle());
+        add(robot.outtakeGrip.tasks.close());
 
         add(robot.drive.makeTrajectory(new Pose2d(-24*3.1+6, -24*2+2+6, Math.toRadians(90)))
                 .strafeToLinearHeading(new Vector2d(-14-13, 0), Inches, 0, Degrees)
                 .build()
-                .with(robot.lift.tasks.goTo(2600))
+                .with(robot.lift.tasks.goTo(368))
         );
 
-        add(robot.lift.tasks.goTo(3000));
+        add(robot.lift.tasks.goTo(425));
 
         //run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
 

@@ -252,10 +252,8 @@ public class Joker extends RobotConfig {
 
         lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
                 .withName("lights");
-
-        //TODO: make it fully open on init
+        
         outtakeGrip = new Switch(hw.outtakeGrip, 0, 0.6);
-
 
         //intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
 
