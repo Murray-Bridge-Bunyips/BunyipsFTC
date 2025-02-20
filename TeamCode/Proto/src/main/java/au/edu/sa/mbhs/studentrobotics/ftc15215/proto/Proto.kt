@@ -104,7 +104,7 @@ object Proto : RobotConfig() {
             it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
             it.direction = Servo.Direction.REVERSE
             it.setPositionDeltaThreshold(0.02)
-            it.scaleRange(0.1, 0.65)
+            it.scaleRange(0.25, 1.0)
         }
 
         hw.clawLift = getHardware("cl", Motor::class.java) {
