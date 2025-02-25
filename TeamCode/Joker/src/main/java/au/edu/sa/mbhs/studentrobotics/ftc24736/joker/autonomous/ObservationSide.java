@@ -18,8 +18,8 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguratio
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 import dev.frozenmilk.util.cell.RefCell;
 
-@Autonomous(name = "Basket Side", preselectTeleOp = "TeleOp")
-public class BasketSide extends AutonomousBunyipsOpMode {
+@Autonomous(name = "Observation Side", preselectTeleOp = "TeleOp")
+public class ObservationSide extends AutonomousBunyipsOpMode {
     private final Joker robot = new Joker();
     PoseMap currentPoseMap;
 
@@ -27,8 +27,8 @@ public class BasketSide extends AutonomousBunyipsOpMode {
     protected void onInitialise() {
         robot.init();
         setOpModes(
-                StartingConfiguration.redLeft().tile(2).backward(Inches.of(4)),
-                StartingConfiguration.blueLeft().tile(2).backward(Inches.of(4))
+                StartingConfiguration.redRight().tile(2.5).backward(Inches.of(4)),
+                StartingConfiguration.blueRight().tile(2.5).backward(Inches.of(4))
         );
         //robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
@@ -39,30 +39,27 @@ public class BasketSide extends AutonomousBunyipsOpMode {
         StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
         if (startingPosition.isBlue()) {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);} else {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);}
         currentPoseMap = startingPosition.isRed() ? new SymmetricPoseMap() : new IdentityPoseMap();
+        //TODO: finish applying the posemap
 
-        robot.drive.setPose(startingPosition.toFieldPose());
+        robot.drive.setPose(new Pose2d(-24, 24*3-9, Math.toRadians(270)));
 
-        robot.drive.makeTrajectory(currentPoseMap)
-                .strafeTo(new Vector2d(24*1.5, 8), Inches)
-                .strafeTo(new Vector2d(24*2.1, 8), Inches)
-                .strafeTo(new Vector2d(24*2.1, 24*3-(9+3.5-2.5)), Inches)
-                .strafeTo(new Vector2d(24*2.1, 8), Inches)
-                .strafeTo(new Vector2d(24*2.7, 8), Inches)
-                .strafeTo(new Vector2d(24*2.7, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(24*2.7, 8), Inches)
-                .strafeTo(new Vector2d(24*3.1, 8), Inches)
-                .strafeTo(new Vector2d(24*3.1, 24*2-2), Inches)
-                .strafeTo(new Vector2d(24*3.1-6, 24*2-2-6), Inches)
+        robot.drive.makeTrajectory()
+                .strafeTo(new Vector2d(-24*1.75, 24*1.5), Inches)
+                .strafeTo(new Vector2d(-24*1.75, 8), Inches)
+                .strafeTo(new Vector2d(-24*2.4, 8), Inches)
+                .strafeTo(new Vector2d(-24*2.4, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*2.4, 8), Inches)
+                .strafeTo(new Vector2d(-24*3, 8), Inches)
+                .strafeTo(new Vector2d(-24*3, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*3, 8), Inches)
+                .strafeTo(new Vector2d(-24*3.45, 8), Inches)
+                .strafeTo(new Vector2d(-24*3.45, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*3.45+6, 24*2.2-6), Inches)
+                .strafeToLinearHeading(new Vector2d(-24*2.5, 56), Inches, 90, Degrees)
                 .addTask();
 
-        add(robot.outtakeGrip.tasks.close());
+        //run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
 
-        add(robot.drive.makeTrajectory(new Pose2d(24*3.1-6, 24*2-2-6, Math.toRadians(270)), currentPoseMap)
-                .strafeToLinearHeading(new Vector2d(14+13, 0), Inches, 180, Degrees)
-                .build()
-                .with(robot.lift.tasks.goTo(368))
-        );
-
-        add(robot.lift.tasks.goTo(425));
+        //run(() -> robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_OPEN_POSITION));
     }
 }
