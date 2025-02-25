@@ -63,8 +63,13 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 .run(robot.basketRotator.tasks.toggle());
         operator().whenRising(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(robot.verticalLift.tasks.home());
-//        operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > 0.5)
-//                .run(arm);
+        // todo: test this goofy stuff
+        //  might be inefficient for drivers
+        //  or just not work lmao
+        operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > 0.5)
+                .run(changeArmPos(1));
+        operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > -0.5)
+                .run(changeArmPos(-1));
 
         operator().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true))
