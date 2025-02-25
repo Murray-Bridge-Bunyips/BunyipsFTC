@@ -49,7 +49,12 @@ public class Vance extends RobotConfig {
      * Vertical arm TPS
      */
     public static double va_TPS = 400;
-
+    /**
+     * Positions for TeleOp's arm
+     */
+    public int[] armPositions = {
+            0  // todo
+    };
     /**
      * Vance hardware
      */

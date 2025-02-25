@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.UserSelection;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
@@ -32,6 +33,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
      */
     public static boolean FC = true;
     private final Vance robot = new Vance();
+    private int armPositionIndex = 0;
 
     @Override
     protected void onInitialise() {
@@ -61,6 +63,8 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 .run(robot.basketRotator.tasks.toggle());
         operator().whenRising(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(robot.verticalLift.tasks.home());
+//        operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > 0.5)
+//                .run(arm);
 
         operator().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true))
@@ -75,5 +79,13 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
 
         robot.verticalLift.setDefaultTask(robot.verticalLift.tasks.control(() -> -gamepad2.rsy));
         robot.horizontalLift.setDefaultTask(robot.horizontalLift.tasks.control(() -> -gamepad2.lsy));
+    }
+
+    private Task changeArmPos(int amount) {
+        // TODO: BROKE PLS TEST
+        armPositionIndex += amount;
+        armPositionIndex = (int) Mathf.clamp(armPositionIndex, 0, robot.armPositions.length);
+
+        return robot.horizontalLift.tasks.goTo(robot.armPositions[armPositionIndex]);
     }
 }
