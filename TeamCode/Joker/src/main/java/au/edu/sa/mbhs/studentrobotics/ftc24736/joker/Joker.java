@@ -6,6 +6,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inc
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -20,6 +21,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforw
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hooks.BunyipsLib;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
@@ -243,6 +245,9 @@ public class Joker extends RobotConfig {
                 .withUpperLimit(850)
                 .withUserSetpointControl((dt) -> 600 * dt)
                 .withName("lift");
+        if (BunyipsLib.getOpMode().getClass().isAnnotationPresent(Autonomous.class)) {
+            lift.withTolerance(10);
+        }
 
         //can be replaced w/ pid controller if hook motor gets an encoder (not really needed though)
         hw.hook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

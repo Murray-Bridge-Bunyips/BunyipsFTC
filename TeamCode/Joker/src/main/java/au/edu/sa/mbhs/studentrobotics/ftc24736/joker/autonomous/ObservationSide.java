@@ -6,7 +6,6 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inc
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.IdentityPoseMap;
-import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseMap;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -39,11 +38,11 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
         StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
         if (startingPosition.isBlue()) {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);} else {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);}
         currentPoseMap = startingPosition.isRed() ? new SymmetricPoseMap() : new IdentityPoseMap();
-        //TODO: finish applying the posemap
 
-        robot.drive.setPose(new Pose2d(-24, 24*3-9, Math.toRadians(270)));
+        robot.drive.setPose(startingPosition.toFieldPose());
+        add(robot.outtakeGrip.tasks.open());
 
-        robot.drive.makeTrajectory()
+        robot.drive.makeTrajectory(currentPoseMap)
                 .strafeTo(new Vector2d(-24*1.75, 24*1.5), Inches)
                 .strafeTo(new Vector2d(-24*1.75, 8), Inches)
                 .strafeTo(new Vector2d(-24*2.4, 8), Inches)

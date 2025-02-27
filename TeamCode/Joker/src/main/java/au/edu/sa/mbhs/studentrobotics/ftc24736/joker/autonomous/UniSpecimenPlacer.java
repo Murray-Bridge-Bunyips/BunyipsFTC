@@ -14,8 +14,8 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 import dev.frozenmilk.util.cell.RefCell;
 
-@Autonomous(name = "Blue Uni Specimen Placer", preselectTeleOp = "TeleOp")
-public class BlueAllianceUniSpecimenPlacer extends AutonomousBunyipsOpMode {
+@Autonomous(name = "Uni Specimen Placer", preselectTeleOp = "TeleOp")
+public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
     private final Joker robot = new Joker();
 
     @Override
