@@ -29,6 +29,7 @@ import com.qualcomm.robotcore.hardware.DcMotorControllerEx;
 import com.qualcomm.robotcore.hardware.DcMotorImplEx;
 import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -43,13 +44,17 @@ import java.util.Arrays;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.Localizer;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.NullLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.Accumulator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.RoadRunnerDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.Constants;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 
 /**
@@ -79,6 +84,8 @@ public class Cellphone extends RobotConfig {
      */
     public RoadRunnerDrive dummyDrive;
 
+    public MecanumDrive notAMecanumDrive;
+
     @Override
     protected void onRuntime() {
         cameraB = ClassFactory.getInstance().getCameraManager().nameFromCameraDirection(BuiltinCameraDirection.BACK);
@@ -88,6 +95,49 @@ public class Cellphone extends RobotConfig {
         dummyMotor = new Motor(new DcMotorImplEx(m, -1));
 
         dummyDrive = new DummyHDrive();
+
+        DriveModel dm = new DriveModel();
+        MotionProfile mp = new MotionProfile();
+        MecanumGains mg = new MecanumGains();
+
+        hardwareMap.voltageSensor.put("voltage", new VoltageSensor() {
+            @Override
+            public double getVoltage() {
+                return 12;
+            }
+
+            @Override
+            public Manufacturer getManufacturer() {
+                return Manufacturer.Unknown;
+            }
+
+            @Override
+            public String getDeviceName() {
+                return "fake_device";
+            }
+
+            @Override
+            public String getConnectionInfo() {
+                return "fake_device";
+            }
+
+            @Override
+            public int getVersion() {
+                return 0;
+            }
+
+            @Override
+            public void resetDeviceConfigurationForOpMode() {
+
+            }
+
+            @Override
+            public void close() {
+
+            }
+        });
+        notAMecanumDrive = new MecanumDrive(dm, mp, mg, dummyMotor, dummyMotor, dummyMotor, dummyMotor, IMUEx.none(), hardwareMap.voltageSensor)
+                .withLocalizer(new NullLocalizer());
 
         BunyipsOpMode.ifRunning(o -> o.onActiveLoop(m::update));
     }
