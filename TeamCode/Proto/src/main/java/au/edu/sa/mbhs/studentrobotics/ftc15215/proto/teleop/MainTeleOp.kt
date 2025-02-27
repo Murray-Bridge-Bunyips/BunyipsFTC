@@ -3,7 +3,7 @@ package au.edu.sa.mbhs.studentrobotics.ftc15215.proto.teleop
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicTrackingDriveTask
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.default
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Companion.rising
@@ -18,7 +18,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 @TeleOp(name = "TeleOp")
 open class MainTeleOp : CommandBasedBunyipsOpMode() {
     override fun assignCommands() {
-        Proto.drive default HolonomicTrackingDriveTask(gamepad1, Proto.drive)
+        Proto.drive default HolonomicVectorDriveTask(
+            gamepad1,
+            Proto.drive
+        )
         driver() whenPressed Controls.BACK run HolonomicDriveTask(gamepad1, Proto.drive) finishIf { gamepad1 rising Controls.BACK }
 
         Proto.clawLift default Proto.clawLift.tasks.control { -gamepad2.lsy.toDouble() }

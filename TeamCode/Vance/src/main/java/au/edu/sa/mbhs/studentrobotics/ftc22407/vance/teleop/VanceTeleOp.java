@@ -9,7 +9,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicTrackingDriveTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Threads;
@@ -75,7 +75,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true))
                 /*.finishIf(() -> gamepad2.getDebounced(Controls.RIGHT_BUMPER))*/;
 
-        robot.drive.setDefaultTask(new HolonomicTrackingDriveTask(gamepad1, robot.drive).withFieldCentric(() -> FC));
+        robot.drive.setDefaultTask(new HolonomicVectorDriveTask(gamepad1, robot.drive).withFieldCentric(() -> FC));
         driver().whenPressed(Controls.BACK)
                 .run(new HolonomicDriveTask(gamepad1, robot.drive).withFieldCentric(() -> FC))
                 .finishIf(() -> gamepad1.getDebounced(Controls.BACK));
