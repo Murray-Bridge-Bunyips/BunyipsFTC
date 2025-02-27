@@ -4,6 +4,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Constants
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
@@ -22,5 +23,6 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
         add(Proto.drive.makeTrajectory()
             .strafeToLinearHeading(basket.position, heading = basket.heading)
             .build().with(Proto.clawLift.tasks.goTo(basketTarget)))
+        add(Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds).then(Proto.eject.invoke()))
     }
 }

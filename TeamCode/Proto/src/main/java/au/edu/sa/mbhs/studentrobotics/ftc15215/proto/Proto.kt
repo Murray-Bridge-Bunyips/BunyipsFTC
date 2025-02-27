@@ -9,11 +9,13 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.o
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.SimpleRotator
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hooks.BunyipsLib
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
@@ -21,9 +23,11 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionPro
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.task
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
 import com.acmerobotics.roadrunner.ftc.RawEncoder
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.IMU
@@ -62,6 +66,19 @@ object Proto : RobotConfig() {
      * Forward camera.
      */
     lateinit var camera: Vision
+
+    val eject = {
+        task {
+            timeout(500 of Milliseconds)
+            init {
+                // Negative ejects
+                hw.clawIntake?.power = -1.0
+            }
+            onFinish {
+                hw.clawIntake?.power = 0.0
+            }
+        }
+    }
 
     override fun onRuntime() {
         // Base is from GLaDOS
@@ -164,7 +181,7 @@ object Proto : RobotConfig() {
 //                .apply()
 //        }
         camera = Vision(hw.camera)
-        drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
+        drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu as IMU, hardwareMap.voltageSensor)
             .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe, hw.ppe, hw.imu?.get()))
             .withName("Drive")
         clawRotator = Switch(hw.clawRotator)
@@ -175,6 +192,12 @@ object Proto : RobotConfig() {
             .withMaxSteadyStateTime(10 of Seconds)
             .withUpperLimit(Constants.cl_MAX)
             .withName("Claw Lift")
+
+        if (BunyipsLib.opMode.javaClass.isAnnotationPresent(Autonomous::class.java)) {
+            // TODO: add back ContinuousTask and RunForTask maybe in the form of Task.util
+            BunyipsOpMode.instance.setInitTask(clawLift.tasks.home().mutate().addPeriodic { clawLift.update() })
+            clawLift.withTolerance(25)
+        }
 
 //        BunyipsOpMode.ifRunning {
 //            it.onActiveLoop {
