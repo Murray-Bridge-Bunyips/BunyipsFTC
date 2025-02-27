@@ -194,7 +194,6 @@ object Proto : RobotConfig() {
             .withName("Claw Lift")
 
         if (BunyipsLib.opMode.javaClass.isAnnotationPresent(Autonomous::class.java)) {
-            // TODO: add back ContinuousTask and RunForTask maybe in the form of Task.util
             BunyipsOpMode.instance.setInitTask(clawLift.tasks.home().mutate().addPeriodic { clawLift.update() })
             clawLift.withTolerance(25)
         }
