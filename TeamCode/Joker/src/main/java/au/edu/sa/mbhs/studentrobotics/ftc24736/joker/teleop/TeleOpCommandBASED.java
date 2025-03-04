@@ -40,6 +40,9 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
         robot.drive.setDefaultTask(driveTask);
         robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.lsy));
         robot.lift.setDefaultTask(robot.lift.tasks.control(() -> -gamepad2.rsy));
+        telemetry.addData("lift current position", robot.hw.liftMotor.getCurrentPosition());
+        telemetry.addData("lift target position", robot.hw.liftMotor.getTargetPosition());
+        telemetry.addData("lift power", robot.hw.liftMotor.getPower());
     }
 
     @Override

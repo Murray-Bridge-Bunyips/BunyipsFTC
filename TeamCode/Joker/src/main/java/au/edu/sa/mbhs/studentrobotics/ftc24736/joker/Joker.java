@@ -14,10 +14,12 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.EncoderTicks;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforward;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
@@ -67,7 +69,7 @@ public class Joker extends RobotConfig {
         /**
          * Control Hub 1: liftMotor
          */
-        public DcMotor liftMotor;
+        public Motor liftMotor;
         /**
          * Control Hub 2: hook
          */
@@ -145,6 +147,11 @@ public class Joker extends RobotConfig {
      */
     public Switch outtakeGrip;
 
+    public static double liftkP = 0.005;
+    public static double liftkI = 0.0;
+    public static double liftkD = 0.0;
+    public static double liftkG = 0.0;
+
     public final Hardware hw = new Hardware();
 
     //live mecanum wheel rolling on keyboard reaction:
@@ -164,7 +171,14 @@ public class Joker extends RobotConfig {
             CompositeController c = new CompositeController(pid, ff, Double::sum);
             d.setRunToPositionController(c);
         });
-        hw.liftMotor = getHardware("liftMotor", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        hw.liftMotor = getHardware("liftMotor", Motor.class, d -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+            PIDController pid = new PIDController(liftkP, liftkI, liftkD);
+            ElevatorFeedforward ff = new ElevatorFeedforward(0.0, liftkG, 0.0, 0.0, () -> 0, () -> 0);
+            CompositeController c = pid.compose(ff, Double::sum);
+            d.setRunToPositionController(c);
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(liftkP, liftkI, liftkD, 0.0, 0.0, liftkG, 0.0, 0.0)));
+        });
         hw.hook = getHardware("hook", DcMotor.class);
         hw.ascentArm = getHardware("arm", Motor.class,
                 d -> d.setRunToPositionController(new PIDController(0.01, 0, 0.00001)));

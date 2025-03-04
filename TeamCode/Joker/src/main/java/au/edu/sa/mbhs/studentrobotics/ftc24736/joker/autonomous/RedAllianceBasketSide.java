@@ -9,11 +9,13 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.ftc24736.joker.Joker;
 import dev.frozenmilk.util.cell.RefCell;
 
+@Disabled
 @Autonomous(name = "Red Basket Side", preselectTeleOp = "TeleOp")
 public class RedAllianceBasketSide extends AutonomousBunyipsOpMode {
     private final Joker robot = new Joker();
