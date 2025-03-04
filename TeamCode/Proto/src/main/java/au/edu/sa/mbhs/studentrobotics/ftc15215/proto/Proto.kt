@@ -5,6 +5,8 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.TrapezoidProfile
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Time
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
@@ -67,26 +69,33 @@ object Proto : RobotConfig() {
      */
     lateinit var camera: Vision
 
-    val eject = {
+    enum class IntakeDirection(val power: Double) {
+        RETRIEVE(1.0),
+        EJECT(-1.0)
+    }
+
+    fun runIntake(direction: IntakeDirection, duration: Measure<Time> = 500 of Milliseconds) =
         task {
-            timeout(500 of Milliseconds)
+            timeout(duration)
             init {
-                // Negative ejects
-                hw.clawIntake?.power = -1.0
+                hw.clawIntake?.power = direction.power
             }
             onFinish {
                 hw.clawIntake?.power = 0.0
             }
         }
-    }
 
     override fun onRuntime() {
         // Base is from GLaDOS
         hw.imu = getHardware("imu", IMUEx::class.java) {
-            it.lazyInitialize(IMU.Parameters(RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.LEFT
-            )))
+            it.lazyInitialize(
+                IMU.Parameters(
+                    RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                    )
+                )
+            )
         }
         hw.fl = getHardware("fl", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.FORWARD
