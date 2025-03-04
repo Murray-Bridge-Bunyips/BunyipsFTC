@@ -7,9 +7,11 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.UserSelection;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.DeferredTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Threads;
@@ -33,7 +35,8 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
      */
     public static boolean FC = true;
     private final Vance robot = new Vance();
-    private int armPositionIndex = 0;
+    private int verticalArmPositionIndex = 0;
+    private int horizontalArmPositionIndex = 0;
 
     @Override
     protected void onInitialise() {
@@ -63,13 +66,26 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
                 .run(robot.basketRotator.tasks.toggle());
         operator().whenRising(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
                 .run(robot.verticalLift.tasks.home());
+
         // todo: test this goofy stuff
         //  might be inefficient for drivers
         //  or just not work lmao
+        //  also very messy tbh
+        //  try to DRY it without the weird function from before happening again
         operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > 0.5)
-                .run(changeArmPos(1));
+//                .run(changeArmPos(robot.verticalLift, 1));
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(verticalArmPositionIndex++, 0, robot.verticalArmPositions.length)])));
         operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > -0.5)
-                .run(changeArmPos(-1));
+//                .run(changeArmPos(robot.verticalLift, -1));
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(verticalArmPositionIndex--, 0, robot.verticalArmPositions.length)])));
+
+        operator().when(Controls.Analog.RIGHT_STICK_Y, (v) -> v > 0.5)
+//                .run(changeArmPos(robot.horizontalLift, 1));
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(horizontalArmPositionIndex++, 0, robot.horizontalArmPositions.length)])));
+        operator().when(Controls.Analog.RIGHT_STICK_Y, (v) -> v < -0.5)
+//                .run(changeArmPos(robot.horizontalLift, -1));
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(horizontalArmPositionIndex--, 0, robot.horizontalArmPositions.length)])));
+
 
         operator().whenPressed(Controls.RIGHT_BUMPER)
                 .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true))
@@ -82,15 +98,25 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         driver().whenPressed(Controls.A)
                 .run("Reset FC Offset", () -> Task.cast(robot.drive.getCurrentTask(), FieldOrientableDriveTask.class).resetFieldCentricOrigin());
 
-        robot.verticalLift.setDefaultTask(robot.verticalLift.tasks.control(() -> -gamepad2.rsy));
-        robot.horizontalLift.setDefaultTask(robot.horizontalLift.tasks.control(() -> -gamepad2.lsy));
+//        robot.verticalLift.setDefaultTask(robot.verticalLift.tasks.control(() -> -gamepad2.rsy));
+//        robot.horizontalLift.setDefaultTask(robot.horizontalLift.tasks.control(() -> -gamepad2.lsy));
     }
 
-    private Task changeArmPos(int amount) {
+    private Task changeArmPos(HoldableActuator arm, int amount) {
         // TODO: BROKE PLS TEST
-        armPositionIndex += amount;
-        armPositionIndex = (int) Mathf.clamp(armPositionIndex, 0, robot.armPositions.length);
+        // todo: this code probably sucks so pls fix
+        //  edit: this code definitely sucks
+        int[] armPosArray = arm == robot.verticalLift ? robot.verticalArmPositions : robot.horizontalArmPositions;
+        int armPosIndex = arm == robot.verticalLift ? verticalArmPositionIndex : horizontalArmPositionIndex;
 
-        return robot.horizontalLift.tasks.goTo(robot.armPositions[armPositionIndex]);
+        armPosIndex += amount;
+        if (arm == robot.verticalLift) {
+            verticalArmPositionIndex+=amount;
+        } else {
+            horizontalArmPositionIndex+=amount;
+        }
+        armPosIndex = (int) Mathf.clamp(armPosIndex, 0, armPosArray.length);
+
+        return arm.tasks.goTo(armPosArray[armPosIndex]);
     }
 }

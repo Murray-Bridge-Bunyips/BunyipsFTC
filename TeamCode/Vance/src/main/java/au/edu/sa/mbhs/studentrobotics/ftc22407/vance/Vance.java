@@ -52,8 +52,11 @@ public class Vance extends RobotConfig {
     /**
      * Positions for TeleOp's arm
      */
-    public int[] armPositions = {
-            0  // todo
+    public int[] verticalArmPositions = {
+            0, 100, 200  // todo
+    };
+    public int[] horizontalArmPositions = {
+            0, 100, 200 // todo
     };
     /**
      * Vance hardware
@@ -205,7 +208,7 @@ public class Vance extends RobotConfig {
         public IMUEx imu;
 
         /**
-         * Control 0: fr
+         * Control 2: fr
          */
         public DcMotorEx /*Are you*/ fr /*Or jk*/;
 
@@ -215,7 +218,7 @@ public class Vance extends RobotConfig {
         public DcMotorEx fl;
 
         /**
-         * Control 2: bl
+         * Control 0: bl
          */
         public DcMotorEx bl;
 
@@ -230,7 +233,7 @@ public class Vance extends RobotConfig {
         public RawEncoder dwleft;
 
         /**
-         * Control 0: fr
+         * Control 2: fr
          */
         public RawEncoder dwright;
 
@@ -240,12 +243,12 @@ public class Vance extends RobotConfig {
         public RawEncoder dwx;
 
         /**
-         * Expansion 1: va
+         * Expansion 2: va
          */
         public Motor verticalLift;
 
         /**
-         * Expansion 0: ha
+         * Expansion 1: ha
          */
         public DcMotorEx horizontalLift;
 
