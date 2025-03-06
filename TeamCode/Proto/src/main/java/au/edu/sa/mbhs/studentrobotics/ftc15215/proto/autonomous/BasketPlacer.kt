@@ -6,6 +6,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.o
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Constants
 import au.edu.sa.mbhs.studentrobotics.ftc15215.proto.Proto
@@ -30,17 +31,23 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
             .setReversed(true)
             .afterTime(
                 0.0,
-                a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.setTo(1.0))
-                    .then(Proto.runIntake(Proto.IntakeDirection.RETRIEVE))
+                a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open())
+                    .then(Proto.runIntake(Proto.IntakeDirection.RETRIEVE, 5 of Seconds))
             )
-            .splineToSplineHeading(
-                vector = Vector2d(35.58, 36.34),
+            .splineToSplineHeading( //burger
+                vector = Vector2d(30.38, 39.71),
                 heading = (-50).degToRad(),
                 tangent = (-50).degToRad()
             )
             .setReversed(false)
+            .splineToConstantHeading(pos = Vector2d(38.49, 34.2), tangent = (-50).degToRad())
+            .afterTime(0.0, a = Proto.clawLift.tasks.goTo(basketTarget).with(Proto.clawRotator.tasks.close()))
             .setTangent(90.0, Degrees)
             .splineToSplineHeading(vector = Vector2d(54.6, 53.6), heading = 40.degToRad(), tangent = 40.degToRad())
+            .stopAndAdd(
+                Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
+                    .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
+            )
             // giulio is the best coder here i am better then lucas and we all know it. i am java
             .addTask()
     }
