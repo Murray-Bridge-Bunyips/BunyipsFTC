@@ -18,7 +18,7 @@ build.common.gradle file in the root of the TeamCode directory.
 You can make your own robot by copying the `../Template` directory and doing the following:
 
 1. Renaming the copied directory name to your robot's name
-2. Uncommenting the contents of build.gradle
+2. Uncommenting the contents of build.gradle (minimum the first 4 lines, you can also choose to install Sloth Load at this point. Refer to Installation on the BunyipsLib wiki.)
 5. Adding your robot to /settings.gradle with your directory name
 6. Removing the .gitkeep file and populating the folder with your own code
 7. Consider adding your robot as an Inspection Scope for UserCode if applicable
