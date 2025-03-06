@@ -2,13 +2,15 @@ package au.edu.sa.mbhs.studentrobotics.ftc22407.vance;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
@@ -23,15 +25,17 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.Perio
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 /**
- * FTC 22407 INTO THE DEEP 2024-2025 robot configuration and subsystems
+ * OLD FTC 22407 INTO THE DEEP 2024-2025 robot configuration and subsystems
  *
  * @author Lachlan Paul, 2024
  */
+@Config
 public class Vance extends RobotConfig {
     /**
      * Vertical arm kP
@@ -45,38 +49,48 @@ public class Vance extends RobotConfig {
      * Vertical arm TPS
      */
     public static double va_TPS = 400;
-
     /**
      * Positions for TeleOp's arm
      */
-    public int[] shoulderPositions = {
+    public int[] verticalArmPositions = {
             0, 100, 200  // todo
     };
-    public int[] elbowPositions = {
+    public int[] horizontalArmPositions = {
             0, 100, 200 // todo
     };
-
     /**
      * Vance hardware
      */
     public final Hardware hw = new Hardware();
+
     /**
      * Mecanum drive
      */
     public MecanumDrive drive;
-
     /**
-     * The shoulder of our arm
+     * Vertical up arm
      */
-    public HoldableActuator shoulder;
+    public HoldableActuator verticalLift;
     /**
-     * The elbow of our arm
+     * Horizontal forward arm
      */
-    public HoldableActuator elbow;
+    public HoldableActuator horizontalLift;
     /**
-     * Intake
+     * Claw rotation
      */
-    public Switch intake;
+    public Switch clawRotator;
+    /**
+     * Basket rotation
+     */
+    public Switch basketRotator;
+    /**
+     * Scoring element claws
+     */
+    public DualServos claws;
+//    /**
+//     * Lights
+//     */
+//    public BlinkinLights lights;
 
     @Override
     protected void onRuntime() {
@@ -107,23 +121,31 @@ public class Vance extends RobotConfig {
         hw.dwright = getHardware("fl", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
         hw.dwx = getHardware("bl", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
-        hw.intake = getHardware("in", CRServo.class);
-        hw.shoulder = getHardware("sh", Motor.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.FORWARD);
+        hw.verticalLift = getHardware("va", Motor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
             PIDController pid = new PController(va_kP);
             ElevatorFeedforward ff = new ElevatorFeedforward(0.0, va_kG, 0.0, 0.0, () -> 0, () -> 0);
             CompositeController c = pid.compose(ff, Double::sum);
             d.setRunToPositionController(c);
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(va_kP, 0.0, 0.0, 0.0, 0.0, va_kG, 0.0, 0.0)));
+        }); // giulio is now in robot 22407 not 15215
+        hw.bottomLimit = getHardware("bottom", TouchSensor.class);
+        hw.horizontalLimit = getHardware("hori", TouchSensor.class);
+        hw.horizontalLift = getHardware("ha", DcMotorEx.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+
+        hw.leftClaw = getHardware("lc", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.REVERSE);
+            d.scaleRange(0.5, 1.0);
         });
-        hw.elbow = getHardware("el", Motor.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.FORWARD);
-            PIDController pid = new PController(va_kP);
-            ElevatorFeedforward ff = new ElevatorFeedforward(0.0, va_kG, 0.0, 0.0, () -> 0, () -> 0);
-            CompositeController c = pid.compose(ff, Double::sum);
-            d.setRunToPositionController(c);
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(va_kP, 0.0, 0.0, 0.0, 0.0, va_kG, 0.0, 0.0)));
+        hw.rightClaw = getHardware("rc", Servo.class, (d) -> d.scaleRange(0.0, 0.5));
+
+        hw.clawRotator = getHardware("cr", Servo.class, (d) -> d.setDirection(Servo.Direction.REVERSE));
+        hw.basketRotator = getHardware("bk", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.FORWARD);
+            d.scaleRange(0.2, 0.5);
         });
+
+//        hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
 
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(122.5 / 61697.0)
@@ -146,23 +168,39 @@ public class Vance extends RobotConfig {
                 .setPerpXTicks(-3361.673151430961)
                 .build();
 
+//        aprilTag = new AprilTag(b -> AprilTag.setCameraPose(b)
+//                .backward(Inches.of(10))
+//                .yaw(Degrees.of(180))
+//                .up(Inches.of(3))
+//                .apply());
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
                 .withLocalizer(new ThreeWheelLocalizer(driveModel, localiserParams, hw.dwleft, hw.dwright, hw.dwx))
                 .withAccumulator(new PeriodicIMUAccumulator(hw.imu.get(), Seconds.of(5)))
                 .withName("Drive");
-        shoulder = new HoldableActuator(hw.shoulder)
+        verticalLift = new HoldableActuator(hw.verticalLift)
+                .withBottomSwitch(hw.bottomLimit)
 //                .enableUserSetpointControl((dt) -> dt * va_TPS)
                 .withTolerance(10, true)
                 .withUpperLimit(900)
                 .withHomingPower(0.7)
-                .withName("Shoulder");
-        elbow = new HoldableActuator(hw.elbow)
+                .withName("Vertical Arm");
+        horizontalLift = new HoldableActuator(hw.horizontalLift)
                 .withPowerClamps(-0.5, 0.5)
                 .withTolerance(10, true)
+                .withBottomSwitch(hw.horizontalLimit)
                 .withTolerance(7, true)
-                .withName("Elbow");
+                .withName("Horizontal Arm");
+        clawRotator = new Switch(hw.clawRotator, 1, 0)
+                .withName("Claw Rotator");
+        basketRotator = new Switch(hw.basketRotator, 1, 0)
+                .withName("Basket Rotator");
+        claws = new DualServos(hw.leftClaw, hw.rightClaw);
+//        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
     }
 
+    /**
+     * Definition of all hardware on Vance.
+     */
     public static class Hardware {
         /**
          * Internally mounted on I2C C0 "imu"
@@ -205,18 +243,48 @@ public class Vance extends RobotConfig {
         public RawEncoder dwx;
 
         /**
-         * Expansion 2: sh
+         * Expansion 2: va
          */
-        public Motor shoulder;
+        public Motor verticalLift;
 
         /**
-         * Expansion 1: el
+         * Expansion 1: ha
          */
-        public Motor elbow;
+        public DcMotorEx horizontalLift;
 
         /**
-         * Control Servo 2: in
+         * Control Servo 2: lc
          */
-        public CRServo intake;
+        public Servo leftClaw;
+
+        /**
+         * Control Servo 1: rc
+         */
+        public Servo rightClaw;
+
+        /**
+         * Control Servo 0: cr
+         */
+        public Servo clawRotator;
+
+        /**
+         * Control Servo 3: bk
+         */
+        public Servo basketRotator;
+
+//        /**
+//         * Control Servo 5: Blinkin Lights "lights"
+//         */
+//        public RevBlinkinLedDriver lights;
+
+        /**
+         * Control Digital 1: Limit Switch "bottom" for vertical arm
+         */
+        public TouchSensor bottomLimit;
+
+        /**
+         * hori: Limit switch "horizontal" for horizontal arm
+         */
+        public TouchSensor horizontalLimit;
     }
 }

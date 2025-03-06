@@ -15,6 +15,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Threads;
 import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
+import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.TransferSample;
 
 /**
  * TeleOp for Vance.
@@ -33,8 +34,8 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
      */
     public static boolean FC = true;
     private final Vance robot = new Vance();
-    private int shoulderPosIndex = 0;
-    private int elbowPosIndex = 0;
+    private int verticalArmPositionIndex = 0;
+    private int horizontalArmPositionIndex = 0;
 
     @Override
     protected void onInitialise() {
@@ -53,27 +54,36 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         setInitTask(Task.task().isFinished(() -> !Threads.isRunning("sel")));
         gamepad1.set(Controls.AnalogGroup.STICKS, UnaryFunction.SQUARE_KEEP_SIGN);
     }
-    // giulio is still here
+// giulio is still here
     @Override
     protected void assignCommands() {
         operator().whenPressed(Controls.X)
-                .run(robot.intake.tasks.toggle());
-//giulio was here he is also java to and he is the best coder here
-        // bro someone GE this guy
+                .run(robot.claws.tasks.toggleBoth());
+        operator().whenPressed(Controls.Y)
+                .run(robot.clawRotator.tasks.toggle());
+        operator().whenPressed(Controls.B)
+                .run(robot.basketRotator.tasks.toggle());
+//        operator().whenRising(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
+//                .run(robot.verticalLift.tasks.home());
+
         // todo: test this goofy stuff
         //  might be inefficient for drivers
         //  or just not work lmao
         //  also very messy tbh
         //  try to DRY it without the weird function from before happening again
         operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > 0.5)
-                .run(new DeferredTask(() -> robot.shoulder.tasks.goTo(robot.shoulderPositions[(int) Mathf.clamp(shoulderPosIndex++, 0, robot.shoulderPositions.length)])));
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(verticalArmPositionIndex++, 0, robot.verticalArmPositions.length)])));
         operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > -0.5)
-                .run(new DeferredTask(() -> robot.shoulder.tasks.goTo(robot.shoulderPositions[(int) Mathf.clamp(shoulderPosIndex--, 0, robot.shoulderPositions.length)])));
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(verticalArmPositionIndex--, 0, robot.verticalArmPositions.length)])));
 
         operator().when(Controls.Analog.RIGHT_STICK_Y, (v) -> v > 0.5)
-                .run(new DeferredTask(() -> robot.elbow.tasks.goTo(robot.elbowPositions[(int) Mathf.clamp(elbowPosIndex++, 0, robot.elbowPositions.length)])));
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(horizontalArmPositionIndex++, 0, robot.horizontalArmPositions.length)])));
         operator().when(Controls.Analog.RIGHT_STICK_Y, (v) -> v < -0.5)
-                .run(new DeferredTask(() -> robot.elbow.tasks.goTo(robot.elbowPositions[(int) Mathf.clamp(elbowPosIndex--, 0, robot.elbowPositions.length)])));
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(horizontalArmPositionIndex--, 0, robot.horizontalArmPositions.length)])));
+
+        operator().whenPressed(Controls.RIGHT_BUMPER)
+                .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true))
+        /*.finishIf(() -> gamepad2.getDebounced(Controls.RIGHT_BUMPER))*/;
 
         robot.drive.setDefaultTask(new HolonomicVectorDriveTask(gamepad1, robot.drive).withFieldCentric(() -> FC));
         driver().whenPressed(Controls.BACK)
