@@ -50,5 +50,19 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
             )
             // giulio is the best coder here i am better then lucas and we all know it. i am java
             .addTask()
+
+        /*
+            Pose2d pose = blueLeft().tile(2.0).backward(Inches.of(2)).rotate(Degrees.of(90)).build().toFieldPose();
+            drive.makeTrajectory(pose)
+                    .setTangent(270, Degrees)
+                    .splineToLinearHeading(new Vector2d(54.6, 53.6), Mathf.degToRad(40), Mathf.degToRad(40))
+                    .setReversed(true)
+                    .splineToSplineHeading(new Vector2d(30.38, 39.71), Mathf.degToRad(-50), Mathf.degToRad(-50))
+                    .setReversed(false)
+                    .splineToConstantHeading(new Vector2d(38.49, 34.2), Mathf.degToRad(-50))
+                    .setTangent(90, Degrees)
+                    .splineToSplineHeading(new Vector2d(54.6, 53.6), Mathf.degToRad(40), Mathf.degToRad(40))
+                    .addTask();
+         */
     }
 }
