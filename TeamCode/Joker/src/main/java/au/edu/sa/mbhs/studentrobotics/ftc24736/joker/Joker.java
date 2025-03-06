@@ -1,7 +1,9 @@
 package au.edu.sa.mbhs.studentrobotics.ftc24736.joker;
 
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Amps;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
@@ -170,6 +172,7 @@ public class Joker extends RobotConfig {
             ArmFeedforward ff = new ArmFeedforward(0, 0.1, 0, 0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
             CompositeController c = new CompositeController(pid, ff, Double::sum);
             d.setRunToPositionController(c);
+            //giulio was here he is also java and is way better then you at coding
         });
         hw.liftMotor = getHardware("liftMotor", Motor.class, d -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -257,6 +260,7 @@ public class Joker extends RobotConfig {
                 //.map(handoverPoint, 1500)
                 .withPowerClamps(-1, 1)
                 .withUpperLimit(850)
+                .withOvercurrent(Amps.of(7.5), Seconds.of(1))
                 .withUserSetpointControl((dt) -> 600 * dt)
                 .withName("lift");
         if (BunyipsLib.getOpMode().getClass().isAnnotationPresent(Autonomous.class)) {
