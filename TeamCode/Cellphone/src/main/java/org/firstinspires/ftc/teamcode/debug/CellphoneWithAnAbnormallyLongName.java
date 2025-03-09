@@ -30,7 +30,7 @@ public class CellphoneWithAnAbnormallyLongName extends CommandBasedBunyipsOpMode
 
     @Override
     protected void assignCommands() {
-        always().run(() -> telemetry.add("hi"));
+        immediately().run(() -> telemetry.add("hi"));
         // self destruct in 1 minute
         s.setDefaultTask(new WaitTask(Minutes.of(1)));
         driver().whenReleased(Controls.BACK).run(new Lambda(() -> {
