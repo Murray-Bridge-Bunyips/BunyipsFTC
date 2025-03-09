@@ -20,7 +20,7 @@ dependencies {
     implementation "dev.frozenmilk.sinister:Sloth:0.1.0"
     implementation "com.acmerobotics.roadrunner:core:1.0.1"
     implementation "com.acmerobotics.slothboard:dashboard:0.1.1+0.4.16"
-    implementation("com.acmerobotics.roadrunner:ftc:0.1.20") {
+    implementation("com.acmerobotics.roadrunner:ftc:0.1.21") {
         exclude group: "com.acmerobotics.dashboard"
     }
 }
