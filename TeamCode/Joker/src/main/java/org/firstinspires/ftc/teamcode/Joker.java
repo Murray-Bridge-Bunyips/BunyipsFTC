@@ -17,7 +17,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.EncoderTicks;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.EncoderTicks;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforward;
@@ -25,7 +25,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFee
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.hooks.BunyipsLib;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsLib;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;

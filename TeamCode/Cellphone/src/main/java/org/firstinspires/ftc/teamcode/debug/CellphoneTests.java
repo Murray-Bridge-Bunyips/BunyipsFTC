@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.R;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Sound;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.executables.Sound;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 
 /**

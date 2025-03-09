@@ -17,7 +17,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.SimpleRotator
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.hooks.BunyipsLib
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsLib
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
