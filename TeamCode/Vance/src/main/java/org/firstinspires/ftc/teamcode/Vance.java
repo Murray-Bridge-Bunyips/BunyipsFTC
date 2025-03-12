@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforward;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
@@ -26,6 +26,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionPro
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.EncoderTicks;
 
 /**
  * FTC 22407 INTO THE DEEP 2024-2025 robot configuration and subsystems
@@ -110,16 +111,18 @@ public class Vance extends RobotConfig {
         hw.intake = getHardware("in", CRServo.class);
         hw.shoulder = getHardware("sh", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.FORWARD);
+            EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, 0.333);
             PIDController pid = new PController(va_kP);
-            ElevatorFeedforward ff = new ElevatorFeedforward(0.0, va_kG, 0.0, 0.0, () -> 0, () -> 0);
+            ArmFeedforward ff = new ArmFeedforward(0.0, va_kG, 0.0, 0.0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
             CompositeController c = pid.compose(ff, Double::sum);
             d.setRunToPositionController(c);
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(va_kP, 0.0, 0.0, 0.0, 0.0, va_kG, 0.0, 0.0)));
         });
         hw.elbow = getHardware("el", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.FORWARD);
+            EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, 0.333);
             PIDController pid = new PController(va_kP);
-            ElevatorFeedforward ff = new ElevatorFeedforward(0.0, va_kG, 0.0, 0.0, () -> 0, () -> 0);
+            ArmFeedforward ff = new ArmFeedforward(0.0, va_kG, 0.0, 0.0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
             CompositeController c = pid.compose(ff, Double::sum);
             d.setRunToPositionController(c);
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(va_kP, 0.0, 0.0, 0.0, 0.0, va_kG, 0.0, 0.0)));
