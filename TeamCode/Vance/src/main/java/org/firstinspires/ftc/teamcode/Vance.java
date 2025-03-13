@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -33,19 +35,42 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.EncoderTicks;
  *
  * @author Lachlan Paul, 2024
  */
+@Config
 public class Vance extends RobotConfig {
     /**
-     * Vertical arm kP
+     * Shoulder kP
      */
-    public static double va_kP = 0.015;
+    public static double sh_kP = 0.0333;
     /**
-     * Vertical arm kG
+     * Shoulder Cos
      */
-    public static double va_kG = 0.3;
+    public static double sh_Cos = 0.4;
     /**
-     * Vertical arm TPS
+     * Shoulder TPS
      */
-    public static double va_TPS = 400;
+    public static double sh_TPS = 400;
+    /**
+     * Shoulder reduction
+     */
+    public static double sh_Reduc = 5.14285714286;
+
+    // todo: toon deez
+    /**
+     * Elbow kP
+     */
+    public static double el_kP;
+    /**
+     * Elbow Cos
+     */
+    public static double el_Cos;
+    /**
+     * Elbow TPS
+     */
+    public static double el_TPS;
+    /**
+     * Elbow reduction
+     */
+    public static double el_Reduc;
 
     /**
      * Positions for TeleOp's arm
@@ -111,21 +136,27 @@ public class Vance extends RobotConfig {
         hw.intake = getHardware("in", CRServo.class);
         hw.shoulder = getHardware("sh", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.FORWARD);
-            EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, 0.333);
-            PIDController pid = new PController(va_kP);
-            ArmFeedforward ff = new ArmFeedforward(0.0, va_kG, 0.0, 0.0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
+            EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, sh_Reduc);
+            PIDController pid = new PController(sh_kP);
+            ArmFeedforward ff = new ArmFeedforward(0.0, sh_Cos, 0.0, 0.0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
             CompositeController c = pid.compose(ff, Double::sum);
             d.setRunToPositionController(c);
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(va_kP, 0.0, 0.0, 0.0, 0.0, va_kG, 0.0, 0.0)));
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+                c.setCoefficients(sh_kP, 0.0, 0.0, 0.0, 0.0, sh_Cos, 0.0, 0.0);
+                o.telemetry.addData("Shoulder Angle", angleGen.getAngle().in(Degrees));
+            }));
         });
         hw.elbow = getHardware("el", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.FORWARD);
-            EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, 0.333);
-            PIDController pid = new PController(va_kP);
-            ArmFeedforward ff = new ArmFeedforward(0.0, va_kG, 0.0, 0.0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
+            EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, el_Reduc);
+            PIDController pid = new PController(el_kP);
+            ArmFeedforward ff = new ArmFeedforward(0.0, el_Cos, 0.0, 0.0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
             CompositeController c = pid.compose(ff, Double::sum);
             d.setRunToPositionController(c);
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(va_kP, 0.0, 0.0, 0.0, 0.0, va_kG, 0.0, 0.0)));
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+                c.setCoefficients(el_kP, 0.0, 0.0, 0.0, 0.0, el_Cos, 0.0, 0.0);
+                o.telemetry.addData("Elbow Angle", angleGen.getAngle().in(Degrees));
+            }));
         });
 
         DriveModel driveModel = new DriveModel.Builder()

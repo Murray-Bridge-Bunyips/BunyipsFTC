@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.debug;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import org.firstinspires.ftc.teamcode.Vance;
@@ -7,13 +9,14 @@ import org.firstinspires.ftc.teamcode.Vance;
 /**
  * PID Testing
  */
-//@TeleOp
+@TeleOp
 public class VancePID extends BunyipsOpMode {
     private final Vance robot = new Vance();
 
     @Override
     protected void onInit() {
         robot.init();
+//        robot.shoulder.disable();
     }
 
     @Override
