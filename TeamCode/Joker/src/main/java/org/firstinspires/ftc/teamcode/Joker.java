@@ -152,7 +152,7 @@ public class Joker extends RobotConfig {
     public static double liftkP = 0.005;
     public static double liftkI = 0.0;
     public static double liftkD = 0.0;
-    public static double liftkG = 0.0;
+    public static double liftkG = 0.1;
 
     public final Hardware hw = new Hardware();
 
@@ -259,9 +259,9 @@ public class Joker extends RobotConfig {
                 .withBottomSwitch(hw.liftBotStop)
                 //.map(handoverPoint, 1500)
                 .withPowerClamps(-1, 1)
-                .withUpperLimit(850)
+                .withUpperLimit(4375)
                 .withOvercurrent(Amps.of(7.5), Seconds.of(1))
-                .withUserSetpointControl((dt) -> 600 * dt)
+                .withUserSetpointControl((dt) -> 1600 * dt)
                 .withName("lift");
         if (BunyipsLib.getOpMode().getClass().isAnnotationPresent(Autonomous.class)) {
             lift.withTolerance(10);
