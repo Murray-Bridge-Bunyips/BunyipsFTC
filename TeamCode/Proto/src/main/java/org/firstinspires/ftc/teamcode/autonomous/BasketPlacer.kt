@@ -8,11 +8,11 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
-import org.firstinspires.ftc.teamcode.Constants
-import org.firstinspires.ftc.teamcode.Proto
 import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import dev.frozenmilk.util.cell.RefCell
+import org.firstinspires.ftc.teamcode.Constants
+import org.firstinspires.ftc.teamcode.Proto
 
 @Autonomous
 class BasketPlacer : AutonomousBunyipsOpMode() {
@@ -32,15 +32,17 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
             .afterTime(
                 0.0,
                 a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open())
-                    .then(Proto.runIntake(Proto.IntakeDirection.RETRIEVE, 5 of Seconds))
+                    .with(Proto.runIntake(Proto.IntakeDirection.RETRIEVE, 5 of Seconds))
             )
+            .setVelConstraints { _, _, s -> if (s >= 30) 12.0 else 40.0  }
             .splineToSplineHeading( //burger
-                vector = Vector2d(30.38, 39.71),
-                heading = (-50).degToRad(),
-                tangent = (-50).degToRad()
+                vector = Vector2d(25.84, 35.00),
+                heading = (-30).degToRad(),
+                tangent = (-30).degToRad()
             )
             .setReversed(false)
-            .splineToConstantHeading(pos = Vector2d(38.49, 34.2), tangent = (-50).degToRad())
+            .splineToConstantHeading(pos = Vector2d(37.72, 29.14), tangent = (-30).degToRad())
+            .resetVelConstraints()
             .afterTime(0.0, a = Proto.clawLift.tasks.goTo(basketTarget).with(Proto.clawRotator.tasks.close()))
             .setTangent(90.0, Degrees)
             .splineToSplineHeading(vector = Vector2d(54.6, 53.6), heading = 40.degToRad(), tangent = 40.degToRad())
