@@ -15,7 +15,7 @@ import dev.frozenmilk.util.cell.RefCell
 import org.firstinspires.ftc.teamcode.Constants
 import org.firstinspires.ftc.teamcode.Proto
 
-@Autonomous
+@Autonomous(name = "0+4 Basket Placer, 2nd tile from LEFT wall touching, 90° CCW", preselectTeleOp = "TeleOp")
 class BasketPlacer : AutonomousBunyipsOpMode() {
     private val basketLiftTarget = Constants.cl_MAX.toInt() - 925
     private val basket = Pose2d(54.6, 53.6, 40.degToRad())
@@ -25,8 +25,12 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
 //    )
 
     override fun onReady(selectedOpMode: RefCell<*>?) {
-        val start = blueLeft().tile(2.0).backward(2 of Inches).rotate(90 of Degrees).build().toFieldPose()
-        Proto.drive.pose = start
+        Proto.drive.pose = blueLeft()
+            .tile(2.0)
+            .backward(2 of Inches)
+            .rotate(90 of Degrees)
+            .build()
+            .toFieldPose()
         Proto.drive.makeTrajectory()
             .setTangent(270.0, Degrees)
             .afterTime(0.0, a = Proto.clawLift.tasks.goTo(basketLiftTarget))
@@ -60,19 +64,5 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
             }
             // giulio is the best coder here i am better then lucas and we all know it. i am java
             .addTask()
-
-        /*
-            Pose2d pose = blueLeft().tile(2.0).backward(Inches.of(2)).rotate(Degrees.of(90)).build().toFieldPose();
-            drive.makeTrajectory(pose)
-                    .setTangent(270, Degrees)
-                    .splineToLinearHeading(new Vector2d(54.6, 53.6), Mathf.degToRad(40), Mathf.degToRad(40))
-                    .setReversed(true)
-                    .splineToSplineHeading(new Vector2d(30.38, 39.71), Mathf.degToRad(-50), Mathf.degToRad(-50))
-                    .setReversed(false)
-                    .splineToConstantHeading(new Vector2d(38.49, 34.2), Mathf.degToRad(-50))
-                    .setTangent(90, Degrees)
-                    .splineToSplineHeading(new Vector2d(54.6, 53.6), Mathf.degToRad(40), Mathf.degToRad(40))
-                    .addTask();
-         */
     }
 }
