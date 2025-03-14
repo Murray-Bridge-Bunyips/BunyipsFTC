@@ -8,6 +8,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
+import com.acmerobotics.roadrunner.Pose2d
 import com.acmerobotics.roadrunner.Vector2d
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import dev.frozenmilk.util.cell.RefCell
@@ -16,40 +17,47 @@ import org.firstinspires.ftc.teamcode.Proto
 
 @Autonomous
 class BasketPlacer : AutonomousBunyipsOpMode() {
+    private val basketLiftTarget = Constants.cl_MAX.toInt() - 925
+    private val basket = Pose2d(54.6, 53.6, 40.degToRad())
+    // TODO
+//    private val waypoints = listOf(
+//
+//    )
+
     override fun onReady(selectedOpMode: RefCell<*>?) {
         val start = blueLeft().tile(2.0).backward(2 of Inches).rotate(90 of Degrees).build().toFieldPose()
-        val basketTarget = Constants.cl_MAX.toInt() - 925
         Proto.drive.pose = start
         Proto.drive.makeTrajectory()
             .setTangent(270.0, Degrees)
-            .afterTime(0.0, a = Proto.clawLift.tasks.goTo(basketTarget))
-            .splineToLinearHeading(vector = Vector2d(54.6, 53.6), heading = 40.degToRad(), tangent = 40.degToRad())
+            .afterTime(0.0, a = Proto.clawLift.tasks.goTo(basketLiftTarget))
+            .splineToLinearHeading(poseHeadingRad = basket, tangent = basket.heading)
             .stopAndAdd(
                 Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
                     .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
-            )
-            .setReversed(true)
-            .afterTime(
-                0.0,
-                a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open())
-                    .with(Proto.runIntake(Proto.IntakeDirection.RETRIEVE, 5 of Seconds))
-            )
-            .setVelConstraints { _, _, s -> if (s >= 30) 12.0 else 40.0  }
-            .splineToSplineHeading( //burger
-                vector = Vector2d(25.84, 35.00),
-                heading = (-30).degToRad(),
-                tangent = (-30).degToRad()
-            )
-            .setReversed(false)
-            .splineToConstantHeading(pos = Vector2d(37.72, 29.14), tangent = (-30).degToRad())
-            .resetVelConstraints()
-            .afterTime(0.0, a = Proto.clawLift.tasks.goTo(basketTarget).with(Proto.clawRotator.tasks.close()))
-            .setTangent(90.0, Degrees)
-            .splineToSplineHeading(vector = Vector2d(54.6, 53.6), heading = 40.degToRad(), tangent = 40.degToRad())
-            .stopAndAdd(
-                Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
-                    .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
-            )
+            ).also {
+                it.setReversed(true)
+                    .afterTime(
+                        0.0,
+                        a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open())
+                            .with(Proto.runIntake(Proto.IntakeDirection.RETRIEVE, 3 of Seconds))
+                    )
+                    .setVelConstraints { _, _, s -> if (s >= 30) 12.0 else 40.0 }
+                    .splineToSplineHeading( //burger
+                        vector = Vector2d(25.84, 35.00),
+                        heading = (-30).degToRad(),
+                        tangent = (-30).degToRad()
+                    )
+                    .setReversed(false)
+                    .splineToConstantHeading(pos = Vector2d(37.72, 29.14), tangent = (-30).degToRad()) // +burger
+                    .resetVelConstraints()
+                    .afterTime(0.0, a = Proto.clawLift.tasks.goTo(basketLiftTarget).with(Proto.clawRotator.tasks.close()))
+                    .setTangent(90.0, Degrees)
+                    .splineToSplineHeading(poseHeadingRad = basket, tangent = basket.heading)
+                    .stopAndAdd(
+                        Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
+                            .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
+                    )
+            }
             // giulio is the best coder here i am better then lucas and we all know it. i am java
             .addTask()
 
