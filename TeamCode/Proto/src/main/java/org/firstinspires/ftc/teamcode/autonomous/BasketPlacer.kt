@@ -19,10 +19,11 @@ import org.firstinspires.ftc.teamcode.Proto
 class BasketPlacer : AutonomousBunyipsOpMode() {
     private val basketLiftTarget = Constants.cl_MAX.toInt() - 925
     private val basket = Pose2d(54.6, 53.6, 40.degToRad())
-    // TODO
-//    private val waypoints = listOf(
-//
-//    )
+    private val waypoints = listOf(
+        Pose2d(27.62, 34.51, -30.degToRad()) to (10 to -5),
+        Pose2d(29.5, 37.5, -30.degToRad()) to (15 to -10),
+        Pose2d(36.04, 38.79, -30.degToRad()) to (15 to -10), // TODO
+    )
 
     override fun onReady(selectedOpMode: RefCell<*>?) {
         Proto.drive.pose = blueLeft()
@@ -39,28 +40,37 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
                 Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
                     .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
             ).also {
-                it.setReversed(true)
-                    .afterTime(
-                        0.0,
-                        a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open())
-                            .with(Proto.runIntake(Proto.IntakeDirection.RETRIEVE, 3 of Seconds))
-                    )
-                    .setVelConstraints { _, _, s -> if (s >= 30) 12.0 else 40.0 }
-                    .splineToSplineHeading( //burger
-                        vector = Vector2d(25.84, 35.00),
-                        heading = (-30).degToRad(),
-                        tangent = (-30).degToRad()
-                    )
-                    .setReversed(false)
-                    .splineToConstantHeading(pos = Vector2d(37.72, 29.14), tangent = (-30).degToRad()) // +burger
-                    .resetVelConstraints()
-                    .afterTime(0.0, a = Proto.clawLift.tasks.goTo(basketLiftTarget).with(Proto.clawRotator.tasks.close()))
-                    .setTangent(90.0, Degrees)
-                    .splineToSplineHeading(poseHeadingRad = basket, tangent = basket.heading)
-                    .stopAndAdd(
-                        Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
-                            .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
-                    )
+                for (waypoint in waypoints) {
+                    it.setReversed(true)
+                        .afterTime(
+                            0.0,
+                            a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open())
+                                .with(Proto.runIntake(Proto.IntakeDirection.RETRIEVE, 3 of Seconds))
+                        )
+                        .setVelConstraints { _, _, s -> if (s >= 30) 12.0 else 40.0 }
+                        .splineToSplineHeading(
+                            poseHeadingRad = waypoint.first,
+                            tangent = waypoint.first.heading /* burger */
+                        )
+                        .setReversed(false)
+                        .splineToConstantHeading(
+                            pos = Vector2d(
+                                waypoint.first.position.x + waypoint.second.first,
+                                waypoint.first.position.y + waypoint.second.second
+                            ), tangent = waypoint.first.heading
+                        ) // +burger
+                        .resetVelConstraints()
+                        .afterTime(
+                            0.0,
+                            a = Proto.clawLift.tasks.goTo(basketLiftTarget).with(Proto.clawRotator.tasks.close())
+                        )
+                        .setTangent(90.0, Degrees)
+                        .splineToSplineHeading(poseHeadingRad = basket, tangent = basket.heading)
+                        .stopAndAdd(
+                            Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
+                                .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
+                        )
+                }
             }
             // giulio is the best coder here i am better then lucas and we all know it. i am java
             .addTask()
