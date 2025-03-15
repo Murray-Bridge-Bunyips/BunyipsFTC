@@ -22,7 +22,7 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
     private val waypoints = listOf(
         Pose2d(27.62, 34.51, -30.degToRad()) to (10 to -5),
         Pose2d(29.5, 37.5, -30.degToRad()) to (15 to -10),
-        Pose2d(36.04, 38.79, -30.degToRad()) to (15 to -10), // TODO
+        Pose2d(36.04, 38.79, -30.degToRad()) to (15 to -10)
     )
 
     override fun onReady(selectedOpMode: RefCell<*>?) {
@@ -63,7 +63,17 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
                         .afterTime(
                             0.0,
                             a = Proto.clawLift.tasks.goTo(basketLiftTarget).with(Proto.clawRotator.tasks.close())
-                        )
+                        ).also { last ->
+                            if (waypoint == waypoints.last())
+                                last
+                                    .setReversed(true)
+                                    // Don't hit the wall
+                                    .splineToSplineHeading(
+                                        poseHeadingRad = waypoint.first,
+                                        tangent = waypoint.first.heading
+                                    )
+                                    .setReversed(false)
+                        }
                         .setTangent(90.0, Degrees)
                         .splineToSplineHeading(poseHeadingRad = basket, tangent = basket.heading)
                         .stopAndAdd(
