@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.Nullable;
 
@@ -54,15 +55,15 @@ public class BasketSide extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(24*3.1, 24*2-2), Inches)
                 .strafeTo(new Vector2d(24*3.1-6, 24*2-2-6), Inches)
                 .addTask();
-
-        add(robot.outtakeGrip.tasks.close());
+//giulio is better then you and he is java still and he is also so cool
+// *than
 
         add(robot.drive.makeTrajectory(new Pose2d(24*3.1-6, 24*2-2-6, Math.toRadians(270)), currentPoseMap)
                 .strafeToLinearHeading(new Vector2d(14+13, 0), Inches, 180, Degrees)
                 .build()
-                .with(robot.lift.tasks.goTo(368))
+                .with(robot.lift.tasks.goTo(1700).timeout(Seconds.of(4.15)))
         );
 
-        add(robot.lift.tasks.goTo(425));
+        add(robot.lift.tasks.goTo(1500));
     }
 }

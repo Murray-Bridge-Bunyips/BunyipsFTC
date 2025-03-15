@@ -57,6 +57,8 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
                 .strafeToLinearHeading(new Vector2d(-24*2.5, 56), Inches, 90, Degrees)
                 .addTask();
 
+        add(robot.lift.tasks.goTo(375));
+
         //run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
 
         //run(() -> robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_OPEN_POSITION));

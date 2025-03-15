@@ -203,7 +203,7 @@ public class Joker extends RobotConfig {
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
                 ))));
 
-        DriveModel driveModel = new DriveModel.Builder()
+        /*DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(123.5 / 6454.75)
                 .setLateralInPerTick(125 / 5090.25)
                 .setTrackWidthTicks(1562.8653888336344)
@@ -218,27 +218,25 @@ public class Joker extends RobotConfig {
                 .setAxialGain(3.5)
                 .setLateralGain(3.5)
                 .setHeadingGain(2)
-                .build();
+                .build();*/
 
-        /*
-        NEW VALUES IN CASE OF ABILITY TO RETUNE ALL AUTONOMOUSes
+        //these are roadrunner values for the robot without its ascent but with the 1 pole that connects the ascent
         DriveModel driveModel = new DriveModel.Builder()
-                .setInPerTick((95.5 - 0.787402) / 5155.25) //RE-DONE and result of calculation be 0.0187354924
-                .setLateralInPerTick((95.5 - 0.787402) / 5200) //RE-DONE and result of calculation be
-                .setTrackWidthTicks(1564.368988990854) //RE-DONE
+//                .setInPerTick((141-(9*2))/6560)
+//                .setLateralInPerTick((141-(18-(1.25+1)))/4730)
+//                .setTrackWidthTicks()
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
                 .setMaxWheelVel(InchesPerSecond.of(40))
-                .setKv(0.003819584225840457) //RE-DONE
-                .setKs(1.4223271129208594) //RE-DONE
-                .setKa(0.001) //RE-DONE
+//                .setKv()
+//                .setKs()
+//                .setKa()
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
-                .setAxialGain(3.5)
-                .setLateralGain(3.5)
-                .setHeadingGain(2)
+//                .setAxialGain()
+//                .setLateralGain()
+//                .setHeadingGain()
                 .build();
-        */
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, hw.imu, hardwareMap.voltageSensor)
                 .withName("drive");
