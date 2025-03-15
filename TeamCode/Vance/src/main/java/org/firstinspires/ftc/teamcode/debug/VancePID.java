@@ -17,12 +17,16 @@ public class VancePID extends BunyipsOpMode {
     protected void onInit() {
         robot.init();
 //        robot.shoulder.disable();
+//        robot.elbow.disable();
     }
 
     @Override
     protected void activeLoop() {
-        robot.shoulder.setPower(-gamepad1.lsy);
-        Motor.debug(robot.hw.shoulder, "Vertical Lift", t);
-        robot.shoulder.update();
+//        robot.shoulder.setPower(-gamepad1.lsy);
+        robot.elbow.setPower(-gamepad1.lsy);
+//        Motor.debug(robot.hw.shoulder, "Vertical Lift", t);
+        Motor.debug(robot.hw.elbow, "Elbow", t);
+//        robot.shoulder.update();
+        robot.elbow.update();
     }
 }

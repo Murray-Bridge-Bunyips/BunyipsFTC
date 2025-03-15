@@ -58,19 +58,19 @@ public class Vance extends RobotConfig {
     /**
      * Elbow kP
      */
-    public static double el_kP;
+    public static double el_kP = 0.03;
     /**
      * Elbow Cos
      */
-    public static double el_Cos;
+    public static double el_Cos = 0.65;
     /**
      * Elbow TPS
      */
-    public static double el_TPS;
+    public static double el_TPS = 100; // todo
     /**
      * Elbow reduction
      */
-    public static double el_Reduc;
+    public static double el_Reduc = 8.5;
 
     /**
      * Positions for TeleOp's arm
@@ -185,13 +185,14 @@ public class Vance extends RobotConfig {
                 .withAccumulator(new PeriodicIMUAccumulator(hw.imu.get(), Seconds.of(5)))
                 .withName("Drive");
         shoulder = new HoldableActuator(hw.shoulder)
-//                .enableUserSetpointControl((dt) -> dt * va_TPS)
+//                .withUserSetpointControl((dt) -> dt * sh_TPS)  // todo
                 .withTolerance(10, true)
                 .withUpperLimit(900)
                 .withHomingPower(0.7)
                 .withName("Shoulder");
         elbow = new HoldableActuator(hw.elbow)
-                .withPowerClamps(-0.5, 0.5)
+                .withUserSetpointControl((dt) -> dt * el_TPS)
+//                .withPowerClamps(-0.5, 0.5)
                 .withTolerance(10, true)
                 .withTolerance(7, true)
                 .withName("Elbow");
