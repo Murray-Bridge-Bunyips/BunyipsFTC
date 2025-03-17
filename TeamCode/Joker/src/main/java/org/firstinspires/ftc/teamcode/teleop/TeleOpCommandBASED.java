@@ -34,6 +34,7 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
 
         robot.ascentArm.setDefaultTask(robot.ascentArm.tasks.control(() -> gamepad2.dpad_left ? -0.4 : gamepad2.dpad_right ? 0.4 : 0));
 
+        //TODO: use .setFieldCentricOffset() to allow field centric to start at right heading
         FieldOrientableDriveTask driveTask = new HolonomicDriveTask(gamepad1, robot.drive).withFieldCentric(() -> true);
         driver().whenPressed(Controls.A)
             .run(driveTask::resetFieldCentricOrigin);

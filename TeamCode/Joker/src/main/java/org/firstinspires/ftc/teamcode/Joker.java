@@ -222,21 +222,22 @@ public class Joker extends RobotConfig {
 
         //these are roadrunner values for the robot without its ascent but with the 1 pole that connects the ascent
         DriveModel driveModel = new DriveModel.Builder()
-//                .setInPerTick((141-(9*2))/6560)
-//                .setLateralInPerTick((141-(18-(1.25+1)))/4730)
-//                .setTrackWidthTicks()
+                .setInPerTick((141-(9*2))/6560.0)
+                .setLateralInPerTick((141-(18-(1.25+1)))/4730)
+                .setTrackWidthTicks(1549.125951361604)
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
                 .setMaxWheelVel(InchesPerSecond.of(40))
-//                .setKv()
-//                .setKs()
-//                .setKa()
+                .setKv(0.004282941307554055)
+                .setKs(1.2153614527317247)
+                .setKa(0.00035)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
-//                .setAxialGain()
-//                .setLateralGain()
-//                .setHeadingGain()
+                .setAxialGain(3.5)
+                .setLateralGain(3.5)
+                .setHeadingGain(2)
                 .build();
+        //TODO: test blue side autonomouses
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, hw.imu, hardwareMap.voltageSensor)
                 .withName("drive");
