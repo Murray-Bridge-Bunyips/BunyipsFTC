@@ -221,6 +221,7 @@ public class Joker extends RobotConfig {
                 .build();*/
 
         //these are roadrunner values for the robot without its ascent but with the 1 pole that connects the ascent
+        //still going to use them though because they just work TM
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick((141-(9*2))/6560.0)
                 .setLateralInPerTick((141-(18-(1.25+1)))/4730)

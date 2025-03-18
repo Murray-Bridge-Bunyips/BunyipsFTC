@@ -1,12 +1,20 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
+
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Angle;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
+
 import org.firstinspires.ftc.teamcode.Joker;
 
 /**
@@ -15,6 +23,7 @@ import org.firstinspires.ftc.teamcode.Joker;
 @TeleOp(name = "TeleOp")
 public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
     private final Joker robot = new Joker();
+    public static StartingConfiguration.Position startingPos;
 
     @Override
     protected void onInitialise() {
@@ -34,8 +43,24 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
 
         robot.ascentArm.setDefaultTask(robot.ascentArm.tasks.control(() -> gamepad2.dpad_left ? -0.4 : gamepad2.dpad_right ? 0.4 : 0));
 
-        //TODO: use .setFieldCentricOffset() to allow field centric to start at right heading
+        //TODO: debug this because it always starts teleop with backwards robot centric controls
         FieldOrientableDriveTask driveTask = new HolonomicDriveTask(gamepad1, robot.drive).withFieldCentric(() -> true);
+
+        Measure<Angle> offset;
+        if (startingPos == null) {
+            offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble());
+            Dbg.log("offset was null");
+        }
+        else if (startingPos.isLeft()) {
+            if (startingPos.isBlue()) {offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble()-Math.PI/2);}
+            else {offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble()+Math.PI/2);}
+        }
+        else {
+            if (startingPos.isBlue()) {offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble()-Math.PI);}
+            else {offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble()+Math.PI/2);}
+        }
+
+        driveTask.setFieldCentricOffset(offset);
         driver().whenPressed(Controls.A)
             .run(driveTask::resetFieldCentricOrigin);
         robot.drive.setDefaultTask(driveTask);
