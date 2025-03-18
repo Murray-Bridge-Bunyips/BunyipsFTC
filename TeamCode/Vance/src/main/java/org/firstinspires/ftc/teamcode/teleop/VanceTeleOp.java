@@ -53,14 +53,14 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
         //  also very messy tbh
         //  try to DRY it without the weird function from before happening again
         operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > 0.5)
-                .run(new DeferredTask(() -> robot.shoulder.tasks.goTo(robot.shoulderPositions[(int) Mathf.clamp(shoulderPosIndex++, 0, robot.shoulderPositions.length)])));
+                .run(new DeferredTask(() -> moveArm(robot.shoulder, 1)));
         operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > -0.5)
                 .run(new DeferredTask(() -> moveArm(robot.shoulder, -1)));
 
         operator().when(Controls.Analog.RIGHT_STICK_Y, (v) -> v > 0.5)
-                .run(new DeferredTask(() -> robot.elbow.tasks.goTo(robot.elbowPositions[(int) Mathf.clamp(elbowPosIndex++, 0, robot.elbowPositions.length)])));
+                .run(new DeferredTask(() -> moveArm(robot.elbow, 1)));
         operator().when(Controls.Analog.RIGHT_STICK_Y, (v) -> v < -0.5)
-                .run(new DeferredTask(() -> robot.elbow.tasks.goTo(robot.elbowPositions[(int) Mathf.clamp(elbowPosIndex--, 0, robot.elbowPositions.length)])));
+                .run(new DeferredTask(() -> moveArm(robot.elbow, -1)));
 
         robot.drive.setDefaultTask(new HolonomicVectorDriveTask(gamepad1, robot.drive).withFieldCentric(() -> FC));
         driver().whenPressed(Controls.BACK)

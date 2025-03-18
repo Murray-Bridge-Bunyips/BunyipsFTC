@@ -17,6 +17,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforward;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
@@ -44,7 +45,7 @@ public class Vance extends RobotConfig {
     /**
      * Shoulder Cos
      */
-    public static double sh_Cos = 0.4;
+    public static double sh_Cos = 0;
     /**
      * Shoulder TPS
      */
@@ -58,11 +59,11 @@ public class Vance extends RobotConfig {
     /**
      * Elbow kP
      */
-    public static double el_kP = 0.03;
+    public static double el_kP = 0.035;
     /**
      * Elbow Cos
      */
-    public static double el_Cos = 0.65;
+    public static double el_Cos = 0.25;
     /**
      * Elbow TPS
      */
@@ -71,6 +72,10 @@ public class Vance extends RobotConfig {
      * Elbow reduction
      */
     public static double el_Reduc = 8.5;
+    /**
+     *
+     */
+    public static double el_kD = 0.00005;
 
     /**
      * Positions for TeleOp's arm
@@ -149,12 +154,12 @@ public class Vance extends RobotConfig {
         hw.elbow = getHardware("el", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.FORWARD);
             EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, el_Reduc);
-            PIDController pid = new PController(el_kP);
-            ArmFeedforward ff = new ArmFeedforward(0.0, el_Cos, 0.0, 0.0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
+            PIDController pid = new PDController(el_kP, el_kD);
+            ArmFeedforward ff = new ArmFeedforward(0.0, el_Cos, 0.0, 0.0, () -> angleGen.getAngle().plus(Degrees.of(155)), angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
             CompositeController c = pid.compose(ff, Double::sum);
             d.setRunToPositionController(c);
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-                c.setCoefficients(el_kP, 0.0, 0.0, 0.0, 0.0, el_Cos, 0.0, 0.0);
+                c.setCoefficients(el_kP, 0.0, el_kD, 0.0, 0.0, el_Cos, 0.0, 0.0);
                 o.telemetry.addData("Elbow Angle", angleGen.getAngle().in(Degrees));
             }));
         });
@@ -187,13 +192,9 @@ public class Vance extends RobotConfig {
         shoulder = new HoldableActuator(hw.shoulder)
 //                .withUserSetpointControl((dt) -> dt * sh_TPS)  // todo
                 .withTolerance(10, true)
-                .withUpperLimit(900)
-                .withHomingPower(0.7)
                 .withName("Shoulder");
         elbow = new HoldableActuator(hw.elbow)
                 .withUserSetpointControl((dt) -> dt * el_TPS)
-//                .withPowerClamps(-0.5, 0.5)
-                .withTolerance(10, true)
                 .withTolerance(7, true)
                 .withName("Elbow");
     }
