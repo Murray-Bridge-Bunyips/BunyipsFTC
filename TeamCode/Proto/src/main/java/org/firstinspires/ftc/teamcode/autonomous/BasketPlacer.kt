@@ -44,7 +44,7 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
                     it.setReversed(true)
                         .afterTime(
                             0.0,
-                            a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open())
+                            a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open().after(1 of Seconds))
                                 .with(Proto.runIntake(Proto.IntakeDirection.RETRIEVE, 3 of Seconds))
                         )
                         .setVelConstraints { _, _, s -> if (s >= 30) 12.0 else 40.0 }
