@@ -191,11 +191,11 @@ public class Vance extends RobotConfig {
                 .withName("Drive");
         shoulder = new HoldableActuator(hw.shoulder)
 //                .withUserSetpointControl((dt) -> dt * sh_TPS)  // todo
-                .withTolerance(10, true)
+                .withTolerance(10)
                 .withName("Shoulder");
         elbow = new HoldableActuator(hw.elbow)
                 .withUserSetpointControl((dt) -> dt * el_TPS)
-                .withTolerance(7, true)
+                .withTolerance(7)
                 .withName("Elbow");
     }
 
