@@ -25,6 +25,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionPro
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.loop
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.task
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
 import com.acmerobotics.roadrunner.ftc.RawEncoder
@@ -202,7 +203,7 @@ object Proto : RobotConfig() {
             .withName("Claw Lift")
 
         if (BunyipsLib.opMode.javaClass.isAnnotationPresent(Autonomous::class.java)) {
-            BunyipsOpMode.instance.setInitTask(clawLift.tasks.home().mutate().addPeriodic { clawLift.update() })
+            BunyipsOpMode.instance.setInitTask(clawLift.tasks.home().during(loop { clawLift.update() }))
             clawLift.withTolerance(25)
         }
 
