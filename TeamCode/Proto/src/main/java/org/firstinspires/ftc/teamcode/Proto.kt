@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsLib
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.TrapezoidProfile
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure
@@ -17,7 +17,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.SimpleRotator
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsLib
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
@@ -128,7 +127,6 @@ object Proto : RobotConfig() {
             it.setPowerDeltaThreshold(0.02)
         }
         hw.clawRotator = getHardware("cr", ServoEx::class.java) {
-            it.setConstraints(TrapezoidProfile.Constraints(Constants.cr_v, Constants.cr_a))
             it.direction = Servo.Direction.REVERSE
             it.setPositionDeltaThreshold(0.02)
         }
