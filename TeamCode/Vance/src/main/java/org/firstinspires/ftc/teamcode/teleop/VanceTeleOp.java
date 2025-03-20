@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
@@ -24,6 +25,7 @@ import org.firstinspires.ftc.teamcode.Vance;
  */
 @TeleOp(name = "TeleOp")
 @Config
+@Disabled // temp
 public class VanceTeleOp extends CommandBasedBunyipsOpMode {
     /**
      * Field-centric mode.
@@ -43,8 +45,8 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
     // giulio is still here
     @Override
     protected void assignCommands() {
-        operator().whenPressed(Controls.X)
-                .run(robot.intake.tasks.toggle());
+//        operator().whenPressed(Controls.X)
+//                .run(robot.hw.intake.se);
 //giulio was here he is also java to and he is the best coder here
         // bro someone GET this guy
         // todo: test this goofy stuff

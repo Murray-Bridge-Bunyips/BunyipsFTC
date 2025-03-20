@@ -21,6 +21,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PDControll
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.IMULocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.ThreeWheelLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.PeriodicIMUAccumulator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
@@ -29,6 +30,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionPro
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.EncoderTicks;
 
 /**
@@ -97,6 +99,11 @@ public class Vance extends RobotConfig {
     public MecanumDrive drive;
 
     /**
+     * simple drive
+     */
+    public SimpleMecanumDrive simpleDrive;
+
+    /**
      * The shoulder of our arm
      */
     public HoldableActuator shoulder;
@@ -104,10 +111,6 @@ public class Vance extends RobotConfig {
      * The elbow of our arm
      */
     public HoldableActuator elbow;
-    /**
-     * Intake
-     */
-    public Switch intake;
 
     @Override
     protected void onRuntime() {
@@ -189,13 +192,16 @@ public class Vance extends RobotConfig {
                 .withLocalizer(new ThreeWheelLocalizer(driveModel, localiserParams, hw.dwleft, hw.dwright, hw.dwx))
                 .withAccumulator(new PeriodicIMUAccumulator(hw.imu.get(), Seconds.of(5)))
                 .withName("Drive");
+        drive.disable();
+        simpleDrive = new SimpleMecanumDrive(hw.fl, hw.bl, hw.br, hw.fr)
+                .withLocalizer(new IMULocalizer(hw.imu));
         shoulder = new HoldableActuator(hw.shoulder)
 //                .withUserSetpointControl((dt) -> dt * sh_TPS)  // todo
-                .withTolerance(10)
+//                .withTolerance(10)
                 .withName("Shoulder");
         elbow = new HoldableActuator(hw.elbow)
                 .withUserSetpointControl((dt) -> dt * el_TPS)
-                .withTolerance(7)
+//                .withTolerance(7)
                 .withName("Elbow");
     }
 
@@ -206,7 +212,7 @@ public class Vance extends RobotConfig {
         public IMUEx imu;
 
         /**
-         * Control 2: fr
+         * Control 3: fr
          */
         public DcMotorEx /*Are you*/ fr /*Or jk*/;
 
@@ -221,17 +227,17 @@ public class Vance extends RobotConfig {
         public DcMotorEx bl;
 
         /**
-         * Control 3: br
+         * Control 2: br
          */
         public DcMotorEx br;
 
         /**
-         * Control 3: br
+         * Control 2: br
          */
         public RawEncoder dwleft;
 
         /**
-         * Control 2: fr
+         * Control 3: fr
          */
         public RawEncoder dwright;
 
