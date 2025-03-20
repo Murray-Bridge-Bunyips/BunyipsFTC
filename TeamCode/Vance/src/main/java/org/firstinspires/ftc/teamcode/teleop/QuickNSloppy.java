@@ -1,13 +1,13 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Vance;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.executables.UserSelection;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
@@ -32,11 +32,13 @@ public class QuickNSloppy extends CommandBasedBunyipsOpMode {
         setInitTask(Task.task().isFinished(() -> !Threads.isRunning("sel")));
         gamepad1.set(Controls.AnalogGroup.STICKS, UnaryFunction.SQUARE_KEEP_SIGN);
     }
-    // giulio is still here
+
     @Override
     protected void assignCommands() {
-//        operator().whenPressed(Controls.X)
-//                .run(robot.hw.intake);
+        operator().whenPressed(Controls.X)
+                .run(robot.toggleContinuousServo(DcMotorSimple.Direction.FORWARD));
+        operator().whenPressed(Controls.A)
+                .run(robot.toggleContinuousServo(DcMotorSimple.Direction.REVERSE));
 
         new HolonomicDriveTask(gamepad1, robot.simpleDrive).withFieldCentric(() -> FC).setAsDefaultTask();
         robot.shoulder.setDefaultTask(robot.shoulder.tasks.control(() -> -gamepad2.lsy));

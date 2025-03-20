@@ -28,9 +28,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.EncoderTicks;
 
 /**
@@ -260,5 +260,20 @@ public class Vance extends RobotConfig {
          * Control Servo 2: in
          */
         public CRServo intake;
+    }
+
+    /**
+     * Toggles hw.intake (continuous servo)
+     * @return task
+     */
+    public Task toggleContinuousServo(DcMotorSimple.Direction direction) {
+        return Task.task().
+            init(() -> {
+                hw.intake.setDirection(direction);
+                hw.intake.setPower(1.0);
+            }).
+            onFinish(() -> {  // and a mah linter say "use lambda" but i tell em i don' wanna this looks bettah(imo)
+                hw.intake.setPower(0.0);
+            }).timeout(Seconds.of(2)).named("VanceContinuousServoToggle");
     }
 }
