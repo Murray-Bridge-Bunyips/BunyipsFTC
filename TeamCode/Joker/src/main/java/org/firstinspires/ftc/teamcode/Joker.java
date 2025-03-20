@@ -223,14 +223,14 @@ public class Joker extends RobotConfig {
         //these are roadrunner values for the robot without its ascent but with the 1 pole that connects the ascent
         //still going to use them though because they just work TM
         DriveModel driveModel = new DriveModel.Builder()
-                .setInPerTick((141-(9*2))/6560.0)
-                .setLateralInPerTick((141-(18-(1.25+1)))/4730)
-                .setTrackWidthTicks(1549.125951361604)
+                .setInPerTick((141-(9*2))/6587.0)
+                .setLateralInPerTick((141-(18-(1.25+1)))/5497)
+                .setTrackWidthTicks(1554.4972402944102)
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
                 .setMaxWheelVel(InchesPerSecond.of(40))
-                .setKv(0.004282941307554055)
-                .setKs(1.2153614527317247)
+                .setKv(0.004282156597587529)
+                .setKs(1.3328330798412233)
                 .setKa(0.00035)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
@@ -276,7 +276,8 @@ public class Joker extends RobotConfig {
         lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
                 .withName("lights");
         
-        outtakeGrip = new Switch(hw.outtakeGrip, 0, 0.6);
+        outtakeGrip = new Switch(hw.outtakeGrip, 0, 0.6)
+                .withName("outtake grip");
 
         //intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
 

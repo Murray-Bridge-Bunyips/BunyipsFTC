@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import static org.firstinspires.ftc.teamcode.teleop.TeleOpCommandBASED.startingPos;
+//import static org.firstinspires.ftc.teamcode.teleop.TeleOpCommandBASED.startingPos;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 
@@ -37,7 +37,7 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
         if (selectedOpMode == null) return;
         StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
-        startingPos = startingPosition;
+//        startingPos = startingPosition;
         if (startingPosition.isBlue()) {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);} else {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);}
         currentPoseMap = startingPosition.isRed() ? new SymmetricPoseMap() : new IdentityPoseMap();
 
@@ -45,17 +45,17 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
         add(robot.outtakeGrip.tasks.open());
 
         robot.drive.makeTrajectory(currentPoseMap)
-                .strafeTo(new Vector2d(-24*1.75, 24*1.5), Inches)
-                .strafeTo(new Vector2d(-24*1.75, 8), Inches)
-                .strafeTo(new Vector2d(-24*2.4, 8), Inches)
-                .strafeTo(new Vector2d(-24*2.4, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(-24*2.4, 8), Inches)
-                .strafeTo(new Vector2d(-24*3, 8), Inches)
-                .strafeTo(new Vector2d(-24*3, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(-24*3, 8), Inches)
-                .strafeTo(new Vector2d(-24*3.45, 8), Inches)
-                .strafeTo(new Vector2d(-24*3.45, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(-24*3.45+6, 24*2.2-6), Inches)
+                .strafeTo(new Vector2d(-24*1.7, 24*1.5), Inches)
+                .strafeTo(new Vector2d(-24*1.7, 8), Inches)
+                .strafeTo(new Vector2d(-24*2.2, 8), Inches)
+                .strafeTo(new Vector2d(-24*2.2, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*2.2, 8), Inches)
+                .strafeTo(new Vector2d(-24*2.8, 8), Inches)
+                .strafeTo(new Vector2d(-24*2.8, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*2.8, 8), Inches)
+                .strafeTo(new Vector2d(-24*3.6, 8), Inches)
+                .strafeTo(new Vector2d(-24*3.6, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*3.6+6, 24*2.2-6), Inches)
                 .strafeToLinearHeading(new Vector2d(-24*2.5, 56), Inches, 90, Degrees)
                 .addTask();
 

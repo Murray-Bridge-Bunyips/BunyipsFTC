@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.Joker;
 @TeleOp(name = "TeleOp")
 public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
     private final Joker robot = new Joker();
-    public static StartingConfiguration.Position startingPos;
+//    public static StartingConfiguration.Position startingPos;
 
     @Override
     protected void onInitialise() {
@@ -41,12 +41,12 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
         operator().whenPressed(Controls.RIGHT_BUMPER)
             .run(robot.outtakeGrip.tasks.toggle());
 
-        robot.ascentArm.setDefaultTask(robot.ascentArm.tasks.control(() -> gamepad2.dpad_left ? -0.4 : gamepad2.dpad_right ? 0.4 : 0));
+        robot.ascentArm.setDefaultTask(robot.ascentArm.tasks.control(() -> gamepad2.dpad_left ? -0.3 : gamepad2.dpad_right ? 0.3 : 0));
 
-        //TODO: debug this because it always starts teleop with backwards robot centric controls
         FieldOrientableDriveTask driveTask = new HolonomicDriveTask(gamepad1, robot.drive).withFieldCentric(() -> true);
 
-        Measure<Angle> offset;
+        //TODO: debug this because it always starts teleop with backwards robot centric controls
+        /*Measure<Angle> offset;
         if (startingPos == null) {
             offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble());
             Dbg.log("offset was null");
@@ -60,7 +60,8 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
             else {offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble()+Math.PI/2);}
         }
 
-        driveTask.setFieldCentricOffset(offset);
+        driveTask.setFieldCentricOffset(offset);*/
+
         driver().whenPressed(Controls.A)
             .run(driveTask::resetFieldCentricOrigin);
         robot.drive.setDefaultTask(driveTask);
