@@ -153,6 +153,7 @@ public class Vance extends RobotConfig {
                 c.setCoefficients(sh_kP, 0.0, 0.0, 0.0, 0.0, sh_Cos, 0.0, 0.0);
                 o.telemetry.addData("Shoulder Angle", angleGen.getAngle().in(Degrees));
             }));
+            d.setNominalVoltageSensor(hardwareMap.voltageSensor);
         });
         hw.elbow = getHardware("el", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.FORWARD);
@@ -165,6 +166,7 @@ public class Vance extends RobotConfig {
                 c.setCoefficients(el_kP, 0.0, el_kD, 0.0, 0.0, el_Cos, 0.0, 0.0);
                 o.telemetry.addData("Elbow Angle", angleGen.getAngle().in(Degrees));
             }));
+            d.setNominalVoltageSensor(hardwareMap.voltageSensor);
         });
 
         DriveModel driveModel = new DriveModel.Builder()

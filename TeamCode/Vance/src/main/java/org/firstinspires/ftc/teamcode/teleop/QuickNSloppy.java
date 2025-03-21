@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Vance;
@@ -16,6 +17,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Threads;
  * the scrimmage is like now so i need to write fast
  * arhahahaha
  */
+@Config
 @TeleOp
 public class QuickNSloppy extends CommandBasedBunyipsOpMode {
     /**
@@ -27,8 +29,10 @@ public class QuickNSloppy extends CommandBasedBunyipsOpMode {
     @Override
     protected void onInitialise() {
         robot.init();
-        Threads.start("sel", new UserSelection<>((m) -> FC = m == null || m.equals("FIELD-CENTRIC")));
-        setInitTask(Task.task().isFinished(() -> !Threads.isRunning("sel")));
+        setInitTask(Task.task()
+                .init(() -> Threads.start("sel",
+                        new UserSelection<>((m) -> FC = m == null || m.equals("FIELD-CENTRIC"))))
+                .isFinished(() -> !Threads.isRunning("sel")));
         gamepad1.set(Controls.AnalogGroup.STICKS, UnaryFunction.SQUARE_KEEP_SIGN);
     }
 
@@ -37,6 +41,15 @@ public class QuickNSloppy extends CommandBasedBunyipsOpMode {
         new HolonomicDriveTask(gamepad1, robot.simpleDrive).withFieldCentric(() -> FC).setAsDefaultTask();
         robot.shoulder.tasks.control(() -> -gamepad2.lsy).setAsDefaultTask();
         robot.elbow.tasks.control(() -> -gamepad2.rsy).setAsDefaultTask();
+
+        operator().whenPressed(Controls.DPAD_UP)
+                .run(robot.elbow.tasks.goTo(-60).with(robot.shoulder.tasks.goTo(550)))
+                .finishIf(() -> !gamepad2.atRest());
+
+        // this kinda destroyed the intake a day before competition, sorry giulio and your team
+//        operator().whenPressed(Controls.DPAD_DOWN)
+//                .run(robot.elbow.tasks.goTo(-155).with(robot.shoulder.tasks.goTo(0)))
+//                .finishIf(() -> !gamepad2.atRest());
 
         operator().whenPressed(Controls.BACK)
                 .run(() -> {
