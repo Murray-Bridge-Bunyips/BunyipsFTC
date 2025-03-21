@@ -77,7 +77,7 @@ public class Vance extends RobotConfig {
     /**
      *
      */
-    public static double el_kD = 0.00005;
+    public static double el_kD = 0; // yo lachlan dont change this it does not like it
 
     /**
      * Positions for TeleOp's arm
@@ -196,10 +196,12 @@ public class Vance extends RobotConfig {
         simpleDrive = new SimpleMecanumDrive(hw.fl, hw.bl, hw.br, hw.fr)
                 .withLocalizer(new IMULocalizer(hw.imu));
         shoulder = new HoldableActuator(hw.shoulder)
+                .withMaxSteadyStateTime(Seconds.of(3))
 //                .withUserSetpointControl((dt) -> dt * sh_TPS)  // todo
 //                .withTolerance(10)
                 .withName("Shoulder");
         elbow = new HoldableActuator(hw.elbow)
+                .withMaxSteadyStateTime(Seconds.of(3))
                 .withUserSetpointControl((dt) -> dt * el_TPS)
 //                .withTolerance(7)
                 .withName("Elbow");
@@ -257,23 +259,25 @@ public class Vance extends RobotConfig {
         public Motor elbow;
 
         /**
-         * Control Servo 2: in
+         * Expansion Servo 0: in
          */
         public CRServo intake;
     }
 
     /**
-     * Toggles hw.intake (continuous servo)
+     * Runs hw.intake (continuous servo) for 2 seconds max
      * @return task
      */
-    public Task toggleContinuousServo(DcMotorSimple.Direction direction) {
-        return Task.task().
-            init(() -> {
-                hw.intake.setDirection(direction);
-                hw.intake.setPower(1.0);
-            }).
-            onFinish(() -> {  // and a mah linter say "use lambda" but i tell em i don' wanna this looks bettah(imo)
+    public Task runIntake(DcMotorSimple.Direction direction) {
+        return Task.task()
+            .init(() -> {
+                // Forward or 1 is intake
+                hw.intake.setPower(direction == DcMotorSimple.Direction.FORWARD ? 1 : -1);
+            })
+            .onFinish(() -> {  // and a mah linter say "use lambda" but i tell em i don' wanna this looks bettah(imo)
                 hw.intake.setPower(0.0);
-            }).timeout(Seconds.of(2)).named("VanceContinuousServoToggle");
+            })
+            .timeout(Seconds.of(2))
+            .named("Run Intake");
     }
 }

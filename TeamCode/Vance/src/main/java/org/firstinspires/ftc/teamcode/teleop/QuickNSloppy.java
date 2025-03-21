@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.Vance;
 
@@ -35,13 +34,19 @@ public class QuickNSloppy extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        operator().whenPressed(Controls.X)
-                .run(robot.toggleContinuousServo(DcMotorSimple.Direction.FORWARD));
-        operator().whenPressed(Controls.A)
-                .run(robot.toggleContinuousServo(DcMotorSimple.Direction.REVERSE));
-
         new HolonomicDriveTask(gamepad1, robot.simpleDrive).withFieldCentric(() -> FC).setAsDefaultTask();
-        robot.shoulder.setDefaultTask(robot.shoulder.tasks.control(() -> -gamepad2.lsy));
-        robot.elbow.setDefaultTask(robot.elbow.tasks.control(() -> -gamepad2.rsy));
+        robot.shoulder.tasks.control(() -> -gamepad2.lsy).setAsDefaultTask();
+        robot.elbow.tasks.control(() -> -gamepad2.rsy).setAsDefaultTask();
+
+        operator().whenPressed(Controls.BACK)
+                .run(() -> {
+                    robot.hw.elbow.resetEncoder();
+                    robot.hw.shoulder.resetEncoder();
+                });
+    }
+
+    @Override
+    protected void periodic() {
+        robot.hw.intake.setPower(gamepad2.a ? 1 : gamepad2.y ? -1 : 0);
     }
 }
