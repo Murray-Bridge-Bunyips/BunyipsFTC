@@ -38,7 +38,11 @@ public class QuickNSloppy extends CommandBasedBunyipsOpMode {
 
     @Override
     protected void assignCommands() {
-        new HolonomicDriveTask(gamepad1, robot.simpleDrive).withFieldCentric(() -> FC).setAsDefaultTask();
+        HolonomicDriveTask driveTask = new HolonomicDriveTask(gamepad1, robot.simpleDrive);
+        driveTask.withFieldCentric(() -> FC).setAsDefaultTask();
+        driver().whenPressed(Controls.A)
+                .run("Reset Field Centric Origin", driveTask::resetFieldCentricOrigin);
+
         robot.shoulder.tasks.control(() -> -gamepad2.lsy).setAsDefaultTask();
         robot.elbow.tasks.control(() -> -gamepad2.rsy).setAsDefaultTask();
 
