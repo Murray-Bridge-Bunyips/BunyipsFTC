@@ -31,7 +31,7 @@ public class QuickNSloppy extends CommandBasedBunyipsOpMode {
         robot.init();
         setInitTask(Task.task()
                 .init(() -> Threads.start("sel",
-                        new UserSelection<>((m) -> FC = m == null || m.equals("FIELD-CENTRIC"))))
+                        new UserSelection<>((m) -> FC = m == null || m.equals("FIELD-CENTRIC"), "FIELD-CENTRIC", "ROBOT-CENTRIC")))
                 .isFinished(() -> !Threads.isRunning("sel")));
         gamepad1.set(Controls.AnalogGroup.STICKS, UnaryFunction.SQUARE_KEEP_SIGN);
     }

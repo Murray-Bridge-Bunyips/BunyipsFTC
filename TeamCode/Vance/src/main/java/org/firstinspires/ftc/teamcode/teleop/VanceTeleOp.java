@@ -38,7 +38,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
     @Override
     protected void onInitialise() {
         robot.init();
-        Threads.start("sel", new UserSelection<>((m) -> FC = m == null || m.equals("FIELD-CENTRIC")));
+        Threads.start("sel", new UserSelection<>((m) -> FC = m == null || m.equals("FIELD-CENTRIC"), "FIELD-CENTRIC", "ROBOT-CENTRIC"));
         setInitTask(Task.task().isFinished(() -> !Threads.isRunning("sel")));
         gamepad1.set(Controls.AnalogGroup.STICKS, UnaryFunction.SQUARE_KEEP_SIGN);
     }
