@@ -203,25 +203,26 @@ public class Joker extends RobotConfig {
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
                 ))));
 
-        /*DriveModel driveModel = new DriveModel.Builder()
-                .setInPerTick(123.5 / 6454.75)
-                .setLateralInPerTick(125 / 5090.25)
-                .setTrackWidthTicks(1562.8653888336344)
+        // roadrunner values for the robot without its ascent
+        DriveModel driveModel = new DriveModel.Builder()
+                .setInPerTick((141-(9*2))/6560.0)
+                .setLateralInPerTick((141-(18-(1.25+1)))/4730)
+                .setTrackWidthTicks(1549.125951361604)
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
                 .setMaxWheelVel(InchesPerSecond.of(40))
-                .setKv(0.004)
-                .setKs(1.2071095031375727)
-                .setKa(0.001)
+                .setKv(0.004282941307554055)
+                .setKs(1.2153614527317247)
+                .setKa(0.00035)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
                 .setAxialGain(3.5)
                 .setLateralGain(3.5)
                 .setHeadingGain(2)
-                .build();*/
+                .build();
 
-        //these are roadrunner values for the robot without its ascent but with the 1 pole that connects the ascent
-        //still going to use them though because they just work TM
+        // roadrunner values for the robot with its ascent (at least in its previous state)
+        /*
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick((141-(9*2))/6587.0)
                 .setLateralInPerTick((141-(18-(1.25+1)))/5497)
@@ -238,7 +239,7 @@ public class Joker extends RobotConfig {
                 .setLateralGain(3.5)
                 .setHeadingGain(2)
                 .build();
-        //TODO: test blue side autonomouses
+        */
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, hw.imu, hardwareMap.voltageSensor)
                 .withName("drive");

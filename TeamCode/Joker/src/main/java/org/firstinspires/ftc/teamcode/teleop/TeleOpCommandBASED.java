@@ -1,12 +1,19 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
+
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Angle;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 
 import org.firstinspires.ftc.teamcode.Joker;
 
@@ -16,12 +23,36 @@ import org.firstinspires.ftc.teamcode.Joker;
 @TeleOp(name = "TeleOp")
 public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
     private final Joker robot = new Joker();
-//    public static StartingConfiguration.Position startingPos;
+    public static StartingConfiguration.Position startingPos;
+    private static Measure<Angle> offset;
 
     @Override
     protected void onInitialise() {
         robot.init();
         robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
+        if (startingPos == null) {
+            offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
+            Dbg.log("offset was null");
+        } else if (startingPos.isLeft()) {
+            if (startingPos.isBlue()) {
+                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble() - Math.PI / 2);
+                Dbg.log("offset was left blue");
+            } else {
+                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble() + Math.PI / 2);
+                Dbg.log("offset was left red");
+            }
+        } else {
+            // TODO: test blue, red just works
+            if (startingPos.isBlue()) {
+                offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
+                Dbg.log("offset was right blue");
+            } else {
+                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble());
+                Dbg.log("offset was right red");
+            }
+        }
+        Dbg.log(offset);
+        startingPos = null;
     }
 
     @Override
@@ -32,31 +63,18 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
     @Override
     protected void assignCommands() {
         operator().whenPressed(Controls.RIGHT_BUMPER)
-            .run(robot.outtakeGrip.tasks.toggle());
+                .run(robot.outtakeGrip.tasks.toggle());
 
         robot.ascentArm.setDefaultTask(robot.ascentArm.tasks.control(() -> gamepad2.dpad_left ? -0.3 : gamepad2.dpad_right ? 0.3 : 0));
 
         FieldOrientableDriveTask driveTask = new HolonomicDriveTask(gamepad1, robot.drive).withFieldCentric(() -> true);
-
-        //TODO: debug this because it always starts teleop with backwards robot centric controls
-        /*Measure<Angle> offset;
-        if (startingPos == null) {
-            offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble());
-            Dbg.log("offset was null");
-        }
-        else if (startingPos.isLeft()) {
-            if (startingPos.isBlue()) {offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble()-Math.PI/2);}
-            else {offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble()+Math.PI/2);}
-        }
-        else {
-            if (startingPos.isBlue()) {offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble()-Math.PI);}
-            else {offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble()+Math.PI/2);}
-        }
-
-        driveTask.setFieldCentricOffset(offset);*/
+        driveTask.setFieldCentricOffset(offset);
 
         driver().whenPressed(Controls.A)
-            .run(driveTask::resetFieldCentricOrigin);
+                .run(driveTask::resetFieldCentricOrigin);
+        driver().whenPressed(Controls.Y)
+                .run(() -> driveTask.setFieldCentricOffset(Radians.of(-robot.drive.getPose().heading.toDouble())));
+
         robot.drive.setDefaultTask(driveTask);
         robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.lsy));
         robot.lift.setDefaultTask(robot.lift.tasks.control(() -> -gamepad2.rsy));
@@ -70,4 +88,5 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
         telemetry.addData("lift target position", robot.hw.liftMotor.getTargetPosition());
         telemetry.addData("lift power", robot.hw.liftMotor.getPower());
     }
+    // lucas bubner was here and NO ONE WILL BELIEVE YOU
 }

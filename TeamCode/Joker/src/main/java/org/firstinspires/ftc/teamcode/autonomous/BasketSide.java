@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-//import static org.firstinspires.ftc.teamcode.teleop.TeleOpCommandBASED.startingPos;
+import static org.firstinspires.ftc.teamcode.teleop.TeleOpCommandBASED.startingPos;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
@@ -39,7 +39,7 @@ public class BasketSide extends AutonomousBunyipsOpMode {
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
         if (selectedOpMode == null) return;
         StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
-//        startingPos = startingPosition;
+        startingPos = startingPosition;
         if (startingPosition.isBlue()) {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);} else {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);}
         currentPoseMap = startingPosition.isRed() ? new SymmetricPoseMap() : new IdentityPoseMap();
 
@@ -53,9 +53,9 @@ public class BasketSide extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(24*2.6, 8), Inches)
                 .strafeTo(new Vector2d(24*2.6, 24*2.2+1), Inches)
                 .strafeTo(new Vector2d(24*2.6, 8), Inches)
-                .strafeTo(new Vector2d(24*3.0, 8), Inches)
-                .strafeTo(new Vector2d(24*3.0, 24*2-2), Inches)
-                .strafeTo(new Vector2d(24*3.0-6, 24*2-2-6), Inches)
+                .strafeTo(new Vector2d(24*3.15, 8), Inches)
+                .strafeTo(new Vector2d(24*3.15, 24*2-2), Inches)
+                .strafeTo(new Vector2d(24*3.15-6, 24*2-2-6), Inches)
                 .addTask();
 //giulio is better then you and he is java still and he is also so cool
 // *than
