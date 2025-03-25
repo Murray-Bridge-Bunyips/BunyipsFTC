@@ -9,6 +9,6 @@ buildscript {
         mavenCentral()
         maven { url "https://repo.dairy.foundation/releases" }
     }
-    dependencies { classpath "dev.frozenmilk:Load:0.2.0" }
+    dependencies { classpath "dev.frozenmilk:Load:0.2.1" }
 }
 apply plugin: "dev.frozenmilk.sinister.sloth.load"
