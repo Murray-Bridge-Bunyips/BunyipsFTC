@@ -13,9 +13,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
+//import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 
 import org.firstinspires.ftc.teamcode.Joker;
+// bubner hamchurger
 
 /**
  * "Whoooaaa! Looking cool, Joker!"
@@ -24,33 +25,39 @@ import org.firstinspires.ftc.teamcode.Joker;
 public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
     private final Joker robot = new Joker();
     public static StartingConfiguration.Position startingPos;
-    private static Measure<Angle> offset;
+    private Measure<Angle> offset;
 
     @Override
     protected void onInitialise() {
         robot.init();
         robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
-        if (startingPos == null) {
-            offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
-            Dbg.log("offset was null");
-        } else if (startingPos.isLeft()) {
-            if (startingPos.isBlue()) {
-                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble() - Math.PI / 2);
-                Dbg.log("offset was left blue");
-            } else {
-                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble() + Math.PI / 2);
-                Dbg.log("offset was left red");
-            }
-        } else {
-            // TODO: test blue, red just works
-            if (startingPos.isBlue()) {
-                offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
-                Dbg.log("offset was right blue");
-            } else {
-                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble());
-                Dbg.log("offset was right red");
-            }
-        }
+//        if (startingPos == null) {
+//            offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
+//            Dbg.log("offset was null");
+//        } else if (startingPos.isLeft()) {
+//            if (startingPos.isBlue()) {
+//                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble() - Math.PI / 2);
+//                Dbg.log("offset was left blue");
+//            } else if (startingPos.isRed()) {
+//                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble() + Math.PI / 2);
+//                Dbg.log("offset was left red");
+//            }
+//        } else if (startingPos.isRight()) {
+//
+//            if (startingPos.isBlue()) {
+//                offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
+//                Dbg.log("offset was right blue");
+//            } else if (startingPos.isRed()) {
+//                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble());
+//                Dbg.log("offset was right red");
+//            }
+//        }
+//        else {
+//            offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
+//            Dbg.log("offset was not null or a valid position");
+//        }
+        // TODO: test this, red just works with the above code
+        offset = Radians.of(startingPos.toFieldPose().heading.toDouble());
         Dbg.log(offset);
         startingPos = null;
     }
