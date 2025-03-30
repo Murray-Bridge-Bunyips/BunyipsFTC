@@ -1,0 +1,15 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.acmerobotics.dashboard.config.Config;
+
+@Config
+@SuppressWarnings("MissingJavadoc")
+public final class Constants {
+    public static double cl_kP = 0.004;
+    public static double cl_kG = 0.01;
+    public static double cl_TPS = 2000;
+    public static long cl_MAX = 5700;
+
+    private Constants() {
+    }
+}

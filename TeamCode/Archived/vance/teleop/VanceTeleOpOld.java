@@ -1,0 +1,95 @@
+package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.teleop;
+
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.UserSelection;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.UnaryFunction;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicVectorDriveTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.DeferredTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Threads;
+import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
+import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.TransferSample;
+
+/**
+ * TeleOp for Vance.
+ *
+ * @author Lachlan Paul, 2025
+ */
+@TeleOp(name = "TeleOp")
+@Config
+public class VanceTeleOp extends CommandBasedBunyipsOpMode {
+    /**
+     * Whether to force start the end-game light pattern.
+     */
+    public static boolean lightForceStart;
+    /**
+     * Field-centric mode.
+     */
+    public static boolean FC = true;
+    private final Vance robot = new Vance();
+    private int verticalArmPositionIndex = 0;
+    private int horizontalArmPositionIndex = 0;
+
+    @Override
+    protected void onInitialise() {
+        robot.init();
+        Threads.start("sel", new UserSelection<>((m) -> {
+            if (m == null) {
+                FC = true;
+                return;
+            }
+            if (m.equals("FIELD-CENTRIC")) {
+                FC = true;
+            } else if (m.equals("ROBOT-CENTRIC")) {
+                FC = false;
+            }
+        }, "FIELD-CENTRIC", "ROBOT-CENTRIC"));
+        setInitTask(Task.task().isFinished(() -> !Threads.isRunning("sel")));
+        gamepad1.set(Controls.AnalogGroup.STICKS, UnaryFunction.SQUARE_KEEP_SIGN);
+    }
+// giulio is still here
+    @Override
+    protected void assignCommands() {
+        operator().whenPressed(Controls.X)
+                .run(robot.claws.tasks.toggleBoth());
+        operator().whenPressed(Controls.Y)
+                .run(robot.clawRotator.tasks.toggle());
+        operator().whenPressed(Controls.B)
+                .run(robot.basketRotator.tasks.toggle());
+//        operator().whenRising(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
+//                .run(robot.verticalLift.tasks.home());
+
+        // todo: test this goofy stuff
+        //  might be inefficient for drivers
+        //  or just not work lmao
+        //  also very messy tbh
+        //  try to DRY it without the weird function from before happening again
+        operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > 0.5)
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(verticalArmPositionIndex++, 0, robot.verticalArmPositions.length)])));
+        operator().when(Controls.Analog.LEFT_STICK_Y, (v) -> v > -0.5)
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(verticalArmPositionIndex--, 0, robot.verticalArmPositions.length)])));
+
+        operator().when(Controls.Analog.RIGHT_STICK_Y, (v) -> v > 0.5)
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(horizontalArmPositionIndex++, 0, robot.horizontalArmPositions.length)])));
+        operator().when(Controls.Analog.RIGHT_STICK_Y, (v) -> v < -0.5)
+                .run(new DeferredTask(() -> robot.verticalLift.tasks.goTo(robot.verticalArmPositions[(int) Mathf.clamp(horizontalArmPositionIndex--, 0, robot.horizontalArmPositions.length)])));
+
+        operator().whenPressed(Controls.RIGHT_BUMPER)
+                .run(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, true))
+        /*.finishIf(() -> gamepad2.getDebounced(Controls.RIGHT_BUMPER))*/;
+
+        robot.drive.setDefaultTask(new HolonomicVectorDriveTask(gamepad1, robot.drive).withFieldCentric(() -> FC));
+        driver().whenPressed(Controls.BACK)
+                .run(new HolonomicDriveTask(gamepad1, robot.drive).withFieldCentric(() -> FC))
+                .finishIf(() -> gamepad1.getDebounced(Controls.BACK));
+        driver().whenPressed(Controls.A)
+                .run("Reset FC Offset", () -> Task.cast(robot.drive.getCurrentTask(), FieldOrientableDriveTask.class).resetFieldCentricOrigin());
+    }
+}

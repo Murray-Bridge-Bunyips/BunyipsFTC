@@ -1,4 +1,14 @@
 apply from: "../build.common.gradle"
 android {
-    namespace = 'au.edu.sa.mbhs.studentrobotics.ftc24736.joker'
+    namespace = 'org.firstinspires.ftc.teamcode'
 }
+
+// Uncomment the below code as well if you'd like to use Sloth Load. Follow the instructions on the Installation page of BunyipsLib wiki to set up the task.
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "https://repo.dairy.foundation/releases" }
+    }
+    dependencies { classpath "dev.frozenmilk:Load:0.2.1" }
+}
+apply plugin: "dev.frozenmilk.sinister.sloth.load"
