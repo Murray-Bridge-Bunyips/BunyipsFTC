@@ -50,12 +50,12 @@ public class BasketSide extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(24*2.1, 8), Inches)
                 .strafeTo(new Vector2d(24*2.1, 24*3-(9+3.5-2.5)), Inches)
                 .strafeTo(new Vector2d(24*2.1, 8), Inches)
-                .strafeTo(new Vector2d(24*2.6, 8), Inches)
-                .strafeTo(new Vector2d(24*2.6, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(24*2.6, 8), Inches)
-                .strafeTo(new Vector2d(24*3.15, 8), Inches)
-                .strafeTo(new Vector2d(24*3.15, 24*2-2), Inches)
-                .strafeTo(new Vector2d(24*3.15-6, 24*2-2-6), Inches)
+                .strafeTo(new Vector2d(24*2.7, 8), Inches)
+                .strafeTo(new Vector2d(24*2.7, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(24*2.7, 8), Inches)
+                .strafeTo(new Vector2d(24*3.3, 8), Inches)
+                .strafeTo(new Vector2d(24*3.3, 24*2-2), Inches)
+                .strafeTo(new Vector2d(24*3.3-6, 24*2-2-6), Inches)
                 .addTask();
 //giulio is better then you and he is java still and he is also so cool
 // *than
