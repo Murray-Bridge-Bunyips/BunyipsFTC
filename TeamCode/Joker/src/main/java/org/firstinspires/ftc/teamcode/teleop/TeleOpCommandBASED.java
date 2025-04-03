@@ -32,19 +32,18 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
     protected void onInitialise() {
         robot.init();
         robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
+        // below is a fragile piece of code known only as the field centric fixer
+        // it did not work until it did with the same code for no reason
         if (startingPos == null) {
             offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
             Dbg.log("startingPos was null");
-        } else if (startingPos.isRed()) {
+        } else if (startingPos.isRed() || startingPos.isBlue()) {
             offset = Radians.of(startingPos.toFieldPose().heading.toDouble());
-            Dbg.log("offset was red");
-        } else if (startingPos.isBlue()) {
-            offset = Radians.of(startingPos.toFieldPose().heading.toDouble() + Math.PI);
-            Dbg.log("offset was blue");
+            Dbg.log("startingPos was valid (red or blue)");
         }
         else {
             offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
-            Dbg.log("offset was not null or a valid position");
+            Dbg.log("startingPos was not null or valid");
         }
 //      TODO: test this on blue
         Dbg.log(offset);

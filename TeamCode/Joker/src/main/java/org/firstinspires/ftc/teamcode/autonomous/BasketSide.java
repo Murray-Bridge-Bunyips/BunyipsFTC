@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import org.firstinspires.ftc.teamcode.Joker;
 import dev.frozenmilk.util.cell.RefCell;
@@ -31,7 +32,7 @@ public class BasketSide extends AutonomousBunyipsOpMode {
         setOpModes(
                 StartingConfiguration.redLeft().tile(2).backward(Inches.of(4)),
                 StartingConfiguration.blueLeft().tile(2).backward(Inches.of(4))
-        );
+        ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
         //robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
