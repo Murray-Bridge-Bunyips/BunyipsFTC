@@ -14,6 +14,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
@@ -33,6 +34,9 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
                 StartingConfiguration.redRight().tile(2.5).backward(Inches.of(4)),
                 StartingConfiguration.blueRight().tile(2.5).backward(Inches.of(4))
         ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
+        telemetry.addData("lift current position", robot.hw.liftMotor.getCurrentPosition());
+        telemetry.addData("lift target position", robot.hw.liftMotor.getTargetPosition());
+        telemetry.addData("lift power", robot.hw.liftMotor.getPower());
     }
 
     @Override
@@ -46,23 +50,20 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
         robot.drive.setPose(startingPosition.toFieldPose());
         add(robot.outtakeGrip.tasks.open());
 
-        robot.drive.setPose(startingPosition.toFieldPose());
-
         robot.drive.makeTrajectory(currentPoseMap)
                 .strafeTo(new Vector2d(-24*1.8, 24*1.3), Inches)
                 .strafeTo(new Vector2d(-24*1.8, 8), Inches)
                 .strafeToLinearHeading(new Vector2d(-24*2.3, 8), Inches, 90, Degrees)
                 .strafeTo(new Vector2d(-24*2.3, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(-24*2.3, 24*1.5), Inches)
+                .strafeTo(new Vector2d(-24*2.3, 24*2), Inches)
                 .waitFor(2, Seconds)
                 .addTask();
 
-        add(robot.drive.makeTrajectory(new Pose2d(-24*2.3, 24*1.5, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-24*2.3, 24*2.5), Inches)
+        add(robot.drive.makeTrajectory(new Pose2d(-24*2.3, 24*1.5, Math.toRadians(90)), currentPoseMap)
+                .strafeTo(new Vector2d(-24*2.5, 24*2.48), Inches)
                 .build()
                 // moving lift up to correct height to grab specimen
                 .with(robot.lift.tasks.goTo(300)
-                //TODO: these numbers make the lift go way too high despite them being seemingly correct
         ));
 
         add(robot.outtakeGrip.tasks.close());
@@ -70,9 +71,9 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
         // moving lift up above so specimen is off the wall
         add(robot.lift.tasks.goTo(700));
 
-        add(robot.drive.makeTrajectory(new Pose2d(-24*2.1, 24*3-9, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-24*2.1, 24*2.5), Inches)
-                .strafeToLinearHeading(new Vector2d(0, 24), Inches, 270, Degrees)
+        add(robot.drive.makeTrajectory(new Pose2d(-24*2.5, 24*2.48, Math.toRadians(90)), currentPoseMap)
+                .strafeTo(new Vector2d(-24*2.1, 24*2.35), Inches)
+                .strafeToLinearHeading(new Vector2d(0, 24-9), Inches, 270, Degrees)
                 .build()
                 // moving lift up ready to hang specimen
                 .with(robot.lift.tasks.goTo(2400)));
@@ -82,7 +83,7 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
 
         add(robot.outtakeGrip.tasks.open());
 
-        add(robot.drive.makeTrajectory(new Pose2d(0, 24+9, Math.toRadians(270)))
+        add(robot.drive.makeTrajectory(new Pose2d(0, 24+9, Math.toRadians(270)), currentPoseMap)
                 .strafeTo(new Vector2d(-24*3, 24*2.5), Inches)
                 .build()
                 .with(robot.lift.tasks.home()));

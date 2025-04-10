@@ -14,7 +14,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
-//import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 
 import org.firstinspires.ftc.teamcode.Joker;
 // bubner hamchurger
@@ -45,7 +44,6 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
             offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
             Dbg.log("startingPos was not null or valid");
         }
-//      TODO: test this on blue
         Dbg.log(offset);
         startingPos = null;
     }
@@ -68,7 +66,7 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
         driver().whenPressed(Controls.A)
                 .run(driveTask::resetFieldCentricOrigin);
         driver().whenPressed(Controls.Y)
-                .run(() -> driveTask.setFieldCentricOffset(Radians.of(-robot.drive.getPose().heading.toDouble())));
+                .run(() -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
         robot.drive.setDefaultTask(driveTask);
         robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.lsy));
