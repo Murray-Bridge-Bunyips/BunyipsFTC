@@ -17,6 +17,12 @@ import org.firstinspires.ftc.teamcode.Proto
 @TeleOp(name = "TeleOp")
 open class MainTeleOp : CommandBasedBunyipsOpMode() {
     override fun assignCommands() {
+        Proto.camera
+            .init(Proto.camera.raw)
+            .start(Proto.camera.raw)
+            .flip()
+            .startPreview()
+
         HolonomicVectorDriveTask(gamepad1, Proto.drive).setAsDefaultTask()
         driver() whenPressed Controls.BACK run HolonomicDriveTask(gamepad1, Proto.drive) finishIf { gamepad1 rising Controls.BACK }
 
