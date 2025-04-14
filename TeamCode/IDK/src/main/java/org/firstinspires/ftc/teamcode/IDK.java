@@ -16,9 +16,10 @@ public class IDK extends RobotConfig {
     @Override
     protected void onRuntime() {
         RightDriveBase = getHardware("Right", DcMotor.class);
-        LeftDriveBase = getHardware("Left", DcMotor.class);
+        RightDriveBase.setDirection(DcMotorSimple.Direction.REVERSE);
         RightDriveBase.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        LeftDriveBase.setDirection(DcMotorSimple.Direction.REVERSE);
+        LeftDriveBase = getHardware("Left", DcMotor.class);
+        LeftDriveBase.setDirection(DcMotorSimple.Direction.FORWARD);
         LeftDriveBase.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         drive = new SimpleTankDrive(Collections.singletonList(LeftDriveBase), Collections.singletonList(RightDriveBase));
     }

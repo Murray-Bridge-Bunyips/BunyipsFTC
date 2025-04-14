@@ -18,7 +18,7 @@ public class teleop extends BunyipsOpMode {
     @Override
     protected void activeLoop() {
         double forward = gamepad1.left_stick_y;
-        double rotateCcw = -gamepad1.right_stick_x;
+        double rotateCcw = gamepad1.right_stick_x;
         robot.drive.setPower(Controls.vel(0, forward, rotateCcw));
         robot.drive.update();
     }
