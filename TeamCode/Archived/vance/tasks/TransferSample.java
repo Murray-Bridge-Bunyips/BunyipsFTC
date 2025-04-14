@@ -13,7 +13,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGrou
 
 /**
  * Transfers a grabbed sample from the claw to the vertical lift.
- * TODO: this and all the other tasks need rewrites
+ * this and all the other tasks need rewrites
  * @author Lachlan Paul, 2024
  */
 public class TransferSample extends SequentialTaskGroup {

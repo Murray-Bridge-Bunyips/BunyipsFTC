@@ -49,7 +49,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
 //                .run(robot.hw.intake.se);
 //giulio was here he is also java to and he is the best coder here
         // bro someone GET this guy
-        // todo: test this goofy stuff
+        // test this goofy stuff
         //  might be inefficient for drivers
         //  or just not work lmao
         //  also very messy tbh
@@ -77,7 +77,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
             shoulderPosIndex = (int) Mathf.clamp(shoulderPosIndex += increment, 0, robot.shoulderPositions.length);
             return robot.shoulder.tasks.goTo(robot.shoulderPositions[shoulderPosIndex]);
         } else {
-            // todo: unsafe af but im in a rush, make it do nothing if its not either
+            // unsafe af but im in a rush, make it do nothing if its not either
             elbowPosIndex = (int) Mathf.clamp(elbowPosIndex += increment, 0, robot.elbowPositions.length);
             return robot.elbow.tasks.goTo(robot.elbowPositions[elbowPosIndex]);
         }
