@@ -60,26 +60,29 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
                 .addTask();
 
         add(robot.drive.makeTrajectory(new Pose2d(-24*2.3, 24*1.5, Math.toRadians(90)), currentPoseMap)
-                .strafeTo(new Vector2d(-24*2.5, 24*2.48), Inches)
+                .strafeTo(new Vector2d(-24*2.6, 24*2.465), Inches)
                 .build()
                 // moving lift up to correct height to grab specimen
-                .with(robot.lift.tasks.goTo(300)
-        ));
+                .with(robot.lift.tasks.goTo(300).timeout(Seconds.of(0.2)))
+                //TODO: test this timeout
+        );
 
         add(robot.outtakeGrip.tasks.close());
+        add(wait(0.1, Seconds));
 
         // moving lift up above so specimen is off the wall
         add(robot.lift.tasks.goTo(700));
 
         add(robot.drive.makeTrajectory(new Pose2d(-24*2.5, 24*2.48, Math.toRadians(90)), currentPoseMap)
                 .strafeTo(new Vector2d(-24*2.1, 24*2.35), Inches)
-                .strafeToLinearHeading(new Vector2d(0, 24-9), Inches, 270, Degrees)
+                .strafeToLinearHeading(new Vector2d(0, 24+8), Inches, 270, Degrees)
                 .build()
                 // moving lift up ready to hang specimen
                 .with(robot.lift.tasks.goTo(2400)));
 
         // moving lift down to hang specimen
         add(robot.lift.tasks.goTo(1900));
+        add(wait(0.1, Seconds));
 
         add(robot.outtakeGrip.tasks.open());
 
