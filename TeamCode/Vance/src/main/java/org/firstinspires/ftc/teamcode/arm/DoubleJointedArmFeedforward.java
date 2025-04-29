@@ -5,7 +5,7 @@
 // license that can be found in the LICENSE file at
 // the root directory of this project.
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.arm;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Amps;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Gs;
