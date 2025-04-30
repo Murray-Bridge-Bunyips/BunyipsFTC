@@ -11,10 +11,13 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Time;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.ThreeWheelLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.PeriodicIMUAccumulator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
@@ -32,6 +35,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 @Config
 @RobotConfig.AutoInit
 public class Vance extends RobotConfig {
+    public static double kP, kI, kD;
     public static Vance instance = new Vance();
     public final Hardware hw = new Hardware();
     public MecanumDrive drive;
@@ -81,9 +85,12 @@ public class Vance extends RobotConfig {
         hw.dwx = getHardware("br", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         hw.intake = getHardware("in", CRServo.class);
-        // TODO: inverse kinematics to build the subsystem for this
-        hw.shoulder = getHardware("sh", DcMotor.class);
-        hw.elbow = getHardware("el", DcMotor.class);
+        hw.shoulder = getHardware("sh", Motor.class, (d) -> {
+            PIDController pid = new PIDController(kP, kI, kD);
+            d.setRunToPositionController(pid);
+            BunyipsOpMode.getInstance().onActiveLoop(() -> pid.setPID(kP, kI, kD));
+        });
+        hw.elbow = getHardware("el", DcMotorEx.class);
 
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(100.0 / 50775.0) // 0.001969473
@@ -111,11 +118,12 @@ public class Vance extends RobotConfig {
                 .withName("Drive");
 
         shoulder = new HoldableActuator(hw.shoulder)
+                .withUserSetpointControl((dt) -> 100 * dt) // TODO: currently enabled for tuning
                 .withName("Shoulder");
         elbow = new HoldableActuator(hw.elbow)
                 .withName("Elbow");
         // TODO: currently disabled as we don't have the proper kinematics for these subsystems
-        shoulder.disable();
+//        shoulder.disable();
         elbow.disable();
     }
 
@@ -163,12 +171,12 @@ public class Vance extends RobotConfig {
         /**
          * Expansion 2: sh
          */
-        public DcMotor shoulder;
+        public Motor shoulder;
 
         /**
          * Expansion 1: el
          */
-        public DcMotor elbow;
+        public DcMotorEx elbow;
 
         /**
          * Expansion Servo 0: in
