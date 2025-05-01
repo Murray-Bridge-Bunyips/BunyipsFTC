@@ -53,41 +53,41 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
         robot.drive.makeTrajectory(currentPoseMap)
                 .strafeTo(new Vector2d(-24*1.8, 24*1.3), Inches)
                 .strafeTo(new Vector2d(-24*1.8, 8), Inches)
-                .strafeToLinearHeading(new Vector2d(-24*2.3, 8), Inches, 90, Degrees)
-                .strafeTo(new Vector2d(-24*2.3, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(-24*2.3, 24*2), Inches)
+                .strafeToLinearHeading(new Vector2d(-24*2.4, 8), Inches, 90, Degrees)
+                .strafeTo(new Vector2d(-24*2.4, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*2.4, 24*2), Inches)
                 .waitFor(2, Seconds)
                 .addTask();
-
-        add(robot.drive.makeTrajectory(new Pose2d(-24*2.3, 24*1.5, Math.toRadians(90)), currentPoseMap)
-                .strafeTo(new Vector2d(-24*2.6, 24*2.465), Inches)
+// a man that is here his name was giulio
+        add(robot.drive.makeTrajectory(new Pose2d(-24*2.4, 24*2, Math.toRadians(90)), currentPoseMap)
+                .strafeTo(new Vector2d(-24*2.5, 24*2.47), Inches)
                 .build()
                 // moving lift up to correct height to grab specimen
-                .with(robot.lift.tasks.goTo(300).timeout(Seconds.of(0.2)))
+                .with(robot.lift.tasks.goTo(270).timeout(Seconds.of(0.2)))
                 //TODO: test this timeout
         );
 
         add(robot.outtakeGrip.tasks.close());
-        add(wait(0.1, Seconds));
+        wait(0.1, Seconds);
 
         // moving lift up above so specimen is off the wall
         add(robot.lift.tasks.goTo(700));
 
-        add(robot.drive.makeTrajectory(new Pose2d(-24*2.5, 24*2.48, Math.toRadians(90)), currentPoseMap)
-                .strafeTo(new Vector2d(-24*2.1, 24*2.35), Inches)
-                .strafeToLinearHeading(new Vector2d(0, 24+8), Inches, 270, Degrees)
+        add(robot.drive.makeTrajectory(new Pose2d(-24*2.6, 24*2.47, Math.toRadians(90)), currentPoseMap)
+                .strafeTo(new Vector2d(-24*2, 24*1.835), Inches)
+                .strafeToLinearHeading(new Vector2d(0, 24+8.8), Inches, 270, Degrees)
                 .build()
                 // moving lift up ready to hang specimen
-                .with(robot.lift.tasks.goTo(2400)));
+                .with(robot.lift.tasks.goTo(2400).timeout(Seconds.of(1.2))));
 
         // moving lift down to hang specimen
-        add(robot.lift.tasks.goTo(1900));
-        add(wait(0.1, Seconds));
+        add(robot.lift.tasks.goTo(1730).timeout(Seconds.of(0.6)));
+        wait(0.05, Seconds);
 
         add(robot.outtakeGrip.tasks.open());
 
-        add(robot.drive.makeTrajectory(new Pose2d(0, 24+9, Math.toRadians(270)), currentPoseMap)
-                .strafeTo(new Vector2d(-24*3, 24*2.5), Inches)
+        add(robot.drive.makeTrajectory(new Pose2d(0, 24+8.8, Math.toRadians(270)), currentPoseMap)
+                .strafeTo(new Vector2d(-24*3, 24*2.5), Inches) // mods ban this guy
                 .build()
                 .with(robot.lift.tasks.home()));
     }
