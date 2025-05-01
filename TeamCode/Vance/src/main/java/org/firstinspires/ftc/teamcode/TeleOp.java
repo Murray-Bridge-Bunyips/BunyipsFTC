@@ -28,7 +28,7 @@ public class TeleOp extends CommandBasedBunyipsOpMode {
         gamepad1.set(Controls.AnalogGroup.STICKS, UnaryFunction.SQUARE_KEEP_SIGN);
     }
 
-//giulio is not here
+//giulio is not here and giulio is very annoying and he definitely typed this and it totally was not madison. Burger = burger
 
     @Override
     protected void assignCommands() {
@@ -36,5 +36,8 @@ public class TeleOp extends CommandBasedBunyipsOpMode {
         hvdt.withFieldCentric(() -> FIELD_CENTRIC_ENABLED).setAsDefaultTask();
         driver().whenPressed(Controls.A)
                 .run(hvdt::resetFieldCentricOrigin);
+
+        vance.shoulder.tasks.control(() -> -gamepad2.lsy).setAsDefaultTask();
+        vance.elbow.tasks.control(() -> -gamepad2.rsy).setAsDefaultTask();
     }
 }

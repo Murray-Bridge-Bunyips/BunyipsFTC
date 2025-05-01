@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Amps;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -32,10 +33,18 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
  *
  * @author Lachlan Paul, 2024
  */
-@Config
 @RobotConfig.AutoInit
 public class Vance extends RobotConfig {
-    public static double kP, kI, kD;
+    @Config
+    public static class ShoulderConstants {
+        public static double kP = 0.01, kI = 0.2, kD = 0.0015;
+    }
+
+    @Config
+    public static class ElbowConstants {
+        public static double kP = 0.03, kI = 0.2, kD = 0.0;
+    }
+
     public static Vance instance = new Vance();
     public final Hardware hw = new Hardware();
     public MecanumDrive drive;
@@ -86,11 +95,16 @@ public class Vance extends RobotConfig {
 
         hw.intake = getHardware("in", CRServo.class);
         hw.shoulder = getHardware("sh", Motor.class, (d) -> {
-            PIDController pid = new PIDController(kP, kI, kD);
+            PIDController pid = new PIDController(ShoulderConstants.kP, ShoulderConstants.kI, ShoulderConstants.kD);
             d.setRunToPositionController(pid);
-            BunyipsOpMode.getInstance().onActiveLoop(() -> pid.setPID(kP, kI, kD));
+            BunyipsOpMode.getInstance().onActiveLoop(() -> pid.setPID(ShoulderConstants.kP, ShoulderConstants.kI, ShoulderConstants.kD));
         });
-        hw.elbow = getHardware("el", DcMotorEx.class);
+        hw.elbow = getHardware("el", Motor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+            PIDController pid = new PIDController(ElbowConstants.kP, ElbowConstants.kI, ElbowConstants.kD);
+            d.setRunToPositionController(pid);
+            BunyipsOpMode.getInstance().onActiveLoop(() -> pid.setPID(ElbowConstants.kP, ElbowConstants.kI, ElbowConstants.kD));
+        });
 
         DriveModel driveModel = new DriveModel.Builder()
                 .setInPerTick(100.0 / 50775.0) // 0.001969473
@@ -118,13 +132,13 @@ public class Vance extends RobotConfig {
                 .withName("Drive");
 
         shoulder = new HoldableActuator(hw.shoulder)
-                .withUserSetpointControl((dt) -> 100 * dt) // TODO: currently enabled for tuning
+                .withUserSetpointControl((dt) -> 150 * dt)
+                .withOvercurrent(Amps.of(6), Seconds.of(2))
                 .withName("Shoulder");
         elbow = new HoldableActuator(hw.elbow)
+                .withUserSetpointControl((dt) -> 50 * dt)
+                .withOvercurrent(Amps.of(6), Seconds.of(2))
                 .withName("Elbow");
-        // TODO: currently disabled as we don't have the proper kinematics for these subsystems
-//        shoulder.disable();
-        elbow.disable();
     }
 
     public static class Hardware {
@@ -176,7 +190,7 @@ public class Vance extends RobotConfig {
         /**
          * Expansion 1: el
          */
-        public DcMotorEx elbow;
+        public Motor elbow;
 
         /**
          * Expansion Servo 0: in

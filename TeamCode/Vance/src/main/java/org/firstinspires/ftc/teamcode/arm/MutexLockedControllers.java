@@ -28,8 +28,8 @@ public class MutexLockedControllers {
         public First() {
             super(MutexLockedControllers.this.first, NULL, (out, ignored) -> {
                 MutexLockedControllers.this.update();
-                return mutexOwnedBy != 2 ? out : 0; // TODO: these really should be stopping target position from changing
-                                                    //  not turning off power output completely
+                return mutexOwnedBy != 2 ? out : 0; // these really should be stopping target position from changing
+                                                    // not turning off power output completely
             });
         }
     }
