@@ -37,7 +37,12 @@ public class TeleOp extends CommandBasedBunyipsOpMode {
         driver().whenPressed(Controls.A)
                 .run(hvdt::resetFieldCentricOrigin);
 
-        // TODO: y should output, a should input
+        operator().whenPressed(Controls.Y)
+                .run(vance.intake.tasks.run(Vance.EJECT).asPriority())
+                .finishIfButtonRetriggered();
+        operator().whenPressed(Controls.A)
+                .run(vance.intake.tasks.run(Vance.INTAKE).asPriority())
+                .finishIfButtonRetriggered();
         vance.shoulder.tasks.control(() -> -gamepad2.lsy).setAsDefaultTask();
         vance.elbow.tasks.control(() -> -gamepad2.rsy).setAsDefaultTask();
     }

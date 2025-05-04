@@ -15,8 +15,6 @@ import com.qualcomm.robotcore.hardware.IMU;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Time;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.ThreeWheelLocalizer;
@@ -24,9 +22,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.Perio
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 
 /**
  * FTC 22407 INTO THE DEEP 2024-2025 robot configuration and subsystems
@@ -35,6 +33,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
  */
 @RobotConfig.AutoInit
 public class Vance extends RobotConfig {
+    public static final int INTAKE = 1;
+    public static final int EJECT = -1;
+
     @Config
     public static class ShoulderConstants {
         public static double kP = 0.01, kI = 0.2, kD = 0.0015, TPS = 300;
@@ -50,19 +51,7 @@ public class Vance extends RobotConfig {
     public MecanumDrive drive;
     public HoldableActuator shoulder;
     public HoldableActuator elbow;
-
-    public Task runIntake(DcMotorSimple.Direction direction, Measure<Time> timeout) {
-        return Task.task()
-                .init(() -> {
-                    // Forward or 1 is intake
-                    hw.intake.setPower(direction == DcMotorSimple.Direction.FORWARD ? 1 : -1);
-                })
-                .onFinish(() -> {  // and a mah linter say "use lambda" but i tell em i don' wanna this looks bettah(imo)
-                    hw.intake.setPower(0.0);
-                })
-                .timeout(timeout)
-                .named("Run Intake for " + timeout);
-    }
+    public Actuator intake;
 
     @Override
     protected void onRuntime() {
@@ -139,6 +128,7 @@ public class Vance extends RobotConfig {
                 .withUserSetpointControl((dt) -> ElbowConstants.TPS * dt)
                 .withOvercurrent(Amps.of(6), Seconds.of(2))
                 .withName("Elbow");
+        intake = new Actuator(hw.intake);
     }
 
     public static class Hardware {
