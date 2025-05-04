@@ -37,12 +37,12 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 public class Vance extends RobotConfig {
     @Config
     public static class ShoulderConstants {
-        public static double kP = 0.01, kI = 0.2, kD = 0.0015;
+        public static double kP = 0.01, kI = 0.2, kD = 0.0015, TPS = 300;
     }
 
     @Config
     public static class ElbowConstants {
-        public static double kP = 0.03, kI = 0.2, kD = 0.0;
+        public static double kP = 0.03, kI = 0.2, kD = 0.0, TPS = 100;
     }
 
     public static Vance instance = new Vance();
@@ -132,11 +132,11 @@ public class Vance extends RobotConfig {
                 .withName("Drive");
 
         shoulder = new HoldableActuator(hw.shoulder)
-                .withUserSetpointControl((dt) -> 150 * dt)
+                .withUserSetpointControl((dt) -> ShoulderConstants.TPS * dt)
                 .withOvercurrent(Amps.of(6), Seconds.of(2))
                 .withName("Shoulder");
         elbow = new HoldableActuator(hw.elbow)
-                .withUserSetpointControl((dt) -> 50 * dt)
+                .withUserSetpointControl((dt) -> ElbowConstants.TPS * dt)
                 .withOvercurrent(Amps.of(6), Seconds.of(2))
                 .withName("Elbow");
     }
