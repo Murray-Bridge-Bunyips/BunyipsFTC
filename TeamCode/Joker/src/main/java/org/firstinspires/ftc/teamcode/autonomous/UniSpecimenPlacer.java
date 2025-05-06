@@ -50,8 +50,9 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
         robot.drive.setPose(startingPosition.toFieldPose());
         add(robot.outtakeGrip.tasks.open());
 
+        //TODO: make a version of this with values tuned to work on blue (maybe separate OpMode)
         robot.drive.makeTrajectory(currentPoseMap)
-                .strafeTo(new Vector2d(-24*1.8, 24*1.3), Inches)
+                .strafeTo(new Vector2d(-24*1.8, 24*1.4), Inches)
                 .strafeTo(new Vector2d(-24*1.8, 8), Inches)
                 .strafeToLinearHeading(new Vector2d(-24*2.4, 8), Inches, 90, Degrees)
                 .strafeTo(new Vector2d(-24*2.4, 24*2.2+1), Inches)
@@ -60,7 +61,7 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
                 .addTask();
 // a man that is here his name was giulio
         add(robot.drive.makeTrajectory(new Pose2d(-24*2.4, 24*2, Math.toRadians(90)), currentPoseMap)
-                .strafeTo(new Vector2d(-24*2.5, 24*2.47), Inches)
+                .strafeTo(new Vector2d(-24*2.6, 24*2.5), Inches)
                 .build()
                 // moving lift up to correct height to grab specimen
                 .with(robot.lift.tasks.goTo(270).timeout(Seconds.of(0.2)))
@@ -71,11 +72,11 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
         wait(0.1, Seconds);
 
         // moving lift up above so specimen is off the wall
-        add(robot.lift.tasks.goTo(700));
+        add(robot.lift.tasks.goTo(700).timeout(Seconds.of(0.35)));
 
         add(robot.drive.makeTrajectory(new Pose2d(-24*2.6, 24*2.47, Math.toRadians(90)), currentPoseMap)
                 .strafeTo(new Vector2d(-24*2, 24*1.835), Inches)
-                .strafeToLinearHeading(new Vector2d(0, 24+8.8), Inches, 270, Degrees)
+                .strafeToLinearHeading(new Vector2d(0, 24+9.5), Inches, 270, Degrees)
                 .build()
                 // moving lift up ready to hang specimen
                 .with(robot.lift.tasks.goTo(2400).timeout(Seconds.of(1.2))));
