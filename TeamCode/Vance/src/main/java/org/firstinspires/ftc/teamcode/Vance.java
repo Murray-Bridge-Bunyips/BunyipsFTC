@@ -123,10 +123,13 @@ public class Vance extends RobotConfig {
         shoulder = new HoldableActuator(hw.shoulder)
                 .withUserSetpointControl((dt) -> ShoulderConstants.TPS * dt)
                 .withOvercurrent(Amps.of(6), Seconds.of(2))
+                .withMaxSteadyStateTime(Seconds.of(5))
                 .withName("Shoulder");
         elbow = new HoldableActuator(hw.elbow)
                 .withUserSetpointControl((dt) -> ElbowConstants.TPS * dt)
                 .withOvercurrent(Amps.of(6), Seconds.of(2))
+                .withMaxSteadyStateTime(Seconds.of(5))
+                .withHomingPower(1)
                 .withName("Elbow");
         intake = new Actuator(hw.intake);
     }
