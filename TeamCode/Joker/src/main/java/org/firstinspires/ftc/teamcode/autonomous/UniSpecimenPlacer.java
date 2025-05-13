@@ -63,10 +63,9 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
         else {
             grabX = -24*2.4;
             grabY = 24*2.525;
-            hangY = 24+9.4;
+            hangY = 24+9.3;
             alignX = -24*2.3;
         }
-        //TODO: test these!1
 
         robot.drive.makeTrajectory(currentPoseMap)
                 .strafeTo(new Vector2d(-24*1.8, 24*1.4), Inches)
@@ -74,7 +73,7 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
                 .strafeToLinearHeading(new Vector2d(alignX, 8), Inches, 90, Degrees)
                 .strafeTo(new Vector2d(alignX, 24*2.2+1), Inches)
                 .strafeTo(new Vector2d(alignX, 24*2), Inches)
-                .waitFor(2, Seconds)
+                .waitFor(3, Seconds)
                 .addTask();
 // a man that is here his name was giulio
         add(robot.drive.makeTrajectory(new Pose2d(-24*2.4, 24*2, Math.toRadians(90)), currentPoseMap)
@@ -103,8 +102,8 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
 
         add(robot.outtakeGrip.tasks.open());
 
-        add(robot.drive.makeTrajectory(new Pose2d(0, 24+8.8, Math.toRadians(270)), currentPoseMap)
-                .strafeTo(new Vector2d(-24*3, 24*2.5), Inches) // mods ban this guy
+        add(robot.drive.makeTrajectory(new Pose2d(0, hangY, Math.toRadians(270)), currentPoseMap)
+                .strafeTo(new Vector2d(-24*2.75, 24*2.25), Inches) // mods ban this guy
                 .build()
                 .with(robot.lift.tasks.home()));
     }
