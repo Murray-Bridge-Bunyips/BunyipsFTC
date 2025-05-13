@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -35,6 +36,7 @@ public class TeleOp extends CommandBasedBunyipsOpMode {
     @Override
     protected void assignCommands() {
         HolonomicVectorDriveTask hvdt = new HolonomicVectorDriveTask(gamepad1, vance.drive);
+        hvdt.withStabilisationTimeout(Milliseconds.of(1200));
         hvdt.withFieldCentric(() -> FIELD_CENTRIC_ENABLED).setAsDefaultTask();
         driver().whenPressed(Controls.A)
                 .run(hvdt::resetFieldCentricOrigin);
