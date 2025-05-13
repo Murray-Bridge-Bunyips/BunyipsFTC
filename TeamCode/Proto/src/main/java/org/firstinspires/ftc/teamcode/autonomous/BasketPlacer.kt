@@ -84,15 +84,14 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
                         )
                 }
             }
-            // TODO: test
             .setReversed(true)
             .afterTime(
                 0.0,
-                a = Proto.clawLift.tasks.goTo(1900) timeout (3 of Seconds) with Proto.clawRotator.tasks.setTo(0.28)
+                a = Proto.clawLift.tasks.goTo(1900) timeout (3 of Seconds) with Proto.clawRotator.tasks.setTo(0.4)
             )
             .splineToSplineHeading(Pose2d(38.8, 18.9, 180.degToRad()), tangent = 270.degToRad())
             .setVelConstraints(Vel.ofMax(FieldTilesPerSecond.of(0.5)))
-            .splineToConstantHeading(Vector2d(20.0, 9.0), tangent = 180.degToRad())
+            .splineToConstantHeading(Vector2d(18.0, 6.0), tangent = 180.degToRad())
             // giulio is the best coder here i am better then lucas and we all know it. i am java
             .addTask()
     }
