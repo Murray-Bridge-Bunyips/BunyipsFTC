@@ -21,6 +21,8 @@ public class teleop extends BunyipsOpMode {
         double rotateCcw = gamepad1.right_stick_x;
         robot.drive.setPower(Controls.vel(0, forward, rotateCcw));
         robot.drive.update();
+        robot.leftLift.setPower(-gamepad2.lsy);
+        robot.rightLift.setPower(-gamepad2.lsy);
     }
 }
 //he's gone
