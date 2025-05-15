@@ -57,7 +57,7 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
         if (startingPosition.isRed()) {
             grabX = -24*2.6;
             grabY = 24*2.5;
-            hangY = 24+9.5;
+            hangY = 24+9.9; // ziya was HERE. NOPE GIULIO WAS HERE
             alignX = -24*2.4;
         }
         else {
@@ -104,7 +104,7 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
 
         add(robot.drive.makeTrajectory(new Pose2d(0, hangY, Math.toRadians(270)), currentPoseMap)
                 .strafeTo(new Vector2d(-24*2.75, 24*2.25), Inches) // mods ban this guy
-                .build()
+                .build() // mods unban this guy that was the owner of twitch dot television
                 .with(robot.lift.tasks.home()));
     }
 }
