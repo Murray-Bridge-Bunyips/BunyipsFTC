@@ -2,20 +2,25 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds;
 
 import androidx.annotation.Nullable;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Vance;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import dev.frozenmilk.util.cell.RefCell;
 
 @Autonomous
 public class VanceAuto extends AutonomousBunyipsOpMode {
     private final Vance vance = Vance.instance;
+    private final Pose2d basketPos = Geometry.poseFrom(new Vector2d(56.86, 55.04), Inches, 230.00, Degrees);
+    private final int placeHeight = 500;
 
     @Override
     protected void onInitialise() {
@@ -28,7 +33,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
             return;
         }
 
-        String res = (String) selectedOpMode.get();
+        String res = (String) selectedOpMode.get(); // john drake approves!!!!!!!!!!!!
 
         switch (res) {
             case "Red":
@@ -36,13 +41,20 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
             case "Blue":
                 vance.drive.setPose(new Vector2d(36.03, 62.31), Inches, -90.00, Degrees);
                 vance.drive.makeTrajectory()
-                        .splineTo(new Vector2d(49.84, 40.63), Inches, -90.00, Degrees)
-                        .splineTo(new Vector2d(57.71, 54.68), Inches, 50.00, Degrees)
-                        .splineTo(new Vector2d(59.04, 37.97), Inches, -89.71, Degrees)
-                        .splineTo(new Vector2d(58.31, 54.80), Inches, 70.00, Degrees)
-                        .splineTo(new Vector2d(60.98, 38.21), Inches, -70.00, Degrees)
+                        .splineTo(basketPos.position, basketPos.heading)
                         .addTask();
 
+                pickAndPlace(250);
+                pickAndPlace(20);
+                // TODO: TOOD: will need a unique one for third sample since it's against the wall
         }
+    }
+
+
+    private void pickAndPlace(int degreeToTurnTo) {
+        vance.drive.makeTrajectory(basketPos).turn(degreeToTurnTo).addTask();
+        add(vance.shoulder.tasks.home());
+        add(vance.intake.tasks.runFor(Milliseconds.of(500), 1));
+        add(vance.shoulder.tasks.goTo(placeHeight));
     }
 }
