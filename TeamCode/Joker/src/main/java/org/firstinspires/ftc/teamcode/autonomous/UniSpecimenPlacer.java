@@ -1,3 +1,13 @@
+/*
+
+     ^
+    / \
+   / ! \  HI-JACKING HOT SPOT
+  /_____\
+     |
+
+*/
+
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import static org.firstinspires.ftc.teamcode.teleop.TeleOpCommandBASED.startingPos;
@@ -97,7 +107,7 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
                 .with(robot.lift.tasks.goTo(2400).timeout(Seconds.of(1.2))));
 
         // moving lift down to hang specimen
-        add(robot.lift.tasks.goTo(1730).timeout(Seconds.of(0.6)));
+        add(robot.lift.tasks.goTo(1650).timeout(Seconds.of(0.6)));
         wait(0.05, Seconds);
 
         add(robot.outtakeGrip.tasks.open());
