@@ -25,6 +25,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionPro
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 
 /**
  * FTC 22407 INTO THE DEEP 2024-2025 robot configuration and subsystems
@@ -52,6 +53,7 @@ public class Vance extends RobotConfig {
     public HoldableActuator shoulder;
     public HoldableActuator elbow;
     public Actuator intake;
+    public ParallelTaskGroup wholeArmUp;
 
     @Override
     protected void onRuntime() {
@@ -132,6 +134,11 @@ public class Vance extends RobotConfig {
                 .withHomingPower(1)
                 .withName("Elbow");
         intake = new Actuator(hw.intake);
+
+        wholeArmUp = new ParallelTaskGroup(
+            shoulder.tasks.goToProfiled(500),
+            elbow.tasks.goToProfiled(33)
+        );
     }
 
     public static class Hardware {
