@@ -5,9 +5,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PControlle
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.MoveToContourTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Tasks
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.intothedeep.BlueSample
-import org.firstinspires.ftc.teamcode.Proto
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.teamcode.Proto
 
 @TeleOp
 @Disabled

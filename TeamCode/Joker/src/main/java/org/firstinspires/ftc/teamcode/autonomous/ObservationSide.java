@@ -11,12 +11,13 @@ import com.acmerobotics.roadrunner.PoseMap;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-// giulio ws here he is not here anymore :)
+
+import org.firstinspires.ftc.teamcode.Joker;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
-import org.firstinspires.ftc.teamcode.Joker;
 import dev.frozenmilk.util.cell.RefCell;
 
 @Autonomous(name = "Observation Side", preselectTeleOp = "TeleOp")

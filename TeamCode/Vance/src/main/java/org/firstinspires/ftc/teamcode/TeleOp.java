@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.dashboard.config.Config;
 
@@ -51,7 +50,7 @@ public class TeleOp extends CommandBasedBunyipsOpMode {
                 .run(vance.shoulder.tasks.home().then(vance.elbow.tasks.home()));
         // TODO: driver assisted controls here
         operator().whenPressed(Controls.B)
-                .run(vance.shoulder.tasks.goToProfiled(0).timeout(Seconds.of(2)).then(vance.elbow.tasks.goToProfiled(150)));
+                .run(vance.wholeArmUp);
 //        operator().whenPressed(Controls.X)
 //                .run(vance.elbow.tasks.goToProfiled(150));
         vance.shoulder.tasks.control(() -> -gamepad2.lsy).setAsDefaultTask();

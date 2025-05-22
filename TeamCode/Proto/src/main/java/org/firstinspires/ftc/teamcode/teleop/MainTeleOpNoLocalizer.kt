@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.teleop
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.NullLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.default
-import org.firstinspires.ftc.teamcode.Proto
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.teamcode.Proto
 
 /**
  * Variant of [MainTeleOp] that does not use localization for improved raw control.

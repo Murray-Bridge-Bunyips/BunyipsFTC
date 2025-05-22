@@ -2,11 +2,12 @@ package org.firstinspires.ftc.teamcode.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Cellphone;
+import org.firstinspires.ftc.teamcode.common.centerstage.vision.RedTeamProp;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.GetDualSplitContourTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
-import org.firstinspires.ftc.teamcode.Cellphone;
-import org.firstinspires.ftc.teamcode.common.centerstage.vision.RedTeamProp;
 
 /**
  * Test triple spike mark positions.
