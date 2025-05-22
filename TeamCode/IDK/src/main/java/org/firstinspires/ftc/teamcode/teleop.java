@@ -23,6 +23,13 @@ public class teleop extends BunyipsOpMode {
         robot.drive.update();
         robot.leftLift.setPower(-gamepad2.lsy);
         robot.rightLift.setPower(-gamepad2.lsy);
+        robot.rotator.setPower(-gamepad2.rsy);
+        robot.rotator.update();
+        if (gamepad2.a)
+            robot.claw.close();
+        if (gamepad2.y)
+            robot.claw.open();
+        robot.claw.update();
     }
 }
 //he's gone
