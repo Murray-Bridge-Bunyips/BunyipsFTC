@@ -5,13 +5,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Time
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
@@ -21,11 +18,11 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.loop
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.task
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
 import com.acmerobotics.roadrunner.ftc.RawEncoder
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
@@ -65,25 +62,14 @@ object Proto : RobotConfig() {
     lateinit var clawLift: HoldableActuator
 
     /**
+     * `clawIntake` control.
+     */
+    lateinit var intake: Actuator
+
+    /**
      * Forward camera.
      */
     lateinit var camera: Vision
-
-    enum class IntakeDirection(val power: Double) {
-        RETRIEVE(1.0),
-        EJECT(-1.0)
-    }
-
-    fun runIntake(direction: IntakeDirection, duration: Measure<Time> = 500 of Milliseconds) =
-        task {
-            timeout(duration)
-            init {
-                hw.clawIntake?.power = direction.power
-            }
-            onFinish {
-                hw.clawIntake?.power = 0.0
-            }
-        }
 
     override fun onRuntime() {
         // Base is from GLaDOS
@@ -128,6 +114,8 @@ object Proto : RobotConfig() {
         }
         hw.clawRotator = getHardware("cr", ServoEx::class.java) {
             it.direction = Servo.Direction.REVERSE
+            it.scaleRange(Constants.cr_MIN, Constants.cr_MAX)
+            BunyipsOpMode.ifRunning { o -> o.onActiveLoop { it.scaleRange(Constants.cr_MIN, Constants.cr_MAX) }}
             it.setPositionDeltaThreshold(0.02)
         }
 
@@ -193,6 +181,8 @@ object Proto : RobotConfig() {
             .withName("Drive")
         clawRotator = Switch(hw.clawRotator)
             .withName("Claw Rotator")
+        intake = Actuator(hw.clawIntake)
+            .withName("Intake")
         clawLift = HoldableActuator(hw.clawLift)
             .withBottomSwitch(hw.bottom)
             .withUserSetpointControl { dt -> dt * Constants.cl_TPS }

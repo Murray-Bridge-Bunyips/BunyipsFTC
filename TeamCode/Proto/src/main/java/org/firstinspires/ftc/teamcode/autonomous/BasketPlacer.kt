@@ -40,14 +40,14 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
             .splineToLinearHeading(poseHeadingRad = basket, tangent = basket.heading)
             .stopAndAdd(
                 Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
-                    .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
+                    .then(Proto.intake.tasks.runFor(500 of Milliseconds, Constants.i_EJECT))
             ).also {
                 for (waypoint in waypoints) {
                     it.setReversed(true)
                         .afterTime(
                             0.0,
                             a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open().after(1 of Seconds))
-                                .with(Proto.runIntake(Proto.IntakeDirection.RETRIEVE, 3 of Seconds))
+                                .with(Proto.intake.tasks.runFor(3 of Seconds, Constants.i_INTAKE))
                         )
                         .setVelConstraints { _, _, s -> if (s >= 30) 12.0 else 40.0 }
                         .splineToSplineHeading(
@@ -80,7 +80,7 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
                         .splineToSplineHeading(poseHeadingRad = basket, tangent = basket.heading)
                         .stopAndAdd(
                             Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
-                                .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
+                                .then(Proto.intake.tasks.runFor(500 of Milliseconds, Constants.i_EJECT))
                         )
                 }
             }
