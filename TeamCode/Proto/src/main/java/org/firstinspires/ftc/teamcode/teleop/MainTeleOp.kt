@@ -20,7 +20,7 @@ open class MainTeleOp : CommandBasedBunyipsOpMode() {
         HolonomicVectorDriveTask(gamepad1, Proto.drive).setAsDefaultTask()
         driver() whenPressed Controls.BACK run HolonomicDriveTask(gamepad1, Proto.drive) finishIf { gamepad1 rising Controls.BACK }
         Proto.clawLift.tasks.control { -gamepad2.lsy.toDouble() }.setAsDefaultTask()
-        Proto.clawRotator.tasks.controlDelta { gamepad2.rsy.toDouble() * 0.5f * (timer.deltaTime() to Seconds) }.setAsDefaultTask()
+        Proto.clawRotator.tasks.controlDelta { gamepad2.rsy.toDouble() * (timer.deltaTime() to Seconds) }.setAsDefaultTask()
         Proto.intake.tasks.control { if (gamepad2.x) 1.0 else if (gamepad2.y) -1.0 else 0.0 }.setAsDefaultTask()
         operator() whenRising (Controls.Analog.RIGHT_TRIGGER to { v -> v == 1.0f }) run Proto.clawLift.tasks.home() finishIf { gamepad2.lsy != 0.0f }
     }

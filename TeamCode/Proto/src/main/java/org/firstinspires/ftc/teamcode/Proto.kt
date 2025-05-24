@@ -23,7 +23,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.loop
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
 import com.acmerobotics.roadrunner.ftc.RawEncoder
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
@@ -32,7 +31,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.IMU
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 
 /**
  * FTC 15215 INTO THE DEEP 2024-2025 robot configuration
@@ -65,11 +63,6 @@ object Proto : RobotConfig() {
      * `clawIntake` control.
      */
     lateinit var intake: Actuator
-
-    /**
-     * Forward camera.
-     */
-    lateinit var camera: Vision
 
     override fun onRuntime() {
         // Base is from GLaDOS
@@ -143,8 +136,6 @@ object Proto : RobotConfig() {
         }
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
 
-        hw.camera = getHardware("webcam", WebcamName::class.java)
-
         // RoadRunner drivebase configuration
         val dm = DriveModel.Builder()
             .setDistPerTick(100.0 of Inches, 109586.0) // 0.000912525
@@ -175,7 +166,6 @@ object Proto : RobotConfig() {
 //                .right(Inches.one())
 //                .apply()
 //        }
-        camera = Vision(hw.camera)
         drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu as IMU, hardwareMap.voltageSensor)
             .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe, hw.ppe, hw.imu?.get()))
             .withName("Drive")
@@ -187,6 +177,7 @@ object Proto : RobotConfig() {
             .withBottomSwitch(hw.bottom)
             .withUserSetpointControl { dt -> dt * Constants.cl_TPS }
             .withMaxSteadyStateTime(10 of Seconds)
+            .withLowerLimit(Constants.cl_MIN)
             .withUpperLimit(Constants.cl_MAX)
             .withName("Claw Lift")
 
@@ -260,10 +251,5 @@ object Proto : RobotConfig() {
          * Control Digital 1: "bottom" limit for claw lift
          */
         var bottom: TouchSensor? = null
-
-        /**
-         * Control USB 3.0: Webcam
-         */
-        var camera: WebcamName? = null
     }
 }
