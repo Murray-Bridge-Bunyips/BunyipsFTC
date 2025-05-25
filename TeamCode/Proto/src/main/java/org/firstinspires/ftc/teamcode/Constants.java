@@ -12,8 +12,8 @@ public final class Constants {
     public static double cl_TPS = 2000;
     public static long cl_MIN = 70;
     public static long cl_MAX = 5700;
-    public static double cr_MIN = 0.2525;
-    public static double cr_MAX = 0.66;
+    public static double cr_MIN = 0.6;
+    public static double cr_MAX = 1;
 
     private Constants() {
     }

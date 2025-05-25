@@ -20,11 +20,11 @@ import org.firstinspires.ftc.teamcode.Proto
 @Autonomous(name = "0+4 Basket Placer, 2nd tile from LEFT wall touching, 90° CCW", preselectTeleOp = "TeleOp")
 class BasketPlacer : AutonomousBunyipsOpMode() {
     private val basketLiftTarget = Constants.cl_MAX.toInt() - 925
-    private val basket = Pose2d(54.6, 53.6, 40.degToRad())
+    private val basket = Pose2d(55.6, 52.9, 40.degToRad())
     private val waypoints = listOf(
-        Pose2d(27.62, 34.51, -30.degToRad()) to (10 to -5),
-        Pose2d(29.5, 37.5, -30.degToRad()) to (15 to -10),
-        Pose2d(36.04, 38.79, -30.degToRad()) to (15 to -10)
+        Pose2d(25.62, 36.2, -30.degToRad()) to (10 to -5),
+        Pose2d(27.5, 37.7, -30.degToRad()) to (15 to -10),
+        Pose2d(32.2, 37.5, -30.degToRad()) to (15 to -10)
     )
 
     override fun onReady(selectedOpMode: RefCell<*>?) {
