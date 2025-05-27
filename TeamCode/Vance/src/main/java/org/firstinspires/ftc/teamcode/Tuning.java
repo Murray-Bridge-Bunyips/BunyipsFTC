@@ -1,22 +1,17 @@
-package org.firstinspires.ftc.teamcode.debug;
+package org.firstinspires.ftc.teamcode;
 
 import androidx.annotation.NonNull;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Joker;
-
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.RoadRunnerDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.tuning.RoadRunnerTuningOpMode;
 
-@TeleOp
-public class JokerRoadRunnerTuning extends RoadRunnerTuningOpMode {
-    private final Joker robot = new Joker();
-
+@TeleOp(name = "RoadRunner Tuning")
+public class Tuning extends RoadRunnerTuningOpMode {
     @NonNull
     @Override
     protected RoadRunnerDrive getDrive() {
-        robot.init();
-        return robot.drive;
+        return Vance.instance.drive;
     }
 }

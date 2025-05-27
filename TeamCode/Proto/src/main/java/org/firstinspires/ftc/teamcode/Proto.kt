@@ -5,13 +5,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PController
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Time
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
@@ -21,12 +18,11 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.loop
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.Companion.task
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision
 import com.acmerobotics.roadrunner.ftc.RawEncoder
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
@@ -35,7 +31,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.IMU
 import com.qualcomm.robotcore.hardware.Servo
 import com.qualcomm.robotcore.hardware.TouchSensor
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName
 
 /**
  * FTC 15215 INTO THE DEEP 2024-2025 robot configuration
@@ -65,25 +60,9 @@ object Proto : RobotConfig() {
     lateinit var clawLift: HoldableActuator
 
     /**
-     * Forward camera.
+     * `clawIntake` control.
      */
-    lateinit var camera: Vision
-
-    enum class IntakeDirection(val power: Double) {
-        RETRIEVE(1.0),
-        EJECT(-1.0)
-    }
-
-    fun runIntake(direction: IntakeDirection, duration: Measure<Time> = 500 of Milliseconds) =
-        task {
-            timeout(duration)
-            init {
-                hw.clawIntake?.power = direction.power
-            }
-            onFinish {
-                hw.clawIntake?.power = 0.0
-            }
-        }
+    lateinit var intake: Actuator
 
     override fun onRuntime() {
         // Base is from GLaDOS
@@ -128,6 +107,8 @@ object Proto : RobotConfig() {
         }
         hw.clawRotator = getHardware("cr", ServoEx::class.java) {
             it.direction = Servo.Direction.REVERSE
+            it.scaleRange(Constants.cr_MIN, Constants.cr_MAX)
+            BunyipsOpMode.ifRunning { o -> o.onActiveLoop { it.scaleRange(Constants.cr_MIN, Constants.cr_MAX) }}
             it.setPositionDeltaThreshold(0.02)
         }
 
@@ -154,8 +135,6 @@ object Proto : RobotConfig() {
             }
         }
         hw.bottom = getHardware("bottom", TouchSensor::class.java)
-
-        hw.camera = getHardware("webcam", WebcamName::class.java)
 
         // RoadRunner drivebase configuration
         val dm = DriveModel.Builder()
@@ -187,16 +166,18 @@ object Proto : RobotConfig() {
 //                .right(Inches.one())
 //                .apply()
 //        }
-        camera = Vision(hw.camera)
         drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu as IMU, hardwareMap.voltageSensor)
             .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe, hw.ppe, hw.imu?.get()))
             .withName("Drive")
         clawRotator = Switch(hw.clawRotator)
             .withName("Claw Rotator")
+        intake = Actuator(hw.clawIntake)
+            .withName("Intake")
         clawLift = HoldableActuator(hw.clawLift)
             .withBottomSwitch(hw.bottom)
             .withUserSetpointControl { dt -> dt * Constants.cl_TPS }
             .withMaxSteadyStateTime(10 of Seconds)
+            .withLowerLimit(Constants.cl_MIN)
             .withUpperLimit(Constants.cl_MAX)
             .withName("Claw Lift")
 
@@ -270,10 +251,5 @@ object Proto : RobotConfig() {
          * Control Digital 1: "bottom" limit for claw lift
          */
         var bottom: TouchSensor? = null
-
-        /**
-         * Control USB 3.0: Webcam
-         */
-        var camera: WebcamName? = null
     }
 }

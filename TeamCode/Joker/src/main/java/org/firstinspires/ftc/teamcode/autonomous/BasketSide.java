@@ -14,10 +14,12 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.Joker;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
-import org.firstinspires.ftc.teamcode.Joker;
 import dev.frozenmilk.util.cell.RefCell;
 
 @Autonomous(name = "Basket Side", preselectTeleOp = "TeleOp")
@@ -31,7 +33,7 @@ public class BasketSide extends AutonomousBunyipsOpMode {
         setOpModes(
                 StartingConfiguration.redLeft().tile(2).backward(Inches.of(4)),
                 StartingConfiguration.blueLeft().tile(2).backward(Inches.of(4))
-        );
+        ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
         //robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
@@ -50,12 +52,12 @@ public class BasketSide extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(24*2.1, 8), Inches)
                 .strafeTo(new Vector2d(24*2.1, 24*3-(9+3.5-2.5)), Inches)
                 .strafeTo(new Vector2d(24*2.1, 8), Inches)
-                .strafeTo(new Vector2d(24*2.6, 8), Inches)
-                .strafeTo(new Vector2d(24*2.6, 24*2.2+1), Inches)
-                .strafeTo(new Vector2d(24*2.6, 8), Inches)
-                .strafeTo(new Vector2d(24*3.15, 8), Inches)
-                .strafeTo(new Vector2d(24*3.15, 24*2-2), Inches)
-                .strafeTo(new Vector2d(24*3.15-6, 24*2-2-6), Inches)
+                .strafeTo(new Vector2d(24*2.7, 8), Inches)
+                .strafeTo(new Vector2d(24*2.7, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(24*2.7, 8), Inches)
+                .strafeTo(new Vector2d(24*3.3, 8), Inches)
+                .strafeTo(new Vector2d(24*3.3, 24*2-2), Inches)
+                .strafeTo(new Vector2d(24*3.3-6, 24*2-2-6), Inches)
                 .addTask();
 //giulio is better then you and he is java still and he is also so cool
 // *than

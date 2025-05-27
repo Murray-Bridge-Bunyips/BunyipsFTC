@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.teleop
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask
-import org.firstinspires.ftc.teamcode.Proto
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.teamcode.Proto
 
 /**
  * Drivebase and localizer only TeleOp with auto-lock.

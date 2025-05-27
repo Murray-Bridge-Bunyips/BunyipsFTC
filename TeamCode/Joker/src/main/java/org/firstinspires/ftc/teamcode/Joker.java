@@ -16,8 +16,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsLib;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.EncoderTicks;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforward;
@@ -25,7 +25,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFee
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsLib;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
@@ -34,6 +33,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.EncoderTicks;
 
 /**
  * who am i? hmmmm, hm hm hm
@@ -260,7 +260,7 @@ public class Joker extends RobotConfig {
                 .withBottomSwitch(hw.liftBotStop)
                 //.map(handoverPoint, 1500)
                 .withPowerClamps(-1, 1)
-                .withUpperLimit(4375)
+                .withUpperLimit(4200) // TODO: calibrate this
                 .withOvercurrent(Amps.of(7.5), Seconds.of(1))
                 .withUserSetpointControl((dt) -> 1600 * dt)
                 .withName("lift");

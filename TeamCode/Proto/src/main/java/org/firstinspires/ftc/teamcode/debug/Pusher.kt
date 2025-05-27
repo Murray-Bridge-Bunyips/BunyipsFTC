@@ -5,10 +5,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.o
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
-import org.firstinspires.ftc.teamcode.Proto
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import com.qualcomm.robotcore.hardware.DcMotor
+import org.firstinspires.ftc.teamcode.Proto
 
 /**
  * Null OpMode that reports the current robot position and can be pushed around the field.

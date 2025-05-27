@@ -66,7 +66,7 @@ public class VanceTeleOp extends CommandBasedBunyipsOpMode {
 //        operator().whenRising(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1.0)
 //                .run(robot.verticalLift.tasks.home());
 
-        // todo: test this goofy stuff
+        // test this goofy stuff
         //  might be inefficient for drivers
         //  or just not work lmao
         //  also very messy tbh

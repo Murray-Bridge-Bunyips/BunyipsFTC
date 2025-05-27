@@ -11,3 +11,5 @@ include ':Vance'
 project(":Vance").projectDir = new File("TeamCode/Vance")
 include ':Joker'
 project(":Joker").projectDir = new File("TeamCode/Joker")
+include ':IDK'
+project(":IDK").projectDir = new File("TeamCode/IDK")

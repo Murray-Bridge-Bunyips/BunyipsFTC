@@ -5,6 +5,8 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Rad
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Joker;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Angle;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
@@ -13,9 +15,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
-//import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
-
-import org.firstinspires.ftc.teamcode.Joker;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 // bubner hamchurger
 
 /**
@@ -31,33 +31,19 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
     protected void onInitialise() {
         robot.init();
         robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN);
-//        if (startingPos == null) {
-//            offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
-//            Dbg.log("offset was null");
-//        } else if (startingPos.isLeft()) {
-//            if (startingPos.isBlue()) {
-//                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble() - Math.PI / 2);
-//                Dbg.log("offset was left blue");
-//            } else if (startingPos.isRed()) {
-//                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble() + Math.PI / 2);
-//                Dbg.log("offset was left red");
-//            }
-//        } else if (startingPos.isRight()) {
-//
-//            if (startingPos.isBlue()) {
-//                offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
-//                Dbg.log("offset was right blue");
-//            } else if (startingPos.isRed()) {
-//                offset = Radians.of(-Storage.memory().lastKnownPosition.heading.toDouble());
-//                Dbg.log("offset was right red");
-//            }
-//        }
-//        else {
-//            offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
-//            Dbg.log("offset was not null or a valid position");
-//        }
-        // TODO: test this, red just works with the above code
-        offset = Radians.of(startingPos.toFieldPose().heading.toDouble());
+        // below is a fragile piece of code known only as the field centric fixer
+        // it did not work until it did with the same code for no reason
+        if (startingPos == null) {
+            offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
+            Dbg.log("startingPos was null");
+        } else if (startingPos.isRed() || startingPos.isBlue()) {
+            offset = Radians.of(startingPos.toFieldPose().heading.toDouble());
+            Dbg.log("startingPos was valid (red or blue)");
+        }
+        else {
+            offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
+            Dbg.log("startingPos was not null or valid");
+        }
         Dbg.log(offset);
         startingPos = null;
     }
@@ -80,7 +66,7 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
         driver().whenPressed(Controls.A)
                 .run(driveTask::resetFieldCentricOrigin);
         driver().whenPressed(Controls.Y)
-                .run(() -> driveTask.setFieldCentricOffset(Radians.of(-robot.drive.getPose().heading.toDouble())));
+                .run(() -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
         robot.drive.setDefaultTask(driveTask);
         robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.lsy));

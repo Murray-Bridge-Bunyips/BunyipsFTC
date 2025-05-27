@@ -2,9 +2,9 @@ package org.firstinspires.ftc.teamcode.debug
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor
-import org.firstinspires.ftc.teamcode.Proto
 import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
+import org.firstinspires.ftc.teamcode.Proto
 
 @TeleOp(name = "Test Vertical Lift", group = "a")
 @Disabled

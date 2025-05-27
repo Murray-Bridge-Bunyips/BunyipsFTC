@@ -4,9 +4,11 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf.degToRad
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Unit.Companion.of
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTilesPerSecond
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.constraints.Vel
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft
 import com.acmerobotics.roadrunner.Pose2d
 import com.acmerobotics.roadrunner.Vector2d
@@ -18,11 +20,11 @@ import org.firstinspires.ftc.teamcode.Proto
 @Autonomous(name = "0+4 Basket Placer, 2nd tile from LEFT wall touching, 90° CCW", preselectTeleOp = "TeleOp")
 class BasketPlacer : AutonomousBunyipsOpMode() {
     private val basketLiftTarget = Constants.cl_MAX.toInt() - 925
-    private val basket = Pose2d(54.6, 53.6, 40.degToRad())
+    private val basket = Pose2d(55.6, 52.9, 40.degToRad())
     private val waypoints = listOf(
-        Pose2d(27.62, 34.51, -30.degToRad()) to (10 to -5),
-        Pose2d(29.5, 37.5, -30.degToRad()) to (15 to -10),
-        Pose2d(36.04, 38.79, -30.degToRad()) to (15 to -10)
+        Pose2d(25.62, 36.2, -30.degToRad()) to (10 to -5),
+        Pose2d(27.5, 37.7, -30.degToRad()) to (15 to -10),
+        Pose2d(32.2, 37.5, -30.degToRad()) to (15 to -10)
     )
 
     override fun onReady(selectedOpMode: RefCell<*>?) {
@@ -38,14 +40,14 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
             .splineToLinearHeading(poseHeadingRad = basket, tangent = basket.heading)
             .stopAndAdd(
                 Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
-                    .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
+                    .then(Proto.intake.tasks.runFor(500 of Milliseconds, Constants.i_EJECT))
             ).also {
                 for (waypoint in waypoints) {
                     it.setReversed(true)
                         .afterTime(
                             0.0,
                             a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open().after(1 of Seconds))
-                                .with(Proto.runIntake(Proto.IntakeDirection.RETRIEVE, 3 of Seconds))
+                                .with(Proto.intake.tasks.runFor(3 of Seconds, Constants.i_INTAKE))
                         )
                         .setVelConstraints { _, _, s -> if (s >= 30) 12.0 else 40.0 }
                         .splineToSplineHeading(
@@ -78,10 +80,18 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
                         .splineToSplineHeading(poseHeadingRad = basket, tangent = basket.heading)
                         .stopAndAdd(
                             Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
-                                .then(Proto.runIntake(Proto.IntakeDirection.EJECT))
+                                .then(Proto.intake.tasks.runFor(500 of Milliseconds, Constants.i_EJECT))
                         )
                 }
             }
+            .setReversed(true)
+            .afterTime(
+                0.0,
+                a = Proto.clawLift.tasks.goTo(1900) timeout (3 of Seconds) with Proto.clawRotator.tasks.setTo(0.4)
+            )
+            .splineToSplineHeading(Pose2d(38.8, 18.9, 180.degToRad()), tangent = 270.degToRad())
+            .setVelConstraints(Vel.ofMax(FieldTilesPerSecond.of(0.5)))
+            .splineToConstantHeading(Vector2d(18.0, 6.0), tangent = 180.degToRad())
             // giulio is the best coder here i am better then lucas and we all know it. i am java
             .addTask()
     }

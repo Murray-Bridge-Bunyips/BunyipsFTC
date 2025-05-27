@@ -6,11 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
+import org.firstinspires.ftc.teamcode.common.centerstage.vision.BlueTeamProp;
+import org.firstinspires.ftc.teamcode.common.centerstage.vision.RedTeamProp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.ColourTunerOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.ColourThreshold;
-import org.firstinspires.ftc.teamcode.common.centerstage.vision.BlueTeamProp;
-import org.firstinspires.ftc.teamcode.common.centerstage.vision.RedTeamProp;
 
 /**
  * Colour tuner for red+blue team props

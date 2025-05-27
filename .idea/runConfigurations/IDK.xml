@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Proto" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
-    <module name="BunyipsFTC.Proto.main" />
+  <configuration default="false" name="IDK" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+    <module name="BunyipsFTC.IDK.main" />
     <option name="DEPLOY" value="true" />
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
     <option name="DEPLOY_AS_INSTANT" value="false" />
@@ -64,7 +64,7 @@
     <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
     <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
     <method v="2">
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="removeSlothRemote" externalProjectPath="$PROJECT_DIR$/TeamCode/Proto" vmOptions="" scriptParameters="" />
+      <option name="Gradle.BeforeRunTask" enabled="false" tasks="removeSlothRemote" externalProjectPath="$PROJECT_DIR$/TeamCode/IDK" vmOptions="" scriptParameters="" />
       <option name="Android.Gradle.BeforeRunTask" enabled="true" />
     </method>
   </configuration>
