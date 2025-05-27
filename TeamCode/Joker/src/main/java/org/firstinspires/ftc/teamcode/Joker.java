@@ -260,9 +260,10 @@ public class Joker extends RobotConfig {
                 .withBottomSwitch(hw.liftBotStop)
                 //.map(handoverPoint, 1500)
                 .withPowerClamps(-1, 1)
-                .withUpperLimit(4200) // TODO: calibrate this
+                .withUpperLimit(4200)
                 .withOvercurrent(Amps.of(7.5), Seconds.of(1))
                 .withUserSetpointControl((dt) -> 1600 * dt)
+                .withTolerance(10)
                 .withName("lift");
         if (BunyipsLib.getOpMode().getClass().isAnnotationPresent(Autonomous.class)) {
             lift.withTolerance(10);

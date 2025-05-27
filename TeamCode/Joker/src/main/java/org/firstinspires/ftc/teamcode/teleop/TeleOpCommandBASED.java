@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -47,7 +48,7 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
         Dbg.log(offset);
         startingPos = null;
     }
-
+//Giulio was here and he is better than you at coding
     @Override
     protected void onStart() {
         robot.outtakeGrip.open();
@@ -57,6 +58,13 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
     protected void assignCommands() {
         operator().whenPressed(Controls.RIGHT_BUMPER)
                 .run(robot.outtakeGrip.tasks.toggle());
+
+        operator().whenPressed(Controls.A)
+                .run(robot.lift.tasks.home().timeout(Seconds.of(3)));
+        operator().whenPressed(Controls.X)
+                .run(robot.lift.tasks.goTo(270).timeout(Seconds.of(3)));
+        operator().whenPressed(Controls.Y)
+                .run(robot.lift.tasks.goTo(2400).timeout(Seconds.of(2)));
 
         robot.ascentArm.setDefaultTask(robot.ascentArm.tasks.control(() -> gamepad2.dpad_left ? -0.3 : gamepad2.dpad_right ? 0.3 : 0));
 
