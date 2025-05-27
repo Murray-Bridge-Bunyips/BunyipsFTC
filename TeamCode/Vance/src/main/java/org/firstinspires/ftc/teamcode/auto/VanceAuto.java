@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Vance;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.TurnTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import dev.frozenmilk.util.cell.RefCell;
 
@@ -27,16 +28,20 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
-        vance.drive.setPose(new Vector2d(35.51, 66.60), Inches, -90.00, Degrees);
+//        vance.drive.setPose(new Vector2d(35.51, 66.60), Inches, -90.00, Degrees);
+//        vance.drive.makeTrajectory()
+//                .strafeTo(new Vector2d(58.93, 55.54), Inches)
+//                .turn(-40, Degrees)
+//                .addTask();
+        vance.drive.setPose(new Vector2d(45.91, 59.88), Inches, 230.00, Degrees);
         vance.drive.makeTrajectory()
-                .strafeTo(new Vector2d(58.93, 55.54), Inches)
-                .turn(-40, Degrees)
+                .strafeTo(new Vector2d(56.45, 56.19), Inches)
                 .addTask();
 
         add(vance.wholeArmUp);
         add(vance.intake.tasks.runFor(Milliseconds.of(500), vance.EJECT));
 
-        pickAndPlace(8);
+        pickAndPlace(20);
         // TODO: TOOD: will need a unique one for third sample since it's against the wall
     }
 
@@ -47,8 +52,12 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
 
         add(turnTask);
         add(vance.shoulder.tasks.home());
-        add(vance.elbow.tasks.goToProfiled(pickUpPos));
-        add(vance.intake.tasks.runFor(Milliseconds.of(500), 1));
+
+        new ParallelTaskGroup(
+            add(vance.elbow.tasks.goToProfiled(pickUpPos)),
+            add(vance.intake.tasks.runFor(Milliseconds.of(2000), 1))
+        );
+
         add(reverseTurnTask);
         add(vance.wholeArmUp);
         add(vance.intake.tasks.runFor(Milliseconds.of(500), 1));
