@@ -10,8 +10,8 @@ import org.firstinspires.ftc.teamcode.Proto
 @Disabled
 class VerticalLiftTest : BunyipsOpMode() {
     override fun activeLoop() {
-        Proto.clawLift.setPower(-gamepad1.lsy.toDouble())
-        Proto.clawLift.update()
-        Motor.debug(Proto.hw.clawLift!!, "Claw Lift", t)
+        Proto.lift.setPower(-gamepad1.lsy.toDouble())
+        Proto.lift.update()
+        Motor.debug(Proto.hw.lift!!, "Claw Lift", t)
     }
 }

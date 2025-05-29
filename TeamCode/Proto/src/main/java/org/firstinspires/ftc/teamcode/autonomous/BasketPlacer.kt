@@ -28,6 +28,7 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
     )
 
     override fun onReady(selectedOpMode: RefCell<*>?) {
+        Proto.rotator.update()
         Proto.drive.pose = blueLeft()
             .tile(2.0)
             .backward(2 of Inches)
@@ -36,17 +37,17 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
             .toFieldPose()
         Proto.drive.makeTrajectory()
             .setTangent(270.0, Degrees)
-            .afterTime(0.0, a = Proto.clawLift.tasks.goTo(basketLiftTarget))
+            .afterTime(0.0, a = Proto.lift.tasks.goTo(basketLiftTarget))
             .splineToLinearHeading(poseHeadingRad = basket, tangent = basket.heading)
             .stopAndAdd(
-                Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
+                Proto.rotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
                     .then(Proto.intake.tasks.runFor(500 of Milliseconds, Constants.i_EJECT))
             ).also {
                 for (waypoint in waypoints) {
                     it.setReversed(true)
                         .afterTime(
                             0.0,
-                            a = Proto.clawLift.tasks.home().with(Proto.clawRotator.tasks.open().after(1 of Seconds))
+                            a = Proto.lift.tasks.home().with(Proto.rotator.tasks.open().after(1 of Seconds))
                                 .with(Proto.intake.tasks.runFor(3 of Seconds, Constants.i_INTAKE))
                         )
                         .setVelConstraints { _, _, s -> if (s >= 30) 12.0 else 40.0 }
@@ -64,7 +65,7 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
                         .resetVelConstraints()
                         .afterTime(
                             0.0,
-                            a = Proto.clawLift.tasks.goTo(basketLiftTarget).with(Proto.clawRotator.tasks.close())
+                            a = Proto.lift.tasks.goTo(basketLiftTarget).with(Proto.rotator.tasks.close())
                         ).also { last ->
                             if (waypoint == waypoints.last())
                                 last
@@ -79,7 +80,7 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
                         .setTangent(90.0, Degrees)
                         .splineToSplineHeading(poseHeadingRad = basket, tangent = basket.heading)
                         .stopAndAdd(
-                            Proto.clawRotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
+                            Proto.rotator.tasks.setTo(0.5).forAtLeast(500 of Milliseconds)
                                 .then(Proto.intake.tasks.runFor(500 of Milliseconds, Constants.i_EJECT))
                         )
                 }
@@ -87,7 +88,7 @@ class BasketPlacer : AutonomousBunyipsOpMode() {
             .setReversed(true)
             .afterTime(
                 0.0,
-                a = Proto.clawLift.tasks.goTo(1900) timeout (3 of Seconds) with Proto.clawRotator.tasks.setTo(0.4)
+                a = Proto.lift.tasks.goTo(1900) timeout (3 of Seconds) with Proto.rotator.tasks.setTo(0.4)
             )
             .splineToSplineHeading(Pose2d(38.8, 18.9, 180.degToRad()), tangent = 270.degToRad())
             .setVelConstraints(Vel.ofMax(FieldTilesPerSecond.of(0.5)))

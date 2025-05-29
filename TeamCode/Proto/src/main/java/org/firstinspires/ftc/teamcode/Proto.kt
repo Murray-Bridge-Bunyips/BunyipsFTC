@@ -30,7 +30,6 @@ import com.qualcomm.robotcore.hardware.DcMotorEx
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.IMU
 import com.qualcomm.robotcore.hardware.Servo
-import com.qualcomm.robotcore.hardware.TouchSensor
 
 /**
  * FTC 15215 INTO THE DEEP 2024-2025 robot configuration
@@ -52,12 +51,12 @@ object Proto : RobotConfig() {
     /**
      * `claws` rotation mechanism.
      */
-    lateinit var clawRotator: Switch
+    lateinit var rotator: Switch
 
     /**
      * Vertical lift for the claw mechanism (`claws` and `clawRotator`).
      */
-    lateinit var clawLift: HoldableActuator
+    lateinit var lift: HoldableActuator
 
     /**
      * `clawIntake` control.
@@ -102,17 +101,17 @@ object Proto : RobotConfig() {
         }
 
         // End effectors
-        hw.clawIntake = getHardware("cs", SimpleRotator::class.java) {
+        hw.intake = getHardware("cs", SimpleRotator::class.java) {
             it.setPowerDeltaThreshold(0.02)
         }
-        hw.clawRotator = getHardware("cr", ServoEx::class.java) {
+        hw.rotator = getHardware("cr", ServoEx::class.java) {
             it.direction = Servo.Direction.REVERSE
             it.scaleRange(Constants.cr_MIN, Constants.cr_MAX)
             BunyipsOpMode.ifRunning { o -> o.onActiveLoop { it.scaleRange(Constants.cr_MIN, Constants.cr_MAX) }}
             it.setPositionDeltaThreshold(0.02)
         }
 
-        hw.clawLift = getHardware("cl", Motor::class.java) {
+        hw.lift = getHardware("cl", Motor::class.java) {
             it.direction = DcMotorSimple.Direction.REVERSE
             val p = PController(Constants.cl_kP)
             val ff = ElevatorFeedforward(0.0, Constants.cl_kG, 0.0, 0.0, { 0.0 }, { 0.0 })
@@ -134,7 +133,6 @@ object Proto : RobotConfig() {
                 }
             }
         }
-        hw.bottom = getHardware("bottom", TouchSensor::class.java)
 
         // RoadRunner drivebase configuration
         val dm = DriveModel.Builder()
@@ -169,21 +167,19 @@ object Proto : RobotConfig() {
         drive = MecanumDrive(dm, mp, mg, hw.fl, hw.bl, hw.br, hw.fr, hw.imu as IMU, hardwareMap.voltageSensor)
             .withLocalizer(TwoWheelLocalizer(dm, twl, hw.pe, hw.ppe, hw.imu?.get()))
             .withName("Drive")
-        clawRotator = Switch(hw.clawRotator)
+        rotator = Switch(hw.rotator)
             .withName("Claw Rotator")
-        intake = Actuator(hw.clawIntake)
+        intake = Actuator(hw.intake)
             .withName("Intake")
-        clawLift = HoldableActuator(hw.clawLift)
-            .withBottomSwitch(hw.bottom)
+        lift = HoldableActuator(hw.lift)
             .withUserSetpointControl { dt -> dt * Constants.cl_TPS }
             .withMaxSteadyStateTime(10 of Seconds)
-            .withLowerLimit(Constants.cl_MIN)
             .withUpperLimit(Constants.cl_MAX)
             .withName("Claw Lift")
 
         if (BunyipsLib.opMode.javaClass.isAnnotationPresent(Autonomous::class.java)) {
-            BunyipsOpMode.instance.setInitTask(clawLift.tasks.home().during(loop { clawLift.update() }))
-            clawLift.withTolerance(25)
+            BunyipsOpMode.instance.setInitTask(lift.tasks.home().with(loop { lift.update() } timeout (5 of Seconds)))
+            lift.withTolerance(25)
         }
 
 //        BunyipsOpMode.ifRunning {
@@ -235,21 +231,16 @@ object Proto : RobotConfig() {
         /**
          * Control S1: Claw Spinny "cs"
          */
-        var clawIntake: SimpleRotator? = null
+        var intake: SimpleRotator? = null
 
         /**
          * Control S2: Claw Rotator "cr"
          */
-        var clawRotator: Servo? = null
+        var rotator: Servo? = null
 
         /**
          * Control 1: Claw Lift "cl"
          */
-        var clawLift: Motor? = null
-
-        /**
-         * Control Digital 1: "bottom" limit for claw lift
-         */
-        var bottom: TouchSensor? = null
+        var lift: Motor? = null
     }
 }
