@@ -22,8 +22,6 @@ import dev.frozenmilk.util.cell.RefCell;
 public class VanceAuto extends AutonomousBunyipsOpMode {
     private final Vance vance = Vance.instance;
     private final Pose2d basketPos = Geometry.poseFrom(new Vector2d(58.93, 55.54), Inches, -50, Degrees);
-    private final int shPlaceHeight = 500;
-    private final int elPlaceHeight = 33;
     private final int pickUpPos = 156;
 
     @Override

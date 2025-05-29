@@ -39,7 +39,7 @@ public class Vance extends RobotConfig {
 
     @Config
     public static class ShoulderConstants {
-        public static double kP = 0.01, kI = 0.2, kD = 0.0015, TPS = 300;
+        public static double kP = 0.01,/*0.001*/ kI = 0.2, kD = 0.0015/*0.00005*/, TPS = 300/*900*/;
     }
 
     @Config
