@@ -34,7 +34,6 @@ public class BasketSide extends AutonomousBunyipsOpMode {
                 StartingConfiguration.redLeft().tile(2).backward(Inches.of(4)),
                 StartingConfiguration.blueLeft().tile(2).backward(Inches.of(4))
         ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
-        //robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override

@@ -32,7 +32,6 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
                 StartingConfiguration.redRight().tile(2.5).backward(Inches.of(4)),
                 StartingConfiguration.blueRight().tile(2.5).backward(Inches.of(4))
         ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
-        //robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     @Override
@@ -62,9 +61,5 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
                 .addTask();
 
         add(robot.lift.tasks.goTo(375));
-
-        //run(() -> robot.outtakeAlign.setPosition(Joker.OUTTAKE_ALIGN_OUT_POSITION));
-
-        //run(() -> robot.outtakeGrip.setPosition(Joker.OUTTAKE_GRIP_OPEN_POSITION));
     }
 }

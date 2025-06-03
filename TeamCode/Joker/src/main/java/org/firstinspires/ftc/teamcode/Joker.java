@@ -93,10 +93,6 @@ public class Joker extends RobotConfig {
          * Control Hub 2: lights
          */
         public RevBlinkinLedDriver lights;
-        //**
-        //* Control Hub 2: intakeGrip
-        //*/
-        //public Servo intakeGrip;
 
         /**
          * Control Hub 0-1 (1 used): liftLimiter
@@ -110,10 +106,6 @@ public class Joker extends RobotConfig {
          * Control Hub 4-5 (5 used): intakeOutStop
          */
         public TouchSensor intakeOutStop;
-        //**
-        //* Control Hub 6-7 (7 used): handoverPoint
-        //*/
-        //public TouchSensor handoverPoint;
 
         /**
          * Internally connected
@@ -186,16 +178,13 @@ public class Joker extends RobotConfig {
         hw.ascentArm = getHardware("arm", Motor.class,
                 d -> d.setRunToPositionController(new PIDController(0.01, 0, 0.00001)));
 
-        //outtakeAlign = getHardware("outtakeAlign", Servo.class);
         hw.spintake = getHardware("spintake", CRServo.class);
         hw.outtakeGrip = getHardware("outtakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
-        //intakeGrip = getHardware("intakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
         hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
 
         hw.liftBotStop = getHardware("liftLimiter", TouchSensor.class);
         hw.intakeInStop = getHardware("intakeInStop", TouchSensor.class);
         hw.intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
-        //handoverPoint = getHardware("handoverPoint", TouchSensor.class);
 
         hw.imu = getHardware("imu", IMUEx.class, d ->
                 d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -221,26 +210,6 @@ public class Joker extends RobotConfig {
                 .setHeadingGain(2)
                 .build();
 
-        // roadrunner values for the robot with its ascent (at least in its previous state)
-        /*
-        DriveModel driveModel = new DriveModel.Builder()
-                .setInPerTick((141-(9*2))/6587.0)
-                .setLateralInPerTick((141-(18-(1.25+1)))/5497)
-                .setTrackWidthTicks(1554.4972402944102)
-                .build();
-        MotionProfile motionProfile = new MotionProfile.Builder()
-                .setMaxWheelVel(InchesPerSecond.of(40))
-                .setKv(0.004282156597587529)
-                .setKs(1.3328330798412233)
-                .setKa(0.00035)
-                .build();
-        MecanumGains mecanumGains = new MecanumGains.Builder()
-                .setAxialGain(3.5)
-                .setLateralGain(3.5)
-                .setHeadingGain(2)
-                .build();
-        */
-
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, hw.imu, hardwareMap.voltageSensor)
                 .withName("drive");
 
@@ -258,7 +227,6 @@ public class Joker extends RobotConfig {
 
         lift = new HoldableActuator(hw.liftMotor)
                 .withBottomSwitch(hw.liftBotStop)
-                //.map(handoverPoint, 1500)
                 .withPowerClamps(-1, 1)
                 .withUpperLimit(4200)
                 .withOvercurrent(Amps.of(7.5), Seconds.of(1))
@@ -269,7 +237,7 @@ public class Joker extends RobotConfig {
             lift.withTolerance(10);
         }
 
-        //can be replaced w/ pid controller if hook motor gets an encoder (not really needed though)
+        // can be replaced w/ pid controller if hook motor gets an encoder (not really needed though)
         hw.hook.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         ascentArm = new HoldableActuator(hw.ascentArm)
@@ -280,22 +248,5 @@ public class Joker extends RobotConfig {
         
         outtakeGrip = new Switch(hw.outtakeGrip, 0, 0.6)
                 .withName("outtake grip");
-
-        //intakeGrip.setPosition(INTAKE_GRIP_OPEN_POSITION);
-
-        //BELOW IS THE EVIL YELLOW-CARD GIVING LINE OF CODE!!1
-        //outtakeGrip.setPosition(OUTTAKE_GRIP_OPEN_POSITION);
     }
-
-    /*
-    public void toggleOuttake() {
-        if (outtakeFacingOut) {
-            outtakeAlign.setPosition(OUTTAKE_ALIGN_IN_POSITION);
-            outtakeFacingOut = false;
-        }
-        else {
-            outtakeAlign.setPosition(OUTTAKE_ALIGN_OUT_POSITION);
-            outtakeFacingOut = true;
-        }
-    */
-    }
+}
