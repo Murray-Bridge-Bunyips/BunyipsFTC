@@ -136,7 +136,7 @@ public class Vance extends RobotConfig {
 
         wholeArmUp = new ParallelTaskGroup(
             shoulder.tasks.goToProfiled(500),
-            elbow.tasks.goToProfiled(40)
+            elbow.tasks.goToProfiled(100)
         );
     }
 

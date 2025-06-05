@@ -45,16 +45,16 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
 
 
     private void pickAndPlace(int degreesToTurn) {
-        TurnTask turnTask = new TurnTask(vance.drive, Degrees.of(degreesToTurn));
-        TurnTask reverseTurnTask = new TurnTask(vance.drive, Degrees.of(-degreesToTurn));
+        TurnTask turnTask = new TurnTask(vance.drive, Degrees.of(degreesToTurn), true);
+        TurnTask reverseTurnTask = new TurnTask(vance.drive, Degrees.of(-degreesToTurn), true);
 
         add(turnTask);
         add(vance.shoulder.tasks.home());
 
-        new ParallelTaskGroup(
-            add(vance.elbow.tasks.goToProfiled(pickUpPos)),
-            add(vance.intake.tasks.runFor(Milliseconds.of(2000), 1))
-        );
+        add(new ParallelTaskGroup(
+                vance.elbow.tasks.goToProfiled(pickUpPos),
+                vance.intake.tasks.runFor(Milliseconds.of(2000), 1)
+        ));
 
         add(reverseTurnTask);
         add(vance.wholeArmUp);
