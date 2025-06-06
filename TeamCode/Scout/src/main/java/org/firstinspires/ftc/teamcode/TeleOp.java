@@ -16,7 +16,7 @@ public class TeleOp extends BunyipsOpMode {
             mul += 0.25;
         mul = Mathf.clamp(mul, 0, 1);
         telemetry.addData("Speed Multiplier (adjust with BACK+LB/RB)", mul);
-        Scout.instance.drive.setPower(Geometry.vel((gamepad1.rt - gamepad1.lt) * mul, 0, gamepad1.lsx * mul));
+        Scout.instance.drive.setPower(Geometry.vel((gamepad1.rt - gamepad1.lt) * mul, 0, -gamepad1.lsx * mul));
         Scout.instance.drive.update();
     }
 }
