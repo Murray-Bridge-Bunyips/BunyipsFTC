@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
-import org.firstinspires.ftc.teamcode.finder.ScoutFinder;
+import org.firstinspires.ftc.teamcode.tuning.MotorDirection;
 
 import java.util.Collections;
 
@@ -40,7 +40,16 @@ public class Scout extends RobotConfig {
         left = getHardware("l", DcMotor.class, d -> d.setDirection(Constants.LEFT_WHEEL_DIRECTION));
         right = getHardware("r", DcMotor.class, d -> d.setDirection(Constants.RIGHT_WHEEL_DIRECTION));
         imu = getHardware("imu", IMU.class, d -> d.initialize(new IMU.Parameters(
-                new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, Constants.IMU_USB_DIRECTION))
+                new RevHubOrientationOnRobot(
+                        // Assumes the hub is mounted with the logo facing upwards for +Z axis.
+                        // https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html
+                        // Note that the TankDrive instance uses encoders to determine rotation, if this is inaccurate
+                        // set the accumulator on the TankDrive to a CustomAccumulator using IMU readings for heading.
+                        // The IMU is used exclusively during tuning as a control.
+                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                        // USB direction on an upwards facing logo does not impact the Z axis, we don't use the other axes
+                        RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                ))
         ));
 
         DriveModel dm = new DriveModel.Builder()
@@ -55,12 +64,11 @@ public class Scout extends RobotConfig {
 
     /**
      * Constants that can vary per minibot construction. Ensure to build with the correct configuration.
-     * The {@link ScoutFinder} OpMode can assist in this.
+     * The {@link MotorDirection} OpMode can assist in this.
      */
     @Config
     public static class Constants {
         public static DcMotorSimple.Direction LEFT_WHEEL_DIRECTION = DcMotorSimple.Direction.FORWARD;
         public static DcMotorSimple.Direction RIGHT_WHEEL_DIRECTION = DcMotorSimple.Direction.REVERSE;
-        public static RevHubOrientationOnRobot.UsbFacingDirection IMU_USB_DIRECTION = RevHubOrientationOnRobot.UsbFacingDirection.LEFT;
     }
 }
