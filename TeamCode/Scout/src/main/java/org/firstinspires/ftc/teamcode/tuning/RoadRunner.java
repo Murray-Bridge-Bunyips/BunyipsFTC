@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.tuning;
 
 import androidx.annotation.NonNull;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import org.firstinspires.ftc.teamcode.Scout;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.RoadRunnerDrive;
@@ -10,7 +12,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.tuning.RoadRunnerTun
 /**
  * RoadRunner tuning OpMode.
  */
-// OpMode is registered in the Registrar class
+@TeleOp(name = "RoadRunner Tuning", group = "tuning")
 public class RoadRunner extends RoadRunnerTuningOpMode {
     @NonNull
     @Override

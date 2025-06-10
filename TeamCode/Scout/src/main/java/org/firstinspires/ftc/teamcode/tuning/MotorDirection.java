@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.tuning;
 
 import androidx.annotation.Nullable;
 
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -17,8 +18,8 @@ import dev.frozenmilk.util.cell.RefCell;
  *
  * @author Lucas Bubner, 2025
  */
-// OpMode is registered in the Registrar class
 @RobotConfig.InhibitAutoInit
+@TeleOp(name = "Motor Direction Finder", group = "tuning")
 public class MotorDirection extends AutonomousBunyipsOpMode {
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
