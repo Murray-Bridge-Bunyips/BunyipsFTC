@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.Vance;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.TurnTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import dev.frozenmilk.util.cell.RefCell;
@@ -22,7 +23,7 @@ import dev.frozenmilk.util.cell.RefCell;
 public class VanceAuto extends AutonomousBunyipsOpMode {
     private final Vance vance = Vance.instance;
     private final Pose2d basketPos = Geometry.poseFrom(new Vector2d(58.93, 55.54), Inches, -50, Degrees);
-    private final int pickUpPos = 156;
+    private final int pickUpPos = 791;
 
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
@@ -33,16 +34,15 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
 //                .addTask();
         vance.drive.setPose(new Vector2d(45.91, 59.88), Inches, 230.00, Degrees);
         vance.drive.makeTrajectory()
-                .strafeTo(new Vector2d(56.45, 56.19), Inches)
+                .strafeTo(new Vector2d(57.45, 57.19), Inches)
                 .addTask();
 
         add(vance.wholeArmUp);
         add(vance.intake.tasks.runFor(Milliseconds.of(500), vance.EJECT));
 
-        pickAndPlace(20);
+        pickAndPlace(30);
         // TODO: TOOD: will need a unique one for third sample since it's against the wall
     }
-
 
     private void pickAndPlace(int degreesToTurn) {
         TurnTask turnTask = new TurnTask(vance.drive, Degrees.of(degreesToTurn), true);
@@ -58,6 +58,7 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
 
         add(reverseTurnTask);
         add(vance.wholeArmUp);
+        add(new WaitTask(Milliseconds.of(500)));  // give time for the arm to stabilise before throwing up
         add(vance.intake.tasks.runFor(Milliseconds.of(500), 1));
     }
 }
