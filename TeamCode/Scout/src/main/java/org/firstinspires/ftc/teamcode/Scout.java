@@ -68,7 +68,7 @@ public class Scout extends RobotConfig {
      */
     @Config
     public static class Constants {
-        public static DcMotorSimple.Direction LEFT_WHEEL_DIRECTION = DcMotorSimple.Direction.FORWARD;
-        public static DcMotorSimple.Direction RIGHT_WHEEL_DIRECTION = DcMotorSimple.Direction.REVERSE;
+        public static DcMotorSimple.Direction LEFT_WHEEL_DIRECTION = DcMotorSimple.Direction.REVERSE;
+        public static DcMotorSimple.Direction RIGHT_WHEEL_DIRECTION = DcMotorSimple.Direction.FORWARD;
     }
 }
