@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.tuning.MotorDirection;
 import java.util.Collections;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TankLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.TankGains;
@@ -60,6 +61,10 @@ public class Scout extends RobotConfig {
         TankGains tg = new TankGains.Builder()
                 .build();
         drive = new TankDrive(dm, mp, tg, Collections.singletonList(left), Collections.singletonList(right), imu, hardwareMap.voltageSensor);
+
+        TankLocalizer localizer = (TankLocalizer) drive.getLocalizer();
+        localizer.leftEncs.get(0).setDirection(Constants.LEFT_WHEEL_DIRECTION);
+        localizer.rightEncs.get(0).setDirection(Constants.RIGHT_WHEEL_DIRECTION);
     }
 
     /**
