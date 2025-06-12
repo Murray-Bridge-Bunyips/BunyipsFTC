@@ -51,6 +51,11 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
         add(turnTask);
         add(vance.shoulder.tasks.home());
 
+        // move back a bit
+        vance.drive.makeTrajectory()
+                .strafeTo(new Vector2d(vance.drive.getPose().position.x, vance.drive.getPose().position.y - 7))
+                .addTask();
+
         add(new ParallelTaskGroup(
                 vance.elbow.tasks.goToProfiled(pickUpPos),
                 vance.intake.tasks.runFor(Milliseconds.of(2000), 1)
