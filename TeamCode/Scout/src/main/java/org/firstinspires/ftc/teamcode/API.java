@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.ExportToBlocks;
 import java.util.ArrayDeque;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Hook;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Ref;
@@ -100,7 +101,9 @@ public class API extends BlocksOpModeCompanion {
                 continue;
             }
             current.execute();
+            linearOpMode.telemetry.addData("Runtime (s)", Mathf.round(linearOpMode.getRuntime(), 1));
+            linearOpMode.telemetry.addData("Executing", current.toVerboseString());
+            linearOpMode.telemetry.update();
         }
-        linearOpMode.requestOpModeStop();
     }
 }
