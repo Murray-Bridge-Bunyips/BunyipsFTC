@@ -151,6 +151,8 @@ public class Joker extends RobotConfig {
     //live mecanum wheel rolling on keyboard reaction:
     //Zzzzzzzzzzzzzzzzzzzzzzzzzzzssxccfvgbhnjk,l.....;///'/'
 
+    //TODO: CONFIGURE HOOK AND TOUCH SENSORS
+
     @Override
     protected void onRuntime() {
         hw.frontLeft = getHardware("front_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
