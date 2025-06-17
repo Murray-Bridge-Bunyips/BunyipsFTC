@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Centimeters;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -54,9 +57,13 @@ public class Scout extends RobotConfig {
         ));
 
         DriveModel dm = new DriveModel.Builder()
-                // TODO
+                .setInPerTick(Inches.convertFrom(333, Centimeters)/2269)
+                .setTrackWidthTicks(211.84157714243102)
                 .build();
         MotionProfile mp = new MotionProfile.Builder()
+                //TODO: robot thinks its turning more than it think it should
+                .setKv(0.018178431094225414)
+                .setKv(1.2328893171060802)
                 .build();
         TankGains tg = new TankGains.Builder()
                 .build();
