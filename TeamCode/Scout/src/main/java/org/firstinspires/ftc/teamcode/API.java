@@ -1,8 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Centimeters;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Meters;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -36,27 +36,27 @@ public class API extends BlocksOpModeCompanion {
 
     @ExportToBlocks(
             color = 177,
-            comment = "Queues movement forward by the desired distance in metres.",
+            comment = "Queues movement forward by the desired distance in centimeters.",
             heading = "do Movement",
-            parameterLabels = "Meters (Forward)",
-            parameterDefaultValues = "1"
+            parameterLabels = "Centimeters (Forward)",
+            parameterDefaultValues = "30"
     )
-    public static void moveForward(double metres) {
+    public static void moveForward(double centimeters) {
         Task task = Scout.instance.drive.makeTrajectory(lastSplice.get())
-                .strafeTo(lastSplice.get().times(new Vector2d(Inches.convertFrom(metres, Meters), 0)))
+                .strafeTo(lastSplice.get().times(new Vector2d(Inches.convertFrom(centimeters, Centimeters), 0)))
                 .build(lastSplice);
         actions.add(task);
     }
 
     @ExportToBlocks(
             color = 197,
-            comment = "Queues movement backward by the desired distance in metres.",
+            comment = "Queues movement backward by the desired distance in centimeters.",
             heading = "do Movement",
-            parameterLabels = "Meters (Backward)",
-            parameterDefaultValues = "1"
+            parameterLabels = "Centimeters (Backward)",
+            parameterDefaultValues = "30"
     )
-    public static void moveBackward(double metres) {
-        moveForward(-metres);
+    public static void moveBackward(double centimeters) {
+        moveForward(-centimeters);
     }
 
     @ExportToBlocks(
