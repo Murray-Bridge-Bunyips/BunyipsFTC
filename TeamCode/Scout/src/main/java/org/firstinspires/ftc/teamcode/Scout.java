@@ -1,7 +1,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Centimeters;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTilesPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -15,6 +16,7 @@ import java.util.Collections;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TankLocalizer;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.PeriodicIMUAccumulator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.TankGains;
@@ -47,9 +49,8 @@ public class Scout extends RobotConfig {
                 new RevHubOrientationOnRobot(
                         // Assumes the hub is mounted with the logo facing upwards for +Z axis.
                         // https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html
-                        // Note that the TankDrive instance uses encoders to determine rotation, if this is inaccurate
-                        // set the accumulator on the TankDrive to a CustomAccumulator using IMU readings for heading.
-                        // The IMU is used exclusively during tuning as a control.
+                        // Note that the TankDrive instance uses encoders to determine rotation, with periodic
+                        // readings from the IMU to ensure accuracy
                         RevHubOrientationOnRobot.LogoFacingDirection.UP,
                         // USB direction on an upwards facing logo does not impact the Z axis, we don't use the other axes
                         RevHubOrientationOnRobot.UsbFacingDirection.LEFT
@@ -57,17 +58,19 @@ public class Scout extends RobotConfig {
         ));
 
         DriveModel dm = new DriveModel.Builder()
-                .setInPerTick(Inches.convertFrom(333, Centimeters)/2269)
+                .setDistPerTick(Centimeters.of(333), 2269)
                 .setTrackWidthTicks(211.84157714243102)
                 .build();
         MotionProfile mp = new MotionProfile.Builder()
-                //TODO: robot thinks its turning more than it think it should
+                .setKs(1.2328893171060802)
                 .setKv(0.018178431094225414)
-                .setKv(1.2328893171060802)
+                .setKa(0.001)
+                .setMaxWheelVel(FieldTilesPerSecond.of(1))
                 .build();
         TankGains tg = new TankGains.Builder()
                 .build();
-        drive = new TankDrive(dm, mp, tg, Collections.singletonList(left), Collections.singletonList(right), imu, hardwareMap.voltageSensor);
+        drive = new TankDrive(dm, mp, tg, Collections.singletonList(left), Collections.singletonList(right), imu, hardwareMap.voltageSensor)
+                .withAccumulator(new PeriodicIMUAccumulator(imu, Seconds.of(2)));
 
         TankLocalizer localizer = (TankLocalizer) drive.getLocalizer();
         localizer.leftEncs.get(0).setDirection(Constants.LEFT_WHEEL_DIRECTION);
