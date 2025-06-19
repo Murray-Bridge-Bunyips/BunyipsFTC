@@ -6,10 +6,8 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inc
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -29,7 +27,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
@@ -82,17 +79,17 @@ public class Joker extends RobotConfig {
         public DcMotor ascentArm;
 
         /**
-         * Control Hub 0: spintake
+         * Control Hub 0: intakeAlign
          */
-        public CRServo spintake;
+        public Servo intakeAlign;
         /**
          * Control Hub 1: outtakeGrip
          */
         public Servo outtakeGrip;
         /**
-         * Control Hub 2: lights
+         * Control Hub 2: intakeGrip
          */
-        public RevBlinkinLedDriver lights;
+        public Servo intakeGrip;
 
         /**
          * Control Hub 0-1 (1 used): liftLimiter
@@ -132,14 +129,17 @@ public class Joker extends RobotConfig {
     public HoldableActuator ascentArm;
 
     /**
-     * Light Strips BlinkinLights
-     */
-    public BlinkinLights lights;
-
-    /**
      * Outtake Grip Switch
      */
     public Switch outtakeGrip;
+    /**
+     * Intake Grip Switch
+     */
+    public Switch intakeGrip;
+    /**
+     * Intake Align Switch
+     */
+    public Switch intakeAlign;
 
     public static double liftkP = 0.005;
     public static double liftkI = 0.0;
@@ -178,9 +178,9 @@ public class Joker extends RobotConfig {
         hw.ascentArm = getHardware("arm", Motor.class,
                 d -> d.setRunToPositionController(new PIDController(0.01, 0, 0.00001)));
 
-        hw.spintake = getHardware("spintake", CRServo.class);
+        hw.intakeAlign = getHardware("intakeAlign", Servo.class);
+        hw.intakeGrip = getHardware("intakeGrip", Servo.class);
         hw.outtakeGrip = getHardware("outtakeGrip", Servo.class, d -> d.setDirection(Servo.Direction.REVERSE));
-        hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
 
         hw.liftBotStop = getHardware("liftLimiter", TouchSensor.class);
         hw.intakeInStop = getHardware("intakeInStop", TouchSensor.class);
@@ -242,9 +242,6 @@ public class Joker extends RobotConfig {
 
         ascentArm = new HoldableActuator(hw.ascentArm)
                 .withName("ascent");
-
-        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
-                .withName("lights");
         
         outtakeGrip = new Switch(hw.outtakeGrip, 0, 0.6)
                 .withName("outtake grip");

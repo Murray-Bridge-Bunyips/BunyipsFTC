@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import com.acmerobotics.roadrunner.IdentityPoseMap;
 import com.acmerobotics.roadrunner.PoseMap;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Joker;
@@ -39,7 +38,6 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
         if (selectedOpMode == null) return;
         StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
         startingPos = startingPosition;
-        if (startingPosition.isBlue()) {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);} else {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);}
         currentPoseMap = startingPosition.isRed() ? new SymmetricPoseMap() : new IdentityPoseMap();
 
         robot.drive.setPose(startingPosition.toFieldPose());
