@@ -17,6 +17,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.Mathf;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Ref;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 import dev.frozenmilk.util.cell.RefCell;
 
 /**
@@ -30,6 +31,7 @@ public class API extends BlocksOpModeCompanion {
 
     @Hook(on = Hook.Target.POST_STOP)
     private static void cleanup() {
+        Storage.memory().lastKnownPosition = Geometry.zeroPose();
         lastSplice.accept(Geometry.zeroPose());
         actions.clear();
     }
@@ -37,7 +39,7 @@ public class API extends BlocksOpModeCompanion {
     @ExportToBlocks(
             color = 177,
             comment = "Queues movement forward by the desired distance in centimeters.",
-            heading = "do Movement",
+            heading = "queue Movement",
             parameterLabels = "Centimeters (Forward)",
             parameterDefaultValues = "30"
     )
@@ -51,7 +53,7 @@ public class API extends BlocksOpModeCompanion {
     @ExportToBlocks(
             color = 197,
             comment = "Queues movement backward by the desired distance in centimeters.",
-            heading = "do Movement",
+            heading = "queue Movement",
             parameterLabels = "Centimeters (Backward)",
             parameterDefaultValues = "30"
     )
@@ -62,7 +64,7 @@ public class API extends BlocksOpModeCompanion {
     @ExportToBlocks(
             color = 306,
             comment = "Queues Counterclockwise in-place rotation movement by the desired angle in degrees.",
-            heading = "do Rotation",
+            heading = "queue Rotation",
             parameterLabels = "Degrees (Anti-clockwise, left)",
             parameterDefaultValues = "90"
     )
@@ -76,7 +78,7 @@ public class API extends BlocksOpModeCompanion {
     @ExportToBlocks(
             color = 340,
             comment = "Queues Clockwise in-place rotation movement by the desired angle in degrees.",
-            heading = "do Rotation",
+            heading = "queue Rotation",
             parameterLabels = "Degrees (Clockwise, right)",
             parameterDefaultValues = "90"
     )

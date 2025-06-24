@@ -15,6 +15,8 @@ import org.firstinspires.ftc.teamcode.tuning.MotorDirection;
 import java.util.Collections;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Distance;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TankLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.accumulators.PeriodicIMUAccumulator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
@@ -58,19 +60,19 @@ public class Scout extends RobotConfig {
         ));
 
         DriveModel dm = new DriveModel.Builder()
-                .setDistPerTick(Centimeters.of(333), 2269)
-                .setTrackWidthTicks(211.84157714243102)
-                .build();
+                .setDistPerTick(Constants.DISTANCE_PUSHED, Constants.TICKS_REPORTED)
+                .setTrackWidthTicks(Constants.TRACK_WIDTH_TICKS)//pepsi min
+                .build();//zero taste max sugar
         MotionProfile mp = new MotionProfile.Builder()
-                .setKs(1.2328893171060802)
-                .setKv(0.018178431094225414)
-                .setKa(0.001)
                 .setMaxWheelVel(FieldTilesPerSecond.of(1))
+                .setKs(Constants.KS)
+                .setKv(Constants.KV)
+                .setKa(Constants.KA)
                 .build();
         TankGains tg = new TankGains.Builder()
                 .build();
         drive = new TankDrive(dm, mp, tg, Collections.singletonList(left), Collections.singletonList(right), imu, hardwareMap.voltageSensor)
-                .withAccumulator(new PeriodicIMUAccumulator(imu, Seconds.of(2)));
+                .withAccumulator(new PeriodicIMUAccumulator(imu, Seconds.one()));
 
         TankLocalizer localizer = (TankLocalizer) drive.getLocalizer();
         localizer.leftEncs.get(0).setDirection(Constants.LEFT_WHEEL_DIRECTION);
@@ -79,11 +81,20 @@ public class Scout extends RobotConfig {
 
     /**
      * Constants that can vary per minibot construction. Ensure to build with the correct configuration.
-     * The {@link MotorDirection} OpMode can assist in this.
+     * The {@link MotorDirection} OpMode can assist in motor directions.
      */
     @Config
     public static class Constants {
         public static DcMotorSimple.Direction LEFT_WHEEL_DIRECTION = DcMotorSimple.Direction.REVERSE;
         public static DcMotorSimple.Direction RIGHT_WHEEL_DIRECTION = DcMotorSimple.Direction.FORWARD;
+
+        public static Measure<Distance> DISTANCE_PUSHED = Centimeters.of(200);
+        public static double TICKS_REPORTED = 1984;
+
+        public static double TRACK_WIDTH_TICKS = 211.84157714243102;
+
+        public static double KS = 1.2328893171060802;
+        public static double KV = 0.018178431094225414;
+        public static double KA = 0.001;
     }
 }
