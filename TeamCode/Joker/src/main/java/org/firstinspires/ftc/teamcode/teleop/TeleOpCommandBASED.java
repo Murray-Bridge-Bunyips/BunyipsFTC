@@ -57,6 +57,11 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
     protected void assignCommands() {
         operator().whenPressed(Controls.RIGHT_BUMPER)
                 .run(robot.outtakeGrip.tasks.toggle());
+        operator().whenPressed(Controls.LEFT_BUMPER)
+                .run(robot.intakeAlign.tasks.toggle());
+
+        operator().whenRising(Controls.Analog.LEFT_TRIGGER, (v) -> v > 0.9)
+                .run(robot.intakeGrip.tasks.toggle());
 
         operator().whenPressed(Controls.A)
                 .run(robot.lift.tasks.home().timeout(Seconds.of(3)));

@@ -15,7 +15,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsLib;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforward;
@@ -99,10 +98,6 @@ public class Joker extends RobotConfig {
          * Control Hub 2-3 (3 used): intakeInStop
          */
         public TouchSensor intakeInStop;
-        /**
-         * Control Hub 4-5 (5 used): intakeOutStop
-         */
-        public TouchSensor intakeOutStop;
 
         /**
          * Internally connected
@@ -159,6 +154,7 @@ public class Joker extends RobotConfig {
         hw.backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
         hw.intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
+            //TODO: tune this once hardware changes are complete
             EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, 0.333);
             PIDController pid = new PIDController(0.005, 0, 0.00001);
             ArmFeedforward ff = new ArmFeedforward(0, 0.1, 0, 0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
@@ -172,7 +168,6 @@ public class Joker extends RobotConfig {
             ElevatorFeedforward ff = new ElevatorFeedforward(0.0, liftkG, 0.0, 0.0, () -> 0, () -> 0);
             CompositeController c = pid.compose(ff, Double::sum);
             d.setRunToPositionController(c);
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> c.setCoefficients(liftkP, liftkI, liftkD, 0.0, 0.0, liftkG, 0.0, 0.0)));
         });
         hw.hook = getHardware("hook", DcMotor.class);
         hw.ascentArm = getHardware("arm", Motor.class,
@@ -184,7 +179,6 @@ public class Joker extends RobotConfig {
 
         hw.liftBotStop = getHardware("liftLimiter", TouchSensor.class);
         hw.intakeInStop = getHardware("intakeInStop", TouchSensor.class);
-        hw.intakeOutStop = getHardware("intakeOutStop", TouchSensor.class);
 
         hw.imu = getHardware("imu", IMUEx.class, d ->
                 d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -221,7 +215,6 @@ public class Joker extends RobotConfig {
 
         intake = new HoldableActuator(hw.intakeMotor)
                 .withBottomSwitch(hw.intakeInStop)
-                .withTopSwitch(hw.intakeOutStop)
                 .withUserSetpointControl((dt) -> 300 * dt)
                 .withName("intake");
 
@@ -245,5 +238,11 @@ public class Joker extends RobotConfig {
         
         outtakeGrip = new Switch(hw.outtakeGrip, 0, 0.6)
                 .withName("outtake grip");
+
+        intakeGrip = new Switch(hw.intakeGrip, 0, 1)
+                .withName("intake grip");
+
+        intakeAlign = new Switch(hw.intakeAlign, 0, 0.7)
+                .withName("intake align");
     }
 }
