@@ -15,9 +15,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsLib;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ArmFeedforward;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
@@ -29,7 +29,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionPro
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.EncoderTicks;
 
 /**
  * <font color=red>+4</font> <font color=white>Mult</font>
@@ -143,6 +142,10 @@ public class Joker extends RobotConfig {
     public static double liftkD = 0.0;
     public static double liftkG = 0.1;
 
+    public static double intakekP = 0.005;
+    public static double intakekI = 0.0;
+    public static double intakekD = 0.00001;
+
     public final Hardware hw = new Hardware();
 
     //live mecanum wheel rolling on keyboard reaction:
@@ -155,14 +158,12 @@ public class Joker extends RobotConfig {
         hw.backLeft = getHardware("back_left", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         hw.backRight = getHardware("back_right", DcMotor.class, d -> d.setDirection(DcMotorSimple.Direction.REVERSE));
 
+        //giulio was here he is also java and is way better then you at coding
         hw.intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
-            //TODO: tune this once hardware changes are complete
-            EncoderTicks.Generator angleGen = EncoderTicks.createGenerator(d, 0.333);
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
             PIDController pid = new PIDController(0.005, 0, 0.00001);
-            ArmFeedforward ff = new ArmFeedforward(0, 0.1, 0, 0, angleGen::getAngle, angleGen::getAngularVelocity, angleGen::getAngularAcceleration);
-            CompositeController c = new CompositeController(pid, ff, Double::sum);
-            d.setRunToPositionController(c);
-            //giulio was here he is also java and is way better then you at coding
+            d.setRunToPositionController(pid);
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> pid.setCoefficients(intakekP, intakekI, intakekD, 0.0, 0.0, 0.0, 0.0, 0.0)));
         });
         hw.liftMotor = getHardware("liftMotor", Motor.class, d -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);

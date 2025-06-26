@@ -91,6 +91,7 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
         telemetry.addData("lift current position", robot.hw.liftMotor.getCurrentPosition());
         telemetry.addData("lift target position", robot.hw.liftMotor.getTargetPosition());
         telemetry.addData("lift power", robot.hw.liftMotor.getPower());
+        telemetry.addData("intake power", robot.hw.intakeMotor.getPower());
     }
     // lucas bubner was here and NO ONE WILL BELIEVE YOU
 }
