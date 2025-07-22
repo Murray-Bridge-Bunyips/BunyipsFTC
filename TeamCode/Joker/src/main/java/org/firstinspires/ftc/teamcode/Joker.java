@@ -161,7 +161,7 @@ public class Joker extends RobotConfig {
         //giulio was here he is also java and is way better then you at coding
         hw.intakeMotor = getHardware("intakeMotor", Motor.class, d -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
-            PIDController pid = new PIDController(0.005, 0, 0.00001);
+            PIDController pid = new PIDController(intakekP, intakekI, intakekD);
             d.setRunToPositionController(pid);
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> pid.setCoefficients(intakekP, intakekI, intakekD, 0.0, 0.0, 0.0, 0.0, 0.0)));
         });

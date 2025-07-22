@@ -23,6 +23,8 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.TankGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.TankDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 
 /**
  * Generic minibot configuration with two Core Hex motors and upwards logo Control Hub orientation.
@@ -47,17 +49,23 @@ public class Scout extends RobotConfig {
     protected void onRuntime() {
         left = getHardware("l", DcMotor.class, d -> d.setDirection(Constants.LEFT_WHEEL_DIRECTION));
         right = getHardware("r", DcMotor.class, d -> d.setDirection(Constants.RIGHT_WHEEL_DIRECTION));
-        imu = getHardware("imu", IMU.class, d -> d.initialize(new IMU.Parameters(
-                new RevHubOrientationOnRobot(
-                        // Assumes the hub is mounted with the logo facing upwards for +Z axis.
-                        // https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html
-                        // Note that the TankDrive instance uses encoders to determine rotation, with periodic
-                        // readings from the IMU to ensure accuracy
-                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        // USB direction on an upwards facing logo does not impact the Z axis, we don't use the other axes
-                        RevHubOrientationOnRobot.UsbFacingDirection.LEFT
-                ))
-        ));
+        imu = getHardware("imu", IMU.class, d -> {
+            d.initialize(new IMU.Parameters(
+                    new RevHubOrientationOnRobot(
+                            // Assumes the hub is mounted with the logo facing upwards for +Z axis.
+                            // https://ftc-docs.firstinspires.org/en/latest/programming_resources/imu/imu.html
+                            // Note that the TankDrive instance uses encoders to determine rotation, with periodic
+                            // readings from the IMU to ensure accuracy
+                            RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                            // USB direction on an upwards facing logo does not impact the Z axis, we don't use the other axes
+                            RevHubOrientationOnRobot.UsbFacingDirection.LEFT
+                    ))
+            );
+            // Scout does not hold pose information from the previous OpMode
+            d.resetYaw();
+        });
+        // See above comment, we don't store previous information and use a relative system
+        Storage.memory().lastKnownPosition = Geometry.zeroPose();
 
         DriveModel dm = new DriveModel.Builder()
                 .setDistPerTick(Constants.DISTANCE_PUSHED, Constants.TICKS_REPORTED)
