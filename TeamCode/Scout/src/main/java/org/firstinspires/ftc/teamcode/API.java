@@ -16,6 +16,7 @@ import java.util.ArrayDeque;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Hook;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dashboard;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Ref;
 import dev.frozenmilk.util.cell.RefCell;
@@ -128,6 +129,7 @@ public class API extends BlocksOpModeCompanion {
             heading = "Execute drive actions"
     )
     public static void go() {
+        Dashboard.USING_SYNCED_PACKETS = true;
         linearOpMode.telemetry.addData("Queue", actions.toString());
         linearOpMode.telemetry.update();
         linearOpMode.waitForStart();
@@ -142,8 +144,8 @@ public class API extends BlocksOpModeCompanion {
             }
             current.execute();
             linearOpMode.telemetry.addData("Executing", current.toVerboseString());
-            // TODO: does smartAdd() work properly in this telemetry situation?
             linearOpMode.telemetry.update();
+            Dashboard.sendAndClearSyncedPackets();
         }
     }
 }
