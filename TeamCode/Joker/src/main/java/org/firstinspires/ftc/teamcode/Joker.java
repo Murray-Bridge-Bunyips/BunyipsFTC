@@ -218,6 +218,8 @@ public class Joker extends RobotConfig {
 
         intake = new HoldableActuator(hw.intakeMotor)
                 .withBottomSwitch(hw.intakeInStop)
+                .withUpperLimit(400) //TODO: fix issue where motor stops moving before limit but error reaches limit
+                .withHomingPower(0.8)
                 .withUserSetpointControl((dt) -> 300 * dt)
                 .withName("intake");
 
@@ -245,7 +247,7 @@ public class Joker extends RobotConfig {
         intakeGrip = new Switch(hw.intakeGrip, 0, 1)
                 .withName("intake grip");
 
-        intakeAlign = new Switch(hw.intakeAlign, 0, 0.7)
+        intakeAlign = new Switch(hw.intakeAlign, 0, 0.625)
                 .withName("intake align");
     }
 }
