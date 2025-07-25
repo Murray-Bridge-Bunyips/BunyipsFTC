@@ -2,8 +2,16 @@ package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Centimeters;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecondPerSecond;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecondPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.MetersPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.MetersPerSecondPerSecond;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.RadiansPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.RadiansPerSecondPerSecond;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -14,6 +22,15 @@ import org.firstinspires.ftc.robotcore.external.ExportToBlocks;
 import java.util.ArrayDeque;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Hook;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Angle;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Distance;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Velocity;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.TaskBuilder;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.constraints.Accel;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.constraints.Turn;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.constraints.Vel;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dashboard;
@@ -31,6 +48,20 @@ public class API extends BlocksOpModeCompanion {
     private static final RefCell<Pose2d> lastSplice = Ref.of(Geometry.zeroPose());
     private static double distanceMultiplier = 1;
     private static double angleMultiplier = 1;
+    // Assigned on init
+    private static Measure<Velocity<Distance>> maxTransVel = null;
+    private static Measure<Velocity<Velocity<Distance>>> maxTransAccel = null; // Note: symmetric for simplicity
+    private static Measure<Velocity<Angle>> maxAngVel = null;
+    private static Measure<Velocity<Velocity<Angle>>> maxAngAccel = null;
+
+    @Hook(on = Hook.Target.PRE_INIT)
+    private static void init() {
+        MotionProfile mp = Scout.instance.drive.getConstants().getMotionProfile();
+        maxTransVel = InchesPerSecond.of(mp.maxWheelVel);
+        maxTransAccel = InchesPerSecondPerSecond.of(Math.max(Math.abs(mp.maxProfileAccel), Math.abs(mp.minProfileAccel)));
+        maxAngVel = RadiansPerSecond.of(mp.maxAngVel);
+        maxAngAccel = RadiansPerSecondPerSecond.of(mp.maxAngAccel);
+    }
 
     @Hook(on = Hook.Target.POST_STOP)
     private static void cleanup() {
@@ -38,6 +69,13 @@ public class API extends BlocksOpModeCompanion {
         lastSplice.accept(Geometry.zeroPose());
         distanceMultiplier = 1;
         angleMultiplier = 1;
+    }
+
+    private static TaskBuilder startTrajectory(Pose2d startPose) {
+        return Scout.instance.drive.makeTrajectory(startPose)
+                .setVelConstraints(Vel.ofMax(maxTransVel).andMaxAng(maxAngVel))
+                .setAccelConstraints(Accel.ofMin(maxTransAccel.negate()).andMax(maxTransAccel))
+                .setTurnConstraints(Turn.ofMaxVel(maxAngVel).andMinAccel(maxAngAccel.negate()).andMaxAccel(maxAngAccel));
     }
 
     @ExportToBlocks(
@@ -48,7 +86,7 @@ public class API extends BlocksOpModeCompanion {
             parameterDefaultValues = "30"
     )
     public static void moveForward(double centimeters) {
-        Task task = Scout.instance.drive.makeTrajectory(lastSplice.get())
+        Task task = startTrajectory(lastSplice.get())
                 .strafeTo(lastSplice.get().times(new Vector2d(Inches.convertFrom(centimeters * distanceMultiplier, Centimeters), 0)))
                 .build(lastSplice);
         actions.add(task);
@@ -73,7 +111,7 @@ public class API extends BlocksOpModeCompanion {
             parameterDefaultValues = "90"
     )
     public static void rotateCCW(double degrees) {
-        Task task = Scout.instance.drive.makeTrajectory(lastSplice.get())
+        Task task = startTrajectory(lastSplice.get())
                 .turn(degrees * angleMultiplier, Degrees)
                 .build(lastSplice);
         actions.add(task);
@@ -91,7 +129,7 @@ public class API extends BlocksOpModeCompanion {
     }
 
     @ExportToBlocks(
-            color = 20,
+            color = 1,
             comment = "Queues a pause or wait in the execution cycle for the desired amount of time in milliseconds.",
             heading = "queue Wait",
             parameterLabels = "Time (Milliseconds)",
@@ -121,6 +159,50 @@ public class API extends BlocksOpModeCompanion {
     )
     public static void setAngleMultiplier(double angleMultiplier) {
         API.angleMultiplier = angleMultiplier;
+    }
+
+    @ExportToBlocks(
+            color = 25,
+            comment = "Sets the maximum translational velocity in metres per second of the robot hereon.",
+            heading = "set Maximum Velocity",
+            parameterLabels = "Speed (m/s)",
+            parameterDefaultValues = "0.6"
+    )
+    public static void setMaximumVelocity(double metresPerSecond) {
+        maxTransVel = MetersPerSecond.of(metresPerSecond);
+    }
+
+    @ExportToBlocks(
+            color = 25,
+            comment = "Sets the maximum (symmetric) translational acceleration in metres per second squared of the robot hereon.",
+            heading = "set Maximum Acceleration",
+            parameterLabels = "Acceleration (m/s/s)",
+            parameterDefaultValues = "0.75"
+    )
+    public static void setMaximumAcceleration(double metresPerSecondPerSecond) {
+        maxTransAccel = MetersPerSecondPerSecond.of(metresPerSecondPerSecond);
+    }
+
+    @ExportToBlocks(
+            color = 30,
+            comment = "Sets the maximum angular velocity in degrees per second of the robot hereon.",
+            heading = "set Maximum Angular Velocity",
+            parameterLabels = "Speed (degrees/s)",
+            parameterDefaultValues = "170"
+    )
+    public static void setMaximumAngularVelocity(double degreesPerSecond) {
+        maxAngVel = DegreesPerSecond.of(degreesPerSecond);
+    }
+
+    @ExportToBlocks(
+            color = 30,
+            comment = "Sets the maximum angular acceleration in degrees per second squared of the robot hereon.",
+            heading = "set Maximum Angular Velocity",
+            parameterLabels = "Acceleration (degrees/s/s)",
+            parameterDefaultValues = "180"
+    )
+    public static void setMaximumAngularAcceleration(double degreesPerSecondPerSecond) {
+        maxAngAccel = DegreesPerSecondPerSecond.of(degreesPerSecondPerSecond);
     }
 
     @ExportToBlocks(
