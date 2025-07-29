@@ -6,7 +6,6 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Mil
 
 import androidx.annotation.Nullable;
 
-import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -16,14 +15,14 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.TurnTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import dev.frozenmilk.util.cell.RefCell;
 
 @Autonomous
 public class VanceAuto extends AutonomousBunyipsOpMode {
     private final Vance vance = Vance.instance;
-    private final Pose2d basketPos = Geometry.poseFrom(new Vector2d(58.93, 55.54), Inches, -50, Degrees);
-    private final int pickUpPos = 791;
+//    private final Pose2d basketPos = Geometry.poseFrom(new Vector2d(57.45, 57.19), 230, Degrees);
+    private final Vector2d basketPlacePos = new Vector2d(57.45, 57.19);
+    private final int armPickUpPos = 791;
 
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
@@ -34,13 +33,17 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
 //                .addTask();
         vance.drive.setPose(new Vector2d(45.91, 59.88), Inches, 230.00, Degrees);
         vance.drive.makeTrajectory()
-                .strafeTo(new Vector2d(57.45, 57.19), Inches)
+                .strafeTo(basketPlacePos)
                 .addTask();
 
         add(vance.wholeArmUp);
         add(vance.intake.tasks.runFor(Milliseconds.of(500), vance.EJECT));
 
-        pickAndPlace(30);
+        pickAndPlace(5);
+
+        defer(() -> vance.drive.makeTrajectory()
+                .strafeTo(basketPlacePos)
+                .build());
         // TODO: TOOD: will need a unique one for third sample since it's against the wall
     }
 
@@ -52,12 +55,12 @@ public class VanceAuto extends AutonomousBunyipsOpMode {
         add(vance.shoulder.tasks.home());
 
         // move back a bit
-        vance.drive.makeTrajectory()
-                .strafeTo(new Vector2d(vance.drive.getPose().position.x, vance.drive.getPose().position.y - 7))
-                .addTask();
+        defer(() -> vance.drive.makeTrajectory()
+                .strafeToSplineHeading(new Vector2d(57.45 + 2, 57.19 - 2.5), Inches, 240.0, Degrees)
+                .build());
 
         add(new ParallelTaskGroup(
-                vance.elbow.tasks.goToProfiled(pickUpPos),
+                vance.elbow.tasks.goToProfiled(armPickUpPos),
                 vance.intake.tasks.runFor(Milliseconds.of(2000), 1)
         ));
 

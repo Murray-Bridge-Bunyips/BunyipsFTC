@@ -135,8 +135,8 @@ public class Vance extends RobotConfig {
         intake = new Actuator(hw.intake);
 
         wholeArmUp = new ParallelTaskGroup(
-            shoulder.tasks.goToProfiled(885),
-            elbow.tasks.goToProfiled(180)
+            shoulder.tasks.goToProfiled(885).timeout(Seconds.of(3)),
+            elbow.tasks.goToProfiled(180).timeout(Seconds.of(3))
         );
     }
 

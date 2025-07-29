@@ -114,5 +114,22 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(-24*2.75, 24*2.25), Inches) // mods ban this guy
                 .build() // mods unban this guy that was the owner of twitch dot television
                 .with(robot.lift.tasks.home()));
+        // im in the code like syntax
+        // and if theres too many errors in my code i wont compile it
+//        ill put it in my local commit and save it like rocket fuel
+        // his coder named lucas but i call him lukeass
+//        and hes more then a coder hes a programmer
+        // we're putting shit together like that code that copper built
+        // on the hill cause this codes gonna run like molasses, cradle,
+        // my code fits tighter then a gradle
+        // if you hate it you can leave it like beaver
+        // but in a day or two ill make you a believer in me
+        // cause in the alphabet youll see
+        // that LKB kicks a application, not your everyday machination
+        // like chef golio my code is truly cookin,
+        // peace to maddy stavast causes shes straight out of Adelaide, Australia
+        // i dont code PHP or Kotlin when i yoddlin
+        // i code a cup of Java, not a big glass of Python
+        // or a C, C# if you have time ill drop code again
     }
 }
