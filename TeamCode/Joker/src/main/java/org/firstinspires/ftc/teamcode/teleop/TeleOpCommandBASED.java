@@ -59,9 +59,9 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
                 .run(robot.outtakeGrip.tasks.toggle());
 
         operator().whenPressed(Controls.LEFT_BUMPER)
-                .run(robot.intakeAlign.tasks.toggle());
-        operator().whenRising(Controls.Analog.LEFT_TRIGGER, (v) -> v > 0.9)
                 .run(robot.intakeGrip.tasks.toggle());
+        operator().whenRising(Controls.Analog.LEFT_TRIGGER, (v) -> v > 0.9)
+                .run(robot.intakeAlign.tasks.toggle());
 
         operator().whenPressed(Controls.A)
                 .run(robot.lift.tasks.home().timeout(Seconds.of(3)));
@@ -69,6 +69,9 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
                 .run(robot.lift.tasks.goTo(270).timeout(Seconds.of(3)));
         operator().whenPressed(Controls.Y)
                 .run(robot.lift.tasks.goTo(2400).timeout(Seconds.of(2)));
+
+        operator().whenPressed(Controls.B)
+                .run(robot.intakeAlign.tasks.open().after(robot.intake.tasks.home()));
 
         robot.ascentArm.setDefaultTask(robot.ascentArm.tasks.control(() -> gamepad2.dpad_left ? -0.3 : gamepad2.dpad_right ? 0.3 : 0));
 
