@@ -189,17 +189,17 @@ public class Joker extends RobotConfig {
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
                 ))));
 
-        // roadrunner values for the robot without its ascent
+        // roadrunner values for the robot with viper slide arm and ascent
         DriveModel driveModel = new DriveModel.Builder()
-                .setInPerTick((141-(9*2))/6560.0)
-                .setLateralInPerTick((141-(18-(1.25+1)))/4730)
-                .setTrackWidthTicks(1549.125951361604)
+                .setInPerTick((141-(9*2))/6608.5)
+                .setLateralInPerTick((141-(18-0.5))/4538.5)
+                .setTrackWidthTicks(1549.918811099886)
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
                 .setMaxWheelVel(InchesPerSecond.of(40))
-                .setKv(0.004282941307554055)
-                .setKs(1.2153614527317247)
-                .setKa(0.00035)
+                .setKv(0.004269122814638806)
+                .setKs(1.5304907176222304)
+                .setKa(0.0002)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
                 .setAxialGain(3.5)
