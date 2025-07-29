@@ -86,8 +86,7 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
         robot.drive.setDefaultTask(driveTask);
         robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.lsy));
         robot.lift.setDefaultTask(robot.lift.tasks.control(() -> -gamepad2.rsy));
-    }
-
+    }//robot.drive.setDefaultTask(dive-Giulio);
     @Override
     protected void periodic() {
         robot.hw.hook.setPower(gamepad2.dpad_up ? 1 : gamepad2.dpad_down ? -1 : 0);
