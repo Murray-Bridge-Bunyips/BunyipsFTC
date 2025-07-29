@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.autonomous;
 import static org.firstinspires.ftc.teamcode.teleop.TeleOpCommandBASED.startingPos;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.Nullable;
 
@@ -41,9 +42,8 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
         currentPoseMap = startingPosition.isRed() ? new SymmetricPoseMap() : new IdentityPoseMap();
 
         robot.drive.setPose(startingPosition.toFieldPose());
-        add(robot.outtakeGrip.tasks.open());
 
-        robot.drive.makeTrajectory(currentPoseMap)
+        add(robot.drive.makeTrajectory(currentPoseMap)
                 .strafeTo(new Vector2d(-24*1.8, 24*1.5), Inches)
                 .strafeTo(new Vector2d(-24*1.8, 8), Inches)
                 .strafeTo(new Vector2d(-24*2.4, 8), Inches)
@@ -56,7 +56,10 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(-24*3.6, 24*2.2+1), Inches)
                 .strafeTo(new Vector2d(-24*3.6+6, 24*2.2-6), Inches)
                 .strafeToLinearHeading(new Vector2d(-24*2.5, 56), Inches, 90, Degrees)
-                .addTask();
+                .build()
+                // opens outtakeGrip after lifting lift up after pulling intake out to make room for it
+                .with(robot.outtakeGrip.tasks.open().after((robot.lift.tasks.goTo(500).timeout(Seconds.of(2)).after(robot.intake.tasks.goTo(150).timeout(Seconds.of(1))))))
+        );
 
         add(robot.lift.tasks.goTo(375));
     }
