@@ -80,9 +80,10 @@ public class Scout extends RobotConfig {
         TankGains tg = new TankGains.Builder()
                 .build();
         drive = new TankDrive(dm, mp, tg, Collections.singletonList(left), Collections.singletonList(right), imu, hardwareMap.voltageSensor)
-                .withAccumulator(new PeriodicIMUAccumulator(imu, Seconds.one()));
+                .withAccumulator(new PeriodicIMUAccumulator(imu, Seconds.one()))
+                .withName("Drive"); // burger xd!1
 
-        TankLocalizer localizer = (TankLocalizer) drive.getLocalizer();
+        TankLocalizer localizer = (TankLocalizer) drive.getLocalizer();//giulio
         localizer.leftEncs.get(0).setDirection(Constants.LEFT_WHEEL_DIRECTION);
         localizer.rightEncs.get(0).setDirection(Constants.RIGHT_WHEEL_DIRECTION);
     }
