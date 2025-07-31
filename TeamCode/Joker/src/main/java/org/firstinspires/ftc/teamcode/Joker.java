@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
+import java.util.function.Supplier;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsLib;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
@@ -29,6 +31,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionPro
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 
 /**
  * <font color=red>+4</font> <font color=white>Mult</font>
@@ -148,6 +151,8 @@ public class Joker extends RobotConfig {
 
     public final Hardware hw = new Hardware();
 
+    public Supplier<Task> tuck = () -> (intakeAlign.tasks.open().after(intake.tasks.home().timeout(Seconds.of(1))).timeout(Seconds.of(2)));
+
     //live mecanum wheel rolling on keyboard reaction:
     //Zzzzzzzzzzzzzzzzzzzzzzzzzzzssxccfvgbhnjk,l.....;///'/'
 
@@ -218,7 +223,7 @@ public class Joker extends RobotConfig {
 
         intake = new HoldableActuator(hw.intakeMotor)
                 .withBottomSwitch(hw.intakeInStop)
-                .withUpperLimit(400) //TODO: fix issue where motor stops moving before limit but error reaches limit
+                .withUpperLimit(420)
                 .withHomingPower(0.8)
                 .withUserSetpointControl((dt) -> 300 * dt)
                 .withName("intake");
@@ -250,4 +255,5 @@ public class Joker extends RobotConfig {
         intakeAlign = new Switch(hw.intakeAlign, 0, 0.625)
                 .withName("intake align");
     }
+    // jonkler from hit 2020 jrpg Person V: King
 }

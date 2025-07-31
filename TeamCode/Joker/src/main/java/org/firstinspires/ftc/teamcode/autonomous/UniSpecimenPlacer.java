@@ -56,7 +56,6 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
         currentPoseMap = startingPosition.isRed() ? new SymmetricPoseMap() : new IdentityPoseMap();
 
         robot.drive.setPose(startingPosition.toFieldPose());
-        add(robot.outtakeGrip.tasks.open());
 
         double grabX;
         double grabY;
@@ -75,14 +74,20 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
             alignX = -24*2.3;
         }
 
-        robot.drive.makeTrajectory(currentPoseMap)
+        add(robot.drive.makeTrajectory(currentPoseMap)
                 .strafeTo(new Vector2d(-24*1.8, 24*1.4), Inches)
                 .strafeTo(new Vector2d(-24*1.8, 8), Inches)
                 .strafeToLinearHeading(new Vector2d(alignX, 8), Inches, 90, Degrees)
                 .strafeTo(new Vector2d(alignX, 24*2.2+1), Inches)
                 .strafeTo(new Vector2d(alignX, 24*2), Inches)
                 .waitFor(3, Seconds)
-                .addTask();
+                .build()
+                // extends intake, raises lift out of the way, then tucks intake
+                .with(robot.tuck.get().after((robot.lift.tasks.goTo(500).timeout(Seconds.of(2)).after(robot.intake.tasks.goTo(150).timeout(Seconds.of(1))))))
+        );
+
+        add(robot.outtakeGrip.tasks.open());
+
 // a man that is here his name was giulio
         add(robot.drive.makeTrajectory(new Pose2d(-24*2.4, 24*2, Math.toRadians(90)), currentPoseMap)
                 .strafeTo(new Vector2d(grabX, grabY), Inches)

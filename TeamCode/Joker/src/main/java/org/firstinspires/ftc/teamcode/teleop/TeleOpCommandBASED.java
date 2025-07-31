@@ -71,7 +71,7 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
                 .run(robot.lift.tasks.goTo(2400).timeout(Seconds.of(2)));
 
         operator().whenPressed(Controls.B)
-                .run(robot.intakeAlign.tasks.open().after(robot.intake.tasks.home()));
+                .run(robot.tuck.get());
 
         robot.ascentArm.setDefaultTask(robot.ascentArm.tasks.control(() -> gamepad2.dpad_left ? -0.3 : gamepad2.dpad_right ? 0.3 : 0));
 
@@ -94,6 +94,7 @@ public class TeleOpCommandBASED extends CommandBasedBunyipsOpMode {
         telemetry.addData("lift target position", robot.hw.liftMotor.getTargetPosition());
         telemetry.addData("lift power", robot.hw.liftMotor.getPower());
         telemetry.addData("intake power", robot.hw.intakeMotor.getPower());
+        // take over time to boogie down
     }
     // lucas bubner was here and NO ONE WILL BELIEVE YOU
 }
