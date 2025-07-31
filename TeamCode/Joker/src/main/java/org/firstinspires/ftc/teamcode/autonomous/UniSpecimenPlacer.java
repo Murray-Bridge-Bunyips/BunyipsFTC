@@ -119,6 +119,11 @@ public class UniSpecimenPlacer extends AutonomousBunyipsOpMode {
                 .strafeTo(new Vector2d(-24*2.75, 24*2.25), Inches) // mods ban this guy
                 .build() // mods unban this guy that was the owner of twitch dot television
                 .with(robot.lift.tasks.home()));
+//        Burning Programmer's Souls
+//        Written by Lock and Balls
+        // Copper Seal of Approval 2025
+//        Copyright Bunyips
+//        ------------------------------------
         // im in the code like syntax
         // and if theres too many errors in my code i wont compile it
 //        ill put it in my local commit and save it like rocket fuel
