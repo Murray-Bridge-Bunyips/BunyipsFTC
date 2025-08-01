@@ -62,6 +62,7 @@ public class BasketSide extends AutonomousBunyipsOpMode {
         add(robot.drive.makeTrajectory(new Pose2d(24*3.1-6, 24*2-2-6, Math.toRadians(270)), currentPoseMap)
                 .strafeToLinearHeading(new Vector2d(14+13, 0), Inches, 180, Degrees)
                 .build()
+                //.with(robot.lift.tasks.goTo(1700).timeout(Seconds.of(4.15)))
                 .with((robot.lift.tasks.goTo(1700).timeout(Seconds.of(4.15)).after(robot.intake.tasks.goTo(150).timeout(Seconds.of(1)))))
         );
 

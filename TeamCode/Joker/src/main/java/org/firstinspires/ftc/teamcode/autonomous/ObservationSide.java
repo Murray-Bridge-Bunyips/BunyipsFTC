@@ -77,6 +77,24 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
                 .with(robot.lift.tasks.goTo(270).timeout(Seconds.of(3)).after(robot.outtakeGrip.tasks.open().after(robot.tuck.get().after((robot.lift.tasks.goTo(500).timeout(Seconds.of(2)).after(robot.intake.tasks.goTo(150).timeout(Seconds.of(1))))))))
         );
 
-        add(robot.lift.tasks.goTo(375));
+        /*
+        add(robot.drive.makeTrajectory(currentPoseMap)
+                .strafeTo(new Vector2d(-24*1.8, 24*1.5), Inches)
+                .strafeTo(new Vector2d(-24*1.8, 8), Inches)
+                .strafeTo(new Vector2d(-24*2.4, 8), Inches)
+                .strafeTo(new Vector2d(-24*2.4, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*2.4, 8), Inches)
+                .strafeTo(new Vector2d(-24*3.1, 8), Inches)
+                .strafeTo(new Vector2d(-24*3.1, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*3.1, 8), Inches)
+                .strafeTo(new Vector2d(-24*3.7, 8), Inches)
+                .strafeTo(new Vector2d(-24*3.7, 24*2.2+1), Inches)
+                .strafeTo(new Vector2d(-24*3.7+6, 24*2.2-6), Inches)
+                .strafeToLinearHeading(new Vector2d(-24*2.5, 56), Inches, 90, Degrees)
+                .build()
+                .with((robot.lift.tasks.goTo(270).timeout(Seconds.of(3)).after(robot.outtakeGrip.tasks.open())))
+        );
+        */
+
     }
 }
