@@ -17,7 +17,6 @@ import com.qualcomm.robotcore.hardware.TouchSensor;
 import java.util.function.Supplier;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsLib;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.CompositeController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.ElevatorFeedforward;
@@ -168,7 +167,6 @@ public class Joker extends RobotConfig {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
             PIDController pid = new PIDController(intakekP, intakekI, intakekD);
             d.setRunToPositionController(pid);
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> pid.setCoefficients(intakekP, intakekI, intakekD, 0.0, 0.0, 0.0, 0.0, 0.0)));
         });
         hw.liftMotor = getHardware("liftMotor", Motor.class, d -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
