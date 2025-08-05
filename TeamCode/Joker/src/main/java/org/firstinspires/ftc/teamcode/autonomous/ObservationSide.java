@@ -43,6 +43,7 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
 
         robot.drive.setPose(startingPosition.toFieldPose());
 
+        /*
         add(robot.drive.makeTrajectory(currentPoseMap)
                 // VROOOOOOM
                 .strafeTo(new Vector2d(-24*1.8, 24*1.5), Inches)
@@ -72,12 +73,12 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
                 //   COPPER LEFT FOR TOO LONG AND HAS BEEN MEGA VANDALISED !!!!!!!!!!!!!!!!!!!!!1
                 .build()
                 // pulls intake out then lifts lift up above intake claw height when closed then tucks intake then opens outtake
-                // Big Beautiful Task// a // that is a // that makes giulio is a // /* AAAAAAAAAAAAAA */ // giulio toolbag !!!!!!!!!!!!!!!!
+                // Big Beautiful Task// a // that is a // that makes giulio is a // /* AAAAAAAAAAAAAA // giulio toolbag !!!!!!!!!!!!!!!!
                 // pepsi min is a government operation sponsored by Big Cola to support their patriarchal structure in the bisector known as Australia.
                 .with(robot.lift.tasks.goTo(270).timeout(Seconds.of(3)).after(robot.outtakeGrip.tasks.open().after(robot.tuck.get().after((robot.lift.tasks.goTo(500).timeout(Seconds.of(2)).after(robot.intake.tasks.goTo(150).timeout(Seconds.of(1))))))))
         );
+        */
 
-        /*
         add(robot.drive.makeTrajectory(currentPoseMap)
                 .strafeTo(new Vector2d(-24*1.8, 24*1.5), Inches)
                 .strafeTo(new Vector2d(-24*1.8, 8), Inches)
@@ -94,7 +95,7 @@ public class ObservationSide extends AutonomousBunyipsOpMode {
                 .build()
                 .with((robot.lift.tasks.goTo(270).timeout(Seconds.of(3)).after(robot.outtakeGrip.tasks.open())))
         );
-        */
+
 
     }
 }
