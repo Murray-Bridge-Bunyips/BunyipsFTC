@@ -39,12 +39,12 @@ public class Vance extends RobotConfig {
 
     @Config
     public static class ShoulderConstants {
-        public static double kP = 0.01, kI = 0.2, kD = 0.0015, TPS = 300;
+        public static double kP = 0.01, kI = 0.0, kD = 0.0, TPS = 700;
     }
 
     @Config
     public static class ElbowConstants {
-        public static double kP = 0.03, kI = 0.2, kD = 0.0, TPS = 100;
+        public static double kP = 0.015, kI = 0.0, kD = 0.0, TPS = 500;
     }
 
     public static Vance instance = new Vance();
@@ -91,7 +91,6 @@ public class Vance extends RobotConfig {
             BunyipsOpMode.getInstance().onActiveLoop(() -> pid.setPID(ShoulderConstants.kP, ShoulderConstants.kI, ShoulderConstants.kD));
         });
         hw.elbow = getHardware("el", Motor.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.REVERSE);
             PIDController pid = new PIDController(ElbowConstants.kP, ElbowConstants.kI, ElbowConstants.kD);
             d.setRunToPositionController(pid);
             BunyipsOpMode.getInstance().onActiveLoop(() -> pid.setPID(ElbowConstants.kP, ElbowConstants.kI, ElbowConstants.kD));
@@ -136,8 +135,8 @@ public class Vance extends RobotConfig {
         intake = new Actuator(hw.intake);
 
         wholeArmUp = new ParallelTaskGroup(
-            shoulder.tasks.goToProfiled(500),
-            elbow.tasks.goToProfiled(50)
+            shoulder.tasks.goToProfiled(885).timeout(Seconds.of(3)),
+            elbow.tasks.goToProfiled(180).timeout(Seconds.of(3))
         );
     }
 

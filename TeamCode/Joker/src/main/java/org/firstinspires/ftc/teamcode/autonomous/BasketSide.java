@@ -11,7 +11,6 @@ import com.acmerobotics.roadrunner.IdentityPoseMap;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseMap;
 import com.acmerobotics.roadrunner.Vector2d;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.teamcode.Joker;
@@ -33,8 +32,7 @@ public class BasketSide extends AutonomousBunyipsOpMode {
         setOpModes(
                 StartingConfiguration.redLeft().tile(2).backward(Inches.of(4)),
                 StartingConfiguration.blueLeft().tile(2).backward(Inches.of(4))
-        ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
-        //robot.liftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X); // coke zero, max coke, zero coke //giulio
     }
 
     @Override
@@ -42,7 +40,6 @@ public class BasketSide extends AutonomousBunyipsOpMode {
         if (selectedOpMode == null) return;
         StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
         startingPos = startingPosition;
-        if (startingPosition.isBlue()) {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);} else {robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED);}
         currentPoseMap = startingPosition.isRed() ? new SymmetricPoseMap() : new IdentityPoseMap();
 
         robot.drive.setPose(startingPosition.toFieldPose());
@@ -66,6 +63,7 @@ public class BasketSide extends AutonomousBunyipsOpMode {
                 .strafeToLinearHeading(new Vector2d(14+13, 0), Inches, 180, Degrees)
                 .build()
                 .with(robot.lift.tasks.goTo(1700).timeout(Seconds.of(4.15)))
+                //.with((robot.lift.tasks.goTo(1700).timeout(Seconds.of(4.15)).after(robot.intake.tasks.goTo(150).timeout(Seconds.of(1)))))
         );
 
         add(robot.lift.tasks.goTo(1500));
