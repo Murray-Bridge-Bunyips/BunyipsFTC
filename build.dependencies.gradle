@@ -6,21 +6,21 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.firstinspires.ftc:Inspection:10.2.0'
-    implementation 'org.firstinspires.ftc:Blocks:10.2.0'
-    implementation 'org.firstinspires.ftc:RobotCore:10.2.0'
-    implementation 'org.firstinspires.ftc:RobotServer:10.2.0'
-    implementation 'org.firstinspires.ftc:OnBotJava:10.2.0'
-    implementation 'org.firstinspires.ftc:Hardware:10.2.0'
-    implementation 'org.firstinspires.ftc:FtcCommon:10.2.0'
-    implementation 'org.firstinspires.ftc:Vision:10.2.0'
+    implementation 'org.firstinspires.ftc:Inspection:10.3.0'
+    implementation 'org.firstinspires.ftc:Blocks:10.3.0'
+    implementation 'org.firstinspires.ftc:RobotCore:10.3.0'
+    implementation 'org.firstinspires.ftc:RobotServer:10.3.0'
+    implementation 'org.firstinspires.ftc:OnBotJava:10.3.0'
+    implementation 'org.firstinspires.ftc:Hardware:10.3.0'
+    implementation 'org.firstinspires.ftc:FtcCommon:10.3.0'
+    implementation 'org.firstinspires.ftc:Vision:10.3.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     // All BunyipsLib dependencies: FtcDashboard (w/ Sloth), Dairy Sloth, RoadRunner v1.0.x
-    implementation "dev.frozenmilk.sinister:Sloth:0.2.1"
+    implementation "dev.frozenmilk.sinister:Sloth:0.2.4"
     implementation "com.acmerobotics.roadrunner:core:1.0.1"
-    implementation "com.acmerobotics.slothboard:dashboard:0.2.1+0.4.16"
-    implementation("com.acmerobotics.roadrunner:ftc:0.1.23") {
+    implementation "com.acmerobotics.slothboard:dashboard:0.2.4+0.4.17"
+    implementation("com.acmerobotics.roadrunner:ftc:0.1.24") {
         exclude group: "com.acmerobotics.dashboard"
     }
 }
