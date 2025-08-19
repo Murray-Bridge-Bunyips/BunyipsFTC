@@ -15,13 +15,14 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 @Config
 public class Jonas extends RobotConfig {
     public static class Hardware {
         /**
-         * Control 0: bl
+         * Control 0: bl <sub>yaoi motor</sub>
          */
         public DcMotor backLeft;
 
@@ -51,6 +52,18 @@ public class Jonas extends RobotConfig {
          */
         public RawEncoder dwParallel;
 
+
+        /**
+         * Control 1: shoulder
+         */
+        public DcMotor shoulder;
+
+        /**
+         * Control 2: elbow
+         */
+        public DcMotor elbow;
+
+
         /**
          * [Hub] [Ports] ([Relevant Port] used): [Name in Config]
          */
@@ -66,6 +79,15 @@ public class Jonas extends RobotConfig {
      * 4-Wheels MecanumDrive
      */
     public MecanumDrive drive;
+
+    /**
+     * Shoulder HoldableActuator
+     */
+    public HoldableActuator shoulder;
+    /**
+     * Elbow HoldableActuator
+     */
+    public HoldableActuator elbow;
 
     /**
      * [Mechanism Name] [Mechanism Class]
@@ -87,6 +109,9 @@ public class Jonas extends RobotConfig {
             d.setDirection(DcMotor.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
+
+        hw.shoulder = getHardware("shoulder", DcMotorEx.class);
+        hw.elbow = getHardware("elbow", DcMotorEx.class);
 
         hw.imu = getHardware("imu", IMUEx.class, d ->
                 d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -114,10 +139,10 @@ public class Jonas extends RobotConfig {
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, hw.imu, hardwareMap.voltageSensor)
                 .withName("drive");
 
-        MecanumLocalizer localizer = (MecanumLocalizer) drive.getLocalizer();
-        localizer.leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        localizer.leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        localizer.rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
-        localizer.rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        shoulder = new HoldableActuator(hw.shoulder)
+                .withName("shoulder");
+
+        elbow = new HoldableActuator(hw.elbow)
+                .withName("elbow");
     }
 }
