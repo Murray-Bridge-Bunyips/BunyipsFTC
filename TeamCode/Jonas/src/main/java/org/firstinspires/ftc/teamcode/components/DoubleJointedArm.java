@@ -1,8 +1,9 @@
 package org.firstinspires.ftc.teamcode.components;
 
 
+import org.firstinspires.ftc.teamcode.Jonas;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsSubsystem;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 
 public class DoubleJointedArm extends BunyipsSubsystem {
@@ -11,7 +12,7 @@ public class DoubleJointedArm extends BunyipsSubsystem {
     private HoldableActuator shoulder;
     private HoldableActuator elbow;
 
-    public DoubleJointedArm(RobotConfig Jonas) {
+    public DoubleJointedArm(Jonas.Hardware jonas) {
 
 //        this.shoulder = (HoldableActuator) shoulder;
 
