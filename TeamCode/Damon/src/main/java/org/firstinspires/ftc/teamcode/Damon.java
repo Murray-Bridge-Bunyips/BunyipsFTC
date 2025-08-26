@@ -56,19 +56,27 @@ public class Damon extends RobotConfig {
                         RevHubOrientationOnRobot.UsbFacingDirection.LEFT
                 ))));
 
-        hw.perp = getHardware("br", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
+        hw.perp = getHardware("br", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
         hw.par = getHardware("fr", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
 
         DriveModel driveModel = new DriveModel.Builder()
+                .setInPerTick(60.0 / 66157)
+                .setLateralInPerTick(0.0008086379593504867)
+                .setTrackWidthTicks(14340.444741047844)
                 // TODO: Fill out as necessary according to the RoadRunner Tuning section of the BunyipsLib Wiki
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
                 // TODO: Fill out as necessary according to the RoadRunner Tuning section of the BunyipsLib Wiki
+                .setKv(0.0002)
+                .setKs(0.9034678945603911)
+                .setKa(0.00001000)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
                 // TODO: Fill out as necessary according to the RoadRunner Tuning section of the BunyipsLib Wiki
                 .build();
         TwoWheelLocalizer.Params localizerPrams = new TwoWheelLocalizer.Params.Builder()
+                .setParYTicks(-2535.679102548541)
+                .setPerpXTicks(5415.298663365377)
                 .build();
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
                 .withLocalizer(new TwoWheelLocalizer(driveModel, localizerPrams, hw.par, hw.perp, hw.imu))
