@@ -1,5 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecondPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTilesPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTilesPerSecondPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
+
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -63,16 +69,19 @@ public class Damon extends RobotConfig {
                 .setInPerTick(60.0 / 66157)
                 .setLateralInPerTick(0.0008086379593504867)
                 .setTrackWidthTicks(14340.444741047844)
-                // TODO: Fill out as necessary according to the RoadRunner Tuning section of the BunyipsLib Wiki
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
-                // TODO: Fill out as necessary according to the RoadRunner Tuning section of the BunyipsLib Wiki
+                .setMaxWheelVel(InchesPerSecond.of(35))
+                .setMaxAngVel(DegreesPerSecond.of(180))
                 .setKv(0.0002)
                 .setKs(0.9034678945603911)
                 .setKa(0.00001000)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
-                // TODO: Fill out as necessary according to the RoadRunner Tuning section of the BunyipsLib Wiki
+                .setAxialGain(2.5)
+                .setLateralGain(3)
+                .setHeadingGain(4)
+                .setPoseHolding(true)
                 .build();
         TwoWheelLocalizer.Params localizerPrams = new TwoWheelLocalizer.Params.Builder()
                 .setParYTicks(-2535.679102548541)
