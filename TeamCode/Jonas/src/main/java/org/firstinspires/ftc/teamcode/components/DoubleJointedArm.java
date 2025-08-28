@@ -34,8 +34,7 @@ public class DoubleJointedArm extends BunyipsSubsystem {
         this.elbow = new HoldableActuator(jonas.elbow)
                 .withName("elbow");
 
-        delegate(shoulder);
-        delegate(elbow);
+        delegate(shoulder, elbow);
     }
 
     public class Tasks {
