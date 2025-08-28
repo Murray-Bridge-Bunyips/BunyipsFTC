@@ -6,16 +6,15 @@ import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+
+import org.firstinspires.ftc.teamcode.components.DoubleJointedArm;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.HoldableActuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 @Config
@@ -63,12 +62,6 @@ public class Jonas extends RobotConfig {
          */
         public DcMotor elbow;
 
-
-        /**
-         * [Hub] [Ports] ([Relevant Port] used): [Name in Config]
-         */
-
-
         /**
          * Internally connected
          */
@@ -81,13 +74,9 @@ public class Jonas extends RobotConfig {
     public MecanumDrive drive;
 
     /**
-     * Shoulder HoldableActuator
+     * Arm DoubleJointedArm
      */
-    public HoldableActuator shoulder;
-    /**
-     * Elbow HoldableActuator
-     */
-    public HoldableActuator elbow;
+    public DoubleJointedArm arm;
 
     /**
      * [Mechanism Name] [Mechanism Class]
@@ -139,10 +128,7 @@ public class Jonas extends RobotConfig {
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, hw.imu, hardwareMap.voltageSensor)
                 .withName("drive");
 
-        shoulder = new HoldableActuator(hw.shoulder)
-                .withName("shoulder");
-
-        elbow = new HoldableActuator(hw.elbow)
-                .withName("elbow");
+        arm = new DoubleJointedArm(hw)
+                .withName("arm");
     }
 }
