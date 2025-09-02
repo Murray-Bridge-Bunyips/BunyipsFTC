@@ -40,24 +40,24 @@ public class DoubleJointedArm extends BunyipsSubsystem {
     public class Tasks {
         @NonNull
         public Task control(@NonNull DoubleSupplier shoulderPowerSupplier, @NonNull DoubleSupplier elbowPowerSupplier) {
+            shoulder.setDefaultTask(shoulder.tasks.control(() -> enabled == Enabled.SHOULDER ? shoulderPowerSupplier.getAsDouble() : 0));
+            elbow.setDefaultTask(elbow.tasks.control(() -> enabled == Enabled.ELBOW ? elbowPowerSupplier.getAsDouble() : 0));
             return Task.task().periodic(() -> {
                 switch (enabled) {
                     case NEUTRAL:
-                        shoulder.cancelCurrentTask();
-                        elbow.cancelCurrentTask();
                         if (shoulderPowerSupplier.getAsDouble() != 0) {
                             enabled = Enabled.SHOULDER;
                         }
                         else if (elbowPowerSupplier.getAsDouble() != 0) {
                             enabled = Enabled.ELBOW;
                         }
+                        break;
 
                     case SHOULDER:
                         if (shoulderPowerSupplier.getAsDouble() == 0) {
                             enabled = Enabled.NEUTRAL;
                             break;
                         }
-                        shoulder.setCurrentTask(shoulder.tasks.control(shoulderPowerSupplier));
                         break;
 
                     case ELBOW:
@@ -65,7 +65,6 @@ public class DoubleJointedArm extends BunyipsSubsystem {
                             enabled = Enabled.NEUTRAL;
                             break;
                         }
-                        elbow.setCurrentTask(elbow.tasks.control(elbowPowerSupplier));
                         break;
 
                     default:
@@ -73,6 +72,10 @@ public class DoubleJointedArm extends BunyipsSubsystem {
                         break;
                 }
                         DualTelemetry.smartAdd(DoubleJointedArm.this.toString(), "enabled is %", enabled);
+                        DualTelemetry.smartAdd(DoubleJointedArm.this.toString(), "shoulder is doing %", shoulder.getCurrentTask());
+                        DualTelemetry.smartAdd(DoubleJointedArm.this.toString(), "elbow is doing %", elbow.getCurrentTask());
+                        DualTelemetry.smartAdd(DoubleJointedArm.this.toString(), "shoulderPowerSupplier: %", shoulderPowerSupplier.getAsDouble());
+                        DualTelemetry.smartAdd(DoubleJointedArm.this.toString(), "elbowPowerSupplier: %", elbowPowerSupplier.getAsDouble());
             })
                     .onFinish(() -> enabled = Enabled.NEUTRAL)
                     .named(forThisSubsystem("Control"))
