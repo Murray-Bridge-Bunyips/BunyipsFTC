@@ -45,7 +45,7 @@ public class TeleOp extends CommandBasedBunyipsOpMode {
                 .finishIfButtonRetriggered();
         operator().when(Controls.Analog.RIGHT_TRIGGER, (v) -> v == 1)
                 .run(vance.shoulder.tasks.home().then(vance.elbow.tasks.home()));
-        // TODO: driver assisted controls here
+        // driver assisted controls here
         operator().whenPressed(Controls.B)
                 .run(vance.wholeArmUp);
 //        operator().whenPressed(Controls.X)

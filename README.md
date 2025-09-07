@@ -10,18 +10,21 @@ This repository contains all code for our FTC robots constructed after 2021 usin
 ## Maintained robots in this repo
 ###### Maintained robots are modules that are attributed to an existing and usable robot controller and Gradle config. These robots are using the latest versions of BunyipsLib.<br>These modules can be found under TeamCode/
 
-| Robot Name | Description                          | Season                    | Team                           |
-|------------|--------------------------------------|---------------------------|--------------------------------|
-| Proto      | REV Mecanum-drive with odometry pods | INTO THE DEEP (2024-2025) | 15215 Murray Bridge Bunyips    |
-| Vance      | goBILDA Mecanum-drive                | INTO THE DEEP (2024-2025) | 22407 Murray Bridge Mulyawonks |
-| Joker      | REV Mecanum-drive with swinging arm  | INTO THE DEEP (2024-2025) | 24736 Murray Bridge Lizards    |
-| IDK        | goBILDA Differential-drive           | INTO THE DEEP (2024-2025) | 99999 Off Season Demo          |
-| Scout      | Minibot outreach framework           | No Season                 | No Team                        |
+| Robot Name | Description                | Season             | Team                           |
+|------------|----------------------------|--------------------|--------------------------------|
+| Damon      | 15215 REV Decode robot     | DECODE (2025-2026) | 15215 Murray Bridge Bunyips    |
+| Jonas      | 22407 goBILDA Decode robot | DECODE (2025-2026) | 22407 Murray Bridge Mulyawonks |
+| Lilbro5000 | 24736 REV Decode robot     | DECODE (2025-2026) | 24736 Murray Bridge Lizards    |
+| Scout      | Minibot outreach framework | No Season          | No Team                        |
 
 ## Unmaintained robots in this repo
 ###### Unmaintained robots used to be attributed to a robot controller but have been decommissioned/are unmaintained. They may be using outdated/deprecated versions of BunyipsLib.<br>These modules can be found under TeamCode/Archived/
 | Robot Name | Description | Season | Team |
 | --- | --- | --- | --- |
+| Proto      | REV Mecanum-drive with odometry pods | INTO THE DEEP (2024-2025) | 15215 Murray Bridge Bunyips    |
+| Vance      | goBILDA Mecanum-drive                | INTO THE DEEP (2024-2025) | 22407 Murray Bridge Mulyawonks |
+| Joker      | REV Mecanum-drive with swinging arm  | INTO THE DEEP (2024-2025) | 24736 Murray Bridge Lizards    |
+| IDK        | goBILDA Differential-drive           | INTO THE DEEP (2024-2025) | 99999 Off Season Demo          |
 | Wheatley   | Mecanum-drive with 3D printed components | CENTERSTAGE (2023-2024) | 22407 Murray Bridge Mulyawonks |
 | GLaDOS     | Mecanum-drive with odometry pods and vision capabilities | CENTERSTAGE (2023-2024) | 15215 Murray Bridge Bunyips |
 | P-body     | Mecanum-drive Core Hex backup robot                                             | CENTERSTAGE (2023-2024)   | 99999 (Off Season Demo) Murray Cods |
