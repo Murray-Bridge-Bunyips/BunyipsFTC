@@ -8,12 +8,16 @@ import java.util.concurrent.Callable;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.executables.Periodic;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Threads;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.data.AprilTagData;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag;
 
 /**
- * Consistently runs an asynchronous detection to find the Motif AprilTag. Once found, this async task ends
- * and the result is returned through the {@link Callable} interface.
+ * Consistently runs a detection to find the Motif AprilTag. Once found, this task ends
+ * and the result is returned.
+ * <p>
+ * This finder is designed to be used by the {@link Threads} system, and results returned
+ * via the {@link Threads.Result} interface.
  *
  * @author Lucas Bubner, 2025
  */
