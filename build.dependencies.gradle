@@ -16,11 +16,14 @@ dependencies {
     implementation 'org.firstinspires.ftc:Vision:11.0.0'
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
+    // BunyipsFTC optional dependencies, not required to BunyipsLib
+    implementation "page.j5155.AdvantageScope:lite:v26.0.0"
+
     // All BunyipsLib dependencies: FtcDashboard (w/ Sloth), Dairy Sloth, RoadRunner v1.0.x
     implementation "dev.frozenmilk.sinister:Sloth:0.2.4"
     implementation "com.acmerobotics.roadrunner:core:1.0.1"
     implementation "com.acmerobotics.slothboard:dashboard:0.2.4+0.4.17"
-    implementation("com.acmerobotics.roadrunner:ftc:0.1.24") {
+    implementation("com.acmerobotics.roadrunner:ftc:0.1.25") {
         exclude group: "com.acmerobotics.dashboard"
     }
 }
