@@ -49,7 +49,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
         wait(250, Milliseconds);
         add(new TransferSample(robot.verticalLift, robot.horizontalLift, robot.clawRotator, robot.basketRotator, robot.claws, false));
 
-        add(robot.drive.makeTrajectory(currentPoseMap) // FIXME: these trajectories are impicit meaning they are always built from the robot starting position...
+        add(robot.drive.makeTrajectory(currentPoseMap) // these trajectories are impicit meaning they are always built from the robot starting position...
                 .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
                 .build().with(robot.verticalLift.tasks.goTo(830)));
 
@@ -94,7 +94,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
         acquireSampleAndPlace();
 
         add(robot.drive.makeTrajectory(basketPlacerPos, Inches, 230.00, Degrees, currentPoseMap)
-                .strafeToLinearHeading(new Vector2d(rightSampleXPos - 10, rightSampleYPos), Inches, 85.00, Degrees) // FIXME: heading set to 85 as the robot seems to be out of tune as drifting 5 degrees, this needs a fix
+                .strafeToLinearHeading(new Vector2d(rightSampleXPos - 10, rightSampleYPos), Inches, 85.00, Degrees) // heading set to 85 as the robot seems to be out of tune as drifting 5 degrees, this needs a fix
                 .build().with(robot.verticalLift.tasks.home(), robot.horizontalLift.tasks.goTo(preClawOut).after(Milliseconds.of(500)).timeout(Milliseconds.of(armTimeout))));
 
         acquireSampleAndPlace();
@@ -110,7 +110,7 @@ public class VanceQuadBasketPlacer extends AutonomousBunyipsOpMode {
 
         add(robot.drive.makeTrajectory(new Pose2d(-62.12, -40.0, Math.toRadians(115)), currentPoseMap)
                 .setReversed(true)
-                .splineTo(new Vector2d(-51.8, -44.3), Inches, 135.00, Degrees) // FIXME: weird oscillations for heading - retune from ManualFeedbackTuner?
+                .splineTo(new Vector2d(-51.8, -44.3), Inches, 135.00, Degrees) // weird oscillations for heading - retune from ManualFeedbackTuner?
                 .setReversed(false)
                 .strafeToSplineHeading(basketPlacerPos, Inches, 230.00, Degrees)
                 .build()
