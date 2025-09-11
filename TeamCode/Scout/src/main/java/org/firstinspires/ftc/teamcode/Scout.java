@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.teamcode.tuning.MotorDirection;
 
 import java.util.Collections;
@@ -25,6 +26,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.TankGains
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.TankDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
 
 /**
  * Generic minibot configuration with two Core Hex motors and upwards logo Control Hub orientation.
@@ -32,6 +34,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
  * Left wheel on "l".
  * Right wheel on "r".
  * IMU on "imu".
+ * Optional webcam on "camera".
  *
  * @author Lucas Bubner, 2025
  */
@@ -44,11 +47,16 @@ public class Scout extends RobotConfig {
     public IMU imu;
 
     public TankDrive drive;
+    public Vision optionalVision;
 
     @Override
     protected void onRuntime() {
         left = getHardware("l", DcMotor.class, d -> d.setDirection(Constants.LEFT_WHEEL_DIRECTION));
         right = getHardware("r", DcMotor.class, d -> d.setDirection(Constants.RIGHT_WHEEL_DIRECTION));
+        // Optional webcam device, may be null
+        CameraName optionalCamera = hardwareMap.tryGet(CameraName.class, "webcam");
+        if (optionalCamera != null)
+            optionalVision = new Vision(optionalCamera);
         imu = getHardware("imu", IMU.class, d -> {
             d.initialize(new IMU.Parameters(
                     new RevHubOrientationOnRobot(
