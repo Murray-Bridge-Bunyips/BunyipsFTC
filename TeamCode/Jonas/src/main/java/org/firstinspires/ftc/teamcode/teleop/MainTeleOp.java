@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -66,7 +67,5 @@ public class MainTeleOp extends CommandBasedBunyipsOpMode {
                 .run(() -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
         robot.drive.setDefaultTask(driveTask);
-
-        robot.arm.setDefaultTask(robot.arm.tasks.control(() -> -gamepad2.lsy, () -> -gamepad2.rsy));
     }
 }
