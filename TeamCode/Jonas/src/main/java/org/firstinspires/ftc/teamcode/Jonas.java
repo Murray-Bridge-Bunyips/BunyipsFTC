@@ -24,30 +24,30 @@ public class Jonas extends RobotConfig {
         public DcMotor backLeft;
 
         /**
-         * Control 1: fl
-         */
-        public DcMotor frontLeft;
-
-        /**
-         * Control 2: br
+         * Control 1: br
          */
         public DcMotor backRight;
 
         /**
-         * Control 3: fr
+         * Control 2: fr
          */
         public DcMotor frontRight;
 
+        /**
+         * Control 3: fl
+         */
+        public DcMotor frontLeft;
+
 
         /**
-         * Control 2: br
+         * Control ?: ??
          */
-        public RawEncoder dwPerpendicular;
+//        public RawEncoder dwPerpendicular;
 
         /**
-         * Control 3: fr
+         * Control ?: ??
          */
-        public RawEncoder dwParallel;
+//        public RawEncoder dwParallel;
 
         /**
          * Internally connected
@@ -69,8 +69,14 @@ public class Jonas extends RobotConfig {
 
     @Override
     protected void onRuntime() {
-        hw.frontLeft = getHardware("fl", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
-        hw.backLeft = getHardware("bl", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+        hw.frontLeft = getHardware("fl", DcMotorEx.class, (d) -> {
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            d.setDirection(DcMotor.Direction.REVERSE);
+        });
+        hw.backLeft = getHardware("bl", DcMotorEx.class, (d) -> {
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            d.setDirection(DcMotor.Direction.REVERSE);
+        });
 
         hw.frontRight = getHardware("fr", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.backRight = getHardware("br", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
