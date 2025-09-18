@@ -2,7 +2,6 @@ package org.firstinspires.ftc.teamcode;
 
 
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -13,6 +12,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 @Config
@@ -38,7 +38,6 @@ public class Jonas extends RobotConfig {
          */
         public DcMotor frontLeft;
 
-
         /**
          * Control ?: ??
          */
@@ -48,6 +47,18 @@ public class Jonas extends RobotConfig {
          * Control ?: ??
          */
 //        public RawEncoder dwParallel;
+
+
+
+        /**
+         * Expansion 0: outputA
+         */
+        public DcMotor outputA;
+
+        /**
+         * Expansion 0: outputB
+         */
+        public DcMotor outputB;
 
         /**
          * Internally connected
@@ -59,6 +70,16 @@ public class Jonas extends RobotConfig {
      * 4-Wheels MecanumDrive
      */
     public MecanumDrive drive;
+
+    /**
+     * OutputA Rotator
+     */
+    public Actuator outputA;
+
+    /**
+     * OutputB Rotator
+     */
+    public Actuator outputB;
 
     /**
      * [Mechanism Name] [Mechanism Class]
@@ -80,6 +101,15 @@ public class Jonas extends RobotConfig {
 
         hw.frontRight = getHardware("fr", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.backRight = getHardware("br", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+
+        hw.outputA = getHardware("outputA", DcMotorEx.class, (d) -> {
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            d.setDirection(DcMotor.Direction.REVERSE);
+        });
+        hw.outputB = getHardware("outputB", DcMotorEx.class, (d) -> {
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+//            d.setDirection(DcMotor.Direction.REVERSE);
+        });
 
         hw.imu = getHardware("imu", IMUEx.class, d ->
                 d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
@@ -106,5 +136,11 @@ public class Jonas extends RobotConfig {
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, hw.imu, hardwareMap.voltageSensor)
                 .withName("drive");
+
+        outputA = new Actuator(hw.outputA)
+                .withName("output");
+        outputB = new Actuator(hw.outputB)
+                .withName("output");
+
     }
 }
