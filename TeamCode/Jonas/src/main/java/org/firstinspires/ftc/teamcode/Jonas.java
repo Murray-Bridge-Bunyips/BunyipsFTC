@@ -56,7 +56,7 @@ public class Jonas extends RobotConfig {
         public DcMotor outputA;
 
         /**
-         * Expansion 0: outputB
+         * Expansion 1: outputB
          */
         public DcMotor outputB;
 
@@ -138,9 +138,9 @@ public class Jonas extends RobotConfig {
                 .withName("drive");
 
         outputA = new Actuator(hw.outputA)
-                .withName("output");
+                .withName("outputA");
         outputB = new Actuator(hw.outputB)
-                .withName("output");
+                .withName("outputB");
 
     }
 }
