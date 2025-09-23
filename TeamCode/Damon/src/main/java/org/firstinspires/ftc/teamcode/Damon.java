@@ -8,6 +8,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inc
 
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
@@ -18,6 +19,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
 
@@ -32,6 +34,8 @@ public class Damon extends RobotConfig {
 
     // ... SUBSYSTEMS AND OTHER PUBLIC DECLARATIONS HERE ...
     public MecanumDrive drive;
+
+    public Actuator intake;
     // TODO: Add more subsystems here according to your robot's needs
     // .....................................................
 
@@ -62,7 +66,7 @@ public class Damon extends RobotConfig {
                         RevHubOrientationOnRobot.UsbFacingDirection.LEFT
                 ))));
 
-        hw.perp = getHardware("br", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.REVERSE));
+        hw.perp = getHardware("br", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
         hw.par = getHardware("fr", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
 
         DriveModel driveModel = new DriveModel.Builder()
@@ -90,6 +94,13 @@ public class Damon extends RobotConfig {
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
                 .withLocalizer(new TwoWheelLocalizer(driveModel, localizerPrams, hw.par, hw.perp, hw.imu))
                 .withName("Drive");
+
+        hw.intake = getHardware("intake", DcMotor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+        });
+
+        intake = new Actuator(hw.intake)
+                .withName("Intake");
     }
 
     /**
@@ -121,6 +132,8 @@ public class Damon extends RobotConfig {
         public RawEncoder par;
 
         public RawEncoder perp;
+
+        public DcMotorSimple intake;
 
 
 

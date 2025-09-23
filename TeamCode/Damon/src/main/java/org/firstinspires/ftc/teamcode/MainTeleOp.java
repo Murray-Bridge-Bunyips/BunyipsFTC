@@ -10,7 +10,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
  * Primary TeleOp.
  * Bootstrapped through bunyipslib-for-rookies.
  *
- * @author Your Name, Year // TODO: Set this to your name and the current year!
+ * @author Lucas Sacco, 2025
  */
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends BunyipsOpMode {
@@ -29,6 +29,16 @@ public class MainTeleOp extends BunyipsOpMode {
         double strafe = -gamepad1.left_stick_x;
         double rotation = -gamepad1.right_stick_x;
         robot.drive.setPower(Geometry.vel(forward, strafe, rotation));
+
+        if(gamepad1.xWasPressed()) {
+            robot.intake.setPower(1);
+        } else {
+            robot.intake.setPower(0);
+        }
+
+        //if(gamepad1.yWasPressed()) { shooter (needs to be definded in config)
+
+        //} else {}
 
         BunyipsSubsystem.updateAll();
     }

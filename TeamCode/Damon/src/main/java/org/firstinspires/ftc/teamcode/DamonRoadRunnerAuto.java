@@ -5,6 +5,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Fie
 
 import androidx.annotation.Nullable;
 
+import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -23,8 +24,8 @@ public class DamonRoadRunnerAuto extends AutonomousBunyipsOpMode {
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
         damon.drive.makeTrajectory()
-                .strafeTo(new Vector2d(1, 0), FieldTile)
-                .strafeTo(new Vector2d(0, 0), FieldTile)
+                .strafeTo(new Vector2d(3, 0), FieldTile)
+                .strafeTo(new Vector2d(3,-2), FieldTile)
                 .addTask();
     }
 }
