@@ -66,8 +66,7 @@ public class MainTeleOp extends CommandBasedBunyipsOpMode {
         driver().whenPressed(Controls.Y)
                 .run(() -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
-        robot.outputA.setDefaultTask(robot.outputA.tasks.control(() -> gamepad2.right_trigger));
-        robot.outputB.setDefaultTask(robot.outputB.tasks.control(() -> gamepad2.right_trigger));
+//        robot.output.setDefaultTask(robot.output.tasks.control(() -> gamepad2.right_trigger));
 
         robot.drive.setDefaultTask(driveTask);
     }
