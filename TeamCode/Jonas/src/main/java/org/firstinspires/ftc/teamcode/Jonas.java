@@ -6,10 +6,12 @@ import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.PinpointLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
@@ -58,6 +60,11 @@ public class Jonas extends RobotConfig {
         public DcMotor output;
 
         /**
+         * Expansion 1: intake
+         */
+        public DcMotor intake;
+
+        /**
          * Internally connected
          */
         public IMUEx imu;
@@ -77,6 +84,11 @@ public class Jonas extends RobotConfig {
      * Output Rotator
      */
     public Actuator output;
+
+    /**
+     * Intake Rotator
+     */
+    public Actuator intake;
 
     /**
      * [Mechanism Name] [Mechanism Class]
@@ -105,6 +117,9 @@ public class Jonas extends RobotConfig {
                         RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
                 ))));
 
+        hw.output = getHardware("output", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+        hw.intake = getHardware("intake", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+
         // roadrunner template
         DriveModel driveModel = new DriveModel.Builder()
 //                .setInPerTick()
@@ -129,5 +144,15 @@ public class Jonas extends RobotConfig {
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, hw.imu, hardwareMap.voltageSensor)
 //                .withLocalizer(new PinpointLocalizer(driveModel, localiserParams, pinpoint));
                 .withName("drive");
+
+        MecanumLocalizer localizer = (MecanumLocalizer) drive.getLocalizer();
+        localizer.leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        localizer.leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        output = new Actuator(hw.output)
+                .withName("output");
+
+        intake = new Actuator(hw.intake)
+                .withName("intake");
     }
 }

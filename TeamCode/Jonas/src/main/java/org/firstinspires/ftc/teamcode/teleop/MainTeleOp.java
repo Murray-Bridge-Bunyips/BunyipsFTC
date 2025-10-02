@@ -25,6 +25,8 @@ public class MainTeleOp extends CommandBasedBunyipsOpMode {
     private final Jonas robot = new Jonas();
     public static StartingConfiguration.Position startingPos;
     private Measure<Angle> offset;
+    private boolean outputOn = false;
+    private boolean intakeOn = false;
 
     public static boolean FIELD_CENTRIC_ENABLED = true;
 
@@ -66,8 +68,19 @@ public class MainTeleOp extends CommandBasedBunyipsOpMode {
         driver().whenPressed(Controls.Y)
                 .run(() -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
-//        robot.output.setDefaultTask(robot.output.tasks.control(() -> gamepad2.right_trigger));
+        robot.output.setDefaultTask(robot.output.tasks.control(() -> outputOn ? 1 : 0));
+        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> intakeOn ? 1 : 0));
 
         robot.drive.setDefaultTask(driveTask);
+    }
+
+    @Override
+    protected void periodic() {
+        if (gamepad2.getDebounced(Controls.Y)) {
+            outputOn = !outputOn;
+        }
+        if (gamepad2.getDebounced(Controls.A)) {
+            intakeOn = !intakeOn;
+        }
     }
 }
