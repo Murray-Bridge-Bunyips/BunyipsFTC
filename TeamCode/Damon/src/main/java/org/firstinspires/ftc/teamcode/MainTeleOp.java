@@ -30,17 +30,26 @@ public class MainTeleOp extends BunyipsOpMode {
         double rotation = -gamepad1.right_stick_x;
         robot.drive.setPower(Geometry.vel(forward, strafe, rotation));
 
-        if(gamepad1.xWasPressed()) { //Was pressed does not work
+        if(gamepad1.x) {
             robot.intake.setPower(1);
+        } else if(gamepad1.a) {
+            robot.intake.setPower(-1);
         } else {
             robot.intake.setPower(0);
         }
 
-        if(gamepad1.yWasPressed()) {
+        if(gamepad1.y) {
             robot.shooter.setPower(1);
         } else {
             robot.shooter.setPower(0);
         }
+
+        if(gamepad1.b) {
+            robot.transferWheel.setPower(1);
+        } else {
+            robot.transferWheel.setPower(0);
+        }
+
 
         BunyipsSubsystem.updateAll();
     }

@@ -41,6 +41,8 @@ public class Damon extends RobotConfig {
     public Actuator intake;
 
     public Actuator shooter;
+
+    public Actuator transferWheel;
     // TODO: Add more subsystems here according to your robot's needs
     // .....................................................
 
@@ -78,24 +80,24 @@ public class Damon extends RobotConfig {
         //hw.perp = getHardware("br", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
         //hw.par = getHardware("fr", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
 
-        PinpointLocalizer.Params localizerParams = (PinpointLocalizer.Params) new PinpointLocalizer.Params.Builder()
+        PinpointLocalizer.Params localizerParams = new PinpointLocalizer.Params.Builder()
                 .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
                 .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-                .setParYTicks(-2966.047427958696)
-                .setPerpXTicks(-5033.877470065803)
+                .setParYTicks(-2737.3825691212733)
+                .setPerpXTicks(-4468.100872270982)
                 // More to be filled out later by the Tuning steps ...
                 .build();
 
         DriveModel driveModel = new DriveModel.Builder()
-                .setDistPerTick(Meters.of(1), 110929)
-                .setLateralInPerTick(0.0003088970325877977)
-                .setTrackWidthTicks(16265.454853913478)
+                .setInPerTick(100.0 / 117357.0) //0.00085210085
+                .setLateralInPerTick(0.000670614596735509)
+                .setTrackWidthTicks(16275.093953873606)
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
                 .setMaxWheelVel(InchesPerSecond.of(35))
                 .setMaxAngVel(DegreesPerSecond.of(180))
-                .setKv(0.0002164422162730806)
-                .setKs(0.6046451184369461)
+                .setKv(0.00021306126516884056)
+                .setKs(0.7893452585903953)
                 .setKa(0.00001000)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
@@ -123,6 +125,14 @@ public class Damon extends RobotConfig {
 
         shooter = new Actuator(hw.shooter)
                 .withName("Shooter");
+
+        hw.transferWheel = getHardware("transferWheel", DcMotor.class, (d) -> {
+            // TODO: Set the direction of the intake motor here
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+        });
+
+        transferWheel = new Actuator(hw.transferWheel)
+                .withName("TransferWheel");
 
 
     }
@@ -162,6 +172,8 @@ public class Damon extends RobotConfig {
         public GoBildaPinpointDriver pinpoint;
 
         public DcMotorSimple shooter;
+
+        public DcMotorSimple transferWheel;
 
 
 
