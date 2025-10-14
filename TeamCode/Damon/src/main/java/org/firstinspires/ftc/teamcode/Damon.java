@@ -7,6 +7,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Fie
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Meters;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -15,8 +16,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.SystemController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.kV;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.PinpointLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
@@ -32,6 +38,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumD
  *
  * @author Your Name, Year // TODO: Set this to your name and the current year!
  */
+@Config
 public class Damon extends RobotConfig {
     public final Hardware hw = new Hardware();
 
@@ -43,6 +50,8 @@ public class Damon extends RobotConfig {
     public Actuator shooter;
 
     public Actuator transferWheel;
+
+    public static double kP = 15, kI = 0, kD = 0, kV = 0.9;
     // TODO: Add more subsystems here according to your robot's needs
     // .....................................................
 
@@ -118,9 +127,20 @@ public class Damon extends RobotConfig {
         intake = new Actuator(hw.intake)
                 .withName("Intake");
 
-        hw.shooter = getHardware("shooter", DcMotor.class, (d) -> {
+        hw.shooter = getHardware("shooter", Motor.class, (d) -> {
             // TODO: Set the direction of the intake motor here
             d.setDirection(DcMotorSimple.Direction.REVERSE);
+            PIDController pid = new PIDController(kP, kI, kD);
+            pid.setTolerance(200);
+            SystemController ff = new kV(kV);
+            d.setRunUsingEncoderController(1, 2300, pid.compose(ff));
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+                o.telemetry.addData("currentVelocity", d.getVelocity());
+                o.telemetry.addData("targetVelocity", pid.getSetpoint());
+                pid.setPID(kP, kI, kD);
+                ff.setCoefficients(kV);
+            }));
+            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         });
 
         shooter = new Actuator(hw.shooter)
@@ -171,7 +191,7 @@ public class Damon extends RobotConfig {
 
         public GoBildaPinpointDriver pinpoint;
 
-        public DcMotorSimple shooter;
+        public Motor shooter;
 
         public DcMotorSimple transferWheel;
 
