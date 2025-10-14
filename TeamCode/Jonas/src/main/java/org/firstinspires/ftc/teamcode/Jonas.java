@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
@@ -17,6 +18,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 @Config
@@ -64,6 +66,15 @@ public class Jonas extends RobotConfig {
          */
         public DcMotor intake;
 
+
+
+        /**
+         * Expansion 5: preventer
+         */
+        public Servo preventer;
+
+
+
         /**
          * Internally connected
          */
@@ -81,19 +92,19 @@ public class Jonas extends RobotConfig {
     public MecanumDrive drive;
 
     /**
-     * Output Rotator
+     * Output Actuator
      */
     public Actuator output;
 
     /**
-     * Intake Rotator
+     * Intake Actuator
      */
     public Actuator intake;
 
     /**
-     * [Mechanism Name] [Mechanism Class]
+     * Preventer Switch
      */
-
+    public Switch preventer;
 
     public final Hardware hw = new Hardware();
 
@@ -119,6 +130,8 @@ public class Jonas extends RobotConfig {
 
         hw.output = getHardware("output", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.intake = getHardware("intake", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+
+        hw.preventer = getHardware("preventer", Servo.class);
 
         // roadrunner template
         DriveModel driveModel = new DriveModel.Builder()
@@ -154,5 +167,9 @@ public class Jonas extends RobotConfig {
 
         intake = new Actuator(hw.intake)
                 .withName("intake");
+
+        //TODO: determine whether closed and opened positions need to be swapped and tune openPosition
+        preventer = new Switch(hw.preventer, 0, 0.5)
+                .withName("preventer");
     }
 }
