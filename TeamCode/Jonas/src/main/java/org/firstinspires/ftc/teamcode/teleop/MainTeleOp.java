@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -14,6 +15,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
@@ -69,18 +71,20 @@ public class MainTeleOp extends CommandBasedBunyipsOpMode {
         driver().whenPressed(Controls.Y)
                 .run(() -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
+        robot.output.setDefaultTask(robot.output.tasks.control(() -> gamepad2.dpad_up ? 1 : 0));
+        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> gamepad2.left_bumper ? 1 : 0));
+        operator().whenPressed(Controls.DPAD_LEFT)
+                .run(robot.preventer.tasks.toggle());
+
         operator().whenPressed(Controls.Y)
-                .run(robot.output.tasks.run(1))
-                .run(robot.preventer.tasks.close())
+                //TODO: test the below
+                .run(new ParallelTaskGroup(robot.output.tasks.run(1), robot.intake.tasks.run(1).after(robot.preventer.tasks.open().after(1, Seconds))))
+                .finishIf(() -> gamepad2.a)
                 .finishIfButtonRetriggered();
         operator().whenPressed(Controls.A)
-                .run(robot.intake.tasks.run(1))
-                //TODO: add a timeout before it opens
-                .run(robot.preventer.tasks.open())
+                .run(robot.intake.tasks.run(1).with(robot.preventer.tasks.close()))
+                .finishIf(() -> gamepad2.y)
                 .finishIfButtonRetriggered();
-
-        operator().whenPressed(Controls.X)
-                .run(robot.preventer.tasks.toggle());
 
         robot.drive.setDefaultTask(driveTask);
     }

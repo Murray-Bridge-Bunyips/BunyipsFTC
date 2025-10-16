@@ -169,7 +169,7 @@ public class Jonas extends RobotConfig {
                 .withName("intake");
 
         //TODO: determine whether closed and opened positions need to be swapped and tune openPosition
-        preventer = new Switch(hw.preventer, 0, 0.5)
+        preventer = new Switch(hw.preventer, 0, 0.4)
                 .withName("preventer");
     }
 }
