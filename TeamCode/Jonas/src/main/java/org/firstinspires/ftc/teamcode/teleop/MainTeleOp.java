@@ -4,11 +4,18 @@ package org.firstinspires.ftc.teamcode.teleop;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler.*;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.*;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Analog.*;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.task;
+
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Jonas;
 
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.CommandBasedBunyipsOpMode;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.executables.UserSelection;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Angle;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
@@ -22,18 +29,18 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Threads;
 
+@Config
 @TeleOp(name = "TeleOp")
-public class MainTeleOp extends CommandBasedBunyipsOpMode {
-    private final Jonas robot = new Jonas();
-    public static StartingConfiguration.Position startingPos;
-    private Measure<Angle> offset;
-
+public class MainTeleOp extends BunyipsOpMode {
     public static boolean FIELD_CENTRIC_ENABLED = true;
+    private final Jonas robot = new Jonas();
 
     @Override
-    protected void onInitialise() {
+    protected void onInit() {
         robot.init();
 
+        Measure<Angle> offset;
+        StartingConfiguration.Position startingPos = Storage.memory().lastKnownStartingConfiguration;
         if (startingPos == null) {
             offset = Radians.of(Storage.memory().lastKnownPosition.heading.toDouble());
             Dbg.log("startingPos was null");
@@ -46,46 +53,54 @@ public class MainTeleOp extends CommandBasedBunyipsOpMode {
             Dbg.log("startingPos was not null or valid");
         }
         Dbg.log(offset);
-        startingPos = null;
 
         UserSelection<String> fieldCentricSelector = new UserSelection<>(
                 (s) -> FIELD_CENTRIC_ENABLED = s == null || s.equals("FIELD-CENTRIC"), "ROBOT-CENTRIC", "FIELD-CENTRIC")
                 .captionLayer(0, "SELECT DRIVE MODE");
-        setInitTask(Task.task()
-                .init(() -> Threads.start("drive selector", fieldCentricSelector))
+        setInitTask(task().init(() -> Threads.start("drive selector", fieldCentricSelector))
                 .isFinished(() -> !Threads.isRunning(fieldCentricSelector)));
+
+        FieldOrientableDriveTask driveTask = new HolonomicDriveTask(gamepad1, robot.drive);
+        driveTask.setFieldCentricOffset(offset);
+        driveTask.withFieldCentric(() -> FIELD_CENTRIC_ENABLED)
+                .setAsDefaultTask();
+        gamepad1().button(A)
+                .onTrue("Reset FC Origin", driveTask::resetFieldCentricOrigin);
+        gamepad1().button(Y)
+                .onTrue("Recenter FC Origin", () -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
+
+        gamepad2().button(DPAD_UP)
+                .whileTrue(robot.output.tasks.run(1));
+        gamepad2().button(LEFT_BUMPER)
+                .whileTrue(robot.intake.tasks.run(1));
+        gamepad2().button(DPAD_LEFT)
+                .onTrue(robot.preventer.tasks.toggle());
+
+        gamepad2().button(Y)
+                //TODO: test the below
+                .toggleOnTrue(
+                        new ParallelTaskGroup(
+                                robot.output.tasks.run(1),
+                                robot.intake.tasks.run(1)
+                                        .after(robot.preventer.tasks.open().after(1, Seconds))
+                        ).until(gamepad2().button(Y))
+                );
+        gamepad2().button(A)
+                .toggleOnTrue(
+                        robot.intake.tasks.run(1).with(robot.preventer.tasks.close())
+                            .until(gamepad2().button(Y))
+                );
+
+        robot.drive.setDefaultTask(driveTask);
     }
 
     @Override
-    protected void onStart() { robot.preventer.close(); }
+    protected void onStart() {
+        robot.preventer.close();
+    }
 
     @Override
-    protected void assignCommands() {
-        FieldOrientableDriveTask driveTask = new HolonomicDriveTask(gamepad1, robot.drive);
-        driveTask.withFieldCentric(() -> FIELD_CENTRIC_ENABLED).setAsDefaultTask();
-
-        driveTask.setFieldCentricOffset(offset);
-
-        driver().whenPressed(Controls.A)
-                .run(driveTask::resetFieldCentricOrigin);
-        driver().whenPressed(Controls.Y)
-                .run(() -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
-
-        robot.output.setDefaultTask(robot.output.tasks.control(() -> gamepad2.dpad_up ? 1 : 0));
-        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> gamepad2.left_bumper ? 1 : 0));
-        operator().whenPressed(Controls.DPAD_LEFT)
-                .run(robot.preventer.tasks.toggle());
-
-        operator().whenPressed(Controls.Y)
-                //TODO: test the below
-                .run(new ParallelTaskGroup(robot.output.tasks.run(1), robot.intake.tasks.run(1).after(robot.preventer.tasks.open().after(1, Seconds))))
-                .finishIf(() -> gamepad2.a)
-                .finishIfButtonRetriggered();
-        operator().whenPressed(Controls.A)
-                .run(robot.intake.tasks.run(1).with(robot.preventer.tasks.close()))
-                .finishIf(() -> gamepad2.y)
-                .finishIfButtonRetriggered();
-
-        robot.drive.setDefaultTask(driveTask);
+    protected void activeLoop() {
+        Scheduler.update();
     }
 }
