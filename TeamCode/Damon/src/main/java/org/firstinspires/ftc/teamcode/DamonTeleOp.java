@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -31,9 +30,10 @@ public class DamonTeleOp extends BunyipsOpMode {
                 .whileTrue(robot.intake.tasks.run(1));
         gamepad1().button(A)
                 .whileTrue(robot.intake.tasks.run(-1));
-        robot.intake.tasks.control(() -> gamepad1.x ? 1 : gamepad1.a ? -1 : 0).setAsDefaultTask();
-        robot.shooter.tasks.control(() -> gamepad1.y ? 1 : 0).setAsDefaultTask();
-        robot.transferWheel.tasks.control(() -> gamepad1.b && robot.hw.shooter.getRunUsingEncoderController().pidf().get().atSetpoint() ? 1 : 0).setAsDefaultTask();
+        gamepad1().button(Y)
+                .whileTrue(robot.shooter.tasks.run(1));
+        gamepad1().button(B).and(() -> robot.hw.shooter.getRunUsingEncoderController().pidf().get().atSetpoint())
+                .whileTrue(robot.transferWheel.tasks.run(1));
 
         gamepad1().button(RIGHT_BUMPER)
                 .whileTrue(new AlignToPointDriveTask(() -> new Vector2d(0,0), gamepad1, robot.drive));
