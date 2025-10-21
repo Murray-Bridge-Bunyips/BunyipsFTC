@@ -4,9 +4,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.*;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Analog.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.task;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -21,9 +19,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Angle;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
@@ -67,7 +63,7 @@ public class MainTeleOp extends BunyipsOpMode {
         gamepad1.button(A)
                 .onTrue("Reset FC Origin", driveTask::resetFieldCentricOrigin);
         gamepad1.button(Y)
-                .onTrue("Recenter FC Origin", () -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
+                .onTrue("Invert FC Origin", () -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
         gamepad2.button(DPAD_UP)
                 .whileTrue(robot.output.tasks.run(1));
@@ -83,7 +79,7 @@ public class MainTeleOp extends BunyipsOpMode {
                                 robot.output.tasks.run(1),
                                 robot.intake.tasks.run(1)
                                         .after(robot.preventer.tasks.open().after(1, Seconds))
-                        ).until(gamepad2.button(Y))
+                        ).until(gamepad2.button(A))
                 );
         gamepad2.button(A)
                 .toggleOnTrue(
