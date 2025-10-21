@@ -1,36 +1,27 @@
 package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecond;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecondPerSecond;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTilesPerSecond;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTilesPerSecondPerSecond;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Meters;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.SystemController;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.ff.kV;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.PinpointLocalizer;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.TwoWheelLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
 
 /**
  * Main robot configuration file.
@@ -51,7 +42,7 @@ public class Damon extends RobotConfig {
 
     public Actuator transferWheel;
 
-    public static double kP = 15, kI = 0, kD = 0, kV = 0.9;
+    public static double shooter_kP = 15, shooter_kV = 0.9;
     // TODO: Add more subsystems here according to your robot's needs
     // .....................................................
 
@@ -128,18 +119,12 @@ public class Damon extends RobotConfig {
                 .withName("Intake");
 
         hw.shooter = getHardware("shooter", Motor.class, (d) -> {
-            // TODO: Set the direction of the intake motor here
             d.setDirection(DcMotorSimple.Direction.REVERSE);
-            PIDController pid = new PIDController(kP, kI, kD);
-            pid.setTolerance(200);
-            SystemController ff = new kV(kV);
-            d.setRunUsingEncoderController(1, 2300, pid.compose(ff));
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-                o.telemetry.addData("currentVelocity", d.getVelocity());
-                o.telemetry.addData("targetVelocity", pid.getSetpoint());
-                pid.setPID(kP, kI, kD);
-                ff.setCoefficients(kV);
-            }));
+            PIDFController pidf = new PIDFController(shooter_kP, 0, 0, shooter_kV);
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() ->
+                    pidf.setPIDF(shooter_kP, 0, 0, shooter_kV)));
+            pidf.setTolerance(200);
+            d.setRunUsingEncoderController(1, 2300, pidf);
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         });
 
