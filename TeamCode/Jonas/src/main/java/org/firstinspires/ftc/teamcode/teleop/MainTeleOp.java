@@ -64,31 +64,31 @@ public class MainTeleOp extends BunyipsOpMode {
         driveTask.setFieldCentricOffset(offset);
         driveTask.withFieldCentric(() -> FIELD_CENTRIC_ENABLED)
                 .setAsDefaultTask();
-        gamepad1().button(A)
+        gamepad1.button(A)
                 .onTrue("Reset FC Origin", driveTask::resetFieldCentricOrigin);
-        gamepad1().button(Y)
+        gamepad1.button(Y)
                 .onTrue("Recenter FC Origin", () -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
-        gamepad2().button(DPAD_UP)
+        gamepad2.button(DPAD_UP)
                 .whileTrue(robot.output.tasks.run(1));
-        gamepad2().button(LEFT_BUMPER)
+        gamepad2.button(LEFT_BUMPER)
                 .whileTrue(robot.intake.tasks.run(1));
-        gamepad2().button(DPAD_LEFT)
+        gamepad2.button(DPAD_LEFT)
                 .onTrue(robot.preventer.tasks.toggle());
 
-        gamepad2().button(Y)
+        gamepad2.button(Y)
                 //TODO: test the below
                 .toggleOnTrue(
                         new ParallelTaskGroup(
                                 robot.output.tasks.run(1),
                                 robot.intake.tasks.run(1)
                                         .after(robot.preventer.tasks.open().after(1, Seconds))
-                        ).until(gamepad2().button(Y))
+                        ).until(gamepad2.button(Y))
                 );
-        gamepad2().button(A)
+        gamepad2.button(A)
                 .toggleOnTrue(
                         robot.intake.tasks.run(1).with(robot.preventer.tasks.close())
-                            .until(gamepad2().button(Y))
+                            .until(gamepad2.button(Y))
                 );
 
         robot.drive.setDefaultTask(driveTask);
