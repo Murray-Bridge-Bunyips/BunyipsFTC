@@ -1,18 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.PinpointLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
@@ -45,15 +43,9 @@ public class Jonas extends RobotConfig {
         public DcMotor frontLeft;
 
         /**
-         * Control ?: ??
+         * Control 0: pinpoint
          */
-//        public RawEncoder dwPerpendicular;
-
-        /**
-         * Control ?: ??
-         */
-//        public RawEncoder dwParallel;
-
+        public GoBildaPinpointDriver pinpoint;
 
 
         /**
@@ -67,23 +59,16 @@ public class Jonas extends RobotConfig {
         public DcMotor intake;
 
 
-
         /**
-         * Expansion 5: preventer
+         * Expansion 0: preventer
          */
-        public Servo preventer;
-
+        public ServoEx preventer;
 
 
         /**
-         * Internally connected
+         * ?? ?: ?
          */
-        public IMUEx imu;
-
-        /**
-         * Pinpoint
-         */
-        public GoBildaPinpointDriver pinpoint;
+//        public BlinkinLights lights;
     }
 
     /**
@@ -122,16 +107,15 @@ public class Jonas extends RobotConfig {
         hw.frontRight = getHardware("fr", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.backRight = getHardware("br", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
 
-        hw.imu = getHardware("imu", IMUEx.class, d ->
-                d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                        RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
-                ))));
+        hw.pinpoint = getHardware("pinpoint", GoBildaPinpointDriver.class);
 
         hw.output = getHardware("output", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.intake = getHardware("intake", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
 
-        hw.preventer = getHardware("preventer", Servo.class);
+        hw.preventer = getHardware("preventer", ServoEx.class, (d) -> {
+            d.setEndToEndTime(Seconds.of(0.4));
+            d.scaleRange(0, 0.4);
+        });
 
         // roadrunner template
         DriveModel driveModel = new DriveModel.Builder()
@@ -149,18 +133,14 @@ public class Jonas extends RobotConfig {
 //                .setLateralGain()
 //                .setHeadingGain()
                 .build();
-//        PinpointLocalizer.Params localiserParams = new PinpointLocalizer.Params.Builder()
+        PinpointLocalizer.Params localiserParams = new PinpointLocalizer.Params.Builder()
 //                .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
 //                .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-//                .build();
+                .build();
 
-        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, hw.imu, hardwareMap.voltageSensor)
-//                .withLocalizer(new PinpointLocalizer(driveModel, localiserParams, pinpoint));
+        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, IMUEx.none(), hardwareMap.voltageSensor)
+                .withLocalizer(new PinpointLocalizer(driveModel, localiserParams, hw.pinpoint))
                 .withName("drive");
-
-        MecanumLocalizer localizer = (MecanumLocalizer) drive.getLocalizer();
-        localizer.leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
-        localizer.leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         output = new Actuator(hw.output)
                 .withName("output");
@@ -168,8 +148,7 @@ public class Jonas extends RobotConfig {
         intake = new Actuator(hw.intake)
                 .withName("intake");
 
-        //TODO: determine whether closed and opened positions need to be swapped and tune openPosition
-        preventer = new Switch(hw.preventer, 0, 0.4)
+        preventer = new Switch(hw.preventer)
                 .withName("preventer");
     }
 }

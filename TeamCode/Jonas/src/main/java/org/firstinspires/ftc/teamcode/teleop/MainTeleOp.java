@@ -73,12 +73,11 @@ public class MainTeleOp extends BunyipsOpMode {
                 .onTrue(robot.preventer.tasks.toggle());
 
         gamepad2.button(Y)
-                //TODO: test the below
                 .toggleOnTrue(
                         new ParallelTaskGroup(
                                 robot.output.tasks.run(1),
                                 robot.intake.tasks.run(1)
-                                        .after(robot.preventer.tasks.open().after(1, Seconds))
+                                        .after(robot.preventer.tasks.open().after(1.6, Seconds))
                         ).until(gamepad2.button(A))
                 );
         gamepad2.button(A)
@@ -92,6 +91,7 @@ public class MainTeleOp extends BunyipsOpMode {
 
     @Override
     protected void onStart() {
+        robot.hw.preventer.setPwmEnable();
         robot.preventer.close();
     }
 
