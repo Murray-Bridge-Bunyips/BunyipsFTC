@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
@@ -14,6 +15,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
  * @author Lucas Sacco, 2025
  */
 @Config
+@Disabled
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends BunyipsOpMode {
     private final Damon robot = new Damon();
@@ -46,6 +48,7 @@ public class MainTeleOp extends BunyipsOpMode {
             robot.shooter.setPower(0);
         }
 
+        // TODO: check if velocity is not zero too?
         if(gamepad1.b && robot.hw.shooter.getRunUsingEncoderController().pidf().get().atSetpoint()) {
             robot.transferWheel.setPower(1);
         } else {
