@@ -91,7 +91,6 @@ public class MainTeleOp extends BunyipsOpMode {
 
     @Override
     protected void onStart() {
-        robot.hw.preventer.setPwmEnable();
         robot.preventer.close();
     }
 

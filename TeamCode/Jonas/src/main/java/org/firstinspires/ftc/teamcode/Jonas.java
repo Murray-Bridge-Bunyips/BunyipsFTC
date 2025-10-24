@@ -5,6 +5,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Sec
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
@@ -16,6 +17,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
@@ -68,7 +70,7 @@ public class Jonas extends RobotConfig {
         /**
          * ?? ?: ?
          */
-//        public BlinkinLights lights;
+        public RevBlinkinLedDriver lights;
     }
 
     /**
@@ -90,6 +92,11 @@ public class Jonas extends RobotConfig {
      * Preventer Switch
      */
     public Switch preventer;
+
+    /**
+     * Lights BlinkinLights
+     */
+    public BlinkinLights lights;
 
     public final Hardware hw = new Hardware();
 
@@ -116,6 +123,8 @@ public class Jonas extends RobotConfig {
             d.setEndToEndTime(Seconds.of(0.4));
             d.scaleRange(0, 0.4);
         });
+
+        hw.lights = getHardware("???", RevBlinkinLedDriver.class);
 
         // roadrunner template
         DriveModel driveModel = new DriveModel.Builder()
@@ -150,5 +159,8 @@ public class Jonas extends RobotConfig {
 
         preventer = new Switch(hw.preventer)
                 .withName("preventer");
+
+        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
+                .withName("lights");
     }
 }
