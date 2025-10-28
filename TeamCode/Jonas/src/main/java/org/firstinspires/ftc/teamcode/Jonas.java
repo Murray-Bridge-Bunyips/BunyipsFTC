@@ -62,13 +62,13 @@ public class Jonas extends RobotConfig {
 
 
         /**
-         * Expansion 0: preventer
+         * Expansion 5: preventer
          */
         public ServoEx preventer;
 
 
         /**
-         * ?? ?: ?
+         * Expansion 0: lights
          */
         public RevBlinkinLedDriver lights;
     }
@@ -124,7 +124,7 @@ public class Jonas extends RobotConfig {
             d.scaleRange(0, 0.4);
         });
 
-        hw.lights = getHardware("???", RevBlinkinLedDriver.class);
+        hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
 
         // roadrunner template
         DriveModel driveModel = new DriveModel.Builder()
@@ -143,8 +143,8 @@ public class Jonas extends RobotConfig {
 //                .setHeadingGain()
                 .build();
         PinpointLocalizer.Params localiserParams = new PinpointLocalizer.Params.Builder()
-//                .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-//                .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
+                .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
+                .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
                 .build();
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, IMUEx.none(), hardwareMap.voltageSensor)
