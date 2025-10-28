@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Centimeter;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTile;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 
 import androidx.annotation.Nullable;
 
@@ -23,9 +25,15 @@ public class DamonRoadRunnerAuto extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
+        damon.drive.setPose(new Vector2d(-54, -45), Inches, 53, Degrees);
         damon.drive.makeTrajectory()
-                .strafeTo(new Vector2d(3, 0), FieldTile)
-                .strafeTo(new Vector2d(3,-2), FieldTile)
+                .strafeTo(new Vector2d(-20, -8.5))
+                //Launch Artifacts
+                .strafeToLinearHeading(new Vector2d(-8, -8.5), Inches, -90, Degrees)
+                .strafeTo(new Vector2d(-8, -53))
+                //Lower speed and intake Artifacts
+                .strafeToLinearHeading(new Vector2d(-20, -8.5), Inches, 53, Degrees)
+                //Launch Artifacts
                 .addTask();
     }
 }
