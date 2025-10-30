@@ -8,6 +8,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.*;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Jonas;
@@ -75,9 +76,10 @@ public class MainTeleOp extends BunyipsOpMode {
         gamepad2.button(Y)
                 .toggleOnTrue(
                         new ParallelTaskGroup(
+                                robot.lights.tasks.setPatternFor(Seconds.of(2.4), RevBlinkinLedDriver.BlinkinPattern.CP1_BREATH_FAST).then(() -> robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED)),
                                 robot.output.tasks.run(1),
                                 robot.intake.tasks.run(1)
-                                        .after(robot.preventer.tasks.open().after(1.6, Seconds))
+                                        .after(robot.preventer.tasks.open().after(2, Seconds))
                         ).until(gamepad2.button(A))
                 );
         gamepad2.button(A)

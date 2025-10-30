@@ -149,18 +149,18 @@ public class Jonas extends RobotConfig {
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, IMUEx.none(), hardwareMap.voltageSensor)
                 .withLocalizer(new PinpointLocalizer(driveModel, localiserParams, hw.pinpoint))
-                .withName("drive");
+                .withName("Drive");
 
         output = new Actuator(hw.output)
-                .withName("output");
+                .withName("Output");
 
         intake = new Actuator(hw.intake)
-                .withName("intake");
+                .withName("Intake");
 
         preventer = new Switch(hw.preventer)
-                .withName("preventer");
+                .withName("Preventer");
 
-        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.LAWN_GREEN)
-                .withName("lights");
+        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.SINELON_RAINBOW_PALETTE)
+                .withName("Lights");
     }
 }
