@@ -48,6 +48,8 @@ public class DamonTeleOp extends BunyipsOpMode {
                 .whileTrue(robot.intake.tasks.run(-1));
         gamepad1.button(Y)
                 .whileTrue(robot.shooter.tasks.run(1));
+        gamepad1.button(LEFT_BUMPER)
+                .whileTrue(robot.shooter.tasks.run(0.85));
         gamepad1.button(B).and(shooterPid::atSetpoint)
                 .whileTrue(robot.transferWheel.tasks.run(1));
 

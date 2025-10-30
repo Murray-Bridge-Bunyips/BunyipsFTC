@@ -118,7 +118,7 @@ public class Damon extends RobotConfig {
                 .withName("Intake");
 
         hw.shooter = getHardware("shooter", Motor.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.REVERSE);
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
             PIDFController pidf = new PIDFController(shooter_kP, 0, 0, shooter_kV);
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() ->
                     pidf.setPIDF(shooter_kP, 0, 0, shooter_kV)));
