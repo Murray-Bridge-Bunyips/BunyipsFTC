@@ -44,13 +44,28 @@ public class DamonTeleOp extends BunyipsOpMode {
         new HolonomicDriveTask(gamepad1, robot.drive).setAsDefaultTask();
         gamepad1.button(X)
                 .whileTrue(robot.intake.tasks.run(1));
+        gamepad2.button(X)
+                .whileTrue(robot.intake.tasks.run(1));
+
         gamepad1.button(A)
                 .whileTrue(robot.intake.tasks.run(-1));
+        gamepad2.button(A)
+                .whileTrue(robot.intake.tasks.run(-1));
+
         gamepad1.button(Y)
                 .whileTrue(robot.shooter.tasks.run(1));
+        gamepad2.axisGreaterThan(LEFT_TRIGGER, 0.9)
+                        .whileTrue(robot.shooter.tasks.run(1));
+
+
         gamepad1.button(LEFT_BUMPER)
                 .whileTrue(robot.shooter.tasks.run(0.85));
+        gamepad2.button(LEFT_BUMPER)
+                .whileTrue(robot.shooter.tasks.run(0.85));
+
         gamepad1.button(B).and(shooterPid::atSetpoint)
+                .whileTrue(robot.transferWheel.tasks.run(1));
+        gamepad2.button(RIGHT_BUMPER).and(shooterPid::atSetpoint)
                 .whileTrue(robot.transferWheel.tasks.run(1));
 
         gamepad1.button(RIGHT_BUMPER)
