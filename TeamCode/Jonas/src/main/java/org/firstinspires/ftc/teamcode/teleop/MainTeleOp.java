@@ -76,8 +76,8 @@ public class MainTeleOp extends BunyipsOpMode {
         gamepad2.button(Y)
                 .toggleOnTrue(
                         new ParallelTaskGroup(
-                                robot.lights.tasks.setPatternFor(Seconds.of(2.4), RevBlinkinLedDriver.BlinkinPattern.CP1_BREATH_FAST).then(() -> robot.lights.setPattern(RevBlinkinLedDriver.BlinkinPattern.RED)),
-                                robot.output.tasks.run(1),
+                                robot.lights.tasks.setPatternFor(Seconds.of(2.4), RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_WHITE).then(robot.lights.tasks.setPatternFor(INFINITE_TIMEOUT, RevBlinkinLedDriver.BlinkinPattern.WHITE)),
+                                robot.output.tasks.run(0.9), //TODO: determine a good number for this before tuning
                                 robot.intake.tasks.run(1)
                                         .after(robot.preventer.tasks.open().after(2, Seconds))
                         ).until(gamepad2.button(A))

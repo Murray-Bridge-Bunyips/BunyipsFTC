@@ -9,8 +9,11 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.PinpointLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
@@ -53,7 +56,7 @@ public class Jonas extends RobotConfig {
         /**
          * Expansion 0: output
          */
-        public DcMotor output;
+        public Motor output;
 
         /**
          * Expansion 1: intake
@@ -100,6 +103,8 @@ public class Jonas extends RobotConfig {
 
     public final Hardware hw = new Hardware();
 
+    public static double outputP = 0.0, outputF = 0.0;
+
     @Override
     protected void onRuntime() {
         hw.frontLeft = getHardware("fl", DcMotorEx.class, (d) -> {
@@ -116,7 +121,19 @@ public class Jonas extends RobotConfig {
 
         hw.pinpoint = getHardware("pinpoint", GoBildaPinpointDriver.class);
 
-        hw.output = getHardware("output", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
+        hw.output = getHardware("output", Motor.class, (d) -> {
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            PIDFController pidf = new PIDFController(outputP, 0.0, 0.0, outputF);
+            d.setRunUsingEncoderController(1, 1900, pidf);
+            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+                pidf.setPIDF(outputP, 0.0, 0.0, outputF);
+                o.telemetry.addData("currentVelocity", d.getVelocity());
+                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
+            }));
+        });
         hw.intake = getHardware("intake", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
 
         hw.preventer = getHardware("preventer", ServoEx.class, (d) -> {
