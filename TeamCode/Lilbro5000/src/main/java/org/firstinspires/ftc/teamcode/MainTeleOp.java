@@ -29,13 +29,16 @@ public class MainTeleOp extends BunyipsOpMode {
         double rotation = -gamepad1.right_stick_x;
         robot.drive.setPower(Geometry.vel(forward, strafe, rotation));
 
-        robot.intake.setPower(gamepad2.left_trigger);
+        if (gamepad2.b) {
+            robot.intake.setPower(-1);
+        } else {
+            robot.intake.setPower(gamepad2.left_trigger);
+        }
 
         if (gamepad2.left_bumper) {
             robot.transfer.setPower(1);
-            // TODO: cant run transfer backwards with current controls
-//        } else if (gamepad2.right_bumper) {
-//            robot.transfer.setPower(-1);
+        } else if (gamepad2.a) {
+            robot.transfer.setPower(-1);
         } else {
             robot.transfer.setPower(0);
         }
@@ -47,7 +50,7 @@ public class MainTeleOp extends BunyipsOpMode {
             robot.outtake.setPower(1);
         } else if (toggle) {
             robot.outtake.setPower(0.5);
-        }else{
+        } else {
             robot.outtake.setPower(0);
         }
 
