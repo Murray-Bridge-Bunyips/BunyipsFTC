@@ -4,8 +4,8 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Deg
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTile;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueLeft;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueRight;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redRight;
 
 import androidx.annotation.Nullable;
@@ -19,8 +19,8 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGrou
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import dev.frozenmilk.util.cell.RefCell;
 
-@Autonomous(name = "Blue Far Zone Auto")
-public class DamonFarZoneAuto extends AutonomousBunyipsOpMode {
+@Autonomous(name = "Red Far Zone Auto")
+public class DamonFarZoneAutoRed extends AutonomousBunyipsOpMode {
     private final Damon damon = new Damon();
 
     @Override
@@ -30,14 +30,14 @@ public class DamonFarZoneAuto extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
-        StartingConfiguration.Position start = redRight()
+        StartingConfiguration.Position start = blueLeft()
                 .tile(1)
-                .rotate(Degrees.of(-90))
+                .rotate(Degrees.of(90))
                 .forward(FieldTile.of(1.9))
                 .build();
         damon.drive.setPose(start.toFieldPose());
         damon.drive.makeTrajectory()
-                .strafeToLinearHeading(new Vector2d(52, -10), Inches, 25, Degrees)
+                .strafeToLinearHeading(new Vector2d(52, 10), Inches, -24, Degrees)
                 .stopAndAdd(new ParallelTaskGroup(
                         damon.shooter.tasks.runFor(Seconds.of(5), 1),
                         new ParallelTaskGroup(
@@ -52,13 +52,13 @@ public class DamonFarZoneAuto extends AutonomousBunyipsOpMode {
                 ))
 
                 .afterTime(0, damon.intake.tasks.runFor(Seconds.of(2), -1))
-                .strafeToLinearHeading(new Vector2d(35, -24), Inches, -90, Degrees)
-                //Intake
+                .strafeToLinearHeading(new Vector2d(35, 24), Inches, 90, Degrees)
                 .afterTime(0, damon.intake.tasks.runFor(Seconds.of(5), 1))
-                .strafeTo(new Vector2d(35, -60))
-
-                .strafeToLinearHeading(new Vector2d(52, -10), Inches, 25, Degrees)
+                .strafeTo(new Vector2d(35, 60))
+                .strafeToLinearHeading(new Vector2d(52, 10), Inches, -24, Degrees)
                 .stopAndAdd(new ParallelTaskGroup(
+
+
                         damon.shooter.tasks.runFor(Seconds.of(5), 1),
                         new ParallelTaskGroup(
                                 damon.shooter.tasks.runFor(Seconds.of(5), 1),
@@ -72,9 +72,9 @@ public class DamonFarZoneAuto extends AutonomousBunyipsOpMode {
                 ))
 
                 .afterTime(0, damon.intake.tasks.runFor(Seconds.of(2), -1))
-                .strafeToLinearHeading(new Vector2d(11, -24), Inches, -90, Degrees)
+                .strafeToLinearHeading(new Vector2d(11, 24), Inches, 90, Degrees)
                 .afterTime(0, damon.intake.tasks.runFor(Seconds.of(5), 1))
-                .strafeTo(new Vector2d(11, -60))
+                .strafeTo(new Vector2d(11, 60))
 
 
                 .addTask();
