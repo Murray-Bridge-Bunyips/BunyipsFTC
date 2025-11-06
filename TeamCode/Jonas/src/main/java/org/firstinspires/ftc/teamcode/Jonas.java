@@ -9,7 +9,6 @@ import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
@@ -103,8 +102,6 @@ public class Jonas extends RobotConfig {
 
     public final Hardware hw = new Hardware();
 
-    public static double outputP = 0.0, outputF = 0.0;
-
     @Override
     protected void onRuntime() {
         hw.frontLeft = getHardware("fl", DcMotorEx.class, (d) -> {
@@ -124,15 +121,15 @@ public class Jonas extends RobotConfig {
         hw.output = getHardware("output", Motor.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            PIDFController pidf = new PIDFController(outputP, 0.0, 0.0, outputF);
+            PIDFController pidf = new PIDFController(1, 0.0, 0.0, 3.5);
             d.setRunUsingEncoderController(1, 1900, pidf);
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-                pidf.setPIDF(outputP, 0.0, 0.0, outputF);
-                o.telemetry.addData("currentVelocity", d.getVelocity());
-                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
-            }));
+//            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+//                pidf.setPIDF(1, 0.0, 0.0, 3.5);
+//                o.telemetry.addData("currentVelocity", d.getVelocity());
+//                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
+//            }));
         });
         hw.intake = getHardware("intake", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
 
@@ -145,39 +142,39 @@ public class Jonas extends RobotConfig {
 
         // roadrunner template
         DriveModel driveModel = new DriveModel.Builder()
-//                .setInPerTick()
-//                .setLateralInPerTick()
-//                .setTrackWidthTicks()
-                .build();
+//            .setInPerTick()
+//            .setLateralInPerTick()
+//            .setTrackWidthTicks()
+        .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
-//                .setKv()
-//                .setKs()
-//                .setKa()
-                .build();
+//            .setKv()
+//            .setKs()
+//            .setKa()
+        .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
-//                .setAxialGain()
-//                .setLateralGain()
-//                .setHeadingGain()
-                .build();
+//            .setAxialGain()
+//            .setLateralGain()
+//            .setHeadingGain()
+            .build();
         PinpointLocalizer.Params localiserParams = new PinpointLocalizer.Params.Builder()
-                .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-                .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-                .build();
+            .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
+            .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+            .build();
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, IMUEx.none(), hardwareMap.voltageSensor)
-                .withLocalizer(new PinpointLocalizer(driveModel, localiserParams, hw.pinpoint))
-                .withName("Drive");
+            .withLocalizer(new PinpointLocalizer(driveModel, localiserParams, hw.pinpoint))
+            .withName("Drive");
 
         output = new Actuator(hw.output)
-                .withName("Output");
+            .withName("Output");
 
         intake = new Actuator(hw.intake)
-                .withName("Intake");
+            .withName("Intake");
 
         preventer = new Switch(hw.preventer)
-                .withName("Preventer");
+            .withName("Preventer");
 
         lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.SINELON_RAINBOW_PALETTE)
-                .withName("Lights");
+            .withName("Lights");
     }
 }
