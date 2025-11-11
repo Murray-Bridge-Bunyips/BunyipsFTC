@@ -1,3 +1,24 @@
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+//CHANGE AUTOS TO HAVE HE SAVE FEATURE
+
+
+
 package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecond;
@@ -123,7 +144,7 @@ public class Damon extends RobotConfig {
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() ->
                     pidf.setPIDF(shooter_kP, 0, 0, shooter_kV)));
             pidf.setTolerance(200);
-            d.setRunUsingEncoderController(1, 2300, pidf);
+            d.setRunUsingEncoderController(1, 2400, pidf);
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         });
 

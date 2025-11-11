@@ -34,7 +34,8 @@ public class DamonFarZoneAuto extends AutonomousBunyipsOpMode {
                 .tile(1)
                 .rotate(Degrees.of(-90))
                 .forward(FieldTile.of(1.9))
-                .build();
+                .build()
+                .save();
         damon.drive.setPose(start.toFieldPose());
         damon.drive.makeTrajectory()
                 .strafeToLinearHeading(new Vector2d(52, -10), Inches, 25, Degrees)

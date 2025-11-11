@@ -12,6 +12,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Analog.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redRight;
 
 import java.util.AbstractList;
 
@@ -32,7 +33,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 @TeleOp(name = "TeleOp")
 public class DamonTeleOp extends BunyipsOpMode {
     public static PIDFCoefficients ALIGN_TO_POINT_PIDF_COEFFICIENTS = new PIDFCoefficients(2, 0, 0, 0);
-    private final Vector2d goal = new Vector2d(-62, 62); // TODO: always assumes on red and that the robot starts from the centre of the field
     private final Damon robot = new Damon();
     private PIDFController shooterPid;
 
@@ -40,6 +40,25 @@ public class DamonTeleOp extends BunyipsOpMode {
     protected void onInit() {
         robot.init();
         shooterPid = robot.hw.shooter.getRunUsingEncoderController().pidf().get();
+        //Check if startConfig in null
+        //Check if its red or blue
+        //Asign the goal varible
+
+
+
+        StartingConfiguration.Position startConfig = Storage.memory().lastKnownStartingConfiguration;
+        Vector2d goal;
+        if(startConfig == null){
+            goal = new Vector2d(-62, 62); //Red goal
+        }
+        else {
+            if(startConfig.isRed()){ //if blue because the starting configs in the autos
+                goal = new Vector2d(-62, -62);
+            }
+            else{ //if red
+                goal = new Vector2d(-62, 62);
+            }
+        }
 
         new HolonomicDriveTask(gamepad1, robot.drive).setAsDefaultTask();
         gamepad1.button(X)
