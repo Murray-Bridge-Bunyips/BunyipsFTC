@@ -142,23 +142,25 @@ public class Jonas extends RobotConfig {
 
         // roadrunner template
         DriveModel driveModel = new DriveModel.Builder()
-//            .setInPerTick()
-//            .setLateralInPerTick()
-//            .setTrackWidthTicks()
-        .build();
+            .setInPerTick(123 / 62386.0) // 0.001971596
+            .setLateralInPerTick(0.0015170413139633508)
+            .setTrackWidthTicks(5684.397869408745)
+            .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
-//            .setKv()
-//            .setKs()
-//            .setKa()
-        .build();
+            .setKv(0.000335)
+            .setKs(1.12)
+            .setKa(0.00005)
+            .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
-//            .setAxialGain()
-//            .setLateralGain()
-//            .setHeadingGain()
+            .setAxialGain(2.5)
+            .setLateralGain(3)
+            .setHeadingGain(4)
             .build();
         PinpointLocalizer.Params localiserParams = new PinpointLocalizer.Params.Builder()
-            .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-            .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+            .setParYTicks(2212.5194851873644)
+            .setPerpXTicks(-220.38538134434685) // FIXME: robot doesnt rotate properly and traces a circle of large radius (bad)
+            .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+            .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .build();
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, IMUEx.none(), hardwareMap.voltageSensor)
