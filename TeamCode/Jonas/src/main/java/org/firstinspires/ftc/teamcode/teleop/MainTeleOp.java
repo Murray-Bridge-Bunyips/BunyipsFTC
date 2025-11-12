@@ -30,14 +30,16 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 @Config
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends BunyipsOpMode {
+    public static double outputPower = 1.0;
     public static boolean FIELD_CENTRIC_ENABLED = true;
     private final Jonas robot = new Jonas();
     private final InterpolatedLookupTable distanceToGoalPower = new InterpolatedLookupTable() {{
-        add(0, 0); // TODO: populate, input: distance to goal in inches, output: power to get it in
+        add(20.5, 0.3);
+        add(45, 0.9);
+        add(74, 1.0);
         createLUT();
     }};
-    private double outputPower = 0.9;
-    private Vector2d goal = new Vector2d(-62, -62); // default to red (arbitrary). this is set in init otherwise
+    private Vector2d goal = new Vector2d(-62, -62); // default to blue (arbitrary). this is set in init otherwise
 
     @Override
     protected void onInit() {
@@ -94,19 +96,16 @@ public class MainTeleOp extends BunyipsOpMode {
                     robot.lights.tasks.setPattern(RevBlinkinLedDriver.BlinkinPattern.GRAY)
                 ).until(gamepad2.button(Y))
             );
-        gamepad2.button(RIGHT_BUMPER) // TODO: Experimental
-            // Standard power control
-            .toggleOnFalse(looping(() -> {
-                outputPower = 0.9;
-                telemetry.add("ADAPTIVE FLYWHEEL DISABLED").color("red").h1();
-            }))
+        gamepad2.button(RIGHT_BUMPER)
             // Use an adaptive guess for the output power based on the interpolated lookup table
             // ** Assumes that the robot knows where it is on the field from auto or elsewhere.
             .toggleOnTrue(looping(() -> {
                 // modulus of the vector between the goal and robot
-                outputPower = distanceToGoalPower.get(goal.minus(robot.drive.getPose().position).norm());
+                double distance = goal.minus(robot.drive.getPose().position).norm();
+                outputPower = distanceToGoalPower.get(distance);
+                telemetry.addData("Distance to goal (in)", distance);
                 telemetry.add("ADAPTIVE FLYWHEEL ENABLED").color("green").h1();
-            }));
+            }).onFinish(() -> outputPower = 1).named("Adaptive Flywheel"));
     }
 
     @Override

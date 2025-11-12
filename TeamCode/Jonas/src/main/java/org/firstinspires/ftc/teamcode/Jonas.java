@@ -6,8 +6,10 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Sec
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.IMU;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
@@ -140,11 +142,10 @@ public class Jonas extends RobotConfig {
 
         hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
 
-        // roadrunner template
         DriveModel driveModel = new DriveModel.Builder()
-            .setInPerTick(123 / 62386.0) // 0.001971596
-            .setLateralInPerTick(0.0015170413139633508)
-            .setTrackWidthTicks(5684.397869408745)
+            .setInPerTick(125 / 63581.0) // 0.001965996
+            .setLateralInPerTick(0.0014489928459200559)
+            .setTrackWidthTicks(5868.208072363816)
             .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
             .setKv(0.000335)
@@ -157,14 +158,14 @@ public class Jonas extends RobotConfig {
             .setHeadingGain(4)
             .build();
         PinpointLocalizer.Params localiserParams = new PinpointLocalizer.Params.Builder()
-            .setParYTicks(2212.5194851873644)
-            .setPerpXTicks(-220.38538134434685) // FIXME: robot doesnt rotate properly and traces a circle of large radius (bad)
+            .setParYTicks(-2179.5793527430556) // note: negative on purpose despite what the tuner says (-'ve is +right)
+            .setPerpXTicks(1285.9282599473254)
             .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
             .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .build();
         //Robot is 12.75in long and 13in wide
 
-        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, IMUEx.none(), hardwareMap.voltageSensor)
+        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, IMUEx.none())
             .withLocalizer(new PinpointLocalizer(driveModel, localiserParams, hw.pinpoint))
             .withName("Drive");
 
