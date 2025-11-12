@@ -38,5 +38,16 @@ public class Auto extends AutonomousBunyipsOpMode {
         currentPoseMap = startingPosition.isRed() ? new SymmetricPoseMap() : new IdentityPoseMap();
 
         robot.drive.setPose(startingPosition.toFieldPose());
+
+        /*
+        .setDimensions(13, 12.75)
+
+        drive.makeTrajectory(new Pose2d(-47.5, 55, Radians.convertFrom(126, Degrees)))
+                .strafeTo(new Vector2d(-24*1.5, 24*0.5), Inches)
+                .strafeToLinearHeading(new Vector2d(72-(35+24*2), 24*0.5), Inches, 90, Degrees)
+                .strafeTo(new Vector2d(72-(35+24*2), 48-(12.75/2)), Inches)
+                .strafeToLinearHeading(new Vector2d(-24*1.5, 24*0.5), Inches, 126, Degrees)
+                .addTask();
+         */
     }
 }

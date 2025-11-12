@@ -162,6 +162,7 @@ public class Jonas extends RobotConfig {
             .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
             .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
             .build();
+        //Robot is 12.75in long and 13in wide
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, IMUEx.none(), hardwareMap.voltageSensor)
             .withLocalizer(new PinpointLocalizer(driveModel, localiserParams, hw.pinpoint))

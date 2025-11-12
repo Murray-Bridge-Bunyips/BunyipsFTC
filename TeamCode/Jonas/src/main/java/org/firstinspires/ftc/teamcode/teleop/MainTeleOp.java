@@ -36,7 +36,7 @@ public class MainTeleOp extends BunyipsOpMode {
         add(0, 0); // TODO: populate, input: distance to goal in inches, output: power to get it in
         createLUT();
     }};
-    private double outputPower = 1.0;
+    private double outputPower = 0.9;
     private Vector2d goal = new Vector2d(-62, -62); // default to red (arbitrary). this is set in init otherwise
 
     @Override
@@ -97,7 +97,7 @@ public class MainTeleOp extends BunyipsOpMode {
         gamepad2.button(RIGHT_BUMPER) // TODO: Experimental
             // Standard power control
             .toggleOnFalse(looping(() -> {
-                outputPower = 1.0;
+                outputPower = 0.9;
                 telemetry.add("ADAPTIVE FLYWHEEL DISABLED").color("red").h1();
             }))
             // Use an adaptive guess for the output power based on the interpolated lookup table
