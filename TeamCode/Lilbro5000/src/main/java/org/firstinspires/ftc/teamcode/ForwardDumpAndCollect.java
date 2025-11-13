@@ -75,13 +75,13 @@ public class ForwardDumpAndCollect extends AutonomousBunyipsOpMode {
         robot.drive.makeTrajectory(last.get(), poseMap)
                 .splineTo(new Vector2d(-7.4, -27.0), -Math.PI / 2)
                 .setVelConstraints(Vel.ofMax(0.3, FieldTilesPerSecond))
-                .afterTime(0, robot.intake.tasks.runFor(Seconds.of(16.5), 1).during(robot.transfer.tasks.run(-1)))
+                .afterTime(0, robot.intake.tasks.runFor(Seconds.of(15), 1).during(robot.transfer.tasks.run(-1)))
                 .splineTo(new Vector2d(-7.4, -34.9), -Math.PI / 2) // first ball
                 .waitSeconds(3)
                 .splineTo(new Vector2d(-7.4, -40.7), -Math.PI / 2) // second ball
                 .waitSeconds(3)
                 .splineTo(new Vector2d(-7.4, -58.2), -Math.PI / 2) // third ball
-                .waitSeconds(5)
+                .waitSeconds(3.5)
                 .resetVelConstraints()
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-37.2, -27.5, Math.PI / 4), Math.toRadians(135))
