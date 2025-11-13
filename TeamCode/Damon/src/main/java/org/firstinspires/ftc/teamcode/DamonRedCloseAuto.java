@@ -33,11 +33,13 @@ public class DamonRedCloseAuto extends AutonomousBunyipsOpMode {
                 .tile(1.1)
                 .rotate(Degrees.of(38))
                 .forward(FieldTile.of(0.7))
-                .build();
+                .build()
+                .save();
         damon.drive.setPose(start.toFieldPose());
         damon.drive.makeTrajectory()
                 .afterTime(0, damon.shooter.tasks.runFor(Seconds.of(3), 0.85))
-                .strafeTo(new Vector2d(-20, 8.5))
+                .strafeToLinearHeading(new Vector2d(-20, 8.5), Inches, -49, Degrees)
+                //Launching
                 .stopAndAdd(new ParallelTaskGroup(
                         new ParallelTaskGroup(
                                 damon.shooter.tasks.runFor(Seconds.of(5), 0.85),
@@ -49,15 +51,17 @@ public class DamonRedCloseAuto extends AutonomousBunyipsOpMode {
                         ).after(Seconds.of(1))
                 ))
                 .afterTime(0, damon.intake.tasks.runFor(Seconds.of(2), -1))
-                .strafeToLinearHeading(new Vector2d(-6, 8.5), Inches, 90, Degrees)
+                .strafeToLinearHeading(new Vector2d(-8, 8.5), Inches, 90, Degrees)
 
 
+                //Intake
                 .afterTime(0, damon.intake.tasks.runFor(Seconds.of(5), 1))
-                .strafeTo(new Vector2d(-6, 53))
+                .strafeTo(new Vector2d(-8, 53))
 
 
                 .afterTime(0, damon.shooter.tasks.runFor(Seconds.of(3), 0.85))
-                .strafeToLinearHeading(new Vector2d(-20, 8.5), Inches, -53, Degrees)
+                //Launching
+                .strafeToLinearHeading(new Vector2d(-20, 8.5), Inches, -49, Degrees)
                 .stopAndAdd(new ParallelTaskGroup(
                        damon.shooter.tasks.runFor(Seconds.of(5), 0.85),
                         new ParallelTaskGroup(

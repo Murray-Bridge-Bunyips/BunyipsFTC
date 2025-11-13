@@ -49,26 +49,22 @@ public class DamonTeleOp extends BunyipsOpMode {
         StartingConfiguration.Position startConfig = Storage.memory().lastKnownStartingConfiguration;
         Vector2d goal;
         if(startConfig == null){
-            goal = new Vector2d(-62, 62); //Red goal
+            goal = new Vector2d(-67, 62); //Red goal
         }
         else {
             if(startConfig.isRed()){ //if blue because the starting configs in the autos
-                goal = new Vector2d(-62, -62);
+                goal = new Vector2d(-67, -62);
             }
             else{ //if red
-                goal = new Vector2d(-62, 62);
+                goal = new Vector2d(-67, 62);
             }
         }
 
         new HolonomicDriveTask(gamepad1, robot.drive).setAsDefaultTask();
-        gamepad1.button(X)
-                .whileTrue(robot.intake.tasks.run(1));
-        gamepad2.button(X)
+        gamepad1.button(X).or(gamepad2.button(X))
                 .whileTrue(robot.intake.tasks.run(1));
 
-        gamepad1.button(A)
-                .whileTrue(robot.intake.tasks.run(-1));
-        gamepad2.button(A)
+        gamepad1.button(A).or(gamepad2.button(A))
                 .whileTrue(robot.intake.tasks.run(-1));
 
         gamepad1.button(Y)
@@ -77,10 +73,9 @@ public class DamonTeleOp extends BunyipsOpMode {
                         .whileTrue(robot.shooter.tasks.run(1));
 
 
-        gamepad1.button(LEFT_BUMPER)
+        gamepad1.button(LEFT_BUMPER).or(gamepad2.button(LEFT_BUMPER))
                 .whileTrue(robot.shooter.tasks.run(0.85));
-        gamepad2.button(LEFT_BUMPER)
-                .whileTrue(robot.shooter.tasks.run(0.85));
+
 
         gamepad1.button(B).and(shooterPid::atSetpoint)
                 .whileTrue(robot.transferWheel.tasks.run(1));
@@ -88,7 +83,7 @@ public class DamonTeleOp extends BunyipsOpMode {
                 .whileTrue(robot.transferWheel.tasks.run(1));
 
         gamepad1.button(RIGHT_BUMPER)
-                // TODO: goal alignment
+
                 .whileTrue(new AlignToPointDriveTask(() -> goal, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180)));
     }
 
