@@ -41,31 +41,35 @@ public class Auto extends AutonomousBunyipsOpMode {
         robot.init();
         setOpModes(
                 StartingConfiguration.redLeft().tile((23.5/24)+0.5).forward(Inches.of(72+42.5)).rotate(Degrees.of(126+90)),
-                StartingConfiguration.blueRight().tile((23.5/24)+0.5).forward(Inches.of(72+42.5)).rotate(Degrees.of((270-126)))
+                StartingConfiguration.blueRight().tile((23.5/24)+0.5).forward(Inches.of(72+42.5)).rotate(Degrees.of(90-126))
         ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
 
         robot.preventer.close();
-        robot.output.disable();
     }
 
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
         if (selectedOpMode == null) return;
         StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
-//        startingPos = startingPosition;
-        currentPoseMap = startingPosition.isRed() ? new IdentityPoseMap() : new MirroredPoseMap();
-        lightsColour = startingPosition.isRed() ? RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_RED : RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE;
-        lightsChargeColour = startingPosition.isRed() ? RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED : RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
-        lightsLaunchColour = startingPosition.isRed() ? RevBlinkinLedDriver.BlinkinPattern.RED : RevBlinkinLedDriver.BlinkinPattern.BLUE;
+        if (startingPosition.isRed()) {
+            lightsColour = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_RED;
+            lightsChargeColour = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED;
+            lightsLaunchColour = RevBlinkinLedDriver.BlinkinPattern.RED;
+            currentPoseMap = new IdentityPoseMap();
+        }
+        else {
+            lightsColour = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE;
+            lightsChargeColour = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
+            lightsLaunchColour = RevBlinkinLedDriver.BlinkinPattern.BLUE;
+            currentPoseMap = new MirroredPoseMap();
+        }
+
         launch = new SequentialTaskGroup(
-                robot.intake.tasks.setPower(0),
-                new ParallelTaskGroup(
-                robot.lights.tasks.setPatternFor(Seconds.of(2.4), lightsChargeColour)
-                        .then(robot.lights.tasks.setPattern(lightsLaunchColour),
-                                new ParallelTaskGroup(
-                                        robot.output.tasks.runFor(Seconds.of(3), 0.9),
-                                        robot.intake.tasks.runFor(Seconds.of(3), 1)
-                                ).after(robot.preventer.tasks.open().after(2, Seconds)))),
+                    robot.intake.tasks.setPower(0),
+                    new ParallelTaskGroup(
+                        robot.lights.tasks.setPatternFor(Seconds.of(2.4), lightsChargeColour).then(robot.lights.tasks.setPattern(lightsLaunchColour)),
+                        robot.output.tasks.runFor(Seconds.of(3), 0.9),
+                        robot.intake.tasks.runFor(Seconds.of(3), 1).after(robot.preventer.tasks.open().after(2, Seconds))),
                 robot.intake.tasks.setPower(0),
                 robot.lights.tasks.setPattern(lightsColour)
         );

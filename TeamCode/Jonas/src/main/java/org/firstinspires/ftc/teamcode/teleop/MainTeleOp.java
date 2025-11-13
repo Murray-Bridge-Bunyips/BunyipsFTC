@@ -48,6 +48,7 @@ public class MainTeleOp extends BunyipsOpMode {
     private Vector2d goal = new Vector2d(-62, -62); // default to blue (arbitrary). this is set in init otherwise
     private double currentOutputPower = DEFAULT_OUTPUT_POWER;
     private boolean adaptiveControl = false;
+    RevBlinkinLedDriver.BlinkinPattern lightsIntakeColour, lightsChargeColour, lightsLaunchColour;
 
     @Override
     protected void onInit() {
@@ -64,6 +65,23 @@ public class MainTeleOp extends BunyipsOpMode {
             offset = Radians.of(startingPos.toFieldPose().heading.toDouble());
         }
         Dbg.log(offset);
+
+        if (startingPos != null) {
+            if (startingPos.isRed()) {
+                lightsIntakeColour = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_RED;
+                lightsChargeColour = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED;
+                lightsLaunchColour = RevBlinkinLedDriver.BlinkinPattern.RED;
+            } else if ((startingPos.isBlue())) {
+                lightsIntakeColour = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE;
+                lightsChargeColour = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
+                lightsLaunchColour = RevBlinkinLedDriver.BlinkinPattern.BLUE;
+            }
+        }
+        else {
+            lightsIntakeColour = RevBlinkinLedDriver.BlinkinPattern.GRAY;
+            lightsChargeColour = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_WHITE;
+            lightsLaunchColour = RevBlinkinLedDriver.BlinkinPattern.WHITE;
+        }
 
         UserSelection<String> fieldCentricSelector = new UserSelection<>(
             (s) -> FIELD_CENTRIC_ENABLED = s == null || s.equals("FIELD-CENTRIC"), "ROBOT-CENTRIC", "FIELD-CENTRIC")
@@ -90,18 +108,17 @@ public class MainTeleOp extends BunyipsOpMode {
         gamepad2.button(Y)
             .toggleOnTrue(
                 new ParallelTaskGroup(
-                    robot.lights.tasks.setPatternFor(Seconds.of(2.4), RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_WHITE)
-                        .then(robot.lights.tasks.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE)),
+                    robot.lights.tasks.setPatternFor(Seconds.of(2.4), lightsChargeColour)
+                        .then(robot.lights.tasks.setPattern(lightsLaunchColour)),
                             robot.output.tasks.control(() -> currentOutputPower),
-                            robot.intake.tasks.run(1)
-                            .after(robot.preventer.tasks.open().after(2, Seconds))
+                            robot.intake.tasks.run(1).after(robot.preventer.tasks.open().after(2, Seconds))
                 ).until(gamepad2.button(A))
             );
         gamepad2.button(A)
             .toggleOnTrue(
                 new ParallelTaskGroup(
                     robot.intake.tasks.run(1).with(robot.preventer.tasks.close()),
-                    robot.lights.tasks.setPattern(RevBlinkinLedDriver.BlinkinPattern.GRAY)
+                    robot.lights.tasks.setPattern(lightsIntakeColour)
                 ).until(gamepad2.button(Y))
             );
         gamepad2.button(RIGHT_BUMPER)
