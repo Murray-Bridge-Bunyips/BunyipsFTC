@@ -111,7 +111,7 @@ public class MainTeleOp extends BunyipsOpMode {
                     robot.lights.tasks.setPatternFor(Seconds.of(2.4), lightsChargeColour)
                         .then(robot.lights.tasks.setPattern(lightsLaunchColour)),
                             robot.output.tasks.control(() -> currentOutputPower),
-                            robot.intake.tasks.run(1).after(robot.preventer.tasks.open().after(2, Seconds))
+                            robot.intake.tasks.run(1).after(robot.preventer.tasks.open().after(2.4, Seconds))
                 ).until(gamepad2.button(A))
             );
         gamepad2.button(A)

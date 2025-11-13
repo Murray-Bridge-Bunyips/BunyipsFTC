@@ -69,7 +69,7 @@ public class Auto extends AutonomousBunyipsOpMode {
                     new ParallelTaskGroup(
                         robot.lights.tasks.setPatternFor(Seconds.of(2.4), lightsChargeColour).then(robot.lights.tasks.setPattern(lightsLaunchColour)),
                         robot.output.tasks.runFor(Seconds.of(3), 0.9),
-                        robot.intake.tasks.runFor(Seconds.of(3), 1).after(robot.preventer.tasks.open().after(2, Seconds))),
+                        robot.intake.tasks.runFor(Seconds.of(3), 1).after(robot.preventer.tasks.open().after(2.4, Seconds))),
                 robot.intake.tasks.setPower(0),
                 robot.lights.tasks.setPattern(lightsColour)
         );
@@ -83,8 +83,8 @@ public class Auto extends AutonomousBunyipsOpMode {
                 .strafeToLinearHeading(launchPos, Inches, launchRot, Degrees)
                 .build()
                 .during(robot.intake.tasks.run(1)));
-
-        add(launch);
+//        TODO: make launch move forwards relative to the robot (but not actually) after the preventer opens
+//        add(.after(Seconds.of(), launch));
 
         robot.drive.makeTrajectory(new Pose2d(-24*1.5, 24*0.5, Radians.convertFrom(126, Degrees)), currentPoseMap)
                 .strafeToLinearHeading(new Vector2d(72-(35+24*2), 24*0.5), Inches, 90, Degrees)
