@@ -4,8 +4,12 @@ package org.firstinspires.ftc.teamcode.teleop;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
+// ------ Recommended static imports for Scheduler, do not remove! --------
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.*;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Analog.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.*;
+// ------------------------------------------------------------------------
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Vector2d;
@@ -30,16 +34,20 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 @Config
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends BunyipsOpMode {
-    public static double outputPower = 1.0;
+    public static double DEFAULT_OUTPUT_POWER = 0.9;
+    public static double MAX_OUTPUT_POWER = 1.0;
     public static boolean FIELD_CENTRIC_ENABLED = true;
+
     private final Jonas robot = new Jonas();
     private final InterpolatedLookupTable distanceToGoalPower = new InterpolatedLookupTable() {{
-        add(20.5, 0.3);
+        add(20.5, 0.3); // inches from goal base to front of wheel <-> optimal output power
         add(45, 0.9);
         add(74, 1.0);
         createLUT();
     }};
     private Vector2d goal = new Vector2d(-62, -62); // default to blue (arbitrary). this is set in init otherwise
+    private double currentOutputPower = DEFAULT_OUTPUT_POWER;
+    private boolean adaptiveControl = false;
 
     @Override
     protected void onInit() {
@@ -73,7 +81,7 @@ public class MainTeleOp extends BunyipsOpMode {
             .onTrue("Invert FC Origin", () -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
         gamepad2.button(DPAD_UP)
-            .whileTrue(robot.output.tasks.control(() -> outputPower));
+            .whileTrue(robot.output.tasks.control(() -> currentOutputPower));
         gamepad2.button(LEFT_BUMPER)
             .whileTrue(robot.intake.tasks.run(1));
         gamepad2.button(DPAD_LEFT)
@@ -84,7 +92,7 @@ public class MainTeleOp extends BunyipsOpMode {
                 new ParallelTaskGroup(
                     robot.lights.tasks.setPatternFor(Seconds.of(2.4), RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_WHITE)
                         .then(robot.lights.tasks.setPattern(RevBlinkinLedDriver.BlinkinPattern.WHITE)),
-                            robot.output.tasks.control(() -> outputPower),
+                            robot.output.tasks.control(() -> currentOutputPower),
                             robot.intake.tasks.run(1)
                             .after(robot.preventer.tasks.open().after(2, Seconds))
                 ).until(gamepad2.button(A))
@@ -97,15 +105,7 @@ public class MainTeleOp extends BunyipsOpMode {
                 ).until(gamepad2.button(Y))
             );
         gamepad2.button(RIGHT_BUMPER)
-            // Use an adaptive guess for the output power based on the interpolated lookup table
-            // ** Assumes that the robot knows where it is on the field from auto or elsewhere.
-            .toggleOnTrue(looping(() -> {
-                // modulus of the vector between the goal and robot
-                double distance = goal.minus(robot.drive.getPose().position).norm();
-                outputPower = distanceToGoalPower.get(distance);
-                telemetry.addData("Distance to goal (in)", distance);
-                telemetry.add("ADAPTIVE FLYWHEEL ENABLED").color("green").h1();
-            }).onFinish(() -> outputPower = 1).named("Adaptive Flywheel"));
+                .onTrue("Toggle Adaptive Flywheel", () -> adaptiveControl = !adaptiveControl);
     }
 
     @Override
@@ -115,6 +115,19 @@ public class MainTeleOp extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
+        // Use an adaptive guess for the output power based on the interpolated lookup table
+        // ** Assumes that the robot knows where it is on the field from auto or elsewhere.
+        if (adaptiveControl) {
+            double distance = goal.minus(robot.drive.getPose().position).norm(); // |goal-robot| vector magnitude
+            currentOutputPower = distanceToGoalPower.get(distance);
+            telemetry.addData("Distance to goal (in)", distance);
+            telemetry.add("ADAPTIVE FLYWHEEL ENABLED").color("green").h1();
+        } else {
+            currentOutputPower = DEFAULT_OUTPUT_POWER;
+            telemetry.add("ADAPTIVE FLYWHEEL DISABLED").color("red").h1();
+        }
+        currentOutputPower = Math.min(currentOutputPower, MAX_OUTPUT_POWER);
+
         Scheduler.update();
     }
 }
