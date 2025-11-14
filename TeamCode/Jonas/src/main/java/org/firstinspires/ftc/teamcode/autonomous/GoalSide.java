@@ -25,8 +25,8 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import dev.frozenmilk.util.cell.RefCell;
 
-@Autonomous(name = "Autonomous", preselectTeleOp = "TeleOp")
-public class Auto extends AutonomousBunyipsOpMode {
+@Autonomous(name = "Goal Side", preselectTeleOp = "TeleOp")
+public class GoalSide extends AutonomousBunyipsOpMode {
     private final Jonas robot = new Jonas();
     PoseMap currentPoseMap;
     RevBlinkinLedDriver.BlinkinPattern lightsColour, lightsChargeColour, lightsLaunchColour;
