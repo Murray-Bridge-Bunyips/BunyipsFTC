@@ -19,6 +19,7 @@ import org.firstinspires.ftc.teamcode.Jonas;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.MirroredPoseMap;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.ActionTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Lambda;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
@@ -29,7 +30,7 @@ import dev.frozenmilk.util.cell.RefCell;
 public class GoalSide extends AutonomousBunyipsOpMode {
     private final Jonas robot = new Jonas();
     PoseMap currentPoseMap;
-    RevBlinkinLedDriver.BlinkinPattern lightsColour, lightsChargeColour, lightsLaunchColour;
+    RevBlinkinLedDriver.BlinkinPattern lightsChargeColour, lightsLaunchColour;
     /**
      * W task?
      */
@@ -48,6 +49,7 @@ public class GoalSide extends AutonomousBunyipsOpMode {
         ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
 
         robot.preventer.close();
+        robot.preventer.update();
     }
 
     @Override
@@ -55,13 +57,13 @@ public class GoalSide extends AutonomousBunyipsOpMode {
         if (selectedOpMode == null) return;
         StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
         if (startingPosition.isRed()) {
-            lightsColour = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_RED;
+            robot.lights.setDefaultPattern(RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_RED);
             lightsChargeColour = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_RED;
             lightsLaunchColour = RevBlinkinLedDriver.BlinkinPattern.RED;
             currentPoseMap = new IdentityPoseMap();
         }
         else {
-            lightsColour = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE;
+            robot.lights.setDefaultPattern(RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE);
             lightsChargeColour = RevBlinkinLedDriver.BlinkinPattern.HEARTBEAT_BLUE;
             lightsLaunchColour = RevBlinkinLedDriver.BlinkinPattern.BLUE;
             currentPoseMap = new MirroredPoseMap();
@@ -76,24 +78,18 @@ public class GoalSide extends AutonomousBunyipsOpMode {
                 .strafeTo(launchPos, Inches)
                 .build();
         launch = new SequentialTaskGroup(
-                robot.intake.tasks.setPower(0),
                 new ParallelTaskGroup(
-                        robot.lights.tasks.setPatternFor(Seconds.of(2.4), lightsChargeColour).then(robot.lights.tasks.setPattern(lightsLaunchColour)),
                         robot.output.tasks.runFor(Seconds.of(3.4), 0.9),
                         robot.intake.tasks.runFor(Seconds.of(1), 1).after(robot.preventer.tasks.open().after(2.4, Seconds)),
                         midLaunchMovement.after(2.4, Seconds)
-                ),
+                ).during(robot.lights.tasks.setPatternFor(Seconds.of(2.4), lightsChargeColour).then(robot.lights.tasks.setPattern(lightsLaunchColour))),
                 new ParallelTaskGroup(
                         postLaunchReturn,
-                        robot.intake.tasks.setPower(0),
-                        robot.output.tasks.setPower(0),
-                        robot.preventer.tasks.close(),
-                        robot.lights.tasks.setPattern(lightsColour)
+                        robot.preventer.tasks.close()
                 )
         );
 
         robot.drive.setPose(startingPosition.toFieldPose());
-        robot.lights.setPattern(lightsColour);
 
         add(robot.drive.makeTrajectory(currentPoseMap)
                 .strafeToLinearHeading(launchPos, Inches, launchRot, Degrees)
