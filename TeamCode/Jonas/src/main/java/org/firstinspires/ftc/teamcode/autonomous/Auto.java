@@ -70,7 +70,7 @@ public class Auto extends AutonomousBunyipsOpMode {
         launchPos = new Vector2d(-24*1.5, 24*0.5);
         launchRot = 126+180;
         midLaunchMovement = robot.drive.makeTrajectory(new Pose2d(launchPos, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
-                .strafeTo(new Vector2d(launchPos.x-6, launchPos.y+6), Inches)
+                .strafeTo(new Vector2d(launchPos.x-1.765, launchPos.y+6), Inches)
                 .build();
         postLaunchReturn = robot.drive.makeTrajectory(new Pose2d(launchPos.x-6, launchPos.y+6, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
                 .strafeTo(launchPos, Inches)
@@ -103,11 +103,11 @@ public class Auto extends AutonomousBunyipsOpMode {
         add(launch);
 
         robot.drive.makeTrajectory(new Pose2d(launchPos, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
-                .strafeToLinearHeading(new Vector2d(72-(35+24*2), 24*0.5), Inches, 90, Degrees)
+                .strafeToLinearHeading(new Vector2d(72-(36+23.75*2), 24*0.5), Inches, 90, Degrees)
                 .addTask();
 
-        add(robot.drive.makeTrajectory(new Pose2d(72-(35+24*2), 24*0.5, Radians.convertFrom(90, Degrees)), currentPoseMap)
-                .strafeTo(new Vector2d(72-(35+24*2), 48-(12.75/2)), Inches)
+        add(robot.drive.makeTrajectory(new Pose2d(72-(36+23.75*2), 24*0.5, Radians.convertFrom(90, Degrees)), currentPoseMap)
+                .strafeTo(new Vector2d(72-(36+23.75*2), 48-(12.75/2)), Inches)
                 .strafeToLinearHeading(launchPos, Inches, launchRot, Degrees)
                 .build()
                 .during(robot.intake.tasks.run(1))
@@ -116,11 +116,11 @@ public class Auto extends AutonomousBunyipsOpMode {
         add(launch);
 
         robot.drive.makeTrajectory(new Pose2d(launchPos, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
-                .strafeToLinearHeading(new Vector2d(72-(35+24), 24*0.5), Inches, 90, Degrees)
+                .strafeToLinearHeading(new Vector2d(72-(36+23.75), 24*0.5), Inches, 90, Degrees)
                 .addTask();
 
-        add(robot.drive.makeTrajectory(new Pose2d(72-(35+24), 24*0.5, Radians.convertFrom(90, Degrees)), currentPoseMap)
-                .strafeTo(new Vector2d(72-(35+24), 48-(12.75/2)), Inches)
+        add(robot.drive.makeTrajectory(new Pose2d(72-(36+23.75), 24*0.5, Radians.convertFrom(90, Degrees)), currentPoseMap)
+                .strafeTo(new Vector2d(72-(36+23.75), 48-(12.75/2)), Inches)
                 .strafeToLinearHeading(launchPos, Inches, launchRot, Degrees)
                 .build()
                 .during(robot.intake.tasks.run(1))
@@ -129,14 +129,16 @@ public class Auto extends AutonomousBunyipsOpMode {
         add(launch);
 
         robot.drive.makeTrajectory(new Pose2d(launchPos, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
-                .strafeToLinearHeading(new Vector2d(72-(35), 24*0.5), Inches, 90, Degrees)
+                .strafeToLinearHeading(new Vector2d(72-(36), 24*0.5), Inches, 90, Degrees)
                 .addTask();
 
-        add(robot.drive.makeTrajectory(new Pose2d(72-(35), 24*0.5, Radians.convertFrom(90, Degrees)), currentPoseMap)
-                .strafeTo(new Vector2d(72-(35), 48-(12.75/2)), Inches)
+        add(robot.drive.makeTrajectory(new Pose2d(72-(36), 24*0.5, Radians.convertFrom(90, Degrees)), currentPoseMap)
+                .strafeTo(new Vector2d(72-(36), 48-(12.75/2)), Inches)
                 .strafeToLinearHeading(launchPos, Inches, launchRot, Degrees)
                 .build()
                 .during(robot.intake.tasks.run(1))
         );
+
+        add(launch);
     }
 }
