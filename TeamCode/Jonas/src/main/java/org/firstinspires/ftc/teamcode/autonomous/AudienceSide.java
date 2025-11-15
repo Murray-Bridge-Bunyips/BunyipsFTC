@@ -69,17 +69,18 @@ public class AudienceSide extends AutonomousBunyipsOpMode {
             currentPoseMap = new MirroredPoseMap();
         }
 
-        launchPos = new Vector2d(-24*1.5, 24*0.5);
+        launchPos = new Vector2d(-24, 12);
         launchRot = 126+180;
         midLaunchMovement = robot.drive.makeTrajectory(new Pose2d(launchPos, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
-                .strafeTo(new Vector2d(launchPos.x-1.765, launchPos.y+6), Inches)
+                .strafeTo(new Vector2d(launchPos.x+(3*-0.8), launchPos.y+3), Inches)
                 .build();
         postLaunchReturn = robot.drive.makeTrajectory(new Pose2d(launchPos.x-6, launchPos.y+6, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
                 .strafeTo(launchPos, Inches)
                 .build();
         launch = new SequentialTaskGroup(
                 new ParallelTaskGroup(
-                        robot.output.tasks.runFor(Seconds.of(3.4), 0.9),
+                        robot.intake.tasks.runFor(Seconds.of(2), 1),
+                        robot.output.tasks.runFor(Seconds.of(3.4), 0.4),
                         robot.intake.tasks.runFor(Seconds.of(1), 1).after(robot.preventer.tasks.open().after(2.4, Seconds)),
                         midLaunchMovement.after(2.4, Seconds)
                 ).during(robot.lights.tasks.setPatternFor(Seconds.of(2.4), lightsChargeColour).then(robot.lights.tasks.setPattern(lightsLaunchColour))),
@@ -91,7 +92,7 @@ public class AudienceSide extends AutonomousBunyipsOpMode {
 
         robot.drive.setPose(startingPosition.toFieldPose());
 
-        add(new WaitTask(5, Seconds));
+        add(new WaitTask(17.5, Seconds));
 
         add(robot.drive.makeTrajectory(currentPoseMap)
                 .strafeToLinearHeading(launchPos, Inches, launchRot, Degrees)
