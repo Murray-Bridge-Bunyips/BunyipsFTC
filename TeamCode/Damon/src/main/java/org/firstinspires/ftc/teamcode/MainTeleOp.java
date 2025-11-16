@@ -9,7 +9,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsSubsystem;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 
 /**
- * Primary TeleOp.
+ * Primary iterative TeleOp.
  * Bootstrapped through bunyipslib-for-rookies.
  *
  * @author Lucas Sacco, 2025
@@ -23,7 +23,6 @@ public class MainTeleOp extends BunyipsOpMode {
     @Override
     protected void onInit() {
         robot.init();
-        // TODO: Add any additional initialisation code here
 
     }
 
@@ -48,7 +47,6 @@ public class MainTeleOp extends BunyipsOpMode {
             robot.shooter.setPower(0);
         }
 
-        // TODO: check if velocity is not zero too?
         if(gamepad1.b && robot.hw.shooter.getRunUsingEncoderController().pidf().get().atSetpoint()) {
             robot.transferWheel.setPower(1);
         } else {

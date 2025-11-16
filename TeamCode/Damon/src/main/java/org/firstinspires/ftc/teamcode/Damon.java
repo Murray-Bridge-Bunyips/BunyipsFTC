@@ -27,7 +27,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
  * Main robot configuration file.
  * Bootstrapped through bunyipslib-for-rookies.
  *
- * @author Your Name, Year // TODO: Set this to your name and the current year!
+ * @author Lucas Sacco, 2025
  */
 @Config
 public class Damon extends RobotConfig {
@@ -43,7 +43,6 @@ public class Damon extends RobotConfig {
     public Actuator transferWheel;
 
     public static double shooter_kP = 15, shooter_kV = 0.9;
-    // TODO: Add more subsystems here according to your robot's needs
     // .....................................................
 
     @Override
@@ -132,7 +131,6 @@ public class Damon extends RobotConfig {
                 .withName("Shooter");
 
         hw.transferWheel = getHardware("transferWheel", DcMotor.class, (d) -> {
-            // TODO: Set the direction of the intake motor here
             d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
 

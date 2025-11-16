@@ -3,21 +3,18 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.PIDCoefficients;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
+
+// ------ Recommended static imports for Scheduler, do not remove! --------
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Analog.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.*;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redRight;
-
-import java.util.AbstractList;
+// ------------------------------------------------------------------------
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Hook;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.AlignToPointDriveTask;
@@ -26,8 +23,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguratio
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 
 /**
- * Basic Command-based TeleOp.
- * This is modelled after the basic robot from the robot configuration page.
+ * Primary TeleOp.
+ *
+ * @author Lucas Sacco, 2025
  */
 @Config
 @TeleOp(name = "TeleOp")
