@@ -36,7 +36,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
  * @author Lachlan Paul, 2024
  */
 @Config
-public class Vance extends RobotConfig {
+public class VanceOld extends RobotConfig {
     /**
      * Vertical arm kP
      */

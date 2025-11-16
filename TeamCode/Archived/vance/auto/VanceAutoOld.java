@@ -27,7 +27,7 @@ import dev.frozenmilk.util.cell.RefCell;
 
 @Autonomous
 @Disabled
-public class VanceAuto extends AutonomousBunyipsOpMode {
+public class VanceAutoOld extends AutonomousBunyipsOpMode {
     protected final Vance robot = new Vance();
     private MessageTask waitMessage;
     private SymmetricPoseMap symmetricPoseMap;
