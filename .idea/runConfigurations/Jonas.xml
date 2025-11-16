@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Cellphone" type="AndroidRunConfigurationType" factoryName="Android App">
-    <module name="BunyipsFTC.Cellphone" />
+  <configuration default="false" name="Jonas" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+    <module name="BunyipsFTC.Jonas" />
     <option name="ANDROID_RUN_CONFIGURATION_SCHEMA_VERSION" value="1" />
     <option name="DEPLOY" value="true" />
     <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
@@ -68,6 +68,7 @@
     <option name="SEARCH_ACTIVITY_IN_GLOBAL_SCOPE" value="false" />
     <option name="SKIP_ACTIVITY_VALIDATION" value="false" />
     <method v="2">
+      <option name="Gradle.BeforeRunTask" enabled="true" tasks="removeSlothRemote" externalProjectPath="$PROJECT_DIR$/TeamCode/Jonas" vmOptions="" scriptParameters="" />
       <option name="Android.Gradle.BeforeRunTask" enabled="true" />
     </method>
   </configuration>
