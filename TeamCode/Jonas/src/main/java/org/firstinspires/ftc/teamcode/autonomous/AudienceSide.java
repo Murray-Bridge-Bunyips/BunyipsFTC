@@ -72,7 +72,7 @@ public class AudienceSide extends AutonomousBunyipsOpMode {
         launchPos = new Vector2d(-24, 12);
         launchRot = 126+180;
         midLaunchMovement = robot.drive.makeTrajectory(new Pose2d(launchPos, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
-                .strafeTo(new Vector2d(launchPos.x+(3*-0.8), launchPos.y+3), Inches)
+                .strafeTo(new Vector2d(launchPos.x+(6*-0.8), launchPos.y+6), Inches)
                 .build();
         postLaunchReturn = robot.drive.makeTrajectory(new Pose2d(launchPos.x-6, launchPos.y+6, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
                 .strafeTo(launchPos, Inches)
@@ -80,9 +80,9 @@ public class AudienceSide extends AutonomousBunyipsOpMode {
         launch = new SequentialTaskGroup(
                 new ParallelTaskGroup(
                         robot.intake.tasks.runFor(Seconds.of(2), 1),
-                        robot.output.tasks.runFor(Seconds.of(3.4), 0.4),
+                        robot.output.tasks.runFor(Seconds.of(3.4), 0.375),
                         robot.intake.tasks.runFor(Seconds.of(1), 1).after(robot.preventer.tasks.open().after(2.4, Seconds)),
-                        midLaunchMovement.after(2.4, Seconds)
+                        midLaunchMovement.after(2.6, Seconds)
                 ).during(robot.lights.tasks.setPatternFor(Seconds.of(2.4), lightsChargeColour).then(robot.lights.tasks.setPattern(lightsLaunchColour))),
                 new ParallelTaskGroup(
                         postLaunchReturn,
@@ -92,9 +92,10 @@ public class AudienceSide extends AutonomousBunyipsOpMode {
 
         robot.drive.setPose(startingPosition.toFieldPose());
 
-        add(new WaitTask(17.5, Seconds));
+        add(new WaitTask(15, Seconds));
 
         add(robot.drive.makeTrajectory(currentPoseMap)
+                .strafeTo(new Vector2d(0, launchPos.y))
                 .strafeToLinearHeading(launchPos, Inches, launchRot, Degrees)
                 .build()
                 .during(robot.intake.tasks.run(1)));

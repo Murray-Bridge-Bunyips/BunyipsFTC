@@ -34,7 +34,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 @Config
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends BunyipsOpMode {
-    public static double DEFAULT_OUTPUT_POWER = 0.9;
+    public static double DEFAULT_OUTPUT_POWER = 0.8;
     public static double MAX_OUTPUT_POWER = 1.0;
     public static boolean FIELD_CENTRIC_ENABLED = true;
 

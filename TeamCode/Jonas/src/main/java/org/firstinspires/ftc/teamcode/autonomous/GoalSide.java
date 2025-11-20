@@ -44,7 +44,7 @@ public class GoalSide extends AutonomousBunyipsOpMode {
         robot.init();
         setOpModes(
                 StartingConfiguration.redLeft().tile((23.5/24)+0.5).forward(Inches.of(72+42.5)).rotate(Degrees.of(126+90)),
-                StartingConfiguration.blueRight().tile((23.5/24)+0.5).forward(Inches.of(72+42.5)).rotate(Degrees.of(90-126))
+                StartingConfiguration.blueRight().tile((23.5/24)+0.5).forward(Inches.of(72+42.5)).rotate(Degrees.of(-90-126))
         ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
 
         robot.preventer.close();
@@ -71,7 +71,7 @@ public class GoalSide extends AutonomousBunyipsOpMode {
         launchPos = new Vector2d(-24, 12);
         launchRot = 126+180;
         midLaunchMovement = robot.drive.makeTrajectory(new Pose2d(launchPos, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
-                .strafeTo(new Vector2d(launchPos.x+(3*-0.8), launchPos.y+3), Inches)
+                .strafeTo(new Vector2d(launchPos.x+(6*-0.8), launchPos.y+6), Inches)
                 .build();
         postLaunchReturn = robot.drive.makeTrajectory(new Pose2d(launchPos.x-6, launchPos.y+6, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)
                 .strafeTo(launchPos, Inches)
@@ -79,9 +79,9 @@ public class GoalSide extends AutonomousBunyipsOpMode {
         launch = new SequentialTaskGroup(
                 new ParallelTaskGroup(
                         robot.intake.tasks.runFor(Seconds.of(2), 1),
-                        robot.output.tasks.runFor(Seconds.of(3.4), 0.4),
+                        robot.output.tasks.runFor(Seconds.of(3.4), 0.375),
                         robot.intake.tasks.runFor(Seconds.of(1), 1).after(robot.preventer.tasks.open().after(2.4, Seconds)),
-                        midLaunchMovement.after(2.4, Seconds)
+                        midLaunchMovement.after(2.6, Seconds)
                 ).during(robot.lights.tasks.setPatternFor(Seconds.of(2.4), lightsChargeColour).then(robot.lights.tasks.setPattern(lightsLaunchColour))),
                 new ParallelTaskGroup(
                         postLaunchReturn,
