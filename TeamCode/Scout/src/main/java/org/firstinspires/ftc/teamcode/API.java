@@ -220,11 +220,11 @@ public class API extends BlocksOpModeCompanion {
             Task current = actions.peekFirst();
             if (current == null)
                 break;
-            if (current.poll()) {
+            current.execute();
+            if (current.isFinished()) {
                 actions.removeFirst();
                 continue;
             }
-            current.execute();
             linearOpMode.telemetry.addData("Executing", current.toVerboseString());
             linearOpMode.telemetry.update();
             Dashboard.sendAndClearSyncedPackets();

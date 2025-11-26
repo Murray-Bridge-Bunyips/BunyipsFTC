@@ -7,6 +7,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 @TeleOp
 public class CellphoneTelemetryTest extends BunyipsOpMode {
     @Override
+    protected void onInit() {
+    }
+
+    @Override
     protected void activeLoop() {
 //        telemetry.add("Hello world!");
         telemetry.add("Goodbye world!");

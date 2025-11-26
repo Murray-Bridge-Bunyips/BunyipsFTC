@@ -14,6 +14,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls;
 @TeleOp
 public class CellphoneMeccanumDroive2 extends BunyipsOpMode {
     @Override
+    protected void onInit() {
+    }
+
+    @Override
     protected void activeLoop() {
         Cellphone.instance.dummyDrive.setPower(Controls.vel(gamepad1.lsx, gamepad1.lsy, gamepad1.rsx));
         Cellphone.instance.dummyDrive.periodic();

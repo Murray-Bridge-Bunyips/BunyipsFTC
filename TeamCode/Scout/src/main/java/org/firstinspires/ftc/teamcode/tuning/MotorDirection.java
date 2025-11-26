@@ -22,6 +22,10 @@ import dev.frozenmilk.util.cell.RefCell;
 @TeleOp(name = "Motor Direction Finder", group = "tuning")
 public class MotorDirection extends AutonomousBunyipsOpMode {
     @Override
+    protected void onInitialise() {
+    }
+
+    @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
         DcMotor left = hardwareMap.dcMotor.get("l");
         left.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

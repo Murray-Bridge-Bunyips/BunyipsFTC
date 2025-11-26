@@ -1,98 +1,72 @@
-package au.edu.sa.mbhs.studentrobotics.ftc22407.vance.auto;
+package org.firstinspires.ftc.teamcode.auto;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Milliseconds;
 
 import androidx.annotation.Nullable;
 
-import com.acmerobotics.roadrunner.IdentityPoseMap;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
+import org.firstinspires.ftc.teamcode.Vance;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.SymmetricPoseMap;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.MessageTask;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
-import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.Vance;
-import au.edu.sa.mbhs.studentrobotics.ftc22407.vance.tasks.BasketPlacer;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.TurnTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.WaitTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import dev.frozenmilk.util.cell.RefCell;
 
-/**
- * Simple Auto to score pre-loaded elements
- *
- * @author Lachlan Paul, 2024
- */
-
 @Autonomous
-@Disabled
 public class VanceAuto extends AutonomousBunyipsOpMode {
-    protected final Vance robot = new Vance();
-    private MessageTask waitMessage;
-    private SymmetricPoseMap symmetricPoseMap;
-    private boolean isRed;
-
-    protected void park() {
-        // for now we've decided to set up shop in front of the basket until auto is open
-//        robot.drive.makeTrajectory(isRed ? symmetricPoseMap : new IdentityPoseMap())
-//                .strafeToLinearHeading(new Vector2d(34.5, 10.0), Inches, 270.00, Degrees)
-//                .strafeToLinearHeading(new Vector2d(27.0, 10.0), Inches, 270.00, Degrees)
-//                .addTask();
-    }
-
-    // An autonomous period has started in FTC INTO THE DEEP
-    // Start the initialisation!
-    @Override
-    protected void onInitialise() {
-        robot.init();
-        robot.verticalLift.withTolerance(25);
-
-        setOpModes(
-                StartingConfiguration.redLeft().tile(2),
-                StartingConfiguration.redRight().tile(2),
-                StartingConfiguration.blueLeft().tile(2),
-                StartingConfiguration.blueRight().tile(2)
-        );
-
-        waitMessage = new MessageTask(Seconds.of(10), "<style=\"color:red;\">DO NOT PANIC because the robot isn't moving, it is waiting for others to move</>");
-        symmetricPoseMap = new SymmetricPoseMap();
-    }
+    private final Vance vance = Vance.instance;
+//    private final Pose2d basketPos = Geometry.poseFrom(new Vector2d(57.45, 57.19), 230, Degrees);
+    private final Vector2d basketPlacePos = new Vector2d(57.45, 57.19);
+    private final int armPickUpPos = 791;
 
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
-        if (selectedOpMode == null) return;
-        StartingConfiguration.Position startingPosition = (StartingConfiguration.Position) selectedOpMode.get();
-        isRed = startingPosition.isRed();
-
-        robot.drive.setPose(startingPosition.toFieldPose());
-
-        if (startingPosition.isRight()) {
-            // We need to wait for other robots when we're far away from the basket,
-            // so we use a message task to delay our cross-country road trip
-            add(waitMessage);
-
-            // Get a bit closer to the basket so our robot doesn't just beeline towards it, likely ramming into someone else's robot
-            robot.drive.makeTrajectory(/*new Vector2d(-35.76, 61.30), Inches, 270.00, Degrees,*/ isRed ? symmetricPoseMap : new IdentityPoseMap())
-                    .splineTo(new Vector2d(-8.51, 41.35), Inches, -46.42, Degrees)
-                    .splineTo(new Vector2d(26.51, 37.95), Inches, 1.62, Degrees)
-                    .addTask();
-        }
-
-        // HEY!
-        // Build the trajectory!
-        robot.drive.makeTrajectory(isRed ? symmetricPoseMap : new IdentityPoseMap())
-                .splineTo(new Vector2d(60.03, 59.00), Inches, 40.00, Degrees)
+//        vance.drive.setPose(new Vector2d(35.51, 66.60), Inches, -90.00, Degrees);
+//        vance.drive.makeTrajectory()
+//                .strafeTo(new Vector2d(58.93, 55.54), Inches)
+//                .turn(-40, Degrees)
+//                .addTask();
+        vance.drive.setPose(new Vector2d(45.91, 59.88), Inches, 230.00, Degrees);
+        vance.drive.makeTrajectory()
+                .strafeTo(basketPlacePos)
                 .addTask();
-        // And off to the scoring basket!
 
-        // Prepare the vertical arm!
-        // Score the pre-load!
-        add(new BasketPlacer(robot.verticalLift, robot.basketRotator, robot.drive));
+        add(vance.wholeArmUp);
+        add(vance.intake.tasks.runFor(Milliseconds.of(500), vance.EJECT));
 
-        // And park in the dedicated zone! (actually false here but shhhh i wanna keep the funny comments)
-        park();
+        pickAndPlace(5);
 
-        // The new autonomous collection from MBHS Mulyawonks
+        defer(() -> vance.drive.makeTrajectory()
+                .strafeTo(basketPlacePos)
+                .build());
+        // will need a unique one for third sample since it's against the wall
+    }
+
+    private void pickAndPlace(int degreesToTurn) {
+        TurnTask turnTask = new TurnTask(vance.drive, Degrees.of(degreesToTurn), true);
+        TurnTask reverseTurnTask = new TurnTask(vance.drive, Degrees.of(-degreesToTurn), true);
+
+        add(turnTask);
+        add(vance.shoulder.tasks.home());
+
+        // move back a bit
+        defer(() -> vance.drive.makeTrajectory()
+                .strafeToSplineHeading(new Vector2d(57.45 + 2, 57.19 - 2.5), Inches, 240.0, Degrees)
+                .build());
+
+        add(new ParallelTaskGroup(
+                vance.elbow.tasks.goToProfiled(armPickUpPos),
+                vance.intake.tasks.runFor(Milliseconds.of(2000), 1)
+        ));
+
+        add(reverseTurnTask);
+        add(vance.wholeArmUp);
+        add(new WaitTask(Milliseconds.of(500)));  // give time for the arm to stabilise before throwing up
+        add(vance.intake.tasks.runFor(Milliseconds.of(500), 1));
     }
 }
