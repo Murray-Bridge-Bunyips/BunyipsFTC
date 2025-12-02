@@ -6,13 +6,13 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Fie
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueRight;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.redLeft;
 
 import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.IdentityPoseMap;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.PoseMap;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
@@ -47,10 +47,14 @@ public class ForwardDumpAndCollect extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onInitialise() {
-        setOpModes(
-                blueRight().tile(1.3).forward(FieldTiles.of(5).minus(Inches.of(12))).rotate(Degrees.of(143)),
-                redLeft().tile(1.3).forward(FieldTiles.of(5).minus(Inches.of(12))).rotate(Degrees.of(-143))
-        ).assignButton(0, 0, Controls.X).assignButton(0, 1, Controls.B);
+        StartingConfiguration.Position blueStart = blueRight()
+                .tile(1.3)
+                .forward(FieldTiles.of(5).minus(Inches.of(12)))
+                .rotate(Degrees.of(143))
+                .build();
+        setOpModes(blueStart, blueStart.mirror())
+                .assignButton(0, 0, Controls.X)
+                .assignButton(0, 1, Controls.B);
         robot.init();
     }
 
@@ -86,11 +90,47 @@ public class ForwardDumpAndCollect extends AutonomousBunyipsOpMode {
                 .waitSeconds(0.5)
                 .resetVelConstraints()
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(shoot.plus(new Vector2d(3, -3)), Math.PI / 4), Math.toRadians(135))
-                .addTask();
+                .splineToLinearHeading(new Pose2d(shoot.plus(Rotation2d.exp(Math.toRadians(20)).vec().times(5)), Math.PI / 4), Math.toRadians(135))
+                .addTask(last);
         add(luncheonInterval);
         robot.drive.makeTrajectory(last.get(), poseMap)
                 .strafeTo(new Vector2d(-56, -27))
                 .addTask();
+
+        /* MeepMeep
+
+            StartingConfiguration.Position blue = blueRight()
+                    .tile(1.3)
+                    .forward(FieldTiles.of(5).minus(Inches.of(12)))
+                    .rotate(Degrees.of(143))
+                    .build();
+            StartingConfiguration.Position red = blue.mirror();
+
+            StartingConfiguration.Position start = blue;
+            PoseMap poseMap = start.isRed() ? new MirroredPoseMap() : new IdentityPoseMap();
+            RefCell<Pose2d> last = Ref.empty();
+            Vector2d shoot = new Vector2d(-28.0, -19.6);
+            double alignBalls = 5.4;
+            drive.useImplicitStartPose().makeTrajectory(start.toFieldPose(), poseMap)
+                    .strafeTo(shoot)
+                    .addTask(last);
+            drive.makeTrajectory(last.get(), poseMap)
+                    .splineTo(new Vector2d(alignBalls, -27.0), -Math.PI / 2)
+                    .setVelConstraints(Vel.ofMax(0.3, FieldTilesPerSecond))
+    //                .afterTime(0, robot.intake.tasks.runFor(Seconds.of(5), 1).during(robot.transfer.tasks.run(-1)))
+                    .splineTo(new Vector2d(alignBalls, -34.9), -Math.PI / 2) // first ball
+                    .waitSeconds(0)
+                    .splineTo(new Vector2d(alignBalls, -40.7), -Math.PI / 2) // second ball
+                    .waitSeconds(0)
+                    .splineTo(new Vector2d(alignBalls, -58.2), -Math.PI / 2) // third ball
+                    .waitSeconds(0.5)
+                    .resetVelConstraints()
+                    .setReversed(true)
+                    .splineToLinearHeading(new Pose2d(shoot.plus(Rotation2d.exp(Math.toRadians(20)).vec().times(5)), Math.PI / 4), Math.toRadians(135))
+                    .addTask(last);
+            drive.makeTrajectory(last.get(), poseMap)
+                    .strafeTo(new Vector2d(-56, -27))
+                    .addTask();
+         */
     }
 }
