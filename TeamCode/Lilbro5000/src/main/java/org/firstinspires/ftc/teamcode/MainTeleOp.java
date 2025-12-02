@@ -54,6 +54,29 @@ public class MainTeleOp extends BunyipsOpMode {
             robot.outtake.setPower(0);
         }
 
+        if (gamepad2.x) {
+            robot.middletake.setPower(1);
+        } else if (gamepad2.y) {
+            robot.middletake.setPower(-1);
+        } else {
+            robot.middletake.setPower(0);
+//        }
+//        if (gamepad2.left_bumper) {
+//            robot.intake.setPower(1);
+//            robot.middletake.setPower(-1);
+//        } else {
+//            robot.intake.setPower(0);
+//            robot.middletake.setPower(0);
+//        }
+//
+//        if (gamepad2.right_bumper) {
+//            robot.outtake.setPower(1);
+//            robot.transfer.setPower(1);
+//        } else {
+//            robot.outtake.setPower(0);
+//            robot.transfer.setPower(0);
+        }
+
         BunyipsSubsystem.updateAll();
     }
 }

@@ -61,30 +61,32 @@ public class ForwardDumpAndCollect extends AutonomousBunyipsOpMode {
         PoseMap poseMap = start.isRed() ? new MirroredPoseMap() : new IdentityPoseMap();
         RefCell<Pose2d> last = Ref.empty();
         // giulio was here
+        Vector2d shoot = new Vector2d(-28.0, -19.6);
+        double alignBalls = 5.4;
         luncheonInterval = new ParallelTaskGroup(
                 robot.outtake.tasks.run(1),
                 robot.transfer.tasks.run(1)
-                        .with(robot.intake.tasks.run(1))
+                        .with(robot.intake.tasks.run(1), robot.middletake.tasks.run(1))
                         .after(Seconds.of(1))
         ).timeout(Seconds.of(5));
         robot.drive.setPose(start.toFieldPose());
         robot.drive.makeTrajectory(poseMap)
-                .strafeTo(new Vector2d(-37.2, -27.5))
+                .strafeTo(shoot)
                 .addTask(last);
         add(luncheonInterval);
         robot.drive.makeTrajectory(last.get(), poseMap)
-                .splineTo(new Vector2d(-7.4, -27.0), -Math.PI / 2)
+                .splineTo(new Vector2d(alignBalls, -27.0), -Math.PI / 2)
                 .setVelConstraints(Vel.ofMax(0.3, FieldTilesPerSecond))
                 .afterTime(0, robot.intake.tasks.runFor(Seconds.of(5), 1).during(robot.transfer.tasks.run(-1)))
-                .splineTo(new Vector2d(-7.4, -34.9), -Math.PI / 2) // first ball
+                .splineTo(new Vector2d(alignBalls, -34.9), -Math.PI / 2) // first ball
                 .waitSeconds(0)
-                .splineTo(new Vector2d(-7.4, -40.7), -Math.PI / 2) // second ball
+                .splineTo(new Vector2d(alignBalls, -40.7), -Math.PI / 2) // second ball
                 .waitSeconds(0)
-                .splineTo(new Vector2d(-7.4, -58.2), -Math.PI / 2) // third ball
+                .splineTo(new Vector2d(alignBalls, -58.2), -Math.PI / 2) // third ball
                 .waitSeconds(0.5)
                 .resetVelConstraints()
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(-37.2, -27.5, Math.PI / 4), Math.toRadians(135))
+                .splineToLinearHeading(new Pose2d(shoot.plus(new Vector2d(3, -3)), Math.PI / 4), Math.toRadians(135))
                 .addTask();
         add(luncheonInterval);
         robot.drive.makeTrajectory(last.get(), poseMap)

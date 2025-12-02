@@ -49,6 +49,7 @@ public class ForwardAndShootPreload extends AutonomousBunyipsOpMode {
             add(robot.intake.tasks.runFor(Seconds.of(2), 1));
         add(new ParallelTaskGroup(
                         robot.outtake.tasks.run(1),
+                        robot.middletake.tasks.run(1),
                         robot.transfer.tasks.run(1)
                                 .with(robot.intake.tasks.run(1))
                                 .after(Seconds.of(1))

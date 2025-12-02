@@ -13,7 +13,6 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGa
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
 
 /**
  * Main robot configuration file.
@@ -27,6 +26,7 @@ public class Lilbro5000 extends RobotConfig {
     // ... SUBSYSTEMS AND OTHER PUBLIC DECLARATIONS HERE ...
     public MecanumDrive drive;
     public Actuator intake;
+    public Actuator middletake;
     public Actuator outtake;
     public Actuator transfer;
     // .....................................................
@@ -49,7 +49,12 @@ public class Lilbro5000 extends RobotConfig {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
 
-        hw.intake = getHardware("intake", DcMotor.class);
+        hw.intake = getHardware("intake", DcMotor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+        });
+        hw.middletake = getHardware("intake2", DcMotor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+        });
         hw.outtake = getHardware("outtake", DcMotor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
@@ -85,6 +90,7 @@ public class Lilbro5000 extends RobotConfig {
         localizer.rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
         localizer.rightFront.setDirection(DcMotorSimple.Direction.REVERSE);
         intake = new Actuator(hw.intake).withName("Intake");
+        middletake = new Actuator(hw.middletake).withName("Middletake");
         outtake = new Actuator(hw.outtake).withName("Outtake");
         transfer = new Actuator(hw.transfer).withName("Transfer");
     }
@@ -117,6 +123,10 @@ public class Lilbro5000 extends RobotConfig {
          * Control 1: intake
          */
         public DcMotor intake;
+        /**
+         * Control 3: intake2
+         */
+        public DcMotor middletake;
         /**
          * Control 0: outtake
          */
