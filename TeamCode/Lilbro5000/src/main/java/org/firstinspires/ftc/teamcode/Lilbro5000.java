@@ -1,12 +1,16 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
@@ -20,7 +24,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
  *
  * @author Ziya, 2025
  */
+@Config
 public class Lilbro5000 extends RobotConfig {
+    public static double kP = 5, kV = 1;
     public final Hardware hw = new Hardware();
 
     // ... SUBSYSTEMS AND OTHER PUBLIC DECLARATIONS HERE ...
@@ -55,8 +61,13 @@ public class Lilbro5000 extends RobotConfig {
         hw.middletake = getHardware("intake2", DcMotor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
-        hw.outtake = getHardware("outtake", DcMotor.class, (d) -> {
+        hw.outtake = getHardware("outtake", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            PIDFController pidf = new PIDFController(kP, 0.0, 0.0, kV);
+            d.setRunUsingEncoderController(0.95, 1800, pidf);
+            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> pidf.setPIDF(kP, 0.0, 0.0, kV)));
         });
         hw.transfer = getHardware("trigger", DcMotor.class);
 
@@ -130,7 +141,7 @@ public class Lilbro5000 extends RobotConfig {
         /**
          * Control 0: outtake
          */
-        public DcMotor outtake;
+        public Motor outtake;
         /**
          * Control 2: outtake
          */

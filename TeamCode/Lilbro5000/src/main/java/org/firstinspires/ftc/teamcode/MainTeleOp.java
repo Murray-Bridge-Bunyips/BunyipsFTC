@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsSubsystem;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 
 /**
@@ -15,11 +16,13 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends BunyipsOpMode {
     private final Lilbro5000 robot = new Lilbro5000();
+    private PIDFController pidf;
     private boolean toggle;
 
     @Override
     protected void onInit() {
         robot.init();
+        pidf = robot.hw.outtake.getRunUsingEncoderController().pidf().get();
     }
 
     @Override
@@ -76,6 +79,9 @@ public class MainTeleOp extends BunyipsOpMode {
 //            robot.outtake.setPower(0);
 //            robot.transfer.setPower(0);
         }
+
+        telemetry.addData("currentVelocity", pidf.getCurrentProcess());
+        telemetry.addData("targetVelocity", pidf.getSetpoint());
 
         BunyipsSubsystem.updateAll();
     }
