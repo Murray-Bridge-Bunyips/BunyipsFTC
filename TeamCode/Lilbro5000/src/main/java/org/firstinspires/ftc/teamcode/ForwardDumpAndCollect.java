@@ -67,7 +67,7 @@ public class ForwardDumpAndCollect extends AutonomousBunyipsOpMode {
         RefCell<Pose2d> last = Ref.empty();
         // giulio was here
         Vector2d shoot = new Vector2d(-28.0, -19.6);
-        double alignBalls = 5.6;
+        double alignBalls = -6;
         luncheonInterval = new ParallelTaskGroup(
                 robot.outtake.tasks.run(0.95),
                 robot.transfer.tasks.run(1)
@@ -82,8 +82,8 @@ public class ForwardDumpAndCollect extends AutonomousBunyipsOpMode {
         robot.drive.makeTrajectory(last.get(), poseMap)
                 .splineTo(new Vector2d(alignBalls, -27.0), -Math.PI / 2)
                 .setVelConstraints(Vel.ofMax(0.3, FieldTilesPerSecond))
-                .afterTime(0, robot.intake.tasks.runFor(Seconds.of(6.5), 1).during(robot.transfer.tasks.run(-1), robot.middletake.tasks.run(1)))
-                .splineTo(new Vector2d(alignBalls, -34.9), -Math.PI / 2) // first ball
+                .afterTime(0, robot.intake.tasks.runFor(Seconds.of(6.5), 1).during(robot.transfer.tasks.run(-1), robot.middletake.tasks.run(1), robot.outtake.tasks.run(-0.25)))
+                .splineTo(new Vector2d(alignBalls, -30.9), -Math.PI / 2) // first ball
                 .waitSeconds(0)
                 .splineTo(new Vector2d(alignBalls, -40.7), -Math.PI / 2) // second ball
                 .waitSeconds(0)
@@ -91,7 +91,8 @@ public class ForwardDumpAndCollect extends AutonomousBunyipsOpMode {
                 .waitSeconds(0.5)
                 .resetVelConstraints()
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(shoot, Math.PI / 3), Math.toRadians(135))
+                .afterTime(0, robot.outtake.tasks.runFor(Seconds.of(0.5), -0.3).during(robot.middletake.tasks.run(-1)))
+                .splineToLinearHeading(new Pose2d(shoot, Math.PI / 4), Math.toRadians(135))
                 .addTask(last);
         add(luncheonInterval);
         robot.drive.makeTrajectory(last.get(), poseMap)
@@ -111,7 +112,7 @@ public class ForwardDumpAndCollect extends AutonomousBunyipsOpMode {
             PoseMap poseMap = start.isRed() ? new MirroredPoseMap() : new IdentityPoseMap();
             RefCell<Pose2d> last = Ref.empty();
             Vector2d shoot = new Vector2d(-28.0, -19.6);
-            double alignBalls = 5.6;
+            double alignBalls = -6;
             drive.useImplicitStartPose().makeTrajectory(start.toFieldPose(), poseMap)
                     .strafeTo(shoot)
                     .addTask(last);
