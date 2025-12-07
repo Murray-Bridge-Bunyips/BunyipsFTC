@@ -54,7 +54,7 @@ public class MainTeleOp extends BunyipsOpMode {
         } else if (toggle) {
             robot.outtake.setPower(0.5);
         } else {
-            robot.outtake.setPower(0);
+            robot.outtake.setPower(-gamepad2.rsy);
         }
 
         if (gamepad2.x) {
