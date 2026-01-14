@@ -5,7 +5,7 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 
 import java.lang.reflect.Field;
 
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Hook;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.annotations.Hook;
 
 /**
  * Temporary shim to use the new field image on FTCDashboard.

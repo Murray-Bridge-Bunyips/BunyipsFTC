@@ -21,7 +21,7 @@ import org.firstinspires.ftc.robotcore.external.ExportToBlocks;
 
 import java.util.ArrayDeque;
 
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.Hook;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.annotations.Hook;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Angle;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Distance;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;

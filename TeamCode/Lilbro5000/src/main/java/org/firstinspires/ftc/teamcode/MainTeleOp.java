@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsSubsystem;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 
 /**
@@ -15,11 +16,13 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends BunyipsOpMode {
     private final Lilbro5000 robot = new Lilbro5000();
+    private PIDFController pidf;
     private boolean toggle;
 
     @Override
     protected void onInit() {
         robot.init();
+        pidf = robot.hw.outtake.getRunUsingEncoderController().pidf().get();
     }
 
     @Override
@@ -51,8 +54,34 @@ public class MainTeleOp extends BunyipsOpMode {
         } else if (toggle) {
             robot.outtake.setPower(0.5);
         } else {
-            robot.outtake.setPower(0);
+            robot.outtake.setPower(-gamepad2.rsy);
         }
+
+        if (gamepad2.x) {
+            robot.middletake.setPower(1);
+        } else if (gamepad2.y) {
+            robot.middletake.setPower(-1);
+        } else {
+            robot.middletake.setPower(0);
+//        }
+//        if (gamepad2.left_bumper) {
+//            robot.intake.setPower(1);
+//            robot.middletake.setPower(-1);
+//        } else {
+//            robot.intake.setPower(0);
+//            robot.middletake.setPower(0);
+//        }
+//
+//        if (gamepad2.right_bumper) {
+//            robot.outtake.setPower(1);
+//            robot.transfer.setPower(1);
+//        } else {
+//            robot.outtake.setPower(0);
+//            robot.transfer.setPower(0);
+        }
+
+        telemetry.addData("currentVelocity", pidf.getCurrentProcess());
+        telemetry.addData("targetVelocity", pidf.getSetpoint());
 
         BunyipsSubsystem.updateAll();
     }

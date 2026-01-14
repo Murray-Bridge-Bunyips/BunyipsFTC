@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
@@ -24,6 +25,7 @@ import dev.frozenmilk.util.cell.RefCell;
  * @author Lucas Bubner, 2025
  */
 @Autonomous(name = "Goal Side, Move Forward and Shoot Two/Three Preloads")
+@Disabled
 public class ForwardAndShootPreload extends AutonomousBunyipsOpMode {
     private final Lilbro5000 robot = new Lilbro5000();
 
@@ -49,6 +51,7 @@ public class ForwardAndShootPreload extends AutonomousBunyipsOpMode {
             add(robot.intake.tasks.runFor(Seconds.of(2), 1));
         add(new ParallelTaskGroup(
                         robot.outtake.tasks.run(1),
+                        robot.middletake.tasks.run(1),
                         robot.transfer.tasks.run(1)
                                 .with(robot.intake.tasks.run(1))
                                 .after(Seconds.of(1))
