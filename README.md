@@ -10,12 +10,13 @@ This repository contains all code for our FTC robots constructed after 2021 usin
 ## Maintained robots in this repo
 ###### Maintained robots are modules that are attributed to an existing and usable robot controller and Gradle config. These robots are using the latest versions of BunyipsLib.<br>These modules can be found under TeamCode/
 
-| Robot Name | Description                | Season             | Team                           |
-|------------|----------------------------|--------------------|--------------------------------|
-| Damon      | 15215 REV Decode robot     | DECODE (2025-2026) | 15215 Murray Bridge Bunyips    |
-| Jonas      | 22407 goBILDA Decode robot | DECODE (2025-2026) | 22407 Murray Bridge Mulyawonks |
-| Lilbro5000 | 24736 REV Decode robot     | DECODE (2025-2026) | 24736 Murray Bridge Lizards    |
-| Scout      | Minibot outreach framework | No Season          | No Team                        |
+| Robot Name | Description                   | Season             | Team                           |
+|------------|-------------------------------|--------------------|--------------------------------|
+| Damon      | 15215 REV Decode robot        | DECODE (2025-2026) | 15215 Murray Bridge Bunyips    |
+| Jonas      | 22407 goBILDA Decode robot    | DECODE (2025-2026) | 22407 Murray Bridge Mulyawonks |
+| Lilbro5000 | 24736 REV Decode robot        | DECODE (2025-2026) | 24736 Murray Bridge Lizards    |
+| Scout      | Minibot outreach framework    | No Season          | No Team                        |
+| Table      | Hardware for a drama set item | No Season          | No Team                        |   
 
 ## Unmaintained robots in this repo
 ###### Unmaintained robots used to be attributed to a robot controller but have been decommissioned/are unmaintained. They may be using outdated/deprecated versions of BunyipsLib.<br>These modules can be found under TeamCode/Archived/
