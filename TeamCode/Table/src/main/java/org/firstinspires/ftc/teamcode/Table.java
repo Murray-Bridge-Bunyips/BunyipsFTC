@@ -21,6 +21,11 @@ public class Table extends RobotConfig {
      */
     public HoldableActuator lineActuator;
 
+    public int lineDistance = 200;
+
+    public int fixDistance = 200;
+    public int breakDistance = -200;
+
     public final Hardware hw = new Hardware();
 
     public double kP = 0.0;
@@ -30,6 +35,10 @@ public class Table extends RobotConfig {
     @Override
     protected void onRuntime() {
         hw.line = getHardware("tableString", Motor.class, (d) -> {
+            //TODO: Make positive direction the direction that repairs the table
+            //TODO: Tune PID
+            //TODO: Tune how far the motor needs to rotate when breaking/fixing
+            //TODO: Tune minimum and maximum (if needed)
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             PIDController pid = new PIDController(kP, kI, kD);

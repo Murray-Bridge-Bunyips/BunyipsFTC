@@ -5,10 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 
+/**
+ * Note that this OpMode assumes that the table starts broken.
+ */
 @Config
 @TeleOp(name = "Fix Table")
 public class FixTable extends BunyipsOpMode {
-
     private final Table robot = new Table();
 
     protected void onInit() {
@@ -20,6 +22,6 @@ public class FixTable extends BunyipsOpMode {
     }
 
     protected void activeLoop() {
-        robot.lineActuator.tasks.control(() -> -200);
+        robot.lineActuator.tasks.goTo(robot.lineDistance);
     }
 }
