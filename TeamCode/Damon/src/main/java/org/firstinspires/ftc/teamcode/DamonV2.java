@@ -1,4 +1,3 @@
-
 package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecond;
@@ -9,11 +8,11 @@ import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
-
-import org.jetbrains.annotations.Nullable;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
@@ -25,6 +24,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 /**
@@ -33,10 +33,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
  *
  * @author Lucas Sacco, 2025
  */
-@Disabled
+
 @Config
-public class Damon extends RobotConfig {
-    public final Hardware hw = new Hardware();
+public class DamonV2 extends RobotConfig{
+    public final DamonV2.Hardware hw = new DamonV2.Hardware();
 
     // ... SUBSYSTEMS AND OTHER PUBLIC DECLARATIONS HERE ...
     public MecanumDrive drive;
@@ -45,9 +45,15 @@ public class Damon extends RobotConfig {
 
     public Actuator shooter;
 
-    public Actuator transferWheel;
+    public Actuator transferLeft;
+
+    public Actuator transferRight;
 
     public static double shooter_kP = 15, shooter_kV = 0.9;
+
+    public Actuator hoodAdjustment;
+
+    public DualServos kicker;
     // .....................................................
 
     @Override
@@ -123,24 +129,46 @@ public class Damon extends RobotConfig {
                 .withName("Intake");
 
         hw.shooter = getHardware("shooter", Motor.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.FORWARD);
-            PIDFController pidf = new PIDFController(shooter_kP, 0, 0, shooter_kV);
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() ->
-                    pidf.setPIDF(shooter_kP, 0, 0, shooter_kV)));
-            pidf.setTolerance(200);
-            d.setRunUsingEncoderController(1, 2400, pidf);
-            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
 
         shooter = new Actuator(hw.shooter)
                 .withName("Shooter");
 
-        hw.transferWheel = getHardware("transferWheel", DcMotor.class, (d) -> {
+        hw.transferLeft = getHardware("transferLeft", DcMotor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
 
-        transferWheel = new Actuator(hw.transferWheel)
-                .withName("TransferWheel");
+        transferLeft = new Actuator(hw.transferLeft)
+                .withName("TransferLeft");
+
+        hw.transferRight = getHardware("transferRight", DcMotor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
+        });
+
+        transferRight = new Actuator(hw.transferRight)
+                .withName("TransferRight");
+
+        hw.hoodAdjustment = getHardware("hoodAdjustment", CRServo.class, (d) -> {
+            d.setDirection(CRServo.Direction.FORWARD);
+        });
+
+        hoodAdjustment = new Actuator(hw.intake)
+                .withName(("Intake"));
+
+
+        //May need to change the direction of the servos and need to change the scale range
+        hw.leftKicker = getHardware("leftKicker", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.FORWARD);
+            d.scaleRange(0, 1);
+        });
+        hw.rightKicker = getHardware("rightKicker", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.REVERSE);
+            d.scaleRange(0, 1);
+        });
+
+        kicker = new DualServos(hw.leftKicker, hw.rightKicker)
+                .withName("Kicker");
 
 
     }
@@ -181,7 +209,15 @@ public class Damon extends RobotConfig {
 
         public Motor shooter;
 
-        public DcMotorSimple transferWheel;
+        public DcMotorSimple transferLeft;
+
+        public DcMotorSimple transferRight;
+
+        public CRServo hoodAdjustment;
+
+        public Servo rightKicker;
+
+        public Servo leftKicker;
 
 
 

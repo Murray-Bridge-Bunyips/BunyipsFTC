@@ -11,13 +11,14 @@ import androidx.annotation.Nullable;
 
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import dev.frozenmilk.util.cell.RefCell;
-
+@Disabled
 @Autonomous(name = "Red Close Zone Auto")
 public class DamonRedCloseAuto extends AutonomousBunyipsOpMode {
     private final Damon damon = new Damon();
