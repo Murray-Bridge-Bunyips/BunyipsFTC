@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
@@ -10,6 +11,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
  */
 @Config
 @TeleOp(name = "Fix Table")
+@Disabled
 public class FixTable extends BunyipsOpMode {
     private final Table robot = new Table();
 
