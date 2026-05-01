@@ -35,14 +35,13 @@ public class Table extends RobotConfig {
             d.setDirection(DcMotor.Direction.FORWARD);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            //TODO: Tune PID
-//            PIDController pid = new PIDController(kP, kI, kD);
-//            d.setRunToPositionController(pid);
-//
-//            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-//                pid.setCoefficients(kP, kI, kD, 0.0);
-//                Motor.debug(d, "line", Motor.Scope.POSITION, Motor.Scope.TARGET);
-//            }));
+            PIDController pid = new PIDController(kP, kI, kD);
+            d.setRunToPositionController(pid);
+
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+                pid.setCoefficients(kP, kI, kD, 0.0);
+                Motor.debug(d, "line", Motor.Scope.POSITION, Motor.Scope.TARGET);
+            }));
         });
 
         lineActuator = new HoldableActuator(hw.line)
