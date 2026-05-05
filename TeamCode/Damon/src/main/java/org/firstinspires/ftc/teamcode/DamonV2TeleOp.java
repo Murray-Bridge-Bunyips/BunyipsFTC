@@ -22,6 +22,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.AlignToPointDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 @Config
 @TeleOp(name = "TeleOp")
 public class DamonV2TeleOp extends BunyipsOpMode {
@@ -53,7 +54,10 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         }
 
 
-
+        double forward = -gamepad1.left_stick_y;
+        double strafe = -gamepad1.left_stick_x;
+        double rotation = -gamepad1.right_stick_x;
+        robot.drive.setPower(Geometry.vel(forward, strafe, rotation));
         //new HolonomicDriveTask(gamepad1, robot.drive).setAsDefaultTask();
         //gamepad1.button(RIGHT_BUMPER)
         //        .whileTrue(new AlignToPointDriveTask(() -> goal, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180)));
