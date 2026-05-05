@@ -19,6 +19,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.AlignToPointDriveTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
@@ -53,11 +54,12 @@ public class DamonV2TeleOp extends BunyipsOpMode {
             }
         }
 
+        FieldOrientableDriveTask driveTask = new HolonomicDriveTask(gamepad1, robot.drive)
+                .withFieldCentric(() -> false);
+        robot.drive.setDefaultTask(driveTask);
 
-        double forward = -gamepad1.left_stick_y;
-        double strafe = -gamepad1.left_stick_x;
-        double rotation = -gamepad1.right_stick_x;
-        robot.drive.setPower(Geometry.vel(forward, strafe, rotation));
+
+
         //new HolonomicDriveTask(gamepad1, robot.drive).setAsDefaultTask();
         //gamepad1.button(RIGHT_BUMPER)
         //        .whileTrue(new AlignToPointDriveTask(() -> goal, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180)));
@@ -83,6 +85,7 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         telemetry.addData("currentVelocity", shooterPid.getCurrentProcess());
         telemetry.addData("targetVelocity", shooterPid.getSetpoint());
         AlignToPointDriveTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_POINT_PIDF_COEFFICIENTS);
+
         Scheduler.update();
     }
 
