@@ -4,7 +4,6 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.A;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.B;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
@@ -35,6 +34,9 @@ public class BreakFixTable extends BunyipsOpMode {
     }
 
     protected void activeLoop() {
+        telemetry.addData("currentPosition", robot.hw.line.getCurrentPosition());
+        telemetry.addData("targetPosition", robot.hw.line.getTargetPosition());
+
         Scheduler.update();
     }
 }

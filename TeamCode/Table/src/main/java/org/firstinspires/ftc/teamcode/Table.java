@@ -25,23 +25,20 @@ public class Table extends RobotConfig {
 
     public final Hardware hw = new Hardware();
 
-    public double kP = 0.0;
-    public double kI = 0.0;
-    public double kD = 0.0;
+    public static double kP = 0.01;
+    public static double kI = 0.0;
+    public static double kD = 0.0;
 
     @Override
     protected void onRuntime() {
         hw.line = getHardware("tableString", Motor.class, (d) -> {
-            d.setDirection(DcMotor.Direction.FORWARD);
-            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                    d.setDirection(DcMotor.Direction.REVERSE);
+                    d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            PIDController pid = new PIDController(kP, kI, kD);
-            d.setRunToPositionController(pid);
+                    PIDController pid = new PIDController(kP, kI, kD);
+                    d.setRunToPositionController(pid);
 
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-                pid.setCoefficients(kP, kI, kD, 0.0);
-                Motor.debug(d, "line", Motor.Scope.POSITION, Motor.Scope.TARGET);
-            }));
+                    BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> pid.setCoefficients(kP, kI, kD, 0.0)));
         });
 
         lineActuator = new HoldableActuator(hw.line)
