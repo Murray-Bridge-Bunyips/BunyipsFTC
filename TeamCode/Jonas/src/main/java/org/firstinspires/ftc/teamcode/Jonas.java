@@ -5,29 +5,24 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Sec
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
-import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
-import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.IMU;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.PinpointLocalizer;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.BlinkinLights;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
 
 @Config
 public class Jonas extends RobotConfig {
     public static class Hardware {
+        //TODO: TOOD: redo javadocs to be correct with new configuration
         /**
          * Control 0: bl <sub>yaoi motor</sub>
          */
@@ -64,23 +59,20 @@ public class Jonas extends RobotConfig {
          */
         public DcMotor intake;
 
-
+        //TODO: Update config to reflect the below as the javadoc is actually correct
         /**
-         * Expansion 5: preventer
+         * Expansion 0: preventer
          */
         public ServoEx preventer;
 
-
-        /**
-         * Expansion 0: lights
-         */
-        public RevBlinkinLedDriver lights;
+        //TODO: Remove lights from config
     }
 
+    //TODO: Reorder these to reflect new config order
     /**
      * 4-Wheels MecanumDrive
      */
-    public MecanumDrive drive;
+    public SimpleMecanumDrive drive;
 
     /**
      * Output Actuator
@@ -97,12 +89,9 @@ public class Jonas extends RobotConfig {
      */
     public Switch preventer;
 
-    /**
-     * Lights BlinkinLights
-     */
-    public BlinkinLights lights;
-
     public final Hardware hw = new Hardware();
+
+    public SequentialTaskGroup launch;
 
     @Override
     protected void onRuntime() {
@@ -122,7 +111,9 @@ public class Jonas extends RobotConfig {
 
         hw.output = getHardware("output", Motor.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            d.setDirection(DcMotor.Direction.REVERSE);
 
+            //TODO: Tune pid
             PIDFController pidf = new PIDFController(1, 0.0, 0.0, 3.5);
             d.setRunUsingEncoderController(1, 1900, pidf);
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -140,33 +131,7 @@ public class Jonas extends RobotConfig {
             d.scaleRange(0, 0.4);
         });
 
-        hw.lights = getHardware("lights", RevBlinkinLedDriver.class);
-
-        DriveModel driveModel = new DriveModel.Builder()
-            .setInPerTick(125 / 63581.0) // 0.001965996
-            .setLateralInPerTick(0.0014489928459200559)
-            .setTrackWidthTicks(5868.208072363816)
-            .build();
-        MotionProfile motionProfile = new MotionProfile.Builder()
-            .setKv(0.000335)
-            .setKs(1.12)
-            .setKa(0.00005)
-            .build();
-        MecanumGains mecanumGains = new MecanumGains.Builder()
-            .setAxialGain(2.5)
-            .setLateralGain(3)
-            .setHeadingGain(4)
-            .build();
-        PinpointLocalizer.Params localiserParams = new PinpointLocalizer.Params.Builder()
-            .setParYTicks(-2179.5793527430556) // note: negative on purpose despite what the tuner says (-'ve is +right)
-            .setPerpXTicks(1285.9282599473254)
-            .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-            .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-            .build();
-        //Robot is 12.75in long and 13in wide
-
-        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight, IMUEx.none())
-            .withLocalizer(new PinpointLocalizer(driveModel, localiserParams, hw.pinpoint))
+        drive = new SimpleMecanumDrive(hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight)
             .withName("Drive");
 
         output = new Actuator(hw.output)
@@ -178,7 +143,13 @@ public class Jonas extends RobotConfig {
         preventer = new Switch(hw.preventer)
             .withName("Preventer");
 
-        lights = new BlinkinLights(hw.lights, RevBlinkinLedDriver.BlinkinPattern.SINELON_RAINBOW_PALETTE)
-            .withName("Lights");
+        launch = new SequentialTaskGroup(
+                new ParallelTaskGroup(
+                        //TODO: Tune these numbers
+                        output.tasks.runFor(Seconds.of(3.4), 0.375),
+                        intake.tasks.runFor(Seconds.of(1), 1).after(preventer.tasks.open().after(2.4, Seconds))
+                ),
+                preventer.tasks.close()
+        );
     }
 }

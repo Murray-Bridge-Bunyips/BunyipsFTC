@@ -31,6 +31,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguratio
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 
+//TODO: Redo whole thing
 @Config
 @TeleOp(name = "TeleOp")
 public class MainTeleOp extends BunyipsOpMode {
