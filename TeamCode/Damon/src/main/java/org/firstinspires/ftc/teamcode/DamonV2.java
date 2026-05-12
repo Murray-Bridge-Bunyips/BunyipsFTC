@@ -59,7 +59,7 @@ public class DamonV2 extends RobotConfig{
     @Override
     protected void onRuntime() {
         hw.fl = getHardware("fl", DcMotor.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.FORWARD);
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
 
 
@@ -122,7 +122,7 @@ public class DamonV2 extends RobotConfig{
                 .withName("Drive");
 
         hw.intake = getHardware("intake", DcMotor.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.FORWARD);
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
 
         intake = new Actuator(hw.intake)
@@ -143,7 +143,7 @@ public class DamonV2 extends RobotConfig{
                 .withName("TransferLeft");
 
         hw.transferRight = getHardware("transferRight", DcMotor.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.FORWARD);
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
         });
 
         transferRight = new Actuator(hw.transferRight)
@@ -160,11 +160,11 @@ public class DamonV2 extends RobotConfig{
         //May need to change the direction of the servos and need to change the scale range
         hw.leftKicker = getHardware("leftKicker", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0, 1);
+            d.scaleRange(0, 0.2);
         });
         hw.rightKicker = getHardware("rightKicker", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.REVERSE);
-            d.scaleRange(0, 1);
+            d.scaleRange(0, 0.2);
         });
 
         kicker = new DualServos(hw.leftKicker, hw.rightKicker)
