@@ -25,6 +25,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGa
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 /**
@@ -51,7 +52,7 @@ public class DamonV2 extends RobotConfig{
 
     public static double shooter_kP = 15, shooter_kV = 0.9;
 
-    public Actuator hoodAdjustment;
+    public Switch hoodAdjustment;
 
     public DualServos kicker;
     // .....................................................
@@ -149,12 +150,13 @@ public class DamonV2 extends RobotConfig{
         transferRight = new Actuator(hw.transferRight)
                 .withName("TransferRight");
 
-        hw.hoodAdjustment = getHardware("hoodAdjustment", CRServo.class, (d) -> {
-            d.setDirection(CRServo.Direction.FORWARD);
+        hw.hoodAdjustment = getHardware("hoodAdjustment", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.FORWARD);
+            d.scaleRange(0, 0.5);
         });
 
-        hoodAdjustment = new Actuator(hw.intake)
-                .withName(("Intake"));
+        hoodAdjustment = new Switch(hw.hoodAdjustment)
+                .withName("hoodAdjustment");
 
 
         //May need to change the direction of the servos and need to change the scale range
@@ -163,7 +165,7 @@ public class DamonV2 extends RobotConfig{
             d.scaleRange(0, 0.2);
         });
         hw.rightKicker = getHardware("rightKicker", Servo.class, (d) -> {
-            d.setDirection(Servo.Direction.REVERSE);
+            d.setDirection(Servo.Direction.FORWARD);
             d.scaleRange(0, 0.2);
         });
 
@@ -213,7 +215,7 @@ public class DamonV2 extends RobotConfig{
 
         public DcMotorSimple transferRight;
 
-        public CRServo hoodAdjustment;
+        public Servo hoodAdjustment;
 
         public Servo rightKicker;
 

@@ -22,6 +22,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.AlignToPointDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
@@ -67,11 +68,11 @@ public class DamonV2TeleOp extends BunyipsOpMode {
 
         gamepad1.button(X).or(gamepad2.button(X))
                 .whileTrue(robot.intake.tasks.run(1))
-                .whileTrue(robot.transferLeft.tasks.run(1)) .whileTrue(robot.transferRight.tasks.run(1));
+                .whileTrue(robot.transferLeft.tasks.run(1))
+                .whileTrue(robot.transferRight.tasks.run(1));
 
         gamepad1.button(Y).or(gamepad2.axisGreaterThan(LEFT_TRIGGER, 0.9))
-                .whileTrue(robot.shooter.tasks.run(1));
-
+                .whileTrue(robot.intake.tasks.run(1));
 
 
         gamepad1.button(A)
@@ -83,8 +84,16 @@ public class DamonV2TeleOp extends BunyipsOpMode {
                         robot.shooter.tasks.run(0.85),
                                 robot.transferLeft.tasks.run(1),
                                 robot.transferLeft.tasks.run(1),
-                                robot.intake.tasks.run(0.2)
+                                robot.intake.tasks.run(0.2),
+                                new SequentialTaskGroup(
+                                        robot.kicker.tasks.toggleBoth(),
+                                        robot.kicker.tasks.toggleBoth()
+                                )
                                 ));
+
+
+        gamepad1.button(DPAD_DOWN)
+                .onTrue(robot.hoodAdjustment.tasks.toggle());
 
 
         //Need to add code that sets the angle of the hood according to what button was pressed
