@@ -4,17 +4,16 @@ package org.firstinspires.ftc.teamcode;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.SimpleMecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
@@ -22,11 +21,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGrou
 @Config
 public class Jonas extends RobotConfig {
     public static class Hardware {
-        //TODO: TOOD: redo javadocs to be correct with new configuration
         /**
-         * Control 0: bl <sub>yaoi motor</sub>
+         * Control 0: fl
          */
-        public DcMotor backLeft;
+        public DcMotor frontLeft;
 
         /**
          * Control 1: br
@@ -34,55 +32,47 @@ public class Jonas extends RobotConfig {
         public DcMotor backRight;
 
         /**
-         * Control 2: fr
+         * Control 2: bl <sub>yaoi motor</sub>
+         */
+        public DcMotor backLeft;
+
+        /**
+         * Control 3: fr
          */
         public DcMotor frontRight;
 
-        /**
-         * Control 3: fl
-         */
-        public DcMotor frontLeft;
 
         /**
-         * Control 0: pinpoint
-         */
-        public GoBildaPinpointDriver pinpoint;
-
-
-        /**
-         * Expansion 0: output
-         */
-        public Motor output;
-
-        /**
-         * Expansion 1: intake
+         * Expansion 0: intake
          */
         public DcMotor intake;
 
-        //TODO: Update config to reflect the below as the javadoc is actually correct
+        /**
+         * Expansion 1: output
+         */
+        public Motor output;
+
+
         /**
          * Expansion 0: preventer
          */
         public ServoEx preventer;
-
-        //TODO: Remove lights from config
     }
 
-    //TODO: Reorder these to reflect new config order
     /**
      * 4-Wheels MecanumDrive
      */
     public SimpleMecanumDrive drive;
 
     /**
-     * Output Actuator
-     */
-    public Actuator output;
-
-    /**
      * Intake Actuator
      */
     public Actuator intake;
+
+    /**
+     * Output Actuator
+     */
+    public Actuator output;
 
     /**
      * Preventer Switch
@@ -92,6 +82,8 @@ public class Jonas extends RobotConfig {
     public final Hardware hw = new Hardware();
 
     public SequentialTaskGroup launch;
+
+    public double kP, kI, kD, kF = 0;
 
     @Override
     protected void onRuntime() {
@@ -107,38 +99,37 @@ public class Jonas extends RobotConfig {
         hw.frontRight = getHardware("fr", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.backRight = getHardware("br", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
 
-        hw.pinpoint = getHardware("pinpoint", GoBildaPinpointDriver.class);
-
+        hw.intake = getHardware("intake", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.output = getHardware("output", Motor.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             d.setDirection(DcMotor.Direction.REVERSE);
 
             //TODO: Tune pid
-            PIDFController pidf = new PIDFController(1, 0.0, 0.0, 3.5);
+            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
+            //TODO: Find max achievable TPS
             d.setRunUsingEncoderController(1, 1900, pidf);
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-//            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-//                pidf.setPIDF(1, 0.0, 0.0, 3.5);
-//                o.telemetry.addData("currentVelocity", d.getVelocity());
-//                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
-//            }));
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+                pidf.setPIDF(kP, kI, kD, kF);
+                o.telemetry.addData("currentVelocity", d.getVelocity());
+                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
+            }));
         });
-        hw.intake = getHardware("intake", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
 
         hw.preventer = getHardware("preventer", ServoEx.class, (d) -> {
-            d.setEndToEndTime(Seconds.of(0.4));
-            d.scaleRange(0, 0.4);
+            d.setEndToEndTime(Seconds.of(0.8));
+            d.scaleRange(0, 1);
         });
 
         drive = new SimpleMecanumDrive(hw.frontLeft, hw.backLeft, hw.backRight, hw.frontRight)
             .withName("Drive");
 
+        intake = new Actuator(hw.intake)
+                .withName("Intake");
+
         output = new Actuator(hw.output)
             .withName("Output");
-
-        intake = new Actuator(hw.intake)
-            .withName("Intake");
 
         preventer = new Switch(hw.preventer)
             .withName("Preventer");
