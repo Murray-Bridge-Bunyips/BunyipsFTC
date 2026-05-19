@@ -78,18 +78,18 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         gamepad1.button(A)
                 .onTrue(robot.kicker.tasks.toggleBoth());
 
+
         gamepad1.button(B)
                 .whileTrue(
                         new ParallelTaskGroup(
                         robot.shooter.tasks.run(0.85),
                                 robot.transferLeft.tasks.run(1),
-                                robot.transferLeft.tasks.run(1),
-                                robot.intake.tasks.run(0.2),
-                                new SequentialTaskGroup(
-                                        robot.kicker.tasks.toggleBoth(),
-                                        robot.kicker.tasks.toggleBoth()
-                                )
+                                robot.transferRight.tasks.run(1),
+                                robot.intake.tasks.run(0.2)
+
                                 ));
+
+
 
 
         gamepad1.button(DPAD_DOWN)

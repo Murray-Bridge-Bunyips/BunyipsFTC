@@ -162,11 +162,11 @@ public class DamonV2 extends RobotConfig{
         //May need to change the direction of the servos and need to change the scale range
         hw.leftKicker = getHardware("leftKicker", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0, 0.2);
+            d.scaleRange(0.7, 1);
         });
         hw.rightKicker = getHardware("rightKicker", Servo.class, (d) -> {
-            d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0, 0.2);
+            d.setDirection(Servo.Direction.REVERSE);
+            d.scaleRange(0, 0.4);
         });
 
         kicker = new DualServos(hw.leftKicker, hw.rightKicker)
