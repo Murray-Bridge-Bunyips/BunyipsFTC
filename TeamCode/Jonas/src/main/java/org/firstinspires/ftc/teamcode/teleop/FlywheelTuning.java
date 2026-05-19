@@ -33,7 +33,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 
 //TODO: Redo whole thing
 @Config
-@TeleOp(name = "Flywheen Tuning")
+@TeleOp(name = "Flywheel Tuning")
 public class FlywheelTuning extends BunyipsOpMode {
     private final Jonas robot = new Jonas();
 
@@ -46,8 +46,12 @@ public class FlywheelTuning extends BunyipsOpMode {
 
     @Override
     protected void activeLoop() {
-//        telemetry.addData("currentPosition", robot.hw.output.getCurrentPosition());
-//        telemetry.addData("targetPosition", robot.hw.output.getTargetPosition());
+        telemetry.addData("currentPosition", robot.hw.output.getCurrentPosition());
+        telemetry.addData("targetPosition", robot.hw.output.getTargetPosition());
+        telemetry.addData("kP", robot.kP);
+        telemetry.addData("kI", robot.kI);
+        telemetry.addData("kD", robot.kD);
+        telemetry.addData("kF", robot.kF);
 
         Scheduler.update();
     }

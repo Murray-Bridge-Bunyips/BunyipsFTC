@@ -83,7 +83,10 @@ public class Jonas extends RobotConfig {
 
     public SequentialTaskGroup launch;
 
-    public double kP, kI, kD, kF = 0;
+    public double kP = 0;
+    public double kI = 0;
+    public double kD = 0;
+    public double kF = 0.1;
 
     @Override
     protected void onRuntime() {
@@ -104,17 +107,10 @@ public class Jonas extends RobotConfig {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             d.setDirection(DcMotor.Direction.REVERSE);
 
-            //TODO: Tune pid
+            //TODO: Make pid work in the first place then tune it
             PIDFController pidf = new PIDFController(kP, kI, kD, kF);
-            //TODO: Find max achievable TPS
-            d.setRunUsingEncoderController(1, 1900, pidf);
+            d.setRunUsingEncoderController(1, 2380, pidf);
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-                pidf.setPIDF(kP, kI, kD, kF);
-                o.telemetry.addData("currentVelocity", d.getVelocity());
-                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
-            }));
         });
 
         hw.preventer = getHardware("preventer", ServoEx.class, (d) -> {
