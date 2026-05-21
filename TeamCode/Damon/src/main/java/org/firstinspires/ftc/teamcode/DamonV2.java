@@ -55,6 +55,8 @@ public class DamonV2 extends RobotConfig{
     public Switch hoodAdjustment;
 
     public DualServos kicker;
+
+    public double kP, kI, kD, kF = 0;
     // .....................................................
 
     @Override
@@ -90,6 +92,10 @@ public class DamonV2 extends RobotConfig{
 
         //hw.perp = getHardware("br", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
         //hw.par = getHardware("fr", RawEncoder.class, (d) -> d.setDirection(DcMotorSimple.Direction.FORWARD));
+
+
+
+
 
         PinpointLocalizer.Params localizerParams = new PinpointLocalizer.Params.Builder()
                 .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
@@ -129,8 +135,24 @@ public class DamonV2 extends RobotConfig{
         intake = new Actuator(hw.intake)
                 .withName("Intake");
 
+
+
+
         hw.shooter = getHardware("shooter", Motor.class, (d) -> {
-            d.setDirection(DcMotorSimple.Direction.REVERSE);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            d.setDirection(DcMotor.Direction.REVERSE);
+
+            //TODO: Tune pid
+            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
+            //TODO: Find max achievable TPS
+            d.setRunUsingEncoderController(1, 1900, pidf);
+            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+                pidf.setPIDF(kP, kI, kD, kF);
+                o.telemetry.addData("currentVelocity", d.getVelocity());
+                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
+            }));
         });
 
         shooter = new Actuator(hw.shooter)
@@ -220,6 +242,8 @@ public class DamonV2 extends RobotConfig{
         public Servo rightKicker;
 
         public Servo leftKicker;
+
+
 
 
 
