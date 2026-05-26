@@ -86,7 +86,7 @@ public class Jonas extends RobotConfig {
     public double kP = 0;
     public double kI = 0;
     public double kD = 0;
-    public double kF = 0.1;
+    public double kF = 10;
 
     @Override
     protected void onRuntime() {
@@ -107,10 +107,16 @@ public class Jonas extends RobotConfig {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             d.setDirection(DcMotor.Direction.REVERSE);
 
-            //TODO: Make pid work in the first place then tune it
+            //TODO: Tune PID
             PIDFController pidf = new PIDFController(kP, kI, kD, kF);
             d.setRunUsingEncoderController(1, 2380, pidf);
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+                pidf.setPIDF(1, 0.0, 0.0, 3.5);
+                o.telemetry.addData("currentVelocity", d.getVelocity());
+                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
+            }));
         });
 
         hw.preventer = getHardware("preventer", ServoEx.class, (d) -> {
