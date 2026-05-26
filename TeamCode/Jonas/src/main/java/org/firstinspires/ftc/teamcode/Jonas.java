@@ -83,10 +83,12 @@ public class Jonas extends RobotConfig {
 
     public SequentialTaskGroup launch;
 
-    public double kP = 0;
+    public double kP = 1;
     public double kI = 0;
     public double kD = 0;
-    public double kF = 10;
+    public double kF = 0.87;
+
+    //TODO: Do a full build to robot
 
     @Override
     protected void onRuntime() {
@@ -102,21 +104,16 @@ public class Jonas extends RobotConfig {
         hw.frontRight = getHardware("fr", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.backRight = getHardware("br", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
 
-        hw.intake = getHardware("intake", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
-        hw.output = getHardware("output", Motor.class, (d) -> {
+        hw.intake = getHardware("intake", DcMotorEx.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             d.setDirection(DcMotor.Direction.REVERSE);
+        });
+        hw.output = getHardware("output", Motor.class, (d) -> {
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-            //TODO: Tune PID
             PIDFController pidf = new PIDFController(kP, kI, kD, kF);
-            d.setRunUsingEncoderController(1, 2380, pidf);
+            d.setRunUsingEncoderController(1, 1800 /* theoretrically 2380 but it only approaches 1800 */, pidf);
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-                pidf.setPIDF(1, 0.0, 0.0, 3.5);
-                o.telemetry.addData("currentVelocity", d.getVelocity());
-                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
-            }));
         });
 
         hw.preventer = getHardware("preventer", ServoEx.class, (d) -> {

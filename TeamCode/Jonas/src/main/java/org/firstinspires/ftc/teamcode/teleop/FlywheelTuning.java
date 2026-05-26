@@ -29,6 +29,11 @@ public class FlywheelTuning extends BunyipsOpMode {
     }
 
     @Override
+    protected void onStart() {
+        robot.preventer.open();
+    }
+
+    @Override
     protected void activeLoop() {
         telemetry.addData("currentVelocity", robot.hw.output.getVelocity());
         telemetry.addData("targetVelocity", robot.hw.output.getRunUsingEncoderController().pidf().get().getSetpoint());
