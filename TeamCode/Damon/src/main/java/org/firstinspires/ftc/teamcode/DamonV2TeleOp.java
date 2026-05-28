@@ -75,25 +75,43 @@ public class DamonV2TeleOp extends BunyipsOpMode {
                 .whileTrue(robot.intake.tasks.run(1));
 
 
-        gamepad1.button(A)
+        gamepad1.button(A).or(gamepad2.button(A))
                 .onTrue(robot.kicker.tasks.toggleBoth());
 
 
-        gamepad1.button(B)
+        gamepad1.button(B).or(gamepad2.button(B))
                 .whileTrue(
                         new ParallelTaskGroup(
-                        robot.shooter.tasks.run(0.85),
+                        robot.shooter.tasks.run(0.58),
                                 robot.transferLeft.tasks.run(1),
                                 robot.transferRight.tasks.run(1),
                                 robot.intake.tasks.run(0.2)
 
                                 ));
 
+        gamepad1.button(RIGHT_BUMPER).or(gamepad2.button(RIGHT_BUMPER))
+                .whileTrue(robot.shooter.tasks.run(0.58));
+
+        gamepad1.button(DPAD_RIGHT).or(gamepad2.button(DPAD_RIGHT))
+                .whileTrue(
+                        new ParallelTaskGroup(
+                                robot.shooter.tasks.run(0.9),
+                                robot.transferLeft.tasks.run(1),
+                                robot.transferRight.tasks.run(1),
+                                robot.intake.tasks.run(0.2)
+
+                        ));
+
+        gamepad1.button(DPAD_LEFT).or(gamepad2.button(DPAD_LEFT))
+                .whileTrue(robot.shooter.tasks.run(0.9));
 
 
 
-        gamepad1.button(DPAD_DOWN)
-                .onTrue(robot.hoodAdjustment.tasks.toggle());
+
+        //gamepad1.button(DPAD_DOWN)
+                //.onTrue(robot.hoodAdjustment.tasks.toggle());
+
+
 
 
         //Need to add code that sets the angle of the hood according to what button was pressed

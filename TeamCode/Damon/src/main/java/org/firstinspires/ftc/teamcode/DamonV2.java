@@ -139,24 +139,14 @@ public class DamonV2 extends RobotConfig{
 
 
         hw.shooter = getHardware("shooter", Motor.class, (d) -> {
-            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             d.setDirection(DcMotor.Direction.REVERSE);
 
-            //TODO: Tune pid
-            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
-            //TODO: Find max achievable TPS
-            d.setRunUsingEncoderController(1, 1900, pidf);
-            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-                pidf.setPIDF(kP, kI, kD, kF);
-                o.telemetry.addData("currentVelocity", d.getVelocity());
-                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
-            }));
-        });
+            });
 
         shooter = new Actuator(hw.shooter)
                 .withName("Shooter");
+
+
 
         hw.transferLeft = getHardware("transferLeft", DcMotor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -173,22 +163,25 @@ public class DamonV2 extends RobotConfig{
                 .withName("TransferRight");
 
         hw.hoodAdjustment = getHardware("hoodAdjustment", Servo.class, (d) -> {
+
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0, 0.5);
+            d.scaleRange(0, 0.4);
         });
 
         hoodAdjustment = new Switch(hw.hoodAdjustment)
-                .withName("hoodAdjustment");
+                .withName("HoodAdjustment");
+
+
 
 
         //May need to change the direction of the servos and need to change the scale range
         hw.leftKicker = getHardware("leftKicker", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0.7, 1);
+            d.scaleRange(0.53, 1);
         });
         hw.rightKicker = getHardware("rightKicker", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.REVERSE);
-            d.scaleRange(0, 0.4);
+            d.scaleRange(0, 0.47);
         });
 
         kicker = new DualServos(hw.leftKicker, hw.rightKicker)
