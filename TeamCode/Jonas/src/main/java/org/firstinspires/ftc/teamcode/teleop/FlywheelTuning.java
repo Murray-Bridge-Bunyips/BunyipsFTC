@@ -25,7 +25,7 @@ public class FlywheelTuning extends BunyipsOpMode {
     protected void onInit() {
         robot.init();
 
-        robot.output.setDefaultTask(robot.output.tasks.control(() -> gamepad1.left_stick_y));
+        robot.output.setDefaultTask(robot.output.tasks.control(() -> -gamepad1.left_stick_y));
     }
 
     @Override

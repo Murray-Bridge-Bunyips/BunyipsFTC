@@ -104,12 +104,10 @@ public class Jonas extends RobotConfig {
         hw.frontRight = getHardware("fr", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.backRight = getHardware("br", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
 
-        hw.intake = getHardware("intake", DcMotorEx.class, (d) -> {
-            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            d.setDirection(DcMotor.Direction.REVERSE);
-        });
+        hw.intake = getHardware("intake", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.output = getHardware("output", Motor.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            d.setDirection(DcMotor.Direction.REVERSE);
 
             PIDFController pidf = new PIDFController(kP, kI, kD, kF);
             d.setRunUsingEncoderController(1, 1800 /* theoretrically 2380 but it only approaches 1800 */, pidf);

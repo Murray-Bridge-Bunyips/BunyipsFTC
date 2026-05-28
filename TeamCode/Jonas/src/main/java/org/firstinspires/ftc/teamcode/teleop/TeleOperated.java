@@ -28,8 +28,8 @@ public class TeleOperated extends BunyipsOpMode {
 
         robot.drive.setDefaultTask(new HolonomicDriveTask(gamepad1, robot.drive));
 
-        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> gamepad2.left_stick_y));
-        robot.output.setDefaultTask(robot.output.tasks.control(() -> gamepad2.right_stick_y));
+        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.left_stick_y));
+        robot.output.setDefaultTask(robot.output.tasks.control(() -> -gamepad2.right_stick_y));
 
         gamepad2.button(LEFT_BUMPER)
                 .onTrue(robot.preventer.tasks.toggle());
