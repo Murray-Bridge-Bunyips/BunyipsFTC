@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.Nullable;
 
@@ -24,13 +23,6 @@ public class AutoWithoutMouse extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
-
-    }
-
-    @Override
-    protected void periodic() {
         robot.drive.setPower(new PoseVelocity2d(new Vector2d(1, 0), 0));
-        wait(Seconds.of(1));
-        robot.drive.setPower(new PoseVelocity2d(new Vector2d(0, 0), 0));
     }
 }
