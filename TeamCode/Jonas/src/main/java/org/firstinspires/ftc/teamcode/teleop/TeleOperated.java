@@ -33,6 +33,9 @@ public class TeleOperated extends BunyipsOpMode {
 
         gamepad2.button(LEFT_BUMPER)
                 .onTrue(robot.preventer.tasks.toggle());
+        
+        gamepad2.button(A)
+                .onTrue(robot.launch);
     }
 
     @Override

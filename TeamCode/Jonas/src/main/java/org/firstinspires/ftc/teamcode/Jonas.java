@@ -7,7 +7,6 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
@@ -88,8 +87,6 @@ public class Jonas extends RobotConfig {
     public double kD = 0;
     public double kF = 0.87;
 
-    //TODO: Do a full build to robot
-
     @Override
     protected void onRuntime() {
         hw.frontLeft = getHardware("fl", DcMotorEx.class, (d) -> {
@@ -127,16 +124,18 @@ public class Jonas extends RobotConfig {
 
         output = new Actuator(hw.output)
             .withName("Output");
-
+// im so back
         preventer = new Switch(hw.preventer)
             .withName("Preventer");
 
         launch = new SequentialTaskGroup(
-                new ParallelTaskGroup(
-                        //TODO: Tune these numbers
-                        output.tasks.runFor(Seconds.of(3.4), 0.375),
-                        intake.tasks.runFor(Seconds.of(1), 1).after(preventer.tasks.open().after(2.4, Seconds))
-                ),
+                new SequentialTaskGroup(
+                    output.tasks.control(() -> 1).until(preventer.tasks.open()),
+                    new ParallelTaskGroup(
+                            output.tasks.runFor(Seconds.of(2), 1),
+                            intake.tasks.runFor(Seconds.of(2), 1)
+                    )
+                ).after(output.tasks.runFor(Seconds.of(1.4), 1)),
                 preventer.tasks.close()
         );
     }
