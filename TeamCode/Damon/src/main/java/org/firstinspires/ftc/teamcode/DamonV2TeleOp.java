@@ -82,7 +82,7 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         gamepad1.button(B).or(gamepad2.button(B))
                 .whileTrue(
                         new ParallelTaskGroup(
-                        robot.shooter.tasks.run(0.58),
+                        robot.shooter.tasks.run(0.65),
                                 robot.transferLeft.tasks.run(1),
                                 robot.transferRight.tasks.run(1),
                                 robot.intake.tasks.run(0.2)
@@ -90,7 +90,7 @@ public class DamonV2TeleOp extends BunyipsOpMode {
                                 ));
 
         gamepad1.button(RIGHT_BUMPER).or(gamepad2.button(RIGHT_BUMPER))
-                .whileTrue(robot.shooter.tasks.run(0.58));
+                .whileTrue(robot.shooter.tasks.run(0.65));
 
         gamepad1.button(DPAD_RIGHT).or(gamepad2.button(DPAD_RIGHT))
                 .whileTrue(
