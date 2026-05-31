@@ -14,6 +14,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
@@ -27,6 +29,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
 
 /**
  * Main robot configuration file.
@@ -82,7 +85,7 @@ public class DamonV2 extends RobotConfig{
 
         hw.imu = getHardware("imu", IMUEx.class, (d) ->
                 d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
-                        RevHubOrientationOnRobot.LogoFacingDirection.RIGHT,
+                        RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
                         RevHubOrientationOnRobot.UsbFacingDirection.UP
                 ))));
 
@@ -106,21 +109,14 @@ public class DamonV2 extends RobotConfig{
                 .build();
 
         DriveModel driveModel = new DriveModel.Builder()
-                .setInPerTick(100.0 / 48550.0) //0.0020618556701031
-                .setLateralInPerTick(0.001820115995937997)
-                .setTrackWidthTicks(7400.158143723337)
+
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
                 .setMaxWheelVel(InchesPerSecond.of(35))
                 .setMaxAngVel(DegreesPerSecond.of(180))
-                .setKv(0.0004661099306658172)
-                .setKs(0.8428631128385451)
-                .setKa(0.00005)
+
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
-                .setAxialGain(2.5)
-                .setLateralGain(3)
-                .setHeadingGain(4)
                 .setPoseHolding(true)
                 .build();
 
@@ -187,6 +183,11 @@ public class DamonV2 extends RobotConfig{
         kicker = new DualServos(hw.leftKicker, hw.rightKicker)
                 .withName("Kicker");
 
+        hw.webcam = getHardware("webcam", WebcamName.class );
+
+
+
+
 
     }
 
@@ -235,6 +236,12 @@ public class DamonV2 extends RobotConfig{
         public Servo rightKicker;
 
         public Servo leftKicker;
+
+        public WebcamName webcam;
+
+
+
+
 
 
 
