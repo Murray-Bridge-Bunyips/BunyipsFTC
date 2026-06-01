@@ -14,6 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
@@ -60,6 +61,7 @@ public class DamonV2 extends RobotConfig{
     public DualServos kicker;
 
     public double kP, kI, kD, kF = 0;
+
     // .....................................................
 
     @Override
@@ -101,22 +103,29 @@ public class DamonV2 extends RobotConfig{
 
 
         PinpointLocalizer.Params localizerParams = new PinpointLocalizer.Params.Builder()
-                .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-                .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-                .setParYTicks(239.67254509780497)
-                .setPerpXTicks(-2371.9364863392334)
+                .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED) // Set directions here!
+                .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+                .setParYTicks(1206.0726883094928)
+                .setPerpXTicks(-3944.7404291749253)
                 // More to be filled out later by the Tuning steps ...
                 .build();
 
         DriveModel driveModel = new DriveModel.Builder()
-
+                .setInPerTick(50.0 / 25855.0) //0.00193386192
+                .setLateralInPerTick(0.0013549917355816688)
+                .setTrackWidthTicks(7945.50527676077)
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
                 .setMaxWheelVel(InchesPerSecond.of(35))
                 .setMaxAngVel(DegreesPerSecond.of(180))
-
+                .setKv(0.0004028819398133126)
+                .setKs(0.8844890964508565)
+                .setKa(0.00005)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
+                .setAxialGain(2.5)
+                .setLateralGain(3)
+                .setHeadingGain(4)
                 .setPoseHolding(true)
                 .build();
 
@@ -183,7 +192,11 @@ public class DamonV2 extends RobotConfig{
         kicker = new DualServos(hw.leftKicker, hw.rightKicker)
                 .withName("Kicker");
 
-        hw.webcam = getHardware("webcam", WebcamName.class );
+        hw.webcam = getHardware("webcam", CameraName.class);
+
+
+
+
 
 
 
@@ -237,7 +250,7 @@ public class DamonV2 extends RobotConfig{
 
         public Servo leftKicker;
 
-        public WebcamName webcam;
+        public CameraName webcam;
 
 
 

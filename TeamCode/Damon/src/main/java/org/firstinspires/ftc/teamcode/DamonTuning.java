@@ -12,8 +12,9 @@ public class DamonTuning extends RoadRunnerTuningOpMode {
     @NonNull
     @Override
     protected RoadRunnerDrive getDrive() {
-        Damon damon = new Damon(); // Assuming @RobotConfig.AutoInit is not being used
-        damon.init();
-        return damon.drive; // robot.drive is using a standard Accumulator, with Localizer configured
+        // TODO: Ensure to switch out `Robot` for your RobotConfig class
+        DamonV2 robot = new DamonV2(); // Assuming @RobotConfig.AutoInit is not being used
+        robot.init();
+        return robot.drive; // Assumes `robot.drive` is exposing a tunable RoadRunnerDrive using a standard Accumulator, with Localizer configured
     }
 }
