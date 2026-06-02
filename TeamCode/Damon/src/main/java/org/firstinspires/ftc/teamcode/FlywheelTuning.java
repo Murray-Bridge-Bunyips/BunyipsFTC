@@ -35,7 +35,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 @Config
 @TeleOp(name = "Flywheel Tuning")
 public class FlywheelTuning extends BunyipsOpMode {
-    private final Damon robot = new Damon();
+    private final DamonV2 robot = new DamonV2();
 
     @Override
     protected void onInit() {

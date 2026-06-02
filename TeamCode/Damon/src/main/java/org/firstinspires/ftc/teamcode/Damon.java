@@ -87,21 +87,21 @@ public class Damon extends RobotConfig {
         PinpointLocalizer.Params localizerParams = new PinpointLocalizer.Params.Builder()
                 .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
                 .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.FORWARD)
-                .setParYTicks(239.67254509780497)
-                .setPerpXTicks(-2371.9364863392334)
+                .setParYTicks(1206.0726883094928)
+                .setPerpXTicks(-3944.7404291749253)
                 // More to be filled out later by the Tuning steps ...
                 .build();
 
         DriveModel driveModel = new DriveModel.Builder()
-                .setInPerTick(100.0 / 48550.0) //0.0020618556701031
-                .setLateralInPerTick(0.001820115995937997)
-                .setTrackWidthTicks(7400.158143723337)
+                .setInPerTick(50.0 / 25855.0) //0.00193386192
+                .setLateralInPerTick(0.0013549917355816688)
+                .setTrackWidthTicks(7945.50527676077)
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
                 .setMaxWheelVel(InchesPerSecond.of(35))
                 .setMaxAngVel(DegreesPerSecond.of(180))
-                .setKv(0.0004661099306658172)
-                .setKs(0.8428631128385451)
+                .setKv(0.0004028819398133126)
+                .setKs(0.8844890964508565)
                 .setKa(0.00005)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()

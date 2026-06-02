@@ -16,6 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.vision.VisionPortal;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
@@ -61,6 +62,8 @@ public class DamonV2 extends RobotConfig{
     public DualServos kicker;
 
     public double kP, kI, kD, kF = 0;
+
+    public Vision webcam;
 
     // .....................................................
 
@@ -192,7 +195,12 @@ public class DamonV2 extends RobotConfig{
         kicker = new DualServos(hw.leftKicker, hw.rightKicker)
                 .withName("Kicker");
 
-        hw.webcam = getHardware("webcam", CameraName.class);
+        hw.webcam = getHardware("webcam", WebcamName.class);
+
+        webcam = new Vision(hw.webcam)
+                .withName("webcam");
+
+
 
 
 
@@ -250,7 +258,7 @@ public class DamonV2 extends RobotConfig{
 
         public Servo leftKicker;
 
-        public CameraName webcam;
+        public WebcamName webcam;
 
 
 
