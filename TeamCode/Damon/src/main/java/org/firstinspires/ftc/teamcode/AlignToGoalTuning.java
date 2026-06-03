@@ -2,9 +2,11 @@ package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Centimeters;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.RIGHT_BUMPER;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -25,6 +27,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.decode.GreenArtifact;
 
 
+
 @Config
 @TeleOp(name = "AlignToGoalTuning")
 public class AlignToGoalTuning extends BunyipsOpMode {
@@ -35,33 +38,43 @@ public class AlignToGoalTuning extends BunyipsOpMode {
     DamonV2 robot = new DamonV2();
     private Vision webcam;
 
+    public static int Target_Tag_ID = 20;
 
-    protected void onInit(){
+
+    public void onInit(){
 
         robot.init();
         // 1. Instantiating creates the BunyipsLib camera binding wrapper
         webcam = new Vision(hardwareMap.get(WebcamName.class, "webcam")).withName("Webcam");
 
-        AprilTag defaultAprilTag = new AprilTag(); // no parameters, using all defaults
+        AprilTag defaultAprilTag = new AprilTag();
         AprilTag aprilTag = new AprilTag(builder -> {
             // extra builder parameters can optionally go in this lambda, including configuring the camera location for relocalization
             builder.setSuppressCalibrationWarnings(true);
 
+
             // other builder config of the AprilTagProcessor can be done too
             // utility builder for robot camera pose
             builder = AprilTag.setCameraPose(builder)
-                    .backward(Centimeters.of(20)) // define where the camera is
-                    .left(Centimeters.of(20))
-                    .up(Centimeters.of(7))
-                    .yaw(Degrees.of(90))
+                    .backward(Centimeters.of(21)) // define where the camera is
+                    .right(Centimeters.of(16))
+                    .up(Centimeters.of(26))
+                    .yaw(Degrees.of(180))
                     .apply();
             return builder;
         });
 
-        webcam.init(defaultAprilTag);
-        webcam.start(defaultAprilTag);
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        dashboard.startCameraStream(aprilTag, 0);
 
-        AlignToAprilTagTask task = new AlignToAprilTagTask(robot.drive, defaultAprilTag, 20); // Use in tasks
+        webcam.init(aprilTag);
+        webcam.start(aprilTag);
+
+        //AlignToAprilTagTask task = new AlignToAprilTagTask(robot.drive, aprilTag, 20); // Use in tasks
+
+        AlignToAprilTagTask task = new AlignToAprilTagTask(robot.drive, aprilTag, 20);
+
+
 
 
     }
@@ -71,10 +84,10 @@ public class AlignToGoalTuning extends BunyipsOpMode {
 
 
 
-    protected void activeLoop() {
+    public void activeLoop() {
 
 
-        //Do a tasks.run in here?
+
 
         BunyipsSubsystem.updateAll();
 
