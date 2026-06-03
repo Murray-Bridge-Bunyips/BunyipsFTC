@@ -33,7 +33,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguratio
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.data.AprilTagData;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag;
+import org.opencv.core.Point;
 
 @Config
 @TeleOp(name = "TeleOp")
@@ -46,11 +48,6 @@ public class DamonV2TeleOp extends BunyipsOpMode {
     public static int Target_Tag_ID = 20;
 
     public AprilTag aprilTag;
-
-
-
-    //AlignToGoalTuning alignToGoal = new AlignToGoalTuning();
-
 
 
 
@@ -91,10 +88,13 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         //-------------------------------------
         webcam = new Vision(hardwareMap.get(WebcamName.class, "webcam")).withName("Webcam");
 
+
+
         //AprilTag defaultAprilTag = new AprilTag();
-        AprilTag aprilTag = new AprilTag(builder -> {
+        aprilTag = new AprilTag(builder -> {
             // extra builder parameters can optionally go in this lambda, including configuring the camera location for relocalization
             builder.setSuppressCalibrationWarnings(true);
+
 
 
             // other builder config of the AprilTagProcessor can be done too
@@ -125,10 +125,14 @@ public class DamonV2TeleOp extends BunyipsOpMode {
 
         //-------------------------------------
 
+        AlignToAprilTagTask.R_TOLERANCE = -10;
+
         AlignToAprilTagTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS);
+
 
         gamepad1.button(LEFT_BUMPER)
                 .whileTrue(new AlignToAprilTagTask(robot.drive, aprilTag, 20));
+        //Ok, so the middle one is the r tolorance, adjust the varible april tag to make it the center of the april tag
 
         gamepad1.button(X).or(gamepad2.button(X))
                 .whileTrue(robot.intake.tasks.run(1))
