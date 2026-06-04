@@ -81,6 +81,7 @@ public class Jonas extends RobotConfig {
     public final Hardware hw = new Hardware();
 
     public SequentialTaskGroup launch;
+    public SequentialTaskGroup launchStaggered;
 
     public double kP = 1;
     public double kI = 0;
@@ -135,7 +136,32 @@ public class Jonas extends RobotConfig {
                             output.tasks.runFor(Seconds.of(2), 1),
                             intake.tasks.runFor(Seconds.of(2), 1)
                     )
-                ).after(output.tasks.runFor(Seconds.of(1.4), 1)),
+                ).after(
+                        new ParallelTaskGroup(
+                                output.tasks.runFor(Seconds.of(1.4), 1),
+                                intake.tasks.runFor(Seconds.of(1.4), 1)
+                        )
+                ),
+                preventer.tasks.close()
+        );
+
+        launchStaggered = new SequentialTaskGroup(
+                new SequentialTaskGroup(
+                        output.tasks.control(() -> 1).until(preventer.tasks.open()),
+                        new ParallelTaskGroup(
+                                output.tasks.runFor(Seconds.of(2), 1),
+                                new SequentialTaskGroup(
+                                        intake.tasks.runFor(Seconds.of(0.5), 1),
+                                        intake.tasks.runFor(Seconds.of(0.5), 0),
+                                        intake.tasks.runFor(Seconds.of(1), 1)
+                                )
+                        )
+                ).after(
+                        new ParallelTaskGroup(
+                                output.tasks.runFor(Seconds.of(1.4), 1),
+                                intake.tasks.runFor(Seconds.of(1.4), 1)
+                        )
+                ),
                 preventer.tasks.close()
         );
     }

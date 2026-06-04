@@ -36,6 +36,9 @@ public class TeleOperated extends BunyipsOpMode {
         
         gamepad2.button(A)
                 .onTrue(robot.launch);
+
+        gamepad2.button(Y)
+                .onTrue(robot.launchStaggered);
     }
 
     @Override
