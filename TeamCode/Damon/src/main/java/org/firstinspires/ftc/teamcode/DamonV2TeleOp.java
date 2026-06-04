@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -41,6 +42,8 @@ import org.opencv.core.Point;
 @TeleOp(name = "TeleOp")
 public class DamonV2TeleOp extends BunyipsOpMode {
     public static PIDFCoefficients ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS = new PIDFCoefficients(0.03, 0, 0, 0);
+
+    public static PIDFCoefficients ALIGN_TO_POINT_PIDF_COEFFICIENTS = new PIDFCoefficients(2, 0, 0, 0);
     private final DamonV2 robot = new DamonV2();
     private PIDFController shooterPid;
 
@@ -48,6 +51,8 @@ public class DamonV2TeleOp extends BunyipsOpMode {
     public static int Target_Tag_ID = 20;
 
     public AprilTag aprilTag;
+
+
 
 
 
@@ -68,15 +73,22 @@ public class DamonV2TeleOp extends BunyipsOpMode {
 
         StartingConfiguration.Position startConfig = Storage.memory().lastKnownStartingConfiguration;
         Vector2d goal;
+        Pose2d camera_offset;
         if(startConfig == null){
-            Target_Tag_ID = 24; //Red goal
+            Target_Tag_ID = 20;
+            goal = new Vector2d(-67, 62);//Blue Goal
+            camera_offset = new Pose2d(0.0, 0.0, 10); //This value is just an estimate
         }
         else {
             if(startConfig.isRed()){ //if blue because the starting configs in the autos
                 Target_Tag_ID = 20;
+                goal = new Vector2d(-67, -62);
+                camera_offset = new Pose2d(0.0, 0.0, -10);
             }
             else{ //if red
                 Target_Tag_ID = 24;
+                goal = new Vector2d(-67, 62);
+                camera_offset = new Pose2d(0.0, 0.0, 10);
             }
         }
 
@@ -94,9 +106,6 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         aprilTag = new AprilTag(builder -> {
             // extra builder parameters can optionally go in this lambda, including configuring the camera location for relocalization
             builder.setSuppressCalibrationWarnings(true);
-
-
-
             // other builder config of the AprilTagProcessor can be done too
             // utility builder for robot camera pose
             builder = AprilTag.setCameraPose(builder)
@@ -114,25 +123,18 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         webcam.init(aprilTag);
         webcam.start(aprilTag);
 
-        //AlignToAprilTagTask task = new AlignToAprilTagTask(robot.drive, aprilTag, 20); // Use in tasks
-
-        //task = new AlignToAprilTagTask(robot.drive, aprilTag, 20);
-        //-------------------------------------
-
-        //gamepad1.button(LEFT_BUMPER)
-                        //.whileTrue(task = new AlignToAprilTagTask(robot.drive, aprilTag, 20));
-
-
-        //-------------------------------------
-
-        AlignToAprilTagTask.R_TOLERANCE = -10;
+        AlignToAprilTagTask.R_TOLERANCE = -20;
 
         AlignToAprilTagTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS);
 
 
+
         gamepad1.button(LEFT_BUMPER)
-                .whileTrue(new AlignToAprilTagTask(robot.drive, aprilTag, 20));
-        //Ok, so the middle one is the r tolorance, adjust the varible april tag to make it the center of the april tag
+                .whileTrue(new AlignToAprilTagTask(gamepad1, robot.drive, aprilTag, Target_Tag_ID));
+
+        gamepad1.axisGreaterThan(LEFT_TRIGGER, 0.9)
+                .whileTrue(new AlignToPointDriveTask(() -> goal, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180)));
+
 
         gamepad1.button(X).or(gamepad2.button(X))
                 .whileTrue(robot.intake.tasks.run(1))
@@ -195,6 +197,7 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         //AlignToPointDriveTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_POINT_PIDF_COEFFICIENTS);
         //AlignToAprilTagTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS);
         //AlignToAprilTagTask task = new AlignToAprilTagTask(robot.drive, aprilTag, 20);
+        AlignToPointDriveTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_POINT_PIDF_COEFFICIENTS);
 
 
 
