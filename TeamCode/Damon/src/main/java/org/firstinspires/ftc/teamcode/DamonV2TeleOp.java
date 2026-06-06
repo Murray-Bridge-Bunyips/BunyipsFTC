@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -13,6 +14,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Deg
 
 // ------ Recommended static imports for Scheduler, do not remove! --------
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler.*;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Analog.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.*;
@@ -24,6 +26,8 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsSubsystem;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.AlignToAprilTagTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.AlignToPointDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
@@ -52,6 +56,14 @@ public class DamonV2TeleOp extends BunyipsOpMode {
 
     public AprilTag aprilTag;
 
+    public Rotation2d fcOffset;
+
+    public boolean sensorValue;
+
+    public boolean maxBalls = false;
+
+
+
 
 
 
@@ -59,6 +71,7 @@ public class DamonV2TeleOp extends BunyipsOpMode {
 
     @Override
     protected void onInit() {
+
 
 
 
@@ -73,22 +86,22 @@ public class DamonV2TeleOp extends BunyipsOpMode {
 
         StartingConfiguration.Position startConfig = Storage.memory().lastKnownStartingConfiguration;
         Vector2d goal;
-        Pose2d camera_offset;
+        sensorValue = robot.touchSensor.isPressed();
+
+
+
         if(startConfig == null){
             Target_Tag_ID = 20;
             goal = new Vector2d(-67, 62);//Blue Goal
-            camera_offset = new Pose2d(0.0, 0.0, 10); //This value is just an estimate
         }
         else {
             if(startConfig.isRed()){ //if blue because the starting configs in the autos
                 Target_Tag_ID = 20;
                 goal = new Vector2d(-67, -62);
-                camera_offset = new Pose2d(0.0, 0.0, -10);
             }
             else{ //if red
                 Target_Tag_ID = 24;
                 goal = new Vector2d(-67, 62);
-                camera_offset = new Pose2d(0.0, 0.0, 10);
             }
         }
 
@@ -96,13 +109,8 @@ public class DamonV2TeleOp extends BunyipsOpMode {
                 .withFieldCentric(() -> false);
         new HolonomicDriveTask(gamepad1, robot.drive).setAsDefaultTask();
 
-
-        //-------------------------------------
         webcam = new Vision(hardwareMap.get(WebcamName.class, "webcam")).withName("Webcam");
 
-
-
-        //AprilTag defaultAprilTag = new AprilTag();
         aprilTag = new AprilTag(builder -> {
             // extra builder parameters can optionally go in this lambda, including configuring the camera location for relocalization
             builder.setSuppressCalibrationWarnings(true);
@@ -124,19 +132,15 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         webcam.start(aprilTag);
 
         AlignToAprilTagTask.R_TOLERANCE = -20;
-
         AlignToAprilTagTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS);
-
-
 
         gamepad1.button(LEFT_BUMPER)
                 .whileTrue(new AlignToAprilTagTask(gamepad1, robot.drive, aprilTag, Target_Tag_ID));
 
         gamepad1.axisGreaterThan(LEFT_TRIGGER, 0.9)
-                .whileTrue(new AlignToPointDriveTask(() -> goal, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180)));
+                .whileTrue(new AlignToPointDriveTask(() -> goal, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180))); //To be changed
 
-
-        gamepad1.button(X).or(gamepad2.button(X))
+        gamepad1.button(X).or(gamepad2.button(X)).and(() -> !maxBalls)
                 .whileTrue(robot.intake.tasks.run(1))
                 .whileTrue(robot.transferLeft.tasks.run(1))
                 .whileTrue(robot.transferRight.tasks.run(1));
@@ -145,49 +149,24 @@ public class DamonV2TeleOp extends BunyipsOpMode {
                 .whileTrue(robot.intake.tasks.run(1));
 
 
-        gamepad1.button(A).or(gamepad2.button(A))
+        gamepad1.button(A).or(gamepad2.button(DPAD_UP))
                 .onTrue(robot.kicker.tasks.toggleBoth());
 
-
-        gamepad1.button(B).or(gamepad2.button(B))
-                .whileTrue(
-                        new ParallelTaskGroup(
-                        robot.shooter.tasks.run(0.65),
-                                robot.transferLeft.tasks.run(1),
-                                robot.transferRight.tasks.run(1),
-                                robot.intake.tasks.run(0.2)
-
-                                ));
-
         gamepad1.button(RIGHT_BUMPER).or(gamepad2.button(RIGHT_BUMPER))
-                .whileTrue(robot.shooter.tasks.run(0.65));
-
-        gamepad1.button(DPAD_RIGHT).or(gamepad2.button(DPAD_RIGHT))
-                .whileTrue(
-                        new ParallelTaskGroup(
-                                robot.shooter.tasks.run(0.9),
-                                robot.transferLeft.tasks.run(1),
-                                robot.transferRight.tasks.run(1),
-                                robot.intake.tasks.run(0.2)
-
-                        ));
-
-        gamepad1.button(DPAD_LEFT).or(gamepad2.button(DPAD_LEFT))
                 .whileTrue(robot.shooter.tasks.run(0.9));
 
+        gamepad2.button(LEFT_BUMPER)
+                .whileTrue(robot.shooter.tasks.run(0.65)); //Add adjustment to hood
 
+        //Gate and hood needs to be done
 
+        gamepad1.button(DPAD_DOWN)
+                .onTrue(robot.hoodAdjustment.tasks.toggle());
 
-        //gamepad1.button(DPAD_DOWN)
-                //.onTrue(robot.hoodAdjustment.tasks.toggle());
-
-
-
-
-        //Need to add code that sets the angle of the hood according to what button was pressed
+        gamepad1.button(DPAD_UP)
+                .onTrue(robot.gate.tasks.toggle());
 
     }
-
 
 
     @Override
@@ -198,8 +177,27 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         //AlignToAprilTagTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS);
         //AlignToAprilTagTask task = new AlignToAprilTagTask(robot.drive, aprilTag, 20);
         AlignToPointDriveTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_POINT_PIDF_COEFFICIENTS);
+        telemetry.addData("isTouched", robot.touchSensor.getValue());
+        //telemetry.addData("maxBalls", maxBalls);
 
+        if (!robot.touchSensor.isPressed()) {
+            robot.intake.setPower(-0.2);
+            robot.transferRight.setPower(-0.25);
+            robot.transferLeft.setPower(-0.25);
+            maxBalls = true;
+            telemetry.addData("maxBalls", maxBalls);
+            telemetry.addData("test", "hi");
+        }
+        else {
+            robot.intake.setPower(0);
+            robot.transferRight.setPower(0);
+            robot.transferLeft.setPower(0);
+        }
 
+        if(robot.kicker.isOpen(DualServos.ServoSide.RIGHT)){
+            maxBalls = false;
+
+        }
 
         Scheduler.update();
     }

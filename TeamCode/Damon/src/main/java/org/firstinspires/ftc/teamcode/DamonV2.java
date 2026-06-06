@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -22,6 +23,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.InvertibleTouchSensor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.PinpointLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
@@ -46,24 +48,21 @@ public class DamonV2 extends RobotConfig{
 
     // ... SUBSYSTEMS AND OTHER PUBLIC DECLARATIONS HERE ...
     public MecanumDrive drive;
-
     public Actuator intake;
 
     public Actuator shooter;
-
     public Actuator transferLeft;
-
     public Actuator transferRight;
-
-    public static double shooter_kP = 15, shooter_kV = 0.9;
-
     public Switch hoodAdjustment;
-
     public DualServos kicker;
-
-    public double kP, kI, kD, kF = 0;
-
     public Vision webcam;
+    public InvertibleTouchSensor touchSensor;
+    public Switch gate;
+
+    public double kP = 4;
+    public double kI = 0;
+    public double kD = 0;
+    public double kF = 0.95;
 
     // .....................................................
 
@@ -147,7 +146,12 @@ public class DamonV2 extends RobotConfig{
 
 
         hw.shooter = getHardware("shooter", Motor.class, (d) -> {
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             d.setDirection(DcMotor.Direction.REVERSE);
+
+            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
+            d.setRunUsingEncoderController(1, 1700, pidf);
+            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             });
 
@@ -171,9 +175,8 @@ public class DamonV2 extends RobotConfig{
                 .withName("TransferRight");
 
         hw.hoodAdjustment = getHardware("hoodAdjustment", Servo.class, (d) -> {
-
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0, 0.4);
+            d.scaleRange(0.2, 0.8);
         });
 
         hoodAdjustment = new Switch(hw.hoodAdjustment)
@@ -185,28 +188,27 @@ public class DamonV2 extends RobotConfig{
         //May need to change the direction of the servos and need to change the scale range
         hw.leftKicker = getHardware("leftKicker", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0.53, 1);
+            d.scaleRange(0.60, 1.0);
         });
         hw.rightKicker = getHardware("rightKicker", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.REVERSE);
-            d.scaleRange(0, 0.47);
+            d.scaleRange(0.0, 0.40);
         });
 
         kicker = new DualServos(hw.leftKicker, hw.rightKicker)
                 .withName("Kicker");
 
-        hw.webcam = getHardware("webcam", WebcamName.class);
+        hw.touchSensor = getHardware("maxBalls", TouchSensor.class);
 
-        webcam = new Vision(hw.webcam)
-                .withName("webcam");
+        touchSensor = new InvertibleTouchSensor(hw.touchSensor);
 
+        hw.gate = getHardware("gate", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.FORWARD);
+            d.scaleRange(0.2, 0.8);
+        });
 
-
-
-
-
-
-
+        gate = new Switch(hw.gate)
+                .withName("Gate");
 
 
 
@@ -260,13 +262,9 @@ public class DamonV2 extends RobotConfig{
 
         public WebcamName webcam;
 
+        public TouchSensor touchSensor;
 
-
-
-
-
-
-
+        public Servo gate;
 
     }
 }
