@@ -13,6 +13,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.*;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.Damon;
@@ -31,7 +32,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguratio
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Dbg;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Storage;
 
-
+@Disabled
 @Config
 @TeleOp(name = "Flywheel Tuning")
 public class FlywheelTuning extends BunyipsOpMode {
@@ -41,13 +42,19 @@ public class FlywheelTuning extends BunyipsOpMode {
     protected void onInit() {
         robot.init();
 
+        robot.shooter.setDefaultTask(robot.shooter.tasks.control(() -> -gamepad1.left_stick_y));
+
 
     }
 
     @Override
     protected void activeLoop() {
-//        telemetry.addData("currentPosition", robot.hw.output.getCurrentPosition());
-//        telemetry.addData("targetPosition", robot.hw.output.getTargetPosition());
+        telemetry.addData("currentVelocity", robot.hw.shooter.getVelocity());
+        telemetry.addData("targetVelocity", robot.hw.shooter.getRunUsingEncoderController().pidf().get().getSetpoint());
+        telemetry.addData("kP", robot.kP);
+        telemetry.addData("kI", robot.kI);
+        telemetry.addData("kD", robot.kD);
+        telemetry.addData("kF", robot.kF);
 
         Scheduler.update();
     }

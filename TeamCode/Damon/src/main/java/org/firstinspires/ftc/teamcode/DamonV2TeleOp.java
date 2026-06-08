@@ -20,6 +20,8 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Anal
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.*;
 // ------------------------------------------------------------------------
 
+import android.widget.ToggleButton;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
@@ -47,7 +49,7 @@ import org.opencv.core.Point;
 public class DamonV2TeleOp extends BunyipsOpMode {
     public static PIDFCoefficients ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS = new PIDFCoefficients(0.03, 0, 0, 0);
 
-    public static PIDFCoefficients ALIGN_TO_POINT_PIDF_COEFFICIENTS = new PIDFCoefficients(2, 0, 0, 0);
+    public static PIDFCoefficients ALIGN_TO_POINT_PIDF_COEFFICIENTS = new PIDFCoefficients(1, 0, 0, 0);
     private final DamonV2 robot = new DamonV2();
     private PIDFController shooterPid;
 
@@ -80,6 +82,8 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         //Check if startConfig in null
         //Check if its red or blue
         //Asign the goal
+
+
 
 
 
@@ -135,7 +139,7 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         AlignToAprilTagTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS);
 
         gamepad1.button(LEFT_BUMPER)
-                .whileTrue(new AlignToAprilTagTask(gamepad1, robot.drive, aprilTag, Target_Tag_ID));
+                .whileTrue(new AlignToAprilTagTask(gamepad1, robot.drive, aprilTag, Target_Tag_ID).withBearingTarget(Degrees.of(10)));
 
         gamepad1.axisGreaterThan(LEFT_TRIGGER, 0.9)
                 .whileTrue(new AlignToPointDriveTask(() -> goal, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180))); //To be changed
@@ -150,22 +154,17 @@ public class DamonV2TeleOp extends BunyipsOpMode {
 
 
         gamepad1.button(A).or(gamepad2.button(DPAD_UP))
+                .onTrue(robot.gate.tasks.open())
+                .onTrue(robot.gate.tasks.close().after(Seconds.of(5)))
                 .onTrue(robot.kicker.tasks.toggleBoth());
 
         gamepad1.button(RIGHT_BUMPER).or(gamepad2.button(RIGHT_BUMPER))
-                .whileTrue(robot.shooter.tasks.run(0.9));
+                .whileTrue(robot.shooter.tasks.run(0.9))
+                .onTrue(robot.hoodAdjustment.tasks.close());
 
         gamepad2.button(LEFT_BUMPER)
-                .whileTrue(robot.shooter.tasks.run(0.65)); //Add adjustment to hood
-
-        //Gate and hood needs to be done
-
-        gamepad1.button(DPAD_DOWN)
-                .onTrue(robot.hoodAdjustment.tasks.toggle());
-
-        gamepad1.button(DPAD_UP)
-                .onTrue(robot.gate.tasks.toggle());
-
+                .whileTrue(robot.shooter.tasks.run(0.65))
+                .onTrue(robot.hoodAdjustment.tasks.open());//Add adjustment to hood
     }
 
 

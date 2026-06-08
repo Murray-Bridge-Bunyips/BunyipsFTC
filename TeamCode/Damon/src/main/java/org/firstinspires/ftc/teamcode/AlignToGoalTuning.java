@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
@@ -28,6 +29,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.decode.GreenA
 
 
 
+@Disabled
 @Config
 @TeleOp(name = "AlignToGoalTuning")
 public class AlignToGoalTuning extends BunyipsOpMode {

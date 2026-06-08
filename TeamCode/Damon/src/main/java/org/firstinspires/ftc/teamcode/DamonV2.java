@@ -1,8 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Centimeters;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.DegreesPerSecond;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
@@ -12,6 +15,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.TouchSensor;
 
@@ -33,7 +37,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.AlignToAprilTagTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.processors.AprilTag;
 
 /**
  * Main robot configuration file.
@@ -58,6 +64,10 @@ public class DamonV2 extends RobotConfig{
     public Vision webcam;
     public InvertibleTouchSensor touchSensor;
     public Switch gate;
+
+    public AprilTag aprilTag;
+
+    public static PIDFCoefficients ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS = new PIDFCoefficients(0.03, 0, 0, 0);
 
     public double kP = 4;
     public double kI = 0;
@@ -176,7 +186,7 @@ public class DamonV2 extends RobotConfig{
 
         hw.hoodAdjustment = getHardware("hoodAdjustment", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0.2, 0.8);
+            d.scaleRange(0.3, 0.725);
         });
 
         hoodAdjustment = new Switch(hw.hoodAdjustment)
@@ -188,11 +198,11 @@ public class DamonV2 extends RobotConfig{
         //May need to change the direction of the servos and need to change the scale range
         hw.leftKicker = getHardware("leftKicker", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0.60, 1.0);
+            d.scaleRange(0.58, 1.0);
         });
         hw.rightKicker = getHardware("rightKicker", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.REVERSE);
-            d.scaleRange(0.0, 0.40);
+            d.scaleRange(0.0, 0.42);
         });
 
         kicker = new DualServos(hw.leftKicker, hw.rightKicker)
@@ -203,12 +213,17 @@ public class DamonV2 extends RobotConfig{
         touchSensor = new InvertibleTouchSensor(hw.touchSensor);
 
         hw.gate = getHardware("gate", Servo.class, (d) -> {
-            d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0.2, 0.8);
+            d.setDirection(Servo.Direction.REVERSE);
+            d.scaleRange(0.4, 0.524);
         });
 
         gate = new Switch(hw.gate)
                 .withName("Gate");
+
+
+
+
+
 
 
 
