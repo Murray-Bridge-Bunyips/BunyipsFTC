@@ -91,6 +91,7 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         StartingConfiguration.Position startConfig = Storage.memory().lastKnownStartingConfiguration;
         Vector2d goal;
         sensorValue = robot.touchSensor.isPressed();
+        int e = 1;
 
 
 

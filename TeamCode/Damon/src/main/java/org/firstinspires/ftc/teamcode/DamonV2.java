@@ -281,5 +281,7 @@ public class DamonV2 extends RobotConfig{
 
         public Servo gate;
 
+        public Servo idk;
+
     }
 }
