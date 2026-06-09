@@ -13,3 +13,5 @@ include ':Jonas'
 project(":Jonas").projectDir = new File("TeamCode/Jonas")
 include ':Lilbro5000'
 project(":Lilbro5000").projectDir = new File ("TeamCode/Lilbro5000")
+include ':Algae'
+project(":Algae").projectDir = new File ("TeamCode/Algae")
