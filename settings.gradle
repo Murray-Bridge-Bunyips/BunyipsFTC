@@ -13,5 +13,3 @@ include ':Jonas'
 project(":Jonas").projectDir = new File("TeamCode/Jonas")
 include ':Lilbro5000'
 project(":Lilbro5000").projectDir = new File ("TeamCode/Lilbro5000")
-include ':Table'
-project(":Table").projectDir = new File("TeamCode/Table")
