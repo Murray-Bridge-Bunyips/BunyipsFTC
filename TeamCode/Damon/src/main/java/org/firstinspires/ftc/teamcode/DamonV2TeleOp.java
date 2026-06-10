@@ -160,11 +160,11 @@ public class DamonV2TeleOp extends BunyipsOpMode {
                 .onTrue(robot.kicker.tasks.toggleBoth());
 
         gamepad1.button(RIGHT_BUMPER).or(gamepad2.button(RIGHT_BUMPER))
-                .whileTrue(robot.shooter.tasks.run(0.9))
+                .whileTrue(robot.shooter.tasks.run(1))
                 .onTrue(robot.hoodAdjustment.tasks.close());
 
         gamepad2.button(LEFT_BUMPER)
-                .whileTrue(robot.shooter.tasks.run(0.65))
+                .whileTrue(robot.shooter.tasks.run(0.7))
                 .onTrue(robot.hoodAdjustment.tasks.open());//Add adjustment to hood
     }
 
