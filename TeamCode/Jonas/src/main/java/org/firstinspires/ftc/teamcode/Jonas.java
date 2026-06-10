@@ -59,7 +59,7 @@ public class Jonas extends RobotConfig {
     }
 
     /**
-     * 4-Wheels MecanumDrive
+     * 4-Wheels SimpleMecanumDrive
      */
     public SimpleMecanumDrive drive;
 
