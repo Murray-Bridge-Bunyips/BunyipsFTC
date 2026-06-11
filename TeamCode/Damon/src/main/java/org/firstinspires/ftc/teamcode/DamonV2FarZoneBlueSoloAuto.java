@@ -35,28 +35,30 @@ public class DamonV2FarZoneBlueSoloAuto extends AutonomousBunyipsOpMode {
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
         StartingConfiguration.Position start = redRight()
-                .tile(2.3)
-                .rotate(Degrees.of(0))
-                .forward(FieldTile.of(0.7))
+                .tile(1)
+                .rotate(Degrees.of(-90))
+                .forward(FieldTile.of(1.9))
                 .build()
                 .save();
         damon.drive.setPose(start.toFieldPose());
         damon.drive.makeTrajectory()
-                .afterTime(0, damon.shooter.tasks.runFor(Seconds.of(3), 0.9))
+                .afterTime(0, damon.shooter.tasks.runFor(Seconds.of(3), 1))
                 .strafeToLinearHeading(new Vector2d(53, -15), Inches, 35, Degrees) //Shooting
 
                 .stopAndAdd(damon.gate.tasks.toggle())
-                .stopAndAdd(damon.kicker.tasks.toggleBoth())
                 .stopAndAdd(new ParallelTaskGroup(
                         new ParallelTaskGroup(
-                                damon.shooter.tasks.runFor(Seconds.of(5), 1),
-                                damon.intake.tasks.runFor(Seconds.of(5), 0.6),
+                                damon.shooter.tasks.runFor(Seconds.of(3), 1),
+                                damon.intake.tasks.runFor(Seconds.of(3), 0.4),
+                                damon.transferLeft.tasks.runFor(Seconds.of(3), 0.8),
+                                damon.transferRight.tasks.runFor(Seconds.of(3), 0.8),
                                 new SequentialTaskGroup(
-                                        damon.kicker.tasks.toggleBoth().after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1)))
                                 )
                         ).after(Seconds.of(1))
                 ))
@@ -67,7 +69,9 @@ public class DamonV2FarZoneBlueSoloAuto extends AutonomousBunyipsOpMode {
                 .strafeToLinearHeading(new Vector2d(35.5, -25), Inches, -90, Degrees)
                 .afterTime(0, new RaceTaskGroup(
                         damon.intake.tasks.runFor(Seconds.of(3), 0.9),
-                        Task.waitFor(() -> !damon.touchSensor.isPressed())
+                        Task.waitFor(() -> !damon.touchSensor.isPressed()),
+                        damon.transferRight.tasks.runFor(Seconds.of(3), 0.6),
+                        damon.transferLeft.tasks.runFor(Seconds.of(3), 0.6)
 
                 ))
                 .strafeToLinearHeading(new Vector2d(35.5, -55), Inches, -90, Degrees) //Intaking (Stop Intake once three balls)
@@ -75,17 +79,19 @@ public class DamonV2FarZoneBlueSoloAuto extends AutonomousBunyipsOpMode {
                 .afterTime(0, damon.shooter.tasks.runFor(Seconds.of(3), 1))
                 .strafeToLinearHeading(new Vector2d(53, -15), Inches, 35, Degrees) //Shooting
                 .stopAndAdd(damon.gate.tasks.toggle())
-                .stopAndAdd(damon.kicker.tasks.toggleBoth())
                 .stopAndAdd(new ParallelTaskGroup(
                         new ParallelTaskGroup(
-                                damon.shooter.tasks.runFor(Seconds.of(5), 1),
-                                damon.intake.tasks.runFor(Seconds.of(5), 0.6),
+                                damon.shooter.tasks.runFor(Seconds.of(3), 1),
+                                damon.intake.tasks.runFor(Seconds.of(3), 0.4),
+                                damon.transferLeft.tasks.runFor(Seconds.of(3), 0.8),
+                                damon.transferRight.tasks.runFor(Seconds.of(3), 0.8),
                                 new SequentialTaskGroup(
-                                        damon.kicker.tasks.toggleBoth().after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1)))
                                 )
                         ).after(Seconds.of(1))
                 ))
@@ -97,26 +103,33 @@ public class DamonV2FarZoneBlueSoloAuto extends AutonomousBunyipsOpMode {
                 .strafeToLinearHeading(new Vector2d(35.5, -25), Inches, -90, Degrees)
                 .afterTime(0, new RaceTaskGroup(
                         damon.intake.tasks.runFor(Seconds.of(3), 0.9),
-                        Task.waitFor(() -> !damon.touchSensor.isPressed())
+                        Task.waitFor(() -> !damon.touchSensor.isPressed()),
+                        damon.transferRight.tasks.runFor(Seconds.of(3), 0.6),
+                        damon.transferLeft.tasks.runFor(Seconds.of(3), 0.6)
 
                 ))
                 .strafeToLinearHeading(new Vector2d(11.7, -50), Inches, -90, Degrees) //Intaking (Stop Intake once three balls)
                 .strafeToLinearHeading(new Vector2d(53, -15), Inches, 35, Degrees) //Shooting
                 .stopAndAdd(damon.gate.tasks.toggle())
-                .stopAndAdd(damon.kicker.tasks.toggleBoth())
                 .stopAndAdd(new ParallelTaskGroup(
                         new ParallelTaskGroup(
-                                damon.shooter.tasks.runFor(Seconds.of(5), 1),
-                                damon.intake.tasks.runFor(Seconds.of(5), 0.6),
+                                damon.shooter.tasks.runFor(Seconds.of(3), 1),
+                                damon.intake.tasks.runFor(Seconds.of(3), 0.4),
+                                damon.transferLeft.tasks.runFor(Seconds.of(3), 0.8),
+                                damon.transferRight.tasks.runFor(Seconds.of(3), 0.8),
                                 new SequentialTaskGroup(
-                                        damon.kicker.tasks.toggleBoth().after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1)))
                                 )
                         ).after(Seconds.of(1))
                 ))
+
+                .stopAndAdd(damon.gate.tasks.toggle())
+
 
                 .stopAndAdd(damon.gate.tasks.toggle())
                 .strafeToLinearHeading(new Vector2d(-11.8, -25), Inches, -90, Degrees)
@@ -124,24 +137,28 @@ public class DamonV2FarZoneBlueSoloAuto extends AutonomousBunyipsOpMode {
 
                 .afterTime(0, new RaceTaskGroup(
                         damon.intake.tasks.runFor(Seconds.of(3), 0.9),
-                        Task.waitFor(() -> !damon.touchSensor.isPressed())
+                        Task.waitFor(() -> !damon.touchSensor.isPressed()),
+                        damon.transferRight.tasks.runFor(Seconds.of(3), 0.6),
+                        damon.transferLeft.tasks.runFor(Seconds.of(3), 0.6)
 
                 ))
                 .strafeToLinearHeading(new Vector2d(-11.8, -50), Inches, -90, Degrees) //Intaking (Stop Intake once three balls)
 
-                .strafeToLinearHeading(new Vector2d(-19, -18.5), Inches, 50, Degrees) //Shooting
+                .strafeToLinearHeading(new Vector2d(-15, -14.5), Inches, 43.5, Degrees) //Shooting
                 .stopAndAdd(damon.gate.tasks.toggle())
-                .stopAndAdd(damon.kicker.tasks.toggleBoth())
                 .stopAndAdd(new ParallelTaskGroup(
                         new ParallelTaskGroup(
-                                damon.shooter.tasks.runFor(Seconds.of(5), 0.7),
-                                damon.intake.tasks.runFor(Seconds.of(5), 0.6),
+                                damon.shooter.tasks.runFor(Seconds.of(3), 1),
+                                damon.intake.tasks.runFor(Seconds.of(3), 0.4),
+                                damon.transferLeft.tasks.runFor(Seconds.of(3), 0.8),
+                                damon.transferRight.tasks.runFor(Seconds.of(3), 0.8),
                                 new SequentialTaskGroup(
-                                        damon.kicker.tasks.toggleBoth().after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
-                                                .then(damon.kicker.tasks.toggleBoth()).after(Seconds.of(0.3))
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1))),
+                                        damon.kicker.tasks.toggleBoth().then(wait(Seconds.of(1)))
                                 )
                         ).after(Seconds.of(1))
                 ))
