@@ -186,7 +186,7 @@ public class DamonV2 extends RobotConfig{
 
         hw.hoodAdjustment = getHardware("hoodAdjustment", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0.3, 0.725);
+            d.scaleRange(0.28, 0.4);
         });
 
         hoodAdjustment = new Switch(hw.hoodAdjustment)

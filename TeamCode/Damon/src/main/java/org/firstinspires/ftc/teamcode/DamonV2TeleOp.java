@@ -140,7 +140,7 @@ public class DamonV2TeleOp extends BunyipsOpMode {
         AlignToAprilTagTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS);
 
         gamepad1.button(LEFT_BUMPER)
-                .whileTrue(new AlignToAprilTagTask(gamepad1, robot.drive, aprilTag, Target_Tag_ID).withBearingTarget(Degrees.of(10)));
+                .whileTrue(new AlignToAprilTagTask(gamepad1, robot.drive, aprilTag, Target_Tag_ID).withBearingTarget(Degrees.of(-8)));
 
         gamepad1.axisGreaterThan(LEFT_TRIGGER, 0.9)
                 .whileTrue(new AlignToPointDriveTask(() -> goal, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180))); //To be changed
@@ -163,8 +163,8 @@ public class DamonV2TeleOp extends BunyipsOpMode {
                 .whileTrue(robot.shooter.tasks.run(1))
                 .onTrue(robot.hoodAdjustment.tasks.close());
 
-        gamepad2.button(LEFT_BUMPER)
-                .whileTrue(robot.shooter.tasks.run(0.7))
+        gamepad2.button(LEFT_BUMPER).or(gamepad1.button(DPAD_RIGHT))
+                .whileTrue(robot.shooter.tasks.run(0.8))
                 .onTrue(robot.hoodAdjustment.tasks.open());//Add adjustment to hood
     }
 
