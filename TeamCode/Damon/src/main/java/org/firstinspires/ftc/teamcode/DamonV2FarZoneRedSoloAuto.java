@@ -23,7 +23,7 @@ import dev.frozenmilk.util.cell.RefCell;
 
 
 
-@Autonomous(name = "Red Far Zone Auto")
+@Autonomous(name = "Red Far Zone Auto V2")
 public class DamonV2FarZoneRedSoloAuto extends AutonomousBunyipsOpMode {
     private final DamonV2 damon = new DamonV2();
 

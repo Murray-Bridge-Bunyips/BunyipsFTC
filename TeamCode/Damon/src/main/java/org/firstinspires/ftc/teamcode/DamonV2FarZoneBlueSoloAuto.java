@@ -20,8 +20,8 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.RaceTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import dev.frozenmilk.util.cell.RefCell;
-@Disabled
-@Autonomous(name = "Blue Far Zone Auto")
+
+@Autonomous(name = "Blue Far Zone Auto V2")
 public class DamonV2FarZoneBlueSoloAuto extends AutonomousBunyipsOpMode {
     private final DamonV2 damon = new DamonV2();
 
