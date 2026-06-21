@@ -64,6 +64,8 @@ public class DinkyBot extends RobotConfig {
 
     @Override
     protected void onRuntime() {
+        //TODO: fix directions on everything
+
         hw.leftDrive = getHardware("leftDrive", DcMotorEx.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             d.setDirection(DcMotor.Direction.REVERSE);
@@ -73,6 +75,7 @@ public class DinkyBot extends RobotConfig {
             d.setDirection(DcMotor.Direction.REVERSE);
         });
 
+        //TODO: Tune PID if we have time
         hw.flywheel = getHardware("flywheel", Motor.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             d.setDirection(DcMotor.Direction.REVERSE);
@@ -82,6 +85,7 @@ public class DinkyBot extends RobotConfig {
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         });
 
+        //TODO: Tune these
         hw.pusher = getHardware("pusher", ServoEx.class, (d) -> {
             d.setEndToEndTime(Seconds.of(0.8));
             d.scaleRange(0, 1);

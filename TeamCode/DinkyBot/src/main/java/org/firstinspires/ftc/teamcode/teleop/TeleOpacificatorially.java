@@ -5,7 +5,7 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.A;
 import org.firstinspires.ftc.teamcode.DinkyBot;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
-import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.DifferentialDriveTask;
 
 public class TeleOpacificatorially extends BunyipsOpMode {
     private final DinkyBot robot = new DinkyBot();
@@ -14,7 +14,7 @@ public class TeleOpacificatorially extends BunyipsOpMode {
     protected void onInit() {
         robot.init();
 
-        robot.drive.setDefaultTask(new HolonomicDriveTask(gamepad1, robot.drive));
+        robot.drive.setDefaultTask(new DifferentialDriveTask(gamepad1, robot.drive));
 
         robot.flywheel.setDefaultTask(robot.flywheel.tasks.control(() -> -gamepad2.right_stick_y));
 
@@ -23,7 +23,13 @@ public class TeleOpacificatorially extends BunyipsOpMode {
     }
 
     @Override
-    protected void activeLoop() {
+    protected void onStart() {
+        robot.pusher.close();
+    }
 
+    @Override
+    protected void activeLoop() {
+        // If it gets bleak we can use this
+        // robot.flywheel.setPower(-gamepad2.right_stick_y);
     }
 }
