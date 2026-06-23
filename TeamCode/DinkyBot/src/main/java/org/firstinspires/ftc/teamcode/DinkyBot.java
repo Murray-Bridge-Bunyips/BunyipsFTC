@@ -57,19 +57,14 @@ public class DinkyBot extends RobotConfig {
 
     public final Hardware hw = new Hardware();
 
-    public double kP = 1;
-    public double kI = 0;
-    public double kD = 0;
-    public double kF = 0.87;
+//    public double kP = 1;
+//    public double kI = 0;
+//    public double kD = 0;
+//    public double kF = 0.87;
 
     @Override
     protected void onRuntime() {
-        //TODO: fix directions on everything
-
-        hw.leftDrive = getHardware("leftDrive", DcMotorEx.class, (d) -> {
-            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            d.setDirection(DcMotor.Direction.REVERSE);
-        });
+        hw.leftDrive = getHardware("leftDrive", DcMotorEx.class, (d) -> d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE));
         hw.rightDrive = getHardware("rightDrive", DcMotorEx.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             d.setDirection(DcMotor.Direction.REVERSE);
@@ -78,17 +73,16 @@ public class DinkyBot extends RobotConfig {
         //TODO: Tune PID if we have time
         hw.flywheel = getHardware("flywheel", Motor.class, (d) -> {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            d.setDirection(DcMotor.Direction.REVERSE);
 
-            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
-            d.setRunUsingEncoderController(1, 1800 /* theoretrically 2380 but it only approaches 1800 */, pidf);
-            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+//            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
+//            d.setRunUsingEncoderController(1, 1800 /* theoretrically 2380 but it only approaches 1800 */, pidf);
+//            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            d.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         });
 
-        //TODO: Tune these
         hw.pusher = getHardware("pusher", ServoEx.class, (d) -> {
             d.setEndToEndTime(Seconds.of(0.8));
-            d.scaleRange(0, 1);
+            d.scaleRange(0.2, 0.39);
         });
 
         drive = new SimpleTankDrive(Collections.singletonList(hw.leftDrive), Collections.singletonList(hw.rightDrive))
