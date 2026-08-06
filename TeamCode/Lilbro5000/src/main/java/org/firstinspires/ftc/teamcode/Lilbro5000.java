@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+//import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
+
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,11 +13,13 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
+//import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.MecanumLocalizer;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
+//import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 /**
@@ -35,6 +39,14 @@ public class Lilbro5000 extends RobotConfig {
     public Actuator middletake;
     public Actuator outtake;
     public Actuator transfer;
+//    /**
+//     * Open is not lifting, closed is lifting
+//     */
+//    public Switch leftLifter;
+//    /**
+//     * Open is lifting, closed is not lifting
+//     */
+//    public Switch rightLifter;
     // .....................................................
 
     @Override
@@ -71,6 +83,15 @@ public class Lilbro5000 extends RobotConfig {
         });
         hw.transfer = getHardware("trigger", DcMotor.class);
 
+//        hw.leftLifter = getHardware("leftLifter", ServoEx.class, (d) -> {
+//            d.setEndToEndTime(Seconds.of(0.8));
+//            d.scaleRange(0.3, 0.55);
+//        });
+//        hw.rightLifter = getHardware("rightLifter", ServoEx.class, (d) -> {
+//            d.setEndToEndTime(Seconds.of(0.8));
+//            d.scaleRange(0.34, 0.6);
+//        });
+
         hw.imu = getHardware("imu", IMUEx.class, (d) ->
                 d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
@@ -104,6 +125,8 @@ public class Lilbro5000 extends RobotConfig {
         middletake = new Actuator(hw.middletake).withName("Middletake");
         outtake = new Actuator(hw.outtake).withName("Outtake");
         transfer = new Actuator(hw.transfer).withName("Transfer");
+//        leftLifter = new Switch(hw.leftLifter).withName("Left Lifter");
+//        rightLifter = new Switch(hw.rightLifter).withName("Right Lifter");
     }
 
     /**
@@ -114,6 +137,7 @@ public class Lilbro5000 extends RobotConfig {
          * Internally mounted on Control Hub I2C 0
          */
         public IMU imu;
+
         /**
          * Expansion 0: back_left
          */
@@ -130,6 +154,7 @@ public class Lilbro5000 extends RobotConfig {
          * Expansion 3: back_right
          */
         public DcMotor br;
+
         /**
          * Control 1: intake
          */
@@ -143,9 +168,18 @@ public class Lilbro5000 extends RobotConfig {
          */
         public Motor outtake;
         /**
-         * Control 2: outtake
+         * Control 2: trigger
          */
         public DcMotor transfer;
+
+//        /**
+//         * Expansion 0: leftLifter
+//         */
+//        public ServoEx leftLifter;
+//        /**
+//         * Expansion 1: rightLifter
+//         */
+//        public ServoEx rightLifter;
     }
 }
 

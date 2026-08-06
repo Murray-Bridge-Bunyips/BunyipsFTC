@@ -25,6 +25,12 @@ public class MainTeleOp extends BunyipsOpMode {
         pidf = robot.hw.outtake.getRunUsingEncoderController().pidf().get();
     }
 
+//    @Override
+//    protected void onStart() {
+//        robot.leftLifter.open();
+//        robot.rightLifter.close();
+//    }
+
     @Override
     protected void activeLoop() {
         double forward = -gamepad1.left_stick_y;
@@ -79,6 +85,15 @@ public class MainTeleOp extends BunyipsOpMode {
 //            robot.outtake.setPower(0);
 //            robot.transfer.setPower(0);
         }
+
+//        if (gamepad1.dpadUpWasPressed()) {
+//            robot.leftLifter.close();
+//            robot.rightLifter.open();
+//        }
+//        if (gamepad1.dpadDownWasPressed()) {
+//            robot.leftLifter.open();
+//            robot.rightLifter.close();
+//        }
 
         telemetry.addData("currentVelocity", pidf.getCurrentProcess());
         telemetry.addData("targetVelocity", pidf.getSetpoint());
