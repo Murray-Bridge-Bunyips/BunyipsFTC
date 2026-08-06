@@ -108,7 +108,7 @@ public class Jonas extends RobotConfig {
             d.setDirection(DcMotor.Direction.REVERSE);
 
             PIDFController pidf = new PIDFController(kP, kI, kD, kF);
-            d.setRunUsingEncoderController(1, 1800 /* theoretrically 2380 but it only approaches 1800 */, pidf);
+            d.setRunUsingEncoderController(1, 1800 /* theoretically 2380 but it only approaches 1800 */, pidf);
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         });
 
