@@ -1,7 +1,9 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run MeepMeep" type="Application" factoryName="Application">
+    <option name="ALTERNATIVE_JRE_PATH" value="ms-17" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.meepmeep.MeepMeepRunner" />
-    <module name="BunyipsFTC.BunyipsLib.MeepMeep.main" />
+    <module name="BunyipFTC.BunyipsLib.MeepMeep.main" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.meepmeep.*" />

@@ -27,6 +27,7 @@ public class DamonFarZoneAuto extends AutonomousBunyipsOpMode {
     @Override
     protected void onInitialise() {
         damon.init();
+
     }
 
     @Override
