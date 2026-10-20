@@ -7,13 +7,7 @@ include ':Cellphone'
 project(":Cellphone").projectDir = new File("TeamCode/Cellphone")
 include ':Scout'
 project(":Scout").projectDir = new File("TeamCode/Scout")
-include ':Damon'
-project(":Damon").projectDir = new File("TeamCode/Damon")
-include ':Jonas'
-project(":Jonas").projectDir = new File("TeamCode/Jonas")
-include ':Lilbro5000'
-project(":Lilbro5000").projectDir = new File ("TeamCode/Lilbro5000")
-include ':Algae'
-project(":Algae").projectDir = new File ("TeamCode/Algae")
-include ':DinkyBot'
-project(":DinkyBot").projectDir = new File ("TeamCode/DinkyBot")
+include ':ApartmentBot'
+project(":ApartmentBot").projectDir = new File("TeamCode/ApartmentBot")
+include ':BioBot'
+project(":BioBot").projectDir = new File("TeamCode/BioBot")
