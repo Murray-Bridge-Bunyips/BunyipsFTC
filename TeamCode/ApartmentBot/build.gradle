@@ -3,7 +3,7 @@ android {
     namespace = 'org.firstinspires.ftc.teamcode'
 }
 
-//// Uncomment the below code as well if you'd like to use Sloth Load. Follow the instructions on the Installation page of BunyipsLib wiki to set up the task.
+// Uncomment the below code as well if you'd like to use Sloth Load. Follow the instructions on the Installation page of BunyipsLib wiki to set up the task.
 buildscript {
     repositories {
         mavenCentral()
