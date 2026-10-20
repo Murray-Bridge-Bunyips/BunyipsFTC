@@ -31,10 +31,10 @@ public class AutoWithoutMouse extends AutonomousBunyipsOpMode {
                 new SequentialTaskGroup(
                         robot.intake.tasks.runFor(Seconds.of(0.1), 1),
                         new ParallelTaskGroup(
-                            Task.task()
-                                .periodic(() -> robot.drive.setPower(Geometry.vel(1, 0, 0)))
-                                .timeout(Seconds.of(0.2)),
-                            robot.intake.tasks.runFor(Seconds.of(0.2), 1)
+                                Task.task()
+                                        .periodic(() -> robot.drive.setPower(Geometry.vel(1, 0, 0)))
+                                        .timeout(Seconds.of(0.2)),
+                                robot.intake.tasks.runFor(Seconds.of(0.2), 1)
                         ),
                         robot.intake.tasks.runFor(Seconds.of(0.1), 1)
                 )

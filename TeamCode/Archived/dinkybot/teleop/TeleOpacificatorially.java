@@ -2,10 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 
 
 // ------ Recommended static imports for Scheduler, do not remove! --------
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler.*;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.*;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.Controls.Analog.*;
-import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.*;
 // ------------------------------------------------------------------------
 
 import com.acmerobotics.dashboard.config.Config;
