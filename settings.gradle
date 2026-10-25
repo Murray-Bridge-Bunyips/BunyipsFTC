@@ -11,3 +11,5 @@ include ':ApartmentBot'
 project(":ApartmentBot").projectDir = new File("TeamCode/ApartmentBot")
 include ':BioBot'
 project(":BioBot").projectDir = new File("TeamCode/BioBot")
+include':Specter'
+project(":Specter").projectDir = new File("TeamCode/Specter")
