@@ -16,6 +16,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveMode
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
@@ -48,7 +49,7 @@ public class Specter extends RobotConfig {
 
     public Switch brake;
 
-    public Switch sweeper;
+    public DualServos sweeper;
 
 
     @Override
@@ -154,12 +155,16 @@ public class Specter extends RobotConfig {
         brake = new Switch(hw.brake)
                 .withName("Break");
 
-        hw.sweeper = getHardware("sweeper", Servo.class, (d) -> {
+        hw.leftSweeper = getHardware("leftServo", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0.29, 0.99);
+            d.scaleRange(0, 1);
+        });
+        hw.rightSweeper = getHardware("rightServo", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.FORWARD);
+            d.scaleRange(0, 1);
         });
 
-        sweeper = new Switch(hw.sweeper)
+        sweeper = new DualServos(hw.rightSweeper, hw.leftSweeper)
                 .withName("Sweeper");
 
 
@@ -213,7 +218,9 @@ public class Specter extends RobotConfig {
 
         public Servo brake;
 
-        public Servo sweeper;
+        public Servo leftSweeper;
+
+        public Servo rightSweeper;
 
 
     }

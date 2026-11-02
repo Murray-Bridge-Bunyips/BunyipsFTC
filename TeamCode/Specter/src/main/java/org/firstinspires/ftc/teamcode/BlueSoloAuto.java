@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.FieldTile;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration.blueRight;
 
 import androidx.annotation.Nullable;
@@ -11,6 +12,7 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.transforms.StartingConfiguration;
 import dev.frozenmilk.util.cell.RefCell;
 
@@ -33,15 +35,57 @@ public class BlueSoloAuto extends AutonomousBunyipsOpMode {
                 .save();
         robot.drive.setPose(start.toFieldPose());
         robot.drive.makeTrajectory()
-                //Shoot
-                .strafeToLinearHeading(new Vector2d(48, 11), Inches, 0, Degrees)
-                .strafeToLinearHeading(new Vector2d(57, 21), Inches, 20, Degrees)
-                //Intake from the flower
-                .strafeToLinearHeading(new Vector2d(48, 11), Inches, 0, Degrees)
+
+                .stopAndAdd(new ParallelTaskGroup(
+                        robot.leftShooter.tasks.runFor(Seconds.of(2.5), 0.7),
+                        robot.rightShooter.tasks.runFor(Seconds.of(2.5), 0.7),
+                        new ParallelTaskGroup(
+                                robot.leftShooter.tasks.runFor(Seconds.of(3), 0.7),
+                                robot.rightShooter.tasks.runFor(Seconds.of(3), 0.7),
+                                robot.gate.tasks.toggle(),
+                                robot.intake.tasks.runFor(Seconds.of(3), 1),
+                                robot.transfer.tasks.runFor(Seconds.of(3), 1)
+                        ).after(Seconds.of(2.5))
+                ))
+                .afterTime(0, robot.gate.tasks.toggle())
+
+                .strafeToLinearHeading(new Vector2d(50, 11), Inches, 0, Degrees)
+
+                .strafeToLinearHeading(new Vector2d(51, 24), Inches, 0, Degrees)
+                .afterTime(0, robot.sweeper.tasks.toggleBoth())
+                .waitFor(0.3)
+
+                .afterTime(0, robot.intake.tasks.runFor(Seconds.of(2), 1))
+
+                .strafeToLinearHeading(new Vector2d(55, 24), Inches, 0, Degrees)
+
+
+                .waitFor(2)
+
+                .strafeToLinearHeading(new Vector2d(51, 24), Inches, 0, Degrees)
+
+
+
+                .strafeToLinearHeading(new Vector2d(50, 11), Inches, 0, Degrees)
+                .afterTime(0, robot.leftShooter.tasks.runFor(Seconds.of(3), 0.7))
+                .afterTime(0, robot.rightShooter.tasks.runFor(Seconds.of(3), 0.7))
                 .strafeToLinearHeading(new Vector2d(62, 11), Inches, 0, Degrees)
-                //Shoot
-                .strafeToLinearHeading(new Vector2d(54, 11), Inches, 0, Degrees)
+                .waitFor(0.5)
+
+                .stopAndAdd(new ParallelTaskGroup(
+                        robot.leftShooter.tasks.runFor(Seconds.of(3), 0.7),
+                        robot.rightShooter.tasks.runFor(Seconds.of(3), 0.7),
+                        robot.gate.tasks.toggle(),
+                        robot.intake.tasks.runFor(Seconds.of(3), 1),
+                        robot.transfer.tasks.runFor(Seconds.of(3), 1)
+                ))
+                .afterTime(0, robot.gate.tasks.toggle())
+
+                .strafeToLinearHeading(new Vector2d(48, 11), Inches, 0, Degrees)
+
+
                 .strafeToLinearHeading(new Vector2d(47, 60), Inches, 0, Degrees)
+
                 .addTask();
 
     }

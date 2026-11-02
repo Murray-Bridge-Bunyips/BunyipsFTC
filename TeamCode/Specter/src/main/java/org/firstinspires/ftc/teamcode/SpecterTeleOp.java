@@ -141,8 +141,8 @@ public class SpecterTeleOp extends BunyipsOpMode {
                 .whileTrue(robot.intake.tasks.run(0.8));
 
         gamepad1.button(B)
-                .whileTrue(robot.leftShooter.tasks.run(0.75))
-                .whileTrue(robot.rightShooter.tasks.run(0.75));
+                .whileTrue(robot.leftShooter.tasks.run(0.675))
+                .whileTrue(robot.rightShooter.tasks.run(0.675));
 
         gamepad1.button(DPAD_DOWN)
                 .onTrue(robot.gate.tasks.toggle());
@@ -152,20 +152,19 @@ public class SpecterTeleOp extends BunyipsOpMode {
                 .onTrue(robot.brake.tasks.toggle());
 
         gamepad1.button(DPAD_RIGHT)
-                .onTrue(robot.sweeper.tasks.toggle());
+                .onTrue(robot.sweeper.tasks.toggleBoth());
 
-        //Shooting speed up
         gamepad2.button(B)
-                .whileTrue(robot.leftShooter.tasks.run(0.75))
-                .whileTrue(robot.rightShooter.tasks.run(0.75));
+                .whileTrue(robot.leftShooter.tasks.run(0.675))
+                .whileTrue(robot.rightShooter.tasks.run(0.675));
 
         gamepad2.button(A)
                 .onTrue(robot.gate.tasks.toggle())
                 .onFalse(robot.gate.tasks.toggle())
                 .whileTrue(robot.intake.tasks.run(1))
                 .whileTrue(robot.transfer.tasks.run(1))
-                .whileTrue(robot.leftShooter.tasks.run(0.75))
-                .whileTrue(robot.rightShooter.tasks.run(0.75));
+                .whileTrue(robot.leftShooter.tasks.run(0.675))
+                .whileTrue(robot.rightShooter.tasks.run(0.675));
 
         gamepad2.button(X)
                 .whileTrue(robot.intake.tasks.run(1));
@@ -201,4 +200,3 @@ public class SpecterTeleOp extends BunyipsOpMode {
     }
 
 }
-
