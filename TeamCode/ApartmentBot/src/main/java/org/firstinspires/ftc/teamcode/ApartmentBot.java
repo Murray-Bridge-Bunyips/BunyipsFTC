@@ -23,17 +23,17 @@ public class ApartmentBot extends RobotConfig {
         public DcMotor fl;
 
         /**
-         * Control 0: frontRight
+         * Control 3: frontRight
          */
         public DcMotor fr;
 
         /**
-         * Control 0: backLeft
+         * Control 2: backLeft
          */
         public DcMotor bl;
 
         /**
-         * Control 0: backRight
+         * Control 1: backRight
          */
         public DcMotor br;
 
