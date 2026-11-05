@@ -2,18 +2,21 @@ package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class ApartmentBot extends RobotConfig {
     public static class Hardware {
@@ -39,15 +42,14 @@ public class ApartmentBot extends RobotConfig {
 
 
         /**
-         * Expansion 0: configName
+         * Expansion 0: intake
          */
-        public DcMotor expMotor;
-
+        public DcMotor intake;
 
         /**
-         * Expansion 0: configName
+         * Expansion 1: output
          */
-        public Servo expServo;
+        public Motor output;
 
 
         /**
@@ -60,6 +62,21 @@ public class ApartmentBot extends RobotConfig {
      * 4-Wheels MecanumDrive
      */
     public MecanumDrive drive;
+
+    /**
+     * Intake Actuator
+     */
+    public Actuator intake;
+
+    /**
+     * Output Actuator
+     */
+    public Actuator output;
+
+    public double kP = 0;
+    public double kI = 0;
+    public double kD = 0;
+    public double kF = 0;
 
     public final Hardware hw = new Hardware();
 
@@ -80,6 +97,24 @@ public class ApartmentBot extends RobotConfig {
         hw.br = getHardware("backRight", DcMotorEx.class, (d) -> {
             d.setDirection(DcMotor.Direction.FORWARD);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        });
+
+        hw.intake = getHardware("intake", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotor.Direction.FORWARD);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        });
+        hw.output = getHardware("output", Motor.class, (d) -> {
+            d.setDirection(DcMotor.Direction.FORWARD);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
+            d.setRunToPositionController(pidf);
+
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+                pidf.setCoefficients(kP, kI, kD, kF);
+
+                Motor.debug(d, "output", Motor.Scope.POSITION, Motor.Scope.TARGET);
+            }));
         });
 
         hw.imu = getHardware("imu", IMUEx.class, d ->
@@ -105,6 +140,13 @@ public class ApartmentBot extends RobotConfig {
                 .setHeadingGain(2)
                 .build();
 
-        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor);
+        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.fl, hw.bl, hw.br, hw.fr, hw.imu, hardwareMap.voltageSensor)
+                .withName("drive");
+
+        intake = new Actuator(hw.intake)
+                .withName("intakeSub");
+
+        output = new Actuator(hw.output)
+                .withName("outputSub");
     }
 }
