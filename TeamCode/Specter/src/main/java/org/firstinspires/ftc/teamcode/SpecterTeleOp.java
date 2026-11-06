@@ -81,8 +81,8 @@ public class SpecterTeleOp extends BunyipsOpMode {
         }
         else {
             if(startConfig.isBlue()){
-                goal1 = new Vector2d(-21.5, 12);
-                goal2 = new Vector2d(21.5, 12);
+                goal1 = new Vector2d(-21.5, 5);
+                goal2 = new Vector2d(21.5, 11);
                 resetPose = new Pose2d(60, 11, 0);
             }
             else{ //if red
@@ -135,14 +135,17 @@ public class SpecterTeleOp extends BunyipsOpMode {
 
 
         gamepad1.button(Y)
-                .whileTrue(robot.transfer.tasks.run(1));
+                .whileTrue(robot.transfer.tasks.run(0.8));
 
         gamepad1.button(X)
                 .whileTrue(robot.intake.tasks.run(0.8));
 
         gamepad1.button(B)
-                .whileTrue(robot.leftShooter.tasks.run(0.675))
-                .whileTrue(robot.rightShooter.tasks.run(0.675));
+                .whileTrue(robot.leftShooter.tasks.run(0.7))
+                .whileTrue(robot.rightShooter.tasks.run(0.7));
+        gamepad1.button(A)
+                .whileTrue(robot.leftShooter.tasks.run(0.75))
+                .whileTrue(robot.rightShooter.tasks.run(0.75));
 
         gamepad1.button(DPAD_DOWN)
                 .onTrue(robot.gate.tasks.toggle());
@@ -154,17 +157,18 @@ public class SpecterTeleOp extends BunyipsOpMode {
         gamepad1.button(DPAD_RIGHT)
                 .onTrue(robot.sweeper.tasks.toggleBoth());
 
+        //Shooting speed up
         gamepad2.button(B)
-                .whileTrue(robot.leftShooter.tasks.run(0.675))
-                .whileTrue(robot.rightShooter.tasks.run(0.675));
+                .whileTrue(robot.leftShooter.tasks.run(0.75))
+                .whileTrue(robot.rightShooter.tasks.run(0.75));
 
         gamepad2.button(A)
                 .onTrue(robot.gate.tasks.toggle())
                 .onFalse(robot.gate.tasks.toggle())
                 .whileTrue(robot.intake.tasks.run(1))
                 .whileTrue(robot.transfer.tasks.run(1))
-                .whileTrue(robot.leftShooter.tasks.run(0.675))
-                .whileTrue(robot.rightShooter.tasks.run(0.675));
+                .whileTrue(robot.leftShooter.tasks.run(0.75))
+                .whileTrue(robot.rightShooter.tasks.run(0.75));
 
         gamepad2.button(X)
                 .whileTrue(robot.intake.tasks.run(1));
@@ -200,3 +204,4 @@ public class SpecterTeleOp extends BunyipsOpMode {
     }
 
 }
+
