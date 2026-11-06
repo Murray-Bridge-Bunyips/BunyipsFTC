@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
@@ -14,39 +16,37 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import com.qualcomm.robotcore.hardware.IMU;
-import com.qualcomm.robotcore.hardware.Servo;
 
 public class BioBot extends RobotConfig {
     public static class Hardware {
         /**
-         * Control 0: configName
+         * Expansion 2: frontRight
          */
         public DcMotor FR;
         /**
-         * Control 0: configName
+         * Expansion 1: frontLeft
          */
         public DcMotor FL;
         /**
-         * Control 0: configName
+         * Expansion 3: backRight
          */
         public DcMotor BR;
         /**
-         * Control 0: configName
+         * Expansion 0: backLeft
          */
         public DcMotor BL;
 
 
-
         /**
-         * Expansion 0: configName
+         * Control 0: configName
          */
         public DcMotor expMotor;
 
 
         /**
-         * Expansion 0: configName
+         * Expansion 0: depollinator
          */
-        public Servo expServo;
+        public ServoEx depollinator;
 
         /**
          * Internally connected
@@ -63,21 +63,26 @@ public class BioBot extends RobotConfig {
 
     @Override
     protected void onRuntime() {
-        hw.FL = getHardware("frontleft", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotor.Direction.FORWARD);
+        hw.FL = getHardware("frontLeft", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotor.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
-        hw.FR = getHardware("frontright", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotor.Direction.FORWARD);
+        hw.FR = getHardware("frontRight", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotor.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
-        hw.BL = getHardware("backleft", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotor.Direction.FORWARD);
+        hw.BL = getHardware("backLeft", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotor.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
-        hw.BR = getHardware("backright", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotor.Direction.FORWARD);
+        hw.BR = getHardware("backRight", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotor.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        });
+
+        hw.depollinator = getHardware("depollinator", ServoEx.class, (d) -> {
+            d.setEndToEndTime(Seconds.of(0.8));
+            d.scaleRange(0, 1);
         });
 
         hw.imu = getHardware("imu", IMUEx.class, d ->
