@@ -135,14 +135,14 @@ public class SpecterTeleOp extends BunyipsOpMode {
 
 
         gamepad1.button(Y)
-                .whileTrue(robot.transfer.tasks.run(0.8));
+                .whileTrue(robot.transfer.tasks.run(1));
 
         gamepad1.button(X)
                 .whileTrue(robot.intake.tasks.run(0.8));
 
         gamepad1.button(B)
-                .whileTrue(robot.leftShooter.tasks.run(0.7))
-                .whileTrue(robot.rightShooter.tasks.run(0.7));
+                .whileTrue(robot.leftShooter.tasks.run(0.67))
+                .whileTrue(robot.rightShooter.tasks.run(0.67));
         gamepad1.button(A)
                 .whileTrue(robot.leftShooter.tasks.run(0.75))
                 .whileTrue(robot.rightShooter.tasks.run(0.75));
