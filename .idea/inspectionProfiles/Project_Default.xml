@@ -65,12 +65,11 @@
     <inspection_tool class="InstanceGuardedByStatic" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="IntLiteralMayBeLongLiteral" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="InterfaceMayBeAnnotatedFunctional" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="LatestMinorVersion" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MarkdownIncorrectTableFormatting" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
     <inspection_tool class="MarkdownIncorrectlyNumberedListItem" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MarkdownUnresolvedFileReference" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MarkdownUnresolvedLinkLabel" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="MemberVisibilityCanBePrivate" enabled="false" level="WEAK WARNING" enabled_by_default="false" />
-    <inspection_tool class="MissingDeprecatedAnnotation" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MissingJavadoc" enabled="true" level="WARNING" enabled_by_default="false">
       <scope name="BunyipsLib" level="WEAK WARNING" enabled="true" editorAttributes="INFO_ATTRIBUTES">
         <option name="IGNORE_ACCESSORS" value="true" />

@@ -23,7 +23,8 @@ public class TeleOphthalmology extends BunyipsOpMode {
         robot.init();
 
         FieldOrientableDriveTask driveTask = new HolonomicDriveTask(gamepad1, robot.drive)
-                .withFieldCentric(() -> true);
+                .withFieldCentric(() -> false);
+//                .withFieldCentric(() -> true);
         robot.drive.setDefaultTask(driveTask);
 
         gamepad1.button(A)
@@ -32,7 +33,21 @@ public class TeleOphthalmology extends BunyipsOpMode {
                 .onTrue("Invert Field-Centric Origin", () -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
         robot.intake.setDefaultTask(robot.intake.tasks.control(() -> gamepad2.lsy));
-        robot.output.setDefaultTask(robot.output.tasks.control(() -> gamepad2.rsy));
+        robot.transfer.setDefaultTask(robot.transfer.tasks.control(() -> gamepad2.rsy));
+        robot.output.setDefaultTask(robot.output.tasks.control(() -> gamepad2.rt));
+
+        gamepad2.button(LEFT_BUMPER)
+                .onTrue(robot.preventer.tasks.toggle());
+
+        gamepad2.button(A)
+                .onTrue(robot.launch);
+        gamepad2.button(B)
+                .onTrue(robot.eject);
+    }
+
+    @Override
+    protected void onStart() {
+        robot.preventer.close();
     }
 
     @Override

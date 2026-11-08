@@ -1,17 +1,24 @@
 package org.firstinspires.ftc.teamcode;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Measure;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Time;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -47,9 +54,20 @@ public class ApartmentBot extends RobotConfig {
         public DcMotor intake;
 
         /**
-         * Expansion 1: output
+         * Expansion ?: transfer
+         */
+        public DcMotor transfer;
+
+        /**
+         * Expansion 3: output
          */
         public Motor output;
+
+
+        /**
+         * Control 5: preventer
+         */
+        public ServoEx preventer;
 
 
         /**
@@ -69,21 +87,44 @@ public class ApartmentBot extends RobotConfig {
     public Actuator intake;
 
     /**
+     * Transfer Actuator
+     */
+    public Actuator transfer;
+
+    /**
      * Output Actuator
      */
     public Actuator output;
+
+    /**
+     * Preventer Switch
+     */
+    public Switch preventer;
 
     public double kP = 0;
     public double kI = 0;
     public double kD = 0;
     public double kF = 0;
 
+    public double outputPower = 1;
+    public Measure<Time> outputChargeTime = Seconds.of(2);
+
     public final Hardware hw = new Hardware();
+
+    /**
+     * SequentialTaskGroup that launches the collected pollen.
+     */
+    public SequentialTaskGroup launch;
+
+    /**
+     * ParallelTaskGroup that ejects all collected field elements out the intake.
+     */
+    public ParallelTaskGroup eject;
 
     @Override
     protected void onRuntime() {
         hw.fl = getHardware("frontLeft", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotor.Direction.FORWARD);
+            d.setDirection(DcMotor.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         hw.fr = getHardware("frontRight", DcMotorEx.class, (d) -> {
@@ -91,7 +132,7 @@ public class ApartmentBot extends RobotConfig {
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         hw.bl = getHardware("backLeft", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotor.Direction.FORWARD);
+            d.setDirection(DcMotor.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         hw.br = getHardware("backRight", DcMotorEx.class, (d) -> {
@@ -100,24 +141,33 @@ public class ApartmentBot extends RobotConfig {
         });
 
         hw.intake = getHardware("intake", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotor.Direction.REVERSE);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        });
+        hw.transfer = getHardware("transfer", DcMotorEx.class, (d) -> {
             d.setDirection(DcMotor.Direction.FORWARD);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         hw.output = getHardware("output", Motor.class, (d) -> {
             d.setDirection(DcMotor.Direction.FORWARD);
-            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
-            d.setRunToPositionController(pidf);
-
-            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-                pidf.setCoefficients(kP, kI, kD, kF);
-
-                Motor.debug(d, "output", Motor.Scope.POSITION, Motor.Scope.TARGET);
-            }));
+//            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
+//            d.setRunToPositionController(pidf);
+//
+//            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+//                pidf.setCoefficients(kP, kI, kD, kF);
+//
+//                Motor.debug(d, "output", Motor.Scope.POSITION, Motor.Scope.TARGET);
+//            }));
         });
 
-        hw.imu = getHardware("imu", IMUEx.class, d ->
+        hw.preventer = getHardware("preventer", ServoEx.class, (d) -> {
+            d.scaleRange(0, 1);
+            d.setEndToEndTime(Seconds.of(0.8));
+        });
+
+        hw.imu = getHardware("imu", IMUEx.class, (d) ->
                 d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
                         RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
@@ -146,7 +196,28 @@ public class ApartmentBot extends RobotConfig {
         intake = new Actuator(hw.intake)
                 .withName("intakeSub");
 
+        transfer = new Actuator(hw.transfer)
+                .withName("transferSub");
+
         output = new Actuator(hw.output)
                 .withName("outputSub");
+
+        preventer = new Switch(hw.preventer)
+                .withOpenBound(0)
+                .withClosedBound(1)
+                .withName("preventerSub");
+
+        launch = new SequentialTaskGroup(
+                preventer.tasks.close(),
+                output.tasks.runFor(outputChargeTime, outputPower),
+                output.tasks.control(() -> outputPower).until(preventer.tasks.open()),
+                output.tasks.runFor(Seconds.of(1.5), outputPower).with(transfer.tasks.runFor(Seconds.of(1.5), 1)),
+                preventer.tasks.close()
+        );
+
+        eject = new ParallelTaskGroup(
+                transfer.tasks.runFor(Seconds.of(2), -1),
+                intake.tasks.runFor(Seconds.of(2), -1)
+        );
     }
 }
