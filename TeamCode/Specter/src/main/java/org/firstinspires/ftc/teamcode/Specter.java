@@ -12,6 +12,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
@@ -21,6 +22,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.PinpointLocalizer;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 
 
 /**
@@ -50,6 +52,17 @@ public class Specter extends RobotConfig {
     public Switch brake;
 
     public DualServos sweeper;
+
+    public double LkP = 2;
+    public double LkI = 0;
+    public double LkD = 1;
+    public double LkF = 1.215                                                                                                                                           ;
+
+    public double RkP = 1;
+    public double RkI = 1;
+    public double RkD = 1;
+    public double RkF = 1;
+
 
 
     @Override
@@ -125,16 +138,27 @@ public class Specter extends RobotConfig {
         transfer = new Actuator(hw.transfer)
                 .withName("Transfer");
 
-        hw.leftShooter = getHardware("leftShooter", DcMotor.class, (d) -> {
+        hw.leftShooter = getHardware("leftShooter", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.FORWARD);
+
+            PIDFController leftpidf = new PIDFController(LkP, LkI, LkD, LkF);
+            d.setRunUsingEncoderController(1.0, 1700.0, leftpidf);
+            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
         });
 
         leftShooter = new Actuator(hw.leftShooter)
                 .withName("LeftShooter");
 
-        hw.rightShooter = getHardware("rightShooter", DcMotor.class, (d) -> {
+        hw.rightShooter = getHardware("rightShooter", Motor.class, (d) -> {
             d.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            PIDFController rightpidf = new PIDFController(RkP, RkI, RkD, RkF);
+            d.setRunUsingEncoderController(1.0, 1700.0, rightpidf);
+            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         });
+
+
 
         rightShooter = new Actuator(hw.rightShooter)
                 .withName("RightShooter");
@@ -210,9 +234,9 @@ public class Specter extends RobotConfig {
 
         public DcMotorSimple transfer;
 
-        public DcMotorSimple leftShooter;
+        public Motor leftShooter;
 
-        public DcMotorSimple rightShooter;
+        public Motor rightShooter;
 
         public Servo gate;
 

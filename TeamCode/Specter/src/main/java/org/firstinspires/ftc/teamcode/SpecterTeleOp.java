@@ -141,9 +141,7 @@ public class SpecterTeleOp extends BunyipsOpMode {
                 .whileTrue(robot.intake.tasks.run(0.8));
 
         gamepad1.button(B)
-                .whileTrue(robot.leftShooter.tasks.run(0.675))
-                .whileTrue(robot.rightShooter.tasks.run(0.675));
-
+                .whileTrue(robot.leftShooter.tasks.run(1200.00/1700.0));
         gamepad1.button(DPAD_DOWN)
                 .onTrue(robot.gate.tasks.toggle());
 
@@ -195,7 +193,12 @@ public class SpecterTeleOp extends BunyipsOpMode {
     @Override
     protected void activeLoop() {
 
-
+        telemetry.addData("currentVelocity", robot.hw.leftShooter.getVelocity());
+        telemetry.addData("targetVelocity", robot.hw.leftShooter.getRunUsingEncoderController().pidf().get().getSetpoint());
+        telemetry.addData("kP", robot.LkP);
+        telemetry.addData("kI", robot.LkI);
+        telemetry.addData("kD", robot.LkD);
+        telemetry.addData("kF", robot.LkF);
         Scheduler.update();
     }
 
