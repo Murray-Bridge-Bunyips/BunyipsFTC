@@ -165,7 +165,7 @@ public class Specter extends RobotConfig {
 
         hw.gate = getHardware("gate", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0.265, 0.524);
+            d.scaleRange(0.325, 0.6);
         });
 
         gate = new Switch(hw.gate)
@@ -179,13 +179,13 @@ public class Specter extends RobotConfig {
         brake = new Switch(hw.brake)
                 .withName("Break");
 
-        hw.leftSweeper = getHardware("leftServo", Servo.class, (d) -> {
-            d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0, 1);
+        hw.leftSweeper = getHardware("leftSweeper", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.REVERSE);
+            d.scaleRange(0.275, 0.71);
         });
-        hw.rightSweeper = getHardware("rightServo", Servo.class, (d) -> {
+        hw.rightSweeper = getHardware("rightSweeper", Servo.class, (d) -> {
             d.setDirection(Servo.Direction.FORWARD);
-            d.scaleRange(0, 1);
+            d.scaleRange(0.58, 1);
         });
 
         sweeper = new DualServos(hw.rightSweeper, hw.leftSweeper)
