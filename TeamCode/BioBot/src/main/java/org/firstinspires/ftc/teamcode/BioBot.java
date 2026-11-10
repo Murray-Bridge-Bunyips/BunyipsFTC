@@ -3,12 +3,17 @@ package org.firstinspires.ftc.teamcode;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.InchesPerSecond;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.ServoEx;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -16,6 +21,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 public class BioBot extends RobotConfig {
     public static class Hardware {
@@ -38,15 +44,26 @@ public class BioBot extends RobotConfig {
 
 
         /**
-         * Control 0: configName
+         * Control 0: outtake
          */
-        public DcMotor expMotor;
+        public Motor outtake;
+        /**
+         * Control 1: intake
+         */
+        public DcMotor intake;
 
 
         /**
          * Expansion 0: depollinator
          */
         public ServoEx depollinator;
+
+
+        /**
+         * Control 1: depollinatorLimiter
+         */
+        public TouchSensor depollinatorLimiter;
+
 
         /**
          * Internally connected
@@ -58,6 +75,25 @@ public class BioBot extends RobotConfig {
      * 4-Wheels MecanumDrive
      */
     public MecanumDrive drive;
+
+    /**
+     * Outtake Actuator
+     */
+    public Actuator outtake;
+    /**
+     * Intake Actuator
+     */
+    public Actuator intake;
+
+    /**
+     * Depollinator Switch
+     */
+    public Switch depollinator;
+
+    public double kP = 0;
+    public double kI = 0;
+    public double kD = 0;
+    public double kF = 0;
 
     public final Hardware hw = new Hardware();
 
@@ -77,6 +113,24 @@ public class BioBot extends RobotConfig {
         });
         hw.BR = getHardware("backRight", DcMotorEx.class, (d) -> {
             d.setDirection(DcMotor.Direction.REVERSE);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        });
+
+        hw.outtake = getHardware("outtake", Motor.class, (d) -> {
+            d.setDirection(DcMotor.Direction.FORWARD);
+            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+
+//            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
+//            d.setRunToPositionController(pidf);
+//
+//            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+//                pidf.setCoefficients(kP, kI, kD, kF);
+//
+//                Motor.debug(d, "outtake", Motor.Scope.POSITION, Motor.Scope.TARGET);
+//            }));
+        });
+        hw.intake = getHardware("intake", DcMotorEx.class, (d) -> {
+            d.setDirection(DcMotor.Direction.FORWARD);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
 
@@ -109,5 +163,10 @@ public class BioBot extends RobotConfig {
                 .build();
 
         drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.FL, hw.BL, hw.BR, hw.FR, hw.imu, hardwareMap.voltageSensor);
+
+        outtake = new Actuator(hw.outtake);
+        intake = new Actuator(hw.intake);
+
+        depollinator = new Switch(hw.depollinator);
     }
 }
