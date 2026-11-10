@@ -54,11 +54,6 @@ public class ApartmentBot extends RobotConfig {
         public DcMotor intake;
 
         /**
-         * Expansion ?: transfer
-         */
-        public DcMotor transfer;
-
-        /**
          * Expansion 3: output
          */
         public Motor output;
@@ -87,11 +82,6 @@ public class ApartmentBot extends RobotConfig {
     public Actuator intake;
 
     /**
-     * Transfer Actuator
-     */
-    public Actuator transfer;
-
-    /**
      * Output Actuator
      */
     public Actuator output;
@@ -106,8 +96,8 @@ public class ApartmentBot extends RobotConfig {
     public double kD = 0;
     public double kF = 0;
 
-    public double outputPower = 1;
-    public Measure<Time> outputChargeTime = Seconds.of(2);
+    public double outputPower = 0.95;
+    public Measure<Time> outputChargeTime = Seconds.of(3);
 
     public final Hardware hw = new Hardware();
 
@@ -142,10 +132,6 @@ public class ApartmentBot extends RobotConfig {
 
         hw.intake = getHardware("intake", DcMotorEx.class, (d) -> {
             d.setDirection(DcMotor.Direction.REVERSE);
-            d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        });
-        hw.transfer = getHardware("transfer", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotor.Direction.FORWARD);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
         hw.output = getHardware("output", Motor.class, (d) -> {
@@ -196,9 +182,6 @@ public class ApartmentBot extends RobotConfig {
         intake = new Actuator(hw.intake)
                 .withName("intakeSub");
 
-        transfer = new Actuator(hw.transfer)
-                .withName("transferSub");
-
         output = new Actuator(hw.output)
                 .withName("outputSub");
 
@@ -211,12 +194,11 @@ public class ApartmentBot extends RobotConfig {
                 preventer.tasks.close(),
                 output.tasks.runFor(outputChargeTime, outputPower),
                 output.tasks.control(() -> outputPower).until(preventer.tasks.open()),
-                output.tasks.runFor(Seconds.of(1.5), outputPower).with(transfer.tasks.runFor(Seconds.of(1.5), 1)),
+                output.tasks.runFor(Seconds.of(1.5), outputPower).with(intake.tasks.runFor(Seconds.of(1.5), 1)),
                 preventer.tasks.close()
         );
 
         eject = new ParallelTaskGroup(
-                transfer.tasks.runFor(Seconds.of(2), -1),
                 intake.tasks.runFor(Seconds.of(2), -1)
         );
     }

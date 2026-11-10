@@ -10,6 +10,8 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.*;
 // ------------------------------------------------------------------------
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import org.firstinspires.ftc.teamcode.ApartmentBot;
 
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.AutonomousBunyipsOpMode;
@@ -17,6 +19,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import dev.frozenmilk.util.cell.RefCell;
 
+@Autonomous(name = "Forward 0.2 Seconds", preselectTeleOp = "TeleOp")
 public class AutosMouse extends AutonomousBunyipsOpMode {
     private final ApartmentBot robot = new ApartmentBot();
 

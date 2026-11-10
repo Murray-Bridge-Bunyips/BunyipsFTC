@@ -10,11 +10,16 @@ import static au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task.*;
 // ------------------------------------------------------------------------
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
 
+import com.acmerobotics.dashboard.config.Config;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.BunyipsOpMode;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.Scheduler;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.FieldOrientableDriveTask;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.HolonomicDriveTask;
 
+@Config
+@TeleOp(name = "TeleOp")
 public class TeleOphthalmology extends BunyipsOpMode {
     private final ApartmentBot robot = new ApartmentBot();
 
@@ -32,9 +37,8 @@ public class TeleOphthalmology extends BunyipsOpMode {
         gamepad1.button(Y)
                 .onTrue("Invert Field-Centric Origin", () -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
-        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> gamepad2.lsy));
-        robot.transfer.setDefaultTask(robot.transfer.tasks.control(() -> gamepad2.rsy));
-        robot.output.setDefaultTask(robot.output.tasks.control(() -> gamepad2.rt));
+        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.lsy));
+        robot.output.setDefaultTask(robot.output.tasks.control(() -> -gamepad2.rsy));
 
         gamepad2.button(LEFT_BUMPER)
                 .onTrue(robot.preventer.tasks.toggle());
