@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
@@ -31,6 +32,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFContro
  *
  * @author Lucas Sacco, 2026
  */
+@Config
 public class Specter extends RobotConfig {
     public final Hardware hw = new Hardware();
 
@@ -53,15 +55,15 @@ public class Specter extends RobotConfig {
 
     public DualServos sweeper;
 
-    public double LkP = 2;
-    public double LkI = 0;
-    public double LkD = 1;
-    public double LkF = 1.215                                                                                                                                           ;
+    public static double LkP = 9;
+    public static double LkI = 0;
+    public static double LkD = 0;
+    public static double LkF = 0.662;
 
-    public double RkP = 1;
-    public double RkI = 1;
-    public double RkD = 1;
-    public double RkF = 1;
+    public static double RkP = 9;
+    public static double RkI = 0;
+    public static double RkD = 0;
+    public static double RkF = 0.662;
 
 
 
