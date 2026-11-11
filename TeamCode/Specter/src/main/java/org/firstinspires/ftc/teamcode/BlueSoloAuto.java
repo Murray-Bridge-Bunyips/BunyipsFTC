@@ -37,11 +37,11 @@ public class BlueSoloAuto extends AutonomousBunyipsOpMode {
         robot.drive.makeTrajectory()
 
                 .stopAndAdd(new ParallelTaskGroup(
-                        robot.leftShooter.tasks.runFor(Seconds.of(2.5), 0.7),
-                        robot.rightShooter.tasks.runFor(Seconds.of(2.5), 0.7),
+                        robot.leftShooter.tasks.runFor(Seconds.of(2.5), 1390/1700.0),
+                        robot.rightShooter.tasks.runFor(Seconds.of(2.5), 1390/1700.0),
                         new ParallelTaskGroup(
-                                robot.leftShooter.tasks.runFor(Seconds.of(3), 0.7),
-                                robot.rightShooter.tasks.runFor(Seconds.of(3), 0.7),
+                                robot.leftShooter.tasks.runFor(Seconds.of(3), 1390/1700.0),
+                                robot.rightShooter.tasks.runFor(Seconds.of(3), 1390/1700.0),
                                 robot.gate.tasks.toggle(),
                                 robot.intake.tasks.runFor(Seconds.of(3), 1),
                                 robot.transfer.tasks.runFor(Seconds.of(3), 1)
@@ -67,14 +67,14 @@ public class BlueSoloAuto extends AutonomousBunyipsOpMode {
 
 
                 .strafeToLinearHeading(new Vector2d(50, 11), Inches, 0, Degrees)
-                .afterTime(0, robot.leftShooter.tasks.runFor(Seconds.of(3), 0.7))
-                .afterTime(0, robot.rightShooter.tasks.runFor(Seconds.of(3), 0.7))
+                .afterTime(0, robot.leftShooter.tasks.runFor(Seconds.of(3), 1390/1700.0))
+                .afterTime(0, robot.rightShooter.tasks.runFor(Seconds.of(3), 1390/1700.0))
                 .strafeToLinearHeading(new Vector2d(62, 11), Inches, 0, Degrees)
                 .waitFor(0.5)
 
                 .stopAndAdd(new ParallelTaskGroup(
-                        robot.leftShooter.tasks.runFor(Seconds.of(3), 0.7),
-                        robot.rightShooter.tasks.runFor(Seconds.of(3), 0.7),
+                        robot.leftShooter.tasks.runFor(Seconds.of(3), 1390/1700.0),
+                        robot.rightShooter.tasks.runFor(Seconds.of(3), 1390/1700.0),
                         robot.gate.tasks.toggle(),
                         robot.intake.tasks.runFor(Seconds.of(3), 1),
                         robot.transfer.tasks.runFor(Seconds.of(3), 1)

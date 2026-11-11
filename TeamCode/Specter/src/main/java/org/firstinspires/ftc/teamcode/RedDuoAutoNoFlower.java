@@ -43,11 +43,11 @@ public class RedDuoAutoNoFlower extends AutonomousBunyipsOpMode {
                 .waitFor(7)
 
                 .stopAndAdd(new ParallelTaskGroup(
-                        robot.leftShooter.tasks.runFor(Seconds.of(2.5), 0.7),
-                        robot.rightShooter.tasks.runFor(Seconds.of(2.5), 0.7),
+                        robot.leftShooter.tasks.runFor(Seconds.of(2.5), 1390/1700.0),
+                        robot.rightShooter.tasks.runFor(Seconds.of(2.5), 1390/1700.0),
                         new ParallelTaskGroup(
-                                robot.leftShooter.tasks.runFor(Seconds.of(3), 0.7),
-                                robot.rightShooter.tasks.runFor(Seconds.of(3), 0.7),
+                                robot.leftShooter.tasks.runFor(Seconds.of(3), 1390/1700.0),
+                                robot.rightShooter.tasks.runFor(Seconds.of(3), 1390/1700.0),
                                 robot.gate.tasks.toggle(),
                                 robot.intake.tasks.runFor(Seconds.of(3), 1),
                                 robot.transfer.tasks.runFor(Seconds.of(3), 1)
