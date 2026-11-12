@@ -49,6 +49,7 @@ public class BlueSoloAuto extends AutonomousBunyipsOpMode {
                 ))
                 .afterTime(0, robot.gate.tasks.toggle())
 
+                .strafeToLinearHeading(new Vector2d(50, 11), Inches, 180, Degrees)
                 .strafeToLinearHeading(new Vector2d(50, 11), Inches, 0, Degrees)
 
                 .strafeToLinearHeading(new Vector2d(51, 24), Inches, 0, Degrees)

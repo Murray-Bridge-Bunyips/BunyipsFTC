@@ -101,18 +101,18 @@ public class Specter extends RobotConfig {
         PinpointLocalizer.Params localizerParams = new PinpointLocalizer.Params.Builder()
                 .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED) // Set directions here!
                 .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-                .setParYTicks(-1450.142830071315)
-                .setPerpXTicks(-3410.836018049558)
+                .setParYTicks(-1766.025526121544)
+                .setPerpXTicks(-3271.3800584265823)
                 .build();
 
         DriveModel driveModel = new DriveModel.Builder()
-                .setInPerTick(122.0 / 62273)
-                .setLateralInPerTick(0.0016817682261912336)
-                .setTrackWidthTicks(7021.528696417151)
+                .setInPerTick(124.0 / 63094)
+                .setLateralInPerTick(0.0016311548027512046)
+                .setTrackWidthTicks(6695.624663258641)
                 .build();
         MotionProfile motionProfile = new MotionProfile.Builder()
-                .setKv(0.00035733446351793926)
-                .setKs(0.9090539145487959)
+                .setKv(0.00034688050807850964)
+                .setKs(1.5047719962041013)
                 .setKa(0.00004)
                 .build();
         MecanumGains mecanumGains = new MecanumGains.Builder()
