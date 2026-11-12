@@ -12,15 +12,18 @@ This repository contains all code for our FTC robots constructed after 2021 usin
 
 | Robot Name | Description                   | Season             | Team                           |
 |------------|-------------------------------|--------------------|--------------------------------|
-| Damon      | 15215 REV Decode robot        | DECODE (2025-2026) | 15215 Murray Bridge Bunyips    |
-| Jonas      | 22407 goBILDA Decode robot    | DECODE (2025-2026) | 22407 Murray Bridge Mulyawonks |
-| Lilbro5000 | 24736 REV Decode robot        | DECODE (2025-2026) | 24736 Murray Bridge Lizards    |
+| Specter      | 15215 Biobuzz robot        | BIOBUZZ (2026-2027) | 15215 Murray Bridge Bunyips    |
+| BioBot      | 22407 REV Biobuzz robot    | BIOBUZZ (2026-2027) | 22407 Murray Bridge Mulyawonks |
+| ApartmentBot | 24736 goBILDA Biobuzz robot        | BIOBUZZ (2026-2027) | 24736 Murray Bridge Lizards    |
 | Scout      | Minibot outreach framework    | No Season          | No Team                        |
 
 ## Unmaintained robots in this repo
 ###### Unmaintained robots used to be attributed to a robot controller but have been decommissioned/are unmaintained. They may be using outdated/deprecated versions of BunyipsLib.<br>These modules can be found under TeamCode/Archived/
 | Robot Name | Description | Season | Team |
 | --- | --- | --- | --- |
+| Damon      | 15215 REV Decode robot        | DECODE (2025-2026) | 15215 Murray Bridge Bunyips    |
+| Jonas      | 22407 goBILDA Decode robot    | DECODE (2025-2026) | 22407 Murray Bridge Mulyawonks |
+| Lilbro5000 | 24736 REV Decode robot        | DECODE (2025-2026) | 24736 Murray Bridge Lizards    |
 | Proto      | REV Mecanum-drive with odometry pods | INTO THE DEEP (2024-2025) | 15215 Murray Bridge Bunyips    |
 | Vance      | goBILDA Mecanum-drive                | INTO THE DEEP (2024-2025) | 22407 Murray Bridge Mulyawonks |
 | Joker      | REV Mecanum-drive with swinging arm  | INTO THE DEEP (2024-2025) | 24736 Murray Bridge Lizards    |
