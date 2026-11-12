@@ -22,6 +22,7 @@ import org.firstinspires.ftc.teamcode.BioBot;
 @TeleOp(name = "TeleOp")
 public class BioBotTeleop extends BunyipsOpMode {
     private final BioBot robot = new BioBot();
+    private double powerMult = 0.9;
 
     @Override
     protected void onInit() {
@@ -36,8 +37,8 @@ public class BioBotTeleop extends BunyipsOpMode {
         gamepad1.button(Y)
                 .onTrue("Invert Field-Centric Origin", () -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
-        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> gamepad2.lt));
-        robot.outtake.setDefaultTask(robot.outtake.tasks.control(() -> gamepad2.rt));
+        robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.lsy));
+        robot.outtake.setDefaultTask(robot.outtake.tasks.control(() -> (-gamepad2.rsy * powerMult)));
 
         gamepad2.button(X)
                 .onTrue(robot.depollinator.tasks.toggle());

@@ -132,7 +132,7 @@ public class BioBot extends RobotConfig {
 //            }));
         });
         hw.intake = getHardware("intake", DcMotorEx.class, (d) -> {
-            d.setDirection(DcMotor.Direction.FORWARD);
+            d.setDirection(DcMotor.Direction.REVERSE);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         });
 
