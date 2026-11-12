@@ -101,7 +101,7 @@ public class Specter extends RobotConfig {
         PinpointLocalizer.Params localizerParams = new PinpointLocalizer.Params.Builder()
                 .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED) // Set directions here!
                 .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
-                .setParYTicks(-1766.025526121544)
+                .setParYTicks(1766.025526121544)
                 .setPerpXTicks(-3271.3800584265823)
                 .build();
 
