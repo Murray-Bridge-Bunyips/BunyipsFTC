@@ -91,12 +91,12 @@ public class ApartmentBot extends RobotConfig {
      */
     public Switch preventer;
 
-    public double kP = 0;
+    public double kP = 1;
     public double kI = 0;
     public double kD = 0;
-    public double kF = 0;
+    public double kF = 0.98;
 
-    public double outputPower = 0.95;
+    public double outputPower = 1;
     public Measure<Time> outputChargeTime = Seconds.of(3);
 
     public final Hardware hw = new Hardware();
@@ -137,15 +137,17 @@ public class ApartmentBot extends RobotConfig {
         hw.output = getHardware("output", Motor.class, (d) -> {
             d.setDirection(DcMotor.Direction.FORWARD);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-//            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
-//            d.setRunToPositionController(pidf);
-//
-//            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
-//                pidf.setCoefficients(kP, kI, kD, kF);
-//
-//                Motor.debug(d, "output", Motor.Scope.POSITION, Motor.Scope.TARGET);
-//            }));
+            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
+            d.setRunUsingEncoderController(1, 2100, pidf); // theoretically has an insane max tps but it aint reaching allat
+
+            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
+                pidf.setCoefficients(kP, kI, kD, kF);
+
+                o.telemetry.addData("currentVelocity", d.getVelocity());
+                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
+            }));
         });
 
         hw.preventer = getHardware("preventer", ServoEx.class, (d) -> {
