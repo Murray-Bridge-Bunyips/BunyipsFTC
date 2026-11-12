@@ -119,14 +119,16 @@ public class BioBot extends RobotConfig {
         hw.outtake = getHardware("outtake", Motor.class, (d) -> {
             d.setDirection(DcMotor.Direction.FORWARD);
             d.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+//            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
 //            PIDFController pidf = new PIDFController(kP, kI, kD, kF);
-//            d.setRunToPositionController(pidf);
+//            d.setRunUsingEncoderController(pidf);
 //
 //            BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
 //                pidf.setCoefficients(kP, kI, kD, kF);
 //
-//                Motor.debug(d, "outtake", Motor.Scope.POSITION, Motor.Scope.TARGET);
+//                o.telemetry.addData("currentVelocity", d.getVelocity());
+//                o.telemetry.addData("targetVelocity", pidf.getSetpoint());
 //            }));
         });
         hw.intake = getHardware("intake", DcMotorEx.class, (d) -> {
