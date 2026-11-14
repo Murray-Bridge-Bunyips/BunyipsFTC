@@ -138,7 +138,7 @@ public class BioBot extends RobotConfig {
 
         hw.depollinator = getHardware("depollinator", ServoEx.class, (d) -> {
             d.setEndToEndTime(Seconds.of(0.8));
-            d.scaleRange(0, 1);
+            d.scaleRange(0.24, 0.56);
         });
 
         hw.imu = getHardware("imu", IMUEx.class, d ->

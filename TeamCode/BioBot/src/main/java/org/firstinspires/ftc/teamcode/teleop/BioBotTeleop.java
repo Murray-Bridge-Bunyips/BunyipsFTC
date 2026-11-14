@@ -22,7 +22,7 @@ import org.firstinspires.ftc.teamcode.BioBot;
 @TeleOp(name = "TeleOp")
 public class BioBotTeleop extends BunyipsOpMode {
     private final BioBot robot = new BioBot();
-    private double powerMult = 0.9;
+    private final double powerMult = 0.9;
 
     @Override
     protected void onInit() {
@@ -42,6 +42,11 @@ public class BioBotTeleop extends BunyipsOpMode {
 
         gamepad2.button(X)
                 .onTrue(robot.depollinator.tasks.toggle());
+    }
+
+    @Override
+    protected void onStart() {
+        robot.depollinator.open();
     }
 
     @Override
