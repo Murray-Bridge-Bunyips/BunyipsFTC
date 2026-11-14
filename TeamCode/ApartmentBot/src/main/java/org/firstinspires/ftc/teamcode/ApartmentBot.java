@@ -96,7 +96,7 @@ public class ApartmentBot extends RobotConfig {
     public double kD = 0;
     public double kF = 0.98;
 
-    public double outputPower = 1;
+    public double outputPower = 0.725;
     public Measure<Time> outputChargeTime = Seconds.of(3);
 
     public final Hardware hw = new Hardware();

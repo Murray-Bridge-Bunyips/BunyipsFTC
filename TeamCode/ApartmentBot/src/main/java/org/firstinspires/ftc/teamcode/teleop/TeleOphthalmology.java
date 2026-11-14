@@ -38,7 +38,7 @@ public class TeleOphthalmology extends BunyipsOpMode {
                 .onTrue("Invert Field-Centric Origin", () -> driveTask.setFieldCentricOffset(Radians.of(robot.drive.getPose().heading.toDouble() + Math.PI)));
 
         robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.lsy));
-        robot.output.setDefaultTask(robot.output.tasks.control(() -> -gamepad2.rsy));
+        robot.output.setDefaultTask(robot.output.tasks.control(() -> -(robot.outputPower * gamepad2.rsy)));
 
         gamepad2.button(LEFT_BUMPER)
                 .onTrue(robot.preventer.tasks.toggle());
