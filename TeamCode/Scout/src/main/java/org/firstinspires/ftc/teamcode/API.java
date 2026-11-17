@@ -197,7 +197,7 @@ public class API extends BlocksOpModeCompanion {
     @ExportToBlocks(
             color = 30,
             comment = "Sets the maximum angular acceleration in degrees per second squared of the robot hereon.",
-            heading = "set Maximum Angular Velocity",
+            heading = "set Maximum Angular Acceleration",
             parameterLabels = "Acceleration (degrees/s/s)",
             parameterDefaultValues = "180"
     )

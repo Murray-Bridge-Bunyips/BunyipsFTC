@@ -1,0 +1,251 @@
+package org.firstinspires.ftc.teamcode;
+
+import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.ftc.RawEncoder;
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.RobotConfig;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.IMUEx;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.hardware.Motor;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.DriveModel;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MecanumGains;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.roadrunner.parameters.MotionProfile;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Actuator;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.DualServos;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.Switch;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.subsystems.drive.MecanumDrive;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.vision.Vision;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.localization.PinpointLocalizer;
+import au.edu.sa.mbhs.studentrobotics.bunyipslib.external.control.pid.PIDFController;
+
+
+/**
+ * Main robot configuration file.
+ * Bootstrapped through bunyipslib-for--
+ *
+ * @author Lucas Sacco, 2026
+ */
+@Config
+public class Specter extends RobotConfig {
+    public final Hardware hw = new Hardware();
+
+    // ... SUBSYSTEMS AND OTHER PUBLIC DECLARATIONS HERE ...
+    public MecanumDrive drive;
+
+    public Vision Webcam;
+
+    public Actuator intake;
+
+    public Actuator transfer;
+
+    public Actuator leftShooter;
+
+    public Actuator rightShooter;
+
+    public Switch gate;
+
+    public Switch brake;
+
+    public DualServos sweeper;
+
+    public static double LkP = 9;
+    public static double LkI = 0;
+    public static double LkD = 0;
+    public static double LkF = 0.662;
+
+    public static double RkP = 9;
+    public static double RkI = 0;
+    public static double RkD = 0;
+    public static double RkF = 0.662;
+
+
+
+    @Override
+    protected void onRuntime() {
+
+        hw.fl = getHardware("fl", DcMotor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
+        });
+
+        hw.bl = getHardware("bl", DcMotor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+        });
+
+        hw.br = getHardware("br", DcMotor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+        });
+
+        hw.fr = getHardware("fr", DcMotor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
+        });
+
+
+
+
+
+        hw.imu = getHardware("imu", IMUEx.class, (d) ->
+                d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
+                        RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                        RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD
+                ))));
+
+        hw.pinpoint = getHardware("pinpoint", GoBildaPinpointDriver.class);
+
+        PinpointLocalizer.Params localizerParams = new PinpointLocalizer.Params.Builder()
+                .setInitialParDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED) // Set directions here!
+                .setInitialPerpDirection(GoBildaPinpointDriver.EncoderDirection.REVERSED)
+                .setParYTicks(1766.025526121544)
+                .setPerpXTicks(-3271.3800584265823)
+                .build();
+
+        DriveModel driveModel = new DriveModel.Builder()
+                .setInPerTick(124.0 / 63094)
+                .setLateralInPerTick(0.0016311548027512046)
+                .setTrackWidthTicks(6695.624663258641)
+                .build();
+        MotionProfile motionProfile = new MotionProfile.Builder()
+                .setKv(0.00034688050807850964)
+                .setKs(1.5047719962041013)
+                .setKa(0.00004)
+                .build();
+        MecanumGains mecanumGains = new MecanumGains.Builder()
+                .setAxialGain(2.5)
+                .setLateralGain(3)
+                .setHeadingGain(4)
+                .setPoseHolding(true)
+                .build();
+        drive = new MecanumDrive(driveModel, motionProfile, mecanumGains, hw.fl, hw.bl, hw.br, hw.fr, hw.imu)
+                .withLocalizer(new PinpointLocalizer(driveModel, localizerParams, hw.pinpoint))
+                .withName("Drive");
+
+
+        hw.intake = getHardware("intake", DcMotor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
+        });
+
+        intake = new Actuator(hw.intake)
+                .withName("Intake");
+
+        hw.transfer = getHardware("transfer", DcMotor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
+        });
+
+        transfer = new Actuator(hw.transfer)
+                .withName("Transfer");
+
+        hw.leftShooter = getHardware("leftShooter", Motor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
+
+            PIDFController leftpidf = new PIDFController(LkP, LkI, LkD, LkF);
+            d.setRunUsingEncoderController(1.0, 1700.0, leftpidf);
+            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        });
+
+        leftShooter = new Actuator(hw.leftShooter)
+                .withName("LeftShooter");
+
+        hw.rightShooter = getHardware("rightShooter", Motor.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.REVERSE);
+
+            PIDFController rightpidf = new PIDFController(RkP, RkI, RkD, RkF);
+            d.setRunUsingEncoderController(1.0, 1700.0, rightpidf);
+            d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        });
+
+
+
+        rightShooter = new Actuator(hw.rightShooter)
+                .withName("RightShooter");
+
+        hw.gate = getHardware("gate", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.FORWARD);
+            d.scaleRange(0.325, 0.6);
+        });
+
+        gate = new Switch(hw.gate)
+                .withName("Gate");
+
+        hw.brake = getHardware("brake", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.FORWARD);
+            d.scaleRange(0.5, 0.75);
+        });
+
+        brake = new Switch(hw.brake)
+                .withName("Break");
+
+        hw.leftSweeper = getHardware("leftSweeper", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.REVERSE);
+            d.scaleRange(0.275, 0.71);
+        });
+        hw.rightSweeper = getHardware("rightSweeper", Servo.class, (d) -> {
+            d.setDirection(Servo.Direction.FORWARD);
+            d.scaleRange(0.58, 1);
+        });
+
+        sweeper = new DualServos(hw.rightSweeper, hw.leftSweeper)
+                .withName("Sweeper");
+
+
+
+    }
+
+    /**
+     * Contains all hardware objects used for the robot.
+     */
+    public static class Hardware {
+        /**
+         * Internally mounted on Control Hub I2C 0
+         */
+        public IMU imu;
+        /**
+         * Control 0: fl
+         */
+        public DcMotor fl;
+        /**
+         * Control 1: bl
+         */
+        public DcMotor bl;
+        /**
+         * Control 2: br
+         */
+        public DcMotor br;
+        /**
+         * Control 3: fr
+         */
+        public DcMotor fr;
+
+        public RawEncoder par;
+
+        public RawEncoder perp;
+
+        public GoBildaPinpointDriver pinpoint;
+
+        public WebcamName webcam;
+
+        public DcMotorSimple intake;
+
+        public DcMotorSimple transfer;
+
+        public Motor leftShooter;
+
+        public Motor rightShooter;
+
+        public Servo gate;
+
+        public Servo brake;
+
+        public Servo leftSweeper;
+
+        public Servo rightSweeper;
+
+
+    }
+}

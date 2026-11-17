@@ -10,17 +10,20 @@ This repository contains all code for our FTC robots constructed after 2021 usin
 ## Maintained robots in this repo
 ###### Maintained robots are modules that are attributed to an existing and usable robot controller and Gradle config. These robots are using the latest versions of BunyipsLib.<br>These modules can be found under TeamCode/
 
-| Robot Name | Description                | Season             | Team                           |
-|------------|----------------------------|--------------------|--------------------------------|
-| Damon      | 15215 REV Decode robot     | DECODE (2025-2026) | 15215 Murray Bridge Bunyips    |
-| Jonas      | 22407 goBILDA Decode robot | DECODE (2025-2026) | 22407 Murray Bridge Mulyawonks |
-| Lilbro5000 | 24736 REV Decode robot     | DECODE (2025-2026) | 24736 Murray Bridge Lizards    |
-| Scout      | Minibot outreach framework | No Season          | No Team                        |
+| Robot Name | Description                   | Season             | Team                           |
+|------------|-------------------------------|--------------------|--------------------------------|
+| Specter      | 15215 Biobuzz robot        | BIOBUZZ (2026-2027) | 15215 Murray Bridge Bunyips    |
+| BioBot      | 22407 REV Biobuzz robot    | BIOBUZZ (2026-2027) | 22407 Murray Bridge Mulyawonks |
+| ApartmentBot | 24736 goBILDA Biobuzz robot        | BIOBUZZ (2026-2027) | 24736 Murray Bridge Lizards    |
+| Scout      | Minibot outreach framework    | No Season          | No Team                        |
 
 ## Unmaintained robots in this repo
 ###### Unmaintained robots used to be attributed to a robot controller but have been decommissioned/are unmaintained. They may be using outdated/deprecated versions of BunyipsLib.<br>These modules can be found under TeamCode/Archived/
 | Robot Name | Description | Season | Team |
 | --- | --- | --- | --- |
+| Damon      | 15215 REV Decode robot        | DECODE (2025-2026) | 15215 Murray Bridge Bunyips    |
+| Jonas      | 22407 goBILDA Decode robot    | DECODE (2025-2026) | 22407 Murray Bridge Mulyawonks |
+| Lilbro5000 | 24736 REV Decode robot        | DECODE (2025-2026) | 24736 Murray Bridge Lizards    |
 | Proto      | REV Mecanum-drive with odometry pods | INTO THE DEEP (2024-2025) | 15215 Murray Bridge Bunyips    |
 | Vance      | goBILDA Mecanum-drive                | INTO THE DEEP (2024-2025) | 22407 Murray Bridge Mulyawonks |
 | Joker      | REV Mecanum-drive with swinging arm  | INTO THE DEEP (2024-2025) | 24736 Murray Bridge Lizards    |
@@ -102,6 +105,21 @@ Samples Folder: &nbsp;&nbsp; [/FtcRobotController/src/main/java/org/firstinspire
 The readme.md file located in the [/TeamCode/src/main/java/org/firstinspires/ftc/teamcode](TeamCode/src/main/java/org/firstinspires/ftc/teamcode) folder contains an explanation of the sample naming convention, and instructions on how to copy them to your own project space.
 
 # Release Information
+
+## Version 11.1 (20251231-104637)
+
+### Enhancements
+
+* Gamepad triggers can now be accessed as booleans and have edge detection supported.
+* GoBildaPinpointDriver now supports Pinpoint v2 functionality
+* Adds webcam calibrations for goBILDA's USB camera.
+
+### Bug Fixes
+* Fixes issue [1654](https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/1654) in GoBildaPinpointDriver that caused error if resolution was set in other than MM
+* Fixes issue [1628](https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/1628) Blocks editor displays incorrect Java code for gamepad edge detection blocks.
+* Fixes possible race condition issue [1884](https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/1884) on Driver Station startup when Driver Station name doesn't match the Robot Controller name.
+* Fixes issue [1863](https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/1863) - Incorrect package paths in samples.
+* Fixes an issue where an OnBotJava filename that begins with a lowercase character would fail to properly rename the file if the user tried to rename it so that it begins with an uppercase character.
 
 ## Version 11.0 (20250827-105138)
 
