@@ -140,7 +140,7 @@ public class ApartmentBot extends RobotConfig {
             d.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             PIDFController pidf = new PIDFController(kP, kI, kD, kF);
-            d.setRunUsingEncoderController(1, 2100, pidf); // theoretically has an insane max tps but it aint reaching allat
+            d.setRunUsingEncoderController(1, 2100, pidf); // theoretically 2707 tps w/ no load
 
             BunyipsOpMode.ifRunning(o -> o.onActiveLoop(() -> {
                 pidf.setCoefficients(kP, kI, kD, kF);
