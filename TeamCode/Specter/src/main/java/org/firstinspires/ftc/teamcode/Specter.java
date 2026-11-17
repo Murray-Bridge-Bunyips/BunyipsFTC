@@ -201,8 +201,6 @@ public class Specter extends RobotConfig {
      * Contains all hardware objects used for the robot.
      */
     public static class Hardware {
-        // TODO: Rewrite the comments above each hardware declaration to match your port and name configuration (e.g <Control/Expansion> <port>: <name in DS>)
-        //   It is strongly recommended to do this as hardware mappings may erase themselves unexpectedly.
         /**
          * Internally mounted on Control Hub I2C 0
          */

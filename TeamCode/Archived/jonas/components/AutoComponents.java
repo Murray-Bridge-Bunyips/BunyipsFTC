@@ -54,7 +54,7 @@ public class AutoComponents {
 
         launchPos = new Vector2d(-24, 12);
         launchRot = 126+180;
-        //TODO: look at below and make sure it works
+
         toLaunchPos = robot.drive.makeTrajectory(startingPosition.toFieldPose())
                 .strafeToLinearHeading(launchPos, Inches, launchRot, Degrees);
         midLaunchMovement = robot.drive.makeTrajectory(new Pose2d(launchPos, Radians.convertFrom(launchRot, Degrees)), currentPoseMap)

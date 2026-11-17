@@ -12,7 +12,6 @@ public class SpecterTuning extends RoadRunnerTuningOpMode {
     @NonNull
     @Override
     protected RoadRunnerDrive getDrive() {
-        // TODO: Ensure to switch out `Robot` for your RobotConfig class
         Specter robot = new Specter(); // Assuming @RobotConfig.AutoInit is not being used
         robot.init();
         return robot.drive; // Assumes `robot.drive` is exposing a tunable RoadRunnerDrive using a standard Accumulator, with Localizer configured
