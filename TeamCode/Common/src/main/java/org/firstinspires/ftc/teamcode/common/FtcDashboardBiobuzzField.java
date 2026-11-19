@@ -10,9 +10,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.annotations.Hook;
 /**
  * Temporary shim to use the new field image on FTCDashboard.
  */
-public class FtcDashboardDecodeField {
+public class FtcDashboardBiobuzzField {
     @Hook(on = Hook.Target.PRE_INIT, priority = 7) // prior to all standard initialisation
-    public static void injectDecodeField() {
+    public static void injectBiobuzzField() {
         try {
             Field defaultField = TelemetryPacket.class.getDeclaredField("DEFAULT_FIELD");
             defaultField.setAccessible(true);
@@ -22,7 +22,7 @@ public class FtcDashboardDecodeField {
 
                 DEFAULT_FIELD.setAlpha(0.4);
                 // image in Common module under src/main/assets/images
-                DEFAULT_FIELD.drawImage("/images/decode.webp", 0, 0, 144, 144);
+                DEFAULT_FIELD.drawImage("/images/biobuzz.webp", 0, 0, 144, 144);
                 DEFAULT_FIELD.setAlpha(1.0);
                 DEFAULT_FIELD.drawGrid(0, 0, 144, 144, 7, 7);
             }
