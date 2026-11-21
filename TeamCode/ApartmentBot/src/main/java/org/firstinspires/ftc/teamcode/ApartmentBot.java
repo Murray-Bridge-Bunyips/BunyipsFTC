@@ -114,6 +114,10 @@ public class ApartmentBot extends RobotConfig {
     //TODO: measure these in inches
     public double width = 18;
     public double length = 18;
+    /**
+     * Distance between the centre of the robot and its corners.
+     */
+    public double diagonal = Math.sqrt(Math.pow(width, 2) + Math.pow(length, 2));
 
     @Override
     protected void onRuntime() {

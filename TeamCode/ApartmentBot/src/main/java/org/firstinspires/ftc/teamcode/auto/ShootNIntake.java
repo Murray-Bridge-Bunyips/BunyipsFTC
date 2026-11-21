@@ -29,6 +29,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Ref;
 import dev.frozenmilk.util.cell.RefCell;
 
+/**
+ * Shoots preload pollen, then intakes from the garden before parking.
+ */
 @Autonomous(name = "Shoot then Intake", preselectTeleOp = "TeleOp")
 public class ShootNIntake extends AutonomousBunyipsOpMode {
     private final ApartmentBot robot = new ApartmentBot();
@@ -36,15 +39,14 @@ public class ShootNIntake extends AutonomousBunyipsOpMode {
 
     private final double width = robot.width;
     private final double length = robot.length;
-
-    private final double diagonal = Math.sqrt(Math.pow(robot.width, 2) + Math.pow(robot.length, 2));
+    private final double diagonal = robot.diagonal;
 
     @Override
     protected void onInitialise() {
         robot.init();
         setOpModes(
-                StartingConfiguration.redRight().tile(1-(((24-width)/2)/24)).forward(Inches.of(24*2)).rotate(Degrees.of(270)),
-                StartingConfiguration.blueRight().tile(1-(((24-width)/2)/24)).forward(Inches.of(24*2)).rotate(Degrees.of(270))
+                StartingConfiguration.redRight().tile(1-(((24-length)/2)/24)).forward(Inches.of(24*2)).rotate(Degrees.of(270)),
+                StartingConfiguration.blueRight().tile(1-(((24-length)/2)/24)).forward(Inches.of(24*2)).rotate(Degrees.of(270))
         ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
     }
 
