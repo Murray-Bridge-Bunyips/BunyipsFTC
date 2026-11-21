@@ -111,6 +111,10 @@ public class ApartmentBot extends RobotConfig {
      */
     public ParallelTaskGroup eject;
 
+    //TODO: measure these in inches
+    public double width = 18;
+    public double length = 18;
+
     @Override
     protected void onRuntime() {
         hw.fl = getHardware("frontLeft", DcMotorEx.class, (d) -> {

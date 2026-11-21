@@ -19,6 +19,9 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.bases.Task;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Geometry;
 import dev.frozenmilk.util.cell.RefCell;
 
+/**
+ * Drives forward for 0.2 seconds, they're calling it the most basic auto of all time
+ */
 @Autonomous(name = "Forward 0.2 Seconds", preselectTeleOp = "TeleOp")
 public class AutosMouse extends AutonomousBunyipsOpMode {
     private final ApartmentBot robot = new ApartmentBot();
@@ -30,7 +33,6 @@ public class AutosMouse extends AutonomousBunyipsOpMode {
 
     @Override
     protected void onReady(@Nullable RefCell<?> selectedOpMode) {
-        // Drives forward for 0.2 seconds, they're calling it the most basic auto of all time
         add(
             Task.task()
                 .periodic(() -> robot.drive.setPower(Geometry.vel(1, 0, 0)))
