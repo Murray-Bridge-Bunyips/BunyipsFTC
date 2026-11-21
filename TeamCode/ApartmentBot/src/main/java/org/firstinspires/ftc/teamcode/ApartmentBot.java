@@ -107,6 +107,14 @@ public class ApartmentBot extends RobotConfig {
     public SequentialTaskGroup launch;
 
     /**
+     * Variation on the launch SequentialTaskGroup that skips closing the preventer at the beginning,
+     * charging the flywheel,
+     * and closing the preventer at the end.
+     * All these actions must be done outside of this SequentialTaskGroup for it to be used.
+     */
+    public SequentialTaskGroup quickLaunch;
+
+    /**
      * ParallelTaskGroup that ejects all collected field elements out the intake.
      */
     public ParallelTaskGroup eject;
@@ -206,6 +214,11 @@ public class ApartmentBot extends RobotConfig {
                 output.tasks.control(() -> outputPower).until(preventer.tasks.open()),
                 output.tasks.runFor(Seconds.of(1.5), outputPower).with(intake.tasks.runFor(Seconds.of(1.5), 1)),
                 preventer.tasks.close()
+        );
+
+        quickLaunch = new SequentialTaskGroup(
+                output.tasks.control(() -> outputPower).until(preventer.tasks.open()),
+                output.tasks.runFor(Seconds.of(1.5), outputPower).with(intake.tasks.runFor(Seconds.of(1.5), 1))
         );
 
         eject = new ParallelTaskGroup(
