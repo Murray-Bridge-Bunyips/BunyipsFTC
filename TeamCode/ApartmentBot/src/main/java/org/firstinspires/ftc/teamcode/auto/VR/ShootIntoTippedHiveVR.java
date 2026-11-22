@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.auto.VR;
 
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Degrees;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Inches;
+import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Radians;
 import static au.edu.sa.mbhs.studentrobotics.bunyipslib.external.units.Units.Seconds;
 
 import androidx.annotation.Nullable;
@@ -44,8 +45,8 @@ public class ShootIntoTippedHiveVR extends AutonomousBunyipsOpMode {
     protected void onInitialise() {
         robot.init();
         setOpModes(
-                StartingConfiguration.redLeft().tile(1-(((24-length)/2)/24)).forward(Inches.of(24*2)).rotate(Degrees.of(90)),
-                StartingConfiguration.blueLeft().tile(1-(((24-length)/2)/24)).forward(Inches.of(24*2)).rotate(Degrees.of(90))
+                StartingConfiguration.redLeft().tile(1-(((24-length)/2)/24)).forward(Inches.of(((24*2)-12)+((width/2)+(6.7/2))+1)).rotate(Degrees.of(270)),
+                StartingConfiguration.blueLeft().tile(1-(((24-length)/2)/24)).forward(Inches.of(((24*2)-12)+((width/2)+(6.7/2))+1)).rotate(Degrees.of(270))
         ).assignButton(0, 0, Controls.B).assignButton(0, 1, Controls.X);
     }
 
@@ -59,12 +60,12 @@ public class ShootIntoTippedHiveVR extends AutonomousBunyipsOpMode {
 
         RefCell<Pose2d> pose = Ref.of(robot.drive.getPose());
 
-        add(new WaitTask(Seconds.of(10)));
+        add(new WaitTask(Seconds.of(15)));
 
         add(robot.launch);
 
-        robot.drive.makeTrajectory(pose.get(), currentPoseMap)
-                .strafeTo(new Vector2d((-24)*2,-12), Inches)
+        robot.drive.makeTrajectory(new Pose2d(-70+(length/2), -24+(width/2)+(6.7/2)+1, Radians.convertFrom(0, Degrees)), currentPoseMap)
+                .strafeTo(new Vector2d((-24)*2,-24+(width/2)+(6.7/2)+1), Inches)
                 .strafeTo(new Vector2d((-24)*2,-10-(24*2)), Inches)
                 .addTask(pose);
     }
