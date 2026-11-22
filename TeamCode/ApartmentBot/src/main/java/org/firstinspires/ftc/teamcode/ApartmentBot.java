@@ -21,8 +21,10 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.ParallelTaskGroup;
 import au.edu.sa.mbhs.studentrobotics.bunyipslib.tasks.groups.SequentialTaskGroup;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 public class ApartmentBot extends RobotConfig {
@@ -63,6 +65,10 @@ public class ApartmentBot extends RobotConfig {
          * Control 5: preventer
          */
         public ServoEx preventer;
+        /**
+         * ???: depol
+         */
+        public CRServo depollinator;
 
 
         /**
@@ -90,6 +96,11 @@ public class ApartmentBot extends RobotConfig {
      * Preventer Switch
      */
     public Switch preventer;
+
+    /**
+     * Depollinator Actuator
+     */
+    public Actuator depollinator;
 
     public double kP = 1;
     public double kI = 0;
@@ -171,6 +182,10 @@ public class ApartmentBot extends RobotConfig {
             d.setEndToEndTime(Seconds.of(0.8));
         });
 
+        hw.depollinator = getHardware("depol", CRServo.class, (d) -> {
+            d.setDirection(DcMotorSimple.Direction.FORWARD);
+        });
+
         hw.imu = getHardware("imu", IMUEx.class, (d) ->
                 d.lazyInitialize(new IMU.Parameters(new RevHubOrientationOnRobot(
                         RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
@@ -207,6 +222,9 @@ public class ApartmentBot extends RobotConfig {
                 .withOpenBound(0)
                 .withClosedBound(1)
                 .withName("preventerSub");
+
+        depollinator = new Actuator(hw.depollinator)
+                .withName("depollinatorSub");
 
         launch = new SequentialTaskGroup(
                 preventer.tasks.close(),

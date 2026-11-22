@@ -39,6 +39,7 @@ public class TeleOphthalmology extends BunyipsOpMode {
 
         robot.intake.setDefaultTask(robot.intake.tasks.control(() -> -gamepad2.lsy));
         robot.output.setDefaultTask(robot.output.tasks.control(() -> -(robot.outputPower * gamepad2.rsy)));
+        robot.depollinator.setDefaultTask(robot.depollinator.tasks.control(() -> gamepad2.rt));
 
         gamepad2.button(LEFT_BUMPER)
                 .onTrue(robot.preventer.tasks.toggle());
