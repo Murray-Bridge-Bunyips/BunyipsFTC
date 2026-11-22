@@ -63,9 +63,8 @@ public class ShootNIntake extends AutonomousBunyipsOpMode {
         add(robot.launch);
 
         robot.drive.makeTrajectory(pose.get(), currentPoseMap)
-                .strafeTo(new Vector2d(70-diagonal,-12), Inches)
-                .turnTo(0, Degrees)
-                .strafeTo(new Vector2d(70-diagonal,-70+(length/2)), Inches)
+                .strafeTo(new Vector2d(70-(length/2)-4,-12), Inches)
+                .strafeTo(new Vector2d(70-(length/2)-4,-70+(length/2)), Inches)
                 .addTask(pose);
 
         add(robot.drive.makeTrajectory(pose.get(), currentPoseMap)
