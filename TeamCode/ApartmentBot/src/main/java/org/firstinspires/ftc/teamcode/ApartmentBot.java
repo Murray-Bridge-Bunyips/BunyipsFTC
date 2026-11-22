@@ -26,6 +26,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class ApartmentBot extends RobotConfig {
     public static class Hardware {
@@ -178,6 +179,7 @@ public class ApartmentBot extends RobotConfig {
         });
 
         hw.preventer = getHardware("preventer", ServoEx.class, (d) -> {
+            d.setDirection(Servo.Direction.REVERSE);
             d.scaleRange(0, 1);
             d.setEndToEndTime(Seconds.of(0.8));
         });
@@ -218,9 +220,8 @@ public class ApartmentBot extends RobotConfig {
         output = new Actuator(hw.output)
                 .withName("outputSub");
 
+        //TODO: test if this still works after reversing hw.preventer rather than adding bounds here
         preventer = new Switch(hw.preventer)
-                .withOpenBound(0)
-                .withClosedBound(1)
                 .withName("preventerSub");
 
         depollinator = new Actuator(hw.depollinator)
