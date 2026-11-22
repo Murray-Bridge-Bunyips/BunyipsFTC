@@ -29,6 +29,8 @@ import dev.frozenmilk.util.cell.RefCell;
 
 /**
  * Shoots preload pollen, then intakes from the garden before parking.
+ *
+ * This version works according to my brain and MeepMeep.
  */
 @Autonomous(name = "Shoot then Intake", preselectTeleOp = "TeleOp")
 public class ShootNIntake extends AutonomousBunyipsOpMode {

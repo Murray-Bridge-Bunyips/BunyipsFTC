@@ -33,6 +33,8 @@ import dev.frozenmilk.util.cell.RefCell;
  * Waits for our alliance partner to shoot, shoots into the same hive cell,
  * then parks.
  * Parking is optimistic here.
+ *
+ * This version works according to my brain and MeepMeep.
  */
 @Autonomous(name = "Wait then Shoot", preselectTeleOp = "TeleOp")
 public class WaitThenShoot extends AutonomousBunyipsOpMode {

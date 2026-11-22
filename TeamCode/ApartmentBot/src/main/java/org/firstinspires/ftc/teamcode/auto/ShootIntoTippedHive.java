@@ -31,6 +31,8 @@ import dev.frozenmilk.util.cell.RefCell;
 /**
  * Waits, shoots preload pollen into the side of the hive that will be facing up if it gets tipped,
  * then parks.
+ *
+ * This version works according to my brain and MeepMeep.
  */
 @Autonomous(name = "Shoot into Tipped Hive", preselectTeleOp = "TeleOp")
 public class ShootIntoTippedHive extends AutonomousBunyipsOpMode {
