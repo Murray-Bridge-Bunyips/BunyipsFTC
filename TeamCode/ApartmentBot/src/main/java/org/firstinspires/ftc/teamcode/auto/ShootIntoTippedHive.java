@@ -29,7 +29,7 @@ import au.edu.sa.mbhs.studentrobotics.bunyipslib.util.Ref;
 import dev.frozenmilk.util.cell.RefCell;
 
 /**
- * Waits, shoots preload pollen into the side of the hive that will be facing up if it gets tipped,
+ * Waits, shoots preload pollen into the hive cell that will be facing up if it gets tipped,
  * then parks.
  *
  * This version works according to my brain and MeepMeep.
