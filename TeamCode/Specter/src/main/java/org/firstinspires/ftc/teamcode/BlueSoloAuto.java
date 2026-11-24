@@ -36,6 +36,7 @@ public class BlueSoloAuto extends AutonomousBunyipsOpMode {
         robot.drive.setPose(start.toFieldPose());
         robot.drive.makeTrajectory()
 
+                .strafeToLinearHeading(new Vector2d(-58.5, 11), Inches, 180, Degrees)
                 .stopAndAdd(new ParallelTaskGroup(
                         robot.leftShooter.tasks.runFor(Seconds.of(2.5), 1390/1700.0),
                         robot.rightShooter.tasks.runFor(Seconds.of(2.5), 1390/1700.0),
@@ -43,34 +44,38 @@ public class BlueSoloAuto extends AutonomousBunyipsOpMode {
                                 robot.leftShooter.tasks.runFor(Seconds.of(3), 1390/1700.0),
                                 robot.rightShooter.tasks.runFor(Seconds.of(3), 1390/1700.0),
                                 robot.gate.tasks.toggle(),
-                                robot.intake.tasks.runFor(Seconds.of(3), 1),
-                                robot.transfer.tasks.runFor(Seconds.of(3), 1)
+                                robot.intake.tasks.runFor(Seconds.of(3), 0.8),
+                                robot.transfer.tasks.runFor(Seconds.of(3), 0.8)
                         ).after(Seconds.of(2.5))
                 ))
                 .afterTime(0, robot.gate.tasks.toggle())
 
                 .strafeToLinearHeading(new Vector2d(50, 11), Inches, 180, Degrees)
-                .strafeToLinearHeading(new Vector2d(50, 11), Inches, 0, Degrees)
 
-                .strafeToLinearHeading(new Vector2d(51, 24), Inches, 0, Degrees)
+
+                .strafeToLinearHeading(new Vector2d(48, 24), Inches, 0, Degrees)
                 .afterTime(0, robot.sweeper.tasks.toggleBoth())
                 .waitFor(0.3)
 
-                .afterTime(0, robot.intake.tasks.runFor(Seconds.of(2), 1))
-
-                .strafeToLinearHeading(new Vector2d(55, 24), Inches, 0, Degrees)
 
 
-                .waitFor(2)
+                .strafeToLinearHeading(new Vector2d(53.7, 20), Inches, 0, Degrees)
+                .afterTime(0.4, robot.intake.tasks.runFor(Seconds.of(2), 0.8))
+                .afterTime(0, robot.transfer.tasks.runFor(Seconds.of(2), 0.9))
 
-                .strafeToLinearHeading(new Vector2d(51, 24), Inches, 0, Degrees)
+
+
+                .waitFor(3)
+
+                .strafeToLinearHeading(new Vector2d(49, 24), Inches, 0, Degrees)
+                .afterTime(0, robot.sweeper.tasks.toggleBoth())
 
 
 
                 .strafeToLinearHeading(new Vector2d(50, 11), Inches, 0, Degrees)
                 .afterTime(0, robot.leftShooter.tasks.runFor(Seconds.of(3), 1390/1700.0))
                 .afterTime(0, robot.rightShooter.tasks.runFor(Seconds.of(3), 1390/1700.0))
-                .strafeToLinearHeading(new Vector2d(62, 11), Inches, 0, Degrees)
+                .strafeToLinearHeading(new Vector2d(56.5, 11), Inches, 0, Degrees)
                 .waitFor(0.5)
 
                 .stopAndAdd(new ParallelTaskGroup(
@@ -78,7 +83,7 @@ public class BlueSoloAuto extends AutonomousBunyipsOpMode {
                         robot.rightShooter.tasks.runFor(Seconds.of(3), 1390/1700.0),
                         robot.gate.tasks.toggle(),
                         robot.intake.tasks.runFor(Seconds.of(3), 1),
-                        robot.transfer.tasks.runFor(Seconds.of(3), 1)
+                        robot.transfer.tasks.runFor(Seconds.of(3), 0.8)
                 ))
                 .afterTime(0, robot.gate.tasks.toggle())
 

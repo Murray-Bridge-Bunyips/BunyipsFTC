@@ -58,12 +58,16 @@ public class Specter extends RobotConfig {
     public static double LkP = 9;
     public static double LkI = 0;
     public static double LkD = 0;
-    public static double LkF = 0.662;
+    public static double LkF = 0.7; //0.662
 
     public static double RkP = 9;
     public static double RkI = 0;
     public static double RkD = 0;
-    public static double RkF = 0.662;
+    public static double RkF = 0.7;
+
+    public Vision webcam;
+
+
 
 
 
@@ -245,6 +249,7 @@ public class Specter extends RobotConfig {
         public Servo leftSweeper;
 
         public Servo rightSweeper;
+
 
 
     }

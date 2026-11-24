@@ -41,6 +41,7 @@ public class BlueDuoAuto extends AutonomousBunyipsOpMode {
 
                 .waitFor(7)
 
+                .strafeToLinearHeading(new Vector2d(56.5, 11), Inches, 0, Degrees)
                 .stopAndAdd(new ParallelTaskGroup(
                         robot.leftShooter.tasks.runFor(Seconds.of(2.5), 0.7),
                         robot.rightShooter.tasks.runFor(Seconds.of(2.5), 0.7),
@@ -54,17 +55,23 @@ public class BlueDuoAuto extends AutonomousBunyipsOpMode {
                 ))
                 .afterTime(0, robot.gate.tasks.toggle())
 
-                .strafeToLinearHeading(new Vector2d(48, 11), Inches, 0, Degrees)
-                .strafeToLinearHeading(new Vector2d(51, 24), Inches, 0, Degrees)
-
+                .strafeToLinearHeading(new Vector2d(48, 24), Inches, 0, Degrees)
                 .afterTime(0, robot.sweeper.tasks.toggleBoth())
                 .waitFor(0.3)
-                .afterTime(0, robot.intake.tasks.runFor(Seconds.of(2), 1))
 
-                .strafeToLinearHeading(new Vector2d(55, 24), Inches, 0, Degrees)
-                .waitFor(2)
 
-                .strafeToLinearHeading(new Vector2d(48, 11), Inches, 0, Degrees)
+
+                .strafeToLinearHeading(new Vector2d(53.7, 20), Inches, 0, Degrees)
+                .afterTime(0.4, robot.intake.tasks.runFor(Seconds.of(2), 0.8))
+                .afterTime(0, robot.transfer.tasks.runFor(Seconds.of(2), 0.9))
+
+
+
+                .waitFor(3)
+
+                .strafeToLinearHeading(new Vector2d(49, 24), Inches, 0, Degrees)
+                .afterTime(0, robot.sweeper.tasks.toggleBoth())
+
                 .strafeToLinearHeading(new Vector2d(47, 60), Inches, 0, Degrees)
 
 

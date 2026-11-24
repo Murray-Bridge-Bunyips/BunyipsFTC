@@ -62,6 +62,10 @@ public class SpecterTeleOp extends BunyipsOpMode {
 
     public Pose2d resetPose;
 
+    public static PIDFCoefficients ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS = new PIDFCoefficients(1, 0, 0, 1);
+
+    public static int Target_Tag_ID = 31;
+
 
     @Override
     protected void onInit() {
@@ -77,7 +81,7 @@ public class SpecterTeleOp extends BunyipsOpMode {
         if(startConfig == null){
             goal1 = new Vector2d(21.5, -12); //Red goal
             goal2 = new Vector2d(-21.5, -12);
-            resetPose = new Pose2d(-60, -11, 180);
+            resetPose = new Pose2d(-60, -11, Math.toRadians(180));
         }
         else {
             if(startConfig.isBlue()){
@@ -88,17 +92,13 @@ public class SpecterTeleOp extends BunyipsOpMode {
             else{ //if red
                 goal1 = new Vector2d(21.5, -12);
                 goal2 = new Vector2d(-21.5, -12);
-                resetPose = new Pose2d(-60, -11, 180);
+                resetPose = new Pose2d(-60, 11, Math.toRadians(180));
             }
         }
 
 
 
-        gamepad1.button(RIGHT_BUMPER)
-                .whileTrue(new AlignToPointDriveTask(() -> goal1, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180)));
 
-        gamepad1.button(LEFT_BUMPER)
-                .whileTrue(new AlignToPointDriveTask(() -> goal2, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180)));
 
         gamepad1.axisGreaterThan(LEFT_TRIGGER, 0.90)
                 .onTrue(() -> robot.drive.setPose(resetPose));
@@ -108,7 +108,7 @@ public class SpecterTeleOp extends BunyipsOpMode {
 
 
 
-        /*
+
         webcam = new Vision(hardwareMap.get(WebcamName.class, "webcam")).withName("Webcam");
 
         aprilTag = new AprilTag(builder -> {
@@ -117,9 +117,9 @@ public class SpecterTeleOp extends BunyipsOpMode {
             // other builder config of the AprilTagProcessor can be done too
             // utility builder for robot camera pose
             builder = AprilTag.setCameraPose(builder)
-                    .backward(Centimeters.of(21)) // define where the camera is
-                    .right(Centimeters.of(16))
-                    .up(Centimeters.of(26))
+                    .backward(Centimeters.of(9)) // define where the camera is
+                    .right(Centimeters.of(0))
+                    .up(Centimeters.of(27))
                     .yaw(Degrees.of(180))
                     .apply();
             return builder;
@@ -130,8 +130,12 @@ public class SpecterTeleOp extends BunyipsOpMode {
 
         webcam.init(aprilTag);
         webcam.start(aprilTag);
-         */
 
+        AlignToAprilTagTask.R_TOLERANCE = -20;
+        AlignToAprilTagTask.DEFAULT_CONTROLLER.setPIDF(ALIGN_TO_APRILTAG_PIDF_COEFFICIENTS);
+
+        gamepad1.button(LEFT_BUMPER)
+                .whileTrue(new AlignToAprilTagTask(gamepad1, robot.drive, aprilTag, Target_Tag_ID).withBearingTarget(Degrees.of(1)));
 
 
         gamepad1.button(Y)
@@ -174,7 +178,7 @@ public class SpecterTeleOp extends BunyipsOpMode {
                 .whileTrue(robot.intake.tasks.run(1));
 
         gamepad2.button(Y)
-                .whileTrue(robot.intake.tasks.run(0.8));
+                .whileTrue(robot.transfer.tasks.run(0.8));
 
         gamepad2.button(LEFT_BUMPER)
                 .onTrue(robot.gate.tasks.toggle());
