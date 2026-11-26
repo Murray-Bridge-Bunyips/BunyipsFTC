@@ -137,6 +137,9 @@ public class SpecterTeleOp extends BunyipsOpMode {
         gamepad1.button(LEFT_BUMPER)
                 .whileTrue(new AlignToAprilTagTask(gamepad1, robot.drive, aprilTag, Target_Tag_ID).withBearingTarget(Degrees.of(1)));
 
+        gamepad1.axisGreaterThan(RIGHT_TRIGGER, 0.9)
+                .whileTrue(new AlignToPointDriveTask(() -> goal1, gamepad1, robot.drive).withAlignmentOffset(Degrees.of(180)));
+
 
         gamepad1.button(Y)
                 .whileTrue(robot.transfer.tasks.run(1));
